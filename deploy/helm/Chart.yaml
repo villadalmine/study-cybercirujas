@@ -1,0 +1,6 @@
+apiVersion: v2
+name: teach-plat
+description: Plataforma educativa de certificaciones IT — landing pública + zona de estudio
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

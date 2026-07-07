@@ -4,73 +4,78 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="El mapa completo de certificaciones IT: Linux (LPI), Cloud Native (CNCF), niveles, temarios oficiales, vencimientos, dependencias, programa CARE y paths de carrera como Kubestronaut.">
-<title>Landscape de Certificaciones IT — Linux, Kubernetes y Cloud Native</title>
+<title>Cert Landscape — Certificaciones IT: Linux, Kubernetes y Cloud Native</title>
 <style>
-  :root { color-scheme: light dark; font-family: system-ui, -apple-system, sans-serif;
+  :root { color-scheme: light dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
           --accent: #4a7fd4; --accent2: #7a5fd4; --gold: #d4a94a; --ok: #4aa96c;
           --line: #88888840; --soft: #88888812; }
   * { box-sizing: border-box; }
-  body { margin: 0; line-height: 1.6; }
+  body { margin: 0; line-height: 1.6; text-rendering: optimizeLegibility; }
   a { cursor: pointer; color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
   code { background: var(--soft); padding: .05rem .35rem; border-radius: 4px; font-size: .9em; }
-  header { position: sticky; top: 0; display: flex; align-items: center; gap: 1.2rem;
-           padding: .7rem 1.2rem; border-bottom: 1px solid var(--line);
-           background: Canvas; z-index: 10; }
-  header .brand { font-weight: 700; margin-right: auto; cursor: pointer; }
-  header a { opacity: .85; font-size: .95rem; }
+  header { position: sticky; top: 0; display: flex; align-items: center; gap: 1.1rem;
+           padding: .65rem 1.2rem; border-bottom: 1px solid var(--line);
+           background: color-mix(in srgb, Canvas 88%, transparent); backdrop-filter: blur(8px);
+           z-index: 10; flex-wrap: wrap; }
+  header .brand { font-weight: 700; margin-right: auto; cursor: pointer; font-size: 1.02rem; }
+  header a { opacity: .85; font-size: .93rem; }
+  header a:hover { opacity: 1; text-decoration: none; color: var(--accent); }
+  select { font: inherit; padding: .2rem .4rem; border: 1px solid var(--line);
+           border-radius: 8px; background: Canvas; cursor: pointer; }
   main { max-width: 70rem; margin: 0 auto; padding: 1rem 1.2rem 4rem; }
-  .hero { text-align: center; padding: 3.5rem 1rem 2.5rem; }
-  .hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin: 0 0 .6rem; letter-spacing: -.02em;
-             background: linear-gradient(90deg, var(--accent), var(--accent2));
+  .hero { position: relative; text-align: center; padding: 3.8rem 1rem 2.6rem; }
+  .hero::before { content: ""; position: absolute; inset: -40% -20% auto; height: 130%;
+                  background: radial-gradient(60% 60% at 50% 30%, #4a7fd422, transparent 70%);
+                  pointer-events: none; z-index: -1; }
+  .hero h1 { font-size: clamp(1.8rem, 4.6vw, 3rem); margin: 0 0 .6rem; letter-spacing: -.025em;
+             background: linear-gradient(92deg, var(--accent), var(--accent2));
              -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero p { opacity: .8; max-width: 44rem; margin: 0 auto 1.6rem; font-size: 1.05rem; }
-  .stats { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
+  .hero p { opacity: .8; max-width: 46rem; margin: 0 auto 1.7rem; font-size: 1.06rem; }
+  .stats { display: flex; gap: 2.6rem; justify-content: center; flex-wrap: wrap; }
   .stats div { text-align: center; }
-  .stats strong { display: block; font-size: 1.9rem; color: var(--accent); }
+  .stats strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1.2; }
   .stats span { font-size: .85rem; opacity: .7; }
   h2 { margin: 2.6rem 0 .8rem; font-size: 1.35rem; letter-spacing: -.01em; }
-  h2 .em { margin-right: .4rem; }
   .lvl { display: inline-block; font-size: .72rem; font-weight: 600; text-transform: uppercase;
-         letter-spacing: .06em; opacity: .7; margin: 1.1rem 0 .5rem; padding: .1rem .6rem;
-         border: 1px solid var(--line); border-radius: 999px; }
+         letter-spacing: .07em; opacity: .75; margin: 1.1rem 0 .5rem; padding: .12rem .65rem;
+         border: 1px solid var(--line); border-radius: 999px; background: var(--soft); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .7rem; }
-  .cert { cursor: pointer; padding: .75rem .9rem; border: 1px solid var(--line);
-          border-radius: 12px; background: var(--soft);
-          transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease; }
+  .cert { cursor: pointer; padding: .8rem .95rem; border: 1px solid var(--line);
+          border-radius: 14px; background: var(--soft);
+          transition: transform .13s ease, border-color .13s ease, box-shadow .13s ease; }
   .cert:hover { transform: translateY(-2px); border-color: var(--accent);
-                box-shadow: 0 6px 18px -8px #4a7fd455; }
-  .cert strong { display: block; font-size: .93rem; margin-bottom: .25rem; }
+                box-shadow: 0 8px 22px -10px #4a7fd466; }
+  .cert strong { display: block; font-size: .93rem; margin-bottom: .3rem; line-height: 1.35; }
   .chip { display: inline-block; font-size: .72rem; border: 1px solid var(--line);
-          border-radius: 999px; padding: 0 .5rem; margin: .15rem .25rem 0 0; opacity: .85; }
+          border-radius: 999px; padding: 0 .5rem; margin: .16rem .25rem 0 0; opacity: .85; }
   .chip.care { border-color: var(--gold); color: var(--gold); opacity: 1; }
   .chip.req  { border-color: var(--accent); color: var(--accent); opacity: 1; }
-  .topic { display: flex; gap: .8rem; align-items: baseline; padding: .55rem .3rem;
-           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .topic { display: flex; gap: .8rem; align-items: baseline; padding: .55rem .4rem;
+           border-bottom: 1px solid var(--line); flex-wrap: wrap; border-radius: 8px; }
   .topic:hover { background: var(--soft); }
   .topic .id { opacity: .55; min-width: 2.4rem; font-variant-numeric: tabular-nums; }
   .topic .title { flex: 1; min-width: 12rem; }
   .topic .w { opacity: .55; font-size: .8rem; }
   .dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%;
-         background: var(--ok); margin-right: .35rem; }
+         background: var(--ok); margin-right: .4rem; }
   .dot.off { background: #888; opacity: .5; }
   .study { font-size: .85rem; white-space: nowrap; }
-  .flow { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .8rem 0 1.6rem; }
+  .flow { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .8rem 0 1.7rem; }
   .stage { display: flex; flex-direction: column; gap: .45rem; }
-  .node { border: 1.5px solid var(--accent); border-radius: 10px; padding: .35rem .8rem;
+  .node { border: 1.5px solid var(--accent); border-radius: 12px; padding: .4rem .85rem;
           cursor: pointer; text-align: center; font-size: .9rem; background: var(--soft);
-          max-width: 12rem; }
-  .node small { line-height: 1.25; margin-top: .1rem; }
+          max-width: 12rem; transition: background .12s ease; }
   .node:hover { background: #4a7fd422; }
-  .node small { display: block; opacity: .65; font-size: .72rem; }
+  .node small { display: block; opacity: .65; font-size: .72rem; line-height: 1.25; margin-top: .1rem; }
   .arrow { font-size: 1.5rem; opacity: .55; }
-  .badge { border: 1.5px solid var(--gold); border-radius: 14px; padding: 1rem 1.2rem;
+  .badge { border: 1.5px solid var(--gold); border-radius: 16px; padding: 1rem 1.25rem;
            margin: 1rem 0; background: var(--soft); }
   .badge .node { border-color: var(--gold); display: inline-block; margin: .15rem .25rem .15rem 0; }
   .badge p { margin: .5rem 0; }
-  /* material de estudio */
   .md { max-width: 46rem; }
   .md pre { overflow-x: auto; background: var(--soft); border: 1px solid var(--line);
-            padding: .9rem 1rem; border-radius: 10px; line-height: 1.45; }
+            padding: .9rem 1rem; border-radius: 12px; line-height: 1.45; }
   .md h2, .md h3, .md h4 { margin: 1.4rem 0 .4rem; }
   .tablewrap { overflow-x: auto; margin: .8rem 0; }
   table { border-collapse: collapse; font-size: .9rem; }
@@ -79,37 +84,38 @@
   .teaser { position: relative; max-height: 26rem; overflow: hidden;
             -webkit-mask-image: linear-gradient(#000 55%, transparent);
             mask-image: linear-gradient(#000 55%, transparent); }
-  .cta { border: 1.5px dashed var(--line); border-radius: 14px; text-align: center;
+  .cta { border: 1.5px dashed var(--line); border-radius: 16px; text-align: center;
          padding: 2rem 1.2rem; margin: -2rem 0 1rem; position: relative; background: Canvas; }
   .cta h3 { margin: .2rem 0 .4rem; }
   .cta p { opacity: .75; max-width: 30rem; margin: 0 auto .4rem; font-size: .92rem; }
   .includes { display: flex; gap: 1.4rem; justify-content: center; flex-wrap: wrap;
               margin: .8rem 0; font-size: .9rem; opacity: .85; }
-  input, button { font: inherit; padding: .45rem .7rem; }
-  button { cursor: pointer; background: var(--accent); color: #fff; border: 0; border-radius: 8px; }
+  .note { font-size: .82rem; opacity: .7; border-left: 3px solid var(--gold);
+          padding: .2rem .7rem; margin: .6rem 0; }
+  input, button { font: inherit; padding: .48rem .75rem; }
+  button { cursor: pointer; background: var(--accent); color: #fff; border: 0;
+           border-radius: 10px; transition: filter .12s ease; }
+  button:hover { filter: brightness(1.1); }
   .panel { max-width: 22rem; margin: 3rem auto; border: 1px solid var(--line);
-           border-radius: 14px; padding: 1.4rem; background: var(--soft); }
+           border-radius: 16px; padding: 1.5rem; background: var(--soft); }
   .panel form { display: flex; flex-direction: column; gap: .6rem; }
-  .panel input { border: 1px solid var(--line); border-radius: 8px; background: Canvas; }
+  .panel input { border: 1px solid var(--line); border-radius: 10px; background: Canvas; }
   .error { color: #c34; }
   .back { display: inline-block; margin-bottom: .6rem; opacity: .8; font-size: .9rem; }
-  footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 1.2rem;
+  footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 1.3rem;
            font-size: .8rem; opacity: .65; text-align: center; }
 </style>
 </head>
 <body>
 <header>
-  <span class="brand" onclick="showLanding()">📚 Cert Landscape</span>
-  <a onclick="showLanding()">Certificaciones</a>
-  <a onclick="showPaths()">Paths de carrera</a>
-  <a id="authLink" onclick="showLogin()">Entrar</a>
+  <span class="brand" onclick="go(showLanding)">📚 Cert Landscape</span>
+  <a data-nav="certs" onclick="go(showLanding)"></a>
+  <a data-nav="paths" onclick="go(showPaths)"></a>
+  <select id="langSel" onchange="setLang(this.value)"></select>
+  <a id="authLink"></a>
 </header>
 <main id="content"></main>
-<footer>
-  Temarios de fuentes oficiales: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) ·
-  training.linuxfoundation.org<br>
-  El contenido de estudio es original, generado con AI y con atribución de fuentes.
-</footer>
+<footer id="foot"></footer>
 
 <script>
 const $ = (id) => document.getElementById(id);
@@ -122,20 +128,172 @@ const api = async (path, options) => {
   return response.json();
 };
 
+// ------------------------------------------------------------------ i18n UI
+const LANG_LABELS = { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch',
+                      zh: '中文', ja: '日本語', pt: 'Português' };
+const STR = {
+  es: { certs: 'Certificaciones', paths: 'Paths de carrera', login: 'Entrar', logout: 'Salir',
+    heroTitle: 'El mapa de las certificaciones IT',
+    heroSub: 'Linux, Kubernetes y Cloud Native: qué certificaciones existen, sus temarios oficiales, cuánto duran, qué requiere cada una y en qué orden encararlas — con material de estudio, ejercicios y laboratorios para cada tema.',
+    sCerts: 'certificaciones', sPaths: 'paths de carrera', sBadges: 'títulos especiales',
+    lvlEss: 'Essentials · sin vencimiento', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / Specialty',
+    expires: 'vence', requires: 'requiere', renews: 'la renueva', curriculum: 'curriculum',
+    syllabus: 'Temario oficial', noSyllabus: 'Temario próximamente.', view: 'Ver material →',
+    soon: 'próximamente', backAll: '← todas las certificaciones', backSyl: '← volver al temario',
+    howGet: 'Cómo obtenerlo:', exercises: '📝 Ejercicios', lab: '🧪 Lab break & fix',
+    ctaTitle: '🚧 Zona de estudio en construcción',
+    ctaBody: 'El material completo de este tema estará disponible próximamente con una cuenta. El landscape de certificaciones es y seguirá siendo público.',
+    incTheory: '📄 teoría completa con ejemplos', incEx: '📝 ejercicios guiados', incLab: '🧪 laboratorio break & fix',
+    haveAccount: '¿Ya tenés cuenta? Entrar', loginTitle: 'Iniciar sesión',
+    loginSub: 'El landscape es público; el material de estudio completo requiere cuenta con plan activo.',
+    user: 'usuario', pass: 'contraseña',
+    fallback: 'Este tema todavía no está traducido a este idioma — se muestra en español.',
+    foot: 'Temarios de fuentes oficiales: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — El contenido de estudio es original, generado con AI y con atribución de fuentes.',
+    linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Otras' },
+  en: { certs: 'Certifications', paths: 'Career paths', login: 'Sign in', logout: 'Sign out',
+    heroTitle: 'The IT certification landscape',
+    heroSub: 'Linux, Kubernetes and Cloud Native: which certifications exist, their official syllabi, how long they last, what each one requires and in which order to take them — with study material, exercises and labs for every topic.',
+    sCerts: 'certifications', sPaths: 'career paths', sBadges: 'special titles',
+    lvlEss: 'Essentials · never expires', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / Specialty',
+    expires: 'expires', requires: 'requires', renews: 'renewed by', curriculum: 'curriculum',
+    syllabus: 'Official syllabus', noSyllabus: 'Syllabus coming soon.', view: 'View material →',
+    soon: 'coming soon', backAll: '← all certifications', backSyl: '← back to syllabus',
+    howGet: 'How to get it:', exercises: '📝 Exercises', lab: '🧪 Break & fix lab',
+    ctaTitle: '🚧 Study area under construction',
+    ctaBody: 'The full material for this topic will be available soon with an account. The certification landscape is and will remain public.',
+    incTheory: '📄 full theory with examples', incEx: '📝 guided exercises', incLab: '🧪 break & fix lab',
+    haveAccount: 'Already have an account? Sign in', loginTitle: 'Sign in',
+    loginSub: 'The landscape is public; full study material requires an account with an active plan.',
+    user: 'username', pass: 'password',
+    fallback: 'This topic is not translated to this language yet — showing Spanish.',
+    foot: 'Syllabi from official sources: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Study content is original, AI-generated, with source attribution.',
+    linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Other' },
+  fr: { certs: 'Certifications', paths: 'Parcours de carrière', login: 'Connexion', logout: 'Déconnexion',
+    heroTitle: 'La carte des certifications IT',
+    heroSub: 'Linux, Kubernetes et Cloud Native : quelles certifications existent, leurs programmes officiels, leur durée de validité, leurs prérequis et dans quel ordre les passer — avec supports, exercices et labs pour chaque sujet.',
+    sCerts: 'certifications', sPaths: 'parcours', sBadges: 'titres spéciaux',
+    lvlEss: 'Essentials · sans expiration', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / Spécialité',
+    expires: 'expire', requires: 'requiert', renews: 'renouvelée par', curriculum: 'programme',
+    syllabus: 'Programme officiel', noSyllabus: 'Programme bientôt disponible.', view: 'Voir le support →',
+    soon: 'bientôt', backAll: '← toutes les certifications', backSyl: '← retour au programme',
+    howGet: "Comment l'obtenir :", exercises: '📝 Exercices', lab: '🧪 Lab break & fix',
+    ctaTitle: '🚧 Espace d\'étude en construction',
+    ctaBody: 'Le support complet de ce sujet sera bientôt disponible avec un compte. La carte des certifications est et restera publique.',
+    incTheory: '📄 théorie complète avec exemples', incEx: '📝 exercices guidés', incLab: '🧪 lab break & fix',
+    haveAccount: 'Déjà un compte ? Connexion', loginTitle: 'Connexion',
+    loginSub: 'La carte est publique ; le support complet nécessite un compte avec un plan actif.',
+    user: 'utilisateur', pass: 'mot de passe',
+    fallback: 'Ce sujet n\'est pas encore traduit — affiché en espagnol.',
+    foot: 'Programmes des sources officielles : lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Contenu original généré par IA, avec attribution des sources.',
+    linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Autres' },
+  de: { certs: 'Zertifizierungen', paths: 'Karrierepfade', login: 'Anmelden', logout: 'Abmelden',
+    heroTitle: 'Die IT-Zertifizierungslandkarte',
+    heroSub: 'Linux, Kubernetes und Cloud Native: welche Zertifizierungen es gibt, ihre offiziellen Lehrpläne, Gültigkeitsdauer, Voraussetzungen und die richtige Reihenfolge — mit Lernmaterial, Übungen und Labs zu jedem Thema.',
+    sCerts: 'Zertifizierungen', sPaths: 'Karrierepfade', sBadges: 'Sondertitel',
+    lvlEss: 'Essentials · unbefristet', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / Spezialisierung',
+    expires: 'gültig', requires: 'erfordert', renews: 'erneuert durch', curriculum: 'Lehrplan',
+    syllabus: 'Offizieller Lehrplan', noSyllabus: 'Lehrplan folgt in Kürze.', view: 'Material ansehen →',
+    soon: 'demnächst', backAll: '← alle Zertifizierungen', backSyl: '← zurück zum Lehrplan',
+    howGet: 'So bekommst du ihn:', exercises: '📝 Übungen', lab: '🧪 Break-&-Fix-Lab',
+    ctaTitle: '🚧 Lernbereich im Aufbau',
+    ctaBody: 'Das vollständige Material zu diesem Thema ist bald mit einem Konto verfügbar. Die Zertifizierungslandkarte bleibt öffentlich.',
+    incTheory: '📄 vollständige Theorie mit Beispielen', incEx: '📝 geführte Übungen', incLab: '🧪 Break-&-Fix-Lab',
+    haveAccount: 'Schon ein Konto? Anmelden', loginTitle: 'Anmelden',
+    loginSub: 'Die Landkarte ist öffentlich; das vollständige Lernmaterial erfordert ein Konto mit aktivem Plan.',
+    user: 'Benutzer', pass: 'Passwort',
+    fallback: 'Dieses Thema ist noch nicht übersetzt — Anzeige auf Spanisch.',
+    foot: 'Lehrpläne aus offiziellen Quellen: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Lerninhalte sind original, KI-generiert, mit Quellenangabe.',
+    linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Weitere' },
+  zh: { certs: '认证', paths: '职业路径', login: '登录', logout: '退出',
+    heroTitle: 'IT 认证全景图',
+    heroSub: 'Linux、Kubernetes 与云原生：有哪些认证、官方考纲、有效期、前置要求以及建议的考试顺序——每个主题都配有学习材料、练习和实验。',
+    sCerts: '项认证', sPaths: '条职业路径', sBadges: '个特殊称号',
+    lvlEss: 'Essentials · 永久有效', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / 专项',
+    expires: '有效期', requires: '前置', renews: '可由此续期', curriculum: '考纲',
+    syllabus: '官方考纲', noSyllabus: '考纲即将上线。', view: '查看材料 →',
+    soon: '即将上线', backAll: '← 全部认证', backSyl: '← 返回考纲',
+    howGet: '如何获得：', exercises: '📝 练习', lab: '🧪 Break & Fix 实验',
+    ctaTitle: '🚧 学习区建设中',
+    ctaBody: '本主题的完整材料即将通过账户开放。认证全景图现在和将来都是公开的。',
+    incTheory: '📄 完整理论与示例', incEx: '📝 引导式练习', incLab: '🧪 break & fix 实验',
+    haveAccount: '已有账户？登录', loginTitle: '登录',
+    loginSub: '全景图是公开的；完整学习材料需要有有效订阅的账户。',
+    user: '用户名', pass: '密码',
+    fallback: '该主题尚未翻译成此语言——显示西班牙语版本。',
+    foot: '考纲来自官方来源：lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学习内容为 AI 生成的原创内容，并注明来源。',
+    linux: '🐧 Linux', cn: '☸️ 云原生 (CNCF)', other: '其他' },
+  ja: { certs: '認定資格', paths: 'キャリアパス', login: 'ログイン', logout: 'ログアウト',
+    heroTitle: 'IT認定資格の全体マップ',
+    heroSub: 'Linux・Kubernetes・クラウドネイティブ:どんな認定資格があるか、公式シラバス、有効期間、前提条件、受験順序——各トピックに学習資料・演習・ラボ付き。',
+    sCerts: '認定資格', sPaths: 'キャリアパス', sBadges: '特別称号',
+    lvlEss: 'Essentials · 無期限', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / 専門',
+    expires: '有効期間', requires: '前提', renews: '更新元', curriculum: 'シラバス',
+    syllabus: '公式シラバス', noSyllabus: 'シラバスは近日公開。', view: '教材を見る →',
+    soon: '近日公開', backAll: '← すべての認定資格', backSyl: '← シラバスに戻る',
+    howGet: '取得方法：', exercises: '📝 演習', lab: '🧪 Break & Fix ラボ',
+    ctaTitle: '🚧 学習エリアは準備中',
+    ctaBody: 'このトピックの完全な教材は、アカウントで近日利用可能になります。認定資格マップは今後も公開のままです。',
+    incTheory: '📄 例付きの完全な理論', incEx: '📝 ガイド付き演習', incLab: '🧪 break & fix ラボ',
+    haveAccount: 'アカウントをお持ちですか?ログイン', loginTitle: 'ログイン',
+    loginSub: 'マップは公開です。完全な教材には有効なプランのアカウントが必要です。',
+    user: 'ユーザー名', pass: 'パスワード',
+    fallback: 'このトピックはまだ翻訳されていません——スペイン語で表示します。',
+    foot: 'シラバスは公式ソースから: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学習コンテンツはAI生成のオリジナルで、出典を明記。',
+    linux: '🐧 Linux', cn: '☸️ クラウドネイティブ (CNCF)', other: 'その他' },
+  pt: { certs: 'Certificações', paths: 'Trilhas de carreira', login: 'Entrar', logout: 'Sair',
+    heroTitle: 'O mapa das certificações de TI',
+    heroSub: 'Linux, Kubernetes e Cloud Native: quais certificações existem, seus conteúdos oficiais, validade, pré-requisitos e em que ordem fazê-las — com material de estudo, exercícios e laboratórios para cada tema.',
+    sCerts: 'certificações', sPaths: 'trilhas', sBadges: 'títulos especiais',
+    lvlEss: 'Essentials · sem vencimento', lvlAssoc: 'Associate', lvlPro: 'Professional', lvlSpec: 'Open Technology / Especialidade',
+    expires: 'vence', requires: 'requer', renews: 'renovada por', curriculum: 'currículo',
+    syllabus: 'Conteúdo oficial', noSyllabus: 'Conteúdo em breve.', view: 'Ver material →',
+    soon: 'em breve', backAll: '← todas as certificações', backSyl: '← voltar ao conteúdo',
+    howGet: 'Como obter:', exercises: '📝 Exercícios', lab: '🧪 Lab break & fix',
+    ctaTitle: '🚧 Área de estudo em construção',
+    ctaBody: 'O material completo deste tema estará disponível em breve com uma conta. O mapa de certificações é e continuará sendo público.',
+    incTheory: '📄 teoria completa com exemplos', incEx: '📝 exercícios guiados', incLab: '🧪 laboratório break & fix',
+    haveAccount: 'Já tem conta? Entrar', loginTitle: 'Entrar',
+    loginSub: 'O mapa é público; o material completo requer conta com plano ativo.',
+    user: 'usuário', pass: 'senha',
+    fallback: 'Este tema ainda não foi traduzido — exibindo em espanhol.',
+    foot: 'Conteúdos de fontes oficiais: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — O material de estudo é original, gerado com IA e com atribuição de fontes.',
+    linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Outras' },
+};
+let LANG = localStorage.getItem('teach_lang')
+  || (STR[(navigator.language || 'es').slice(0, 2)] ? (navigator.language || 'es').slice(0, 2) : 'es');
+const t = (key) => (STR[LANG] || STR.es)[key] || STR.es[key] || key;
+
+let VIEW = { fn: null, args: [] };
+const go = (fn, ...args) => { VIEW = { fn, args }; fn(...args); };
+
+function setLang(lang) {
+  LANG = lang; localStorage.setItem('teach_lang', lang);
+  document.documentElement.lang = lang;
+  renderChrome();
+  if (VIEW.fn) VIEW.fn(...VIEW.args);
+}
+
+function renderChrome() {
+  document.querySelector('[data-nav="certs"]').textContent = t('certs');
+  document.querySelector('[data-nav="paths"]').textContent = t('paths');
+  $('foot').textContent = t('foot');
+  $('langSel').innerHTML = Object.entries(LANG_LABELS)
+    .map(([code, label]) => `<option value="${code}"${code === LANG ? ' selected' : ''}>${label}</option>`)
+    .join('');
+  updateAuthLink();
+}
+
+// ------------------------------------------------------------------ estado
 let ME = null, CERTS = null, PATHS = null;
 const loadCerts = async () => (CERTS = CERTS || await api('/api/catalog'));
 const loadPaths = async () => (PATHS = PATHS || await api('/api/paths'));
 
-const CATEGORIES = { 'linux': '🐧 Linux', 'cloud-native': '☸️ Cloud Native (CNCF)', 'general': 'Otras' };
-const LEVELS = {
-  'essentials': 'Essentials · sin vencimiento',
-  'associate': 'Associate',
-  'professional': 'Professional',
-  'specialty': 'Open Technology / Specialty',
-};
+const catName = { 'linux': () => t('linux'), 'cloud-native': () => t('cn'), 'general': () => t('other') };
 const LEVEL_ORDER = ['essentials', 'associate', 'professional', 'specialty', 'general'];
+const lvlName = { essentials: () => t('lvlEss'), associate: () => t('lvlAssoc'),
+                  professional: () => t('lvlPro'), specialty: () => t('lvlSpec') };
 
-// --- mini render de Markdown (titulos, listas, código, tablas, links) ---
+// ------------------------------------------------------- mini render de MD
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const inline = (s) => esc(s)
   .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -181,19 +339,20 @@ function md(text) {
   return html;
 }
 
+// ------------------------------------------------------------------ vistas
 const examOf = (id) => (CERTS[id] || { exam: id }).exam;
 const certChips = (cert) =>
-  (cert.validity ? `<span class="chip">⏳ ${cert.validity}</span>` : '') +
+  (cert.validity ? `<span class="chip">⏳ ${t('expires')}: ${cert.validity}</span>` : '') +
   (cert.requires && cert.requires.length
-    ? `<span class="chip req">requiere ${cert.requires.map(examOf).join(', ')}</span>` : '') +
+    ? `<span class="chip req">${t('requires')} ${cert.requires.map(examOf).join(', ')}</span>` : '') +
   (cert.renewed_by && cert.renewed_by.length
-    ? `<span class="chip care">♻ la renueva ${cert.renewed_by.map(examOf).join(' o ')}</span>` : '') +
+    ? `<span class="chip care">♻ ${t('renews')} ${cert.renewed_by.map(examOf).join(' / ')}</span>` : '') +
   (cert.curriculum_updated
-    ? `<span class="chip">📋 ${cert.curriculum_updated}</span>` : '');
+    ? `<span class="chip">📋 ${t('curriculum')}: ${cert.curriculum_updated}</span>` : '');
 
 function updateAuthLink() {
-  $('authLink').textContent = ME ? `Salir (${ME.user})` : 'Entrar';
-  $('authLink').onclick = ME ? doLogout : showLogin;
+  $('authLink').textContent = ME ? `${t('logout')} (${ME.user})` : t('login');
+  $('authLink').onclick = ME ? doLogout : () => go(showLogin);
 }
 
 async function showLanding() {
@@ -207,22 +366,20 @@ async function showLanding() {
   const nBadges = Object.values(paths).filter((p) => p.type === 'achievement').length;
   $('content').innerHTML = `
     <div class="hero">
-      <h1>El mapa de las certificaciones IT</h1>
-      <p>Linux, Kubernetes y Cloud Native: qué certificaciones existen, sus temarios
-         oficiales, cuánto duran, qué requiere cada una y en qué orden encararlas —
-         con material de estudio, ejercicios y laboratorios para cada tema.</p>
+      <h1>${t('heroTitle')}</h1>
+      <p>${t('heroSub')}</p>
       <div class="stats">
-        <div><strong>${Object.keys(certs).length}</strong><span>certificaciones</span></div>
-        <div><strong>${nPaths}</strong><span>paths de carrera</span></div>
-        <div><strong>${nBadges}</strong><span>títulos especiales</span></div>
+        <div><strong>${Object.keys(certs).length}</strong><span>${t('sCerts')}</span></div>
+        <div><strong>${nPaths}</strong><span>${t('sPaths')}</span></div>
+        <div><strong>${nBadges}</strong><span>${t('sBadges')}</span></div>
       </div>
     </div>` +
-    Object.keys(CATEGORIES).filter((c) => byCategory[c]).map((category) =>
-      `<h2>${CATEGORIES[category]}</h2>` +
+    Object.keys(catName).filter((c) => byCategory[c]).map((category) =>
+      `<h2>${catName[category]()}</h2>` +
       LEVEL_ORDER.filter((l) => byCategory[category][l]).map((level) =>
-        `<div><span class="lvl">${LEVELS[level] || level}</span></div><div class="grid">` +
+        `<div><span class="lvl">${lvlName[level] ? lvlName[level]() : level}</span></div><div class="grid">` +
         byCategory[category][level].map(([id, cert]) =>
-          `<div class="cert" onclick="showCert('${id}')">
+          `<div class="cert" onclick="go(showCert,'${id}')">
              <strong>${cert.name}</strong>${certChips(cert)}
            </div>`).join('') + '</div>'
       ).join('')
@@ -232,22 +389,21 @@ async function showLanding() {
 
 const node = (id) => {
   const cert = CERTS[id] || { exam: id, name: id };
-  // nombre corto: sin el acrónimo entre paréntesis (ya se muestra el examen)
   const short = (cert.name || id).replace(/\s*\([^)]*\)\s*$/, '');
-  return `<div class="node" onclick="showCert('${id}')"><strong>${cert.exam}</strong>
+  return `<div class="node" onclick="go(showCert,'${id}')"><strong>${cert.exam}</strong>
             <small>${short}</small>
             <small>${cert.validity ? '⏳ ' + cert.validity : ''}</small></div>`;
 };
 
 async function showPaths() {
   await loadCerts(); const paths = await loadPaths();
-  let html = '<h2>🧭 Paths de carrera</h2>';
+  let html = `<h2>🧭 ${t('paths')}</h2>`;
   for (const path of Object.values(paths)) {
     if (path.type === 'achievement') {
       html += `<div class="badge"><strong>🏅 ${path.name}</strong>
                  <p>${path.description || ''}</p>
                  ${path.requires_all.map(node).join('')}
-                 ${path.how_to_obtain ? `<p><em>Cómo obtenerlo:</em> ${path.how_to_obtain}</p>` : ''}</div>`;
+                 ${path.how_to_obtain ? `<p><em>${t('howGet')}</em> ${path.how_to_obtain}</p>` : ''}</div>`;
     } else if (path.type === 'info') {
       html += `<div class="badge"><strong>♻ ${path.name}</strong>
                  <p>${path.description || ''}</p>
@@ -267,56 +423,56 @@ async function showCert(certId) {
   const data = await api(`/api/certs/${certId}`);
   const cert = data.cert;
   $('content').innerHTML = `
-    <a class="back" onclick="showLanding()">← todas las certificaciones</a>
+    <a class="back" onclick="go(showLanding)">${t('backAll')}</a>
     <h2>${cert.name}</h2>
     <p>${certChips(cert)}</p>
-    <div><span class="lvl">Temario oficial · v${cert.tracked_version}</span></div>` +
-    (data.topics.length ? '' : '<p>Temario próximamente.</p>') +
+    <div><span class="lvl">${t('syllabus')} · v${cert.tracked_version}</span></div>` +
+    (data.topics.length ? '' : `<p>${t('noSyllabus')}</p>`) +
     data.topics.map((topic) =>
       `<div class="topic">
          <span class="id">${topic.id}</span>
          <span class="title"><span class="dot${topic.available ? '' : ' off'}"></span>${topic.title}</span>
-         <span class="w">peso ${topic.weight}</span>
+         <span class="w">${topic.weight ?? ''}</span>
          ${topic.available
-           ? `<a class="study" onclick="showTopic('${certId}','${topic.id}')">Ver material →</a>`
-           : '<span class="study" style="opacity:.5">próximamente</span>'}
+           ? `<a class="study" onclick="go(showTopic,'${certId}','${topic.id}')">${t('view')}</a>`
+           : `<span class="study" style="opacity:.5">${t('soon')}</span>`}
        </div>`).join('');
   window.scrollTo(0, 0);
 }
 
 async function showTopic(certId, topicId) {
-  // con plan activo: material completo; público: teaser difuminado
   if (ME && ME.subscription) {
     try {
-      const data = await api(`/api/certs/${certId}/topics/${topicId}`);
+      const data = await api(`/api/certs/${certId}/topics/${topicId}?lang=${LANG}`);
       const section = (title, text, bash) =>
         text ? `<h3>${title}</h3>` + (bash ? `<pre><code>${esc(text)}</code></pre>` : md(text)) : '';
       $('content').innerHTML = `
-        <a class="back" onclick="showCert('${certId}')">← volver al temario</a>
+        <a class="back" onclick="go(showCert,'${certId}')">${t('backSyl')}</a>
         <h2>${data.topic.id} — ${data.topic.title}</h2>
+        ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
         <div class="md">${md(data.content || '')}
-          ${section('📝 Ejercicios', data.exercises)}
-          ${section('🧪 Lab break & fix', data.break_fix, true)}</div>`;
+          ${section(t('exercises'), data.exercises)}
+          ${section(t('lab'), data.break_fix, true)}</div>`;
       window.scrollTo(0, 0);
       return;
     } catch (error) { /* cae al teaser */ }
   }
-  const data = await api(`/api/certs/${certId}/topics/${topicId}/preview`);
+  const data = await api(`/api/certs/${certId}/topics/${topicId}/preview?lang=${LANG}`);
   const inc = data.includes;
   $('content').innerHTML = `
-    <a class="back" onclick="showCert('${certId}')">← volver al temario</a>
+    <a class="back" onclick="go(showCert,'${certId}')">${t('backSyl')}</a>
     <h2>${data.topic.id} — ${data.topic.title}</h2>
+    ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
     <div class="md teaser">${md(data.preview || '')}</div>
     <div class="cta">
-      <h3>🚧 Zona de estudio en construcción</h3>
+      <h3>${t('ctaTitle')}</h3>
       <div class="includes">
-        <span>📄 teoría completa con ejemplos</span>
-        ${inc.has_exercises ? '<span>📝 ejercicios guiados</span>' : ''}
-        ${inc.has_lab ? '<span>🧪 laboratorio break & fix</span>' : ''}
+        <span>${t('incTheory')}</span>
+        ${inc.has_exercises ? `<span>${t('incEx')}</span>` : ''}
+        ${inc.has_lab ? `<span>${t('incLab')}</span>` : ''}
       </div>
-      <p>El material completo de este tema estará disponible próximamente con una
-         cuenta. El landscape de certificaciones es y seguirá siendo público.</p>
-      <p style="font-size:.8rem"><a onclick="showLogin()">¿Ya tenés cuenta? Entrar</a></p>
+      <p>${t('ctaBody')}</p>
+      <p style="font-size:.8rem"><a onclick="go(showLogin)">${t('haveAccount')}</a></p>
     </div>`;
   window.scrollTo(0, 0);
 }
@@ -324,13 +480,12 @@ async function showTopic(certId, topicId) {
 function showLogin() {
   $('content').innerHTML = `
     <div class="panel">
-      <h3>Iniciar sesión</h3>
-      <p style="font-size:.85rem;opacity:.75">El landscape es público; el material
-        de estudio completo requiere cuenta con plan activo.</p>
+      <h3>${t('loginTitle')}</h3>
+      <p style="font-size:.85rem;opacity:.75">${t('loginSub')}</p>
       <form onsubmit="doLogin(event)">
-        <input id="user" placeholder="usuario" autocomplete="username">
-        <input id="pass" type="password" placeholder="contraseña" autocomplete="current-password">
-        <button>Entrar</button>
+        <input id="user" placeholder="${t('user')}" autocomplete="username">
+        <input id="pass" type="password" placeholder="${t('pass')}" autocomplete="current-password">
+        <button>${t('login')}</button>
       </form>
       <p id="loginError" class="error"></p>
     </div>`;
@@ -344,7 +499,7 @@ async function doLogin(event) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: $('user').value, password: $('pass').value }),
     });
-    updateAuthLink(); showLanding();
+    updateAuthLink(); go(showLanding);
   } catch (error) {
     $('loginError').textContent = error.message;
   }
@@ -352,13 +507,14 @@ async function doLogin(event) {
 
 async function doLogout() {
   await api('/api/logout', { method: 'POST' });
-  ME = null; updateAuthLink(); showLanding();
+  ME = null; updateAuthLink(); go(showLanding);
 }
 
 (async () => {
+  document.documentElement.lang = LANG;
   ME = await api('/api/me').catch(() => null);
-  updateAuthLink();
-  showLanding();
+  renderChrome();
+  go(showLanding);
 })();
 </script>
 </body>

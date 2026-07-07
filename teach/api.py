@@ -80,6 +80,17 @@ def get_paths() -> dict:
     return catalog.load().get("paths", {})
 
 
+def _valid_lang(lang: str) -> str:
+    if lang not in certs.LANGS:
+        raise HTTPException(status_code=400, detail=f"Idioma inválido. Válidos: {certs.LANGS}")
+    return lang
+
+
+@app.get("/api/langs")
+def get_langs() -> dict:
+    return {"langs": certs.LANGS, "default": certs.DEFAULT_LANG}
+
+
 @app.get("/api/certs/{cert_id}")
 def get_cert(cert_id: str) -> dict:
     try:
@@ -88,7 +99,7 @@ def get_cert(cert_id: str) -> dict:
     except (KeyError, FileNotFoundError) as error:
         raise HTTPException(status_code=404, detail=str(error))
     # el temario es público; el estado interno de generación no se expone,
-    # se traduce a disponibilidad
+    # se traduce a disponibilidad (+ en qué idiomas existe el material)
     public_topics = [
         {
             "id": t.get("id"),
@@ -96,6 +107,7 @@ def get_cert(cert_id: str) -> dict:
             "topic": t.get("topic"),
             "weight": t.get("weight"),
             "available": t.get("status") in ("generated", "edited"),
+            "langs": certs.topic_langs(cert_id, str(t.get("id"))),
         }
         for t in topic_list
     ]
@@ -103,13 +115,14 @@ def get_cert(cert_id: str) -> dict:
 
 
 @app.get("/api/certs/{cert_id}/topics/{topic_id}/preview")
-def get_topic_preview(cert_id: str, topic_id: str) -> dict:
+def get_topic_preview(cert_id: str, topic_id: str, lang: str = certs.DEFAULT_LANG) -> dict:
     """Teaser público: primeras líneas del material + qué incluye el tema."""
+    _valid_lang(lang)
     try:
         topic = certs.get_topic(cert_id, topic_id)
     except (KeyError, FileNotFoundError) as error:
         raise HTTPException(status_code=404, detail=str(error))
-    content = certs.topic_content(cert_id, topic_id)
+    content = certs.topic_content(cert_id, topic_id, lang=lang)
     text = content["content"] or ""
     return {
         "topic": {
@@ -118,6 +131,8 @@ def get_topic_preview(cert_id: str, topic_id: str) -> dict:
             "weight": topic.get("weight"),
         },
         "preview": text[:1200],
+        "lang": content["lang"],
+        "lang_fallback": content["lang_fallback"],
         "includes": {
             "content_lines": len(text.splitlines()),
             "has_exercises": bool(content["exercises"]),
@@ -130,17 +145,27 @@ def get_topic_preview(cert_id: str, topic_id: str) -> dict:
 
 @app.get("/api/certs/{cert_id}/topics/{topic_id}")
 def get_topic(
-    cert_id: str, topic_id: str, user: str = Depends(require_subscriber)
+    cert_id: str,
+    topic_id: str,
+    lang: str = certs.DEFAULT_LANG,
+    user: str = Depends(require_subscriber),
 ) -> dict:
+    _valid_lang(lang)
     try:
         topic = certs.get_topic(cert_id, topic_id)
     except (KeyError, FileNotFoundError) as error:
         raise HTTPException(status_code=404, detail=str(error))
     return {
         "topic": topic,
-        **certs.topic_content(cert_id, topic_id),
+        **certs.topic_content(cert_id, topic_id, lang=lang),
         "lab_status": labs.status(cert_id, topic_id),
     }
+
+
+@app.get("/healthz")
+def healthz() -> dict:
+    """Liveness/readiness para Kubernetes."""
+    return {"ok": True, "certs": len(catalog.list_certs())}
 
 
 @app.get("/")

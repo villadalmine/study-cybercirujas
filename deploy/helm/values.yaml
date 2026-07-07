@@ -1,0 +1,52 @@
+# teach-plat — mismas convenciones que online-game (Gateway API + cert-manager acme-dns).
+# Datos reales (dominio/secretos) en values-local.yaml GITIGNORED; ver values-study.example.yaml.
+
+image:
+  # Cluster real: build in-cluster (Kaniko) → registry interno, como online-game:
+  #   repository: registry.registry:5000/teach-plat
+  repository: ghcr.io/villadalmine/teach-plat
+  tag: "latest"
+  pullPolicy: Always
+
+imagePullSecrets: []
+nodeSelector: {}
+
+app:
+  replicas: 1
+  port: 8000
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+# Exponer vía Gateway API (Cilium). El HTTPRoute se engancha al Gateway existente
+# `name`/`namespace` (cluster-gateway/gateway en el cluster real).
+# host = dominio principal; extraHosts = otros dominios en la MISMA route
+# (ej: study.cybercirujas.club público + study.cluster.home local).
+# OJO: cada host público HTTPS necesita su listener + cert en el Gateway.
+gateway:
+  enabled: false
+  host: study.cluster.home
+  extraHosts: []
+  name: cluster-gateway
+  namespace: gateway
+  tls:
+    enabled: false
+    secretName: ""              # "" = <release>-tls
+    issuer: letsencrypt-prod    # ClusterIssuer (acme-dns DNS-01, ya existe en el cluster)
+
+env:
+  ENVIRONMENT: production
+  # TEACH_SECRET (firma de cookies de sesión) va por Secret — setealo en values-local.
+  TEACH_SECRET: change-me
+
+# Generación de contenido DESDE el pod (opcional). Normalmente el contenido se
+# genera local (claude/codex) y va horneado en la imagen; esto es para usar el
+# LiteLLM del cluster desde adentro. apiKey va a un Secret.
+llm:
+  baseUrl: ""                   # ej http://litellm.litellm:4000/v1
+  model: ""
+  apiKey: ""

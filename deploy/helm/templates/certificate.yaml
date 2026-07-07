@@ -1,0 +1,17 @@
+{{- if and .Values.gateway.enabled .Values.gateway.tls.enabled }}
+# Certificate público (Let's Encrypt vía ClusterIssuer, DNS-01/acme-dns como en
+# online-game). Vive en el ns del Gateway; el listener HTTPS monta el Secret.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.gateway.tls.secretName | default (printf "%s-tls" .Release.Name) }}
+  namespace: {{ .Values.gateway.namespace }}
+spec:
+  secretName: {{ .Values.gateway.tls.secretName | default (printf "%s-tls" .Release.Name) }}
+  dnsNames:
+    - {{ .Values.gateway.host | quote }}
+  issuerRef:
+    name: {{ .Values.gateway.tls.issuer }}
+    kind: ClusterIssuer
+    group: cert-manager.io
+{{- end }}

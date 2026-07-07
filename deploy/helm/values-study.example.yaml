@@ -1,0 +1,42 @@
+# EJEMPLO del values-local.yaml para el cluster real (copiar a values-local.yaml,
+# completar secretos; values-local.yaml está gitignored). Deploy:
+#   helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
+#     -f deploy/helm/values-local.yaml
+#
+# Pre-requisitos en el cluster (ya existen, mismos que online-game):
+#   - Gateway `cluster-gateway` en ns `gateway` (Cilium) con listener HTTPS para
+#     study.cybercirujas.club (cert study-tls; igual que cruzdelsur)
+#   - ClusterIssuer letsencrypt-prod (acme-dns) + registro DNS
+#     study.cybercirujas.club → IP pública (HAProxy)
+#   - study.cluster.home → resolución local al LB del Gateway
+#   - Registry interno + Kaniko para buildear la imagen
+
+image:
+  repository: registry.registry:5000/teach-plat
+  tag: "0.1.0"
+  pullPolicy: Always
+
+# nodeSelector:
+#   kubernetes.io/hostname: srv-super6c-01-nvme
+
+gateway:
+  enabled: true
+  name: cluster-gateway
+  namespace: gateway
+  host: study.cybercirujas.club
+  extraHosts:
+    - study.cluster.home
+  tls:
+    enabled: true
+    secretName: study-tls
+    issuer: letsencrypt-prod
+
+env:
+  ENVIRONMENT: production
+  TEACH_SECRET: "PONER-UN-SECRETO-FUERTE-DE-32-BYTES"
+
+# opcional: generar contenido desde el pod con el LiteLLM del cluster
+# llm:
+#   baseUrl: http://litellm.litellm:4000/v1
+#   model: <modelo-en-litellm>
+#   apiKey: <key>

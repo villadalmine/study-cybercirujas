@@ -119,13 +119,20 @@ def make_completer(backend: str | None = None) -> tuple[Completer, dict]:
     raise GeneratorConfigError(f"Backend desconocido '{backend}'. Válidos: {valid}")
 
 
-SYSTEM = (
-    "Sos un instructor experto creando material de estudio para una certificación. "
-    "Escribís en español, con términos técnicos en inglés. El contenido es original: "
-    "usás las fuentes solo como referencia y siempre las citás con sus URLs. "
-    "Nunca copiás texto literal de materiales de terceros. Respondé SOLO con el "
-    "material pedido, sin comentarios sobre el proceso."
-)
+LANG_NAMES = {
+    "es": "español", "en": "English", "fr": "français", "de": "Deutsch",
+    "zh": "中文 (chino simplificado)", "ja": "日本語", "pt": "português",
+}
+
+
+def _system(lang: str) -> str:
+    return (
+        "Sos un instructor experto creando material de estudio para una certificación. "
+        f"Escribís en {LANG_NAMES.get(lang, lang)}, con los términos técnicos en inglés. "
+        "El contenido es original: usás las fuentes solo como referencia y siempre las "
+        "citás con sus URLs. Nunca copiás texto literal de materiales de terceros. "
+        "Respondé SOLO con el material pedido, sin comentarios sobre el proceso."
+    )
 
 
 def _topic_context(cert_meta: dict, topic: dict) -> str:
@@ -140,25 +147,33 @@ def _topic_context(cert_meta: dict, topic: dict) -> str:
 
 
 def generate_topic(
-    cert_id: str, topic_id: str, force: bool = False, backend: str | None = None
+    cert_id: str,
+    topic_id: str,
+    force: bool = False,
+    backend: str | None = None,
+    lang: str = certs.DEFAULT_LANG,
 ) -> dict:
-    """Genera todo el contenido de un tema. Devuelve resumen de lo escrito."""
+    """Genera el contenido de un tema en un idioma. El lab es compartido."""
+    if lang not in certs.LANGS:
+        raise GeneratorConfigError(f"Idioma '{lang}' no soportado. Válidos: {certs.LANGS}")
     complete, backend_meta = make_completer(backend)
 
     post = certs.load(cert_id)
     topic = certs.get_topic(cert_id, topic_id)
     status = topic.get("status", "pending")
+    already = lang in certs.topic_langs(cert_id, topic_id)
 
-    if status == "edited" and not force:
+    if status == "edited" and lang == certs.DEFAULT_LANG and not force:
         return {"topic": topic_id, "skipped": "edited (usar --force para pisar)"}
-    if status == "generated" and not force:
-        return {"topic": topic_id, "skipped": "ya generado (usar --force para regenerar)"}
+    if already and not force:
+        return {"topic": topic_id, "skipped": f"ya generado en {lang} (usar --force)"}
 
+    system = _system(lang)
     context = _topic_context(post.metadata, topic)
     weight = topic.get("weight", 1)
 
     content = complete(
-        SYSTEM,
+        system,
         f"{context}\n"
         f"Escribí el contenido de estudio de este tema en Markdown. Profundidad "
         f"proporcional al peso ({weight}). Incluí: explicación clara, ejemplos "
@@ -166,56 +181,67 @@ def generate_topic(
         f"'Referencias' con links a la documentación oficial.",
     )
     exercises = complete(
-        SYSTEM,
+        system,
         f"{context}\n"
         f"Escribí ejercicios guiados de este tema en Markdown: pasos numerados que "
         f"el estudiante ejecuta, y después de cada bloque una o más preguntas para "
         f"verificar comprensión. Al final, las respuestas en una sección "
         f"'<details>' colapsable.",
     )
-    break_fix = complete(
-        SYSTEM,
-        f"{context}\n"
-        f"Escribí un script bash 'break & fix' para este tema: rompe algo de forma "
-        f"controlada y segura en una VM de laboratorio descartable y le explica al "
-        f"estudiante qué síntoma va a ver y qué debe lograr para arreglarlo. "
-        f"Incluí al final, comentada, la solución paso a paso. Respondé SOLO con "
-        f"el script bash, sin markdown.",
-    )
 
     directory = certs.content_dir(cert_id, topic_id)
-    (directory / "lab").mkdir(parents=True, exist_ok=True)
-    (directory / "content.md").write_text(content)
-    (directory / "exercises.md").write_text(exercises)
-    (directory / "lab" / "break_fix.sh").write_text(break_fix)
+    lang_dir = directory / lang
+    lang_dir.mkdir(parents=True, exist_ok=True)
+    (lang_dir / "content.md").write_text(content)
+    (lang_dir / "exercises.md").write_text(exercises)
 
-    lab_spec = {
-        "cert": cert_id,
-        "topic": topic_id,
-        "title": topic["title"],
-        "provider": "local",  # v1: un solo provider; el runner futuro lee esto
-        "resources": {"vms": [{"name": "lab", "os": "debian-12", "cpus": 1, "ram_mb": 1024}]},
-        "setup": ["break_fix.sh"],
-    }
-    (directory / "lab" / "lab.yaml").write_text(
-        yaml.safe_dump(lab_spec, sort_keys=False, allow_unicode=True)
-    )
+    # el lab es compartido entre idiomas: se crea una vez (o se regenera con
+    # --force en el idioma default)
+    lab_dir = directory / "lab"
+    if not (lab_dir / "break_fix.sh").exists() or (force and lang == certs.DEFAULT_LANG):
+        break_fix = complete(
+            system,
+            f"{context}\n"
+            f"Escribí un script bash 'break & fix' para este tema: rompe algo de forma "
+            f"controlada y segura en una VM de laboratorio descartable y le explica al "
+            f"estudiante qué síntoma va a ver y qué debe lograr para arreglarlo. "
+            f"Incluí al final, comentada, la solución paso a paso. Respondé SOLO con "
+            f"el script bash, sin markdown.",
+        )
+        lab_dir.mkdir(parents=True, exist_ok=True)
+        (lab_dir / "break_fix.sh").write_text(break_fix)
+        lab_spec = {
+            "cert": cert_id,
+            "topic": topic_id,
+            "title": topic["title"],
+            "provider": "local",  # v1: un solo provider; el runner futuro lee esto
+            "resources": {"vms": [{"name": "lab", "os": "debian-12", "cpus": 1, "ram_mb": 1024}]},
+            "setup": ["break_fix.sh"],
+        }
+        (lab_dir / "lab.yaml").write_text(
+            yaml.safe_dump(lab_spec, sort_keys=False, allow_unicode=True)
+        )
 
     meta = {
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "lang": lang,
         **backend_meta,
         "sources": topic.get("sources", []),
     }
-    (directory / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False))
+    (lang_dir / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False))
 
-    certs.set_topic_status(cert_id, topic_id, "generated")
-    return {"topic": topic_id, "written": str(directory)}
+    if lang == certs.DEFAULT_LANG:
+        certs.set_topic_status(cert_id, topic_id, "generated")
+    return {"topic": topic_id, "written": str(lang_dir)}
 
 
 def generate_cert(
-    cert_id: str, force: bool = False, backend: str | None = None
+    cert_id: str,
+    force: bool = False,
+    backend: str | None = None,
+    lang: str = certs.DEFAULT_LANG,
 ) -> list[dict]:
     return [
-        generate_topic(cert_id, str(topic["id"]), force=force, backend=backend)
+        generate_topic(cert_id, str(topic["id"]), force=force, backend=backend, lang=lang)
         for topic in certs.topics(cert_id)
     ]

@@ -12,6 +12,11 @@ from . import catalog
 
 VALID_STATUS = {"pending", "generated", "edited", "stale"}
 
+# contenido por idioma: certs/<cert>/<topic>/<lang>/{content,exercises}.md
+# el lab (spec/terraform/scripts) es compartido entre idiomas
+LANGS = ["es", "en", "fr", "de", "zh", "ja", "pt"]
+DEFAULT_LANG = "es"
+
 TEMPLATE = """\
 ---
 cert: {cert_id}
@@ -82,17 +87,32 @@ def scaffold(cert_id: str, name: str, exam: str) -> Path:
     return path
 
 
-def topic_content(cert_id: str, topic_id: str) -> dict:
-    """Contenido generado de un tema (None donde falta)."""
+def _read(path: Path) -> str | None:
+    return path.read_text() if path.exists() else None
+
+
+def topic_langs(cert_id: str, topic_id: str) -> list[str]:
+    """Idiomas en los que existe contenido de un tema."""
     directory = content_dir(cert_id, topic_id)
+    return [lang for lang in LANGS if (directory / lang / "content.md").exists()]
 
-    def read(name: str) -> str | None:
-        f = directory / name
-        return f.read_text() if f.exists() else None
 
+def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict:
+    """Contenido generado de un tema en un idioma (fallback al default)."""
+    directory = content_dir(cert_id, topic_id)
+    content = _read(directory / lang / "content.md")
+    exercises = _read(directory / lang / "exercises.md")
+    fallback = None
+    if content is None and lang != DEFAULT_LANG:
+        content = _read(directory / DEFAULT_LANG / "content.md")
+        exercises = _read(directory / DEFAULT_LANG / "exercises.md")
+        if content is not None:
+            fallback = DEFAULT_LANG
     return {
-        "content": read("content.md"),
-        "exercises": read("exercises.md"),
-        "break_fix": read("lab/break_fix.sh"),
-        "lab_spec": read("lab/lab.yaml"),
+        "content": content,
+        "exercises": exercises,
+        "break_fix": _read(directory / "lab" / "break_fix.sh"),
+        "lab_spec": _read(directory / "lab" / "lab.yaml"),
+        "lang": fallback or lang,
+        "lang_fallback": fallback,
     }

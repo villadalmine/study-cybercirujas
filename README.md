@@ -28,5 +28,31 @@ make publish MSG="contenido 1.1"               # commit+push al repo que publica
 
 Con backends locales el flujo es: generar en tu máquina → revisar → `make publish`.
 
+## Idiomas
+
+Contenido por idioma en `certs/<cert>/<topic>/<lang>/` (es default; en, fr, de,
+zh, ja, pt). Generar traducciones: `teach cert generate <cert> --lang en`.
+La web tiene selector de idioma con fallback al español.
+
+## Deploy en Kubernetes
+
+Mismo esquema que online-game (Gateway API Cilium + cert-manager acme-dns +
+registry interno con Kaniko). El contenido va horneado en la imagen:
+publicar = rebuild + upgrade.
+
+```bash
+# 1. build in-cluster (ajustar tag en el manifest)
+kubectl create -f deploy/build/teach-plat-kaniko.yaml
+# 2. valores reales (dominios study.cybercirujas.club + study.cluster.home):
+cp deploy/helm/values-study.example.yaml deploy/helm/values-local.yaml  # editar secretos
+# 3. deploy
+helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
+  -f deploy/helm/values-local.yaml
+```
+
+Pre-requisitos (ya existen en el cluster): Gateway `cluster-gateway` con
+listener HTTPS para study.cybercirujas.club, ClusterIssuer `letsencrypt-prod`,
+DNS público → HAProxy y `study.cluster.home` local.
+
 Web: http://127.0.0.1:8000 — login `admin/admin` (solo para probar).
 Docs de la API: http://127.0.0.1:8000/docs

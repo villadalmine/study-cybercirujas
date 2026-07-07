@@ -122,20 +122,20 @@ teach/core (Python)          lab-runner (Go, desacoplado)
 - Comunicación por etapas: (a) archivos compartidos, (b) mini API HTTP del
   runner, (c) cola (NATS/Redis) cuando haya volumen.
 
-## Idiomas
+## Idiomas (IMPLEMENTADO)
 
-El contenido se genera en múltiples idiomas: **en, es, fr, de, zh, ja, pt**.
+Idiomas: **es (default), en, fr, de, zh, ja, pt**.
 
-- El idioma es una dimensión más de la generación: el contenido de cada tema
-  pasa de `certs/<cert>/<topic>/content.md` a `certs/<cert>/<topic>/<lang>/…`.
-- El snapshot del temario queda en su idioma original (los objetivos oficiales
-  suelen estar en inglés); lo que se traduce/genera por idioma es el contenido,
-  los ejercicios y los scripts de lab.
-- `status` pasa a ser por tema **y por idioma** (un tema puede estar generado
-  en es y pendiente en ja).
-- CLI/Make: `teach cert generate <cert> --lang es` / `make generate LANG=es`;
-  sin flag genera el idioma default del catálogo.
-- La web/API agregan selector de idioma; la URL del tema incluye el lang.
+- Contenido por idioma: `certs/<cert>/<topic>/<lang>/{content,exercises,meta}`.
+  El **lab es compartido** entre idiomas (spec/terraform/scripts).
+- `teach cert generate <cert> --lang en` genera en ese idioma; disponibilidad
+  por idioma = existencia del archivo (la API expone `langs` por tema).
+  `status` del MD sigue al idioma default.
+- API: `?lang=` en contenido y preview, con **fallback al español** (marcado
+  con `lang_fallback` y aviso en la web).
+- Web: selector de idioma en el header (persistido en localStorage, detecta el
+  idioma del browser); toda la UI traducida a los 7 idiomas.
+- Pendiente: generar las traducciones del contenido existente (`--lang en`, …).
 
 ## Modelo de datos
 

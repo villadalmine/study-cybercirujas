@@ -63,13 +63,14 @@ def cert_generate(
     backend: str = typer.Option(
         None, "--backend", help="litellm | claude | codex | gemini | custom (default: $TEACH_BACKEND o litellm)"
     ),
+    lang: str = typer.Option("es", "--lang", help="es | en | fr | de | zh | ja | pt"),
 ) -> None:
     """Genera contenido con AI para los temas pending/stale."""
     try:
         if topic:
-            results = [generator.generate_topic(cert_id, topic, force=force, backend=backend)]
+            results = [generator.generate_topic(cert_id, topic, force=force, backend=backend, lang=lang)]
         else:
-            results = generator.generate_cert(cert_id, force=force, backend=backend)
+            results = generator.generate_cert(cert_id, force=force, backend=backend, lang=lang)
     except generator.GeneratorConfigError as error:
         typer.echo(f"Error de configuración: {error}", err=True)
         raise typer.Exit(1)
