@@ -76,8 +76,20 @@ def get_catalog() -> dict:
 
 
 @app.get("/api/paths")
-def get_paths() -> dict:
-    return catalog.load().get("paths", {})
+def get_paths(lang: str = certs.DEFAULT_LANG) -> dict:
+    """Paths con textos en el idioma pedido (i18n mergeado; fallback al default)."""
+    _valid_lang(lang)
+    paths = catalog.load().get("paths", {})
+    if lang == certs.DEFAULT_LANG:
+        return paths
+    merged = {}
+    for slug, path in paths.items():
+        translated = (path.get("i18n") or {}).get(lang) or {}
+        merged[slug] = {
+            **{k: v for k, v in path.items() if k != "i18n"},
+            **translated,
+        }
+    return merged
 
 
 def _valid_lang(lang: str) -> str:

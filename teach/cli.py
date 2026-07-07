@@ -164,6 +164,23 @@ def paths_generate(
         typer.echo(f"  {change}")
 
 
+@paths_app.command("translate")
+def paths_translate(
+    backend: str = typer.Option(None, "--backend"),
+    lang: str = typer.Option(None, "--lang", help="un idioma (ej. en); omitir = todos"),
+) -> None:
+    """Traduce los textos de los paths a los idiomas soportados."""
+    from .core import tracker
+
+    try:
+        changes = tracker.translate_paths(backend=backend, langs=[lang] if lang else None)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    for change in changes:
+        typer.echo(f"  {change}")
+
+
 @app.command()
 def serve(
     host: str = typer.Option("127.0.0.1", "--host"),

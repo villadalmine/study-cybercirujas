@@ -423,6 +423,19 @@ certs:
     level: professional
     validity: 2 años
     requires: []
+  lfca:
+    name: Linux Foundation Certified IT Associate (LFCA)
+    exam: LFCA
+    category: linux
+    level: associate
+    validity: 2 años
+    requires: []
+    tracked_version: '2026-07-07'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lfca.md
+    sources:
+      objectives: https://training.linuxfoundation.org/certification/certified-it-associate/
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
@@ -433,6 +446,29 @@ paths:
     - - cka
       - ckad
     - - cks
+    i18n:
+      en:
+        description: Core Kubernetes path from cloud native fundamentals to administration
+          and application development on the cluster.
+        name: Kubernetes Engineer
+      fr:
+        description: Parcours central Kubernetes, des fondamentaux cloud native jusqu'à
+          l'administration et au développement d'applications sur le cluster.
+        name: Ingénieur Kubernetes
+      de:
+        description: Kernpfad für Kubernetes, von den Cloud-Native-Grundlagen bis
+          zur Administration und Anwendungsentwicklung auf dem Cluster.
+        name: Kubernetes-Engineer
+      zh:
+        name: Kubernetes 工程师
+        description: Kubernetes 主干路线，从 cloud native 基础一直到集群上的管理与应用开发。
+      ja:
+        description: cloud nativeの基礎からクラスター上でのアプリケーション開発と管理まで進む、Kubernetesの中核ルート。
+        name: Kubernetesエンジニア
+      pt:
+        description: Trilha principal de Kubernetes, desde os fundamentos cloud native
+          até a administração e o desenvolvimento de aplicações no cluster.
+        name: Engenheiro Kubernetes
   kubestronaut:
     name: Kubestronaut
     type: achievement
@@ -449,6 +485,51 @@ paths:
       recertificando CKS renovás también CKA y KCSA; recertificando CKA o CKAD renovás
       KCNA — 3 exámenes mantienen las 5 certs.'
     edited: true
+    i18n:
+      en:
+        description: 'The 5 CNCF Kubernetes certs, all valid at once. Benefits: jacket,
+          badge, 5 50%-off coupons per year.'
+        how_to_obtain: 'Pass all 5 certs and hold them valid at the same time. CNCF
+          contacts you by email within a business week. With CARE, maintenance is
+          cheaper: recertifying CKS also renews CKA and KCSA; recertifying CKA or
+          CKAD renews KCNA — 3 exams keep all 5 certs current.'
+        name: Kubestronaut
+      fr:
+        description: 'Les 5 certifications Kubernetes de la CNCF, toutes valides en
+          même temps. Avantages : veste, badge, 5 bons de réduction de 50 % par an.'
+        how_to_obtain: 'Réussissez les 5 certifications et gardez-les valides en même
+          temps. La CNCF vous contacte par e-mail sous une semaine ouvrée. Avec CARE,
+          le maintien est moins cher : en recertifiant CKS vous renouvelez aussi CKA
+          et KCSA ; en recertifiant CKA ou CKAD vous renouvelez KCNA — 3 examens maintiennent
+          les 5 certifications.'
+        name: Kubestronaut
+      de:
+        description: 'Die 5 Kubernetes-Zertifizierungen der CNCF, alle gleichzeitig
+          gültig. Vorteile: Jacke, Badge, 5 Gutscheine mit 50 % Rabatt pro Jahr.'
+        how_to_obtain: 'Bestehe die 5 Zertifizierungen und halte sie gleichzeitig
+          gültig. Die CNCF kontaktiert dich innerhalb einer Arbeitswoche per E-Mail.
+          Mit CARE ist die Aufrechterhaltung günstiger: mit der Rezertifizierung von
+          CKS erneuerst du auch CKA und KCSA; mit der Rezertifizierung von CKA oder
+          CKAD erneuerst du KCNA — 3 Prüfungen erhalten alle 5 Zertifizierungen.'
+        name: Kubestronaut
+      zh:
+        name: Kubestronaut
+        description: CNCF 的 5 项 Kubernetes 认证，全部同时有效。福利：夹克、徽章、每年 5 张 50% 折扣券。
+        how_to_obtain: 通过全部 5 项认证并使其同时保持有效。CNCF 会在一个工作周内通过电子邮件与你联系。借助 CARE，维护成本更低：重新认证
+          CKS 可同时续期 CKA 和 KCSA；重新认证 CKA 或 CKAD 可续期 KCNA — 3 场考试即可维持全部 5 项认证。
+      ja:
+        description: 'CNCFのKubernetes認定5つをすべて同時に有効な状態で保持。特典: ジャケット、バッジ、年5枚の50%割引クーポン。'
+        how_to_obtain: '5つの認定に合格し、すべて同時に有効な状態にしてください。CNCFから1営業週間以内にメールで連絡があります。CAREにより維持コストが下がります:
+          CKSを再認定するとCKAとKCSAも更新され、CKAまたはCKADを再認定するとKCNAも更新されます — 3つの試験で5つの認定を維持できます。'
+        name: Kubestronaut
+      pt:
+        description: 'As 5 certs Kubernetes da CNCF, todas vigentes ao mesmo tempo.
+          Benefícios: jaqueta, badge, 5 cupons de 50% por ano.'
+        how_to_obtain: 'Passe nas 5 certs e mantenha todas vigentes ao mesmo tempo.
+          A CNCF entra em contato por email dentro de uma semana útil. Com o CARE
+          a manutenção é mais barata: recertificando CKS você renova também CKA e
+          KCSA; recertificando CKA ou CKAD renova KCNA — 3 exames mantêm as 5 certs.'
+        name: Kubestronaut
   golden-kubestronaut:
     name: Golden Kubestronaut
     type: achievement
@@ -476,6 +557,52 @@ paths:
       empezar por las de 3 años (associates), después las de 2 años (CKA/CKAD/CKS/CNPE
       y LFCS) para que no venzan antes de completar.'
     edited: true
+    i18n:
+      en:
+        description: 'All 15 CNCF certs + LFCS, all valid at once. Lifetime title.
+          Benefits: backpack, ThriveOne, free annual KCD.'
+        how_to_obtain: 'Pass all 15 CNCF certs + LFCS, all valid at the same time.
+          The title is for life (ThriveOne benefits require maintaining the status).
+          Strategy: start with the 3-year ones (associates), then the 2-year ones
+          (CKA/CKAD/CKS/CNPE and LFCS) so they don''t expire before you finish.'
+        name: Golden Kubestronaut
+      fr:
+        description: 'Les 15 certifications CNCF + LFCS, toutes valides. Titre à vie.
+          Avantages : sac à dos, ThriveOne, KCD gratuit chaque année.'
+        how_to_obtain: 'Réussissez les 15 certifications CNCF + LFCS, toutes valides
+          en même temps. Le titre est à vie (les avantages ThriveOne exigent de maintenir
+          le statut). Stratégie : commencer par celles de 3 ans (associates), puis
+          celles de 2 ans (CKA/CKAD/CKS/CNPE et LFCS) pour qu''elles n''expirent pas
+          avant la fin.'
+        name: Golden Kubestronaut
+      de:
+        description: 'Alle 15 CNCF-Zertifizierungen + LFCS, alle gleichzeitig gültig.
+          Titel auf Lebenszeit. Vorteile: Rucksack, ThriveOne, jährlich ein kostenloses
+          KCD.'
+        how_to_obtain: 'Bestehe die 15 CNCF-Zertifizierungen + LFCS, alle gleichzeitig
+          gültig. Der Titel gilt auf Lebenszeit (die ThriveOne-Vorteile erfordern
+          die Aufrechterhaltung des Status). Strategie: mit den 3-Jahres-Zertifizierungen
+          (Associates) beginnen, danach die 2-Jahres-Zertifizierungen (CKA/CKAD/CKS/CNPE
+          und LFCS), damit sie nicht vor dem Abschluss ablaufen.'
+        name: Golden Kubestronaut
+      zh:
+        name: Golden Kubestronaut
+        description: 15 项 CNCF 认证 + LFCS，全部同时有效。终身头衔。福利：背包、ThriveOne、每年免费参加一次 KCD。
+        how_to_obtain: 通过全部 15 项 CNCF 认证 + LFCS，并使其同时保持有效。头衔为终身制（ThriveOne 福利需要维持该状态）。策略：先考有效期
+          3 年的认证（associate 级），再考有效期 2 年的（CKA/CKAD/CKS/CNPE 和 LFCS），以免在完成之前过期。
+      ja:
+        description: 'CNCFの全15認定 + LFCSをすべて有効な状態で保持。称号は生涯有効。特典: バックパック、ThriveOne、毎年無料のKCD。'
+        how_to_obtain: 'CNCFの15認定 + LFCSにすべて合格し、同時に有効な状態にしてください。称号は生涯有効です（ThriveOneの特典はステータスの維持が必要）。戦略:
+          まず有効期間3年の認定（associates）から始め、その後2年の認定（CKA/CKAD/CKS/CNPEとLFCS）を取得することで、完了前に期限切れになるのを防げます。'
+        name: Golden Kubestronaut
+      pt:
+        description: 'As 15 certs CNCF + LFCS, todas vigentes. Título vitalício. Benefícios:
+          mochila, ThriveOne, KCD gratuito anual.'
+        how_to_obtain: 'Passe nas 15 certs CNCF + LFCS, todas vigentes ao mesmo tempo.
+          O título é vitalício (os benefícios ThriveOne exigem manter o status). Estratégia:
+          começar pelas de 3 anos (associates), depois as de 2 anos (CKA/CKAD/CKS/CNPE
+          e LFCS) para que não vençam antes de completar.'
+        name: Golden Kubestronaut
   care:
     name: Programa CARE — renovación automática
     type: info
@@ -488,6 +615,65 @@ paths:
     - CKS (aprobada/recertificada) → reinstala y extiende CKA, incluso vencida (desde
       2026-06-18)
     edited: true
+    i18n:
+      en:
+        description: 'Certification Advancement & Recertification Experience (CNCF,
+          effective since 2026-01-01; expanded 2026-06-17): passing a higher-level
+          cert automatically renews the lower ones, aligning expiration dates.'
+        name: CARE Program — automatic renewal
+        rules:
+        - CKA or CKAD (passed/recertified) → renews KCNA
+        - CKS (passed/recertified) → renews KCSA
+        - CKS (passed/recertified) → reinstates and extends CKA, even if expired (since
+          2026-06-18)
+      fr:
+        description: 'Certification Advancement & Recertification Experience (CNCF,
+          en vigueur depuis le 2026-01-01 ; élargi le 2026-06-17) : réussir une certification
+          supérieure renouvelle automatiquement les inférieures, en alignant les dates
+          d''expiration.'
+        name: Programme CARE — renouvellement automatique
+        rules:
+        - CKA ou CKAD (réussie/recertifiée) → renouvelle KCNA
+        - CKS (réussie/recertifiée) → renouvelle KCSA
+        - CKS (réussie/recertifiée) → réactive et prolonge CKA, même expirée (depuis
+          le 2026-06-18)
+      de:
+        description: 'Certification Advancement & Recertification Experience (CNCF,
+          gültig seit 2026-01-01; erweitert am 2026-06-17): das Bestehen einer höheren
+          Zertifizierung erneuert automatisch die untergeordneten und gleicht deren
+          Ablaufdaten an.'
+        name: CARE-Programm — automatische Rezertifizierung
+        rules:
+        - CKA oder CKAD (bestanden/rezertifiziert) → erneuert KCNA
+        - CKS (bestanden/rezertifiziert) → erneuert KCSA
+        - CKS (bestanden/rezertifiziert) → reaktiviert und verlängert CKA, auch wenn
+          bereits abgelaufen (seit 2026-06-18)
+      zh:
+        name: CARE 计划 — 自动续期
+        description: Certification Advancement & Recertification Experience（CNCF，自
+          2026-01-01 起生效；2026-06-17 扩展）：通过更高级别的认证会自动续期较低级别的认证，并使到期日期保持一致。
+        rules:
+        - CKA 或 CKAD（通过/重新认证）→ 续期 KCNA
+        - CKS（通过/重新认证）→ 续期 KCSA
+        - CKS（通过/重新认证）→ 恢复并延长 CKA，即使已过期（自 2026-06-18 起）
+      ja:
+        description: 'Certification Advancement & Recertification Experience (CNCF、2026-01-01より有効、2026-06-17に拡大):
+          上位の認定に合格すると下位の認定が自動的に更新され、有効期限が揃えられます。'
+        name: CAREプログラム — 自動更新
+        rules:
+        - CKA または CKAD（合格/再認定）→ KCNA を更新
+        - CKS（合格/再認定）→ KCSA を更新
+        - CKS（合格/再認定）→ CKA を再有効化して延長（期限切れでも可、2026-06-18より）
+      pt:
+        description: 'Certification Advancement & Recertification Experience (CNCF,
+          em vigor desde 2026-01-01; expandido em 2026-06-17): passar em uma cert
+          superior renova automaticamente as inferiores, igualando as datas de vencimento.'
+        name: Programa CARE — renovação automática
+        rules:
+        - CKA ou CKAD (aprovada/recertificada) → renova KCNA
+        - CKS (aprovada/recertificada) → renova KCSA
+        - CKS (aprovada/recertificada) → reinstala e estende CKA, mesmo vencida (desde
+          2026-06-18)
   linux-admin:
     name: Administrador Linux
     description: Ruta completa de administración de sistemas Linux, desde fundamentos
@@ -495,13 +681,40 @@ paths:
       y LPIC-2 antes de elegir una especialidad.
     steps:
     - - lpi-010-160
-    - - lfcs
     - - lpic-1
     - - lpic-2
     - - lpic-3-300
       - lpic-3-303
       - lpic-3-305
       - lpic-3-306
+    i18n:
+      en:
+        description: Complete Linux systems administration path, from fundamentals
+          to LPIC-3 specializations. Starts with Linux Essentials and progresses through
+          LPIC-1 and LPIC-2 before choosing a specialty.
+        name: Linux Administrator
+      fr:
+        description: Parcours complet d'administration de systèmes Linux, des fondamentaux
+          jusqu'aux spécialisations LPIC-3. Il commence avec Linux Essentials et progresse
+          par LPIC-1 et LPIC-2 avant de choisir une spécialité.
+        name: Administrateur Linux
+      de:
+        description: Vollständiger Pfad für die Linux-Systemadministration, von den
+          Grundlagen bis zu den LPIC-3-Spezialisierungen. Beginnt mit Linux Essentials
+          und führt über LPIC-1 und LPIC-2, bevor eine Spezialisierung gewählt wird.
+        name: Linux-Administrator
+      zh:
+        name: Linux 管理员
+        description: 完整的 Linux 系统管理路线，从基础一直到 LPIC-3 专业化方向。从 Linux Essentials 开始，依次通过
+          LPIC-1 和 LPIC-2，然后选择一个专业方向。
+      ja:
+        description: 基礎からLPIC-3の専門分野までをカバーするLinuxシステム管理の完全ルート。Linux Essentialsから始まり、専門分野を選ぶ前にLPIC-1とLPIC-2へ進みます。
+        name: Linux管理者
+      pt:
+        description: Trilha completa de administração de sistemas Linux, desde os
+          fundamentos até as especializações LPIC-3. Começa com Linux Essentials e
+          avança por LPIC-1 e LPIC-2 antes de escolher uma especialidade.
+        name: Administrador Linux
   linux-devops:
     name: DevOps sobre Linux
     description: Base sólida de administración Linux orientada a herramientas DevOps
@@ -510,6 +723,32 @@ paths:
     - - lpi-010-160
     - - lpic-1
     - - lpi-devops
+    i18n:
+      en:
+        description: Solid Linux administration foundation oriented toward DevOps
+          tooling and containers. Ideal as a bridge between traditional sysadmin and
+          cloud native.
+        name: DevOps on Linux
+      fr:
+        description: Base solide d'administration Linux orientée vers les outils DevOps
+          et les conteneurs. Idéal comme passerelle entre le sysadmin traditionnel
+          et le cloud native.
+        name: DevOps sur Linux
+      de:
+        description: Solide Grundlage in Linux-Administration mit Ausrichtung auf
+          DevOps-Tools und Container. Ideal als Brücke zwischen klassischer Systemadministration
+          und Cloud Native.
+        name: DevOps auf Linux
+      zh:
+        name: Linux 上的 DevOps
+        description: 面向 DevOps 工具与容器的扎实 Linux 管理基础。是传统 sysadmin 与 cloud native 之间的理想桥梁。
+      ja:
+        description: DevOpsツールとコンテナに向けたLinux管理の堅実な基礎。従来のsysadminとcloud nativeをつなぐ橋渡しとして最適です。
+        name: Linux上のDevOps
+      pt:
+        description: Base sólida de administração Linux orientada a ferramentas DevOps
+          e containers. Ideal como ponte entre sysadmin tradicional e cloud native.
+        name: DevOps sobre Linux
   kubernetes-security:
     name: Seguridad Cloud Native
     description: Especialización en seguridad de Kubernetes y del ecosistema cloud
@@ -520,6 +759,34 @@ paths:
       - kcsa
     - - cka
     - - cks
+    i18n:
+      en:
+        description: Specialization in Kubernetes and cloud native ecosystem security.
+          KCSA introduces the concepts and CKS validates them at a professional level
+          after earning CKA.
+        name: Cloud Native Security
+      fr:
+        description: Spécialisation en sécurité de Kubernetes et de l'écosystème cloud
+          native. KCSA introduit les concepts et CKS les valide au niveau professionnel
+          après l'obtention de la CKA.
+        name: Sécurité Cloud Native
+      de:
+        description: Spezialisierung auf die Sicherheit von Kubernetes und des Cloud-Native-Ökosystems.
+          KCSA führt in die Konzepte ein, CKS validiert sie nach dem Erwerb von CKA
+          auf professionellem Niveau.
+        name: Cloud Native Security
+      zh:
+        name: Cloud Native 安全
+        description: Kubernetes 与 cloud native 生态系统安全方向的专业化路线。KCSA 引入相关概念，CKS 在取得
+          CKA 之后在专业级别对其进行验证。
+      ja:
+        description: Kubernetesとcloud nativeエコシステムのセキュリティ専門ルート。KCSAで概念を学び、CKA取得後にCKSでプロフェッショナルレベルとして検証します。
+        name: Cloud Nativeセキュリティ
+      pt:
+        description: Especialização em segurança de Kubernetes e do ecossistema cloud
+          native. KCSA introduz os conceitos e CKS os valida em nível profissional
+          após obter CKA.
+        name: Segurança Cloud Native
   gitops-platform:
     name: Ingeniería de Plataformas y GitOps
     description: Ruta de platform engineering basada en GitOps, entrega continua con
@@ -532,6 +799,34 @@ paths:
       - cba
       - cnpa
     - - cnpe
+    i18n:
+      en:
+        description: Platform engineering path based on GitOps, continuous delivery
+          with Argo and developer portals with Backstage, culminating in the professional-level
+          CNPE.
+        name: Platform Engineering and GitOps
+      fr:
+        description: Parcours de platform engineering basé sur GitOps, livraison continue
+          avec Argo et portails développeurs avec Backstage, culminant avec le niveau
+          professionnel CNPE.
+        name: Ingénierie de Plateformes et GitOps
+      de:
+        description: Platform-Engineering-Pfad auf Basis von GitOps, Continuous Delivery
+          mit Argo und Entwicklerportalen mit Backstage, mit dem professionellen Abschluss
+          CNPE.
+        name: Platform Engineering und GitOps
+      zh:
+        name: 平台工程与 GitOps
+        description: 基于 GitOps 的 platform engineering 路线，使用 Argo 进行持续交付、使用 Backstage
+          构建开发者门户，最终达到专业级认证 CNPE。
+      ja:
+        description: GitOpsに基づくplatform engineeringのルート。Argoによる継続的デリバリーとBackstageによる開発者ポータルを扱い、プロフェッショナルレベルのCNPEで完結します。
+        name: プラットフォームエンジニアリングとGitOps
+      pt:
+        description: Trilha de platform engineering baseada em GitOps, entrega contínua
+          com Argo e portais de desenvolvedores com Backstage, culminando no nível
+          profissional CNPE.
+        name: Engenharia de Plataformas e GitOps
   observabilidad:
     name: Observabilidad Cloud Native
     description: Monitoreo y telemetría del ecosistema cloud native con Prometheus
@@ -540,6 +835,30 @@ paths:
     - - kcna
     - - pca
       - otca
+    i18n:
+      en:
+        description: Monitoring and telemetry for the cloud native ecosystem with
+          Prometheus and OpenTelemetry on a Kubernetes foundation.
+        name: Cloud Native Observability
+      fr:
+        description: Monitoring et télémétrie de l'écosystème cloud native avec Prometheus
+          et OpenTelemetry sur une base Kubernetes.
+        name: Observabilité Cloud Native
+      de:
+        description: Monitoring und Telemetrie des Cloud-Native-Ökosystems mit Prometheus
+          und OpenTelemetry auf einer Kubernetes-Basis.
+        name: Cloud Native Observability
+      zh:
+        name: Cloud Native 可观测性
+        description: 在 Kubernetes 基础之上，使用 Prometheus 和 OpenTelemetry 对 cloud native
+          生态系统进行监控与遥测。
+      ja:
+        description: Kubernetesの基礎の上に、PrometheusとOpenTelemetryを用いたcloud nativeエコシステムのモニタリングとテレメトリー。
+        name: Cloud Nativeオブザーバビリティ
+      pt:
+        description: Monitoramento e telemetria do ecossistema cloud native com Prometheus
+          e OpenTelemetry sobre uma base de Kubernetes.
+        name: Observabilidade Cloud Native
   service-mesh-networking:
     name: Redes y Service Mesh
     description: Especialización en networking cloud native con Cilium e Istio, partiendo
@@ -549,3 +868,67 @@ paths:
     - - cca
       - ica
     - - kca
+    i18n:
+      en:
+        description: Specialization in cloud native networking with Cilium and Istio,
+          starting from Kubernetes fundamentals.
+        name: Networking and Service Mesh
+      fr:
+        description: Spécialisation en networking cloud native avec Cilium et Istio,
+          à partir des fondamentaux de Kubernetes.
+        name: Réseaux et Service Mesh
+      de:
+        description: Spezialisierung auf Cloud-Native-Networking mit Cilium und Istio,
+          ausgehend von den Kubernetes-Grundlagen.
+        name: Networking und Service Mesh
+      zh:
+        name: 网络与 Service Mesh
+        description: 以 Kubernetes 基础为起点，使用 Cilium 和 Istio 的 cloud native 网络专业化路线。
+      ja:
+        description: Kubernetesの基礎から出発する、CiliumとIstioによるcloud nativeネットワーキングの専門ルート。
+        name: ネットワーキングとService Mesh
+      pt:
+        description: Especialização em networking cloud native com Cilium e Istio,
+          partindo dos fundamentos de Kubernetes.
+        name: Redes e Service Mesh
+  linux-foundation:
+    name: Track Linux Foundation (LFCA → LFCS)
+    description: 'El track de certificaciones Linux de la Linux Foundation, separado
+      de LPI: LFCA (fundamentos IT) y LFCS (sysadmin, examen práctico). LFCS además
+      es requisito del Golden Kubestronaut. LFCE y LFCT fueron retiradas (2022 y 2025).'
+    steps:
+    - - lfca
+    - - lfcs
+    i18n:
+      en:
+        name: Linux Foundation Track (LFCA → LFCS)
+        description: 'The Linux Foundation''s Linux certification track, separate
+          from LPI: LFCA (IT fundamentals) and LFCS (sysadmin, hands-on exam). LFCS
+          is also required for Golden Kubestronaut. LFCE and LFCT were retired (2022
+          and 2025).'
+      pt:
+        name: Trilha Linux Foundation (LFCA → LFCS)
+        description: 'A trilha de certificações Linux da Linux Foundation, separada
+          da LPI: LFCA (fundamentos de TI) e LFCS (sysadmin, exame prático). LFCS
+          também é requisito do Golden Kubestronaut. LFCE e LFCT foram aposentadas
+          (2022 e 2025).'
+      fr:
+        name: Parcours Linux Foundation (LFCA → LFCS)
+        description: 'Le parcours de certifications Linux de la Linux Foundation,
+          distinct de LPI : LFCA (fondamentaux IT) et LFCS (sysadmin, examen pratique).
+          LFCS est aussi requis pour Golden Kubestronaut. LFCE et LFCT ont été retirées
+          (2022 et 2025).'
+      de:
+        name: Linux-Foundation-Track (LFCA → LFCS)
+        description: 'Der Linux-Zertifizierungstrack der Linux Foundation, getrennt
+          von LPI: LFCA (IT-Grundlagen) und LFCS (Sysadmin, praktische Prüfung). LFCS
+          ist außerdem Voraussetzung für Golden Kubestronaut. LFCE und LFCT wurden
+          eingestellt (2022 und 2025).'
+      zh:
+        name: Linux Foundation 路线 (LFCA → LFCS)
+        description: Linux Foundation 的 Linux 认证路线，独立于 LPI:LFCA(IT 基础)和 LFCS(系统管理员,实操考试)。LFCS
+          也是 Golden Kubestronaut 的必要条件。LFCE 和 LFCT 已退役(2022 和 2025)。
+      ja:
+        name: Linux Foundation トラック (LFCA → LFCS)
+        description: Linux Foundation の Linux 認定トラック(LPI とは別):LFCA(IT基礎)と LFCS(sysadmin、実技試験)。LFCS
+          は Golden Kubestronaut の要件でもあります。LFCE と LFCT は廃止されました(2022年・2025年)。

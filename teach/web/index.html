@@ -284,9 +284,10 @@ function renderChrome() {
 }
 
 // ------------------------------------------------------------------ estado
-let ME = null, CERTS = null, PATHS = null;
+let ME = null, CERTS = null, PATHS = {};
 const loadCerts = async () => (CERTS = CERTS || await api('/api/catalog'));
-const loadPaths = async () => (PATHS = PATHS || await api('/api/paths'));
+const loadPaths = async () =>
+  (PATHS[LANG] = PATHS[LANG] || await api(`/api/paths?lang=${LANG}`));
 
 const catName = { 'linux': () => t('linux'), 'cloud-native': () => t('cn'), 'general': () => t('other') };
 const LEVEL_ORDER = ['essentials', 'associate', 'professional', 'specialty', 'general'];

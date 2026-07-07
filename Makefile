@@ -11,13 +11,16 @@ CERT    ?= lpi-010-160
 BACKEND ?=
 TOPIC   ?=
 FORCE   ?=
+LANG    ?=
 HOST    ?= 127.0.0.1
 PORT    ?= 8000
 MSG     ?= actualiza contenido generado
+TAG     ?= 0.1.0
+REGISTRY ?= registry.registry:5000
 
-GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND))
+GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean
+.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -57,6 +60,18 @@ publish: ## commit + push del contenido generado al repo que publica la página 
 	git add catalog.yaml certs/
 	git diff --cached --quiet && echo "Nada nuevo para publicar" || \
 		(git commit -m "$(MSG)" && git push)
+
+image-cluster: ## builda la imagen in-cluster: Kaniko como pod simple, contexto local por stdin (sin git/workflow)
+	tar --exclude .git --exclude .venv --exclude '*.egg-info' --exclude __pycache__ -czf - . | \
+	kubectl run kaniko-teach-plat --rm -i --restart=Never -n kaniko \
+	  --image=gcr.io/kaniko-project/executor:latest -- \
+	  --dockerfile=deploy/Dockerfile --context=tar://stdin \
+	  --destination=$(REGISTRY)/teach-plat:$(TAG) \
+	  --insecure --skip-tls-verify --snapshot-mode=redo --compression=zstd --compression-level=1
+
+deploy-local: ## helm upgrade con values-local.yaml (TAG=)
+	helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
+	  -f deploy/helm/values-local.yaml --set image.tag=$(TAG)
 
 clean: ## borra el venv
 	rm -rf $(VENV)

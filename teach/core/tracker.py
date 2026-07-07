@@ -206,6 +206,45 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
 
 # ---------------------------------------------------------------- paths
 
+TRANSLATABLE_PATH_FIELDS = ("name", "description", "how_to_obtain", "rules")
+
+
+def translate_paths(backend: str | None = None, langs: list[str] | None = None) -> list[str]:
+    """Traduce los textos de los paths a los idiomas soportados.
+
+    Guarda las traducciones en paths.<slug>.i18n.<lang> (el texto base queda en
+    el idioma default); la API las mergea según ?lang=.
+    """
+    data = catalog.load()
+    paths = data.get("paths") or {}
+    base = {
+        slug: {k: v for k, v in p.items() if k in TRANSLATABLE_PATH_FIELDS}
+        for slug, p in paths.items()
+    }
+    langs = langs or [l for l in certs.LANGS if l != certs.DEFAULT_LANG]
+    changes = []
+    for lang in langs:
+        result = _ai_yaml(
+            backend,
+            f"Textos de paths de carrera (en español):\n"
+            f"{yaml.safe_dump(base, allow_unicode=True)}\n"
+            f"Traducilos al idioma con código '{lang}'. Mantené los términos "
+            "técnicos y nombres de certificaciones en inglés (CKA, LPIC-1, "
+            "Kubestronaut, etc). Devolvé YAML con exactamente la misma "
+            "estructura (mismos slugs y campos, incluyendo 'rules' como lista "
+            "si existe).",
+        )
+        for slug, translated in result.items():
+            if slug not in paths or not isinstance(translated, dict):
+                continue
+            paths[slug].setdefault("i18n", {})[lang] = {
+                k: v for k, v in translated.items() if k in TRANSLATABLE_PATH_FIELDS
+            }
+        changes.append(f"{lang}: {len(result)} paths traducidos")
+        catalog.save(data)  # guardado incremental por idioma
+    return changes
+
+
 def generate_paths(backend: str | None = None) -> list[str]:
     """La AI propone paths de carrera desde el catálogo. edited: true no se pisa."""
     data = catalog.load()
