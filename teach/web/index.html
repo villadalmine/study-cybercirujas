@@ -57,7 +57,9 @@
   .flow { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .8rem 0 1.6rem; }
   .stage { display: flex; flex-direction: column; gap: .45rem; }
   .node { border: 1.5px solid var(--accent); border-radius: 10px; padding: .35rem .8rem;
-          cursor: pointer; text-align: center; font-size: .9rem; background: var(--soft); }
+          cursor: pointer; text-align: center; font-size: .9rem; background: var(--soft);
+          max-width: 12rem; }
+  .node small { line-height: 1.25; margin-top: .1rem; }
   .node:hover { background: #4a7fd422; }
   .node small { display: block; opacity: .65; font-size: .72rem; }
   .arrow { font-size: 1.5rem; opacity: .55; }
@@ -229,9 +231,12 @@ async function showLanding() {
 }
 
 const node = (id) => {
-  const cert = CERTS[id] || { exam: id };
-  return `<div class="node" onclick="showCert('${id}')">${cert.exam}
-            <small>${cert.validity || ''}</small></div>`;
+  const cert = CERTS[id] || { exam: id, name: id };
+  // nombre corto: sin el acrónimo entre paréntesis (ya se muestra el examen)
+  const short = (cert.name || id).replace(/\s*\([^)]*\)\s*$/, '');
+  return `<div class="node" onclick="showCert('${id}')"><strong>${cert.exam}</strong>
+            <small>${short}</small>
+            <small>${cert.validity ? '⏳ ' + cert.validity : ''}</small></div>`;
 };
 
 async function showPaths() {
