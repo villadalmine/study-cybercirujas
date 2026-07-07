@@ -1,0 +1,499 @@
+certs:
+  lpi-010-160:
+    name: LPI Linux Essentials
+    exam: 010-160
+    tracked_version: '1.6'
+    upstream_status: current
+    last_checked: 2026-07-06
+    file: certs/lpi-010-160.md
+    sources:
+      overview: https://www.lpi.org/our-certifications/linux-essentials-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-010-objectives/
+      learning_materials: https://learning.lpi.org/en/learning-materials/010-160/
+    category: linux
+    level: essentials
+    validity: lifetime
+    requires: []
+  lpi-020-100:
+    name: LPI Security Essentials
+    exam: 020-100
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpi-020-100.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/security-essentials-overview/
+    level: essentials
+    validity: lifetime
+    requires: []
+  lpic-1:
+    name: 'LPIC-1: Linux Administrator'
+    exam: 101-500 + 102-500
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-1.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-1-overview/
+    level: professional
+    validity: 5 años
+    requires: []
+  lpic-2:
+    name: 'LPIC-2: Linux Engineer'
+    exam: 201-450 + 202-450
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-2.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-2-overview/
+    level: professional
+    validity: 5 años
+    requires:
+    - lpic-1
+  lpic-3-300:
+    name: 'LPIC-3: Mixed Environments'
+    exam: 300-300
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-3-300.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-3-300-overview/
+    level: professional
+    validity: 5 años
+    requires:
+    - lpic-2
+  lpic-3-303:
+    name: 'LPIC-3: Security'
+    exam: 303-300
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-3-303.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-3-303-overview/
+    level: professional
+    validity: 5 años
+    requires:
+    - lpic-2
+  lpic-3-305:
+    name: 'LPIC-3: Virtualization and Containerization'
+    exam: 305-300
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-3-305.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-3-305-overview/
+    level: professional
+    validity: 5 años
+    requires:
+    - lpic-2
+  lpic-3-306:
+    name: 'LPIC-3: High Availability and Storage Clusters'
+    exam: 306-300
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpic-3-306.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/lpic-3-306-overview/
+    level: professional
+    validity: 5 años
+    requires:
+    - lpic-2
+  lpi-devops:
+    name: LPI DevOps Tools Engineer
+    exam: 701-100
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpi-devops.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/devops-tools-engineer-overview/
+    level: specialty
+    validity: 5 años
+    requires: []
+  cka:
+    name: Certified Kubernetes Administrator (CKA)
+    exam: CKA
+    category: cloud-native
+    tracked_version: '1.35'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cka.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: professional
+    validity: 2 años
+    requires: []
+    curriculum_updated: '2026-03-03'
+    renewed_by:
+    - cks
+  ckad:
+    name: Certified Kubernetes Application Developer (CKAD)
+    exam: CKAD
+    category: cloud-native
+    tracked_version: '1.35'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/ckad.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: professional
+    validity: 2 años
+    requires: []
+    curriculum_updated: '2026-02-25'
+  cks:
+    name: Certified Kubernetes Security Specialist (CKS)
+    exam: CKS
+    category: cloud-native
+    tracked_version: '1.34'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cks.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: professional
+    validity: 2 años
+    requires:
+    - cka
+    curriculum_updated: '2025-10-30'
+  kcna:
+    name: Kubernetes and Cloud Native Associate (KCNA)
+    exam: KCNA
+    category: cloud-native
+    tracked_version: '2025-11-24'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/kcna.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2025-11-24'
+    renewed_by:
+    - cka
+    - ckad
+  kcsa:
+    name: Kubernetes and Cloud Native Security Associate (KCSA)
+    exam: KCSA
+    category: cloud-native
+    tracked_version: '2024-06-24'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/kcsa.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-06-24'
+    renewed_by:
+    - cks
+  cgoa:
+    name: Certified GitOps Associate (CGOA)
+    exam: CGOA
+    category: cloud-native
+    tracked_version: '2024-11-19'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cgoa.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CGOA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-11-19'
+  capa:
+    name: Certified Argo Project Associate (CAPA)
+    exam: CAPA
+    category: cloud-native
+    tracked_version: '2024-10-21'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/capa.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CAPA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-10-21'
+  cba:
+    name: Certified Backstage Associate (CBA)
+    exam: CBA
+    category: cloud-native
+    tracked_version: '2024-10-22'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cba.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CBA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-10-22'
+  cnpa:
+    name: Certified Cloud Native Platform Engineering Associate (CNPA)
+    exam: CNPA
+    category: cloud-native
+    tracked_version: '2025-04-01'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cnpa.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2025-04-01'
+  cnpe:
+    name: Certified Cloud Native Platform Engineer (CNPE)
+    exam: CNPE
+    category: cloud-native
+    tracked_version: '2025-12-03'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cnpe.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: professional
+    validity: 2 años
+    requires: []
+    curriculum_updated: '2025-12-03'
+  cca:
+    name: Cilium Certified Associate (CCA)
+    exam: CCA
+    category: cloud-native
+    tracked_version: '2024-10-21'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/cca.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/CCA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-10-21'
+  ica:
+    name: Istio Certified Associate (ICA)
+    exam: ICA
+    category: cloud-native
+    tracked_version: '2025-08-12'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/ica.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/ICA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2025-08-12'
+  kca:
+    name: Kyverno Certified Associate (KCA)
+    exam: KCA
+    category: cloud-native
+    tracked_version: '2024-11-28'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/kca.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-11-28'
+  otca:
+    name: OpenTelemetry Certified Associate (OTCA)
+    exam: OTCA
+    category: cloud-native
+    tracked_version: '2024-11-28'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/otca.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2024-11-28'
+  pca:
+    name: Prometheus Certified Associate (PCA)
+    exam: PCA
+    category: cloud-native
+    tracked_version: '2022-08-31'
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/pca.md
+    sources:
+      objectives: https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
+      repo: https://github.com/cncf/curriculum
+    license: CC-BY 4.0
+    level: associate
+    validity: 3 años
+    requires: []
+    curriculum_updated: '2022-08-31'
+  lpi-030-100:
+    name: LPI Web Development Essentials
+    exam: 030-100
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpi-030-100.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/web-development-essentials-overview/
+    level: essentials
+    validity: lifetime
+    requires: []
+  lpi-050-100:
+    name: LPI Open Source Essentials
+    exam: 050-100
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpi-050-100.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/open-source-essentials-overview/
+    level: essentials
+    validity: lifetime
+    requires: []
+  lpi-702:
+    name: LPI BSD Specialist
+    exam: 702-100
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lpi-702.md
+    sources:
+      objectives: https://www.lpi.org/our-certifications/bsd-specialist-overview/
+    level: specialty
+    validity: 5 años
+    requires: []
+  lfcs:
+    name: Linux Foundation Certified System Administrator (LFCS)
+    exam: LFCS
+    category: linux
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-07-07'
+    file: certs/lfcs.md
+    sources:
+      objectives: https://training.linuxfoundation.org/certification/linux-foundation-certified-sysadmin-lfcs/
+    level: professional
+    validity: 2 años
+    requires: []
+paths:
+  linux-lpi:
+    name: Carrera Linux (LPI)
+    description: De cero a experto Linux. Essentials no vence; LPIC duran 5 años y
+      cada nivel exige el anterior activo.
+    steps:
+    - - lpi-010-160
+    - - lpic-1
+    - - lpic-2
+    - - lpic-3-300
+      - lpic-3-303
+      - lpic-3-305
+      - lpic-3-306
+  kubernetes:
+    name: Carrera Kubernetes (CNCF)
+    description: Base cloud native → administración → seguridad. CKS exige CKA aprobada.
+    steps:
+    - - kcna
+      - kcsa
+    - - cka
+      - ckad
+    - - cks
+  kubestronaut:
+    name: Kubestronaut
+    type: achievement
+    description: 'Las 5 certs Kubernetes de CNCF, todas vigentes a la vez. Beneficios:
+      campera, badge, 5 cupones 50% por año.'
+    requires_all:
+    - cka
+    - ckad
+    - cks
+    - kcna
+    - kcsa
+    how_to_obtain: 'Aprobá las 5 certs y tenelas vigentes a la vez. CNCF te contacta
+      por email dentro de la semana hábil. Con CARE el mantenimiento es más barato:
+      recertificando CKS renovás también CKA y KCSA; recertificando CKA o CKAD renovás
+      KCNA — 3 exámenes mantienen las 5 certs.'
+  golden-kubestronaut:
+    name: Golden Kubestronaut
+    type: achievement
+    description: 'Las 15 certs CNCF + LFCS, todas vigentes. Título de por vida. Beneficios:
+      mochila, ThriveOne, KCD gratis anual.'
+    requires_all:
+    - cka
+    - ckad
+    - cks
+    - kcna
+    - kcsa
+    - pca
+    - ica
+    - cca
+    - capa
+    - cgoa
+    - cba
+    - otca
+    - kca
+    - cnpa
+    - cnpe
+    - lfcs
+    how_to_obtain: 'Aprobá las 15 certs CNCF + LFCS, todas vigentes a la vez. El título
+      es de por vida (los beneficios ThriveOne requieren mantener el estado). Estrategia:
+      empezar por las de 3 años (associates), después las de 2 años (CKA/CKAD/CKS/CNPE
+      y LFCS) para que no venzan antes de completar.'
+  care:
+    name: Programa CARE — renovación automática
+    type: info
+    description: 'Certification Advancement & Recertification Experience (CNCF, vigente
+      desde 2026-01-01; expandido 2026-06-17): aprobar una cert superior renueva automáticamente
+      las inferiores, igualando fechas de vencimiento.'
+    rules:
+    - CKA o CKAD (aprobada/recertificada) → renueva KCNA
+    - CKS (aprobada/recertificada) → renueva KCSA
+    - CKS (aprobada/recertificada) → reinstala y extiende CKA, incluso vencida (desde
+      2026-06-18)

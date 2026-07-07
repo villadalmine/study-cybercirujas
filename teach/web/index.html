@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="El mapa completo de certificaciones IT: Linux (LPI), Cloud Native (CNCF), niveles, temarios oficiales, vencimientos, dependencias, programa CARE y paths de carrera como Kubestronaut.">
+<title>Landscape de Certificaciones IT — Linux, Kubernetes y Cloud Native</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, -apple-system, sans-serif;
+          --accent: #4a7fd4; --accent2: #7a5fd4; --gold: #d4a94a; --ok: #4aa96c;
+          --line: #88888840; --soft: #88888812; }
+  * { box-sizing: border-box; }
+  body { margin: 0; line-height: 1.6; }
+  a { cursor: pointer; color: var(--accent); text-decoration: none; }
+  code { background: var(--soft); padding: .05rem .35rem; border-radius: 4px; font-size: .9em; }
+  header { position: sticky; top: 0; display: flex; align-items: center; gap: 1.2rem;
+           padding: .7rem 1.2rem; border-bottom: 1px solid var(--line);
+           background: Canvas; z-index: 10; }
+  header .brand { font-weight: 700; margin-right: auto; cursor: pointer; }
+  header a { opacity: .85; font-size: .95rem; }
+  main { max-width: 70rem; margin: 0 auto; padding: 1rem 1.2rem 4rem; }
+  .hero { text-align: center; padding: 3.5rem 1rem 2.5rem; }
+  .hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin: 0 0 .6rem; letter-spacing: -.02em;
+             background: linear-gradient(90deg, var(--accent), var(--accent2));
+             -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { opacity: .8; max-width: 44rem; margin: 0 auto 1.6rem; font-size: 1.05rem; }
+  .stats { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
+  .stats div { text-align: center; }
+  .stats strong { display: block; font-size: 1.9rem; color: var(--accent); }
+  .stats span { font-size: .85rem; opacity: .7; }
+  h2 { margin: 2.6rem 0 .8rem; font-size: 1.35rem; letter-spacing: -.01em; }
+  h2 .em { margin-right: .4rem; }
+  .lvl { display: inline-block; font-size: .72rem; font-weight: 600; text-transform: uppercase;
+         letter-spacing: .06em; opacity: .7; margin: 1.1rem 0 .5rem; padding: .1rem .6rem;
+         border: 1px solid var(--line); border-radius: 999px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .7rem; }
+  .cert { cursor: pointer; padding: .75rem .9rem; border: 1px solid var(--line);
+          border-radius: 12px; background: var(--soft);
+          transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease; }
+  .cert:hover { transform: translateY(-2px); border-color: var(--accent);
+                box-shadow: 0 6px 18px -8px #4a7fd455; }
+  .cert strong { display: block; font-size: .93rem; margin-bottom: .25rem; }
+  .chip { display: inline-block; font-size: .72rem; border: 1px solid var(--line);
+          border-radius: 999px; padding: 0 .5rem; margin: .15rem .25rem 0 0; opacity: .85; }
+  .chip.care { border-color: var(--gold); color: var(--gold); opacity: 1; }
+  .chip.req  { border-color: var(--accent); color: var(--accent); opacity: 1; }
+  .topic { display: flex; gap: .8rem; align-items: baseline; padding: .55rem .3rem;
+           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .topic:hover { background: var(--soft); }
+  .topic .id { opacity: .55; min-width: 2.4rem; font-variant-numeric: tabular-nums; }
+  .topic .title { flex: 1; min-width: 12rem; }
+  .topic .w { opacity: .55; font-size: .8rem; }
+  .dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%;
+         background: var(--ok); margin-right: .35rem; }
+  .dot.off { background: #888; opacity: .5; }
+  .study { font-size: .85rem; white-space: nowrap; }
+  .flow { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .8rem 0 1.6rem; }
+  .stage { display: flex; flex-direction: column; gap: .45rem; }
+  .node { border: 1.5px solid var(--accent); border-radius: 10px; padding: .35rem .8rem;
+          cursor: pointer; text-align: center; font-size: .9rem; background: var(--soft); }
+  .node:hover { background: #4a7fd422; }
+  .node small { display: block; opacity: .65; font-size: .72rem; }
+  .arrow { font-size: 1.5rem; opacity: .55; }
+  .badge { border: 1.5px solid var(--gold); border-radius: 14px; padding: 1rem 1.2rem;
+           margin: 1rem 0; background: var(--soft); }
+  .badge .node { border-color: var(--gold); display: inline-block; margin: .15rem .25rem .15rem 0; }
+  .badge p { margin: .5rem 0; }
+  /* material de estudio */
+  .md { max-width: 46rem; }
+  .md pre { overflow-x: auto; background: var(--soft); border: 1px solid var(--line);
+            padding: .9rem 1rem; border-radius: 10px; line-height: 1.45; }
+  .md h2, .md h3, .md h4 { margin: 1.4rem 0 .4rem; }
+  .tablewrap { overflow-x: auto; margin: .8rem 0; }
+  table { border-collapse: collapse; font-size: .9rem; }
+  th, td { border: 1px solid var(--line); padding: .35rem .7rem; text-align: left; }
+  th { background: var(--soft); }
+  .teaser { position: relative; max-height: 26rem; overflow: hidden;
+            -webkit-mask-image: linear-gradient(#000 55%, transparent);
+            mask-image: linear-gradient(#000 55%, transparent); }
+  .cta { border: 1.5px dashed var(--line); border-radius: 14px; text-align: center;
+         padding: 2rem 1.2rem; margin: -2rem 0 1rem; position: relative; background: Canvas; }
+  .cta h3 { margin: .2rem 0 .4rem; }
+  .cta p { opacity: .75; max-width: 30rem; margin: 0 auto .4rem; font-size: .92rem; }
+  .includes { display: flex; gap: 1.4rem; justify-content: center; flex-wrap: wrap;
+              margin: .8rem 0; font-size: .9rem; opacity: .85; }
+  input, button { font: inherit; padding: .45rem .7rem; }
+  button { cursor: pointer; background: var(--accent); color: #fff; border: 0; border-radius: 8px; }
+  .panel { max-width: 22rem; margin: 3rem auto; border: 1px solid var(--line);
+           border-radius: 14px; padding: 1.4rem; background: var(--soft); }
+  .panel form { display: flex; flex-direction: column; gap: .6rem; }
+  .panel input { border: 1px solid var(--line); border-radius: 8px; background: Canvas; }
+  .error { color: #c34; }
+  .back { display: inline-block; margin-bottom: .6rem; opacity: .8; font-size: .9rem; }
+  footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 1.2rem;
+           font-size: .8rem; opacity: .65; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand" onclick="showLanding()">📚 Cert Landscape</span>
+  <a onclick="showLanding()">Certificaciones</a>
+  <a onclick="showPaths()">Paths de carrera</a>
+  <a id="authLink" onclick="showLogin()">Entrar</a>
+</header>
+<main id="content"></main>
+<footer>
+  Temarios de fuentes oficiales: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) ·
+  training.linuxfoundation.org<br>
+  El contenido de estudio es original, generado con AI y con atribución de fuentes.
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const api = async (path, options) => {
+  const response = await fetch(path, options);
+  if (!response.ok) {
+    const detail = (await response.json().catch(() => ({}))).detail || response.status;
+    const error = new Error(detail); error.status = response.status; throw error;
+  }
+  return response.json();
+};
+
+let ME = null, CERTS = null, PATHS = null;
+const loadCerts = async () => (CERTS = CERTS || await api('/api/catalog'));
+const loadPaths = async () => (PATHS = PATHS || await api('/api/paths'));
+
+const CATEGORIES = { 'linux': '🐧 Linux', 'cloud-native': '☸️ Cloud Native (CNCF)', 'general': 'Otras' };
+const LEVELS = {
+  'essentials': 'Essentials · sin vencimiento',
+  'associate': 'Associate',
+  'professional': 'Professional',
+  'specialty': 'Open Technology / Specialty',
+};
+const LEVEL_ORDER = ['essentials', 'associate', 'professional', 'specialty', 'general'];
+
+// --- mini render de Markdown (titulos, listas, código, tablas, links) ---
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const inline = (s) => esc(s)
+  .replace(/`([^`]+)`/g, '<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+function md(text) {
+  const lines = text.split('\n');
+  let html = '', inCode = false, list = null, para = [];
+  const flush = () => { if (para.length) { html += `<p>${inline(para.join(' '))}</p>`; para = []; } };
+  const closeList = () => { if (list) { html += `</${list}>`; list = null; } };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('```')) {
+      flush(); closeList();
+      html += inCode ? '</code></pre>' : '<pre><code>'; inCode = !inCode; continue;
+    }
+    if (inCode) { html += esc(line) + '\n'; continue; }
+    const h = line.match(/^(#{1,6})\s+(.*)/);
+    if (h) { flush(); closeList(); const l = Math.min(h[1].length + 1, 6);
+             html += `<h${l}>${inline(h[2])}</h${l}>`; continue; }
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      flush(); closeList();
+      const rows = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) rows.push(lines[i++]);
+      i--;
+      html += '<div class="tablewrap"><table>' +
+        rows.filter((r) => !/^[\s|:-]+$/.test(r)).map((r, idx) => {
+          const tag = idx === 0 ? 'th' : 'td';
+          return '<tr>' + r.trim().replace(/^\||\|$/g, '').split('|')
+            .map((c) => `<${tag}>${inline(c.trim())}</${tag}>`).join('') + '</tr>';
+        }).join('') + '</table></div>';
+      continue;
+    }
+    if (/^\s*[-*+]\s+/.test(line)) { flush(); if (list !== 'ul') { closeList(); html += '<ul>'; list = 'ul'; }
+      html += `<li>${inline(line.replace(/^\s*[-*+]\s+/, ''))}</li>`; continue; }
+    if (/^\s*\d+[.)]\s+/.test(line)) { flush(); if (list !== 'ol') { closeList(); html += '<ol>'; list = 'ol'; }
+      html += `<li>${inline(line.replace(/^\s*\d+[.)]\s+/, ''))}</li>`; continue; }
+    if (/^\s*(-{3,}|\*{3,})\s*$/.test(line)) { flush(); closeList(); html += '<hr>'; continue; }
+    if (!line.trim()) { flush(); closeList(); continue; }
+    para.push(line.trim());
+  }
+  flush(); closeList(); if (inCode) html += '</code></pre>';
+  return html;
+}
+
+const examOf = (id) => (CERTS[id] || { exam: id }).exam;
+const certChips = (cert) =>
+  (cert.validity ? `<span class="chip">⏳ ${cert.validity}</span>` : '') +
+  (cert.requires && cert.requires.length
+    ? `<span class="chip req">requiere ${cert.requires.map(examOf).join(', ')}</span>` : '') +
+  (cert.renewed_by && cert.renewed_by.length
+    ? `<span class="chip care">♻ la renueva ${cert.renewed_by.map(examOf).join(' o ')}</span>` : '') +
+  (cert.curriculum_updated
+    ? `<span class="chip">📋 ${cert.curriculum_updated}</span>` : '');
+
+function updateAuthLink() {
+  $('authLink').textContent = ME ? `Salir (${ME.user})` : 'Entrar';
+  $('authLink').onclick = ME ? doLogout : showLogin;
+}
+
+async function showLanding() {
+  const certs = await loadCerts(); const paths = await loadPaths();
+  const byCategory = {};
+  for (const [id, cert] of Object.entries(certs)) {
+    const c = cert.category || 'general', l = cert.level || 'general';
+    ((byCategory[c] = byCategory[c] || {})[l] = byCategory[c][l] || []).push([id, cert]);
+  }
+  const nPaths = Object.values(paths).filter((p) => !p.type).length;
+  const nBadges = Object.values(paths).filter((p) => p.type === 'achievement').length;
+  $('content').innerHTML = `
+    <div class="hero">
+      <h1>El mapa de las certificaciones IT</h1>
+      <p>Linux, Kubernetes y Cloud Native: qué certificaciones existen, sus temarios
+         oficiales, cuánto duran, qué requiere cada una y en qué orden encararlas —
+         con material de estudio, ejercicios y laboratorios para cada tema.</p>
+      <div class="stats">
+        <div><strong>${Object.keys(certs).length}</strong><span>certificaciones</span></div>
+        <div><strong>${nPaths}</strong><span>paths de carrera</span></div>
+        <div><strong>${nBadges}</strong><span>títulos especiales</span></div>
+      </div>
+    </div>` +
+    Object.keys(CATEGORIES).filter((c) => byCategory[c]).map((category) =>
+      `<h2>${CATEGORIES[category]}</h2>` +
+      LEVEL_ORDER.filter((l) => byCategory[category][l]).map((level) =>
+        `<div><span class="lvl">${LEVELS[level] || level}</span></div><div class="grid">` +
+        byCategory[category][level].map(([id, cert]) =>
+          `<div class="cert" onclick="showCert('${id}')">
+             <strong>${cert.name}</strong>${certChips(cert)}
+           </div>`).join('') + '</div>'
+      ).join('')
+    ).join('');
+  window.scrollTo(0, 0);
+}
+
+const node = (id) => {
+  const cert = CERTS[id] || { exam: id };
+  return `<div class="node" onclick="showCert('${id}')">${cert.exam}
+            <small>${cert.validity || ''}</small></div>`;
+};
+
+async function showPaths() {
+  await loadCerts(); const paths = await loadPaths();
+  let html = '<h2>🧭 Paths de carrera</h2>';
+  for (const path of Object.values(paths)) {
+    if (path.type === 'achievement') {
+      html += `<div class="badge"><strong>🏅 ${path.name}</strong>
+                 <p>${path.description || ''}</p>
+                 ${path.requires_all.map(node).join('')}
+                 ${path.how_to_obtain ? `<p><em>Cómo obtenerlo:</em> ${path.how_to_obtain}</p>` : ''}</div>`;
+    } else if (path.type === 'info') {
+      html += `<div class="badge"><strong>♻ ${path.name}</strong>
+                 <p>${path.description || ''}</p>
+                 <ul>${(path.rules || []).map((r) => `<li>${r}</li>`).join('')}</ul></div>`;
+    } else {
+      html += `<h3>${path.name}</h3><p style="opacity:.8">${path.description || ''}</p><div class="flow">` +
+        path.steps.map((stage) =>
+          `<div class="stage">${stage.map(node).join('')}</div>`
+        ).join('<span class="arrow">→</span>') + '</div>';
+    }
+  }
+  $('content').innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+async function showCert(certId) {
+  const data = await api(`/api/certs/${certId}`);
+  const cert = data.cert;
+  $('content').innerHTML = `
+    <a class="back" onclick="showLanding()">← todas las certificaciones</a>
+    <h2>${cert.name}</h2>
+    <p>${certChips(cert)}</p>
+    <div><span class="lvl">Temario oficial · v${cert.tracked_version}</span></div>` +
+    (data.topics.length ? '' : '<p>Temario próximamente.</p>') +
+    data.topics.map((topic) =>
+      `<div class="topic">
+         <span class="id">${topic.id}</span>
+         <span class="title"><span class="dot${topic.available ? '' : ' off'}"></span>${topic.title}</span>
+         <span class="w">peso ${topic.weight}</span>
+         ${topic.available
+           ? `<a class="study" onclick="showTopic('${certId}','${topic.id}')">Ver material →</a>`
+           : '<span class="study" style="opacity:.5">próximamente</span>'}
+       </div>`).join('');
+  window.scrollTo(0, 0);
+}
+
+async function showTopic(certId, topicId) {
+  // con plan activo: material completo; público: teaser difuminado
+  if (ME && ME.subscription) {
+    try {
+      const data = await api(`/api/certs/${certId}/topics/${topicId}`);
+      const section = (title, text, bash) =>
+        text ? `<h3>${title}</h3>` + (bash ? `<pre><code>${esc(text)}</code></pre>` : md(text)) : '';
+      $('content').innerHTML = `
+        <a class="back" onclick="showCert('${certId}')">← volver al temario</a>
+        <h2>${data.topic.id} — ${data.topic.title}</h2>
+        <div class="md">${md(data.content || '')}
+          ${section('📝 Ejercicios', data.exercises)}
+          ${section('🧪 Lab break & fix', data.break_fix, true)}</div>`;
+      window.scrollTo(0, 0);
+      return;
+    } catch (error) { /* cae al teaser */ }
+  }
+  const data = await api(`/api/certs/${certId}/topics/${topicId}/preview`);
+  const inc = data.includes;
+  $('content').innerHTML = `
+    <a class="back" onclick="showCert('${certId}')">← volver al temario</a>
+    <h2>${data.topic.id} — ${data.topic.title}</h2>
+    <div class="md teaser">${md(data.preview || '')}</div>
+    <div class="cta">
+      <h3>🚧 Zona de estudio en construcción</h3>
+      <div class="includes">
+        <span>📄 teoría completa con ejemplos</span>
+        ${inc.has_exercises ? '<span>📝 ejercicios guiados</span>' : ''}
+        ${inc.has_lab ? '<span>🧪 laboratorio break & fix</span>' : ''}
+      </div>
+      <p>El material completo de este tema estará disponible próximamente con una
+         cuenta. El landscape de certificaciones es y seguirá siendo público.</p>
+      <p style="font-size:.8rem"><a onclick="showLogin()">¿Ya tenés cuenta? Entrar</a></p>
+    </div>`;
+  window.scrollTo(0, 0);
+}
+
+function showLogin() {
+  $('content').innerHTML = `
+    <div class="panel">
+      <h3>Iniciar sesión</h3>
+      <p style="font-size:.85rem;opacity:.75">El landscape es público; el material
+        de estudio completo requiere cuenta con plan activo.</p>
+      <form onsubmit="doLogin(event)">
+        <input id="user" placeholder="usuario" autocomplete="username">
+        <input id="pass" type="password" placeholder="contraseña" autocomplete="current-password">
+        <button>Entrar</button>
+      </form>
+      <p id="loginError" class="error"></p>
+    </div>`;
+}
+
+async function doLogin(event) {
+  event.preventDefault();
+  try {
+    ME = await api('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: $('user').value, password: $('pass').value }),
+    });
+    updateAuthLink(); showLanding();
+  } catch (error) {
+    $('loginError').textContent = error.message;
+  }
+}
+
+async function doLogout() {
+  await api('/api/logout', { method: 'POST' });
+  ME = null; updateAuthLink(); showLanding();
+}
+
+(async () => {
+  ME = await api('/api/me').catch(() => null);
+  updateAuthLink();
+  showLanding();
+})();
+</script>
+</body>
+</html>
