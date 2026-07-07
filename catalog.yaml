@@ -14,6 +14,7 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    vendor: LPI
   lpi-020-100:
     name: LPI Security Essentials
     exam: 020-100
@@ -27,6 +28,7 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    vendor: LPI
   lpic-1:
     name: 'LPIC-1: Linux Administrator'
     exam: 101-500 + 102-500
@@ -40,6 +42,7 @@ certs:
     level: professional
     validity: 5 años
     requires: []
+    vendor: LPI
   lpic-2:
     name: 'LPIC-2: Linux Engineer'
     exam: 201-450 + 202-450
@@ -54,6 +57,7 @@ certs:
     validity: 5 años
     requires:
     - lpic-1
+    vendor: LPI
   lpic-3-300:
     name: 'LPIC-3: Mixed Environments'
     exam: 300-300
@@ -68,6 +72,7 @@ certs:
     validity: 5 años
     requires:
     - lpic-2
+    vendor: LPI
   lpic-3-303:
     name: 'LPIC-3: Security'
     exam: 303-300
@@ -82,6 +87,7 @@ certs:
     validity: 5 años
     requires:
     - lpic-2
+    vendor: LPI
   lpic-3-305:
     name: 'LPIC-3: Virtualization and Containerization'
     exam: 305-300
@@ -96,6 +102,7 @@ certs:
     validity: 5 años
     requires:
     - lpic-2
+    vendor: LPI
   lpic-3-306:
     name: 'LPIC-3: High Availability and Storage Clusters'
     exam: 306-300
@@ -110,6 +117,7 @@ certs:
     validity: 5 años
     requires:
     - lpic-2
+    vendor: LPI
   lpi-devops:
     name: LPI DevOps Tools Engineer
     exam: 701-100
@@ -123,6 +131,7 @@ certs:
     level: specialty
     validity: 5 años
     requires: []
+    vendor: LPI
   cka:
     name: Certified Kubernetes Administrator (CKA)
     exam: CKA
@@ -141,6 +150,7 @@ certs:
     curriculum_updated: '2026-03-03'
     renewed_by:
     - cks
+    vendor: CNCF
   ckad:
     name: Certified Kubernetes Application Developer (CKAD)
     exam: CKAD
@@ -157,6 +167,7 @@ certs:
     validity: 2 años
     requires: []
     curriculum_updated: '2026-02-25'
+    vendor: CNCF
   cks:
     name: Certified Kubernetes Security Specialist (CKS)
     exam: CKS
@@ -174,6 +185,7 @@ certs:
     requires:
     - cka
     curriculum_updated: '2025-10-30'
+    vendor: CNCF
   kcna:
     name: Kubernetes and Cloud Native Associate (KCNA)
     exam: KCNA
@@ -193,6 +205,7 @@ certs:
     renewed_by:
     - cka
     - ckad
+    vendor: CNCF
   kcsa:
     name: Kubernetes and Cloud Native Security Associate (KCSA)
     exam: KCSA
@@ -211,6 +224,7 @@ certs:
     curriculum_updated: '2024-06-24'
     renewed_by:
     - cks
+    vendor: CNCF
   cgoa:
     name: Certified GitOps Associate (CGOA)
     exam: CGOA
@@ -227,6 +241,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-11-19'
+    vendor: CNCF
   capa:
     name: Certified Argo Project Associate (CAPA)
     exam: CAPA
@@ -243,6 +258,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-10-21'
+    vendor: CNCF
   cba:
     name: Certified Backstage Associate (CBA)
     exam: CBA
@@ -259,6 +275,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-10-22'
+    vendor: CNCF
   cnpa:
     name: Certified Cloud Native Platform Engineering Associate (CNPA)
     exam: CNPA
@@ -275,6 +292,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2025-04-01'
+    vendor: CNCF
   cnpe:
     name: Certified Cloud Native Platform Engineer (CNPE)
     exam: CNPE
@@ -291,6 +309,7 @@ certs:
     validity: 2 años
     requires: []
     curriculum_updated: '2025-12-03'
+    vendor: CNCF
   cca:
     name: Cilium Certified Associate (CCA)
     exam: CCA
@@ -307,6 +326,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-10-21'
+    vendor: CNCF
   ica:
     name: Istio Certified Associate (ICA)
     exam: ICA
@@ -323,6 +343,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2025-08-12'
+    vendor: CNCF
   kca:
     name: Kyverno Certified Associate (KCA)
     exam: KCA
@@ -339,6 +360,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-11-28'
+    vendor: CNCF
   otca:
     name: OpenTelemetry Certified Associate (OTCA)
     exam: OTCA
@@ -355,6 +377,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2024-11-28'
+    vendor: CNCF
   pca:
     name: Prometheus Certified Associate (PCA)
     exam: PCA
@@ -371,6 +394,7 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2022-08-31'
+    vendor: CNCF
   lpi-030-100:
     name: LPI Web Development Essentials
     exam: 030-100
@@ -384,6 +408,7 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    vendor: LPI
   lpi-050-100:
     name: LPI Open Source Essentials
     exam: 050-100
@@ -397,6 +422,7 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    vendor: LPI
   lpi-702:
     name: LPI BSD Specialist
     exam: 702-100
@@ -410,6 +436,7 @@ certs:
     level: specialty
     validity: 5 años
     requires: []
+    vendor: LPI
   lfcs:
     name: Linux Foundation Certified System Administrator (LFCS)
     exam: LFCS
@@ -423,6 +450,7 @@ certs:
     level: professional
     validity: 2 años
     requires: []
+    vendor: Linux Foundation
   lfca:
     name: Linux Foundation Certified IT Associate (LFCA)
     exam: LFCA
@@ -436,6 +464,7 @@ certs:
     file: certs/lfca.md
     sources:
       objectives: https://training.linuxfoundation.org/certification/certified-it-associate/
+    vendor: Linux Foundation
 paths:
   kubernetes:
     name: Ingeniero Kubernetes

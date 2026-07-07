@@ -37,6 +37,8 @@
   .stats strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1.2; }
   .stats span { font-size: .85rem; opacity: .7; }
   h2 { margin: 2.6rem 0 .8rem; font-size: 1.35rem; letter-spacing: -.01em; }
+  h3.vendor { margin: 1.4rem 0 .1rem; font-size: 1.05rem; opacity: .9;
+              border-left: 3px solid var(--accent); padding-left: .6rem; }
   .lvl { display: inline-block; font-size: .72rem; font-weight: 600; text-transform: uppercase;
          letter-spacing: .07em; opacity: .75; margin: 1.1rem 0 .5rem; padding: .12rem .65rem;
          border: 1px solid var(--line); border-radius: 999px; background: var(--soft); }
@@ -343,6 +345,7 @@ function md(text) {
 // ------------------------------------------------------------------ vistas
 const examOf = (id) => (CERTS[id] || { exam: id }).exam;
 const certChips = (cert) =>
+  (cert.vendor ? `<span class="chip">🏛 ${cert.vendor}</span>` : '') +
   (cert.validity ? `<span class="chip">⏳ ${t('expires')}: ${cert.validity}</span>` : '') +
   (cert.requires && cert.requires.length
     ? `<span class="chip req">${t('requires')} ${cert.requires.map(examOf).join(', ')}</span>` : '') +
@@ -358,10 +361,13 @@ function updateAuthLink() {
 
 async function showLanding() {
   const certs = await loadCerts(); const paths = await loadPaths();
+  // categoría → organización (LPI / Linux Foundation / CNCF) → nivel
   const byCategory = {};
   for (const [id, cert] of Object.entries(certs)) {
-    const c = cert.category || 'general', l = cert.level || 'general';
-    ((byCategory[c] = byCategory[c] || {})[l] = byCategory[c][l] || []).push([id, cert]);
+    const c = cert.category || 'general', v = cert.vendor || '', l = cert.level || 'general';
+    const cat = (byCategory[c] = byCategory[c] || {});
+    const ven = (cat[v] = cat[v] || {});
+    (ven[l] = ven[l] || []).push([id, cert]);
   }
   const nPaths = Object.values(paths).filter((p) => !p.type).length;
   const nBadges = Object.values(paths).filter((p) => p.type === 'achievement').length;
@@ -375,16 +381,22 @@ async function showLanding() {
         <div><strong>${nBadges}</strong><span>${t('sBadges')}</span></div>
       </div>
     </div>` +
-    Object.keys(catName).filter((c) => byCategory[c]).map((category) =>
-      `<h2>${catName[category]()}</h2>` +
-      LEVEL_ORDER.filter((l) => byCategory[category][l]).map((level) =>
-        `<div><span class="lvl">${lvlName[level] ? lvlName[level]() : level}</span></div><div class="grid">` +
-        byCategory[category][level].map(([id, cert]) =>
-          `<div class="cert" onclick="go(showCert,'${id}')">
-             <strong>${cert.name}</strong>${certChips(cert)}
-           </div>`).join('') + '</div>'
-      ).join('')
-    ).join('');
+    Object.keys(catName).filter((c) => byCategory[c]).map((category) => {
+      const vendors = Object.keys(byCategory[category]).sort();
+      return `<h2>${catName[category]()}</h2>` +
+        vendors.map((vendor) =>
+          // el nombre de la organización se remarca cuando conviven varias
+          // en la misma categoría (ej: LPI y Linux Foundation dentro de Linux)
+          (vendors.length > 1 && vendor ? `<h3 class="vendor">${vendor}</h3>` : '') +
+          LEVEL_ORDER.filter((l) => byCategory[category][vendor][l]).map((level) =>
+            `<div><span class="lvl">${lvlName[level] ? lvlName[level]() : level}</span></div><div class="grid">` +
+            byCategory[category][vendor][level].map(([id, cert]) =>
+              `<div class="cert" onclick="go(showCert,'${id}')">
+                 <strong>${cert.name}</strong>${certChips(cert)}
+               </div>`).join('') + '</div>'
+          ).join('')
+        ).join('');
+    }).join('');
   window.scrollTo(0, 0);
 }
 
