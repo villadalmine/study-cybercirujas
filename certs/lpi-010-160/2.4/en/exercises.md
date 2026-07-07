@@ -1,0 +1,3 @@
+Created `certs/lpi-010-160/2.4/en/exercises.md` — guided exercises for Topic 2.4 in English, following the same format as the existing 2.3 English material.
+
+The file contains 7 exercise blocks with numbered hands-on steps and comprehension questions after each: (1) `mkdir`/`touch` in a safe playground, (2) copying with `cp` and `cp -r`, (3) moving/renaming with `mv` and the `-i` overwrite prompt, (4) deleting with `rm`, `rmdir`, and the risks of `rm -rf`, (5) case sensitivity, (6) globbing with `*`, `?`, and `[...]` including shell-expansion mechanics, and (7) safe cleanup. All answers are collected in a collapsible `<details>` section at the end, and the LPI Learning Materials lesson URL is cited as the reference.

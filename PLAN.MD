@@ -209,7 +209,10 @@ Datos de documentación oficial (lpi.org, cncf.io, docs.linuxfoundation.org):
   OTCA, PCA.
 - *Professional* (**2 años** desde 2024-04): CKA, CKAD, CKS (exige CKA
   aprobada), CNPE.
-- LFCS (**2 años**) — necesaria para Golden Kubestronaut.
+- **Linux Foundation** (track propio, separado de la carrera LPI):
+  LFCA (associate, 2 años, 6 dominios) → LFCS (professional, 2 años, 5 dominios,
+  examen práctico; necesaria para Golden Kubestronaut). **LFCE retirada en
+  2022 y LFCT retirada en 2025** — no catalogar.
 
 **Programas** (todas las certs deben estar vigentes a la vez; al aprobar todas,
 CNCF contacta por email en la semana hábil):

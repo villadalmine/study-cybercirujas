@@ -50,9 +50,26 @@ helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
   -f deploy/helm/values-local.yaml
 ```
 
+Build sin GitHub ni workflows: `make image-cluster` corre Kaniko como pod
+simple con el contexto local por stdin. Deploy local: `make deploy-local`
+(values-local.yaml gitignored, host study.cluster.home).
+
 Pre-requisitos (ya existen en el cluster): Gateway `cluster-gateway` con
 listener HTTPS para study.cybercirujas.club, ClusterIssuer `letsencrypt-prod`,
 DNS público → HAProxy y `study.cluster.home` local.
+
+**Registry interno**: los nodos necesitan `/etc/rancher/k3s/registries.yaml`
+con el mirror http de `registry.registry:5000` (hoy solo lo tiene
+srv-super6c-01-nvme; sin eso el pull falla con ImagePullBackOff en el resto):
+
+```yaml
+mirrors:
+  "registry.registry:5000":
+    endpoint: ["http://registry.registry:5000"]
+```
+
+Los nodos rk1 ya lo tienen (etiquetados `registry-access=true`; values-local usa ese pool como nodeSelector). Al agregar la config a los super6c rearmados, etiquetarlos igual o quitar el selector. Reiniciar `k3s-agent` (workers) / `k3s` (control-plane, de a uno y con etcd
+sano — no reiniciar CPs mientras un miembro esté caído).
 
 Web: http://127.0.0.1:8000 — login `admin/admin` (solo para probar).
 Docs de la API: http://127.0.0.1:8000/docs
