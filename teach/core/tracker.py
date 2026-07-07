@@ -1,0 +1,241 @@
+"""Tracker/scraper: nada es estático — todo el catálogo se deriva de fuentes.
+
+- sync_cncf(): determinístico. Lee el repo cncf/curriculum por API de GitHub:
+  fecha de último cambio de cada PDF = versión del curriculum. Marca
+  new-version-available cuando upstream cambió.
+- sync_lpi(): scrapea lpi.org y un modelo AI convierte la página en updates
+  estructurados (nivel, validez, prerequisitos) por cert del catálogo.
+- snapshot_topics(): baja los objetivos oficiales de una cert (HTML o PDF),
+  la AI los convierte en topics YAML y se congelan en el MD (snapshot).
+- generate_paths(): la AI propone los paths de carrera a partir del catálogo
+  (requires, niveles, CARE). Los paths con edited: true nunca se pisan.
+
+La AI usa los mismos backends del generador (litellm/claude/codex/gemini).
+"""
+
+import datetime
+import html as html_lib
+import io
+import re
+
+import httpx
+import yaml
+
+from . import catalog, certs
+from .generator import make_completer
+
+UA = {"User-Agent": "Mozilla/5.0 (compatible; teach-plat-tracker)"}
+CNCF_REPO_API = "https://api.github.com/repos/cncf/curriculum"
+
+YAML_SYSTEM = (
+    "Sos un parser de documentación oficial de certificaciones. Respondés "
+    "SOLO con YAML válido, sin markdown, sin fences, sin comentarios extra."
+)
+
+
+class TrackerError(Exception):
+    pass
+
+
+def _get(url: str) -> httpx.Response:
+    response = httpx.get(url, headers=UA, follow_redirects=True, timeout=60)
+    response.raise_for_status()
+    return response
+
+
+def fetch_text(url: str, limit: int = 20000) -> str:
+    """Texto plano de una URL: PDF (pypdf) o HTML (tags fuera)."""
+    response = _get(url)
+    if url.lower().endswith(".pdf") or "pdf" in response.headers.get("content-type", ""):
+        from pypdf import PdfReader
+
+        reader = PdfReader(io.BytesIO(response.content))
+        text = "\n".join(page.extract_text() or "" for page in reader.pages)
+    else:
+        text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", response.text, flags=re.S)
+        text = re.sub(r"<[^>]+>", " ", text)
+        text = html_lib.unescape(text)
+    return re.sub(r"\s+", " ", text).strip()[:limit]
+
+
+def _ai_yaml(backend: str | None, prompt: str) -> dict:
+    complete, _ = make_completer(backend)
+    raw = complete(YAML_SYSTEM, prompt).strip()
+    raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
+    data = yaml.safe_load(raw)
+    if not isinstance(data, dict):
+        raise TrackerError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
+    return data
+
+
+# ---------------------------------------------------------------- CNCF
+
+def sync_cncf() -> list[str]:
+    """Versión de cada curriculum = fecha del último commit que tocó su PDF."""
+    data = catalog.load()
+    changes = []
+    files = _get(f"{CNCF_REPO_API}/contents/").json()
+    today = datetime.date.today().isoformat()
+    for entry in files:
+        name = entry["name"]
+        if not name.lower().endswith(".pdf"):
+            continue
+        cert_id = re.split(r"[_ ]", name)[0].lower()
+        if cert_id not in data["certs"]:
+            changes.append(f"NUEVA cert upstream sin catalogar: {name}")
+            continue
+        commits = _get(
+            f"{CNCF_REPO_API}/commits?path={httpx.QueryParams({'p': name})['p']}&per_page=1"
+        ).json()
+        updated = commits[0]["commit"]["committer"]["date"][:10] if commits else None
+        cert = data["certs"][cert_id]
+        cert["last_checked"] = today
+        if updated and cert.get("curriculum_updated") != updated:
+            cert["curriculum_updated"] = updated
+            cert["upstream_status"] = "new-version-available"
+            changes.append(f"{cert_id}: curriculum cambió → {updated}")
+        semantic = re.search(r"v(\d+\.\d+)", name)
+        if semantic and cert.get("tracked_version") != semantic.group(1):
+            cert["tracked_version"] = semantic.group(1)
+            changes.append(f"{cert_id}: versión → {semantic.group(1)}")
+    catalog.save(data)
+    return changes or ["cncf: sin cambios upstream"]
+
+
+# ---------------------------------------------------------------- LPI
+
+LPI_SUMMARY = "https://www.lpi.org/our-certifications/summary-of-lpi-certifications/"
+
+
+def sync_lpi(backend: str | None = None) -> list[str]:
+    """Scrapea el resumen oficial de LPI y actualiza nivel/validez/requires."""
+    data = catalog.load()
+    known = {
+        cert_id: {"name": c["name"], "exam": c.get("exam", "")}
+        for cert_id, c in data["certs"].items()
+        if c.get("category") == "linux"
+    }
+    page = fetch_text(LPI_SUMMARY)
+    result = _ai_yaml(
+        backend,
+        f"Página oficial de LPI (texto plano):\n{page}\n\n"
+        f"Certs en mi catálogo (id → nombre/examen):\n{yaml.safe_dump(known, allow_unicode=True)}\n"
+        "Devolvé YAML con esta forma exacta:\n"
+        "updates:\n  <id-del-catalogo>:\n    level: essentials|professional|specialty\n"
+        "    validity: lifetime|'5 años'|'2 años'|'3 años'\n"
+        "    requires: [ids del catálogo que exige activos, o lista vacía]\n"
+        "Mapeo de tracks LPI a level (usar EXACTAMENTE este criterio): "
+        "track Essentials → essentials; tracks LPIC-1/LPIC-2/LPIC-3 (incluye "
+        "todas las especializaciones LPIC-3) → professional; track Open "
+        "Technology (DevOps, BSD) → specialty.\n"
+        "new:\n  - name: ...\n    exam: ...\n    level: ...\n    validity: ...\n"
+        "Solo certs que aparezcan en la página. 'new' = certs de la página que "
+        "no están en mi catálogo.",
+    )
+    changes = []
+    today = datetime.date.today().isoformat()
+    for cert_id, update in (result.get("updates") or {}).items():
+        if cert_id not in data["certs"]:
+            continue
+        cert = data["certs"][cert_id]
+        cert["last_checked"] = today
+        for field in ("level", "validity", "requires"):
+            if field in update and cert.get(field) != update[field]:
+                changes.append(f"{cert_id}: {field} {cert.get(field)} → {update[field]}")
+                cert[field] = update[field]
+    for new in result.get("new") or []:
+        changes.append(f"NUEVA cert upstream sin catalogar: {new.get('name')} ({new.get('exam')})")
+    catalog.save(data)
+    return changes or ["lpi: sin cambios"]
+
+
+# ---------------------------------------------------------------- temario
+
+def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = False) -> dict:
+    """Congela el temario oficial en el MD: fetch objetivos (HTML/PDF) → AI → topics."""
+    data = catalog.load()
+    cert = data["certs"].get(cert_id)
+    if not cert:
+        raise TrackerError(f"'{cert_id}' no está en el catálogo")
+    url = (cert.get("sources") or {}).get("objectives")
+    if not url:
+        raise TrackerError(f"'{cert_id}' no tiene sources.objectives en el catálogo")
+
+    post = certs.load(cert_id)
+    existing = {str(t.get("id")): t for t in post.metadata.get("topics", [])}
+    if existing and not force:
+        raise TrackerError(
+            f"'{cert_id}' ya tiene temario ({len(existing)} topics). Usar --force para re-snapshotear."
+        )
+
+    text = fetch_text(url)
+    result = _ai_yaml(
+        backend,
+        f"Objetivos oficiales de la certificación {cert['name']} "
+        f"(examen {cert.get('exam')}), texto extraído de {url}:\n{text}\n\n"
+        "Devolvé YAML con esta forma exacta:\n"
+        "version: <versión del temario si aparece, si no 'unknown'>\n"
+        "topics:\n  - id: '1.1'\n    title: ...\n    topic: '1 - <nombre del dominio>'\n"
+        "    weight: <peso o porcentaje numérico>\n"
+        "Cubrí TODOS los dominios/temas del documento, en orden. Si el documento "
+        "solo tiene dominios (sin subtemas numerados), usá el dominio como topic y "
+        "sus bullets principales como topics con ids '1.1', '1.2', etc.",
+    )
+    topics = result.get("topics") or []
+    if not topics:
+        raise TrackerError("La AI no extrajo topics del documento")
+    for topic in topics:
+        tid = str(topic.get("id"))
+        old = existing.get(tid)
+        topic["status"] = old.get("status", "pending") if old else "pending"
+        topic.setdefault("sources", (old or {}).get("sources") or [url])
+
+    post.metadata["topics"] = topics
+    post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))
+    post.metadata["snapshot_date"] = datetime.date.today().isoformat()
+    sources = post.metadata.get("sources") or []
+    if url not in sources:
+        post.metadata["sources"] = [*sources, url]
+    certs.save(cert_id, post)
+
+    cert["upstream_status"] = "current"
+    cert["last_checked"] = datetime.date.today().isoformat()
+    catalog.save(data)
+    return {"cert": cert_id, "topics": len(topics), "version": post.metadata["version"]}
+
+
+# ---------------------------------------------------------------- paths
+
+def generate_paths(backend: str | None = None) -> list[str]:
+    """La AI propone paths de carrera desde el catálogo. edited: true no se pisa."""
+    data = catalog.load()
+    summary = {
+        cert_id: {
+            k: v
+            for k, v in c.items()
+            if k in ("name", "exam", "category", "level", "validity", "requires", "renewed_by")
+        }
+        for cert_id, c in data["certs"].items()
+    }
+    result = _ai_yaml(
+        backend,
+        f"Catálogo de certificaciones:\n{yaml.safe_dump(summary, allow_unicode=True)}\n\n"
+        "Armá paths de carrera. Devolvé YAML:\n"
+        "paths:\n  <slug>:\n    name: ...\n    description: <1-2 frases, en español>\n"
+        "    steps: [[ids en paralelo], [siguiente paso], ...]\n"
+        "Reglas: respetar 'requires' (nunca poner una cert antes que su "
+        "prerequisito), ordenar de menor a mayor nivel, usar solo ids del "
+        "catálogo. Un path por categoría/rol razonable (admin linux, kubernetes, "
+        "observabilidad/service mesh si da el catálogo).",
+    )
+    changes = []
+    existing = data.get("paths") or {}
+    for slug, path in (result.get("paths") or {}).items():
+        if existing.get(slug, {}).get("edited"):
+            changes.append(f"{slug}: salteado (edited)")
+            continue
+        existing[slug] = path
+        changes.append(f"{slug}: {'actualizado' if slug in existing else 'nuevo'}")
+    data["paths"] = existing
+    catalog.save(data)
+    return changes

@@ -4,7 +4,7 @@ certs:
     exam: 010-160
     tracked_version: '1.6'
     upstream_status: current
-    last_checked: 2026-07-06
+    last_checked: '2026-07-07'
     file: certs/lpi-010-160.md
     sources:
       overview: https://www.lpi.org/our-certifications/linux-essentials-overview/
@@ -424,24 +424,12 @@ certs:
     validity: 2 años
     requires: []
 paths:
-  linux-lpi:
-    name: Carrera Linux (LPI)
-    description: De cero a experto Linux. Essentials no vence; LPIC duran 5 años y
-      cada nivel exige el anterior activo.
-    steps:
-    - - lpi-010-160
-    - - lpic-1
-    - - lpic-2
-    - - lpic-3-300
-      - lpic-3-303
-      - lpic-3-305
-      - lpic-3-306
   kubernetes:
-    name: Carrera Kubernetes (CNCF)
-    description: Base cloud native → administración → seguridad. CKS exige CKA aprobada.
+    name: Ingeniero Kubernetes
+    description: Ruta troncal de Kubernetes desde los fundamentos cloud native hasta
+      la administración y el desarrollo de aplicaciones sobre el clúster.
     steps:
     - - kcna
-      - kcsa
     - - cka
       - ckad
     - - cks
@@ -460,6 +448,7 @@ paths:
       por email dentro de la semana hábil. Con CARE el mantenimiento es más barato:
       recertificando CKS renovás también CKA y KCSA; recertificando CKA o CKAD renovás
       KCNA — 3 exámenes mantienen las 5 certs.'
+    edited: true
   golden-kubestronaut:
     name: Golden Kubestronaut
     type: achievement
@@ -486,6 +475,7 @@ paths:
       es de por vida (los beneficios ThriveOne requieren mantener el estado). Estrategia:
       empezar por las de 3 años (associates), después las de 2 años (CKA/CKAD/CKS/CNPE
       y LFCS) para que no venzan antes de completar.'
+    edited: true
   care:
     name: Programa CARE — renovación automática
     type: info
@@ -497,3 +487,65 @@ paths:
     - CKS (aprobada/recertificada) → renueva KCSA
     - CKS (aprobada/recertificada) → reinstala y extiende CKA, incluso vencida (desde
       2026-06-18)
+    edited: true
+  linux-admin:
+    name: Administrador Linux
+    description: Ruta completa de administración de sistemas Linux, desde fundamentos
+      hasta especializaciones LPIC-3. Comienza con Linux Essentials y avanza por LPIC-1
+      y LPIC-2 antes de elegir una especialidad.
+    steps:
+    - - lpi-010-160
+    - - lfcs
+    - - lpic-1
+    - - lpic-2
+    - - lpic-3-300
+      - lpic-3-303
+      - lpic-3-305
+      - lpic-3-306
+  linux-devops:
+    name: DevOps sobre Linux
+    description: Base sólida de administración Linux orientada a herramientas DevOps
+      y contenedores. Ideal como puente entre sysadmin tradicional y cloud native.
+    steps:
+    - - lpi-010-160
+    - - lpic-1
+    - - lpi-devops
+  kubernetes-security:
+    name: Seguridad Cloud Native
+    description: Especialización en seguridad de Kubernetes y del ecosistema cloud
+      native. KCSA introduce los conceptos y CKS los valida a nivel profesional tras
+      obtener CKA.
+    steps:
+    - - kcna
+      - kcsa
+    - - cka
+    - - cks
+  gitops-platform:
+    name: Ingeniería de Plataformas y GitOps
+    description: Ruta de platform engineering basada en GitOps, entrega continua con
+      Argo y portales de desarrollo con Backstage, culminando en el nivel profesional
+      CNPE.
+    steps:
+    - - kcna
+    - - cgoa
+    - - capa
+      - cba
+      - cnpa
+    - - cnpe
+  observabilidad:
+    name: Observabilidad Cloud Native
+    description: Monitoreo y telemetría del ecosistema cloud native con Prometheus
+      y OpenTelemetry sobre una base de Kubernetes.
+    steps:
+    - - kcna
+    - - pca
+      - otca
+  service-mesh-networking:
+    name: Redes y Service Mesh
+    description: Especialización en networking cloud native con Cilium e Istio, partiendo
+      de los fundamentos de Kubernetes.
+    steps:
+    - - kcna
+    - - cca
+      - ica
+    - - kca

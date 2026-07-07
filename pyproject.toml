@@ -15,6 +15,8 @@ dependencies = [
     "python-frontmatter>=1.1",
     "openai>=1.30",
     "itsdangerous>=2.1",
+    "httpx>=0.27",
+    "pypdf>=4.0",
 ]
 
 [project.scripts]

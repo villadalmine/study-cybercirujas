@@ -16,11 +16,25 @@ Plataforma educativa self-service que trackea las certificaciones mainstream, ba
 
 ## Arquitectura — 3 piezas
 
-### 1. Tracker del catálogo (proceso de fondo, sin AI)
+### 1. Tracker del catálogo (scraper — nada es estático)
 
-- Mantiene la lista de certificaciones conocidas y la versión trackeada de cada una.
-- Corre periódicamente (cron), compara contra lo publicado y si hay cambios marca "hay versión nueva del temario de X" en el catálogo.
-- Nunca toca el contenido generado — solo avisa.
+Principio: **todo dato del catálogo se deriva de una fuente oficial scrapeada**;
+nada se mantiene a mano (a mano solo se *enriquece*, con `edited` para que no
+se pise). Implementado en `core/tracker.py`:
+
+- `teach tracker sync --provider cncf` — determinístico, sin AI: API de GitHub
+  sobre cncf/curriculum; fecha del último commit de cada PDF = versión del
+  curriculum; marca `new-version-available` si upstream cambió.
+- `teach tracker sync --provider lpi --backend <ai>` — scrapea lpi.org y la AI
+  convierte la página en updates estructurados (nivel/validez/requires).
+- `teach cert snapshot <id> --backend <ai>` — baja los objetivos oficiales
+  (HTML o **PDF**, con pypdf) y la AI los convierte en topics YAML congelados
+  en el MD. Statuses existentes se preservan; `--force` para re-snapshotear.
+- `teach paths generate --backend <ai>` — la AI propone los paths de carrera
+  desde el catálogo (respetando `requires`); paths con `edited: true` (ej. los
+  que encodean datos scrapeados de Kubestronaut/CARE) nunca se pisan.
+- Corre periódicamente (cron); nunca toca el contenido generado — solo el
+  catálogo, y avisa qué cambió.
 
 ### 2. Generador (AI, bajo demanda)
 

@@ -7,8 +7,12 @@ from .core import catalog, certs, generator, labs
 app = typer.Typer(help="Plataforma educativa self-service", no_args_is_help=True)
 cert_app = typer.Typer(help="Certificaciones del catálogo", no_args_is_help=True)
 lab_app = typer.Typer(help="Labs por tema", no_args_is_help=True)
+tracker_app = typer.Typer(help="Scraper de fuentes oficiales (nada estático)", no_args_is_help=True)
+paths_app = typer.Typer(help="Paths de carrera", no_args_is_help=True)
 app.add_typer(cert_app, name="cert")
 app.add_typer(lab_app, name="lab")
+app.add_typer(tracker_app, name="tracker")
+app.add_typer(paths_app, name="paths")
 
 
 @cert_app.command("list")
@@ -103,6 +107,60 @@ def lab_status(cert_id: str, topic_id: str) -> None:
     """Estado del lab de un tema."""
     result = labs.status(cert_id, topic_id)
     typer.echo(f"Lab {cert_id}/{topic_id}: {result.get('state')}")
+
+
+@tracker_app.command("sync")
+def tracker_sync(
+    provider: str = typer.Option("all", "--provider", help="all | cncf | lpi"),
+    backend: str = typer.Option(None, "--backend", help="backend AI para parsear páginas"),
+) -> None:
+    """Scrapea las fuentes oficiales y actualiza el catálogo."""
+    from .core import tracker
+
+    try:
+        changes = []
+        if provider in ("all", "cncf"):
+            changes += tracker.sync_cncf()
+        if provider in ("all", "lpi"):
+            changes += tracker.sync_lpi(backend=backend)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    for change in changes:
+        typer.echo(f"  {change}")
+
+
+@cert_app.command("snapshot")
+def cert_snapshot(
+    cert_id: str,
+    backend: str = typer.Option(None, "--backend"),
+    force: bool = typer.Option(False, "--force", help="Re-snapshotear aunque haya temario"),
+) -> None:
+    """Congela el temario oficial (HTML/PDF → AI → topics en el MD)."""
+    from .core import tracker
+
+    try:
+        result = tracker.snapshot_topics(cert_id, backend=backend, force=force)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(f"  {result['cert']}: {result['topics']} topics congelados (v{result['version']})")
+
+
+@paths_app.command("generate")
+def paths_generate(
+    backend: str = typer.Option(None, "--backend"),
+) -> None:
+    """La AI propone paths de carrera desde el catálogo (edited no se pisa)."""
+    from .core import tracker
+
+    try:
+        changes = tracker.generate_paths(backend=backend)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    for change in changes:
+        typer.echo(f"  {change}")
 
 
 @app.command()
