@@ -114,7 +114,7 @@
   <a data-nav="certs" onclick="go(showLanding)"></a>
   <a data-nav="paths" onclick="go(showPaths)"></a>
   <select id="langSel" onchange="setLang(this.value)"></select>
-  <a id="authLink"></a>
+
 </header>
 <main id="content"></main>
 <footer id="foot"></footer>
@@ -282,11 +282,10 @@ function renderChrome() {
   $('langSel').innerHTML = Object.entries(LANG_LABELS)
     .map(([code, label]) => `<option value="${code}"${code === LANG ? ' selected' : ''}>${label}</option>`)
     .join('');
-  updateAuthLink();
 }
 
 // ------------------------------------------------------------------ estado
-let ME = null, CERTS = null, PATHS = {};
+let CERTS = null, PATHS = {};
 const loadCerts = async () => (CERTS = CERTS || await api('/api/catalog'));
 const loadPaths = async () =>
   (PATHS[LANG] = PATHS[LANG] || await api(`/api/paths?lang=${LANG}`));
@@ -343,21 +342,20 @@ function md(text) {
 }
 
 // ------------------------------------------------------------------ vistas
-const examOf = (id) => (CERTS[id] || { exam: id }).exam;
+const examOf = (id) => { const c = CERTS[id]; return c ? c.exam : id; };
+const nameOf = (id) => { const c = CERTS[id]; return c ? c.name : id; };
 const certChips = (cert) =>
   (cert.vendor ? `<span class="chip">🏛 ${cert.vendor}</span>` : '') +
+  (cert.exam ? `<span class="chip">📝 ${cert.exam}</span>` : '') +
   (cert.validity ? `<span class="chip">⏳ ${t('expires')}: ${cert.validity}</span>` : '') +
   (cert.requires && cert.requires.length
-    ? `<span class="chip req">${t('requires')} ${cert.requires.map(examOf).join(', ')}</span>` : '') +
+    ? `<span class="chip req">${t('requires')} ${cert.requires.map(nameOf).join(', ')}</span>` : '') +
   (cert.renewed_by && cert.renewed_by.length
     ? `<span class="chip care">♻ ${t('renews')} ${cert.renewed_by.map(examOf).join(' / ')}</span>` : '') +
   (cert.curriculum_updated
     ? `<span class="chip">📋 ${t('curriculum')}: ${cert.curriculum_updated}</span>` : '');
 
-function updateAuthLink() {
-  $('authLink').textContent = ME ? `${t('logout')} (${ME.user})` : t('login');
-  $('authLink').onclick = ME ? doLogout : () => go(showLogin);
-}
+
 
 async function showLanding() {
   const certs = await loadCerts(); const paths = await loadPaths();
@@ -454,78 +452,23 @@ async function showCert(certId) {
 }
 
 async function showTopic(certId, topicId) {
-  if (ME && ME.subscription) {
-    try {
-      const data = await api(`/api/certs/${certId}/topics/${topicId}?lang=${LANG}`);
-      const section = (title, text, bash) =>
-        text ? `<h3>${title}</h3>` + (bash ? `<pre><code>${esc(text)}</code></pre>` : md(text)) : '';
-      $('content').innerHTML = `
-        <a class="back" onclick="go(showCert,'${certId}')">${t('backSyl')}</a>
-        <h2>${data.topic.id} — ${data.topic.title}</h2>
-        ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
-        <div class="md">${md(data.content || '')}
-          ${section(t('exercises'), data.exercises)}
-          ${section(t('lab'), data.break_fix, true)}</div>`;
-      window.scrollTo(0, 0);
-      return;
-    } catch (error) { /* cae al teaser */ }
-  }
-  const data = await api(`/api/certs/${certId}/topics/${topicId}/preview?lang=${LANG}`);
-  const inc = data.includes;
+  const data = await api(`/api/certs/${certId}/topics/${topicId}?lang=${LANG}`);
+  const section = (title, text, bash) =>
+    text ? `<h3>${title}</h3>` + (bash ? `<pre><code>${esc(text)}</code></pre>` : md(text)) : '';
   $('content').innerHTML = `
     <a class="back" onclick="go(showCert,'${certId}')">${t('backSyl')}</a>
     <h2>${data.topic.id} — ${data.topic.title}</h2>
     ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
-    <div class="md teaser">${md(data.preview || '')}</div>
-    <div class="cta">
-      <h3>${t('ctaTitle')}</h3>
-      <div class="includes">
-        <span>${t('incTheory')}</span>
-        ${inc.has_exercises ? `<span>${t('incEx')}</span>` : ''}
-        ${inc.has_lab ? `<span>${t('incLab')}</span>` : ''}
-      </div>
-      <p>${t('ctaBody')}</p>
-      <p style="font-size:.8rem"><a onclick="go(showLogin)">${t('haveAccount')}</a></p>
-    </div>`;
+    <div class="md">${md(data.content || '')}
+      ${section(t('exercises'), data.exercises)}
+      ${section(t('lab'), data.break_fix, true)}</div>`;
   window.scrollTo(0, 0);
 }
 
-function showLogin() {
-  $('content').innerHTML = `
-    <div class="panel">
-      <h3>${t('loginTitle')}</h3>
-      <p style="font-size:.85rem;opacity:.75">${t('loginSub')}</p>
-      <form onsubmit="doLogin(event)">
-        <input id="user" placeholder="${t('user')}" autocomplete="username">
-        <input id="pass" type="password" placeholder="${t('pass')}" autocomplete="current-password">
-        <button>${t('login')}</button>
-      </form>
-      <p id="loginError" class="error"></p>
-    </div>`;
-}
 
-async function doLogin(event) {
-  event.preventDefault();
-  try {
-    ME = await api('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: $('user').value, password: $('pass').value }),
-    });
-    updateAuthLink(); go(showLanding);
-  } catch (error) {
-    $('loginError').textContent = error.message;
-  }
-}
-
-async function doLogout() {
-  await api('/api/logout', { method: 'POST' });
-  ME = null; updateAuthLink(); go(showLanding);
-}
 
 (async () => {
   document.documentElement.lang = LANG;
-  ME = await api('/api/me').catch(() => null);
   renderChrome();
   go(showLanding);
 })();

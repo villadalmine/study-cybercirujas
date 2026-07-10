@@ -160,7 +160,6 @@ def get_topic(
     cert_id: str,
     topic_id: str,
     lang: str = certs.DEFAULT_LANG,
-    user: str = Depends(require_subscriber),
 ) -> dict:
     _valid_lang(lang)
     try:
