@@ -15,8 +15,18 @@ import subprocess
 import sys
 from pathlib import Path
 
+import yaml
+
 REPO = Path(__file__).resolve().parent.parent
 TEACH = REPO / ".venv" / "bin" / "teach"
+
+
+def _cert_topic_ids(cert: str) -> list[str]:
+    """Ids de todos los topics del temario (frontmatter del .md), para poder
+    detectar labs faltantes sin depender de qué haya en disco."""
+    md = (REPO / "certs" / f"{cert}.md").read_text()
+    front = yaml.safe_load(md.split("---")[1])
+    return [str(t["id"]) for t in front.get("topics", [])]
 
 RECAP_PATTERNS = [
     r"^`?certs/",
@@ -68,25 +78,47 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
     for cert, langs in TARGETS:
         cert_dir = REPO / "certs" / cert
         for lang in langs:
-            for kind in ("content.md", "exercises.md"):
-                for f in sorted(cert_dir.glob(f"*/{lang}/{kind}")):
+            # iterar por directorio de idioma (no por archivo existente) para
+            # detectar también content.md/exercises.md FALTANTES, no solo
+            # corruptos — un topic puede haber quedado a medio generar (ej.
+            # proceso matado entre los dos completions) sin que ningún
+            # archivo individual se vea corrupto.
+            for lang_dir in sorted(cert_dir.glob(f"*/{lang}")):
+                if not lang_dir.is_dir():
+                    continue
+                topic = lang_dir.parts[-2]
+                for kind in ("content.md", "exercises.md"):
+                    f = lang_dir / kind
+                    if not f.exists():
+                        bad.add((cert, topic, lang))
+                        continue
                     text = f.read_text(errors="replace")
                     stripped = text.strip()
                     first_line = stripped.splitlines()[0] if stripped else ""
                     is_small = f.stat().st_size < MIN_REAL_BYTES
                     looks_recap = bool(RECAP_RE.search(first_line)) or not stripped.startswith("#")
                     if is_small or looks_recap:
-                        bad.add((cert, f.parts[-3], lang))
+                        bad.add((cert, topic, lang))
         # break_fix.sh es compartido entre idiomas (una copia por tema, no
-        # por lang) — solo se regenera con force+lang==DEFAULT_LANG.
-        for f in sorted(cert_dir.glob("*/lab/break_fix.sh")):
+        # por lang) — solo se regenera con force+lang==DEFAULT_LANG. Se
+        # enumeran los topics desde el temario (no desde disco) para
+        # detectar labs FALTANTES, no solo corruptos.
+        try:
+            topic_ids = _cert_topic_ids(cert)
+        except (FileNotFoundError, IndexError):
+            topic_ids = []
+        for topic in topic_ids:
+            f = cert_dir / topic / "lab" / "break_fix.sh"
+            if not f.exists():
+                bad.add((cert, topic, DEFAULT_LANG))
+                continue
             text = f.read_text(errors="replace")
             stripped = text.strip()
             first_line = stripped.splitlines()[0] if stripped else ""
             is_small = f.stat().st_size < MIN_REAL_BYTES
             looks_recap = bool(RECAP_RE.search(first_line))
             if is_small or looks_recap:
-                bad.add((cert, f.parts[-3], DEFAULT_LANG))
+                bad.add((cert, topic, DEFAULT_LANG))
     return bad
 
 

@@ -164,7 +164,7 @@ topics:
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
-  status: pending
+  status: generated
   title: Use Ingress rules to expose applications
   topic: 5 - Services and Networking
   weight: 5

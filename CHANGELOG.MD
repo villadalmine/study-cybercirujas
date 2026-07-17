@@ -6,6 +6,24 @@ lo pendiente vive en [BACKLOG.MD](BACKLOG.MD).
 
 ## 2026-07-16
 
+- **Bug encontrado y arreglado en `scripts/fix_corrupted_content.py`: solo
+  detectaba archivos corruptos, no faltantes.** El script auditaba
+  `cert_dir.glob(".../content.md")` — si el archivo no existía, el glob
+  simplemente no lo encontraba, así que un topic a medio generar (proceso
+  matado entre los dos completions, ej. de una sesión de meses atrás) no
+  se detectaba nunca aunque el resto pareciera "0 combos corruptos". Se
+  encontraron así 3 huecos reales que habían sobrevivido a todas las
+  auditorías previas: `ckad/5.3/es/exercises.md` (y su lab entero) y los
+  labs de `ckad/2.3` y `ckad/3.4` faltaban directamente. El chequeo de
+  lpi-010-160/ckad "19/19"/"24/24" de entradas anteriores solo contaba
+  `content.md` — nunca verificó `exercises.md`/`break_fix.sh` uno por uno.
+  Fix: el script ahora itera por directorio de idioma (detecta
+  `content.md`/`exercises.md` faltantes) y por la lista de topics del
+  temario — no del disco — para los labs (detecta `break_fix.sh`
+  faltante). Regenerados los 3 huecos; auditoría fresca confirma 0 combos
+  en los tres certs, con conteo por archivo (no solo por topic) verificado
+  a mano: lpi-010-160 19/19 content+exercises+lab en los 7 idiomas, ckad
+  24/24, cka 27/27. Redesplegado con esta corrección.
 - **CKA agregado al catálogo**: snapshot del temario oficial (PDF
   `CKA_Curriculum_v1.35.pdf`, 27 topics) + contenido/ejercicios/lab en
   español, 27/27 limpio. El bug de peso-por-dominio (visto antes en CKAD) se

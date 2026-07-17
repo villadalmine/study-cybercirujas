@@ -1,184 +1,252 @@
 # 5.2 Creating Users and Groups
 
-**Exam weight: 2** — Linux Essentials 010-160, version 1.6
+## 概要
 
-## なぜ user と group の管理を理解する必要があるのか
+Linux はマルチユーザー OS であり、すべてのプロセスとファイルは特定の user と group に紐づいています。system administrator の基本業務の一つが、user account と group account の作成・変更・削除です。この章では `useradd`、`usermod`、`userdel`、`groupadd`、`groupmod`、`groupdel`、`passwd` といった主要なコマンドと、それらが操作する設定ファイル（`/etc/passwd`、`/etc/shadow`、`/etc/group`、`/etc/gshadow`）を扱います。
 
-Linux はマルチユーザー OS であり、1台のマシンを複数の人間、そして多数のサービス（daemon）が同時に利用します。実行中のあらゆるプロセスは必ず「ある user」として動作しており、その user は必ず1つ以上の group に所属しています。誰がどのファイルにアクセスできるか、どのコマンドを実行できるかという権限管理（Topic 5 の他のセクションで扱うパーミッション）は、すべてこの user/group の仕組みの上に成り立っています。したがって account をどう作成し、どこにどんな情報として保存されるかを理解することが、Linux 管理の出発点になります。
+試験での重み(weight)は 2 と比較的軽めですが、実務では最も頻繁に使うコマンド群なので、オプションと出力形式を正確に押さえておくことが重要です。
 
-## account の種類
+---
 
-Linux の account は大きく3種類に分類されます。
+## user account を管理するファイル
 
-| 種類 | 典型的な UID の範囲 | 用途 |
-|---|---|---|
-| **root**（superuser） | 0 | システム全体に対する無制限の管理権限を持つ |
-| **system account** | 1〜999 | daemon やサービス用（例: `sshd`, `www-data`）。通常は対話的な login ができない |
-| **regular user** | 1000以上 | home directory と login shell を持つ、人間が使う account |
+### `/etc/passwd`
 
-- 各 user には数値の **UID**（User ID）が割り当てられており、user 名はあくまで人間向けのラベルで、kernel 内部は UID の数値だけで動作を管理しています。
-- 各 group にも同様に数値の **GID**（Group ID）があります。
-- user は必ず1つの **primary group** を持ち（account 作成時に決まる）、さらに任意の数の **supplementary group** に所属できます。supplementary group は追加の権限を付与するのに使われ、たとえば管理者権限を得るために `sudo` や `wheel` group に加える、といった運用がよく行われます。
+すべての user account の基本情報を保持するファイルです。各行が 1 user を表し、コロン `:` で 7 つのフィールドに分かれています。
 
-regular user が始まる UID の境界値はディストリビューションによって差があります（古いシステムでは500からのこともあります）が、現在の主要ディストリビューションでは 1000 が一般的です。この値は `/etc/login.defs` の `UID_MIN` で定義されています。
-
-## 自分が誰であるかを確認する
-
-`id` コマンドは、現在の user の UID、primary GID、そして所属するすべての group を表示します。
-
-```
-$ id
-uid=1000(carol) gid=1000(carol) groups=1000(carol),27(sudo),998(docker)
+```bash
+$ cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+alice:x:1001:1001:Alice Smith:/home/alice:/bin/bash
 ```
 
-他の account を指定して調べることも可能です: `id emma`。
+フィールドの意味（左から順）:
 
-試験でよく問われる関連コマンド:
+| 順番 | フィールド名        | 説明                                      |
+|------|---------------------|-------------------------------------------|
+| 1    | username             | login 名                                  |
+| 2    | password placeholder | 通常 `x`。実際の password hash は `/etc/shadow` にある |
+| 3    | UID                  | user ID（数値）                           |
+| 4    | GID                  | primary group ID（数値）                  |
+| 5    | GECOS                | comment field（本名など任意情報）         |
+| 6    | home directory       | login 後の初期 directory                  |
+| 7    | login shell          | login 時に起動される shell                |
 
-- `who` — 現在 login している user の一覧を表示する。
-- `w` — `who` と似ているが、各セッションが何を実行しているか、load average なども合わせて表示する。
-- `last` — `/var/log/wtmp` を読み取り、login と reboot の履歴を表示する:
+`/etc/passwd` は誰でも読み取り可能（world-readable）ですが、password hash 自体はここには含まれません。かつては password hash が直接このファイルに保存されていましたが、セキュリティ上の理由から `/etc/shadow` に分離されました（shadow password 方式）。
 
-```
-$ last -n 3
-carol    pts/0        192.168.1.20     Mon Jul  6 09:12   still logged in
-emma     tty2         :0               Sun Jul  5 18:40 - 19:55  (01:15)
-reboot   system boot  5.15.0-91        Sun Jul  5 18:38   still running
-```
+### `/etc/shadow`
 
-## account 情報はどこに保存されているか
+password hash と有効期限に関する情報を保持し、root 以外は読み取れません（パーミッションは通常 `640` または `600`）。
 
-### /etc/passwd
-
-1行に1 user、コロン区切りの7つのフィールドで構成されます。名前とは裏腹に、現在このファイルには実際の password は保存されていません。
-
-```
-$ grep carol /etc/passwd
-carol:x:1000:1000:Carol Jones:/home/carol:/bin/bash
+```bash
+$ sudo cat /etc/shadow
+alice:$6$abcd1234$hash....:19500:0:99999:7:::
 ```
 
-左から順にフィールドの意味は次のとおりです。
+フィールド（コロン区切り、9 個）:
 
-1. **username** — `carol`
-2. **password のプレースホルダー** — `x` は実際の password hash が `/etc/shadow` にあることを示す
-3. **UID** — `1000`
-4. **primary group の GID** — `1000`
-5. **GECOS** — 自由記述のコメント欄。通常はフルネームが入る
-6. **home directory** — `/home/carol`
-7. **login shell** — `/bin/bash`（system account では login を禁止するために `/usr/sbin/nologin` や `/bin/false` が使われることが多い）
+1. username
+2. 暗号化された password hash（`$6$` は SHA-512 を意味する）
+3. 最終変更日（1970-01-01 からの日数）
+4. 変更可能になるまでの最小日数
+5. 変更が必須になるまでの最大日数
+6. 変更を促す警告日数
+7. 無効化までの猶予日数
+8. account が無効化される日（絶対値）
+9. 予約フィールド
 
-`/etc/passwd` は誰でも読める（world-readable）ファイルです。これはまさに password hash がこのファイルから `/etc/shadow` に分離された理由でもあります。
+### `/etc/group`
 
-### /etc/shadow
+group 情報を保持します。
 
-password の hash と、password の有効期限に関するポリシーを保持します。root のみが読み取り可能です。
-
-```
-$ sudo grep carol /etc/shadow
-carol:$6$W3q9...hashed...:20456:0:99999:7:::
-```
-
-主なフィールドは、username、password hash、最終変更日（1970-01-01 からの経過日数）、最小/最大有効日数、warning 期間などです。hash フィールドが `!` や `*` の場合、その account は password による login ができないことを意味します（ロックされているか、system account であることが多い）。
-
-### /etc/group
-
-1行に1 group、4つのフィールド（group 名、password のプレースホルダー、GID、member のカンマ区切りリスト）で構成されます。ここに列挙される member は supplementary membership であり、primary group は `/etc/passwd` 側に記録されている点に注意してください。
-
-```
-$ grep sudo /etc/group
-sudo:x:27:carol,emma
+```bash
+$ cat /etc/group
+root:x:0:
+sudo:x:27:alice
+developers:x:1002:alice,bob
 ```
 
-これらのデータベースは `getent` コマンドでも参照できます。`getent` は LDAP など、ネットワーク経由の directory service に account 情報がある場合にも同様に機能する、より汎用的な方法です。
+フィールド:
 
+1. group name
+2. password placeholder（`x`。通常は使われない）
+3. GID
+4. member list（secondary member として所属する user のカンマ区切りリスト。primary group として所属する user はここには現れない）
+
+### `/etc/gshadow`
+
+group の password 情報や group administrator を保持する、`/etc/group` に対応する shadow file です。root のみ読み取り可能で、通常の運用ではほとんど直接編集しません。
+
+---
+
+## user account の作成: `useradd`
+
+```bash
+$ sudo useradd -m -s /bin/bash -c "Alice Smith" -G sudo,developers alice
 ```
-$ getent passwd carol
-carol:x:1000:1000:Carol Jones:/home/carol:/bin/bash
+
+主なオプション:
+
+| オプション | 意味                                          |
+|------------|-----------------------------------------------|
+| `-m`       | home directory を作成する（`/etc/skel` の内容をコピー） |
+| `-d`       | home directory の path を指定                 |
+| `-s`       | login shell を指定                            |
+| `-c`       | GECOS（comment field）を指定                  |
+| `-u`       | UID を指定                                    |
+| `-g`       | primary group を指定（名前または GID）        |
+| `-G`       | secondary group を指定（複数はカンマ区切り）  |
+| `-e`       | account の有効期限（`YYYY-MM-DD`）            |
+
+distribution によっては `useradd` にデフォルトで `-m` が有効になっていない場合があるため（Debian 系は無効、RHEL 系は有効）、home directory が必要な場合は明示的に `-m` を指定するのが安全です。
+
+作成後の確認:
+
+```bash
+$ id alice
+uid=1001(alice) gid=1001(alice) groups=1001(alice),27(sudo),1002(developers)
 ```
 
-## user の作成: useradd
+`useradd` はデフォルトで user と同名の primary group（UPG: User Private Group）を新規作成する distribution が多いです（Debian/Ubuntu の標準動作）。
 
-account 管理には root 権限が必要なので、以下のコマンドはすべて `sudo` を付けて実行します。低レベルで、どのディストリビューションでも利用できる標準ツールが `useradd` です。
+---
 
+## user account の変更: `usermod`
+
+既存 account の属性を変更するコマンドです。
+
+```bash
+# secondary group を追加（既存の所属を維持したまま追加する場合は -a が必須）
+$ sudo usermod -aG developers bob
+
+# login shell を変更
+$ sudo usermod -s /bin/zsh alice
+
+# home directory を変更し、中身も移動
+$ sudo usermod -d /home/alice_new -m alice
+
+# account を一時的にロック（passwd の先頭に ! を付与）
+$ sudo usermod -L alice
+
+# ロック解除
+$ sudo usermod -U alice
 ```
-$ sudo useradd -m -c "Dave Lee" -s /bin/bash dave
+
+`-G` のみを指定して `-a` を付け忘れると、既存の secondary group がすべて上書き（削除）されてしまう点は頻出の注意点です。
+
+---
+
+## user account の削除: `userdel`
+
+```bash
+# account のみ削除（home directory は残る）
+$ sudo userdel alice
+
+# home directory と mail spool も削除
+$ sudo userdel -r alice
 ```
 
-よく使われるオプション:
+---
 
-- `-m` — home directory を作成する（`/etc/skel` にある skeleton files、例えばデフォルトの `.bashrc` などがコピーされる）
-- `-c` — comment（GECOS フィールド。通常はフルネーム）
-- `-s` — login shell
-- `-d` — デフォルト以外の home directory を指定する
-- `-g` — primary group を指定、`-G` — カンマ区切りで supplementary group を指定
-- `-u` — 特定の UID を指定する
+## password の管理: `passwd`
 
-作成直後の account はまだ有効な password を持たないため、`passwd` コマンドで設定します。
+```bash
+# 自分自身の password を変更
+$ passwd
 
+# root が他 user の password を設定
+$ sudo passwd alice
+
+# account を lock/unlock
+$ sudo passwd -l alice
+$ sudo passwd -u alice
+
+# password の有効期限をすぐに切らせ、次回 login 時に変更を強制
+$ sudo passwd -e alice
+
+# 現在の password 状態を確認
+$ sudo passwd -S alice
+alice L 07/16/2026 0 99999 7 -1
 ```
-$ sudo passwd dave
+
+`passwd -S` の出力の 2 文字目は状態を表します：`P`（usable password）、`L`（locked）、`NP`（no password）。
+
+---
+
+## group account の管理
+
+### `groupadd`
+
+```bash
+$ sudo groupadd developers
+$ sudo groupadd -g 2000 qa       # GID を明示的に指定
+```
+
+### `groupmod`
+
+```bash
+$ sudo groupmod -n devops developers   # group name を変更
+$ sudo groupmod -g 2100 devops         # GID を変更
+```
+
+### `groupdel`
+
+```bash
+$ sudo groupdel devops
+```
+
+注意点として、削除しようとする group が何らかの user の **primary group** になっている場合、`groupdel` は失敗します。事前に対象 user の primary group を変更する必要があります。
+
+---
+
+## user と group の関係を確認する
+
+```bash
+$ id alice
+uid=1001(alice) gid=1001(alice) groups=1001(alice),27(sudo)
+
+$ groups alice
+alice : alice sudo
+
+$ getent passwd alice
+alice:x:1001:1001:Alice Smith:/home/alice:/bin/bash
+```
+
+`getent` は NSS(Name Service Switch) 経由で情報を取得するため、local file だけでなく LDAP 等のバックエンドを使う環境でも正しい情報を返します。
+
+---
+
+## 実践例: 新規プロジェクト向け user/group のセットアップ
+
+```bash
+# 1. project 用の group を作成
+$ sudo groupadd project-x
+
+# 2. 新規 user を作成し、home directory を作り、secondary group に project-x を追加
+$ sudo useradd -m -s /bin/bash -G project-x carol
+
+# 3. password を設定
+$ sudo passwd carol
 New password:
 Retype new password:
 passwd: password updated successfully
+
+# 4. 設定の確認
+$ id carol
+uid=1002(carol) gid=1002(carol) groups=1002(carol),2001(project-x)
 ```
 
-一般 user は引数なしで `passwd` を実行すると自分自身の password を変更できます。他人の password を変更できるのは root だけです。
-
-作成結果を確認します。
-
-```
-$ id dave
-uid=1001(dave) gid=1001(dave) groups=1001(dave)
-$ ls /home
-carol  dave
-```
-
-Debian 系のディストリビューションでは `adduser` という、対話形式で password などをまとめて聞いてくれる `useradd` のフレンドリーなフロントエンドも用意されています。ただし試験対策としては `useradd` が標準ツールであることを押さえておいてください。
-
-## group の作成: groupadd
-
-```
-$ sudo groupadd developers
-$ grep developers /etc/group
-developers:x:1002:
-```
-
-`-g` オプションで特定の GID を指定できます。既存の user をこの group に supplementary member として追加するには `usermod -aG` を使います。
-
-```
-$ sudo usermod -aG developers dave
-$ id dave
-uid=1001(dave) gid=1001(dave) groups=1001(dave),1002(developers)
-```
-
-**注意:** `-a`（append）フラグの有無が重要です。`usermod -G developers dave` は Dave の supplementary group をすべて `developers` だけに**置き換えて**しまいます。既存の membership を保持したまま追加するには必ず `-aG` を使ってください。また、新しい group membership が反映されるには、一度 logout して再度 login する必要があります。
-
-## account の変更と削除
-
-- `usermod` — 既存 account を変更する: `-s` で shell 変更、`-d`（`-m` 併用でファイルも移動）で home directory 変更、`-L`/`-U` で account の lock/unlock。
-- `userdel dave` — account を削除する。`-r` を付けると home directory と mail spool も同時に削除される。
-- `groupmod` — group 名の変更（`-n`）や GID の変更（`-g`）。
-- `groupdel developers` — group を削除する（その group が誰かの primary group になっていない場合に限る）。
-
-```
-$ sudo userdel -r dave
-$ sudo groupdel developers
-```
-
-## Key takeaways
-
-- root の UID は 0。system account は regular user より低い UID 範囲に置かれ、regular user は通常 UID 1000 から始まる。
-- user は `/etc/passwd` に、password hash は `/etc/shadow`（root のみ読み取り可）に、group は `/etc/group` に定義される。
-- `useradd -m` で home directory 付きの user を作成し、`passwd` で password を設定し、`groupadd` で group を作成し、`usermod -aG` で supplementary group への追加を行う。
-- `id`、`who`、`w`、`last` は、自分自身や他の user の login 状況を確認するためのコマンドである。
+---
 
 ## Referencias
 
-- LPI Learning Materials, Linux Essentials 5.2 — Creating Users and Groups: https://learning.lpi.org/en/learning-materials/010-160/5/5.2/
-- LPI Linux Essentials exam objectives (version 1.6): https://www.lpi.org/our-certifications/exam-010-objectives/
+- LPI Learning Materials — 5.2 Creating Users and Groups: https://learning.lpi.org/en/learning-materials/010-160/5/5.2/
 - `useradd(8)` man page: https://man7.org/linux/man-pages/man8/useradd.8.html
-- `groupadd(8)` man page: https://man7.org/linux/man-pages/man8/groupadd.8.html
 - `usermod(8)` man page: https://man7.org/linux/man-pages/man8/usermod.8.html
-- `passwd(5)` man page (format of /etc/passwd): https://man7.org/linux/man-pages/man5/passwd.5.html
-- `shadow(5)` man page (format of /etc/shadow): https://man7.org/linux/man-pages/man5/shadow.5.html
-- `group(5)` man page (format of /etc/group): https://man7.org/linux/man-pages/man5/group.5.html
+- `userdel(8)` man page: https://man7.org/linux/man-pages/man8/userdel.8.html
+- `groupadd(8)` man page: https://man7.org/linux/man-pages/man8/groupadd.8.html
+- `passwd(1)` man page: https://man7.org/linux/man-pages/man1/passwd.1.html
+- `passwd(5)` file format: https://man7.org/linux/man-pages/man5/passwd.5.html
+- `shadow(5)` file format: https://man7.org/linux/man-pages/man5/shadow.5.html
+- `group(5)` file format: https://man7.org/linux/man-pages/man5/group.5.html
