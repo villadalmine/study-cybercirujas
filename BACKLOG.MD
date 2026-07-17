@@ -13,16 +13,18 @@ acá. Próximo, sin orden estricto:
 1. ~~**KCNA**~~ **Hecho (2026-07-17)**: 13/13 en español (content + exercises
    + labs). **El temario del path `kubernetes` (KCNA → CKA/CKAD → CKS) está
    completo** en las 4 certs que lo componen.
-2. **Video por certificación** (nuevo, 2026-07-17) — pilotado en `cka`,
-   ver CHANGELOG.MD para el detalle. Decidir si escalar al resto de las
-   certs con contenido (ckad, cks, kcna, lpi-010-160) — cada uno es una
-   llamada de AI + rendering, no gratis en tiempo/cuota.
+2. ~~**Video por certificación**~~ **Hecho (2026-07-17)**: escalado del
+   piloto `cka` a las otras 4 certs con contenido (ckad, cks, kcna,
+   lpi-010-160) — **las 5 certs con contenido tienen video en español.**
+   Ver CHANGELOG.MD por los dos bugs reales encontrados en el camino (YAML
+   con `:` sin comillas rompía el parseo del guion; lpi-010-160 pesa en
+   puntos que suman 40, no en % que suman 100 — normalizado).
 3. **SDD de labs** (ver sección "Labs — modos de ejecución" más abajo, y
    PLAN.MD sección SDD) — evaluación hecha, nada implementado todavía.
    Empezar por Docker local (provider `local` de `labs.py`, hoy sin
    implementar) porque el resto del roadmap de labs depende de tener un
    container "toolbox" reusable.
-4. Traducir CKAD, CKA, CKS y KCNA a los otros 6 idiomas.
+4. Traducir CKAD, CKA, CKS y KCNA a los otros 6 idiomas (contenido y/o video).
 5. Video para los paths restantes sin video (ver "Contenido" más abajo).
 
 ## Contenido

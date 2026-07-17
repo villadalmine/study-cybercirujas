@@ -6,6 +6,21 @@ lo pendiente vive en [BACKLOG.MD](BACKLOG.MD).
 
 ## 2026-07-17
 
+- **Video por certificación escalado a las 5 certs con contenido** (cka,
+  ckad, cks, kcna, lpi-010-160), en español. Dos bugs reales encontrados y
+  arreglados en el camino:
+  - **YAML del guion roto por `:` sin comillas dentro de una frase**
+    (reproducido con `cks`: `"No es teoría: es defender..."` — el `: ` en
+    medio de un plain scalar es ambiguo para el parser YAML y lo rompe).
+    No es un error de contenido ni de backend, es de formato; `_ask_scenes`
+    ahora reintenta hasta 3 veces (pidiéndole al modelo explícitamente que
+    entrecomille cualquier frase con `:`) antes de fallar.
+  - **`lpi-010-160` pesa sus dominios en puntos que suman 40, no en % que
+    suman 100** (a diferencia de todos los temarios CNCF snapshoteados,
+    que sí usan %) — sin normalizar, la escena de dominios del video hubiera
+    mostrado "7%" para un dominio que en realidad es "7 de 40 puntos", un
+    dato incorrecto. `_cert_domains()` ahora normaliza siempre a porcentaje
+    del total antes de mostrarlo.
 - **CKS agregado al catálogo**: snapshot del temario oficial (PDF
   `CKS_Curriculum v1.34`, 26 topics, pesos correctos por dominio desde el
   primer intento) + contenido/ejercicios/lab en español, 26/26 limpio.

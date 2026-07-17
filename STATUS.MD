@@ -55,7 +55,7 @@ Generado por `scripts/status_matrix.py` desde el filesystem real (conteo de arch
 
 | Cert | ES | EN | DE | ZH | JA |
 |---|---|---|---|---|---|
-| `lpi-010-160` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-010-160` | ✅ | ❌ | ❌ | ❌ | ❌ |
 | `lpi-020-100` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `lpic-1` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `lpic-2` | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -65,9 +65,9 @@ Generado por `scripts/status_matrix.py` desde el filesystem real (conteo de arch
 | `lpic-3-306` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `lpi-devops` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `cka` | ✅ | ❌ | ❌ | ❌ | ❌ |
-| `ckad` | ❌ | ❌ | ❌ | ❌ | ❌ |
-| `cks` | ❌ | ❌ | ❌ | ❌ | ❌ |
-| `kcna` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `ckad` | ✅ | ❌ | ❌ | ❌ | ❌ |
+| `cks` | ✅ | ❌ | ❌ | ❌ | ❌ |
+| `kcna` | ✅ | ❌ | ❌ | ❌ | ❌ |
 | `kcsa` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `cgoa` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `capa` | ❌ | ❌ | ❌ | ❌ | ❌ |
