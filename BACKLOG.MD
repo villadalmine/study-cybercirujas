@@ -65,17 +65,30 @@ acá. Próximo, sin orden estricto:
 
 ## Labs — modos de ejecución (ver PLAN.MD, sección SDD)
 
-Evaluación hecha (spec-driven, PLAN.MD), nada de esto implementado todavía.
-Punto de partida ya existente: `lab.yaml` (spec declarativo por tema) y
-`break_fix.sh` (script real, generado y revisado) por tema; `labs.py` solo
-implementa el provider `terraform` — el provider `local` está declarado pero
-sin código detrás. Orden sugerido (cada etapa reusa la anterior):
+Orden sugerido (cada etapa reusa la anterior):
 
-1. **Docker local (free, primero).** Generar desde `lab.yaml` un
-   `Dockerfile`/`docker-compose.yml` determinístico; el estudiante lo corre
-   en su propia máquina. Llena el hueco del provider `local` en `labs.py`.
-   Costo/riesgo para la plataforma: cero. El mismo container "toolbox" que
-   esto produce es el que se reusa en el paso siguiente.
+1. ~~**Docker local (free, primero).**~~ **Implementado (2026-07-17),
+   pero SIN verificar contra Docker/kind reales** — la máquina de dev donde
+   se escribió esto no tiene `docker` ni `kind` instalados, así que solo se
+   probó la lógica de control con subprocess mockeado (dry-run), no una
+   corrida real. **Probar `teach lab up lpi-010-160/2.1` y `teach lab up
+   cka/1.1` en una máquina con Docker antes de confiar en esto para
+   estudiantes reales.** `labs.py` ahora despacha por `provider` en
+   `lab.yaml` (hoy siempre `local`, `terraform` queda para el paso 3):
+   - Si el `break_fix.sh` del tema usa `kubectl` (todo CKA/CKAD/CKS/KCNA):
+     levanta un cluster `kind` (Kubernetes-in-Docker) y corre el script
+     contra él. Requiere `kind`+`kubectl`+`docker` instalados.
+   - Si no (LPI Linux Essentials): corre el script dentro de un container
+     Debian/Ubuntu simple, como usuario no-root (los scripts rechazan
+     root). Requiere solo `docker`.
+   - `teach lab status` ahora chequea el estado real de docker/kind, no
+     solo el último `status.yaml` escrito (si el container/cluster se cayó
+     o se borró a mano, lo detecta y marca `failed`).
+   - Pendiente real: generar el `Dockerfile`/`docker-compose.yml` explícito
+     que menciona el PLAN.MD original — la versión actual arma el container
+     con `docker run` directo (más simple, mismo resultado para v1) en vez
+     de un compose file versionado; revisar si vale la pena el compose
+     cuando haya demanda de labs multi-container.
 2. **Video del ejercicio — captura real, no mock.** Mismo principio que el
    video de marketing de paths (la parte fáctica nunca la escribe la AI, ver
    el path scene determinístico en `core/video.py`): levantar el container

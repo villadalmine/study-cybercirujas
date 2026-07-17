@@ -6,6 +6,20 @@ lo pendiente vive en [BACKLOG.MD](BACKLOG.MD).
 
 ## 2026-07-17
 
+- **Implementado el provider `local` de labs (Docker), primer paso del
+  roadmap SDD de PLAN.MD** — hasta ahora `labs.py` solo tenía código para
+  terraform, así que `teach lab up` fallaba en el 100% de los labs
+  existentes (todos declaran `provider: local` en su `lab.yaml`, ninguno
+  `terraform`). Ahora despacha en dos variantes según lo que el propio
+  `break_fix.sh` necesite (detectado leyendo el script, sin tener que
+  regenerar los 100+ `lab.yaml` ya existentes): un cluster `kind`
+  (Kubernetes-in-Docker) para los labs que usan `kubectl` (todo
+  CKA/CKAD/CKS/KCNA), o un container Debian/Ubuntu simple para los que no
+  (LPI Linux Essentials). `teach lab status` ahora también chequea el
+  estado real de docker/kind en vez de confiar ciegamente en el último
+  `status.yaml` escrito. **Sin verificar contra Docker/kind reales** (no
+  instalados en la máquina donde se escribió esto) — solo dry-run con
+  subprocess mockeado. Ver BACKLOG.MD antes de usarlo con estudiantes reales.
 - **Video por certificación escalado a las 5 certs con contenido** (cka,
   ckad, cks, kcna, lpi-010-160), en español. Dos bugs reales encontrados y
   arreglados en el camino:

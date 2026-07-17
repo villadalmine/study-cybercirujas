@@ -83,7 +83,7 @@ def cert_generate(
 
 @lab_app.command("up")
 def lab_up(cert_id: str, topic_id: str) -> None:
-    """Levanta el lab de un tema (terraform)."""
+    """Levanta el lab de un tema (Docker local, o terraform si el lab.yaml lo pide)."""
     try:
         result = labs.up(cert_id, topic_id)
     except labs.LabError as error:
