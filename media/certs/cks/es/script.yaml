@@ -1,0 +1,42 @@
+cert: cks
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Blindá tus clusters, certificá tu nivel
+    voiceover: La CKS es el examen que certifica que sabés asegurar Kubernetes en
+      cada capa, desde el setup del cluster hasta el runtime en producción. No es
+      teoría suelta, es seguridad aplicada de punta a punta. Si ya operás clusters,
+      esta es la certificación que te distingue.
+  audience:
+    title: Para quién es
+    voiceover: Está pensada para quienes ya se manejan cómodos en Kubernetes y quieren
+      dar el salto a la seguridad. No es un punto de partida, es una especialización.
+    bullets:
+    - Administradores de Kubernetes que quieren sumar seguridad avanzada
+    - Ingenieros DevOps o DevSecOps a cargo de hardening y compliance
+    - Quienes ya tienen la CKA y buscan completar el perfil con seguridad
+  cta:
+    title: Empezá a prepararte para la CKS
+    voiceover: En Cert Landscape tenés los seis dominios del examen organizados y
+      listos para estudiar. Entrá y arrancá tu preparación hoy mismo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Cluster Setup con 15.0%, Minimize Microservice
+      Vulnerabilities con 20.0%, Cluster Hardening con 15.0%, Supply Chain Security
+      con 20.0%, System Hardening con 10.0%, Monitoring, Logging and Runtime Security
+      con 20.0%.
+    domains:
+    - name: Cluster Setup
+      weight: 15.0
+    - name: Minimize Microservice Vulnerabilities
+      weight: 20.0
+    - name: Cluster Hardening
+      weight: 15.0
+    - name: Supply Chain Security
+      weight: 20.0
+    - name: System Hardening
+      weight: 10.0
+    - name: Monitoring, Logging and Runtime Security
+      weight: 20.0

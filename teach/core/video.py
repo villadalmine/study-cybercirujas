@@ -133,15 +133,33 @@ def _path_voiceover(stages: list[list[dict]], lang: str) -> str:
 
 def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[str]) -> tuple[dict, dict]:
     complete, backend_meta = make_completer(backend)
-    raw = complete(system, user).strip()
-    raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
-    data = yaml.safe_load(raw)
-    if not isinstance(data, dict):
-        raise VideoError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
-    missing = [key for key in expected_ids if not isinstance(data.get(key), dict)]
-    if missing:
-        raise VideoError(f"Guion incompleto, faltan escenas {missing}:\n{raw[:500]}")
-    return data, backend_meta
+    # el modelo a veces mete un ":" sin comillas dentro de una frase (común en
+    # es/pt/fr), lo que rompe el parseo YAML de un plain scalar — no es un
+    # error de backend ni de contenido, solo de formato; reintentar unas
+    # pocas veces antes de fallar (la próxima generación no tiene por qué
+    # repetir el mismo problema).
+    last_error: Exception | None = None
+    for attempt in range(3):
+        raw = complete(system, user if attempt == 0 else user + (
+            "\n\nIMPORTANTE: la respuesta anterior no era YAML válido. Si "
+            "alguna frase necesita un ':', poné el valor completo entre "
+            "comillas dobles."
+        )).strip()
+        raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
+        try:
+            data = yaml.safe_load(raw)
+        except yaml.YAMLError as error:
+            last_error = error
+            continue
+        if not isinstance(data, dict):
+            last_error = VideoError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
+            continue
+        missing = [key for key in expected_ids if not isinstance(data.get(key), dict)]
+        if missing:
+            last_error = VideoError(f"Guion incompleto, faltan escenas {missing}:\n{raw[:500]}")
+            continue
+        return data, backend_meta
+    raise VideoError(f"No se pudo generar un guion YAML válido tras 3 intentos: {last_error}")
 
 
 def generate_script(
@@ -233,12 +251,19 @@ def generate_script(
 
 def _cert_domains(cert_id: str) -> list[dict]:
     """Dominios del examen + peso, sumado desde los topics reales del cert.md
-    (nunca inventado por la AI) — mismo principio que la escena "path"."""
+    (nunca inventado por la AI) — mismo principio que la escena "path".
+
+    Normalizado a porcentaje del total: no todos los temarios usan la misma
+    escala (CNCF pesa en % que suma 100; LPI Linux Essentials pesa en puntos
+    que suman 40) — sin normalizar, mostrar "7%" para un dominio que en
+    realidad es "7 de 40 puntos" sería un dato incorrecto en el video.
+    """
     domains: dict[str, float] = {}
     for topic in certs.topics(cert_id):
         name = re.sub(r"^\d+\s*-\s*", "", topic.get("topic") or "").strip() or "General"
         domains[name] = domains.get(name, 0) + float(topic.get("weight") or 0)
-    return [{"name": name, "weight": round(weight, 1)} for name, weight in domains.items()]
+    total = sum(domains.values()) or 1
+    return [{"name": name, "weight": round(weight / total * 100, 1)} for name, weight in domains.items()]
 
 
 def _domains_voiceover(domains: list[dict], lang: str) -> str:

@@ -1,0 +1,39 @@
+cert: kcna
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Tu certificación de entrada a Kubernetes
+    voiceover: La KCNA certifica que entendés los fundamentos de Kubernetes y cómo
+      funciona el ecosistema cloud native, desde la orquestación de contenedores hasta
+      el diseño de arquitecturas modernas. Es el primer paso ideal antes de ir por
+      certificaciones más técnicas como la CKAD o la CKA.
+  audience:
+    title: Para quién es
+    voiceover: Está pensada para quienes recién arrancan en el mundo cloud native
+      y necesitan una base sólida antes de especializarse. No hace falta ser experto
+      en Kubernetes para rendirla, pero sí tener ganas de entender cómo funciona la
+      infraestructura moderna.
+    bullets:
+    - Devs que quieren sumar cloud native a su perfil
+    - Sysadmins que están migrando a contenedores
+    - Cualquiera que quiera arrancar en Kubernetes con una base ordenada
+  cta:
+    title: Arrancá tu camino cloud native
+    voiceover: En Cert Landscape tenés todo el temario de la KCNA organizado por dominio,
+      listo para que empieces a estudiar hoy mismo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Kubernetes Fundamentals con 44.0%, Cloud Native
+      Application Delivery con 16.0%, Container Orchestration con 28.0%, Cloud Native
+      Architecture con 12.0%.
+    domains:
+    - name: Kubernetes Fundamentals
+      weight: 44.0
+    - name: Cloud Native Application Delivery
+      weight: 16.0
+    - name: Container Orchestration
+      weight: 28.0
+    - name: Cloud Native Architecture
+      weight: 12.0

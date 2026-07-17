@@ -1,0 +1,43 @@
+cert: ckad
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Demostrá que sabés vivir en Kubernetes
+    voiceover: La CKAD no es una certificación teórica, es 100% práctica en un clúster
+      real. Vas a tener que diseñar, construir y desplegar aplicaciones bajo presión
+      de tiempo, resolviendo lo mismo que te pasa en el día a día como developer.
+  audience:
+    title: Para quién es
+    voiceover: Pensada para developers que ya trabajan con contenedores y quieren
+      certificar que saben moverse en Kubernetes, no solo administrarlo. Si escribís
+      manifiestos, desplegás servicios y necesitás que tu app funcione bien en el
+      clúster, esta es tu certificación.
+    bullets:
+    - Desarrolladores que empaquetan y despliegan apps en Kubernetes
+    - Devs que ya manejan contenedores y quieren dar el salto a producción
+    - Perfiles cloud-native que necesitan configurar seguridad y networking de sus
+      apps
+  cta:
+    title: Empezá a prepararte hoy
+    voiceover: En Cert Landscape tenés el temario completo de la CKAD organizado por
+      dominio de examen, para que estudies con foco donde más pesa. Entrá a la plataforma
+      y arrancá tu camino hacia la certificación.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Application Design and Build con 20.0%, Application
+      Deployment con 20.0%, Application Observability and Maintenance con 15.0%, Application
+      Environment, Configuration and Security con 25.0%, Services and Networking con
+      20.0%.
+    domains:
+    - name: Application Design and Build
+      weight: 20.0
+    - name: Application Deployment
+      weight: 20.0
+    - name: Application Observability and Maintenance
+      weight: 15.0
+    - name: Application Environment, Configuration and Security
+      weight: 25.0
+    - name: Services and Networking
+      weight: 20.0

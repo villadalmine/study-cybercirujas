@@ -1,0 +1,41 @@
+cert: lpi-010-160
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Tu primer paso oficial en Linux
+    voiceover: LPI Linux Essentials certifica que entendés los fundamentos reales
+      de Linux, desde la línea de comandos hasta los permisos de archivos. Es el punto
+      de partida ideal si querés demostrar que hablás el idioma de Linux, sin necesitar
+      experiencia previa.
+  audience:
+    title: Para quién es
+    voiceover: Pensada para quienes recién empiezan en el mundo Linux y open source.
+      No hace falta background técnico previo, solo ganas de aprender de forma ordenada.
+    bullets:
+    - Estudiantes que dan sus primeros pasos en IT
+    - Personas que quieren entender Linux antes de avanzar a certificaciones más técnicas
+    - Curiosos del open source que buscan una base sólida y validada
+  cta:
+    title: Arrancá tu camino en Linux
+    voiceover: En Cert Landscape tenés el temario completo de Linux Essentials organizado
+      por dominio, listo para estudiar a tu ritmo. Empezá hoy y dale el primer paso
+      serio a tu carrera en Linux.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en The Linux Community and a Career in Open Source
+      con 17.5%, Finding Your Way on a Linux System con 22.5%, The Power of the Command
+      Line con 22.5%, The Linux Operating System con 20.0%, Security and File Permissions
+      con 17.5%.
+    domains:
+    - name: The Linux Community and a Career in Open Source
+      weight: 17.5
+    - name: Finding Your Way on a Linux System
+      weight: 22.5
+    - name: The Power of the Command Line
+      weight: 22.5
+    - name: The Linux Operating System
+      weight: 20.0
+    - name: Security and File Permissions
+      weight: 17.5
