@@ -148,6 +148,41 @@ def cert_snapshot(
     typer.echo(f"  {result['cert']}: {result['topics']} topics congelados (v{result['version']})")
 
 
+@cert_app.command("video-script")
+def cert_video_script(
+    cert_id: str,
+    backend: str = typer.Option(None, "--backend"),
+    lang: str = typer.Option("es", "--lang"),
+    force: bool = typer.Option(False, "--force"),
+) -> None:
+    """La AI escribe el guion del video de una certificación puntual (se congela en script.yaml)."""
+    from .core import video
+
+    try:
+        result = video.generate_cert_script(cert_id, backend=backend, lang=lang, force=force)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(f"  {result}")
+
+
+@cert_app.command("video")
+def cert_video(
+    cert_id: str,
+    lang: str = typer.Option("es", "--lang"),
+    force: bool = typer.Option(False, "--force"),
+) -> None:
+    """Renderiza el video de una certificación (slides + voz Piper + ffmpeg)."""
+    from .core import video
+
+    try:
+        result = video.render_cert_video(cert_id, lang=lang, force=force)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(f"  {result}")
+
+
 @paths_app.command("generate")
 def paths_generate(
     backend: str = typer.Option(None, "--backend"),

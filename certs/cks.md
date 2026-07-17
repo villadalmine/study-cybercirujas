@@ -44,21 +44,21 @@ topics:
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Use appropriate pod security standards
   topic: 2 - Minimize Microservice Vulnerabilities
   weight: 5
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Manage kubernetes secrets
   topic: 2 - Minimize Microservice Vulnerabilities
   weight: 5
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Understand and implement isolation techniques (multi-tenancy, sandboxed containers,
     etc.)
   topic: 2 - Minimize Microservice Vulnerabilities
@@ -66,21 +66,21 @@ topics:
 - id: '2.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Implement Pod-to-Pod encryption (Cilium, Istio)
   topic: 2 - Minimize Microservice Vulnerabilities
   weight: 5
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Use Role Based Access Controls to minimize exposure
   topic: 3 - Cluster Hardening
   weight: 3.75
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Exercise caution in using service accounts e.g. disable defaults, minimize
     permissions on newly created ones
   topic: 3 - Cluster Hardening
@@ -88,35 +88,35 @@ topics:
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Restrict access to Kubernetes API
   topic: 3 - Cluster Hardening
   weight: 3.75
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Upgrade Kubernetes to avoid vulnerabilities
   topic: 3 - Cluster Hardening
   weight: 3.75
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Minimize base image footprint
   topic: 4 - Supply Chain Security
   weight: 5
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)
   topic: 4 - Supply Chain Security
   weight: 5
 - id: '4.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Secure your supply chain (permitted registries, sign and validate artifacts,
     etc.)
   topic: 4 - Supply Chain Security
@@ -124,7 +124,7 @@ topics:
 - id: '4.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Perform static analysis of user workloads and container images (e.g. Kubesec,
     KubeLinter)
   topic: 4 - Supply Chain Security
@@ -132,42 +132,42 @@ topics:
 - id: '5.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Minimize host OS footprint (reduce attack surface)
   topic: 5 - System Hardening
   weight: 2.5
 - id: '5.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Using least-privilege identity and access management
   topic: 5 - System Hardening
   weight: 2.5
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Minimize external access to the network
   topic: 5 - System Hardening
   weight: 2.5
 - id: '5.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Appropriately use kernel hardening tools such as AppArmor, seccomp
   topic: 5 - System Hardening
   weight: 2.5
 - id: '6.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Perform behavioral analytics to detect malicious activities
   topic: 6 - Monitoring, Logging and Runtime Security
   weight: 4
 - id: '6.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Detect threats within physical infrastructure, apps, networks, data, users
     and workloads
   topic: 6 - Monitoring, Logging and Runtime Security
@@ -175,21 +175,21 @@ topics:
 - id: '6.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Investigate and identify phases of attack and bad actors within the environment
   topic: 6 - Monitoring, Logging and Runtime Security
   weight: 4
 - id: '6.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Ensure immutability of containers at runtime
   topic: 6 - Monitoring, Logging and Runtime Security
   weight: 4
 - id: '6.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-  status: pending
+  status: generated
   title: Use Kubernetes audit logs to monitor access
   topic: 6 - Monitoring, Logging and Runtime Security
   weight: 4

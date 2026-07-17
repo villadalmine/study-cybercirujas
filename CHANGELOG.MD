@@ -4,6 +4,47 @@ Registro de lo que se fue entregando. Formato libre, orden cronológico
 inverso (más reciente arriba). El detalle de diseño vive en [PLAN.MD](PLAN.MD);
 lo pendiente vive en [BACKLOG.MD](BACKLOG.MD).
 
+## 2026-07-17
+
+- **CKS agregado al catálogo**: snapshot del temario oficial (PDF
+  `CKS_Curriculum v1.34`, 26 topics, pesos correctos por dominio desde el
+  primer intento) + contenido/ejercicios/lab en español, 26/26 limpio.
+  Sobrevivió a un `kill` externo del proceso (a las 14/26) y a dos cortes
+  reales de cuota de Claude (a los 19/26 y 24/26) — se retomó cada vez sin
+  perder progreso porque `teach cert generate` saltea topics ya generados.
+  Quedaron 2 labs a medio generar por los cortes; `fix_corrupted_content.py`
+  los detectó (ahora chequea también labs faltantes, no solo corruptos) y
+  los completó solo.
+- **KCNA: mismo bug de peso-por-dominio que CKAD** encontrado al revisar
+  `STATUS.MD` (pesos sumaban 360 en vez de 100, cada sub-tema con el peso
+  completo del dominio copiado) — re-snapshoteado con `tracker.py` ya
+  arreglado, ahora suma 100 limpio (44/16/28/12). Contenido todavía no
+  generado.
+- **Video en más idiomas**: Piper sí tiene voces para alemán y chino
+  (`de_DE-thorsten-high`, `zh_CN-huayan-medium` — verificado contra la
+  lista real de idiomas soportados del repo `rhasspy/piper-voices`; japonés
+  NO tiene ninguna voz Piper, ese sigue bloqueado). Videos de `linux-admin`
+  y `kubernetes` generados en inglés y alemán. `core/video.py` ahora elige
+  fuente por idioma (Noto Sans CJK para zh/ja si está instalada, si no cae
+  a Liberation Sans sin romper) para que las slides en chino no muestren
+  tofu/cuadraditos.
+- **STATUS.MD (nuevo)** + `scripts/status_matrix.py`: matriz de qué
+  cert/idioma/lab/video está terminado, generada siempre desde conteo real
+  de archivos (nunca a mano) — correr el script después de cualquier
+  generación. Ya sirvió para encontrar el bug de KCNA de arriba.
+- **Nueva feature: video por certificación puntual** (no solo por path de
+  carrera). Mismo pipeline (Piper + Pillow + ffmpeg) que los videos de path,
+  con una escena nueva y determinística "dominios del examen" (barras con
+  el peso real de cada dominio, sumado de los topics del cert.md — nunca
+  inventado por la AI, mismo principio que la escena "path" existente) en
+  vez del mapa de certificaciones. `teach cert video-script`/`teach cert
+  video` (nuevos), `/api/certs/{id}/video` (nuevo, mismo fallback de idioma
+  que el de paths), video visible en la página de cada cert en la web.
+  Pilotado en `cka` (52s, 4 escenas) antes de decidir si escalar al resto.
+- `cks` agregado a `TARGETS` en `scripts/fix_corrupted_content.py` y
+  `scripts/resume-generation.sh` (mismo chequeo de fence envolvente y
+  archivos faltantes que ya corría para lpi-010-160/ckad/cka).
+
 ## 2026-07-16
 
 - **Bug encontrado y arreglado en `scripts/fix_corrupted_content.py`: solo

@@ -74,6 +74,17 @@ SCENES = [
 ]
 AI_SCENE_IDS = [s["id"] for s in SCENES if s["id"] != "path"]
 
+# video corto por certificación puntual (a diferencia de SCENES, que es el
+# video de marketing de un path de carrera entero) — más liviano: 3 escenas
+# de AI en vez de 5, para no duplicar el costo de generación por cada cert.
+CERT_SCENES = [
+    {"id": "hook", "kind": "title"},
+    {"id": "audience", "kind": "bullets"},
+    {"id": "domains", "kind": "domains"},
+    {"id": "cta", "kind": "title"},
+]
+CERT_AI_SCENE_IDS = [s["id"] for s in CERT_SCENES if s["id"] != "domains"]
+
 
 class VideoError(Exception):
     pass
@@ -81,6 +92,10 @@ class VideoError(Exception):
 
 def media_dir(path_slug: str, lang: str) -> Path:
     return catalog.root() / "media" / "paths" / path_slug / lang
+
+
+def cert_media_dir(cert_id: str, lang: str) -> Path:
+    return catalog.root() / "media" / "certs" / cert_id / lang
 
 
 # --------------------------------------------------------------- guion (AI)
@@ -116,14 +131,14 @@ def _path_voiceover(stages: list[list[dict]], lang: str) -> str:
     return "Arrancás con " + ", después seguís con ".join(names) + "."
 
 
-def _ask_scenes(system: str, user: str, backend: str | None) -> dict:
+def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[str]) -> tuple[dict, dict]:
     complete, backend_meta = make_completer(backend)
     raw = complete(system, user).strip()
     raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
     data = yaml.safe_load(raw)
     if not isinstance(data, dict):
         raise VideoError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
-    missing = [key for key in AI_SCENE_IDS if not isinstance(data.get(key), dict)]
+    missing = [key for key in expected_ids if not isinstance(data.get(key), dict)]
     if missing:
         raise VideoError(f"Guion incompleto, faltan escenas {missing}:\n{raw[:500]}")
     return data, backend_meta
@@ -197,7 +212,7 @@ def generate_script(
         "  title: <llamado a la acción corto>\n"
         "  voiceover: <1 o 2 frases de cierre invitando a empezar en la plataforma>\n"
     )
-    ai_scenes, backend_meta = _ask_scenes(system, user, backend)
+    ai_scenes, backend_meta = _ask_scenes(system, user, backend, AI_SCENE_IDS)
 
     scenes = {key: ai_scenes[key] for key in AI_SCENE_IDS}
     scenes["path"] = {
@@ -211,6 +226,94 @@ def generate_script(
         **backend_meta,
         "scenes": scenes,
     }
+    out_dir.mkdir(parents=True, exist_ok=True)
+    script_path.write_text(yaml.safe_dump(script, sort_keys=False, allow_unicode=True))
+    return {"written": str(script_path)}
+
+
+def _cert_domains(cert_id: str) -> list[dict]:
+    """Dominios del examen + peso, sumado desde los topics reales del cert.md
+    (nunca inventado por la AI) — mismo principio que la escena "path"."""
+    domains: dict[str, float] = {}
+    for topic in certs.topics(cert_id):
+        name = re.sub(r"^\d+\s*-\s*", "", topic.get("topic") or "").strip() or "General"
+        domains[name] = domains.get(name, 0) + float(topic.get("weight") or 0)
+    return [{"name": name, "weight": round(weight, 1)} for name, weight in domains.items()]
+
+
+def _domains_voiceover(domains: list[dict], lang: str) -> str:
+    parts = [f"{d['name']} con {d['weight']}%" for d in domains]
+    if lang == "en":
+        parts = [f"{d['name']} at {d['weight']}%" for d in domains]
+        return "The exam covers " + ", ".join(parts) + "."
+    return "El examen se reparte en " + ", ".join(parts) + "."
+
+
+def generate_cert_script(
+    cert_id: str,
+    backend: str | None = None,
+    lang: str = certs.DEFAULT_LANG,
+    force: bool = False,
+) -> dict:
+    """Guion de un video corto sobre UNA certificación puntual (a diferencia
+    de generate_script(), que es el video de marketing de un path entero)."""
+    if lang not in certs.LANGS:
+        raise VideoError(f"Idioma '{lang}' no soportado. Válidos: {certs.LANGS}")
+    cert = catalog.load()["certs"].get(cert_id)
+    if cert is None:
+        raise VideoError(f"'{cert_id}' no existe en el catálogo")
+
+    out_dir = cert_media_dir(cert_id, lang)
+    script_path = out_dir / "script.yaml"
+    if script_path.exists() and not force:
+        return {"skipped": f"guion ya existe en {script_path} (usar --force)"}
+
+    domains = _cert_domains(cert_id)
+    if not domains:
+        raise VideoError(f"'{cert_id}' no tiene temario snapshoteado (correr teach cert snapshot {cert_id})")
+
+    domain_lines = "\n".join(f"  - {d['name']}: {d['weight']}%" for d in domains)
+    context = (
+        f"Certificación: {cert.get('name')} (examen {cert.get('exam')})\n"
+        f"Categoría: {cert.get('category')}\n"
+        f"Nivel: {cert.get('level', 'N/D')}\n"
+        f"Vigencia: {cert.get('validity', 'N/D')}\n"
+        f"Dominios del examen y su peso (dato real, no inventar otros ni cambiar "
+        f"los porcentajes):\n{domain_lines}"
+    )
+    system = (
+        "Sos guionista de videos de marketing educativo estilo YouTube, para una "
+        f"plataforma de certificaciones IT llamada 'Cert Landscape'. Escribís en "
+        f"{LANG_NAMES.get(lang, lang)}. Tono cercano, motivador y directo, sin "
+        "exagerar ni prometer de más. Te basás SOLO en los datos reales que te "
+        "pasan; nunca inventás cifras de salario ni estadísticas que no te "
+        "dieron. Respondé SOLO con YAML válido, sin fences ni comentarios."
+    )
+    user = (
+        f"{context}\n\n"
+        "Escribí el guion de un video corto (1 a 2 minutos) sobre esta "
+        "certificación puntual (no una ruta de carrera completa). Devolvé YAML "
+        "con EXACTAMENTE estas claves:\n\n"
+        "hook:\n"
+        "  title: <gancho de 4 a 8 palabras>\n"
+        "  voiceover: <2 o 3 frases que enganchen y planteen qué valida este examen>\n"
+        "audience:\n"
+        "  title: <título corto, ej. 'Para quién es'>\n"
+        "  voiceover: <2 o 3 frases>\n"
+        "  bullets: [<perfil 1>, <perfil 2>, <perfil 3>]\n"
+        "cta:\n"
+        "  title: <llamado a la acción corto>\n"
+        "  voiceover: <1 o 2 frases de cierre invitando a estudiarla en la plataforma>\n"
+    )
+    ai_scenes, backend_meta = _ask_scenes(system, user, backend, CERT_AI_SCENE_IDS)
+
+    scenes = {key: ai_scenes[key] for key in CERT_AI_SCENE_IDS}
+    scenes["domains"] = {
+        "title": "Dominios del examen" if lang != "en" else "Exam domains",
+        "voiceover": _domains_voiceover(domains, lang),
+        "domains": domains,
+    }
+    script = {"cert": cert_id, "lang": lang, **backend_meta, "scenes": scenes}
     out_dir.mkdir(parents=True, exist_ok=True)
     script_path.write_text(yaml.safe_dump(script, sort_keys=False, allow_unicode=True))
     return {"written": str(script_path)}
@@ -389,6 +492,37 @@ def _slide_path(scene: dict, out_path: Path, lang: str) -> None:
     img.save(out_path)
 
 
+def _slide_domains(scene: dict, out_path: Path, lang: str) -> None:
+    """Barras horizontales con el peso de cada dominio del examen — dato
+    real (sumado de topics del cert.md), nunca inventado por la AI."""
+    img, draw = _base_slide(lang)
+    bold, regular = _fonts_for(lang)
+    draw.text((120, 120), scene.get("title", ""), font=_font(bold, 62), fill=ACCENT)
+    domains = scene.get("domains", [])
+    label_font = _font(bold, 30)
+    pct_font = _font(regular, 30)
+    max_weight = max((d["weight"] for d in domains), default=1) or 1
+    bar_x = 120
+    bar_max_w = W - 620
+    bar_h = 44
+    label_h = 42
+    row_gap = 26
+    row_h = label_h + bar_h + row_gap
+    colors = [ACCENT, ACCENT2, GOLD]
+    total_h = len(domains) * row_h - row_gap
+    y = max(H // 2 - total_h // 2 + 20, 300)
+    for i, d in enumerate(domains):
+        color = colors[i % len(colors)]
+        label = _wrap(draw, d["name"], label_font, bar_max_w)[:1][0]
+        draw.text((bar_x, y), label, font=label_font, fill=FG)
+        bar_y = y + label_h
+        w = bar_max_w * (d["weight"] / max_weight)
+        draw.rounded_rectangle([bar_x, bar_y, bar_x + max(w, 6), bar_y + bar_h], radius=10, fill=color)
+        draw.text((bar_x + bar_max_w + 24, bar_y + 6), f"{d['weight']:g}%", font=pct_font, fill=MUTED)
+        y += row_h
+    img.save(out_path)
+
+
 def _render_slide(kind: str, scene: dict, out_path: Path, lang: str) -> None:
     if kind == "title":
         _slide_title(scene, out_path, lang)
@@ -396,6 +530,8 @@ def _render_slide(kind: str, scene: dict, out_path: Path, lang: str) -> None:
         _slide_bullets(scene, out_path, lang)
     elif kind == "path":
         _slide_path(scene, out_path, lang)
+    elif kind == "domains":
+        _slide_domains(scene, out_path, lang)
     else:
         raise VideoError(f"kind de slide desconocido: {kind}")
 
@@ -430,17 +566,16 @@ def _concat(clips: list[Path], out_path: Path) -> None:
     list_file.unlink()
 
 
-def render_video(
-    path_slug: str,
-    lang: str = certs.DEFAULT_LANG,
-    force: bool = False,
+def _render_from_script(
+    out_dir: Path,
+    scenes_spec: list[dict],
+    lang: str,
+    force: bool,
+    missing_script_hint: str,
 ) -> dict:
-    out_dir = media_dir(path_slug, lang)
     script_path = out_dir / "script.yaml"
     if not script_path.exists():
-        raise VideoError(
-            f"No existe {script_path}. Correr antes: teach paths video-script {path_slug} --lang {lang}"
-        )
+        raise VideoError(f"No existe {script_path}. Correr antes: {missing_script_hint}")
     video_path = out_dir / "video.mp4"
     if video_path.exists() and not force:
         return {"skipped": f"{video_path} ya existe (usar --force)"}
@@ -453,7 +588,7 @@ def render_video(
     work_dir.mkdir(parents=True, exist_ok=True)
     clips = []
     try:
-        for i, spec in enumerate(SCENES):
+        for i, spec in enumerate(scenes_spec):
             scene = scenes[spec["id"]]
             image_path = work_dir / f"{i:02d}_{spec['id']}.png"
             audio_path = work_dir / f"{i:02d}_{spec['id']}.wav"
@@ -465,8 +600,32 @@ def render_video(
 
         _concat(clips, video_path)
         thumbnail = out_dir / "thumbnail.png"
-        Image.open(work_dir / "00_hook.png").save(thumbnail)
+        Image.open(work_dir / f"00_{scenes_spec[0]['id']}.png").save(thumbnail)
     finally:
         shutil.rmtree(work_dir, ignore_errors=True)
 
     return {"video": str(video_path), "thumbnail": str(out_dir / "thumbnail.png"), "scenes": len(clips)}
+
+
+def render_video(
+    path_slug: str,
+    lang: str = certs.DEFAULT_LANG,
+    force: bool = False,
+) -> dict:
+    out_dir = media_dir(path_slug, lang)
+    return _render_from_script(
+        out_dir, SCENES, lang, force,
+        f"teach paths video-script {path_slug} --lang {lang}",
+    )
+
+
+def render_cert_video(
+    cert_id: str,
+    lang: str = certs.DEFAULT_LANG,
+    force: bool = False,
+) -> dict:
+    out_dir = cert_media_dir(cert_id, lang)
+    return _render_from_script(
+        out_dir, CERT_SCENES, lang, force,
+        f"teach cert video-script {cert_id} --lang {lang}",
+    )

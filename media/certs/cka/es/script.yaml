@@ -1,0 +1,41 @@
+cert: cka
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: El examen que te pone a prueba de verdad
+    voiceover: 'La CKA no es un examen de opción múltiple: es 100% práctico, sobre
+      un cluster real de Kubernetes. Certifica que sabés instalarlo, configurarlo
+      y, sobre todo, arreglarlo cuando algo se rompe.'
+  audience:
+    title: Para quién es
+    voiceover: Es la certificación de referencia si tu trabajo es mantener clusters
+      funcionando, no solo desplegar apps sobre ellos. Está pensada para roles con
+      responsabilidad operativa sobre la infraestructura.
+    bullets:
+    - Administradores y administradoras de Kubernetes
+    - SREs y perfiles de plataforma/infraestructura
+    - DevOps que necesitan resolver incidentes en producción, no solo hacer deploy
+  cta:
+    title: Preparate donde más pesa el examen
+    voiceover: Troubleshooting es el 30% del examen, el dominio más grande de todos,
+      seguido de Cluster Architecture con 25%. En Cert Landscape vas a encontrar el
+      material organizado por esos mismos dominios para que sepas exactamente dónde
+      poner el foco.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Storage con 10.0%, Troubleshooting con 30.0%,
+      Workloads and Scheduling con 15.0%, Cluster Architecture, Installation and Configuration
+      con 25.0%, Servicing and Networking con 20.0%.
+    domains:
+    - name: Storage
+      weight: 10.0
+    - name: Troubleshooting
+      weight: 30.0
+    - name: Workloads and Scheduling
+      weight: 15.0
+    - name: Cluster Architecture, Installation and Configuration
+      weight: 25.0
+    - name: Servicing and Networking
+      weight: 20.0

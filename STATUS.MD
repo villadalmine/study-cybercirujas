@@ -19,7 +19,7 @@ Generado por `scripts/status_matrix.py` desde el filesystem real (conteo de arch
 | `lpi-devops` | – | – | – | – | – | – | – | – | – |
 | `cka` | 27 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | `ckad` | 24 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| `cks` | 26 | 🔶 5/26c·5/26e | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | 🔶 5/26 |
+| `cks` | 26 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | `kcna` | 13 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `kcsa` | – | – | – | – | – | – | – | – | – |
 | `cgoa` | – | – | – | – | – | – | – | – | – |
@@ -50,3 +50,37 @@ Generado por `scripts/status_matrix.py` desde el filesystem real (conteo de arch
 | `observabilidad` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `service-mesh-networking` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | `linux-foundation` | ❌ | ❌ | ❌ | ❌ | ❌ |
+
+## Videos de certificaciones
+
+| Cert | ES | EN | DE | ZH | JA |
+|---|---|---|---|---|---|
+| `lpi-010-160` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-020-100` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-1` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-2` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-3-300` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-3-303` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-3-305` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpic-3-306` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-devops` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cka` | ✅ | ❌ | ❌ | ❌ | ❌ |
+| `ckad` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cks` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `kcna` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `kcsa` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cgoa` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `capa` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cba` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cnpa` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cnpe` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `cca` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `ica` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `kca` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `otca` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `pca` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-030-100` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-050-100` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lpi-702` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lfcs` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `lfca` | ❌ | ❌ | ❌ | ❌ | ❌ |

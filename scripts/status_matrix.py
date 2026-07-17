@@ -87,6 +87,16 @@ def main() -> None:
             row.append("✅" if video.exists() else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
+    lines += ["", "## Videos de certificaciones", "",
+              "| Cert | " + " | ".join(l.upper() for l in VIDEO_LANGS) + " |",
+              "|---|" + "---|" * len(VIDEO_LANGS)]
+    for cert_id in catalog["certs"]:
+        row = [f"`{cert_id}`"]
+        for lang in VIDEO_LANGS:
+            video = REPO / "media" / "certs" / cert_id / lang / "video.mp4"
+            row.append("✅" if video.exists() else "❌")
+        lines.append("| " + " | ".join(row) + " |")
+
     (REPO / "STATUS.MD").write_text("\n".join(lines) + "\n")
     print("Escrito STATUS.MD")
 

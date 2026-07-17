@@ -456,13 +456,22 @@ async function showPaths() {
 }
 
 async function showCert(certId) {
-  const data = await api(`/api/certs/${certId}`);
+  const [data, video] = await Promise.all([
+    api(`/api/certs/${certId}`),
+    api(`/api/certs/${certId}/video?lang=${LANG}`),
+  ]);
   const cert = data.cert;
   $('content').innerHTML = `
     <a class="back" onclick="go(showLanding)">${t('backAll')}</a>
     <h2>${cert.name}</h2>
-    <p>${certChips(cert)}</p>
-    <div><span class="lvl">${t('syllabus')} · v${cert.tracked_version}</span></div>` +
+    <p>${certChips(cert)}</p>` +
+    (video && video.available
+      ? `<video controls preload="none" poster="${video.thumbnail_url || ''}"
+           style="width:100%;max-width:820px;border-radius:12px;margin:.8rem 0;display:block;background:#000">
+           <source src="${video.video_url}" type="video/mp4"></video>` +
+        (video.lang_fallback ? `<p class="note">${t('fallback')}</p>` : '')
+      : '') +
+    `<div><span class="lvl">${t('syllabus')} · v${cert.tracked_version}</span></div>` +
     (data.topics.length ? '' : `<p>${t('noSyllabus')}</p>`) +
     data.topics.map((topic) =>
       `<div class="topic">
