@@ -174,7 +174,7 @@ certs:
     category: cloud-native
     tracked_version: '1.34'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-07-17'
     file: certs/cks.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
@@ -192,7 +192,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-11-24'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-07-17'
     file: certs/kcna.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf

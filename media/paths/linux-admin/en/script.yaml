@@ -1,0 +1,91 @@
+path: linux-admin
+lang: en
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Go from zero to Linux expert
+    voiceover: One certification path, four milestones, and a real specialization
+      at the end. Cert Landscape's Linux Administrator path takes you from the absolute
+      basics all the way to LPIC-3, the highest level LPI offers. No guessing what
+      to study next — the order is already mapped out for you.
+  audience:
+    title: Who this path is for
+    voiceover: This path works whether you're starting from scratch or already managing
+      servers without a certificate to show for it. It's built to take you step by
+      step, so you never have to wonder if you're ready for the next exam.
+    bullets:
+    - Complete beginners who want a structured way into Linux
+    - Self-taught sysadmins looking to certify skills they already use
+    - IT professionals aiming for a recognized LPIC-3 specialization
+  learn:
+    title: What you'll learn
+    voiceover: You'll start with the core concepts every Linux user needs, then move
+      into full system administration, and finish with advanced, specialized skills.
+      Each step builds directly on the one before it.
+    bullets:
+    - 'Linux essentials: command line, file systems, and basic scripting'
+    - 'Core system administration: users, permissions, packages, and processes'
+    - Networking, storage, and system maintenance at an engineer level
+    - 'Advanced specialization: mixed environments, security, virtualization, or high
+      availability'
+  outcomes:
+    title: Where this path can take you
+    voiceover: By the end, you'll have the skills to administer Linux systems day
+      to day, and the LPIC-3 track you choose lets you specialize in what fits you
+      best — from securing mixed environments to running virtualized or high-availability
+      infrastructure.
+    bullets:
+    - Linux Administrator
+    - Linux Engineer
+    - Linux Specialist in security, virtualization, or high availability clusters
+  platform:
+    title: How you'll study it here
+    voiceover: On Cert Landscape, every lesson is generated with AI directly from
+      official exam objectives, so you're always studying what's actually being tested.
+      You'll practice with hands-on, break-and-fix labs that force you to really understand
+      the system, not just memorize commands, and everything is available in multiple
+      languages.
+    bullets:
+    - AI-generated content sourced from official exam objectives
+    - Break-and-fix labs for real hands-on practice
+    - Available in multiple languages
+  cta:
+    title: Start your Linux path today
+    voiceover: Your first step, LPI Linux Essentials, is waiting for you on Cert Landscape.
+      Jump in and start building your path.
+  path:
+    title: 'Tu camino: Linux Administrator'
+    voiceover: 'You start with LPI Linux Essentials, then move to LPIC-1: Linux Administrator,
+      then move to LPIC-2: Linux Engineer, then move to LPIC-3: Mixed Environments
+      o LPIC-3: Security o LPIC-3: Virtualization and Containerization o LPIC-3: High
+      Availability and Storage Clusters.'
+    stages:
+    - - id: lpi-010-160
+        name: LPI Linux Essentials
+        exam: 010-160
+        validity: lifetime
+    - - id: lpic-1
+        name: 'LPIC-1: Linux Administrator'
+        exam: 101-500 + 102-500
+        validity: 5 años
+    - - id: lpic-2
+        name: 'LPIC-2: Linux Engineer'
+        exam: 201-450 + 202-450
+        validity: 5 años
+    - - id: lpic-3-300
+        name: 'LPIC-3: Mixed Environments'
+        exam: 300-300
+        validity: 5 años
+      - id: lpic-3-303
+        name: 'LPIC-3: Security'
+        exam: 303-300
+        validity: 5 años
+      - id: lpic-3-305
+        name: 'LPIC-3: Virtualization and Containerization'
+        exam: 305-300
+        validity: 5 años
+      - id: lpic-3-306
+        name: 'LPIC-3: High Availability and Storage Clusters'
+        exam: 306-300
+        validity: 5 años

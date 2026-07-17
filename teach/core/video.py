@@ -39,6 +39,19 @@ GOLD = (212, 169, 74)
 
 FONT_BOLD = Path("/usr/share/fonts/liberation-sans-fonts/LiberationSans-Bold.ttf")
 FONT_REGULAR = Path("/usr/share/fonts/liberation-sans-fonts/LiberationSans-Regular.ttf")
+# Liberation Sans no tiene glifos CJK (tofu/cuadraditos en zh/ja) — para esos
+# idiomas se usa Noto Sans CJK (paquete google-noto-sans-cjk-fonts en Fedora).
+FONT_CJK_BOLD = Path("/usr/share/fonts/google-noto-sans-cjk-fonts/NotoSansCJK-Bold.ttc")
+FONT_CJK_REGULAR = Path("/usr/share/fonts/google-noto-sans-cjk-fonts/NotoSansCJK-Regular.ttc")
+CJK_LANGS = {"zh", "ja"}
+
+
+def _fonts_for(lang: str) -> tuple[Path, Path]:
+    """(bold, regular) — Noto Sans CJK para zh/ja si está instalada, si no cae
+    a Liberation Sans (tofu en esos idiomas, pero no rompe el render)."""
+    if lang in CJK_LANGS and FONT_CJK_BOLD.exists() and FONT_CJK_REGULAR.exists():
+        return FONT_CJK_BOLD, FONT_CJK_REGULAR
+    return FONT_BOLD, FONT_REGULAR
 
 VOICE_CACHE = Path.home() / ".cache" / "teach-plat" / "piper-voices"
 HF_BASE = "https://huggingface.co/rhasspy/piper-voices/resolve/main"
@@ -46,6 +59,8 @@ HF_BASE = "https://huggingface.co/rhasspy/piper-voices/resolve/main"
 VOICES = {
     "es": "es/es_AR/daniela/high/es_AR-daniela-high",
     "en": "en/en_US/amy/medium/en_US-amy-medium",
+    "de": "de/de_DE/thorsten/high/de_DE-thorsten-high",
+    "zh": "zh/zh_CN/huayan/medium/zh_CN-huayan-medium",
 }
 
 SCENES = [
@@ -271,7 +286,8 @@ def _wrap(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont, ma
     return lines or [""]
 
 
-def _base_slide() -> tuple[Image.Image, ImageDraw.ImageDraw]:
+def _base_slide(lang: str) -> tuple[Image.Image, ImageDraw.ImageDraw]:
+    bold, regular = _fonts_for(lang)
     img = Image.new("RGB", (W, H), BG)
     draw = ImageDraw.Draw(img)
     bar_h = 10
@@ -281,14 +297,15 @@ def _base_slide() -> tuple[Image.Image, ImageDraw.ImageDraw]:
             [(x, 0), (x, bar_h)],
             fill=tuple(int(ACCENT[i] + (ACCENT2[i] - ACCENT[i]) * t) for i in range(3)),
         )
-    draw.text((70, 40), "Cert Landscape", font=_font(FONT_BOLD, 32), fill=MUTED)
-    draw.text((W - 70, H - 56), "study.cybercirujas.club", font=_font(FONT_REGULAR, 26), fill=MUTED, anchor="ra")
+    draw.text((70, 40), "Cert Landscape", font=_font(bold, 32), fill=MUTED)
+    draw.text((W - 70, H - 56), "study.cybercirujas.club", font=_font(regular, 26), fill=MUTED, anchor="ra")
     return img, draw
 
 
-def _slide_title(scene: dict, out_path: Path) -> None:
-    img, draw = _base_slide()
-    title_font = _font(FONT_BOLD, 84)
+def _slide_title(scene: dict, out_path: Path, lang: str) -> None:
+    img, draw = _base_slide(lang)
+    bold, regular = _fonts_for(lang)
+    title_font = _font(bold, 84)
     lines = _wrap(draw, scene.get("title", ""), title_font, W - 300)
     total_h = len(lines) * 100
     y = H // 2 - total_h // 2 - 60
@@ -296,7 +313,7 @@ def _slide_title(scene: dict, out_path: Path) -> None:
         w = draw.textlength(line, font=title_font)
         draw.text(((W - w) // 2, y), line, font=title_font, fill=ACCENT)
         y += 100
-    sub_font = _font(FONT_REGULAR, 38)
+    sub_font = _font(regular, 38)
     sub_lines = _wrap(draw, scene.get("voiceover", ""), sub_font, W - 560)[:4]
     y += 30
     for line in sub_lines:
@@ -306,10 +323,11 @@ def _slide_title(scene: dict, out_path: Path) -> None:
     img.save(out_path)
 
 
-def _slide_bullets(scene: dict, out_path: Path) -> None:
-    img, draw = _base_slide()
-    draw.text((120, 150), scene.get("title", ""), font=_font(FONT_BOLD, 62), fill=ACCENT)
-    bullet_font = _font(FONT_REGULAR, 44)
+def _slide_bullets(scene: dict, out_path: Path, lang: str) -> None:
+    img, draw = _base_slide(lang)
+    bold, regular = _fonts_for(lang)
+    draw.text((120, 150), scene.get("title", ""), font=_font(bold, 62), fill=ACCENT)
+    bullet_font = _font(regular, 44)
     y = 320
     for bullet in scene.get("bullets", [])[:5]:
         lines = _wrap(draw, bullet, bullet_font, W - 320)
@@ -320,9 +338,10 @@ def _slide_bullets(scene: dict, out_path: Path) -> None:
     img.save(out_path)
 
 
-def _slide_path(scene: dict, out_path: Path) -> None:
-    img, draw = _base_slide()
-    draw.text((120, 120), scene.get("title", ""), font=_font(FONT_BOLD, 54), fill=ACCENT)
+def _slide_path(scene: dict, out_path: Path, lang: str) -> None:
+    img, draw = _base_slide(lang)
+    bold, regular = _fonts_for(lang)
+    draw.text((120, 120), scene.get("title", ""), font=_font(bold, 54), fill=ACCENT)
     stages = scene.get("stages", [])
     n = max(len(stages), 1)
     margin_x = 140
@@ -332,8 +351,8 @@ def _slide_path(scene: dict, out_path: Path) -> None:
     gap = 22
     pad_top = 20
     line_h = 32
-    node_font = _font(FONT_BOLD, 26)
-    small_font = _font(FONT_REGULAR, 22)
+    node_font = _font(bold, 26)
+    small_font = _font(regular, 22)
 
     # alto de caja variable: cada nombre se banquea a las líneas que necesite
     # (nada se trunca en silencio, ej. "LPIC-3: High Availability and Storage Clusters")
@@ -370,13 +389,13 @@ def _slide_path(scene: dict, out_path: Path) -> None:
     img.save(out_path)
 
 
-def _render_slide(kind: str, scene: dict, out_path: Path) -> None:
+def _render_slide(kind: str, scene: dict, out_path: Path, lang: str) -> None:
     if kind == "title":
-        _slide_title(scene, out_path)
+        _slide_title(scene, out_path, lang)
     elif kind == "bullets":
-        _slide_bullets(scene, out_path)
+        _slide_bullets(scene, out_path, lang)
     elif kind == "path":
-        _slide_path(scene, out_path)
+        _slide_path(scene, out_path, lang)
     else:
         raise VideoError(f"kind de slide desconocido: {kind}")
 
@@ -439,7 +458,7 @@ def render_video(
             image_path = work_dir / f"{i:02d}_{spec['id']}.png"
             audio_path = work_dir / f"{i:02d}_{spec['id']}.wav"
             clip_path = work_dir / f"{i:02d}_{spec['id']}.mp4"
-            _render_slide(spec["kind"], scene, image_path)
+            _render_slide(spec["kind"], scene, image_path, lang)
             _synthesize(scene.get("voiceover", ""), voice_model, audio_path)
             _mux_scene(image_path, audio_path, clip_path)
             clips.append(clip_path)

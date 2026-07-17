@@ -20,18 +20,35 @@ acá. Próximo, sin orden estricto:
 
 ## Contenido
 
-- Traducir CKAD y CKA a los otros 6 idiomas — hoy solo existen en español.
-- Revisar si otras certs CNCF ya snapshoteadas (KCNA, KCSA, CKS, etc.) tienen
-  el mismo problema de peso-por-dominio antes de generar contenido sobre ellas.
+- **Ver [STATUS.MD](STATUS.MD)** para la matriz completa cert × idioma × lab
+  y path × idioma de video (se regenera con `scripts/status_matrix.py`,
+  siempre desde el filesystem real — no confiar en un "terminado" a mano).
+- Traducir CKAD, CKA y CKS a los otros 6 idiomas — hoy solo existen en español.
+- CKS en curso (generándose en background, ver STATUS.MD para el conteo real).
+- ~~Revisar si otras certs CNCF ya snapshoteadas (KCNA, KCSA, CKS, etc.) tienen
+  el mismo problema de peso-por-dominio~~ **KCNA tenía el bug** (pesos sumaban
+  360, cada sub-tema con el peso completo del dominio copiado) — re-snapshoteado
+  con el código ya arreglado, ahora suma 100. `KCSA`/`LFCS`/`LFCA` no tienen
+  topics todavía (sin snapshot) así que no aplica. Generar contenido de KCNA
+  sigue pendiente.
 - Video para los paths restantes sin video: `linux-devops`, `kubernetes-security`,
-  `gitops-platform`, `kubestronaut`, `golden-kubestronaut`, `care`.
+  `gitops-platform` (ver STATUS.MD para la lista completa y estado real).
 
 ## Video — deuda técnica
 
-- No hay voz Piper configurada para de/zh/ja (`VOICES` en `core/video.py` solo
-  tiene es/en) — bloquea narración de video en esos idiomas.
-- No hay fuente CJK instalada — bloquea que las slides Pillow rendericen texto
-  zh/ja correctamente (hoy solo Liberation Sans).
+- ~~No hay voz Piper para de/zh~~ **Resuelto (2026-07-17)**: Piper sí tiene
+  voces de/zh (`de_DE-thorsten-high`, `zh_CN-huayan-medium`), agregadas a
+  `VOICES` en `core/video.py`. **`ja` sigue bloqueado** — Piper no tiene
+  ninguna voz japonesa (lista completa de idiomas soportados verificada
+  contra el repo `rhasspy/piper-voices`); haría falta un TTS distinto para
+  narrar en japonés.
+- ~~No hay fuente CJK instalada~~ **Resuelto (2026-07-17)**: `core/video.py`
+  ahora elige Noto Sans CJK (`google-noto-sans-cjk-fonts`) para zh/ja si está
+  instalada (cae a Liberation Sans si no, sin romper) — instalada a mano en
+  la máquina de dev con `sudo dnf install google-noto-sans-cjk-fonts`. Solo
+  hace falta en la máquina que renderiza los videos (Pillow local), no en la
+  imagen Docker — el mp4 ya generado se hornea como cualquier otro archivo
+  de `media/`.
 
 ## Labs — modos de ejecución (ver PLAN.MD, sección SDD)
 

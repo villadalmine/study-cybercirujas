@@ -45,6 +45,7 @@ TARGETS = [
     ("lpi-010-160", ["es", "en", "pt", "fr", "de", "zh", "ja"]),
     ("ckad", ["es"]),
     ("cka", ["es"]),
+    ("cks", ["es"]),
 ]
 
 

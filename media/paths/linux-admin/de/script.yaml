@@ -1,0 +1,87 @@
+path: linux-admin
+lang: de
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Dein Weg zum Linux-Profi
+    voiceover: Du willst Linux nicht nur benutzen, sondern wirklich verstehen? Dieser
+      Pfad führt dich Schritt für Schritt von den Grundlagen bis zur Spezialisierung
+      als Linux-Experte. Vier klar aufeinander aufbauende Etappen, ein Ziel.
+  audience:
+    title: Für wen ist das?
+    voiceover: Dieser Pfad ist für alle gedacht, die im Linux-Betrieb durchstarten
+      oder sich weiterentwickeln wollen. Egal ob du bei null anfängst oder schon mit
+      Linux arbeitest, hier findest du deine passende Stufe.
+    bullets:
+    - Einsteiger ohne Linux-Vorkenntnisse
+    - Sysadmins, die ihr Wissen zertifizieren wollen
+    - IT-Profis auf dem Weg zur Spezialisierung
+  learn:
+    title: Was du lernst
+    voiceover: Der Pfad startet mit den Linux-Grundlagen und baut konsequent darauf
+      auf. Am Ende beherrschst du Systemadministration auf Expertenniveau, inklusive
+      einer Spezialisierung deiner Wahl.
+    bullets:
+    - Linux-Grundlagen und Kommandozeile
+    - Systemadministration mit LPIC-1
+    - Netzwerk- und Serverbetrieb mit LPIC-2
+    - 'Spezialisierung: Mixed Environments, Security, Virtualisierung oder High Availability'
+  outcomes:
+    title: Welche Rollen dieser Pfad öffnet
+    voiceover: Mit LPIC-1 bist du für Aufgaben in der Linux-Administration qualifiziert.
+      LPIC-2 bringt dich in komplexere Themen wie Netzwerk- und Serververwaltung,
+      und mit der LPIC-3-Spezialisierung positionierst du dich als Experte in deinem
+      Bereich.
+    bullets:
+    - Linux-Systemadministrator
+    - Linux Engineer
+    - Spezialist für Security, Virtualisierung oder High Availability
+  platform:
+    title: So lernst du bei uns
+    voiceover: Unsere Inhalte werden mit AI aus offiziellen Quellen erstellt. Dazu
+      bekommst du praktische Übungen und Break-and-Fix-Labs, mit denen du wirklich
+      verstehst, was im System passiert, und das in mehreren Sprachen.
+    bullets:
+    - AI-generierte Inhalte aus offiziellen Quellen
+    - Break-and-Fix-Labs für echtes Praxiswissen
+    - Verfügbar in mehreren Sprachen
+  cta:
+    title: Starte jetzt deinen Weg
+    voiceover: Leg los mit Linux Essentials und arbeite dich Schritt für Schritt bis
+      zur Spezialisierung vor. Starte jetzt auf Cert Landscape.
+  path:
+    title: 'Tu camino: Linux-Administrator'
+    voiceover: 'Arrancás con LPI Linux Essentials, después seguís con LPIC-1: Linux
+      Administrator, después seguís con LPIC-2: Linux Engineer, después seguís con
+      LPIC-3: Mixed Environments o LPIC-3: Security o LPIC-3: Virtualization and Containerization
+      o LPIC-3: High Availability and Storage Clusters.'
+    stages:
+    - - id: lpi-010-160
+        name: LPI Linux Essentials
+        exam: 010-160
+        validity: lifetime
+    - - id: lpic-1
+        name: 'LPIC-1: Linux Administrator'
+        exam: 101-500 + 102-500
+        validity: 5 años
+    - - id: lpic-2
+        name: 'LPIC-2: Linux Engineer'
+        exam: 201-450 + 202-450
+        validity: 5 años
+    - - id: lpic-3-300
+        name: 'LPIC-3: Mixed Environments'
+        exam: 300-300
+        validity: 5 años
+      - id: lpic-3-303
+        name: 'LPIC-3: Security'
+        exam: 303-300
+        validity: 5 años
+      - id: lpic-3-305
+        name: 'LPIC-3: Virtualization and Containerization'
+        exam: 305-300
+        validity: 5 años
+      - id: lpic-3-306
+        name: 'LPIC-3: High Availability and Storage Clusters'
+        exam: 306-300
+        validity: 5 años

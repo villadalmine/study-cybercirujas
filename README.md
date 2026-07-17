@@ -1,8 +1,10 @@
 # teach-plat
 
 Plataforma educativa self-service. Ver [PLAN.MD](PLAN.MD) para el diseño
-completo, [CHANGELOG.MD](CHANGELOG.MD) para lo entregado y
-[BACKLOG.MD](BACKLOG.MD) para lo pendiente.
+completo, [CHANGELOG.MD](CHANGELOG.MD) para lo entregado,
+[BACKLOG.MD](BACKLOG.MD) para lo pendiente y [STATUS.MD](STATUS.MD) para la
+matriz de qué cert/idioma/lab/video está terminado ahora mismo (`.venv/bin/python3
+scripts/status_matrix.py` la regenera desde el filesystem real).
 
 ## Quickstart
 

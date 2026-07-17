@@ -1,0 +1,76 @@
+path: kubernetes
+lang: de
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Dein Weg zum Kubernetes-Profi
+    voiceover: Kubernetes ist heute das Rückgrat moderner Cloud-Infrastruktur. Mit
+      diesem Karrierepfad baust du dir Schritt für Schritt das Wissen auf, das Teams
+      im Cluster-Alltag wirklich brauchen. Von den Grundlagen bis zur Sicherheit -
+      alles in der richtigen Reihenfolge.
+  audience:
+    title: Für wen ist das?
+    voiceover: Dieser Pfad ist für alle, die mit Cloud-Native-Technologien arbeiten
+      oder einsteigen wollen. Egal ob du bei null startest oder schon erste Erfahrung
+      mit Containern hast, hier findest du deinen Einstieg.
+    bullets:
+    - Einsteiger in Cloud Native und Kubernetes
+    - DevOps- und Platform-Engineers
+    - Entwickler, die Anwendungen auf Kubernetes betreiben
+  learn:
+    title: Was du lernst
+    voiceover: Der Pfad führt dich von den Kubernetes- und Cloud-Native-Grundlagen
+      bis zur Administration und Anwendungsentwicklung auf dem Cluster. Zum Schluss
+      vertiefst du die Sicherheit, die im produktiven Betrieb zählt.
+    bullets:
+    - Kubernetes- und Cloud-Native-Grundlagen (KCNA)
+    - Cluster-Administration (CKA)
+    - Anwendungsentwicklung auf Kubernetes (CKAD)
+    - Sicherheit im Kubernetes-Cluster (CKS)
+  outcomes:
+    title: Welche Rollen dir das öffnet
+    voiceover: Mit diesen Zertifizierungen zeigst du, dass du Kubernetes-Cluster administrieren,
+      Anwendungen darauf entwickeln und sie sicher betreiben kannst. Genau diese Fähigkeiten
+      stehen hinter den zentralen Rollen im Cloud-Native-Betrieb.
+    bullets:
+    - Kubernetes Administrator
+    - Cloud-Native / DevOps Engineer
+    - Kubernetes Security Specialist
+  platform:
+    title: So lernst du bei uns
+    voiceover: Unsere Inhalte werden per AI aus offiziellen Quellen erstellt, mit
+      Übungen und Break-and-Fix-Labs, in denen du Cluster wirklich kaputt machst und
+      selbst wieder reparierst. Alles verfügbar in mehreren Sprachen, damit du dort
+      lernst, wo du dich am wohlsten fühlst.
+    bullets:
+    - AI-generierte Inhalte aus offiziellen Quellen
+    - Break-and-Fix-Labs für echtes Hands-on-Lernen
+    - Verfügbar in mehreren Sprachen
+  cta:
+    title: Starte jetzt deinen Weg
+    voiceover: Leg los mit KCNA und arbeite dich Schritt für Schritt bis zur CKS vor.
+      Starte noch heute auf Cert Landscape.
+  path:
+    title: 'Tu camino: Kubernetes-Engineer'
+    voiceover: Arrancás con Kubernetes and Cloud Native Associate (KCNA), después
+      seguís con Certified Kubernetes Administrator (CKA) o Certified Kubernetes Application
+      Developer (CKAD), después seguís con Certified Kubernetes Security Specialist
+      (CKS).
+    stages:
+    - - id: kcna
+        name: Kubernetes and Cloud Native Associate (KCNA)
+        exam: KCNA
+        validity: 3 años
+    - - id: cka
+        name: Certified Kubernetes Administrator (CKA)
+        exam: CKA
+        validity: 2 años
+      - id: ckad
+        name: Certified Kubernetes Application Developer (CKAD)
+        exam: CKAD
+        validity: 2 años
+    - - id: cks
+        name: Certified Kubernetes Security Specialist (CKS)
+        exam: CKS
+        validity: 2 años
