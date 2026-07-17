@@ -79,6 +79,10 @@
   .md pre { overflow-x: auto; background: var(--soft); border: 1px solid var(--line);
             padding: .9rem 1rem; border-radius: 12px; line-height: 1.45; }
   .md h2, .md h3, .md h4 { margin: 1.4rem 0 .4rem; }
+  .md details { border: 1px solid var(--line); border-radius: 12px; padding: .3rem 1rem;
+                margin: 1rem 0; background: var(--soft); }
+  .md summary { cursor: pointer; font-weight: 600; padding: .5rem 0; }
+  .md details[open] summary { margin-bottom: .3rem; }
   .tablewrap { overflow-x: auto; margin: .8rem 0; }
   table { border-collapse: collapse; font-size: .9rem; }
   th, td { border: 1px solid var(--line); padding: .35rem .7rem; text-align: left; }
@@ -303,16 +307,24 @@ const inline = (s) => esc(s)
   .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 function md(text) {
   const lines = text.split('\n');
-  let html = '', inCode = false, list = null, para = [];
+  let html = '', inCode = false, codeIndent = '', list = null, para = [];
   const flush = () => { if (para.length) { html += `<p>${inline(para.join(' '))}</p>`; para = []; } };
   const closeList = () => { if (list) { html += `</${list}>`; list = null; } };
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (line.startsWith('```')) {
-      flush(); closeList();
-      html += inCode ? '</code></pre>' : '<pre><code>'; inCode = !inCode; continue;
+    if (inCode) {
+      if (line.trim() === '```') { html += '</code></pre>'; inCode = false; continue; }
+      const stripped = line.startsWith(codeIndent) ? line.slice(codeIndent.length) : line.replace(/^\s+/, '');
+      html += esc(stripped) + '\n'; continue;
     }
-    if (inCode) { html += esc(line) + '\n'; continue; }
+    // los pasos numerados suelen traer un bloque de código indentado debajo
+    // (ver certs/*/exercises.md) — no cerrar la lista al entrar en código,
+    // así el <ol>/<ul> sigue numerando bien después del bloque.
+    const fence = line.match(/^(\s*)```/);
+    if (fence) { flush(); codeIndent = fence[1]; html += '<pre><code>'; inCode = true; continue; }
+    if (/^<\/?details>$/.test(line.trim()) || /^<summary>.*<\/summary>$/.test(line.trim())) {
+      flush(); closeList(); html += line.trim(); continue;
+    }
     const h = line.match(/^(#{1,6})\s+(.*)/);
     if (h) { flush(); closeList(); const l = Math.min(h[1].length + 1, 6);
              html += `<h${l}>${inline(h[2])}</h${l}>`; continue; }
@@ -430,7 +442,8 @@ async function showPaths() {
         (video && video.available
           ? `<video controls preload="none" poster="${video.thumbnail_url || ''}"
                style="width:100%;max-width:820px;border-radius:12px;margin:.5rem 0;display:block;background:#000">
-               <source src="${video.video_url}" type="video/mp4"></video>`
+               <source src="${video.video_url}" type="video/mp4"></video>` +
+             (video.lang_fallback ? `<p class="note">${t('fallback')}</p>` : '')
           : '') +
         `<div class="flow">` +
         path.steps.map((stage) =>

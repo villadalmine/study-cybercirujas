@@ -98,9 +98,17 @@ def get_paths(lang: str = certs.DEFAULT_LANG) -> dict:
 
 @app.get("/api/paths/{path_slug}/video")
 def get_path_video(path_slug: str, lang: str = certs.DEFAULT_LANG) -> dict:
-    """Video de un path (si ya se generó): url del mp4 servido desde /media."""
+    """Video de un path (si ya se generó): url del mp4 servido desde /media.
+
+    Si no hay video en el idioma pedido, cae al idioma default (hoy solo hay
+    voz Piper para es/en) en vez de esconder un video que sí existe.
+    """
     _valid_lang(lang)
     base = MEDIA_DIR / "paths" / path_slug / lang
+    fallback = lang != certs.DEFAULT_LANG and not (base / "video.mp4").exists()
+    if fallback:
+        lang = certs.DEFAULT_LANG
+        base = MEDIA_DIR / "paths" / path_slug / lang
     video = base / "video.mp4"
     if not video.exists():
         return {"available": False}
@@ -109,6 +117,7 @@ def get_path_video(path_slug: str, lang: str = certs.DEFAULT_LANG) -> dict:
         "available": True,
         "video_url": f"/media/paths/{path_slug}/{lang}/video.mp4",
         "thumbnail_url": f"/media/paths/{path_slug}/{lang}/thumbnail.png" if thumbnail.exists() else None,
+        "lang_fallback": fallback,
     }
 
 
