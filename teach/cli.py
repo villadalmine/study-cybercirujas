@@ -181,6 +181,41 @@ def paths_translate(
         typer.echo(f"  {change}")
 
 
+@paths_app.command("video-script")
+def paths_video_script(
+    path_slug: str,
+    backend: str = typer.Option(None, "--backend"),
+    lang: str = typer.Option("es", "--lang"),
+    force: bool = typer.Option(False, "--force"),
+) -> None:
+    """La AI escribe el guion del video de un path (se congela en script.yaml)."""
+    from .core import video
+
+    try:
+        result = video.generate_script(path_slug, backend=backend, lang=lang, force=force)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(f"  {result}")
+
+
+@paths_app.command("video")
+def paths_video(
+    path_slug: str,
+    lang: str = typer.Option("es", "--lang"),
+    force: bool = typer.Option(False, "--force"),
+) -> None:
+    """Renderiza el video (slides + voz Piper + ffmpeg) a partir del script.yaml."""
+    from .core import video
+
+    try:
+        result = video.render_video(path_slug, lang=lang, force=force)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(f"  {result}")
+
+
 @app.command()
 def serve(
     host: str = typer.Option("127.0.0.1", "--host"),

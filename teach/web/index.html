@@ -408,8 +408,13 @@ const node = (id) => {
 
 async function showPaths() {
   await loadCerts(); const paths = await loadPaths();
+  const entries = Object.entries(paths);
+  const videos = {};
+  await Promise.all(entries
+    .filter(([, path]) => !path.type)
+    .map(async ([slug]) => { videos[slug] = await api(`/api/paths/${slug}/video?lang=${LANG}`); }));
   let html = `<h2>🧭 ${t('paths')}</h2>`;
-  for (const path of Object.values(paths)) {
+  for (const [slug, path] of entries) {
     if (path.type === 'achievement') {
       html += `<div class="badge"><strong>🏅 ${path.name}</strong>
                  <p>${path.description || ''}</p>
@@ -420,7 +425,14 @@ async function showPaths() {
                  <p>${path.description || ''}</p>
                  <ul>${(path.rules || []).map((r) => `<li>${r}</li>`).join('')}</ul></div>`;
     } else {
-      html += `<h3>${path.name}</h3><p style="opacity:.8">${path.description || ''}</p><div class="flow">` +
+      const video = videos[slug];
+      html += `<h3>${path.name}</h3><p style="opacity:.8">${path.description || ''}</p>` +
+        (video && video.available
+          ? `<video controls preload="none" poster="${video.thumbnail_url || ''}"
+               style="width:100%;max-width:820px;border-radius:12px;margin:.5rem 0;display:block;background:#000">
+               <source src="${video.video_url}" type="video/mp4"></video>`
+          : '') +
+        `<div class="flow">` +
         path.steps.map((stage) =>
           `<div class="stage">${stage.map(node).join('')}</div>`
         ).join('<span class="arrow">→</span>') + '</div>';

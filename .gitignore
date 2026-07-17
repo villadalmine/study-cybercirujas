@@ -4,3 +4,5 @@ __pycache__/
 deploy/helm/values-local.yaml
 certs/*/*/lab/terraform/.terraform/
 certs/*/*/lab/terraform/*.tfstate*
+media/**/*.mp4
+media/**/.build/

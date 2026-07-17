@@ -1,124 +1,131 @@
 # 4.1 Choosing an Operating System
 
-**Exam weight: 1** — a light topic. Expect one or two questions on the differences between Linux, Windows, and macOS, the concept of a distribution, the role of the kernel, and how release/support cycles influence the choice of an OS.
+## What Is an Operating System
 
----
+An **operating system (OS)** is the software layer that manages hardware resources (CPU, memory, storage, peripherals) and provides a common interface for applications to run on. It handles process scheduling, memory management, file systems, device drivers, and user interaction (via a shell, GUI, or both). Every computer, phone, server, or embedded device needs one to be usable.
 
-## 1. What Is an Operating System?
+## Major Operating System Families
 
-An **operating system (OS)** is the software layer that sits between the hardware and the applications. Its core, the **kernel**, manages the CPU, memory, storage, and devices, and provides services that programs use instead of talking to the hardware directly. Around the kernel, an OS ships system libraries, command-line tools, and usually a graphical interface.
-
-Strictly speaking, **Linux is only a kernel**. What people install is a **distribution** (distro): the Linux kernel packaged together with the GNU tools, a package manager, an installer, and a selection of applications.
-
-## 2. The Main Operating System Families
-
-### 2.1 Linux
-
-- **Open source** (mostly GPL-licensed): anyone can read, modify, and redistribute the code.
-- Runs on everything from supercomputers and cloud servers to phones (Android uses the Linux kernel), routers, TVs, and embedded devices (IoT).
-- Hundreds of distributions exist because anyone can build one; they differ mainly in package format, release model, default software, and support.
-
-### 2.2 Unix and Unix-like systems
-
-Linux is *Unix-like*: it follows the design and standards (POSIX) of the original AT&T Unix without sharing its code. Other members of the family:
-
-- **BSD variants** — FreeBSD, OpenBSD, NetBSD: open source, permissively licensed, common in firewalls, storage appliances, and servers.
-- **Commercial Unix** — AIX (IBM), HP-UX, Oracle Solaris: proprietary, tied to specific vendor hardware, declining but still present in legacy enterprise environments.
-
-### 2.3 macOS
-
-Apple's desktop OS. It is a certified Unix built on the Darwin/XNU kernel with BSD userland components, so the Terminal feels familiar to Linux users (`ls`, `grep`, `ssh` all work). It is **proprietary** and only licensed to run on Apple hardware.
-
-### 2.4 Windows
-
-Microsoft's proprietary OS, dominant on corporate and home desktops. Key contrasts with Linux:
-
-| Aspect | Linux | Windows |
+| Family | Examples | Typical use |
 |---|---|---|
-| License | Open source (GPL and others) | Proprietary, paid licenses |
-| Configuration | Plain-text files (e.g., `/etc/`) | Registry + GUI tools |
-| Path separator | `/home/user/file` | `C:\Users\user\file` |
-| Default shell | Bash (or similar) | PowerShell / cmd.exe |
-| Case sensitivity | `File` ≠ `file` | `File` = `file` |
-| Line endings | LF (`\n`) | CRLF (`\r\n`) |
+| Windows | Windows 10, Windows 11, Windows Server | Desktop, gaming, enterprise servers |
+| macOS | macOS Sonoma, macOS Sequoia | Apple desktops/laptops |
+| Unix / Unix-like | FreeBSD, OpenBSD, Solaris | Servers, appliances, research |
+| Linux | Debian, Fedora, Ubuntu, Arch, openSUSE | Servers, desktops, embedded, cloud, mobile (via Android) |
+| Android | Android (AOSP) | Smartphones, tablets, TVs, IoT — built on a Linux kernel |
 
-Windows has narrowed the gap with **WSL** (Windows Subsystem for Linux), which runs a real Linux environment inside Windows.
+Linux is not a single product but a **kernel** (created by Linus Torvalds in 1991) combined with GNU userland tools and other software to form a complete, usable system — commonly referred to as GNU/Linux.
 
-## 3. Linux Distributions
+## Understanding Linux Distributions
 
-A distribution bundles kernel + package manager + tooling + support policy. The major families:
+A **distribution** (distro) bundles the Linux kernel, system libraries, a package manager, and a curated set of applications into an installable, maintained product. Different distributions target different audiences, release philosophies, and package formats, but they all share the same kernel lineage.
 
-| Family | Package format / manager | Representative distros | Typical use |
-|---|---|---|---|
-| **Debian** | `.deb` — `apt`, `dpkg` | Debian, **Ubuntu**, Linux Mint, Raspberry Pi OS | Desktops, servers, education, SBCs |
-| **Red Hat** | `.rpm` — `dnf`, `rpm` | RHEL, **Fedora**, CentOS Stream, Rocky, AlmaLinux | Enterprise servers, workstations |
-| **SUSE** | `.rpm` — `zypper` | SUSE Linux Enterprise, openSUSE | Enterprise (strong in Europe) |
-| **Independent / rolling** | varies — `pacman`, `emerge` | Arch Linux, Gentoo | Enthusiasts, bleeding-edge |
+### Distribution families
 
-You can identify the running distribution from the shell:
+- **Debian-based**: Debian, Ubuntu, Linux Mint — use `.deb` packages, managed with `dpkg`/`apt`.
+- **Red Hat-based**: Fedora, RHEL, Rocky Linux, AlmaLinux — use `.rpm` packages, managed with `rpm`/`dnf`.
+- **SUSE-based**: openSUSE, SLES — `.rpm` packages, managed with `zypper`.
+- **Arch-based**: Arch Linux, Manjaro — use `.pkg.tar.zst`, managed with `pacman`.
 
-```bash
+### Release models
+
+- **Point release / fixed release**: a numbered version is frozen and receives only security/bug fixes until the next major version (e.g., Debian 12 "Bookworm", Ubuntu 22.04 LTS). Stable, predictable — favored for servers.
+- **Rolling release**: packages are continuously updated to their latest versions with no fixed version number (e.g., Arch Linux, openSUSE Tumbleweed). Always current, but more prone to breakage — favored by users who want the newest software.
+
+### Package manager comparison
+
+```
+# Debian/Ubuntu family
+$ sudo apt install vim
+
+# Fedora/RHEL family
+$ sudo dnf install vim
+
+# openSUSE
+$ sudo zypper install vim
+
+# Arch Linux
+$ sudo pacman -S vim
+```
+
+## Desktop vs Server Distributions
+
+The same distribution family often ships both **desktop** editions (GUI, desktop environment like GNOME or KDE preinstalled, drivers for consumer hardware) and **server** editions (minimal footprint, no GUI by default, optimized for reliability and long-term support). Example: Ubuntu Desktop vs Ubuntu Server, or Fedora Workstation vs Fedora Server. Servers typically favor LTS (Long Term Support) releases for extended patching windows.
+
+## Choosing the Right OS for a Use Case
+
+- **Desktop end users**: prioritize hardware support, application availability, and ease of use — Ubuntu, Fedora, Linux Mint are common choices.
+- **Servers**: prioritize stability and long support cycles — Debian stable, Ubuntu LTS, RHEL/Rocky/AlmaLinux.
+- **Embedded systems / IoT**: minimal, resource-constrained builds — Yocto-built images, OpenWrt, Raspberry Pi OS.
+- **Cloud instances**: lightweight, cloud-init-ready images — Ubuntu Cloud, Amazon Linux, Fedora CoreOS.
+- **Mobile**: Android (Linux kernel-based) dominates non-Apple mobile devices.
+
+## Identifying the OS on a Running System
+
+```
 $ cat /etc/os-release
 NAME="Ubuntu"
-VERSION="24.04.2 LTS (Noble Numbat)"
+VERSION="22.04.3 LTS (Jammy Jellyfish)"
 ID=ubuntu
 ID_LIKE=debian
-PRETTY_NAME="Ubuntu 24.04.2 LTS"
-VERSION_ID="24.04"
+PRETTY_NAME="Ubuntu 22.04.3 LTS"
+VERSION_ID="22.04"
 ```
 
-And the kernel version with:
-
-```bash
-$ uname -r
-6.8.0-57-generic
+```
+$ cat /etc/os-release
+NAME="Fedora Linux"
+VERSION="39 (Workstation Edition)"
+ID=fedora
+VERSION_ID=39
+PRETTY_NAME="Fedora Linux 39 (Workstation Edition)"
 ```
 
-### 3.1 Android
+```
+$ uname -a
+Linux server01 5.15.0-91-generic #101-Ubuntu SMP x86_64 GNU/Linux
+```
 
-Android is the most widely deployed Linux-based OS. It uses the Linux kernel but replaces the GNU userland with its own libraries and a Java/Kotlin application framework, so it doesn't behave like a typical desktop distribution.
+```
+$ hostnamectl
+   Static hostname: server01
+         Icon name: computer-vm
+           Chassis: vm
+    Virtualization: kvm
+  Operating System: Ubuntu 22.04.3 LTS
+            Kernel: Linux 5.15.0-91-generic
+      Architecture: x86-64
+```
 
-## 4. Criteria for Choosing an OS
+- `/etc/os-release` — standardized file (freedesktop.org spec) identifying the distribution and version; the most reliable script-friendly source.
+- `uname -a` — shows kernel name, version, and architecture (works on any Unix-like system, not distribution-specific).
+- `hostnamectl` — on systemd-based distros, summarizes hostname, OS, kernel, and virtualization type in one command.
 
-The exam expects you to reason about *why* an organization picks one system over another:
+## Cloud Computing and Virtualization
 
-1. **Purpose** — desktop productivity, server workload, embedded device, or mobile. Linux dominates servers and embedded; Windows/macOS dominate office desktops.
-2. **Cost** — license fees (Windows, commercial Unix) vs. free software with optional **paid support subscriptions** (RHEL, SLES, Ubuntu Pro).
-3. **Application availability** — some commercial applications only exist for Windows or macOS; most server-side software targets Linux first.
-4. **Hardware support** — drivers for very new or very exotic hardware may lag on Linux; macOS runs only on Apple machines.
-5. **Skills available** — the OS your team can administer is cheaper to operate than a theoretically better one nobody knows.
-6. **Support lifecycle** — how long the vendor ships security updates (see below).
+Choosing an OS today often also means choosing a **deployment model**:
 
-## 5. Release Models and Support Lifecycles
+- **Virtualization**: a hypervisor (e.g., KVM, VMware, Hyper-V) runs one or more guest OS instances, each isolated with its own kernel, on shared hardware.
+- **Containers**: share the host kernel and isolate only the userland (e.g., Docker, Podman) — lighter weight than full VMs, and why the base OS choice for a container image (Debian slim, Alpine, etc.) still matters.
+- **Cloud service models**:
+  - **IaaS** (Infrastructure as a Service): the provider supplies raw compute/storage/network; the customer chooses and manages the OS (e.g., AWS EC2, Azure VMs).
+  - **PaaS** (Platform as a Service): the provider manages the OS and runtime; the customer only deploys application code (e.g., Heroku, AWS Elastic Beanstalk).
+  - **SaaS** (Software as a Service): the provider manages everything, including the application (e.g., Google Workspace).
 
-This is the most exam-relevant part of the topic:
+## Key Takeaways
 
-- **Fixed releases** — a new version ships on a schedule and receives updates for a defined period. Example: Ubuntu publishes an **LTS (Long Term Support)** release every two years (24.04, 26.04, …) with **5 years** of standard support, plus interim releases supported only 9 months. RHEL major versions get about **10 years**.
-- **Rolling releases** — no versions; packages update continuously (Arch Linux, openSUSE Tumbleweed). Always current, but requires more frequent maintenance and carries more regression risk — rarely chosen for production servers.
-- **Beta / stable / backports**:
-  - A **beta** version is a preview for testing; never for production.
-  - A **stable** release changes as little as possible; it receives **security fixes**, not new features.
-  - A **backport** is a fix or feature from a newer version recompiled for an older stable release, so users get the fix without upgrading the whole system.
-
-**Rule of thumb:** servers favor long-support stable releases (Ubuntu LTS, RHEL, Debian stable); developers and enthusiasts who want the latest software favor rapid or rolling releases (Fedora, Arch).
-
-## 6. Quick Exam Checkpoints
-
-- Linux = kernel; distribution = kernel + tools + package manager.
-- Android runs the Linux kernel; macOS is a proprietary certified Unix.
-- Debian family uses `.deb`/`apt`; Red Hat family uses `.rpm`/`dnf`.
-- LTS = long-term support: fewer features, longer security updates — the server choice.
-- Beta = testing only; backport = newer fix applied to an older stable release.
-- Windows differs from Linux in paths (`\` vs `/`), case sensitivity, line endings, and text-file configuration.
-
----
+- An OS manages hardware and provides the platform applications run on; Linux is a kernel around which many distributions are built.
+- Distributions differ mainly in package management, release cycle, and target audience — not in the underlying kernel.
+- Match the distribution to the task: LTS/stable for servers, rolling or desktop-focused for workstations, minimal images for embedded/cloud/containers.
+- `/etc/os-release`, `uname -a`, and `hostnamectl` are the standard commands to identify OS and kernel details on a running Linux system.
 
 ## Referencias
 
-- LPI Learning Materials, Topic 4.1 — Choosing an Operating System: https://learning.lpi.org/en/learning-materials/010-160/4/4.1/
-- LPI Linux Essentials Objectives (v1.6): https://www.lpi.org/our-certifications/exam-010-objectives/
-- Ubuntu release cycle: https://ubuntu.com/about/release-cycle
-- Red Hat Enterprise Linux life cycle: https://access.redhat.com/support/policy/updates/errata
-- Debian releases: https://www.debian.org/releases/
+- LPI Learning Materials — 4.1 Choosing an Operating System: https://learning.lpi.org/en/learning-materials/010-160/4/4.1/
+- Debian Project: https://www.debian.org/
+- Fedora Project: https://getfedora.org/
+- openSUSE: https://www.opensuse.org/
+- Arch Linux: https://archlinux.org/
+- `os-release` specification (freedesktop.org / systemd): https://www.freedesktop.org/software/systemd/man/latest/os-release.html
 - The Linux Kernel Archives: https://www.kernel.org/
-- `os-release` specification (freedesktop.org): https://www.freedesktop.org/software/systemd/man/latest/os-release.html
+- DistroWatch (distribution comparison): https://distrowatch.com/

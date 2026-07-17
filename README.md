@@ -1,6 +1,8 @@
 # teach-plat
 
-Plataforma educativa self-service. Ver [PLAN.MD](PLAN.MD) para el diseño completo.
+Plataforma educativa self-service. Ver [PLAN.MD](PLAN.MD) para el diseño
+completo, [CHANGELOG.MD](CHANGELOG.MD) para lo entregado y
+[BACKLOG.MD](BACKLOG.MD) para lo pendiente.
 
 ## Quickstart
 
@@ -71,5 +73,47 @@ mirrors:
 Los nodos rk1 ya lo tienen (etiquetados `registry-access=true`; values-local usa ese pool como nodeSelector). Al agregar la config a los super6c rearmados, etiquetarlos igual o quitar el selector. Reiniciar `k3s-agent` (workers) / `k3s` (control-plane, de a uno y con etcd
 sano — no reiniciar CPs mientras un miembro esté caído).
 
-Web: http://127.0.0.1:8000 — login `admin/admin` (solo para probar).
+Web: http://127.0.0.1:8000 — sin login (deshabilitado).
 Docs de la API: http://127.0.0.1:8000/docs
+
+## Timer de generación automática
+
+Un timer de systemd (`teach-resume.timer`) corre `scripts/resume-generation.sh`
+cada 20 minutos. El script:
+
+1. Ejecuta `scripts/fix_corrupted_content.py` (detecta y regenera contenido
+   corrupto — idempotente, converge a 0).
+2. Genera contenido pendiente para los targets definidos en el script
+   (hoy: lpi-010-160 traducciones + CKAD es + CKA es).
+
+**Estado actual**: parado y deshabilitado (2026-07-16) para no consumir tokens
+de Claude CLI innecesariamente. Ojo: un `disable` anterior (2026-07-13) no
+sobrevivió un reboot de la máquina (`stop` sin `disable` real, o el unit
+quedó igual "enabled" — el timer se reactivó solo el 2026-07-14 18:37 y
+corrió sin supervisión ~2 días, cosa que en este caso vino bien porque
+terminó de converger la limpieza de contenido corrupto a 0, pero no hay que
+asumir que "estado actual: deshabilitado" en este archivo siga siendo cierto
+sin correr `systemctl --user status teach-resume.timer` primero).
+
+```bash
+# Reactivar
+systemctl --user enable --now teach-resume.timer
+
+# Parar
+systemctl --user stop teach-resume.timer
+systemctl --user disable teach-resume.timer
+
+# Ver estado
+systemctl --user status teach-resume.timer
+systemctl --user list-timers | grep teach
+
+# Ver log de ejecuciones
+tail -50 ~/.local/state/teach-plat/resume.log
+
+# Correr una pasada a mano (sin timer)
+scripts/resume-generation.sh
+```
+
+Los archivos del timer viven en `~/.config/systemd/user/`:
+- `teach-resume.timer` — dispara cada 20 min
+- `teach-resume.service` — ejecuta `scripts/resume-generation.sh`

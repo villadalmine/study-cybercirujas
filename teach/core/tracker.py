@@ -176,10 +176,15 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         "Devolvé YAML con esta forma exacta:\n"
         "version: <versión del temario si aparece, si no 'unknown'>\n"
         "topics:\n  - id: '1.1'\n    title: ...\n    topic: '1 - <nombre del dominio>'\n"
-        "    weight: <peso o porcentaje numérico>\n"
+        "    weight: <número, el % que ESE SUB-TEMA vale del examen total>\n"
         "Cubrí TODOS los dominios/temas del documento, en orden. Si el documento "
         "solo tiene dominios (sin subtemas numerados), usá el dominio como topic y "
-        "sus bullets principales como topics con ids '1.1', '1.2', etc.",
+        "sus bullets principales como topics con ids '1.1', '1.2', etc.\n"
+        "IMPORTANTE sobre 'weight': muchos temarios de CNCF dan el porcentaje "
+        "SOLO a nivel de dominio completo (ej. 'Domain 1: 20%' con 4 sub-temas "
+        "adentro). En ese caso NO copies ese 20% en cada sub-tema — repartilo "
+        "entre ellos (20/4 = 5 cada uno). La suma de los weight de TODOS los "
+        "topics del YAML debe dar exactamente 100.",
     )
     topics = result.get("topics") or []
     if not topics:
@@ -189,6 +194,15 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         old = existing.get(tid)
         topic["status"] = old.get("status", "pending") if old else "pending"
         topic.setdefault("sources", (old or {}).get("sources") or [url])
+
+    total_weight = sum(float(t.get("weight") or 0) for t in topics)
+    if abs(total_weight - 100) > 2:
+        raise TrackerError(
+            f"Los weight de los {len(topics)} topics suman {total_weight}, no 100 — "
+            "probablemente el bug de peso-por-dominio (el PDF da % solo por "
+            "dominio y se copió sin repartir entre sub-temas). Revisar el YAML "
+            "a mano antes de guardar; no se persiste el snapshot."
+        )
 
     post.metadata["topics"] = topics
     post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))

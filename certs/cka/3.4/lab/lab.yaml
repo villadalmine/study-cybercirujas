@@ -1,0 +1,13 @@
+cert: cka
+topic: '3.4'
+title: Understand the primitives used to create robust, self-healing, application
+  deployments
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh

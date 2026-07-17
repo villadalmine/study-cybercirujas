@@ -138,7 +138,7 @@ certs:
     category: cloud-native
     tracked_version: '1.35'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-07-16'
     file: certs/cka.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
@@ -157,7 +157,7 @@ certs:
     category: cloud-native
     tracked_version: '1.35'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-07-11'
     file: certs/ckad.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf

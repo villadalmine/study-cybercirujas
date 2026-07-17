@@ -1,0 +1,85 @@
+path: kubernetes
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Convertite en Ingeniero Kubernetes, paso a paso
+    voiceover: Kubernetes se convirtió en el estándar para correr aplicaciones en
+      contenedores, y las empresas necesitan gente que lo entienda de punta a punta.
+      La ruta Ingeniero Kubernetes te lleva de los fundamentos cloud native hasta
+      la administración y el desarrollo de aplicaciones sobre el clúster. Certificación
+      por certificación, vas construyendo el perfil que hoy piden los equipos de plataforma.
+  audience:
+    title: Para quién es
+    voiceover: 'Esta ruta es para vos si venís del mundo de la infraestructura o el
+      desarrollo y querés sumar Kubernetes a tu perfil. También sirve si ya trabajás
+      con contenedores pero necesitás una certificación que lo demuestre. No hace
+      falta ser experto para arrancar: el primer paso está pensado para construir
+      las bases.'
+    bullets:
+    - Administradores de sistemas que quieren pasar a plataformas cloud native
+    - Desarrolladores que despliegan sus propias aplicaciones en clústers
+    - Perfiles de DevOps o SRE que buscan certificar lo que ya usan en el día a día
+  learn:
+    title: Qué vas a aprender
+    voiceover: 'Arrancás por los conceptos de Kubernetes y cloud native con el KCNA,
+      la base para entender cómo funciona un clúster. Después elegís tu camino: administración
+      con el CKA o desarrollo de aplicaciones con el CKAD, los dos con el mismo peso
+      dentro de la ruta. Cerrás con el CKS, la certificación de seguridad que valida
+      que sabés proteger lo que administrás o desarrollás.'
+    bullets:
+    - Fundamentos de Kubernetes y arquitectura cloud native (KCNA)
+    - Administración de clústers en producción (CKA)
+    - Desarrollo y despliegue de aplicaciones sobre Kubernetes (CKAD)
+    - Seguridad de clústers y cargas de trabajo (CKS)
+  outcomes:
+    title: Qué salida laboral te da
+    voiceover: Esta ruta te prepara para roles donde Kubernetes es el corazón de la
+      infraestructura, como equipos de plataforma, SRE o DevOps. Vas a poder administrar
+      clústers en producción, desplegar y mantener aplicaciones, y sumar la mirada
+      de seguridad que hoy se pide en cualquier equipo maduro. Son certificaciones
+      reconocidas en la industria, que respaldan lo que ya sabés hacer o lo que estás
+      por aprender.
+    bullets:
+    - Administrador de clústers Kubernetes
+    - Desarrollador de aplicaciones cloud native
+    - Ingeniero de plataforma o DevOps con foco en Kubernetes
+  platform:
+    title: Cómo lo estudiás en Cert Landscape
+    voiceover: En la plataforma, el contenido de estudio se genera con AI a partir
+      de fuentes oficiales de cada certificación, así que siempre está alineado con
+      el temario real. Sumamos ejercicios y labs de romper y arreglar, para que no
+      solo leas sino que practiques resolviendo problemas reales de clúster. Todo
+      está disponible en varios idiomas, para que estudies como te resulte más cómodo.
+    bullets:
+    - Contenido generado con AI a partir de fuentes oficiales
+    - Ejercicios y labs de romper y arreglar
+    - Disponible en varios idiomas
+  cta:
+    title: Empezá tu ruta hoy
+    voiceover: El camino a Ingeniero Kubernetes empieza con el KCNA. Entrá a Cert
+      Landscape y arrancá el primer paso.
+  path:
+    title: 'Tu camino: Ingeniero Kubernetes'
+    voiceover: Arrancás con Kubernetes and Cloud Native Associate (KCNA), después
+      seguís con Certified Kubernetes Administrator (CKA) o Certified Kubernetes Application
+      Developer (CKAD), después seguís con Certified Kubernetes Security Specialist
+      (CKS).
+    stages:
+    - - id: kcna
+        name: Kubernetes and Cloud Native Associate (KCNA)
+        exam: KCNA
+        validity: 3 años
+    - - id: cka
+        name: Certified Kubernetes Administrator (CKA)
+        exam: CKA
+        validity: 2 años
+      - id: ckad
+        name: Certified Kubernetes Application Developer (CKAD)
+        exam: CKAD
+        validity: 2 años
+    - - id: cks
+        name: Certified Kubernetes Security Specialist (CKS)
+        exam: CKS
+        validity: 2 años

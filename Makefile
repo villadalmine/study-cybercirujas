@@ -15,7 +15,7 @@ LANG    ?=
 HOST    ?= 127.0.0.1
 PORT    ?= 8000
 MSG     ?= actualiza contenido generado
-TAG     ?= 0.1.0
+TAG     ?= $(shell date +%Y%m%d%H%M%S)
 REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))

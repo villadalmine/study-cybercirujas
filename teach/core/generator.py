@@ -24,6 +24,7 @@ Reglas: status 'edited' nunca se pisa (salvo --force); se regenera lo
 
 import datetime
 import os
+import re
 import shlex
 import shutil
 import subprocess
@@ -38,11 +39,58 @@ class GeneratorConfigError(Exception):
     pass
 
 
+# claude -p corre en el cwd del repo con acceso a herramientas por default:
+# sin restricción, el modelo a veces actúa como agente de código (explora el
+# repo, intenta escribir el archivo él mismo) y lo que llega por stdout es un
+# resumen de esa acción ("ja/content.md に完全な学習コンテンツを書きました...")
+# en vez del contenido pedido. --disallowedTools lo fuerza a responder en
+# texto plano, que es lo único que puede hacer sin herramientas.
+_CLAUDE_NO_TOOLS = (
+    "Write,Edit,Bash,Read,Glob,Grep,NotebookEdit,WebFetch,WebSearch,Task"
+)
+
 AGENT_COMMANDS = {
-    "claude": ["claude", "-p"],
+    "claude": ["claude", "-p", "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
     "codex": ["codex", "exec"],
     "gemini": ["gemini", "-p"],
 }
+
+# Firma del bug de arriba (y variantes: "Escribí", "Wrote", "Fichier créé",
+# "已创建", "を作成しました", autorreferencias a "content.md`", claims de
+# haber verificado con wc -c) — si el completer devuelve esto en vez del
+# contenido pedido, mejor fallar fuerte que guardar un stub silencioso.
+_RECAP_RE = re.compile(
+    r"^`?certs/"
+    r"|^(He |Wrote|Written|Escribí|Creado|Created|Content (file )?(written|created)"
+    r"|Fichier créé|J'ai créé|Ich habe|Datei erstellt|已创建|作成しました|を作成"
+    r"|Listo\.|Done\.|Fertig\.|Task complete)"
+    r"|content\.md`? (fue |was |está )?(creado|escrito|written|created)"
+    r"|verificad[oa] con `?wc -c`?"
+    r"|no es un stub|not a stub",
+    re.IGNORECASE,
+)
+
+
+def _strip_fence(text: str) -> str:
+    """A veces el backend envuelve toda la respuesta en un fence ```markdown
+    ... ``` a pesar de que el prompt pide el contenido "pelado" — no es
+    corrupción (el contenido real está bien), pero rompe el render en la web."""
+    stripped = text.strip()
+    stripped = re.sub(r"^```[a-zA-Z]*\n?", "", stripped)
+    stripped = re.sub(r"\n?```\s*$", "", stripped)
+    return stripped.strip()
+
+
+def _reject_if_recap(text: str, label: str) -> str:
+    text = _strip_fence(text)
+    first_line = text.strip().splitlines()[0] if text.strip() else ""
+    if len(text.strip()) < 400 or _RECAP_RE.search(first_line):
+        raise GeneratorConfigError(
+            f"El backend devolvió un resumen de proceso en vez de {label} "
+            f"(bug conocido de agentes de código corriendo sin restricción de "
+            f"herramientas). Primera línea: {first_line[:150]!r}"
+        )
+    return text
 
 Completer = Callable[[str, str], str]
 
@@ -101,8 +149,9 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
             [*command, f"{system}\n\n{user}"], capture_output=True, text=True
         )
         if result.returncode != 0:
+            detail = result.stderr.strip() or result.stdout.strip()
             raise GeneratorConfigError(
-                f"'{command[0]}' falló (exit {result.returncode}):\n{result.stderr.strip()}"
+                f"'{command[0]}' falló (exit {result.returncode}):\n{detail}"
             )
         return result.stdout.strip()
 
@@ -172,21 +221,27 @@ def generate_topic(
     context = _topic_context(post.metadata, topic)
     weight = topic.get("weight", 1)
 
-    content = complete(
-        system,
-        f"{context}\n"
-        f"Escribí el contenido de estudio de este tema en Markdown. Profundidad "
-        f"proporcional al peso ({weight}). Incluí: explicación clara, ejemplos "
-        f"concretos (comandos y salidas cuando aplique) y una sección final "
-        f"'Referencias' con links a la documentación oficial.",
+    content = _reject_if_recap(
+        complete(
+            system,
+            f"{context}\n"
+            f"Escribí el contenido de estudio de este tema en Markdown. Profundidad "
+            f"proporcional al peso ({weight}). Incluí: explicación clara, ejemplos "
+            f"concretos (comandos y salidas cuando aplique) y una sección final "
+            f"'Referencias' con links a la documentación oficial.",
+        ),
+        "el contenido",
     )
-    exercises = complete(
-        system,
-        f"{context}\n"
-        f"Escribí ejercicios guiados de este tema en Markdown: pasos numerados que "
-        f"el estudiante ejecuta, y después de cada bloque una o más preguntas para "
-        f"verificar comprensión. Al final, las respuestas en una sección "
-        f"'<details>' colapsable.",
+    exercises = _reject_if_recap(
+        complete(
+            system,
+            f"{context}\n"
+            f"Escribí ejercicios guiados de este tema en Markdown: pasos numerados que "
+            f"el estudiante ejecuta, y después de cada bloque una o más preguntas para "
+            f"verificar comprensión. Al final, las respuestas en una sección "
+            f"'<details>' colapsable.",
+        ),
+        "los ejercicios",
     )
 
     directory = certs.content_dir(cert_id, topic_id)
@@ -199,14 +254,17 @@ def generate_topic(
     # --force en el idioma default)
     lab_dir = directory / "lab"
     if not (lab_dir / "break_fix.sh").exists() or (force and lang == certs.DEFAULT_LANG):
-        break_fix = complete(
-            system,
-            f"{context}\n"
-            f"Escribí un script bash 'break & fix' para este tema: rompe algo de forma "
-            f"controlada y segura en una VM de laboratorio descartable y le explica al "
-            f"estudiante qué síntoma va a ver y qué debe lograr para arreglarlo. "
-            f"Incluí al final, comentada, la solución paso a paso. Respondé SOLO con "
-            f"el script bash, sin markdown.",
+        break_fix = _reject_if_recap(
+            complete(
+                system,
+                f"{context}\n"
+                f"Escribí un script bash 'break & fix' para este tema: rompe algo de forma "
+                f"controlada y segura en una VM de laboratorio descartable y le explica al "
+                f"estudiante qué síntoma va a ver y qué debe lograr para arreglarlo. "
+                f"Incluí al final, comentada, la solución paso a paso. Respondé SOLO con "
+                f"el script bash, sin markdown.",
+            ),
+            "el script break&fix",
         )
         lab_dir.mkdir(parents=True, exist_ok=True)
         (lab_dir / "break_fix.sh").write_text(break_fix)

@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir .
 
 COPY catalog.yaml ./
 COPY certs/ certs/
+COPY media/ media/
 
 EXPOSE 8000
 # TEACH_SECRET/LITELLM_* llegan por env desde el chart (Secret)

@@ -1,0 +1,89 @@
+path: linux-admin
+lang: es
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: De cero a experto en Linux
+    voiceover: Si querés administrar servidores Linux en serio, no hace falta adivinar
+      por dónde empezar. LPI armó una ruta clara, paso a paso, para llevarte de los
+      fundamentos hasta las especializaciones más avanzadas.
+  audience:
+    title: Para quién es
+    voiceover: Este path sirve tanto si nunca tocaste una terminal como si ya trabajás
+      con Linux y querés certificar lo que sabés. Cada paso te prepara para el siguiente,
+      sin saltos raros.
+    bullets:
+    - Quien recién arranca con Linux y sistemas operativos
+    - Soporte técnico o sysadmin que quiere validar sus conocimientos
+    - Quien busca especializarse en seguridad, virtualización o alta disponibilidad
+  learn:
+    title: Qué vas a aprender
+    voiceover: Empezás con Linux Essentials para afirmar las bases, seguís con LPIC-1
+      para administrar sistemas por tu cuenta, y subís a LPIC-2 para entornos más
+      complejos. Ahí elegís tu especialidad en LPIC-3.
+    bullets:
+    - Fundamentos de Linux y línea de comandos
+    - 'Administración de sistemas: usuarios, redes, servicios'
+    - Gestión de sistemas avanzados y arquitecturas mixtas
+    - 'Especialización a elección: seguridad, virtualización, alta disponibilidad
+      o entornos mixtos'
+  outcomes:
+    title: Qué salida laboral te da
+    voiceover: Esta ruta te habilita para roles de soporte, administración de sistemas
+      Linux y, en las especialidades avanzadas, para tareas de seguridad, virtualización
+      o gestión de clusters de alta disponibilidad. Cada certificación es un escalón
+      que podés mostrar en tu perfil profesional.
+    bullets:
+    - Administrador de sistemas Linux
+    - Ingeniero de infraestructura
+    - Especialista en seguridad, virtualización o clusters, según la ruta que elijas
+  platform:
+    title: Cómo lo estudiás acá
+    voiceover: En Cert Landscape generamos el contenido con AI a partir de las fuentes
+      oficiales de cada examen, así que estudiás siempre alineado a lo que realmente
+      te van a tomar. Sumamos ejercicios y labs de romper y arreglar para que practiques
+      en situaciones reales, no solo teoría.
+    bullets:
+    - Contenido generado con AI desde fuentes oficiales
+    - Labs de romper y arreglar para practicar de verdad
+    - Disponible en varios idiomas
+  cta:
+    title: Empezá tu ruta Linux
+    voiceover: Arrancá hoy con Linux Essentials en Cert Landscape y avanzá a tu ritmo
+      hacia LPIC-1, LPIC-2 y tu especialidad en LPIC-3.
+  path:
+    title: 'Tu camino: Administrador Linux'
+    voiceover: 'Arrancás con LPI Linux Essentials, después seguís con LPIC-1: Linux
+      Administrator, después seguís con LPIC-2: Linux Engineer, después seguís con
+      LPIC-3: Mixed Environments o LPIC-3: Security o LPIC-3: Virtualization and Containerization
+      o LPIC-3: High Availability and Storage Clusters.'
+    stages:
+    - - id: lpi-010-160
+        name: LPI Linux Essentials
+        exam: 010-160
+        validity: lifetime
+    - - id: lpic-1
+        name: 'LPIC-1: Linux Administrator'
+        exam: 101-500 + 102-500
+        validity: 5 años
+    - - id: lpic-2
+        name: 'LPIC-2: Linux Engineer'
+        exam: 201-450 + 202-450
+        validity: 5 años
+    - - id: lpic-3-300
+        name: 'LPIC-3: Mixed Environments'
+        exam: 300-300
+        validity: 5 años
+      - id: lpic-3-303
+        name: 'LPIC-3: Security'
+        exam: 303-300
+        validity: 5 años
+      - id: lpic-3-305
+        name: 'LPIC-3: Virtualization and Containerization'
+        exam: 305-300
+        validity: 5 años
+      - id: lpic-3-306
+        name: 'LPIC-3: High Availability and Storage Clusters'
+        exam: 306-300
+        validity: 5 años

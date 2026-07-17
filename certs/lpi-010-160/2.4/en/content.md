@@ -1,280 +1,206 @@
 # 2.4 Creating, Moving and Deleting Files
 
-**Exam weight:** 2
-**Key knowledge areas:** files and directories, case sensitivity, simple globbing (wildcards).
-**Relevant commands and concepts:** `touch`, `mkdir`, `rmdir`, `cp`, `mv`, `rm`, globbing characters (`*`, `?`, `[]`), quoting.
+## Overview
 
----
+Topic 2.4 covers the core file management commands every Linux user needs: creating files and directories, copying and moving them, removing them safely, and creating links between them. These commands form the backbone of daily filesystem interaction on any Linux system.
 
-## 1. Creating Files with `touch`
+## Creating Directories: `mkdir`
 
-The quickest way to create an empty file is `touch`:
+The `mkdir` command creates new directories.
+
+```
+$ mkdir projects
+$ mkdir -p projects/2026/reports
+```
+
+- `-p` (`--parents`) creates any missing parent directories along the path and does not fail if the target already exists.
+- `-v` (`--verbose`) prints a message for each directory created.
+
+```
+$ mkdir -pv archive/logs/old
+mkdir: created directory 'archive'
+mkdir: created directory 'archive/logs'
+mkdir: created directory 'archive/logs/old'
+```
+
+Without `-p`, trying to create a nested path whose parents don't exist fails:
+
+```
+$ mkdir new/sub
+mkdir: cannot create directory 'new/sub': No such file or directory
+```
+
+## Creating Empty Files: `touch`
+
+`touch` creates an empty file if it doesn't exist, or updates the access/modification timestamps if it does.
 
 ```
 $ touch notes.txt
 $ ls -l notes.txt
--rw-r--r-- 1 carol carol 0 Jul  7 10:15 notes.txt
+-rw-r--r--. 1 user user 0 Jul 12 10:00 notes.txt
 ```
 
-The file size is `0` bytes — `touch` creates the file but puts nothing in it. If the file *already exists*, `touch` does not modify its contents; it only updates the file's timestamps (its access and modification times). That is actually the command's original purpose — creating files is a convenient side effect.
-
-You can create several files at once by listing them:
+Running `touch` again on an existing file updates its timestamp without changing its content:
 
 ```
-$ touch a.txt b.txt c.txt
+$ touch notes.txt
+$ stat -c '%y' notes.txt
+2026-07-12 10:05:12.000000000 -0300
 ```
 
-Remember that Linux file names are **case sensitive**: `touch Notes.txt` creates a *second* file, different from `notes.txt`.
+Useful options:
+- `-c` (`--no-create`) only updates timestamps; does nothing if the file doesn't exist.
+- `-t [[CC]YY]MMDDhhmm[.ss]` sets a specific timestamp.
 
-## 2. Creating and Removing Directories: `mkdir` and `rmdir`
+## Copying Files and Directories: `cp`
 
-`mkdir` (*make directory*) creates directories:
-
-```
-$ mkdir projects
-$ ls -l
-drwxr-xr-x 2 carol carol 4096 Jul  7 10:20 projects
-```
-
-Trying to create nested directories in one step fails by default, because the intermediate directory does not exist:
+`cp` copies files or directories.
 
 ```
-$ mkdir projects/linux/essentials
-mkdir: cannot create directory 'projects/linux/essentials': No such file or directory
+$ cp report.txt report_backup.txt
+$ cp report.txt /tmp/
 ```
 
-The `-p` (*parents*) option solves this by creating every missing directory along the path:
+Key options:
+- `-r` or `-R` (recursive) — required to copy directories and their contents.
+- `-i` (interactive) — prompts before overwriting an existing destination file.
+- `-v` (verbose) — prints each file as it's copied.
+- `-p` (preserve) — keeps original permissions, ownership, and timestamps.
+- `-u` (update) — only copies when the source is newer than the destination or the destination is missing.
 
 ```
-$ mkdir -p projects/linux/essentials
+$ cp -r projects/ projects_backup/
+$ cp -riv notes.txt /tmp/
+cp: overwrite '/tmp/notes.txt'? y
+'notes.txt' -> '/tmp/notes.txt'
 ```
 
-`rmdir` (*remove directory*) deletes a directory — but **only if it is empty**:
+Attempting to copy a directory without `-r` fails:
 
 ```
-$ rmdir projects
-rmdir: failed to remove 'projects': Directory not empty
+$ cp projects/ projects_backup2/
+cp: -r not specified; omitting directory 'projects/'
 ```
 
-`rmdir` also accepts `-p` to remove a whole chain of nested empty directories:
+## Moving and Renaming: `mv`
+
+`mv` moves files/directories to a new location, and is also used to rename them (a rename is simply a move within the same directory).
 
 ```
-$ rmdir -p projects/linux/essentials
+$ mv notes.txt final_notes.txt
+$ mv final_notes.txt archive/
 ```
 
-This removes `essentials`, then `linux`, then `projects` — provided each one contains nothing else. To remove a directory *with* its contents, you need `rm -r` (see section 5).
-
-## 3. Copying Files and Directories: `cp`
-
-The basic form is `cp SOURCE DESTINATION`:
-
-```
-$ cp notes.txt backup.txt
-```
-
-If the destination is a **directory**, the copy keeps the original name and is placed inside it:
+Options mirror `cp`:
+- `-i` — prompt before overwrite.
+- `-v` — verbose output.
+- `-n` — never overwrite an existing file.
 
 ```
-$ mkdir backups
-$ cp notes.txt backups/
-$ ls backups
-notes.txt
+$ mv -v report.txt archive/logs/
+'report.txt' -> 'archive/logs/report.txt'
 ```
 
-You can copy several files at once, but then the last argument *must* be a directory:
+Moving multiple files into a directory:
 
 ```
-$ cp a.txt b.txt c.txt backups/
+$ mv file1.txt file2.txt archive/
 ```
 
-Copying a directory requires the `-r` (*recursive*) option, which copies the directory and everything inside it:
+Unlike `cp`, `mv` does not need `-r` to move directories, since it typically just repoints the directory entry rather than copying data (when staying on the same filesystem).
+
+## Removing Files and Directories: `rm` and `rmdir`
+
+`rmdir` removes **empty** directories only:
 
 ```
-$ cp backups backups2
-cp: -r not specified; omitting directory 'backups'
-$ cp -r backups backups2
+$ rmdir archive/logs/old
+$ rmdir archive/logs
+rmdir: failed to remove 'archive/logs': Directory not empty
 ```
 
-Two safety-related options worth knowing:
-
-| Option | Effect |
-|--------|--------|
-| `-i` (*interactive*) | Ask for confirmation before overwriting an existing file |
-| `-r` or `-R` | Copy directories recursively |
-
-Without `-i`, `cp` **silently overwrites** the destination if it already exists — a classic way to lose data.
+`rm` removes files, and with `-r` removes directories recursively (including their contents):
 
 ```
-$ cp -i notes.txt backup.txt
-cp: overwrite 'backup.txt'? n
+$ rm notes.txt
+$ rm -r projects_backup/
 ```
 
-## 4. Moving and Renaming: `mv`
-
-Linux uses a single command for both moving and renaming: `mv`. Which one happens depends only on the arguments.
-
-**Renaming** (destination is a new file name):
-
-```
-$ mv notes.txt meeting-notes.txt
-```
-
-**Moving** (destination is an existing directory):
+Common options:
+- `-f` (force) — ignores nonexistent files and never prompts.
+- `-i` (interactive) — prompts before every removal.
+- `-r` / `-R` (recursive) — required for directories.
+- `-v` (verbose) — reports what was removed.
 
 ```
-$ mv meeting-notes.txt backups/
-$ ls backups
-meeting-notes.txt  notes.txt
+$ rm -rf projects_backup2/
 ```
 
-You can move and rename in one step:
+`rm -rf` is powerful and destructive: there is no trash bin or undelete by default in most shells, so files removed this way are typically unrecoverable. Always double-check the path, especially when using wildcards:
 
 ```
-$ mv backups/meeting-notes.txt ./old-notes.txt
+$ rm -rf /var/tmp/cache/*
 ```
 
-Unlike `cp`, `mv` moves directories without needing any special option. Like `cp`, it silently overwrites an existing destination unless you use `-i`:
+A misplaced space (e.g., `rm -rf / var/tmp/cache/*` instead of `rm -rf /var/tmp/cache/*`) can attempt to wipe the root filesystem, so care with spacing and quoting matters.
+
+## Links: `ln`
+
+Linux supports two kinds of links between files, created with `ln`.
+
+### Hard links
+
+A hard link is an additional directory entry pointing to the same inode (same data on disk). Both names are equally "real"; deleting one leaves the data accessible through the other.
 
 ```
-$ mv -i old-notes.txt backup.txt
-mv: overwrite 'backup.txt'? y
+$ echo "hello" > original.txt
+$ ln original.txt hardlink.txt
+$ ls -li original.txt hardlink.txt
+123456 -rw-r--r--. 2 user user 6 Jul 12 10:10 hardlink.txt
+123456 -rw-r--r--. 2 user user 6 Jul 12 10:10 original.txt
 ```
 
-## 5. Deleting Files and Directories: `rm`
+Note both files share the same inode number (`123456`) and the link count is `2`. Hard links cannot span filesystems and cannot point to directories (with rare exceptions handled internally by the system).
 
-`rm` (*remove*) deletes files:
+### Symbolic (soft) links
 
-```
-$ rm backup.txt
-```
-
-By default it refuses to delete directories:
+A symbolic link is a special file that stores a path to another file. Created with `ln -s`:
 
 ```
-$ rm backups
-rm: cannot remove 'backups': Is a directory
+$ ln -s original.txt symlink.txt
+$ ls -l symlink.txt
+lrwxrwxrwx. 1 user user 12 Jul 12 10:12 symlink.txt -> original.txt
 ```
 
-With `-r` (*recursive*) it deletes a directory **and everything inside it**, at any depth:
+Symbolic links can point across filesystems and to directories, but become "dangling" (broken) if the target is removed:
 
 ```
-$ rm -r backups
+$ rm original.txt
+$ cat symlink.txt
+cat: symlink.txt: No such file or directory
 ```
 
-The most important options:
+`ls -l` marks the link type with a leading `l` and shows the target after `->`.
 
-| Option | Effect |
-|--------|--------|
-| `-r` or `-R` | Delete directories and their contents recursively |
-| `-i` | Ask for confirmation before each deletion |
-| `-f` (*force*) | Never ask, ignore missing files, override some protections |
+## Summary Table
 
-Two things to burn into memory:
-
-- **There is no trash can.** Files deleted with `rm` are gone; there is no built-in undo or recycle bin on the command line.
-- `rm -rf` combined with a wrong path or a careless wildcard can wipe out enormous amounts of data without a single prompt. Double-check the arguments before pressing Enter — especially as `root`.
-
-A safer habit while learning is to use the interactive mode:
-
-```
-$ rm -ri projects
-rm: descend into directory 'projects'? y
-rm: remove regular file 'projects/todo.txt'? y
-rm: remove directory 'projects'? y
-```
-
-## 6. Globbing: Working with Many Files at Once
-
-**Globbing** (also called *wildcard expansion*) lets you refer to multiple files with a single pattern. The important detail: it is the **shell** that expands the pattern into a list of matching names *before* running the command — the command itself (e.g. `rm`) never sees the wildcard, only the resulting file names.
-
-| Pattern | Matches |
-|---------|---------|
-| `*` | Any string of characters, including none |
-| `?` | Exactly one character (any character) |
-| `[abc]` | Exactly one character from the set: `a`, `b` or `c` |
-| `[a-z]` | Exactly one character in the range `a` to `z` |
-| `[!abc]` or `[^abc]` | Exactly one character *not* in the set |
-
-Examples, assuming the directory contains `log1.txt`, `log2.txt`, `log10.txt` and `report.txt`:
-
-```
-$ ls *.txt
-log1.txt  log2.txt  log10.txt  report.txt
-
-$ ls log?.txt
-log1.txt  log2.txt
-
-$ ls log[12].txt
-log1.txt  log2.txt
-
-$ ls log*
-log1.txt  log2.txt  log10.txt
-```
-
-Note the difference between `?` and `*`: `log?.txt` does not match `log10.txt`, because `?` stands for exactly one character.
-
-Globbing works with any command that takes file names:
-
-```
-$ cp *.txt backups/       # copy all .txt files
-$ mv log* archive/        # move everything starting with "log"
-$ rm log[0-9].txt         # delete log0.txt through log9.txt
-```
-
-Because the shell expands the pattern first, `rm *` really means "run `rm` with every visible file in this directory as an argument" — which is why wildcards and `rm -rf` are a dangerous combination.
-
-## 7. Quoting: File Names with Spaces and Special Characters
-
-The shell uses spaces to separate arguments, so a file name containing spaces gets split into pieces:
-
-```
-$ touch my notes.txt
-$ ls
-my  notes.txt
-```
-
-That created **two** files (`my` and `notes.txt`), not one. To treat the whole name as a single argument, quote it:
-
-```
-$ touch "my notes.txt"
-$ rm 'my notes.txt'
-```
-
-Quoting also *disables globbing*, which matters when a name contains wildcard characters:
-
-- **Double quotes** (`"..."`): protect spaces and wildcards, but the shell still expands variables like `$HOME` inside them.
-- **Single quotes** (`'...'`): protect everything literally — no globbing, no variable expansion.
-
-```
-$ echo "You are $USER"
-You are carol
-$ echo 'You are $USER'
-You are $USER
-```
-
-A backslash (`\`) escapes a single character instead of a whole string: `rm my\ notes.txt` is equivalent to `rm "my notes.txt"`.
-
-## 8. Command Summary
-
-| Task | Command |
-|------|---------|
-| Create an empty file / update timestamps | `touch file` |
-| Create a directory | `mkdir dir` |
-| Create nested directories | `mkdir -p a/b/c` |
-| Remove an empty directory | `rmdir dir` |
-| Copy a file | `cp src dst` |
-| Copy a directory | `cp -r srcdir dstdir` |
-| Move or rename | `mv src dst` |
-| Delete a file | `rm file` |
-| Delete a directory and its contents | `rm -r dir` |
-| Ask before overwriting/deleting | `-i` with `cp`, `mv`, `rm` |
-
----
+| Command | Purpose | Key flags |
+|---|---|---|
+| `mkdir` | create directories | `-p`, `-v` |
+| `touch` | create empty files / update timestamps | `-c`, `-t` |
+| `cp` | copy files/directories | `-r`, `-i`, `-v`, `-p` |
+| `mv` | move/rename files/directories | `-i`, `-v`, `-n` |
+| `rmdir` | remove empty directories | — |
+| `rm` | remove files/directories | `-r`, `-f`, `-i`, `-v` |
+| `ln` | create hard/symbolic links | `-s` |
 
 ## Referencias
 
-- LPI Learning Materials — Topic 2.4, Creating, Moving and Deleting Files: https://learning.lpi.org/en/learning-materials/010-160/2/2.4/
-- LPI Linux Essentials exam objectives (010-160, v1.6): https://www.lpi.org/our-certifications/exam-010-objectives/
-- GNU Coreutils manual (`touch`, `mkdir`, `rmdir`, `cp`, `mv`, `rm`): https://www.gnu.org/software/coreutils/manual/coreutils.html
-- Bash Reference Manual — Filename Expansion (globbing): https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html
-- Bash Reference Manual — Quoting: https://www.gnu.org/software/bash/manual/html_node/Quoting.html
+- LPI Learning Materials, Topic 2.4: https://learning.lpi.org/en/learning-materials/010-160/2/2.4/
+- GNU Coreutils Manual — `mkdir`: https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html
+- GNU Coreutils Manual — `touch`: https://www.gnu.org/software/coreutils/manual/html_node/touch-invocation.html
+- GNU Coreutils Manual — `cp`: https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html
+- GNU Coreutils Manual — `mv`: https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html
+- GNU Coreutils Manual — `rm`: https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html
+- GNU Coreutils Manual — `rmdir`: https://www.gnu.org/software/coreutils/manual/html_node/rmdir-invocation.html
+- GNU Coreutils Manual — `ln`: https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html
