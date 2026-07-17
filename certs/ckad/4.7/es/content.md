@@ -233,7 +233,7 @@ imagePullSecrets:
 - name: regcred
 ```
 
-Cualquier Pod que use `app-sa` a partir de ahí puede tirar imágenes del registro privado sin repetir la configuración por Pod. Si un Pod define su **propio** `imagePullSecrets`, ambos conjuntos (el del Pod y el del ServiceAccount) se combinan — no se pisan.
+Cualquier Pod que use `app-sa` a partir de ahí puede tirar imágenes del registro privado sin repetir la configuración por Pod. **Ojo:** esto no es un merge — el admission controller solo copia los `imagePullSecrets` del ServiceAccount cuando el Pod no declara ninguno propio (`len(pod.Spec.ImagePullSecrets) == 0`). Si un Pod define su **propio** `imagePullSecrets`, el del ServiceAccount se ignora por completo; un Pod que necesite ambos tiene que listarlos los dos explícitamente.
 
 ## 9. Inspección y comandos útiles
 
