@@ -36,6 +36,7 @@ TARGETS=(
     "ckad:es"
     "cka:es"
     "cks:es"
+    "kcna:es"
 )
 
 {

@@ -20,7 +20,7 @@ Generado por `scripts/status_matrix.py` desde el filesystem real (conteo de arch
 | `cka` | 27 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | `ckad` | 24 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | `cks` | 26 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| `kcna` | 13 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| `kcna` | 13 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | `kcsa` | – | – | – | – | – | – | – | – | – |
 | `cgoa` | – | – | – | – | – | – | – | – | – |
 | `capa` | – | – | – | – | – | – | – | – | – |

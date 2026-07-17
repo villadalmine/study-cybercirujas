@@ -10,20 +10,19 @@ bug del fence envolvente, gaps de archivos faltantes, tagging de deploy) ya
 está en [CHANGELOG.MD](CHANGELOG.MD) con el detalle completo — no se repite
 acá. Próximo, sin orden estricto:
 
-1. **KCNA** (Kubernetes and Cloud Native Associate) — snapshot ya arreglado
-   (weight-por-dominio), falta generar el contenido (13 topics, es). Cierra
-   el temario del path `kubernetes` (KCNA → CKA/CKAD → CKS), que ahora ya
-   tiene contenido completo en las otras 3 certs (CKA/CKAD/CKS, 2026-07-17).
+1. ~~**KCNA**~~ **Hecho (2026-07-17)**: 13/13 en español (content + exercises
+   + labs). **El temario del path `kubernetes` (KCNA → CKA/CKAD → CKS) está
+   completo** en las 4 certs que lo componen.
 2. **Video por certificación** (nuevo, 2026-07-17) — pilotado en `cka`,
    ver CHANGELOG.MD para el detalle. Decidir si escalar al resto de las
-   certs con contenido (ckad, cks, lpi-010-160) — cada uno es una llamada de
-   AI + rendering, no gratis en tiempo/cuota.
+   certs con contenido (ckad, cks, kcna, lpi-010-160) — cada uno es una
+   llamada de AI + rendering, no gratis en tiempo/cuota.
 3. **SDD de labs** (ver sección "Labs — modos de ejecución" más abajo, y
    PLAN.MD sección SDD) — evaluación hecha, nada implementado todavía.
    Empezar por Docker local (provider `local` de `labs.py`, hoy sin
    implementar) porque el resto del roadmap de labs depende de tener un
    container "toolbox" reusable.
-4. Traducir CKAD, CKA y CKS a los otros 6 idiomas.
+4. Traducir CKAD, CKA, CKS y KCNA a los otros 6 idiomas.
 5. Video para los paths restantes sin video (ver "Contenido" más abajo).
 
 ## Contenido
@@ -37,13 +36,12 @@ acá. Próximo, sin orden estricto:
   por archivo, no solo por topic). Sobrevivió a un `kill` externo y a dos
   cortes de cuota de Claude en el medio — se retomó solo cada vez porque la
   generación es idempotente por topic.
-- Traducir CKAD, CKA y CKS a los otros 6 idiomas — hoy solo existen en español.
+- Traducir CKAD, CKA, CKS y KCNA a los otros 6 idiomas — hoy solo existen en español.
 - ~~Revisar si otras certs CNCF ya snapshoteadas (KCNA, KCSA, CKS, etc.) tienen
   el mismo problema de peso-por-dominio~~ **KCNA tenía el bug** (pesos sumaban
   360, cada sub-tema con el peso completo del dominio copiado) — re-snapshoteado
-  con el código ya arreglado, ahora suma 100. `KCSA`/`LFCS`/`LFCA` no tienen
-  topics todavía (sin snapshot) así que no aplica. Generar contenido de KCNA
-  sigue pendiente (item 1 de arriba).
+  con el código ya arreglado, ahora suma 100, y contenido generado (13/13).
+  `KCSA`/`LFCS`/`LFCA` no tienen topics todavía (sin snapshot) así que no aplica.
 - Video para los paths restantes sin video: `linux-devops`, `kubernetes-security`,
   `gitops-platform` (ver STATUS.MD para la lista completa y estado real).
 

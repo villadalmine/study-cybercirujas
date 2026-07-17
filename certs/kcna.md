@@ -8,91 +8,91 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kubernetes Core Concepts
   topic: 1 - Kubernetes Fundamentals
   weight: 44
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Application Delivery
   topic: 2 - Cloud Native Application Delivery
   weight: 5.3
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Debugging
   topic: 2 - Cloud Native Application Delivery
   weight: 5.3
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Observability
   topic: 2 - Cloud Native Application Delivery
   weight: 5.4
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Administration
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Scheduling
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Containerization
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Networking
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Security
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Troubleshooting
   topic: 3 - Container Orchestration
   weight: 4
 - id: '3.7'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Storage
   topic: 3 - Container Orchestration
   weight: 4
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Cloud Native Ecosystem and Principles
   topic: 4 - Cloud Native Architecture
   weight: 6
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Cloud Native Community and Collaboration
   topic: 4 - Cloud Native Architecture
   weight: 6

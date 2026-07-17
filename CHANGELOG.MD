@@ -15,11 +15,12 @@ lo pendiente vive en [BACKLOG.MD](BACKLOG.MD).
   Quedaron 2 labs a medio generar por los cortes; `fix_corrupted_content.py`
   los detectó (ahora chequea también labs faltantes, no solo corruptos) y
   los completó solo.
-- **KCNA: mismo bug de peso-por-dominio que CKAD** encontrado al revisar
-  `STATUS.MD` (pesos sumaban 360 en vez de 100, cada sub-tema con el peso
-  completo del dominio copiado) — re-snapshoteado con `tracker.py` ya
-  arreglado, ahora suma 100 limpio (44/16/28/12). Contenido todavía no
-  generado.
+- **KCNA agregado al catálogo**: mismo bug de peso-por-dominio que CKAD
+  encontrado al revisar `STATUS.MD` (pesos sumaban 360 en vez de 100, cada
+  sub-tema con el peso completo del dominio copiado) — re-snapshoteado con
+  `tracker.py` ya arreglado, ahora suma 100 limpio (44/16/28/12). Contenido
+  generado, 13/13 en español. **Con esto el temario del path `kubernetes`
+  (KCNA → CKA/CKAD → CKS) queda completo en sus 4 certs.**
 - **Video en más idiomas**: Piper sí tiene voces para alemán y chino
   (`de_DE-thorsten-high`, `zh_CN-huayan-medium` — verificado contra la
   lista real de idiomas soportados del repo `rhasspy/piper-voices`; japonés
