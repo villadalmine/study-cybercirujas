@@ -5,40 +5,18 @@ resuelto va a [CHANGELOG.MD](CHANGELOG.MD); el diseño de fondo a [PLAN.MD](PLAN
 
 ## En curso / próximo (orden)
 
-0. ~~**(Bloqueante) Terminar de regenerar contenido corrupto.**~~ **Resuelto
-   (2026-07-16)**: `scripts/fix_corrupted_content.py` reporta 0 combos
-   corruptos. Verificado además a mano: lpi-010-160 19/19 temas en los 7
-   idiomas, ckad 24/24 en es, ningún `content.md`/`exercises.md` por debajo de
-   1500 bytes, y spot-check de contenido real (no recap) en ja/zh y en
-   `ckad/4.7/lab/break_fix.sh` (el archivo que la memoria de proyecto marcaba
-   como historial de regresión a stub — ahora tiene contenido real). Ya no
-   bloquea deploy/commit.
-1. ~~**CKA**~~ **Hecho (2026-07-16)**: snapshot de `CKA_Curriculum_v1.35.pdf`
-   (27 topics) + contenido/ejercicios/lab en español, 27/27 limpio. El bug de
-   peso-por-dominio se arregló a nivel de código en
-   `teach/core/tracker.py::snapshot_topics` (prompt explícito + validación
-   dura: si los weight no suman ~100, `TrackerError` y no se persiste el
-   snapshot) — ya no depende de corrección manual. Salió correcto al primer
-   intento (Storage 10/Troubleshooting 30/Workloads 15/Cluster Arch 25/
-   Networking 20 = 100).
-2. ~~**Video de otro path**~~ **Hecho (2026-07-16)**: path `kubernetes`
-   (Ingeniero Kubernetes), es, 111s/7 escenas. De paso se encontró y arregló
-   otro bug de PATH (`piper` vive en `.venv/bin`, no en el PATH del sistema —
-   mismo patrón que ya había mordido con el binario `teach`): ahora
-   `teach/core/video.py` lo resuelve vía `sys.executable` en vez de confiar
-   en el PATH.
-3. **Nuevo bug encontrado y arreglado (2026-07-16): fence de código envolvente.**
-   El backend `claude` a veces devuelve todo el contenido envuelto en un fence
-   Markdown (` ```markdown ` al inicio, ` ``` ` al final) a pesar de pedir
-   texto plano — no es corrupción (el contenido es real), pero rompe el
-   render en la web. Visto por primera vez en CKA (18 de 81 archivos). Fix en
-   `teach/core/generator.py::_strip_fence` (aplicado antes de guardar,
-   también antes de la validación anti-recap) + `scripts/fix_corrupted_content.py`
-   ahora tiene un paso previo que arregla in-place los archivos ya afectados
-   sin gastar cuota de AI. Vale la pena revisar si lpi-010-160/CKAD tuvieron
-   este problema en el pasado y no se detectó (el chequeo viejo de "empieza
-   con #" los habría marcado como corruptos igual, así que si hubieran
-   existido ya se habrían regenerado).
+Lo resuelto el 2026-07-16 (contenido corrupto, CKA, video de `kubernetes`,
+bug del fence envolvente, gaps de archivos faltantes, tagging de deploy) ya
+está en [CHANGELOG.MD](CHANGELOG.MD) con el detalle completo — no se repite
+acá. Próximo, sin orden estricto:
+
+1. **SDD de labs** (ver sección "Labs — modos de ejecución" más abajo, y
+   PLAN.MD sección SDD) — evaluación hecha, nada implementado todavía.
+   Empezar por Docker local (provider `local` de `labs.py`, hoy sin
+   implementar) porque el resto del roadmap de labs depende de tener un
+   container "toolbox" reusable.
+2. Traducir CKAD y CKA a los otros 6 idiomas.
+3. Video para los paths restantes sin video (ver "Contenido" más abajo).
 
 ## Contenido
 
@@ -57,22 +35,55 @@ resuelto va a [CHANGELOG.MD](CHANGELOG.MD); el diseño de fondo a [PLAN.MD](PLAN
 
 ## Labs — modos de ejecución (ver PLAN.MD, sección SDD)
 
-- Docker local (free): generar `docker-compose.yml`/`Dockerfile` desde
-  `lab.yaml`, llena el hueco del provider `local` no implementado en `labs.py`.
-- Grabación asciinema del ejercicio resuelto (reusa el mismo container).
-- Terraform BYO-cloud (pago, self-service primero).
-- Lab hosteado efímero (pago, al final — requiere aislar de la red doméstica).
+Evaluación hecha (spec-driven, PLAN.MD), nada de esto implementado todavía.
+Punto de partida ya existente: `lab.yaml` (spec declarativo por tema) y
+`break_fix.sh` (script real, generado y revisado) por tema; `labs.py` solo
+implementa el provider `terraform` — el provider `local` está declarado pero
+sin código detrás. Orden sugerido (cada etapa reusa la anterior):
+
+1. **Docker local (free, primero).** Generar desde `lab.yaml` un
+   `Dockerfile`/`docker-compose.yml` determinístico; el estudiante lo corre
+   en su propia máquina. Llena el hueco del provider `local` en `labs.py`.
+   Costo/riesgo para la plataforma: cero. El mismo container "toolbox" que
+   esto produce es el que se reusa en el paso siguiente.
+2. **Video del ejercicio — captura real, no mock.** Mismo principio que el
+   video de marketing de paths (la parte fáctica nunca la escribe la AI, ver
+   el path scene determinístico en `core/video.py`): levantar el container
+   real del paso 1, correr `break_fix.sh` de verdad, y grabar la sesión con
+   **asciinema** (`.cast`, texto, KB no MB, reproducible/escalable, player
+   self-hosteable) en vez de mockear la terminal con AI o renderizar mp4. La
+   AI solo escribe la narración que se superpone (Piper TTS, como ya se hace
+   para los videos de path).
+3. **Pago A — BYO-cloud + terraform, self-service primero.** Extiende el
+   contrato que ya está en `labs.py` (`up`/`down` sobre `lab/terraform/`):
+   generar el módulo terraform por tema, v1 con el estudiante corriendo
+   `terraform apply` con sus propias credenciales — la plataforma nunca las
+   toca. Un modo "un click" donde la plataforma ejecuta terraform con
+   credenciales pegadas por el estudiante es más cómodo pero la convierte en
+   custodio de credenciales cloud ajenas — dejar para cuando haya demanda
+   comprobada, no construirlo de entrada.
+4. **Pago B — hosteado por mí, botón "Conectar" → destrucción automática
+   (al final, solo con ingresos que justifiquen la inversión en seguridad).**
+   Riesgo principal: la plataforma corre en el cluster de casa, expuesto
+   públicamente — **no correr labs de terceros ahí**, blast radius directo a
+   la red doméstica (escape de lab, minado, pivot a la LAN). Alternativa:
+   VM efímera por sesión en un proveedor cloud aparte y barato (Hetzner/DO,
+   billing por minuto), desde la misma imagen "toolbox" del paso 1, timeout
+   duro (30-60 min), límite de sesiones concurrentes, terminal web vía
+   xterm.js+websocket, `terraform destroy` al cerrar la sesión. Evaluar
+   también sandboxes efímeros ya hechos (E2B, Coder, Gitpod) antes de
+   construir el hardening de aislamiento a mano.
 
 ## Deploy — deuda técnica
 
-- **`make image-cluster` usa `TAG ?= 0.1.0` por default, pero el release de
-  Helm en producción está fijado a `image.tag: 0.1.3`** (de un `helm upgrade
-  --set image.tag=...` manual anterior, nunca reflejado en `values-*.yaml` ni
-  en el Makefile). Un rebuild con el TAG default sube una imagen que el
-  deployment nunca pulls — el rollout "funciona" pero sirve la imagen vieja
-  sin error visible. Pasa desapercibido porque `imagePullPolicy: Always` hace
-  que el pod arranque igual. Automatizar el tagging (git sha o timestamp) en
-  vez de un número fijo que hay que sincronizar a mano entre Makefile y Helm.
+- ~~**`make image-cluster` usaba un `TAG` fijo que podía divergir del release
+  de Helm en producción sin error visible.**~~ **Resuelto (2026-07-16)**:
+  `TAG` default ahora es `$(shell date +%Y%m%d%H%M%S)` en el Makefile — un
+  timestamp fresco por invocación, no un número que haya que sincronizar a
+  mano. Ojo: sigue siendo responsabilidad de quien despliega pasar el MISMO
+  `TAG=...` explícito a `make image-cluster` y `make deploy-local` en la
+  misma tanda (dos invocaciones de `make` sin `TAG=` explícito generan dos
+  timestamps distintos y rompen el emparejamiento build↔deploy).
 
 ## Plataforma (roadmap largo, ver PLAN.MD)
 
