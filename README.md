@@ -63,8 +63,8 @@ listener HTTPS para study.cybercirujas.club, ClusterIssuer `letsencrypt-prod`,
 DNS público → HAProxy y `study.cluster.home` local.
 
 **Registry interno**: los nodos necesitan `/etc/rancher/k3s/registries.yaml`
-con el mirror http de `registry.registry:5000` (hoy solo lo tiene
-srv-super6c-01-nvme; sin eso el pull falla con ImagePullBackOff en el resto):
+con el mirror http del registry interno (si no todos los nodos lo tienen, el
+pull falla con ImagePullBackOff en los que no):
 
 ```yaml
 mirrors:
@@ -72,8 +72,11 @@ mirrors:
     endpoint: ["http://registry.registry:5000"]
 ```
 
-Los nodos rk1 ya lo tienen (etiquetados `registry-access=true`; values-local usa ese pool como nodeSelector). Al agregar la config a los super6c rearmados, etiquetarlos igual o quitar el selector. Reiniciar `k3s-agent` (workers) / `k3s` (control-plane, de a uno y con etcd
-sano — no reiniciar CPs mientras un miembro esté caído).
+Etiquetar con `registry-access=true` los nodos que sí tengan la config
+(`values-local` usa esa label como nodeSelector), o quitar el selector si
+todos los nodos la tienen. Reiniciar `k3s-agent` (workers) / `k3s`
+(control-plane, de a uno y con etcd sano — no reiniciar CPs mientras un
+miembro esté caído).
 
 Web: http://127.0.0.1:8000 — sin login (deshabilitado).
 Docs de la API: http://127.0.0.1:8000/docs

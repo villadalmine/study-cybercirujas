@@ -17,7 +17,9 @@ image:
   pullPolicy: Always
 
 # nodeSelector:
-#   kubernetes.io/hostname: srv-super6c-01-nvme
+#   kubernetes.io/hostname: <nombre-del-nodo>
+#   # o, si etiquetaste los nodos con acceso al registry interno:
+#   # registry-access: "true"
 
 gateway:
   enabled: true
