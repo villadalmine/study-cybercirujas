@@ -2,9 +2,8 @@
 
 Público (sin login): catálogo, temarios y paths — la landing es referente
 de qué certificaciones existen.
-Con login + plan activo: el contenido de estudio (temas, ejercicios, labs).
-
-Login por sesión (cookie firmada). v1: admin/admin + suscripción stub.
+Auth deshabilitado (v1). Endpoints de login/logout existen pero rechazan
+siempre — listos para enchufar OIDC + pasarela de pago cuando se implemente.
 Docs interactivas en /docs (OpenAPI).
 """
 

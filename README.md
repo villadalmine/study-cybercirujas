@@ -1,10 +1,13 @@
 # teach-plat
 
-Plataforma educativa self-service. Ver [PLAN.MD](PLAN.MD) para el diseño
-completo, [CHANGELOG.MD](CHANGELOG.MD) para lo entregado,
-[BACKLOG.MD](BACKLOG.MD) para lo pendiente y [STATUS.MD](STATUS.MD) para la
-matriz de qué cert/idioma/lab/video está terminado ahora mismo (`.venv/bin/python3
-scripts/status_matrix.py` la regenera desde el filesystem real).
+Plataforma de estudio para certificaciones IT. Todo el contenido se genera
+dinámicamente desde fuentes oficiales (temarios scrapeados de lpi.org, PDFs
+de github.com/cncf/curriculum, etc.) — nada hardcodeado.
+
+- **[STATUS.MD](STATUS.MD)** — qué cert/idioma/lab/video está terminado
+- **[PLAN.MD](PLAN.MD)** — diseño completo
+- **[BACKLOG.MD](BACKLOG.MD)** — lo pendiente
+- **[CHANGELOG.MD](CHANGELOG.MD)** — lo entregado
 
 ## Quickstart
 
@@ -14,23 +17,33 @@ make list                                      # catálogo
 make show CERT=lpi-010-160                     # temario + estado por tema
 make generate CERT=lpi-010-160 TOPIC=1.1 BACKEND=claude
 make serve                                     # API + web en :8000
-make publish MSG="contenido 1.1"               # commit+push al repo que publica
 ```
 
-`make help` lista todos los targets (labs, git-init, etc.).
+`make help` lista todos los targets.
+
+## Imagen Docker pública
+
+Cada push a `main` publica la imagen en GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/villadalmine/study-cybercirujas:latest
+docker run -p 8000:8000 ghcr.io/villadalmine/study-cybercirujas:latest
+```
+
+Web: http://localhost:8000 · API docs: http://localhost:8000/docs
 
 ## Backends de generación
 
 `BACKEND=` (o `TEACH_BACKEND`):
 
-- `litellm` (default) — el LiteLLM del cluster. Requiere `LITELLM_BASE_URL`,
-  `LITELLM_API_KEY`, `LITELLM_MODEL`.
+- `litellm` (default) — cualquier API compatible OpenAI (LiteLLM, OpenRouter,
+  etc.). Requiere `LITELLM_BASE_URL`, `LITELLM_API_KEY`, `LITELLM_MODEL`.
 - `claude` — Claude Code CLI local (`claude -p`).
 - `codex` — OpenAI Codex CLI local (`codex exec`).
 - `gemini` — Gemini CLI local (`gemini -p`).
 - `custom` — tu comando en `TEACH_AGENT_CMD` (recibe el prompt como último argumento).
 
-Con backends locales el flujo es: generar en tu máquina → revisar → `make publish`.
+Con backends locales: generar en tu máquina → revisar → `make publish`.
 
 ## Idiomas
 
@@ -40,85 +53,60 @@ La web tiene selector de idioma con fallback al español.
 
 ## Deploy en Kubernetes
 
-Mismo esquema que online-game (Gateway API Cilium + cert-manager acme-dns +
-registry interno con Kaniko). El contenido va horneado en la imagen:
-publicar = rebuild + upgrade.
+El contenido va horneado en la imagen — publicar = rebuild + upgrade.
 
 ```bash
-# 1. build in-cluster (ajustar tag en el manifest)
-kubectl create -f deploy/build/teach-plat-kaniko.yaml
-# 2. valores reales (dominios study.cybercirujas.club + study.cluster.home):
-cp deploy/helm/values-study.example.yaml deploy/helm/values-local.yaml  # editar secretos
-# 3. deploy
+# Con la imagen pública de GHCR:
 helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
-  -f deploy/helm/values-local.yaml
+  -f deploy/helm/values-local.yaml \
+  --set image.registry=ghcr.io \
+  --set image.repository=villadalmine/study-cybercirujas
+
+# O build in-cluster (Kaniko, sin GitHub Actions):
+make image-cluster TAG=mytag
+make deploy-local TAG=mytag
 ```
 
-Build sin GitHub ni workflows: `make image-cluster` corre Kaniko como pod
-simple con el contexto local por stdin. Deploy local: `make deploy-local`
-(values-local.yaml gitignored, host study.cluster.home).
+Para deploy en un cluster propio, copiar `values-study.example.yaml` a
+`values-local.yaml` y editar dominios/secretos. Pre-requisitos: Gateway API
+(Cilium o similar), cert-manager con ClusterIssuer para TLS.
 
-Pre-requisitos (ya existen en el cluster): Gateway `cluster-gateway` con
-listener HTTPS para study.cybercirujas.club, ClusterIssuer `letsencrypt-prod`,
-DNS público → HAProxy y `study.cluster.home` local.
+## Variables de entorno
 
-**Registry interno**: los nodos necesitan `/etc/rancher/k3s/registries.yaml`
-con el mirror http del registry interno (si no todos los nodos lo tienen, el
-pull falla con ImagePullBackOff en los que no):
-
-```yaml
-mirrors:
-  "registry.registry:5000":
-    endpoint: ["http://registry.registry:5000"]
-```
-
-Etiquetar con `registry-access=true` los nodos que sí tengan la config
-(`values-local` usa esa label como nodeSelector), o quitar el selector si
-todos los nodos la tienen. Reiniciar `k3s-agent` (workers) / `k3s`
-(control-plane, de a uno y con etcd sano — no reiniciar CPs mientras un
-miembro esté caído).
-
-Web: http://127.0.0.1:8000 — sin login (deshabilitado).
-Docs de la API: http://127.0.0.1:8000/docs
+| Variable | Uso | Default |
+|----------|-----|---------|
+| `TEACH_ROOT` | Raíz del repo de datos | `.` (cwd) |
+| `TEACH_SECRET` | Clave de firma de sesión | random |
+| `TEACH_SITE_URL` | Hostname en marca de agua de videos | `study.cybercirujas.club` |
+| `TEACH_BACKEND` | Backend de generación | `litellm` |
+| `LITELLM_BASE_URL` | URL del proxy LiteLLM | — |
+| `LITELLM_API_KEY` | API key para LiteLLM | — |
+| `LITELLM_MODEL` | Modelo a usar vía LiteLLM | — |
 
 ## Timer de generación automática
 
-Un timer de systemd (`teach-resume.timer`) corre `scripts/resume-generation.sh`
-cada 20 minutos. El script:
-
-1. Ejecuta `scripts/fix_corrupted_content.py` (detecta y regenera contenido
-   corrupto — idempotente, converge a 0).
-2. Genera contenido pendiente para los targets definidos en el script
-   (hoy: lpi-010-160 traducciones + CKAD es + CKA es).
-
-**Estado actual**: parado y deshabilitado (2026-07-16) para no consumir tokens
-de Claude CLI innecesariamente. Ojo: un `disable` anterior (2026-07-13) no
-sobrevivió un reboot de la máquina (`stop` sin `disable` real, o el unit
-quedó igual "enabled" — el timer se reactivó solo el 2026-07-14 18:37 y
-corrió sin supervisión ~2 días, cosa que en este caso vino bien porque
-terminó de converger la limpieza de contenido corrupto a 0, pero no hay que
-asumir que "estado actual: deshabilitado" en este archivo siga siendo cierto
-sin correr `systemctl --user status teach-resume.timer` primero).
+Un timer de systemd (`teach-resume.timer`) puede correr `scripts/resume-generation.sh`
+cada 20 minutos para generar contenido desatendido (fix de corruptos + generación
+pendiente). Idempotente — salta lo ya hecho.
 
 ```bash
-# Reactivar
+# Activar
 systemctl --user enable --now teach-resume.timer
 
 # Parar
-systemctl --user stop teach-resume.timer
-systemctl --user disable teach-resume.timer
+systemctl --user stop teach-resume.timer && systemctl --user disable teach-resume.timer
 
-# Ver estado
+# Estado y log
 systemctl --user status teach-resume.timer
-systemctl --user list-timers | grep teach
-
-# Ver log de ejecuciones
 tail -50 ~/.local/state/teach-plat/resume.log
 
-# Correr una pasada a mano (sin timer)
+# Pasada manual (sin timer)
 scripts/resume-generation.sh
 ```
 
-Los archivos del timer viven en `~/.config/systemd/user/`:
-- `teach-resume.timer` — dispara cada 20 min
-- `teach-resume.service` — ejecuta `scripts/resume-generation.sh`
+Los unit files viven en `~/.config/systemd/user/` (`teach-resume.timer` +
+`teach-resume.service`).
+
+## Licencia
+
+[Apache License 2.0](LICENSE)

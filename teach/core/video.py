@@ -15,6 +15,7 @@ directo desde catalog.yaml para que el dato más sensible a errores (exámenes,
 vigencias, orden) nunca dependa de que el modelo no alucine.
 """
 
+import os
 import re
 import shutil
 import subprocess
@@ -426,7 +427,8 @@ def _base_slide(lang: str) -> tuple[Image.Image, ImageDraw.ImageDraw]:
             fill=tuple(int(ACCENT[i] + (ACCENT2[i] - ACCENT[i]) * t) for i in range(3)),
         )
     draw.text((70, 40), "Cert Landscape", font=_font(bold, 32), fill=MUTED)
-    draw.text((W - 70, H - 56), "study.cybercirujas.club", font=_font(regular, 26), fill=MUTED, anchor="ra")
+    site_url = os.environ.get("TEACH_SITE_URL", "study.cybercirujas.club")
+    draw.text((W - 70, H - 56), site_url, font=_font(regular, 26), fill=MUTED, anchor="ra")
     return img, draw
 
 
