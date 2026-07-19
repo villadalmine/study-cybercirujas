@@ -96,9 +96,15 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
                         continue
                     text = f.read_text(errors="replace")
                     stripped = text.strip()
-                    first_line = stripped.splitlines()[0] if stripped else ""
+                    lines = stripped.splitlines()
+                    first_line = lines[0] if lines else ""
+                    last_line = lines[-1] if lines else ""
                     is_small = f.stat().st_size < MIN_REAL_BYTES
-                    looks_recap = bool(RECAP_RE.search(first_line)) or not stripped.startswith("#")
+                    looks_recap = (
+                        bool(RECAP_RE.search(first_line))
+                        or bool(RECAP_RE.search(last_line))
+                        or not stripped.startswith("#")
+                    )
                     if is_small or looks_recap:
                         bad.add((cert, topic, lang))
         # break_fix.sh es compartido entre idiomas (una copia por tema, no
@@ -116,9 +122,11 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
                 continue
             text = f.read_text(errors="replace")
             stripped = text.strip()
-            first_line = stripped.splitlines()[0] if stripped else ""
+            lines = stripped.splitlines()
+            first_line = lines[0] if lines else ""
+            last_line = lines[-1] if lines else ""
             is_small = f.stat().st_size < MIN_REAL_BYTES
-            looks_recap = bool(RECAP_RE.search(first_line))
+            looks_recap = bool(RECAP_RE.search(first_line)) or bool(RECAP_RE.search(last_line))
             if is_small or looks_recap:
                 bad.add((cert, topic, DEFAULT_LANG))
     return bad

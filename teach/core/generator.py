@@ -83,8 +83,14 @@ def _strip_fence(text: str) -> str:
 
 def _reject_if_recap(text: str, label: str) -> str:
     text = _strip_fence(text)
-    first_line = text.strip().splitlines()[0] if text.strip() else ""
-    if len(text.strip()) < 400 or _RECAP_RE.search(first_line):
+    lines = text.strip().splitlines()
+    # el resumen de proceso puede aparecer al principio (bug original) O al
+    # final (visto en lpi-010-160/2.3/de: contenido real completo + un último
+    # párrafo tipo "no tengo acceso a herramientas de archivo, así que acá va
+    # el texto para pegar a mano" que un chequeo solo-primera-línea no agarra)
+    first_line = lines[0] if lines else ""
+    last_line = lines[-1] if lines else ""
+    if len(text.strip()) < 400 or _RECAP_RE.search(first_line) or _RECAP_RE.search(last_line):
         raise GeneratorConfigError(
             f"El backend devolvió un resumen de proceso en vez de {label} "
             f"(bug conocido de agentes de código corriendo sin restricción de "

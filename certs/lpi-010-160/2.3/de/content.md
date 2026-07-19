@@ -1,187 +1,206 @@
 # 2.3 Using Directories and Listing Files
 
+**Gewichtung im Examen: 2**
+
 ## Überblick
 
-Um sich sicher innerhalb der Filesystem-Hierarchy zu bewegen, sind drei Commands zentral: `pwd`, `cd` und `ls`. Dieses Thema behandelt die Directory-Struktur, absolute und relative Paths sowie das Lesen der `ls -l` Long-Listing-Ausgabe.
-
-## Die Filesystem-Hierarchie
-
-Jedes Linux-System besitzt genau ein Root Directory, dargestellt durch `/`. Von dort aus verzweigen sich alle weiteren Directories baumartig, z. B. `/home`, `/etc`, `/var` oder `/usr`. Jeder User besitzt üblicherweise ein eigenes Home Directory unter `/home/<username>` (bei root: `/root`), referenzierbar über die Tilde `~`.
-
-In jedem Directory existieren zwei spezielle Einträge:
-- `.` referenziert das aktuelle Directory
-- `..` referenziert das Parent Directory
-
-## Absolute und relative Paths
-
-Ein **absoluter Path** beginnt immer mit `/` und beschreibt den vollständigen Weg vom Root Directory aus, unabhängig vom aktuellen Standort:
-
-```
-/home/anna/Documents/report.txt
-```
-
-Ein **relativer Path** wird ausgehend vom aktuellen Working Directory interpretiert und beginnt nicht mit `/`:
-
-```
-Documents/report.txt
-../Pictures/photo.png
-./script.sh
-```
-
-## Position bestimmen: `pwd`
-
-`pwd` (print working directory) zeigt den absoluten Path des aktuellen Working Directory:
-
-```
-$ pwd
-/home/anna
-```
-
-## Navigation: `cd`
-
-Mit `cd` (change directory) wechselt man das Working Directory:
-
-```
-$ cd /etc              # absoluter Path
-$ cd Documents          # relativer Path, Subdirectory
-$ cd ..                 # eine Ebene nach oben
-$ cd ~                  # zurück zum eigenen Home Directory
-$ cd                    # ohne Argument: ebenfalls Home Directory
-$ cd -                  # zurück zum vorherigen Working Directory
-```
-
-Beispiel-Session:
-
-```
-$ pwd
-/home/anna
-$ cd /var/log
-$ pwd
-/var/log
-$ cd -
-/home/anna
-$ pwd
-/home/anna
-```
-
-## Directory-Inhalt auflisten: `ls`
-
-`ls` (list) zeigt den Inhalt eines Directory. Ohne Argument wird das Working Directory verwendet:
-
-```
-$ ls
-Desktop  Documents  Downloads  Music  Pictures
-```
-
-Ein anderes Directory kann direkt als Argument übergeben werden:
-
-```
-$ ls /etc
-adduser.conf  apt  bash.bashrc  cron.d  hostname  hosts  ...
-```
-
-### Wichtige Optionen von `ls`
-
-| Option | Bedeutung |
-|---|---|
-| `-l` | Long Listing Format mit Details (Permissions, Owner, Size, Date) |
-| `-a` | zeigt auch hidden files (Name beginnt mit `.`), inklusive `.` und `..` |
-| `-A` | wie `-a`, aber ohne `.` und `..` |
-| `-h` | Dateigrößen human-readable (z. B. `4.0K`, `1.2M`) |
-| `-d` | zeigt Directories selbst an, nicht ihren Inhalt |
-| `-F` | hängt Symbole an Einträge an (`/` Directory, `*` executable, `@` Symlink) |
-| `-R` | listet rekursiv, inklusive aller Subdirectories |
-| `-t` | sortiert nach Modification Time (neueste zuerst) |
-| `-S` | sortiert nach Dateigröße (größte zuerst) |
-| `-r` | kehrt die Sortierreihenfolge um |
-
-Optionen lassen sich kombinieren, z. B. `ls -lah`.
-
-### Hidden Files (Dotfiles)
-
-Dateien und Directories, deren Name mit einem Punkt beginnt (z. B. `.bashrc`, `.config`), gelten als **hidden** und werden von `ls` standardmäßig nicht angezeigt:
-
-```
-$ ls
-Desktop  Documents  Downloads
-
-$ ls -a
-.  ..  .bash_history  .bashrc  .config  Desktop  Documents  Downloads
-```
-
-### Die `ls -l`-Ausgabe verstehen
-
-```
-$ ls -l /etc/hosts /home/anna
--rw-r--r-- 1 root root  174 Mär  3 09:12 /etc/hosts
-
-/home/anna:
-total 24
-drwxr-xr-x  2 anna anna 4096 Jun 20 14:05 Desktop
--rw-r--r--  1 anna anna  220 Jun 20 14:05 .bash_logout
-drwxr-xr-x  3 anna anna 4096 Jun 21 08:41 Documents
-```
-
-Jede Zeile besteht, von links nach rechts, aus folgenden Feldern:
-
-1. **File Type + Permissions** (10 Zeichen), z. B. `drwxr-xr-x`
-   - erstes Zeichen: File Type — `-` reguläre Datei, `d` Directory, `l` Symlink
-   - restliche 9 Zeichen: Permissions für Owner, Group und Others (`rwx`)
-2. **Link Count** — Anzahl der Hard Links (bei Directories inklusive `.`-Eintrag und `..`-Verweisen der Subdirectories)
-3. **Owner** — der User, dem die Datei gehört
-4. **Group** — die Group, der die Datei zugeordnet ist
-5. **Size** — Dateigröße in Bytes (mit `-h` human-readable)
-6. **Modification Timestamp** — Datum/Uhrzeit der letzten Änderung
-7. **Name** — Datei- bzw. Directory-Name
-
-Das `total`-Feld oberhalb der Liste gibt die Summe der belegten Blocks an, nicht die Anzahl der Dateien.
-
-### Weitere praktische Beispiele
-
-Nach Größe sortiert, human-readable:
-
-```
-$ ls -lhS /var/log
-total 3.2M
--rw-r-----  1 syslog adm  1.8M Jul 12 10:03 syslog
--rw-r-----  1 syslog adm  640K Jul  5 00:00 syslog.1
--rw-r--r--  1 root   root  12K Jul 12 09:58 dpkg.log
-```
-
-Nur Directories selbst anzeigen, nicht deren Inhalt (`-d`):
-
-```
-$ ls -ld /home /etc /var
-drwxr-xr-x   4 root root  4096 Jun 10 12:00 /home
-drwxr-xr-x 142 root root 12288 Jul 12 08:00 /etc
-drwxr-xr-x  13 root root  4096 May 22 07:15 /var
-```
-
-Rekursives Listing eines kleinen Projekt-Directory:
-
-```
-$ ls -R project/
-project/:
-README.md  src
-
-project/src:
-main.py  utils.py
-```
-
-## Zusammenfassung
-
-- `pwd` zeigt den aktuellen Standort im Filesystem.
-- `cd` navigiert zwischen Directories, über absolute oder relative Paths.
-- `ls` listet Directory-Inhalte; Optionen wie `-l`, `-a`, `-h`, `-d`, `-R`, `-t`, `-S` steuern Format und Umfang der Ausgabe.
-- Die `ls -l`-Ausgabe liefert Type, Permissions, Owner, Group, Size und Modification Time in fester Spaltenreihenfolge.
-- Dotfiles sind standardmäßig versteckt und werden erst mit `-a`/`-A` sichtbar.
-
-## Referenzen
-
-- LPI Learning Materials, Topic 2.3 "Using Directories and Listing Files": https://learning.lpi.org/en/learning-materials/010-160/2/2.3/
-- GNU Coreutils Manual, `ls`: https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html
-- GNU Bash Reference Manual, Bourne Shell Builtins (`cd`): https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html
+Linux organisiert alle Daten in einem hierarchischen Dateisystem, das wie ein umgedrehter Baum aufgebaut ist: An der Spitze steht das **root directory** `/`, darunter verzweigen sich alle weiteren Verzeichnisse. In diesem Thema lernst du, dich mit der Shell in dieser Struktur zu bewegen (`cd`), deinen Standort zu bestimmen (`pwd`) und Dateien aufzulisten (`ls`) — die drei grundlegendsten Werkzeuge der täglichen Arbeit auf der Kommandozeile.
 
 ---
 
-Ich habe in dieser Session keinen Zugriff auf Datei-Tools (Read/Write/Bash), daher konnte ich den Text nicht direkt in `certs/lpi-010-160/2.3/de/` speichern — hier ist der vollständige Inhalt zum manuellen Einfügen.
+## Das Dateisystem als Baum
+
+Jede Datei und jedes Verzeichnis ist vom root directory `/` aus erreichbar. Typische Verzeichnisse direkt unterhalb von `/`:
+
+```
+/
+├── bin/     → grundlegende Programme (binaries)
+├── etc/     → Konfigurationsdateien
+├── home/    → home directories der Benutzer
+│   ├── carol/
+│   └── david/
+├── tmp/     → temporäre Dateien
+├── usr/     → Programme und Bibliotheken
+└── var/     → veränderliche Daten (Logs, Spool)
+```
+
+Wichtig: Unter Linux trennt der **forward slash** `/` die Ebenen eines Pfads (nicht der backslash `\` wie unter Windows). Außerdem ist das Dateisystem **case-sensitive**: `Dokument.txt`, `dokument.txt` und `DOKUMENT.TXT` sind drei verschiedene Dateien.
+
+## Das Home Directory
+
+Jeder Benutzer besitzt ein eigenes **home directory**, üblicherweise unter `/home/<benutzername>` (z. B. `/home/carol`). Dort landen persönliche Dateien und Konfigurationen. Nach dem Login startet die Shell in diesem Verzeichnis.
+
+Die Shell bietet dafür eine Abkürzung: Die **tilde** `~` steht immer für das home directory des aktuellen Benutzers.
+
+```bash
+$ echo ~
+/home/carol
+```
+
+---
+
+## `pwd` — Wo bin ich?
+
+Der Befehl `pwd` (**print working directory**) zeigt das aktuelle Arbeitsverzeichnis als absoluten Pfad an:
+
+```bash
+$ pwd
+/home/carol/Dokumente
+```
+
+Das **current working directory** ist der Bezugspunkt für alle relativen Pfade (siehe unten). Viele Shells zeigen es zusätzlich im Prompt an.
+
+## Absolute und relative Pfade
+
+Es gibt zwei Arten, den Ort einer Datei anzugeben:
+
+| Pfadtyp | Merkmal | Beispiel |
+|---|---|---|
+| **absolute path** | beginnt immer mit `/`, gilt von überall | `/home/carol/Dokumente/brief.txt` |
+| **relative path** | beginnt *nicht* mit `/`, gilt ab dem current working directory | `Dokumente/brief.txt` |
+
+Zwei spezielle Einträge existieren in **jedem** Verzeichnis:
+
+- `.` — das aktuelle Verzeichnis selbst
+- `..` — das **parent directory** (eine Ebene höher)
+
+Beispiel: Du befindest dich in `/home/carol/Dokumente`. Dann verweisen:
+
+```bash
+$ pwd
+/home/carol/Dokumente
+$ cd ..        # wechselt nach /home/carol
+$ cd ../..     # von /home/carol nach / (zwei Ebenen hoch)
+```
+
+Relative Pfade lassen sich auch kombinieren: `../david/Musik` bedeutet „eine Ebene hoch, dann in `david/Musik` hinein".
+
+## `cd` — Verzeichnis wechseln
+
+Mit `cd` (**change directory**) bewegst du dich durch den Verzeichnisbaum:
+
+```bash
+$ cd /etc              # absoluter Pfad
+$ cd Dokumente         # relativer Pfad (ab dem aktuellen Verzeichnis)
+$ cd ..                # ins parent directory
+$ cd ~                 # ins eigene home directory
+$ cd                   # ohne Argument: ebenfalls ins home directory
+$ cd -                 # zurück zum vorherigen Verzeichnis
+```
+
+Der Sonderfall `cd -` ist im Alltag sehr praktisch: Er springt zum zuletzt besuchten Verzeichnis zurück und gibt dessen Pfad aus:
+
+```bash
+$ pwd
+/home/carol
+$ cd /var/log
+$ cd -
+/home/carol
+```
+
+---
+
+## `ls` — Dateien auflisten
+
+`ls` (**list**) zeigt den Inhalt eines Verzeichnisses. Ohne Argument listet es das current working directory, mit Argument jedes beliebige Verzeichnis:
+
+```bash
+$ ls
+Bilder  Dokumente  Downloads  Musik  notizen.txt
+$ ls /etc
+adduser.conf  bash.bashrc  fstab  hostname  hosts  ...
+```
+
+### Das lange Format: `ls -l`
+
+Die Option `-l` (**long listing**) zeigt Details zu jeder Datei:
+
+```bash
+$ ls -l
+drwxr-xr-x 2 carol carol 4096 Jul 10 09:30 Dokumente
+-rw-r--r-- 1 carol carol 1250 Jul 12 14:02 notizen.txt
+```
+
+Die Spalten von links nach rechts:
+
+1. **Dateityp und permissions** — das erste Zeichen zeigt den Typ: `-` für eine reguläre Datei, `d` für ein directory, `l` für einen symbolic link. Danach folgen die Zugriffsrechte.
+2. **Anzahl der links** auf die Datei
+3. **Owner** (Besitzer)
+4. **Group** (Gruppe)
+5. **Größe** in Bytes
+6. **Zeitstempel** der letzten Änderung
+7. **Name**
+
+### Hidden Files: `ls -a`
+
+Dateien, deren Name mit einem Punkt beginnt (**dotfiles**, z. B. `.bashrc`), sind versteckt und werden von `ls` standardmäßig nicht angezeigt. Die Option `-a` (**all**) macht sie sichtbar — inklusive der Einträge `.` und `..`:
+
+```bash
+$ ls -a
+.  ..  .bashrc  .profile  Bilder  Dokumente  notizen.txt
+```
+
+Hidden files sind kein Sicherheitsmechanismus, sondern eine Konvention, um Konfigurationsdateien aus dem Weg zu halten.
+
+### Lesbare Größen: `ls -h`
+
+Die Option `-h` (**human-readable**) zeigt Größen in K, M oder G statt in Bytes — sinnvoll nur in Kombination mit `-l`:
+
+```bash
+$ ls -lh
+drwxr-xr-x 2 carol carol 4,0K Jul 10 09:30 Dokumente
+-rw-r--r-- 1 carol carol 1,3K Jul 12 14:02 notizen.txt
+-rw-r--r-- 1 carol carol 2,1G Jul 15 18:44 backup.tar
+```
+
+### Weitere nützliche Optionen
+
+| Option | Wirkung |
+|---|---|
+| `-R` | **recursive** — listet auch alle Unterverzeichnisse |
+| `-t` | sortiert nach Änderungszeit (neueste zuerst) |
+| `-S` | sortiert nach Größe (größte zuerst) |
+| `-r` | **reverse** — kehrt die Sortierreihenfolge um |
+| `-d` | zeigt das Verzeichnis selbst statt seines Inhalts |
+
+Optionen lassen sich kombinieren. Ein Klassiker ist `ls -lah` (long listing, alle Dateien, lesbare Größen) oder `ls -ltr` (nach Zeit sortiert, älteste zuletzt — die neuesten Dateien stehen dann direkt über dem Prompt):
+
+```bash
+$ ls -ltr /var/log
+-rw-r--r-- 1 root root  32K Jul 17 06:25 dpkg.log
+-rw-r--r-- 1 root root 130K Jul 19 08:12 syslog
+```
+
+---
+
+## Zusammenspiel: ein typischer Arbeitsablauf
+
+```bash
+$ pwd                      # Standort prüfen
+/home/carol
+$ ls                       # Inhalt ansehen
+Bilder  Dokumente  Downloads  notizen.txt
+$ cd Dokumente/Projekte    # relativ hineinwechseln
+$ pwd
+/home/carol/Dokumente/Projekte
+$ ls -lah                  # Details inkl. hidden files
+$ cd ../..                 # zwei Ebenen zurück ins home directory
+$ cd -                     # und wieder zurück nach Projekte
+/home/carol/Dokumente/Projekte
+```
+
+## Zusammenfassung der Kernpunkte
+
+- Das Dateisystem beginnt beim **root directory** `/`; Pfade trennen Ebenen mit `/` und sind **case-sensitive**.
+- **Absolute Pfade** beginnen mit `/`; **relative Pfade** beziehen sich auf das current working directory.
+- `.` = aktuelles Verzeichnis, `..` = parent directory, `~` = home directory.
+- `pwd` zeigt den Standort, `cd` wechselt das Verzeichnis (`cd` allein → home, `cd -` → vorheriges Verzeichnis).
+- `ls` listet Dateien; wichtigste Optionen: `-l` (Details), `-a` (hidden files), `-h` (lesbare Größen), `-R` (rekursiv), `-t`/`-S`/`-r` (Sortierung).
+
+## Referenzen
+
+- LPI Learning Materials, Thema 2.3 — Using Directories and Listing Files: https://learning.lpi.org/en/learning-materials/010-160/2/2.3/
+- GNU Coreutils Manual — `ls`: https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html
+- GNU Coreutils Manual — `pwd`: https://www.gnu.org/software/coreutils/manual/html_node/pwd-invocation.html
+- GNU Bash Manual — Builtin Commands (`cd`): https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html
+- Filesystem Hierarchy Standard (FHS): https://refspecs.linuxfoundation.org/fhs.shtml

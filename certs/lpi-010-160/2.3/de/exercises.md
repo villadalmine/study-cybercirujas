@@ -1,110 +1,283 @@
-# Übungen: Using Directories and Listing Files (Thema 2.3)
+# Geführte Übungen — Thema 2.3: Using Directories and Listing Files
 
-**Quelle (Referenz, keine wörtliche Übernahme):** https://learning.lpi.org/en/learning-materials/010-160/2/2.3/
+**Zertifizierung:** LPI Linux Essentials (010-160, Version 1.6) · **Gewichtung:** 2
 
----
-
-## Übung 1 — Navigation im Filesystem: `pwd` und `cd`
-
-1. Öffne ein Terminal und gib `pwd` ein, um das aktuelle **working directory** anzuzeigen.
-2. Wechsle mit `cd /etc` in ein absolutes Verzeichnis und prüfe mit `pwd`, wo du gelandet bist.
-3. Kehre mit `cd` (ohne Argument) direkt in dein **home directory** zurück.
-4. Wechsle mit `cd ..` eine Ebene nach oben (Parent Directory) und mit `cd .` bleibe im aktuellen Verzeichnis (keine Änderung).
-5. Nutze `cd -`, um zum zuletzt besuchten Verzeichnis zurückzuspringen.
-6. Wechsle mit `cd ~/Documents` (relativ zum home directory über die Tilde `~`) in ein Unterverzeichnis, falls vorhanden, sonst mit `cd ~`.
-
-> **Verständnisfrage 1:** Was ist der Unterschied zwischen einem *absolute path* (z. B. `/etc/passwd`) und einem *relative path* (z. B. `../logs`)?
->
-> **Verständnisfrage 2:** Was bewirken die Sonderzeichen `.`, `..` und `~` jeweils bei der Pfadangabe?
+Für diese Übungen brauchst du nur ein Terminal. Alle Befehle sind gefahrlos — es wird nichts gelöscht oder überschrieben.
 
 ---
 
-## Übung 2 — Verzeichnisse anlegen und entfernen: `mkdir` und `rmdir`
+## Übung 1: Wo bin ich? — `pwd`, Home Directory und `~`
 
-1. Wechsle in dein home directory (`cd ~`) und lege ein neues Verzeichnis an: `mkdir uebung23`.
-2. Wechsle hinein (`cd uebung23`) und versuche, verschachtelte Verzeichnisse in einem Schritt zu erstellen: `mkdir projekt/daten/2026`.
-3. Beobachte die Fehlermeldung ("No such file or directory") — dies passiert, weil die Parent Directories nicht existieren.
-4. Wiederhole den Schritt mit der Option `-p`: `mkdir -p projekt/daten/2026`, die fehlende Parent Directories automatisch mit anlegt.
-5. Entferne mit `rmdir` ein **leeres** Verzeichnis, z. B. `rmdir projekt/daten/2026`.
-6. Versuche anschließend `rmdir projekt` und beobachte, dass dies fehlschlägt, solange das Verzeichnis noch Unterverzeichnisse enthält.
+Wenn du ein Terminal öffnest, landest du in deinem **Home Directory**. Jeder Benutzer hat ein eigenes; dort darf er Dateien anlegen und ändern.
 
-> **Verständnisfrage 3:** Wofür steht die Option `-p` bei `mkdir`, und warum ist sie beim Anlegen von verschachtelten Pfaden nützlich?
->
-> **Verständnisfrage 4:** Warum funktioniert `rmdir` nicht bei nicht-leeren Verzeichnissen? Welcher Befehl wäre stattdessen nötig, um ein Verzeichnis samt Inhalt zu löschen?
+1. Öffne ein Terminal und zeige dein aktuelles Verzeichnis an:
+   ```bash
+   pwd
+   ```
+2. Notiere die Ausgabe — sie sollte etwa `/home/deinname` lauten (für `root` wäre es `/root`).
+3. Wechsle in das Wurzelverzeichnis des Systems und prüfe erneut deine Position:
+   ```bash
+   cd /
+   pwd
+   ```
+4. Kehre mit einem einzigen kurzen Befehl in dein Home Directory zurück und bestätige es:
+   ```bash
+   cd
+   pwd
+   ```
+5. Wechsle noch einmal nach `/tmp` und kehre diesmal mit der Tilde zurück:
+   ```bash
+   cd /tmp
+   cd ~
+   pwd
+   ```
 
----
+**Fragen zum Verständnis:**
 
-## Übung 3 — Dateien auflisten: `ls` und wichtige Optionen
-
-1. Liste im Verzeichnis `~/uebung23` den Inhalt mit `ls` auf.
-2. Zeige mit `ls -a` **alle** Dateien inklusive versteckter Dateien (die mit `.` beginnen) an.
-3. Zeige mit `ls -l` das **long listing format** an (Permissions, Owner, Group, Size, Datum).
-4. Kombiniere Optionen: `ls -la`, um versteckte Dateien im long format zu sehen.
-5. Nutze `ls -F`, um jedem Eintrag ein Symbol anzuhängen, das den Dateityp anzeigt (z. B. `/` für Verzeichnisse, `*` für ausführbare Dateien, `@` für symbolic links).
-6. Nutze `ls -d */`, um nur Verzeichnisse (nicht deren Inhalt) aufzulisten.
-7. Erstelle eine tiefere Struktur (`mkdir -p a/b/c`) und liste sie rekursiv mit `ls -R` auf.
-8. Zeige mit `ls -i` die **inode**-Nummer jeder Datei an.
-
-> **Verständnisfrage 5:** Welche Optionskombination von `ls` würdest du verwenden, um versteckte Dateien mit vollständigen Details (Rechte, Größe, Datum) anzuzeigen?
->
-> **Verständnisfrage 6:** Wofür steht das Symbol `/` am Ende eines Eintrags bei `ls -F`, und wofür steht `@`?
-
----
-
-## Übung 4 — Dateitypen erkennen
-
-1. Erzeuge in `~/uebung23` eine reguläre Datei: `touch datei.txt`.
-2. Erzeuge einen **symbolic link** darauf: `ln -s datei.txt link.txt`.
-3. Führe `ls -l` aus und beachte das erste Zeichen jeder Zeile: `-` für reguläre Dateien, `d` für Verzeichnisse, `l` für Links.
-4. Prüfe mit dem Befehl `file datei.txt` und `file link.txt`, wie das System den Dateityp jeweils benennt.
-5. Liste die Gerätedateien im Verzeichnis `/dev` mit `ls -l /dev | head -n 20` auf und suche nach Zeilen, die mit `b` (block device) oder `c` (character device) beginnen.
-6. Suche mit `ls -l /dev | grep '^p'` nach einer **named pipe (FIFO)**, sofern vorhanden.
-
-> **Verständnisfrage 7:** Welcher Buchstabe erscheint am Zeilenanfang von `ls -l` bei einem *symbolic link*, und was unterscheidet ein block device von einem character device?
+- **1a.** Wofür steht die Abkürzung `pwd`, und was genau zeigt der Befehl an?
+- **1b.** Welche zwei Schreibweisen hast du benutzt, um ins Home Directory zurückzukehren? Gibt es einen Unterschied im Ergebnis?
+- **1c.** Was würde `cd ~/Dokumente` bedeuten, ausgeschrieben als absoluter Pfad?
 
 ---
 
-## Übung 5 — Versteckte Dateien (dotfiles)
+## Übung 2: Eine Übungsstruktur anlegen
 
-1. Wechsle in dein home directory (`cd ~`) und liste mit `ls -a` alle dotfiles auf (z. B. `.bashrc`, `.bash_history`, `.config`).
-2. Erstelle in `~/uebung23` eine eigene versteckte Datei: `touch .geheim`.
-3. Bestätige mit `ls` (ohne `-a`), dass `.geheim` **nicht** angezeigt wird.
-4. Bestätige mit `ls -a`, dass `.geheim` jetzt sichtbar ist.
+Wir bauen einen kleinen Verzeichnisbaum, mit dem alle folgenden Übungen arbeiten.
 
-> **Verständnisfrage 8:** Warum werden Dateien, deren Name mit einem Punkt beginnt, standardmäßig von `ls` ausgeblendet, und wie nennt man diese Konvention?
+1. Stelle sicher, dass du im Home Directory bist:
+   ```bash
+   cd
+   ```
+2. Lege die Struktur in einem Schritt an (die Option `-p` erzeugt auch die Zwischenverzeichnisse):
+   ```bash
+   mkdir -p uebung/projekte/alpha uebung/projekte/beta uebung/notizen
+   ```
+3. Erzeuge ein paar leere Dateien darin:
+   ```bash
+   touch uebung/projekte/alpha/plan.txt
+   touch uebung/projekte/beta/bericht.txt
+   touch uebung/notizen/ideen.txt
+   ```
+4. Verschaffe dir einen Überblick:
+   ```bash
+   ls uebung
+   ```
+
+Die Struktur sieht jetzt so aus:
+
+```
+uebung/
+├── notizen/
+│   └── ideen.txt
+└── projekte/
+    ├── alpha/
+    │   └── plan.txt
+    └── beta/
+        └── bericht.txt
+```
+
+**Frage zum Verständnis:**
+
+- **2a.** In der Ausgabe von `ls uebung` erscheinen `notizen` und `projekte`, aber nicht `plan.txt`. Warum nicht?
 
 ---
 
-## Übung 6 — Tab Completion und Command History
+## Übung 3: Absolute und relative Pfade
 
-1. Tippe `cd uebu` und drücke die **Tab**-Taste, um den Verzeichnisnamen automatisch vervollständigen zu lassen.
-2. Tippe `ls -l /etc/pass` und drücke Tab zweimal, um mögliche Vervollständigungen anzuzeigen, falls mehrere Treffer existieren.
-3. Führe `history` aus, um die Liste der zuletzt ausgeführten Befehle zu sehen.
-4. Nutze die Pfeiltaste **nach oben**, um einen früheren Befehl erneut aufzurufen, und führe ihn mit Enter erneut aus.
+Ein **absolute path** beginnt immer mit `/` und beschreibt den Weg vom Wurzelverzeichnis aus. Ein **relative path** beginnt beim aktuellen Verzeichnis.
 
-> **Verständnisfrage 9:** Welchen praktischen Vorteil bietet Tab Completion beim Arbeiten mit langen Pfaden?
+1. Wechsle mit einem relativen Pfad in das Verzeichnis `alpha`:
+   ```bash
+   cd
+   cd uebung/projekte/alpha
+   pwd
+   ```
+2. Wechsle jetzt mit einem **absoluten** Pfad in das Verzeichnis `notizen` (ersetze `deinname` durch deinen Benutzernamen — die Ausgabe von `pwd` aus Schritt 1 hilft dir):
+   ```bash
+   cd /home/deinname/uebung/notizen
+   pwd
+   ```
+3. Von `notizen` aus: wechsle mit einem relativen Pfad nach `beta`. Dafür musst du zuerst eine Ebene nach oben (`..`) und dann wieder hinab:
+   ```bash
+   cd ../projekte/beta
+   pwd
+   ```
+4. Probiere die zwei Spezialeinträge aus, die es in jedem Verzeichnis gibt:
+   ```bash
+   cd .
+   pwd
+   cd ..
+   pwd
+   ```
+5. Springe zwei Ebenen auf einmal nach oben und prüfe, wo du gelandet bist:
+   ```bash
+   cd beta
+   cd ../..
+   pwd
+   ```
+
+**Fragen zum Verständnis:**
+
+- **3a.** Woran erkennst du auf einen Blick, ob ein Pfad absolut oder relativ ist?
+- **3b.** Was bedeuten `.` und `..`?
+- **3c.** Du stehst in `~/uebung/projekte/alpha`. Nenne einen relativen **und** einen absoluten Pfad, um `~/uebung/notizen/ideen.txt` zu erreichen.
+- **3d.** Warum hat `cd .` in Schritt 4 nichts verändert?
 
 ---
+
+## Übung 4: Dateien auflisten mit `ls` und seinen Optionen
+
+`ls` ist das wichtigste Werkzeug, um den Inhalt von Verzeichnissen zu untersuchen. Seine Optionen lassen sich kombinieren.
+
+1. Wechsle in das Übungsverzeichnis:
+   ```bash
+   cd ~/uebung
+   ```
+2. Einfache Auflistung:
+   ```bash
+   ls
+   ```
+3. Das **long listing** zeigt Details wie Rechte, Besitzer, Größe und Änderungsdatum:
+   ```bash
+   ls -l
+   ```
+4. Schau dir eine große Datei mit und ohne *human-readable* Größen an:
+   ```bash
+   ls -l /var/log
+   ls -lh /var/log
+   ```
+   Vergleiche die Spalte mit der Dateigröße in beiden Ausgaben.
+5. Liste ein Verzeichnis auf, ohne hineinzuwechseln — `ls` akzeptiert Pfade als Argument:
+   ```bash
+   ls -l projekte/alpha
+   ls -l /etc
+   ```
+6. Was passiert, wenn das Argument ein Verzeichnis ist, du aber Informationen über das Verzeichnis **selbst** willst (nicht über seinen Inhalt)? Vergleiche:
+   ```bash
+   ls -l projekte
+   ls -ld projekte
+   ```
+
+**Fragen zum Verständnis:**
+
+- **4a.** Welche Information steht in der ersten Spalte von `ls -l`, und was bedeutet ein `d` als erstes Zeichen?
+- **4b.** Was bewirkt die Option `-h`, und warum ist sie nur in Kombination mit `-l` sinnvoll?
+- **4c.** Worin unterscheiden sich `ls -l projekte` und `ls -ld projekte`?
+
+---
+
+## Übung 5: Versteckte Dateien
+
+Dateien und Verzeichnisse, deren Name mit einem Punkt beginnt, sind **hidden files** — `ls` zeigt sie standardmäßig nicht an. Sie enthalten meist Konfiguration.
+
+1. Lege im Übungsverzeichnis eine versteckte Datei an:
+   ```bash
+   cd ~/uebung
+   touch .geheim.txt
+   ```
+2. Liste das Verzeichnis normal auf — die Datei fehlt:
+   ```bash
+   ls
+   ```
+3. Zeige jetzt **alle** Einträge an:
+   ```bash
+   ls -a
+   ```
+4. Kombiniere das mit dem long listing und sieh dir auch dein Home Directory an:
+   ```bash
+   ls -la
+   ls -la ~
+   ```
+   In deinem Home Directory findest du typische Beispiele wie `.bashrc` oder `.profile`.
+
+**Fragen zum Verständnis:**
+
+- **5a.** Was macht einen Dateinamen unter Linux zu einem "versteckten" Namen?
+- **5b.** In der Ausgabe von `ls -a` erscheinen immer die Einträge `.` und `..`, obwohl du sie nie angelegt hast. Was sind sie?
+- **5c.** Sind versteckte Dateien ein Sicherheitsmechanismus? Begründe kurz.
+
+---
+
+## Übung 6: Rekursive Auflistung
+
+Mit `-R` (**recursive listing**) zeigt `ls` nicht nur das angegebene Verzeichnis, sondern auch alle Unterverzeichnisse.
+
+1. Liste den gesamten Übungsbaum auf einmal auf:
+   ```bash
+   cd
+   ls -R uebung
+   ```
+2. Beobachte die Ausgabe: jedes Unterverzeichnis wird mit seinem Pfad und einem Doppelpunkt eingeleitet, danach folgt sein Inhalt.
+3. Kombiniere die Rekursion mit dem long listing:
+   ```bash
+   ls -lR uebung
+   ```
+4. Prüfe, ob die versteckte Datei aus Übung 5 in der rekursiven Ausgabe auftaucht:
+   ```bash
+   ls -R uebung | grep geheim
+   ls -Ra uebung | grep geheim
+   ```
+
+**Fragen zum Verständnis:**
+
+- **6a.** Erscheint `.geheim.txt` in der Ausgabe von `ls -R`? Warum bzw. warum nicht?
+- **6b.** Warum sollte man `ls -R /` nur mit Vorsicht ausführen?
+- **6c.** Bei `ls` ist die Option für Rekursion das große `-R`. Ist die Groß-/Kleinschreibung von Optionen unter Linux generell egal?
+
+---
+
+## Aufräumen (optional)
+
+```bash
+rm -r ~/uebung
+```
+
+---
+
+## Antworten
 
 <details>
-<summary><strong>Lösungen anzeigen</strong></summary>
+<summary><strong>Antworten anzeigen</strong></summary>
 
-**Antwort 1:** Ein *absolute path* beginnt immer beim root directory `/` und beschreibt den vollständigen Pfad unabhängig vom aktuellen Standort (z. B. `/etc/passwd`). Ein *relative path* wird ausgehend vom aktuellen working directory interpretiert (z. B. `../logs` bedeutet: eine Ebene hoch, dann in `logs`).
+**1a.** `pwd` steht für *print working directory*. Der Befehl gibt den absoluten Pfad des Verzeichnisses aus, in dem du dich gerade befindest (das *current working directory*).
 
-**Antwort 2:** `.` steht für das aktuelle Verzeichnis, `..` für das Parent Directory (eine Ebene höher), und `~` ist eine Abkürzung für das home directory des aktuellen Users.
+**1b.** `cd` ohne Argument und `cd ~`. Das Ergebnis ist identisch: beide wechseln ins Home Directory des aktuellen Benutzers. Die Tilde ist vor allem nützlich, um Pfade **unterhalb** des Home Directory abzukürzen (z. B. `~/uebung`).
 
-**Antwort 3:** Die Option `-p` (parents) sorgt dafür, dass `mkdir` alle fehlenden übergeordneten Verzeichnisse im angegebenen Pfad automatisch mit erstellt, statt einen Fehler auszugeben, wenn Zwischenverzeichnisse fehlen.
+**1c.** Die Shell ersetzt `~` durch den Pfad des Home Directory. `cd ~/Dokumente` entspricht also `cd /home/deinname/Dokumente`.
 
-**Antwort 4:** `rmdir` löscht ausschließlich leere Verzeichnisse als Sicherheitsmaßnahme gegen versehentlichen Datenverlust. Um ein Verzeichnis samt Inhalt zu löschen, wird `rm -r` (recursive) verwendet.
+**2a.** `ls uebung` zeigt nur den direkten Inhalt von `uebung` — also die Verzeichnisse `notizen` und `projekte`. `plan.txt` liegt eine Ebene tiefer (in `uebung/projekte/alpha`) und erscheint erst bei einer rekursiven Auflistung (`ls -R`) oder wenn man das Unterverzeichnis direkt auflistet.
 
-**Antwort 5:** `ls -la` (bzw. `ls -al`) zeigt versteckte Dateien (`-a`) im long listing format (`-l`) mit allen Details an.
+**3a.** Ein absoluter Pfad beginnt mit `/` (dem *root directory*). Alles andere ist ein relativer Pfad und wird vom aktuellen Verzeichnis aus interpretiert.
 
-**Antwort 6:** `/` markiert ein Verzeichnis, `@` markiert einen symbolic link. Weitere Symbole bei `ls -F` sind z. B. `*` für ausführbare Dateien und `|` für named pipes.
+**3b.** `.` ist das aktuelle Verzeichnis selbst; `..` ist das übergeordnete Verzeichnis (*parent directory*). Beide existieren als Einträge in jedem Verzeichnis.
 
-**Antwort 7:** Ein symbolic link wird bei `ls -l` mit `l` am Zeilenanfang markiert. Ein block device (`b`) überträgt Daten blockweise mit gepuffertem Zugriff (z. B. Festplatten), während ein character device (`c`) Daten zeichenweise/unbuffered überträgt (z. B. Terminals, serielle Schnittstellen).
+**3c.** Relativ: `../../notizen/ideen.txt` (zwei Ebenen hoch von `alpha` nach `uebung`, dann hinab). Absolut: `/home/deinname/uebung/notizen/ideen.txt`. Auch `~/uebung/notizen/ideen.txt` ist gültig — die Shell expandiert es zu einem absoluten Pfad.
 
-**Antwort 8:** Dateien mit einem führenden Punkt gelten als *hidden files* (dotfiles) und werden standardmäßig ausgeblendet, um Konfigurationsdateien und Systemdateien nicht bei jeder normalen Auflistung anzuzeigen. Um sie zu sehen, ist die Option `-a` (all) bei `ls` nötig.
+**3d.** `cd .` wechselt in das aktuelle Verzeichnis — also dorthin, wo du schon bist. Die Position ändert sich nicht.
 
-**Antwort 9:** Tab Completion reduziert Tippfehler und Zeitaufwand, da lange oder komplexe Pfad- und Dateinamen automatisch vervollständigt werden, sobald genügend eindeutige Zeichen eingegeben wurden.
+**4a.** Die erste Spalte zeigt Dateityp und Zugriffsrechte (*permissions*), z. B. `drwxr-xr-x`. Das erste Zeichen ist der Typ: `d` bedeutet *directory*, `-` eine reguläre Datei.
+
+**4b.** `-h` (*human-readable*) zeigt Dateigrößen in lesbaren Einheiten wie `4,0K`, `1,2M` oder `2,5G` statt in Bytes. Ohne `-l` wird die Größe gar nicht angezeigt, daher hat `-h` allein keine sichtbare Wirkung.
+
+**4c.** `ls -l projekte` listet den **Inhalt** des Verzeichnisses auf (`alpha`, `beta`). `ls -ld projekte` zeigt dank `-d` den Eintrag des Verzeichnisses **selbst** — nützlich, um z. B. die Rechte des Verzeichnisses zu prüfen.
+
+**5a.** Der Name beginnt mit einem Punkt, z. B. `.geheim.txt` oder `.bashrc`. Mehr braucht es nicht — es gibt kein spezielles "hidden"-Attribut.
+
+**5b.** `.` (das Verzeichnis selbst) und `..` (das übergeordnete Verzeichnis). Sie sind in jedem Verzeichnis automatisch vorhanden; weil ihre Namen mit einem Punkt beginnen, erscheinen sie nur mit `ls -a`.
+
+**5c.** Nein. Verstecken bedeutet nur, dass `ls` und Dateimanager die Einträge standardmäßig nicht anzeigen — jeder Benutzer kann sie mit `ls -a` sofort sehen. Es dient der Übersichtlichkeit (Konfigurationsdateien stören nicht im Alltag), nicht dem Schutz. Zugriffsschutz regeln ausschließlich die *permissions*.
+
+**6a.** Nein, mit `ls -R` allein nicht. Die Rekursion ändert nichts daran, dass versteckte Dateien standardmäßig ausgeblendet werden. Erst die Kombination `ls -Ra` zeigt sie.
+
+**6b.** `ls -R /` durchläuft das gesamte Dateisystem ab dem Wurzelverzeichnis. Das erzeugt eine riesige Ausgabe, dauert lange und produziert viele Fehlermeldungen für Verzeichnisse, die ein normaler Benutzer nicht lesen darf.
+
+**6c.** Nein — Linux unterscheidet strikt zwischen Groß- und Kleinschreibung, auch bei Optionen. Bei `ls` bedeutet `-R` *recursive*, während `-r` die Sortierreihenfolge umkehrt (*reverse*). Zwei völlig verschiedene Dinge.
 
 </details>
+
+---
+
+## Quellen
+
+- LPI Learning Materials, Thema 2.3 "Using Directories and Listing Files": https://learning.lpi.org/en/learning-materials/010-160/2/2.3/
+- Manpages: `man ls`, `man pwd`, `man cd` (bzw. `help cd`, da `cd` ein Shell-Builtin ist)
