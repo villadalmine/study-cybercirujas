@@ -1,0 +1,6 @@
+generated_at: '2026-07-16T21:59:18'
+lang: es
+backend: claude
+model: claude
+sources:
+- https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
