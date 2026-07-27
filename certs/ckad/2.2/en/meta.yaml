@@ -1,0 +1,6 @@
+generated_at: '2026-07-17T16:19:08'
+lang: en
+backend: claude
+model: claude
+sources:
+- https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
