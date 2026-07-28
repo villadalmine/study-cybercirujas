@@ -2,6 +2,17 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-07-28
+
+- **Audit Blind Spot Closed in `scripts/fix_corrupted_content.py`**: `TARGETS` only listed `es` for `ckad`/`cka`, so the newly generated English content was never scanned — the same class of blind spot as the 2026-07-16 missing-files bug (the audit reports "0 corrupt" for what it does not look at). Added `en` to both. Re-audited with the widened targets: **0 corrupt combos** (no new findings, the English content was already clean). Certs still Spanish-only (`cks`, `kcna`) keep a single language until they are translated.
+- **Backlog Reconciled Against `STATUS.md`**: the blocking regeneration item and the CKA item were still listed as pending despite being done; moved here. `STATUS.md` re-generated from the filesystem — no diff, so the committed matrix was already current. Also corrected two stale claims: `LFCS`/`LFCA` do have snapshots (at domain granularity, not sub-topic), and the admin/admin auth stub described under Platform was already removed on 2026-07-19.
+- **RAG Study Bot Proposal Audited** (the untracked `chart/`, generated with Kimi AI on 2026-07-27) and written up as a backlog section with a phased split. Rendered rather than merely read, which surfaced blockers a review of the YAML would have missed: the chart does not `helm template` at all (`redis.service.port` is referenced but absent from values), and Go template expressions embedded in `values.yaml` are never expanded by Helm, so every service hostname (`POSTGRES_HOST`, `OLLAMA_HOST`, `REDIS_HOST`) reaches the pods as a literal `{{ .Release.Name }}-postgres` string. Also flagged: 4 subsystems configured with no manifests, default credentials, a 70b model that does not fit the stated 8 GB GPU, and a direct conflict with this repo's standing "no third-party labs on the home cluster" decision. Kept untracked pending fixes. The two `study-cybercirujas-full.zip` copies were byte-identical archives of `chart/` (`diff -r` clean) and were deleted.
+
+## 2026-07-27
+
+- **CKAD and CKA Translated to English**: both certs now have complete English content + exercises (ckad 24/24, cka 27/27 for both `content.md` and `exercises.md`), regenerated topic by topic across 8 commits. No file below 1500 bytes and no recap stubs — the `generator.py` fixes from 2026-07-12/16 (`--disallowedTools`, `_reject_if_recap` checking first *and* last line, `_strip_fence`) held for the whole run.
+- **Corrupted-Content Regeneration Closed (was the blocking backlog item)**: `fix_corrupted_content.py` reports 0 corrupt combos across lpi-010-160 (7 languages), ckad, cka, cks and kcna. The deploy freeze on translations/CKAD declared in the 2026-07-12 entry no longer applies.
+
 ## 2026-07-19
 
 - **Repository Published on GitHub**: https://github.com/villadalmine/study-cybercirujas (public). Before publishing: generalized internal cluster hostnames in README/values-study.example.yaml (not secret, but home network topology), added `LICENSE` (Apache 2.0), and confirmed no tracked secrets (checked for api-key/token/password patterns, `.env`, `.pem`, `kubeconfig`, etc. — 0 real results, the only match was the placeholder in values example).

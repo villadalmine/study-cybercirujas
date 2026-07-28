@@ -4,18 +4,21 @@ Pending items, without strict ordering unless specified. Resolved items go to [C
 
 ## In Progress / Next (Ordering)
 
-0. **(Blocking) Complete regeneration of corrupted content.** See CHANGELOG.md
-   — `scripts/fix_corrupted_content.py` is running (manually + systemd timer) regenerating ~170 files for lpi-010-160 (pt/fr/de/zh/ja, and es/en just in case) and CKAD that had process summaries saved as actual study content. **Do not deploy or commit translations/CKAD until a run of this script reports 0 corrupted combos** — run again and confirm before any `make image-cluster`. The script does not deeply cover `lab/break_fix.sh` for CKAD yet (it checks existence at the end, but the project history shows this file frequently reverts to a stub — verify separately before trusting CKAD labs).
-1. **CKA** (Certified Kubernetes Administrator): snapshot of the official syllabus (PDF `cncf/curriculum`) + content/exercises/labs in Spanish. Watch out for the same bug that appeared in CKAD: the CNCF PDF only gives weights per domain — distribute them among sub-topics before generating, do not copy the whole domain weight. Now that the generator is fixed (`--disallowedTools`), this should run clean, but verify with `wc -c` anyway.
-2. **Video for another path** — candidate: `kubernetes` (Kubernetes Engineer), as it shares the same content as CKA/CKAD. To be confirmed/assigned.
+Standing rule for any generation run: after finishing, re-run `scripts/fix_corrupted_content.py` **and** check that the cert/language is actually listed in its `TARGETS` — an audit reporting "0 corrupt" only proves the combos it scans are clean. Add the new language to `TARGETS` in the same commit that generates it.
+
+1. **Verify the local Docker lab provider against real Docker/kind.** Highest-risk open item: the code is implemented but was only dry-run tested with mocked subprocess calls (see the Labs section below). Nothing here should be offered to students until `teach lab up lpi-010-160/2.1` (plain container) and `teach lab up cka/1.1` (kind cluster) both run on a machine that actually has `docker`/`kind`.
+2. **Translate `cks` and `kcna` out of Spanish-only** — these two are the remaining single-language certs; `cka`/`ckad` now have es+en. English first (largest audience, and it is the language the rest of the repo is written in), then the other 5.
+3. **Content for `lfcs` (5 topics) and `lfca` (6 topics)** — both have a snapshotted syllabus but zero generated content in any language, so they are the cheapest way to widen the catalog (no scraping step needed).
+4. **Videos for paths without one**: `linux-devops`, `kubernetes-security`, `gitops-platform`, `observabilidad`, `service-mesh-networking`, `linux-foundation`. The `kubernetes` path is already done (es/en/de).
+5. **RAG study bot, phase 1 (anonymous)** — see the dedicated section below for the audit of the `chart/` proposal. Worth starting whenever there is appetite for a feature rather than more content: the corpus already exists and phase 1 needs no auth and no new cluster.
 
 ## Content
 
 - **See [STATUS.md](STATUS.md)** for the complete matrix of cert × language × lab, path × video language, and cert × video language (regenerate with `scripts/status_matrix.py` from actual filesystem — do not trust manual updates).
 - ~~CKS in progress~~ **Done (2026-07-17)**: 26/26 in Spanish (content + exercises + labs, verified with `fix_corrupted_content.py` at 0 and per-file counts, not just topic status). Survived an external process `kill` and two Claude API quota cuts in the middle — resumed cleanly each time because topic generation is idempotent.
-- Translate CKAD, CKA, CKS, and KCNA to the other 6 languages — currently they only exist in Spanish.
-- ~~Review if other CNCF certs already snapshotted (KCNA, KCSA, CKS, etc.) have the same weight-by-domain issue before generating content for them~~ **KCNA had the bug** (weights summed to 360, each sub-topic had the full domain weight copied) — re-snapshoteated with the fixed script, now sums to 100, and content is generated (13/13). `KCSA`/`LFCS`/`LFCA` do not have topics yet (no snapshot) so they do not apply.
-- Video for remaining paths without video: `linux-devops`, `kubernetes-security`, `gitops-platform` (see STATUS.md for the full real list).
+- ~~Translate CKAD, CKA, CKS, and KCNA to the other 6 languages — currently they only exist in Spanish.~~ **Partially done (2026-07-27)**: CKAD and CKA now have English (24/24 and 27/27). Remaining: fr/de/zh/ja/pt for those two, and every non-Spanish language for CKS and KCNA — see item 2 above.
+- ~~Review if other CNCF certs already snapshotted (KCNA, KCSA, CKS, etc.) have the same weight-by-domain issue before generating content for them~~ **KCNA had the bug** (weights summed to 360, each sub-topic had the full domain weight copied) — re-snapshotted with the fixed script, now sums to 100, and content is generated (13/13). `KCSA` still has no snapshot (0 topics) so it does not apply. `LFCS` (5) and `LFCA` (6) do have snapshots and their weights sum to 100 correctly — but only at **domain level**, one topic per domain, unlike cka/ckad/cks which are snapshotted at sub-topic granularity (27/24/26). Decide before generating: 5 enormous topics, or re-snapshot into sub-topics for a comparable reading unit.
+- Certification videos exist only in Spanish (5 certs). Path videos reach German at most. `ja` is blocked on TTS (see below); the rest is just render time.
 
 ## Video — Technical Debt
 
@@ -43,5 +46,39 @@ Suggested order (each stage reuses the previous one):
 
 ## Platform (Long-Term Roadmap, see PLAN.md)
 
-- Multi-provider labs, real user auth (currently admin/admin stub), Go lab-runner working against the `lab.yaml`/`terraform/`/`status.yaml` contract.
+- Multi-provider labs, and a Go lab-runner working against the `lab.yaml`/`terraform/`/`status.yaml` contract.
+- **Real user auth.** The admin/admin stub was removed on 2026-07-19; `teach/core/auth.py` is now a deliberate deny-all placeholder (`authenticate` and `has_subscription` both always return `False`) since all content is public and login-free. This only becomes blocking when the paid lab tier ships — that is the thing that needs a real identity (OIDC/social) plus a payment gateway behind it, not the content.
 - Improve web presentation: currently displays raw content; needs Markdown rendering, styles, navigation. (low priority).
+
+## RAG Study Bot — Proposal Under Review (`chart/`)
+
+Untracked design artifact in `chart/`: a Helm chart plus `CONTEXT.md`, generated from a conversation with Kimi AI on 2026-07-27 for architecture review. It proposes a self-hosted RAG assistant (pgvector + Ollama + FastAPI bot + hourly embedder CronJob) on top of the existing content, plus KubeVirt/vcluster labs and Guacamole browser access. **Not deployable as it stands** — see the audit below. The two `study-cybercirujas-full.zip` copies were byte-identical archives of `chart/` itself and were deleted (`diff -r` clean, nothing lost).
+
+**The idea is sound and the corpus is already there.** 274 `content.md` + 274 `exercises.md` (~5.5 MB of markdown, 218 es / 140 en / 38 each in fr,de,zh,ja,pt) — enough to be a genuinely useful retrieval corpus, and it is already chunked by cert/topic/language, which is exactly the metadata the proposed `study_embeddings` table wants. `VECTOR(1024)` correctly matches multilingual-e5-large and BGE-M3, and a multilingual embedder is the right call given the 7-language content.
+
+**What the chart gets wrong (verified by rendering it, not by reading it):**
+
+1. **It does not render at all.** `helm template study ./chart` fails: `redis.yaml:51` dereferences `.Values.redis.service.port`, and the `redis:` block in `values.yaml` has no `service:` key. Hard stop before anything else.
+2. **Service hostnames are dead on arrival.** `values.yaml` sets `POSTGRES_HOST: "{{ .Release.Name }}-postgres"` (same for `OLLAMA_HOST`, `REDIS_HOST`), but **Helm does not template `values.yaml`** — templates consume it as literal data. Forcing a render confirms the pods receive the literal string `{{ .Release.Name }}-postgres` as a hostname, so bot-api could never reach Postgres, Ollama or Redis. Fix: resolve the names inside the templates, or wrap the value in `tpl`. The `ollama.initContainers` block in `values.yaml` has the same defect (`{{- range .Values.ollama.models }}` never expands), so no model would ever be pulled.
+3. **Four subsystems are values-only, with no templates**: `guacamole`, `kubevirt`, `vcluster`, `monitoring` all have configuration blocks and zero manifests. The chart advertises considerably more than it implements.
+4. **Default credentials baked in**: `POSTGRES_PASSWORD: "changeme"` ×3 and Grafana `adminPassword: "admin"`. This repo went through a pre-publication secrets audit (see CHANGELOG 2026-07-19); committing this as-is would walk default creds straight back into a public repo. Move to `existingSecret` before any commit.
+5. **`llama3.1:70b` will not run on the stated hardware.** `CONTEXT.md` lists a Tesla P4 (8 GB VRAM) and the model list requests 8b *and* 70b. A 4-bit 70b needs roughly 40 GB; it would spill to CPU and be unusable for interactive chat. 8b quantized fits comfortably. Drop 70b or plan for different hardware.
+6. **Three images that do not exist**: `study-cybercirujas/bot-api`, `/embedder`, `/web`. The chart also assumes a static-site frontend and an embedder that clones content from `CONTENT_REPO_URL` into a PVC — whereas the real platform is a single FastAPI app serving markdown straight from `certs/` in the image. This is a v2 architecture, not an increment on `deploy/helm/`.
+
+**Two conflicts with decisions already made in this repo — these are judgement calls, not bugs:**
+
+- **Labs on the home cluster.** The Labs section below concluded explicitly: *do not run third-party labs on the home cluster* — direct blast radius to the home LAN. The proposal does exactly that (KubeVirt VMs and vcluster labs on the T7910, quota for 30 VMs, Guacamole exposed). Either the earlier risk analysis is revisited on purpose, or the lab half of this proposal is dropped and only the RAG half is kept.
+- **Personalization needs identity.** The `user_profiles` / `user_progress` / `activity_log` tables assume logged-in users, but content is deliberately free and login-free and `auth.py` is a deny-all placeholder. This does not block the bot — it splits it.
+
+**Suggested split — phase 1 is worth doing on its own:**
+
+1. **Anonymous content bot (no auth, no new cluster).** Embed `certs/**/content.md` into pgvector, answer questions with citations back to cert/topic, run it as a route in the existing FastAPI app. Needs Postgres+pgvector and an inference backend — nothing else in the chart. This is the piece that delivers most of the value and conflicts with nothing.
+2. **Personalized bot.** Progress tracking and mastery-aware answers — blocked on the real-auth item under Platform.
+3. **Lab orchestration.** Revisit only after the home-cluster risk decision, and after the local Docker provider in the Labs section is actually verified.
+
+Keep `chart/` untracked until at least items 1–4 above are fixed; a chart that cannot render should not land in a public repo as if it were deployable.
+
+## Repo Hygiene
+
+- `hola` is a one-line scratch note (a `claude --resume` command), untracked. Harmless, delete when no longer needed.
+- Source comments and docstrings under `teach/` and `scripts/` are still largely in Spanish, which contradicts the English-only rule in `CLAUDE.md`. Mechanical to fix, but it is a wide diff — worth doing in one dedicated pass rather than drip-feeding it into feature commits.

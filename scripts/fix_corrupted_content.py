@@ -43,8 +43,8 @@ MIN_REAL_BYTES = 1500
 
 TARGETS = [
     ("lpi-010-160", ["es", "en", "pt", "fr", "de", "zh", "ja"]),
-    ("ckad", ["es"]),
-    ("cka", ["es"]),
+    ("ckad", ["es", "en"]),
+    ("cka", ["es", "en"]),
     ("cks", ["es"]),
     ("kcna", ["es"]),
 ]
