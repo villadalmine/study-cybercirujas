@@ -34,8 +34,11 @@ TARGETS=(
     "lpi-010-160:zh"
     "lpi-010-160:ja"
     "ckad:es"
+    "ckad:en"
     "cka:es"
+    "cka:en"
     "cks:es"
+    "cks:en"
     "kcna:es"
 )
 
