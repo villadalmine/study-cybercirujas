@@ -45,7 +45,7 @@ TARGETS = [
     ("lpi-010-160", ["es", "en", "pt", "fr", "de", "zh", "ja"]),
     ("ckad", ["es", "en"]),
     ("cka", ["es", "en"]),
-    ("cks", ["es"]),
+    ("cks", ["es", "en"]),
     ("kcna", ["es"]),
 ]
 
@@ -79,16 +79,21 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
     bad = set()
     for cert, langs in TARGETS:
         cert_dir = REPO / "certs" / cert
+        # Enumerate topics from the syllabus, never from disk. Globbing
+        # `*/{lang}` only sees language directories that already exist, so a
+        # topic never generated in that language at all has no directory and
+        # is silently skipped — the audit would then report "0 corrupt" for a
+        # translation that is only a third done (hit for real on cks/en, which
+        # stopped at 6 of 26 when the API quota ran out). Same blind spot the
+        # 2026-07-16 fix closed for missing files inside an existing dir; this
+        # closes it one level up, for the missing dir itself.
+        try:
+            topic_ids = _cert_topic_ids(cert)
+        except (FileNotFoundError, IndexError):
+            topic_ids = []
         for lang in langs:
-            # iterar por directorio de idioma (no por archivo existente) para
-            # detectar también content.md/exercises.md FALTANTES, no solo
-            # corruptos — un topic puede haber quedado a medio generar (ej.
-            # proceso matado entre los dos completions) sin que ningún
-            # archivo individual se vea corrupto.
-            for lang_dir in sorted(cert_dir.glob(f"*/{lang}")):
-                if not lang_dir.is_dir():
-                    continue
-                topic = lang_dir.parts[-2]
+            for topic in topic_ids:
+                lang_dir = cert_dir / topic / lang
                 for kind in ("content.md", "exercises.md"):
                     f = lang_dir / kind
                     if not f.exists():
@@ -108,13 +113,9 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
                     if is_small or looks_recap:
                         bad.add((cert, topic, lang))
         # break_fix.sh es compartido entre idiomas (una copia por tema, no
-        # por lang) — solo se regenera con force+lang==DEFAULT_LANG. Se
-        # enumeran los topics desde el temario (no desde disco) para
+        # por lang) — solo se regenera con force+lang==DEFAULT_LANG. Reusa la
+        # lista de topics del temario calculada arriba, por el mismo motivo:
         # detectar labs FALTANTES, no solo corruptos.
-        try:
-            topic_ids = _cert_topic_ids(cert)
-        except (FileNotFoundError, IndexError):
-            topic_ids = []
         for topic in topic_ids:
             f = cert_dir / topic / "lab" / "break_fix.sh"
             if not f.exists():
