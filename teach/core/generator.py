@@ -151,11 +151,24 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
         )
 
     def complete(system: str, user: str) -> str:
+        # stdin=DEVNULL: the prompt travels as an argument, never on stdin. Without
+        # this the agent CLIs wait ~3s per call for input that never comes and emit
+        # a warning on stderr, which used to mask the real error below.
         result = subprocess.run(
-            [*command, f"{system}\n\n{user}"], capture_output=True, text=True
+            [*command, f"{system}\n\n{user}"],
+            capture_output=True,
+            text=True,
+            stdin=subprocess.DEVNULL,
         )
         if result.returncode != 0:
-            detail = result.stderr.strip() or result.stdout.strip()
+            # Report both streams: agent CLIs write warnings to stderr and the
+            # actual failure to stdout, so picking one hides the diagnosis.
+            parts = [
+                f"{name}:\n{stream.strip()}"
+                for name, stream in (("stderr", result.stderr), ("stdout", result.stdout))
+                if stream.strip()
+            ]
+            detail = "\n".join(parts) or "(sin salida)"
             raise GeneratorConfigError(
                 f"'{command[0]}' falló (exit {result.returncode}):\n{detail}"
             )
