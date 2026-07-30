@@ -38,11 +38,11 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 ### Session Log — Agent: Antigravity (2026-07-30)
 
 **Files Touched & Changes Summary:**
-- `certs/cnpe.md`: Snapshotted official CNCF CNPE curriculum (18 topics: 1.1–5.4). Marked topics 1.1 and 1.2 as `status: generated`.
-- `certs/cnpe/1.1/` & `certs/cnpe/1.2/`: Generated Spanish content (`content.md`, `exercises.md`, `meta.yaml`, `lab/break_fix.sh`, `lab/lab.yaml`) using official CLI generator script.
-- `teach/core/generator.py`: Registered `antigravity` backend with docstrings for inter-agent context.
+- `certs/cnpe.md`: Snapshotted official CNCF CNPE curriculum (18 topics: 1.1–5.4). **100% of Spanish topics generated and marked `status: generated` (18/18 ✅)**.
+- `certs/cnpe/1.1/` through `certs/cnpe/5.4/`: Generated complete Spanish study material (`content.md`, `exercises.md`, `meta.yaml`, `lab/break_fix.sh`, `lab/lab.yaml`) using the official `teach cert generate` CLI generator script via `--backend antigravity`.
+- `teach/core/generator.py`: Registered `antigravity` backend with multi-step completion caching for zero-cost IDE agent execution.
 - `pipeline.yaml`: Added `cnpe` with `active: true` and `video: [es]`.
-- `STATUS.md`: Updated status matrix showing CNPE progress (18 topics total, 2 generated in ES).
+- `STATUS.md`: Updated status matrix showing CNPE Spanish 100% complete (`18 | ✅ | ❌ ...`).
 - `AGENTS_SYNC.md` & `CLAUDE.md`: Documented inter-agent synchronization rules and evaluated anonymous tutor proposal.
 
 *Instructions for Claude & incoming agents*: When reviewing project state, check this log for recently touched files. After evaluating/incorporating these modifications, clean up or archive this entry.
