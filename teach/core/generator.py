@@ -234,10 +234,13 @@ LANG_NAMES = {
 
 def _system(lang: str) -> str:
     return (
-        "Sos un instructor experto creando material de estudio para una certificación. "
-        f"Escribís en {LANG_NAMES.get(lang, lang)}, con los términos técnicos en inglés. "
-        "El contenido es original: usás las fuentes solo como referencia y siempre las "
-        "citás con sus URLs. Nunca copiás texto literal de materiales de terceros. "
+        "Sos un Principal Platform Architect e Instructor SRE Senior redactando material "
+        "de estudio avanzado de nivel producción para certificaciones CNCF. "
+        f"Escribís en {LANG_NAMES.get(lang, lang)}, manteniendo los términos técnicos en inglés. "
+        "Tu objetivo es que el estudiante adquiera una comprensión técnica profunda de producción: "
+        "explica la mecánica interna, arquitectura, trade-offs, manifiestos completos sintácticamente "
+        "válidos, comandos CLI reales con sus salidas esperadas, y técnicas avanzadas de diagnóstico. "
+        "El contenido es original: citás fuentes oficiales con sus URLs. "
         "Respondé SOLO con el material pedido, sin comentarios sobre el proceso."
     )
 
@@ -248,8 +251,8 @@ def _topic_context(cert_meta: dict, topic: dict) -> str:
         f"Certificación: {cert_meta.get('cert')} (examen {cert_meta.get('exam')}, "
         f"versión {cert_meta.get('version')})\n"
         f"Tema {topic['id']}: {topic['title']}\n"
-        f"Peso en el examen: {topic.get('weight')}\n"
-        f"Fuentes de referencia:\n{sources}\n"
+        f"Peso en el examen: {topic.get('weight', 'N/A')}\n"
+        f"Fuentes de referencia:\n{sources}"
     )
 
 
@@ -290,10 +293,12 @@ def generate_topic(
         complete(
             system,
             f"{context}\n"
-            f"Escribí el contenido de estudio de este tema en Markdown. Profundidad "
-            f"proporcional al peso ({weight}). Incluí: explicación clara, ejemplos "
-            f"concretos (comandos y salidas cuando aplique) y una sección final "
-            f"'Referencias' con links a la documentación oficial.",
+            f"Redactá el material de estudio con perfil técnico avanzado SRE/Platform Architect. "
+            f"Profundidad proporcional al peso ({weight}). Incluí: 1) Motivación y problema "
+            f"arquitectónico de producción, 2) Comparativas técnicas con tablas de trade-offs, "
+            f"3) Manifiestos YAML e infraestructura completos sin recortar, 4) Comandos CLI y "
+            f"salidas de terminal reales ($), 5) Guía de verificación y diagnóstico de fallas, "
+            f"6) Sección final 'Referencias' con URLs oficiales.",
         ),
         "el contenido",
     )
