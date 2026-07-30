@@ -14,9 +14,19 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ## Pending Proposals & Ideas
 
-*(empty)*
+### 4. Interactive RAG Tutor & Anonymous Lab Tracking (`/api/tutor/...`)
+- **Context**: The user wants an interactive AI bot/tutor system for online students that operates without user login/auth (using browser session storage + `X-Session-ID`), allows selecting course preferences, indexes course content (via Vector / Hybrid Graph-Vector RAG), asks interactive questions based on real course material, evaluates answers with feedback, and tracks completed labs to provide personalized recommendations (what the user did well vs needs to review).
+- **Architecture Proposal**:
+  1. **Hybrid Graph-Vector RAG**: Index `certs/*/*/content.md` and `exercises.md` chunks into a lightweight vector index (or in-memory embeddings), filtered by graph node `(cert_id, topic_id)`.
+  2. **No-Auth Session**: Browser generates `UUIDv4` stored in `localStorage`, sent as `X-Session-ID` header. Session state (selected cert, lab attempts, quiz history) saved in lightweight backend storage (SQLite/JSON).
+  3. **API-Oriented Tutor Endpoints** (`teach/api.py` & `teach/core/tutor.py`):
+     - `POST /api/tutor/quiz/generate`: Generates grounded quiz questions from target topic RAG chunks.
+     - `POST /api/tutor/quiz/evaluate`: Evaluates student answers against material and returns feedback.
+     - `POST /api/tutor/ask`: Answers student questions with strict RAG grounding and citations to topics.
+     - `GET /api/tutor/recommendations`: Recommends topics/labs based on session quiz scores and lab break-fix performance.
 
 ---
+
 
 ## Processed
 
