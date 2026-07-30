@@ -78,49 +78,49 @@ topics:
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Continuous Integration Fundamentals and Best Practices
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.3
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Continuous Delivery Concepts and GitOps Principles
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.3
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Continuous Integration Pipelines Overview and Architecture
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.3
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Incident Response and Remediation in Platform Engineering
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.3
 - id: '3.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: CI/CD Relationship Fundamentals and Integration
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.3
 - id: '3.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: GitOps Basics, Controllers, and Workflows
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.25
 - id: '3.7'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: GitOps for Multi-Environment Application Management
   topic: 3 - Continuous Delivery and Platform Engineering
   weight: 2.25

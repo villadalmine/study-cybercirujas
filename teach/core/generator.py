@@ -66,7 +66,7 @@ _RECAP_RE = re.compile(
     r"|^(He |Wrote|Written|Escribí|Creado|Created|Content (file )?(written|created)"
     r"|Fichier créé|J'ai créé|Ich habe|Datei erstellt|已创建|作成しました|を作成"
     r"|Listo\.|Done\.|Fertig\.|Task complete)"
-    r"|content\.md`? (fue |was |está )?(creado|escrito|written|created)"
+    r"|content\.md\b"
     r"|verificad[oa] con `?wc -c`?"
     r"|no es un stub|not a stub",
     re.IGNORECASE,
@@ -191,8 +191,9 @@ def _antigravity_completer() -> tuple[Completer, dict]:
     cache_file = Path("/tmp/antigravity_cache.json")
 
     def complete(system: str, user: str) -> str:
+        import hashlib
         cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
-        key = user[:120]
+        key = hashlib.md5(user.encode("utf-8")).hexdigest()
         if key in cache:
             return cache[key]
 
