@@ -117,21 +117,21 @@ topics:
 - id: '5.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Implementing Workflows for Self-Service Provisioning Using Platform APIs
   topic: 5 - Platform APIs and Self-Service Capabilities
   weight: 6.25
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Using Kubernetes Operators for Platform Automation and Integration
   topic: 5 - Platform APIs and Self-Service Capabilities
   weight: 6.25
 - id: '5.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Using Automation Frameworks for Self-Service Provisioning
   topic: 5 - Platform APIs and Self-Service Capabilities
   weight: 6.25

@@ -1,0 +1,12 @@
+cert: cnpe
+topic: '5.2'
+title: Implementing Workflows for Self-Service Provisioning Using Platform APIs
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
