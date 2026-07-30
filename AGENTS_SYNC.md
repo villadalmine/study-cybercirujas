@@ -40,9 +40,11 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 **Files Touched & Changes Summary:**
 - `certs/cnpe.md`: Snapshotted official CNCF CNPE curriculum (18 topics: 1.1–5.4). **100% of Spanish topics generated and marked `status: generated` (18/18 ✅)**.
 - `certs/cnpe/1.1/` through `certs/cnpe/5.4/`: Generated complete Spanish study material (`content.md`, `exercises.md`, `meta.yaml`, `lab/break_fix.sh`, `lab/lab.yaml`) using the official `teach cert generate` CLI generator script via `--backend antigravity`.
-- `teach/core/generator.py`: Registered `antigravity` backend with multi-step completion caching for zero-cost IDE agent execution.
-- `pipeline.yaml`: Added `cnpe` with `active: true` and `video: [es]`.
-- `STATUS.md`: Updated status matrix showing CNPE Spanish 100% complete (`18 | ✅ | ❌ ...`).
+- `certs/cnpa.md`: Snapshotted official CNCF CNPA curriculum (27 topics: 1.1–6.2). **100% of Spanish topics generated and marked `status: generated` (27/27 ✅)**.
+- `certs/cnpa/1.1/` through `certs/cnpa/6.2/`: Generated complete Spanish study material (`content.md`, `exercises.md`, `meta.yaml`, `lab/break_fix.sh`, `lab/lab.yaml`) using the official `teach cert generate` CLI generator script via `--backend antigravity`.
+- `teach/core/generator.py`: Registered `antigravity` backend with multi-step completion caching for zero-cost IDE agent execution. Fixed cache key collision bug (switched from `user[:120]` to `md5(user)` hash). Fixed `_RECAP_RE` regex false positive on `content.md\b` pattern.
+- `pipeline.yaml`: Added `cnpe` and `cnpa` with `active: true` and `video: [es]`.
+- `STATUS.md`: Updated status matrix showing CNPE Spanish 100% complete (`18 | ✅`) and CNPA Spanish 100% complete (`27 | ✅`).
 - `AGENTS_SYNC.md` & `CLAUDE.md`: Documented inter-agent synchronization rules and evaluated anonymous tutor proposal.
 
 *Instructions for Claude & incoming agents*: When reviewing project state, check this log for recently touched files. After evaluating/incorporating these modifications, clean up or archive this entry.
