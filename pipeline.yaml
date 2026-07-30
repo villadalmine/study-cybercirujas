@@ -70,6 +70,9 @@ certs:
   cnpe:
     active: true
     video: [es]
+  cnpa:
+    active: true
+    video: [es]
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per
     # domain) unlike the sub-topic granularity of the CNCF certs. Decide that
