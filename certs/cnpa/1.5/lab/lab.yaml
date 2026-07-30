@@ -1,0 +1,12 @@
+cert: cnpa
+topic: '1.5'
+title: Platform Engineering Goals, Objectives, and Strategic Approaches
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh

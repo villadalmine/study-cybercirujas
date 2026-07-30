@@ -36,14 +36,14 @@ topics:
 - id: '1.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Platform Engineering Goals, Objectives, and Strategic Approaches
   topic: 1 - Platform Engineering Core Fundamentals
   weight: 7.2
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Observability Fundamentals (Traces, Metrics, Logs, and Events)
   topic: 2 - Platform Observability, Security, and Conformance
   weight: 4.0
