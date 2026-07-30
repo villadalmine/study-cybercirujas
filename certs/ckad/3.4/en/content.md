@@ -261,7 +261,7 @@ kubectl get events --field-selector type=Warning
 - CNCF, *CKAD Curriculum v1.35*: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
 - Kubernetes docs, *Debug Pods*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/
 - Kubernetes docs, *Debug Running Pods*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/
-- Kubernetes docs, *Debug with ephemeral containers*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-ephemeral-container/
+- Kubernetes docs, *Debug with ephemeral containers*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container
 - Kubernetes docs, *Debugging Kubernetes Nodes with crictl*: https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/
 - Kubernetes docs, *Debug a StatefulSet*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-statefulset/
 - Kubernetes docs, *Troubleshoot Services*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/

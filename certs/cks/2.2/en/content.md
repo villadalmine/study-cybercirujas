@@ -662,7 +662,7 @@ Also check for secrets leaking through the wrong channels: `command`/`args` in P
 - Distribute Credentials Securely Using Secrets: https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/
 - Encrypting Confidential Data at Rest: https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
 - Using a KMS provider for data encryption: https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/
-- EncryptionConfiguration API reference: https://kubernetes.io/docs/reference/config-api/apiserver-encryption.v1/
+- EncryptionConfiguration API reference: https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/
 - Configure Service Accounts for Pods: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 - Managing Service Accounts: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/
 - Using RBAC Authorization: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
