@@ -1,6 +1,6 @@
 # 1.1 Declarative Resource Management and Infrastructure Concepts
 
-> Referencia: [CNCF CNPA Curriculum](https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf)
+## Motivación y Modelo Declarativo
 
 El **Gestión Declarativa de Recursos (Declarative Resource Management)** es la piedra angular de la ingeniería de plataformas cloud native. A diferencia del modelo imperativo (donde se especifican los pasos paso a paso para configurar un sistema), el modelo declarativo describe el **estado deseado** (*Desired State*) mediante archivos manifiestos (YAML/JSON) y delega a un bucle de control la tarea de reconciliar continuamente el estado real del sistema.
 
@@ -17,8 +17,6 @@ El **Gestión Declarativa de Recursos (Declarative Resource Management)** es la 
 ---
 
 ## 2. Manifiestos Declarativos en Kubernetes
-
-Un manifiesto declarativo en Kubernetes especifica la versión de la API (`apiVersion`), el tipo de recurso (`kind`), metadatos (`metadata`) y el estado deseado (`spec`).
 
 ```yaml
 apiVersion: apps/v1
@@ -40,8 +38,6 @@ spec:
       - name: web
         image: nginx:alpine
 ```
-
-Al aplicar este manifiesto con `kubectl apply -f deployment.yaml`, el API Server almacena la definición en `etcd` y el controlador de Deployment asegura que existan exactamente 3 réplicas ejecutándose.
 
 ---
 
