@@ -1,25 +1,24 @@
 # 3.1 Configuring Secure Service-to-Service Communication
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Arquitectura de Zero Trust Networking
 
-La comunicación segura entre servicios dentro de un clúster de Kubernetes se basa en **mTLS (Mutual TLS)** y autenticación basada en identidad criptográfica impulsada por proyectos como **SPIFFE/SPIRE** o mallas de servicios (**Istio / Linkerd / Cilium Service Mesh**).
-
----
-
-## 1. Fundamentos de mTLS en Cloud Native
-
-En mTLS, tanto el cliente como el servidor se autentican mutuamente mediante certificados X.509 antes de establecer el túnel cifrado.
-
-### SPIFFE/SPIRE
-- **SPIFFE (Secure Production Identity Framework for Everyone)**: Define un estándar para emitir identidades criptográficas únicas (`SPIFFE ID`) en formato URI: `spiffe://cluster.local/ns/prod/sa/backend-api`.
-- **SPIRE (SPIFFE Runtime Environment)**: Es el software de implementación de la CNCF que emite y rota automáticamente certificados SVID (SPIFFE Verifiable Identity Document) a los contenedores.
+En arquitecturas de microservicios sobre Kubernetes, la seguridad del perímetro (firewalls externos) no es suficiente. El modelo de seguridad de la plataforma debe asumir **Zero Trust** (cero confianza): cada solicitud entre servicios (*East-West traffic*) debe autenticarse criptográficamente, autorizarse y cifrarse en tránsito mediante **mTLS (Mutual TLS)**.
 
 ---
 
-## 2. Encriptación en Tránsito con Service Mesh (Istio / Cilium)
+## 1. Identidad Criptográfica con SPIFFE/SPIRE
 
-### Istio PeerAuthentication (STRICT mTLS)
-Fuerza a todos los workloads del namespace a aceptar únicamente conexiones cifradas con mTLS.
+**SPIFFE (Secure Production Identity Framework for Everyone)** define un estándar abierto para emitir identidades criptográficas únicas a cargas de trabajo en formato URI (`SPIFFE ID`): `spiffe://cluster.local/ns/prod/sa/payment-api`.
+
+**SPIRE (SPIFFE Runtime Environment)** es el software de la CNCF que emite y rota automáticamente certificados X.509 (*SVIDs - SPIFFE Verifiable Identity Documents*) de corta duración a los Pods de la plataforma.
+
+---
+
+## 2. Implementación de mTLS con Service Mesh (Istio / Cilium Service Mesh)
+
+### 2.1 Istio PeerAuthentication (mTLS Estricto)
+
+El recurso `PeerAuthentication` fuerza a todos los workloads del namespace a aceptar únicamente conexiones cifradas con mTLS usando identidades SPIFFE.
 
 ```yaml
 apiVersion: security.istio.io/v1beta1
@@ -32,12 +31,22 @@ spec:
     mode: STRICT
 ```
 
-### Cilium WireGuard / IPsec
-Cilium permite activar cifrado de tráfico pod-a-pod a nivel de kernel utilizando **WireGuard** o **IPsec** transparente, sin necesidad de inyectar sidecars en cada Pod.
+### 2.2 Cilium WireGuard / IPsec Cifrado Transparente
+
+Cilium permite activar cifrado de red pod-a-pod transparente a nivel de kernel utilizando **WireGuard** o **IPsec** sin necesidad de inyectar proxies sidecar.
 
 ```bash
 # Activar cifrado transparente WireGuard en Cilium
-cilium config set enable-wireguard true
+helm upgrade cilium cilium/cilium -n kube-system --reuse-values --set encryption.enabled=true --set encryption.type=wireguard
+```
+
+---
+
+## Verificación de mTLS en Tránsito
+
+```bash
+# Capturar paquetes en la interfaz del nodo para verificar que el tráfico viaja cifrado (WireGuard)
+$ tcpdump -i cilium_wg0 -n
 ```
 
 ---
@@ -45,6 +54,5 @@ cilium config set enable-wireguard true
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- SPIFFE/SPIRE Documentation — https://spiffe.io/docs/latest/spire-about/spire-concepts/
-- Istio Mutual TLS Authentication — https://istio.io/latest/docs/concepts/security/#mutual-tls-authentication
-- Cilium Transparent Encryption — https://docs.cilium.io/en/stable/security/encryption/
+- SPIFFE/SPIRE Standard — https://spiffe.io/docs/latest/
+- Istio Security Architecture — https://istio.io/latest/docs/concepts/security/

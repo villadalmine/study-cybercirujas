@@ -1,50 +1,76 @@
 # 2.3 Diagnosing and Remediating Platform Issue and Incident Scenarios
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Respuesta a Incidentes en la Plataforma
 
-La resolución rápida de incidentes (*Incident Response & Remediation*) en entornos de producción exige dominar las metodologías de diagnóstico, el análisis de causas raíz (*RCA*) y el uso de herramientas CLI como `kubectl`, `crictl` y métricas del sistema operativo.
-
----
-
-## 1. Patrones y Diagnóstico de Fallas Comunes en Pods
-
-| Estado del Pod | Causa Raíz Probable | Comando de Diagnóstico Principal |
-|---|---|---|
-| `CrashLoopBackOff` | Error en código de la app, falta de variable de entorno o falla de archivo de config | `kubectl logs <pod> --previous` |
-| `ImagePullBackOff` | Tag inexistente, falta de `imagePullSecrets` o rate limit del registry | `kubectl describe pod <pod>` (sección Events) |
-| `OOMKilled` | El proceso excedió el límite de memoria del contenedor (cgroups) | `kubectl get pod <pod> -o jsonpath='{.status.containerStatuses[0].state.terminated.reason}'` |
-| `Pending` | Recursos insuficientes en el clúster, `NodeSelector`/`Taints` desalineados | `kubectl get events -n <ns> --sort-by='.lastTimestamp'` |
+La resolución rápida y metódica de incidentes (**Incident Response & Remediation**) en plataformas cloud native requiere dominar las herramientas de diagnóstico a nivel de clúster, nodo y runtime de contenedor. Durante un incidente de producción, la prioridad del SRE/Platform Engineer es restaurar la disponibilidad del servicio minimizando el radio de impacto (*Blast Radius*) antes de iniciar el análisis de causa raíz (*Root Cause Analysis - RCA*).
 
 ---
 
-## 2. Diagnóstico a Nivel de Nodo y CNI
+## 1. Patrones de Falla Comunes en Cargas de Trabajo
+
+| Estado del Pod | Causa Raíz Probable | Comando de Diagnóstico Principal | Acción de Remedación Inmediata |
+|---|---|---|---|
+| `CrashLoopBackOff` | Error de código, falta de archivo de configuración o secreto | `kubectl logs <pod> --previous` | Rollback a la versión anterior en Git / Deployment |
+| `ImagePullBackOff` | Tag inexistente o falta de `imagePullSecrets` | `kubectl describe pod <pod>` (Events) | Corregir tag en Git o actualizar el Secret de Registry |
+| `OOMKilled` | El contenedor superó su `limits.memory` (cgroups) | `kubectl get pod <pod> -o jsonpath='{.status.containerStatuses[0].state.terminated.reason}'` | Incrementar `limits.memory` o ajustar VPA |
+| `Pending` | Falta de recursos en nodos o Taints/Affinity desalineados | `kubectl get events --sort-by='.lastTimestamp'` | Escalar nodos vía Autoscaler o corregir Tolerations |
+
+---
+
+## 2. Diagnóstico del Plano de Control y Nodos
 
 Cuando un nodo pasa a estado `NotReady`:
-1. **Inspección del Kubelet**:
-   ```bash
-   journalctl -u kubelet -n 100 --no-pager
-   ```
-2. **Estado del Container Runtime (containerd / CRI-O)**:
-   ```bash
-   crictl ps
-   crictl info
-   ```
-3. **Presión de Almacenamiento/Memoria**:
-   ```bash
-   kubectl describe node <node-name> | grep -i pressure
-   ```
+
+### 2.1 Inspección del Demonio Kubelet
+El demonio `kubelet` se encarga de la comunicación con el API Server y del ciclo de vida de los contenedores en el nodo.
+
+```bash
+# Inspeccionar los logs del servicio Kubelet en el nodo afectado
+$ journalctl -u kubelet -n 100 --no-pager -f
+```
+
+### 2.2 Diagnóstico del Container Runtime (`crictl`)
+Cuando el API Server no responde o los contenedores no inician, la herramienta CLI `crictl` interactúa directamente con el runtime del contenedor (containerd / CRI-O) a través de la API CRI (*Container Runtime Interface*).
+
+```bash
+# Listar contenedores activos directamente a nivel de runtime
+$ crictl ps -a
+
+# Inspeccionar logs del contenedor a nivel de runtime
+$ crictl logs <container-id>
+```
 
 ---
 
 ## 3. Playbooks de Remedación Declarativa
 
-- **Reiniciar cargas de trabajo**: `kubectl rollout restart deployment/<name>`
-- **Escalado de emergencia**: `kubectl scale deployment/<name> --replicas=0 && kubectl scale deployment/<name> --replicas=3`
+1. **Reiniciar Cargas de Trabajo (Rolling Restart)**:
+   ```bash
+   kubectl rollout restart deployment/platform-api -n platform-prod
+   ```
+2. **Escalado de Emergencia**:
+   ```bash
+   kubectl scale deployment/platform-api --replicas=10 -n platform-prod
+   ```
+3. **Drenado Seguro de Nodos Afectados**:
+   ```bash
+   kubectl drain node-az-a-2 --ignore-daemonsets --delete-emptydir-data
+   ```
+
+---
+
+## Verificación de la Recuperación del Servicio
+
+```bash
+# Verificar que el rollout haya finalizado exitosamente
+$ kubectl rollout status deployment/platform-api -n platform-prod --timeout=60s
+deployment "platform-api" successfully rolled out
+```
 
 ---
 
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Kubernetes Troubleshooting Docs — https://kubernetes.io/docs/tasks/debug/debug-application/
-- Containerd Diagnostics with crictl — https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/
+- Kubernetes Troubleshooting Tasks — https://kubernetes.io/docs/tasks/debug/
+- crictl CLI Reference — https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/
