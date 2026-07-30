@@ -67,6 +67,9 @@ certs:
   kcna:
     active: true
     video: [es]
+  cnpe:
+    active: true
+    video: [es]
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per
     # domain) unlike the sub-topic granularity of the CNCF certs. Decide that
@@ -76,6 +79,7 @@ certs:
   lfca:
     active: false
     video: []
+
 
 # Career path videos, rendered from catalog.yaml rather than from a syllabus.
 paths:
