@@ -188,19 +188,29 @@ def _antigravity_completer() -> tuple[Completer, dict]:
     """
     prompt_file = Path(os.environ.get("ANTIGRAVITY_PROMPT_FILE", "/tmp/antigravity_prompt.json"))
     resp_file = Path(os.environ.get("ANTIGRAVITY_RESP_FILE", "/tmp/antigravity_response.txt"))
+    cache_file = Path("/tmp/antigravity_cache.json")
 
     def complete(system: str, user: str) -> str:
-        prompt_file.write_text(json.dumps({"system": system, "user": user}, indent=2))
+        cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
+        key = user[:120]
+        if key in cache:
+            return cache[key]
+
         if resp_file.exists():
             content = resp_file.read_text().strip()
             resp_file.unlink()
+            cache[key] = content
+            cache_file.write_text(json.dumps(cache, indent=2))
             return content
+
+        prompt_file.write_text(json.dumps({"system": system, "user": user}, indent=2))
         raise GeneratorConfigError(
             "Antigravity backend prompt written to /tmp/antigravity_prompt.json. "
             "Awaiting response in /tmp/antigravity_response.txt"
         )
 
     return complete, {"backend": "antigravity", "model": "antigravity-session"}
+
 
 
 def make_completer(backend: str | None = None) -> tuple[Completer, dict]:

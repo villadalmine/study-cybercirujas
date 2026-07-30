@@ -30,7 +30,7 @@ topics:
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Implementing Monitoring, Alerting, Logging, and Tracing Solutions
   topic: 2 - Observability and Operations
   weight: 6.66
