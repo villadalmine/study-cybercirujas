@@ -1,0 +1,6 @@
+generated_at: '2026-07-30T02:47:20'
+lang: es
+backend: antigravity
+model: antigravity-session
+sources:
+- https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf

@@ -59,14 +59,14 @@ topics:
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Applying RBAC and Security Controls Across Platform Resources
   topic: 3 - Security and Policy Enforcement
   weight: 3
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Generating Audit Trails and Enforcing Policy Compliance (SBOM, Compliance
     Reports, etc.)
   topic: 3 - Security and Policy Enforcement
