@@ -1,0 +1,14 @@
+[Unit]
+Description=Run teach-resume.service every 20 minutes
+
+[Timer]
+# Wall-clock schedule (:00, :20, :40) rather than OnBootSec/OnUnitActiveSec.
+# Those two elapsed on a long-running machine and left Trigger: n/a, so the
+# timer was enabled but would never fire again — which is exactly how the
+# previous recovery attempts silently did nothing.
+OnCalendar=*:0/20
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

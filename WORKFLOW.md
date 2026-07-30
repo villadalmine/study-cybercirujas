@@ -364,15 +364,47 @@ tool loop.
 | Audit says 0 corrupt but content is missing | The combo is not in `TARGETS` | Add it, re-audit |
 | Empty log while a run is clearly working | Python block-buffers stdout when it is not a tty | `PYTHONUNBUFFERED=1` |
 
-## Unattended runs
+## Unattended runs and quota
 
-`scripts/resume-generation.sh` retries generation via a systemd user timer,
-holds a `flock`, refuses to start if a generation is already running, and is
-safe to call when there is nothing pending.
-
-**`teach-resume.timer` is deliberately disabled.** Enabling it means the machine
-spends API quota autonomously on its own schedule. Turn it on knowingly:
+**The window cannot be computed, only observed.** The spend limit that stopped
+generation on 2026-07-29/30 came back partway through a day and then ran out
+again, so it is not a simple monthly reset and no arithmetic will predict it.
+The only reliable answer is a cheap probe:
 
 ```bash
-systemctl --user enable --now teach-resume.timer
+scripts/quota.py              # probe now, exit 0 if quota is available
+scripts/quota.py --quiet      # exit code only, for use as a gate
+scripts/quota.py --history 20 # when it changed, marked <-- CHANGED
+scripts/quota.py --wait 7200  # block until it returns, giving up after N seconds
+```
+
+The probe asks for two characters, so it costs almost nothing, and it
+classifies the result with the same `fatal_errors` list from `pipeline.yaml`
+that the batch runner uses — "out of quota" means one thing project-wide. Every
+probe is appended to `~/.local/state/teach-plat/quota-history.jsonl`, which
+after a few days is the actual empirical record of when windows reopen.
+
+`scripts/resume-generation.sh` runs one bounded pass per firing: it probes
+quota first and exits without spending anything when the window is closed, it
+holds a `flock`, and it skips when a generation is already running. The work
+itself comes from `fix_corrupted_content.py`, which derives the queue from
+`pipeline.yaml` and stops at `budget.topics_per_run`.
+
+The units are versioned in `deploy/systemd/`. Two failure modes were found in
+the original ones and are worth not reintroducing:
+
+- **`OnBootSec` + `OnUnitActiveSec` silently stop scheduling.** On a machine up
+  for days those deadlines elapse and `systemctl list-timers` shows
+  `Trigger: n/a` — enabled, active, and never firing again. The timer now uses
+  a wall-clock `OnCalendar=*:0/20`, which always has a next elapse. Check with
+  `systemctl --user list-timers teach-resume.timer`; if `NEXT` is empty, it is
+  not going to run.
+- **The unattended pass used to be unbounded.** It looped
+  `teach cert generate <cert> --lang <lang>` with no `--topic`, generating every
+  pending topic for that combination and ignoring the batch budget entirely.
+
+```bash
+systemctl --user enable --now teach-resume.timer   # spends quota on its own schedule
+systemctl --user list-timers teach-resume.timer    # confirm NEXT is populated
+tail -f ~/.local/state/teach-plat/resume.log
 ```

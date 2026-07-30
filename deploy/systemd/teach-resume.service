@@ -1,0 +1,7 @@
+[Unit]
+Description=teach-plat: one bounded content-generation pass when quota allows
+
+[Service]
+Type=oneshot
+Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
+ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
