@@ -1,32 +1,24 @@
 # 3.5 Integrating Security Scanning and Compliance Checks into Deployment Pipelines
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Shift-Left Security
 
-Shift-Left Security en la plataforma implica integrar escaneo continuo de vulnerabilidades (**Vulnerability Scanning**), análisis estático de manifiestos (**IaC Security**) y verificación de compliance en los pipelines de integración y despliegue continuo (CI/CD).
+Shift-Left Security en la plataforma implica integrar el escaneo continuo de vulnerabilidades (**Vulnerability Scanning**), el análisis estático de manifiestos IaC y las reglas de seguridad runtime en los pipelines de CI/CD antes del despliegue en producción.
 
 ---
 
-## 1. Escaneo de Imágenes y Manifiestos IaC (Trivy / Grype / Checkov)
+## 1. Escaneo Estático y de Imágenes (Trivy & Falco)
 
-- **Trivy (Aqua Security)**: Escáner de seguridad integral para imágenes de contenedores, archivos de configuración (Kubernetes, Helm, Terraform) y dependencias.
-- **Checkov**: Escaneo estático de manifiestos IaC enfocado en configuraciones erróneas de seguridad.
+- **Trivy (Aqua Security)**: Escaneo estático de vulnerabilidades en imágenes y manifiestos de Kubernetes.
+- **Falco (CNCF Graduated)**: Detección de anomalías y amenazas en tiempo real a nivel de kernel utilizando eBPF.
 
 ```bash
-# Escaneo de vulnerabilidades en imagen de contenedor bloqueando en CVEs CRITICAL/HIGH
+# Escaneo de vulnerabilidades en imágenes bloqueando en CVEs CRITICAL/HIGH
 trivy image --severity HIGH,CRITICAL --exit-code 1 myregistry.io/app:v1.0
-
-# Escaneo de manifiestos Kubernetes locales antes del commit
-trivy config ./deploy/k8s/
 ```
 
----
-
-## 2. Ingesta de Alertas de Seguridad Runtime (Falco)
-
-**Falco** (CNCF Graduated) es el motor de detección de amenazas en tiempo real para Kubernetes basado en eBPF que analiza llamadas al sistema del kernel.
+Regla declarativa de Falco para detectar shells lanzadas dentro de contenedores:
 
 ```yaml
-# Regla de Falco para detectar exec dentro de contenedores en producción
 - rule: Terminal shell in container
   desc: A shell was spawned inside a running container
   condition: >
