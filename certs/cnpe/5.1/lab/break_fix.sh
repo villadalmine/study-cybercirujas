@@ -1,14 +1,12 @@
 # 5.1 Designing and Creating Custom Resource Definitions (CRDs) for Platform Services
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Extensión de las APIs de Kubernetes
 
 Las **Custom Resource Definitions (CRDs)** permiten extender la API de Kubernetes para crear abstraer servicios de plataforma propios (Internal Developer Platforms - IDP) como si fueran recursos nativos.
 
 ---
 
 ## 1. Estructura de una Custom Resource Definition (apiextensions.k8s.io/v1)
-
-Una CRD define el esquema OpenAPI v3 para validar las especificidades del nuevo recurso (`spec`) y reflejar el estado actual (`status`).
 
 ```yaml
 apiVersion: apiextensions.k8s.io/v1

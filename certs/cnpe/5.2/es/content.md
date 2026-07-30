@@ -1,15 +1,12 @@
 # 5.2 Implementing Workflows for Self-Service Provisioning Using Platform APIs
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Self-Service Provisioning
 
-El aprovisionamiento autoservicio (**Self-Service Provisioning**) abstrae la complejidad de la infraestructura para que los equipos de desarrollo puedan solicitar recursos (bases de datos, colas de mensajes, entornos) de forma declarativa e independiente a través de las APIs de la plataforma.
+El aprovisionamiento autoservicio (**Self-Service Provisioning**) mediante herramientas como **Crossplane** permite componer infraestructura en la nube utilizando manifiestos y la API de Kubernetes.
 
 ---
 
-## 1. Patrón de Control Planes de Plataforma (Crossplane vs Kratix)
-
-### Crossplane (CNCF Incubating)
-Crossplane extiende Kubernetes convirtiéndolo en un Control Plane universal que compone infraestructura cloud (AWS, GCP, Azure) como recursos Kubernetes nativos (`Compositions` y `Composite Resource Definitions - XRDs`).
+## 1. Crossplane Compositions & XRDs
 
 ```yaml
 apiVersion: apiextensions.crossplane.io/v1
@@ -36,4 +33,4 @@ spec:
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Crossplane Documentation — https://www.crossplane.io/
+- Crossplane — https://www.crossplane.io/

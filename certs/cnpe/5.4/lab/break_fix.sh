@@ -1,14 +1,12 @@
 # 5.4 Using Automation Frameworks for Self-Service Provisioning
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación e Internal Developer Portals (Backstage)
 
-Los frameworks de automatización para portales de autoservicio (Internal Developer Portals - IDP) como **Spotify Backstage** integran catalogación de servicios, plantillas de desarrollo (*Software Templates*) y APIs para habilitar la experiencia del desarrollador (Developer Experience - DevEx).
+Portales de desarrollador como **Spotify Backstage** (CNCF Incubating) ofrecen un catálogo unificado de servicios y plantillas de desarrollo (*Software Templates*).
 
 ---
 
-## 1. Internal Developer Portals (IDPs) con Backstage
-
-**Backstage** (CNCF Incubating) expone un catálogo centralizado donde los desarrolladores pueden crear proyectos pre-configurados que incluyen CI/CD, IaC, monitoreo y políticas de seguridad automáticamente.
+## 1. Backstage Software Template
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -38,4 +36,4 @@ spec:
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Spotify Backstage Documentation — https://backstage.io/docs/overview/what-is-backstage
+- Spotify Backstage — https://backstage.io/
