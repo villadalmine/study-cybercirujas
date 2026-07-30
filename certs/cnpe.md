@@ -16,7 +16,7 @@ topics:
 - id: '1.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Using Cost Management Solutions for Right-Sizing and Scaling
   topic: 1 - Platform Architecture and Infrastructure
   weight: 5
