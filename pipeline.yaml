@@ -104,17 +104,20 @@ certs:
   kcna:
     active: true
     video: [es]
-  # Syllabus snapshotted and Spanish content generated, but below the `quality`
-  # floor: cnpa meets it for 0 of 27 topics and cnpe for 5 of 18, with the
-  # exercises missing the collapsible answers section. `active: false` keeps
-  # them out of the automatic queue until they are regenerated to the same
-  # standard as the rest — the material stays in the repo, it just does not
-  # count as done. `scripts/quality_report.py` shows them at any time.
+  # Content is being regenerated: the first pass came out far below the quality
+  # floor (cnpa met it for 0 of 27 topics, cnpe for 5 of 18, with the exercises
+  # missing the collapsible answers section entirely). Active again so the queue
+  # picks them up; the audit lists every topic that has not yet been redone.
+  #
+  # The syllabi themselves are sound and do NOT need re-snapshotting: the domain
+  # weights were checked against the official CNCF PDFs and match exactly
+  # (cnpe 15/20/15/25/25, cnpa 36/20/16/12/8/8), which is precisely the check
+  # that has caught bad snapshots before.
   cnpe:
-    active: false
+    active: true
     video: [es]
   cnpa:
-    active: false
+    active: true
     video: [es]
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per
