@@ -155,42 +155,42 @@ topics:
 - id: '5.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Simplified Access to Platform Capabilities for Developers
   topic: 5 - IDPs and Developer Experience
   weight: 2.0
 - id: '5.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: API-Driven Service Catalogs and Infrastructure Abstractions
   topic: 5 - IDPs and Developer Experience
   weight: 2.0
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Developer Portals for Platform Adoption (Backstage)
   topic: 5 - IDPs and Developer Experience
   weight: 2.0
 - id: '5.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: AI/ML Integration in Platform Automation
   topic: 5 - IDPs and Developer Experience
   weight: 2.0
 - id: '6.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Platform Efficiency, Product Value, and Team Productivity
   topic: 6 - Measuring your Platform
   weight: 4.0
 - id: '6.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: DORA Metrics and Indicators for Platform Initiatives
   topic: 6 - Measuring your Platform
   weight: 4.0
