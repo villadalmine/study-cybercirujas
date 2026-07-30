@@ -8,21 +8,22 @@ This file serves as an asynchronous idea queue and coordination buffer between A
 2. **Evaluate & Act**: Read pending proposals, evaluate their technical feasibility and alignment with [PLAN.md](PLAN.md) and [WORKFLOW.md](WORKFLOW.md), and implement or integrate approved items.
 3. **Clean Up**: Once an idea has been evaluated and implemented (or integrated into `BACKLOG.md`/`PLAN.md`), remove it from this file so the queue remains clean for future proposals.
 
+When rejecting or amending a proposal, record the reasoning in the destination document rather than leaving the entry here — this queue is for undecided items only.
+
 ---
 
 ## Pending Proposals & Ideas
 
-### 1. Direct Content Translation Command (`teach cert translate`)
-- **Context**: Currently, `teach cert generate --lang en` regenerates content from scratch using syllabus metadata rather than translating existing Spanish content.
-- **Proposal**: Add a `teach cert translate <cert_id> [--topic <id>] [--from es] [--to <lang>]` CLI command in `teach/core/generator.py` and `teach/cli.py`.
-- **Value**: Translating existing `es/content.md` and `es/exercises.md` directly via LLM prompt ensures strict structural parity across languages, reduces prompt token overhead, and drastically lowers generation cost per non-default language.
+*(empty)*
 
-### 2. Auto-Discovery of Targets in Audit Scripts (`scripts/fix_corrupted_content.py`)
-- **Context**: `WORKFLOW.md` highlights that `fix_corrupted_content.py` historically suffered from blind spots because `TARGETS` was hardcoded.
-- **Proposal**: Enhance `fix_corrupted_content.py` to auto-discover active `(cert, lang)` combinations by scanning `certs/` directories, while using `TARGETS` as an optional filter.
-- **Value**: Prevents newly generated language sets from being silently skipped during corruption audits.
+---
 
-### 3. CNPE Certification Enablement (Cloud Native Platform Engineer)
-- **Context**: `cnpe` is registered in `catalog.yaml` with official CNCF PDF sources, but `certs/cnpe.md` has `topics: []`.
-- **Proposal**: Run `teach cert snapshot cnpe` to freeze the 2025-12-03 CNPE curriculum, verify that domain weights sum to 100%, and add `cnpe` to the active generation queue.
-- **Value**: Unlocks CNPE as a full certification path in `teach-plat`.
+## Processed
+
+**2026-07-30** — three proposals evaluated and moved out of the queue.
+
+1. **`teach cert translate`** — Accepted. The premise is confirmed by code: `generate_topic()` builds its prompt from syllabus metadata and never reads the existing content, so `--lang en` authors from scratch rather than translating. Recorded under "Real translation" in BACKLOG.md with the trade-offs — much cheaper and viable on a small model, keeps languages structurally in sync, but every language inherits the Spanish structure, and a weak model translating dense technical prose can mangle command output in a way the current audit cannot catch, since the result is neither a stub nor a short file. Keep it as a separate `--from es` flag so authoring and translating both stay available.
+
+2. **Auto-discovery of audit targets** — Accepted in intent, **rejected in mechanism**. The proposal was to discover `(cert, lang)` pairs by scanning the `certs/` directories. That reintroduces the exact bug it aims to prevent: disk scanning only sees languages that already exist, so a translation never started has no directory and stays invisible — which is precisely how the audit reported "0 corrupt" for `cks/en` while 20 of 26 topics did not exist (fixed in `e8201d7`). Discovery has to come from **declared intent**, not from disk. Implemented as `pipeline.yaml` + `teach/core/pipeline.py`, with `fix_corrupted_content.py` and `resume-generation.sh` both reading from it, and the audit enumerating topics from the syllabus frontmatter so it reports what is missing rather than only what is damaged.
+
+3. **CNPE enablement** — Accepted, deferred. Claims verified: `cnpe` is in `catalog.yaml` with the official CNCF PDF (tracked version 2025-12-03, CC-BY 4.0) and `certs/cnpe.md` has `topics: []`, so `teach cert snapshot cnpe` is the whole first step. Not started because 31 declared topics are already outstanding (`cks/en` 18, `kcna/en` 13) and a new certification would add roughly 26 more ahead of them, against a real API budget constraint. Queued in BACKLOG.md — snapshot it when the queue is shorter, then set `active: true` in `pipeline.yaml`.

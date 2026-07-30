@@ -25,25 +25,21 @@ fi
 exec 9>"$LOCK"
 flock -n 9 || exit 0
 
-# cert:lang a mantener al día. Certs sin topics todavía (ej. cka antes del
-# snapshot) simplemente no generan nada — no rompe.
-TARGETS=(
-    "lpi-010-160:pt"
-    "lpi-010-160:fr"
-    "lpi-010-160:de"
-    "lpi-010-160:zh"
-    "lpi-010-160:ja"
-    "ckad:es"
-    "ckad:en"
-    "cka:es"
-    "cka:en"
-    "cks:es"
-    "cks:en"
-    "kcna:es"
-)
+# cert:lang sale de pipeline.yaml, no de una lista acá. Tener la lista propia
+# significaba que agregar un idioma requería acordarse de tres lugares, y no
+# pasó: este script quedó en español-solamente mientras se generaba inglés.
+mapfile -t TARGETS < <("$REPO/.venv/bin/python3" -c "
+from teach.core import pipeline
+for cert, langs in pipeline.targets():
+    for lang in langs:
+        print(f'{cert}:{lang}')
+")
 
 {
     echo "=== $(date -Iseconds) ==="
+    # fix_corrupted_content ya respeta budget.topics_per_run de pipeline.yaml,
+    # así que una pasada desatendida avanza de a poco en vez de intentar
+    # vaciar la cola (y la cuota) de una sola vez.
     echo "--- fix_corrupted_content ---"
     "$REPO/.venv/bin/python3" "$REPO/scripts/fix_corrupted_content.py"
     for target in "${TARGETS[@]}"; do

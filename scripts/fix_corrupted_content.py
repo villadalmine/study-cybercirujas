@@ -17,6 +17,8 @@ from pathlib import Path
 
 import yaml
 
+from teach.core import pipeline
+
 REPO = Path(__file__).resolve().parent.parent
 TEACH = REPO / ".venv" / "bin" / "teach"
 
@@ -41,14 +43,10 @@ RECAP_PATTERNS = [
 RECAP_RE = re.compile("|".join(RECAP_PATTERNS), re.IGNORECASE)
 MIN_REAL_BYTES = 1500
 
-TARGETS = [
-    ("lpi-010-160", ["es", "en", "pt", "fr", "de", "zh", "ja"]),
-    ("ckad", ["es", "en"]),
-    ("cka", ["es", "en"]),
-    ("cks", ["es", "en"]),
-    ("kcna", ["es"]),
-]
-
+# Qué auditar sale de pipeline.yaml, no de una lista acá. Esta lista propia
+# existió y se desincronizó dos veces sin que nada fallara: la auditoría
+# informaba "0 corruptos" sobre combos de los que nunca se le habló.
+TARGETS = pipeline.targets()
 
 DEFAULT_LANG = "es"
 
@@ -138,16 +136,35 @@ def main() -> None:
     if n_fenced:
         print(f"Archivos con fence ```markdown envolvente arreglados en el lugar: {n_fenced}", flush=True)
     bad = sorted(find_bad_combos())
-    print(f"Combos (cert, topic, lang) corruptos restantes: {len(bad)}", flush=True)
-    for cert, topic, lang in bad:
+    # "pendientes" y no "corruptos": desde que los targets salen de
+    # pipeline.yaml, esta lista mezcla contenido dañado con contenido que
+    # simplemente todavía no se generó para un idioma declarado. Para
+    # regenerar da igual, pero llamarlo corrupto confunde el informe.
+    print(f"Combos (cert, topic, lang) pendientes o corruptos: {len(bad)}", flush=True)
+    if "--audit-only" in sys.argv:
+        for cert, topic, lang in bad:
+            print(f"    {cert} {topic} ({lang})", flush=True)
+        return
+    # El presupuesto sale del YAML: una pasada desatendida no debe vaciar la
+    # cuota del mes de una sentada.
+    limit = pipeline.topics_per_run()
+    batch = bad[:limit] if limit else bad
+    if limit and len(bad) > limit:
+        print(f"Presupuesto por pasada: {limit}. Quedan {len(bad) - limit} "
+              f"para las siguientes.", flush=True)
+    for cert, topic, lang in batch:
         print(f"--- regenerando {cert} {topic} ({lang}) ---", flush=True)
         result = subprocess.run(
             [str(TEACH), "cert", "generate", cert, "--topic", topic,
              "--lang", lang, "--backend", "claude", "--force"],
-            cwd=REPO,
+            cwd=REPO, capture_output=True, text=True,
         )
+        output = (result.stdout + result.stderr).strip()
         if result.returncode != 0:
-            print(f"    falló, se reintenta en la próxima pasada", flush=True)
+            if pipeline.is_fatal(output):
+                print(f"    fatal, corto la pasada:\n{output}", flush=True)
+                return
+            print(f"    falló, se reintenta en la próxima pasada:\n{output}", flush=True)
 
 
 if __name__ == "__main__":

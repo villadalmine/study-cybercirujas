@@ -1,0 +1,82 @@
+# Declarative content pipeline.
+#
+# This file is the single source of truth for WHAT the pipeline should produce.
+# Scripts and CLI commands read it; nothing that drives the pipeline is written
+# into a script's own list. Two hardcoded target lists used to live in
+# scripts/fix_corrupted_content.py and scripts/resume-generation.sh, and both
+# silently drifted out of sync with reality (three separate audit blind spots,
+# see CHANGELOG 2026-07-16 / 07-28 / 07-29). Add a language here, once.
+#
+# Full process: WORKFLOW.md
+
+# Languages every active certification is expected to have. Order is the order
+# work is done in: Spanish first (source language), English second, and only
+# then the on-demand tier — and that one only for certs that opt in below.
+languages:
+  default: [es, en]
+  on_demand: [pt, fr, de, zh, ja]
+
+# Guard rails for unattended and batch runs. API credits are a real constraint:
+# a full certification is ~26 topics x ~7 min x 2 completions, so an unbounded
+# run both takes hours and can exhaust the monthly limit mid-certification.
+budget:
+  # Maximum topics generated per invocation. Raise deliberately, not by habit.
+  topics_per_run: 2
+  # Errors where retrying is pointless — stop the run instead of burning the
+  # remaining budget on calls that cannot succeed.
+  fatal_errors:
+    - "spend limit"
+    - "usage limit"
+  # Errors that are transient and worth retrying. All observed in practice on
+  # 2026-07-29/30 while generating cks/en.
+  retry_errors:
+    - "529"
+    - "Overloaded"
+    - "500"
+    - "Internal server error"
+  retry_attempts: 3
+  retry_delay_seconds: 60
+
+# Stage order. Content before media, always: a video narrates content that must
+# already exist and be verified. Videos are the last step and never block.
+stages: [snapshot, generate, audit, status, video]
+
+# Certifications under automation.
+#
+#   active: false  -> declared but not part of automatic work. The audit ignores
+#                     it, so a cert nobody has started does not flood the report.
+#                     Flip to true when starting it, in the same commit.
+#   languages:     -> overrides `languages.default` entirely when present.
+#   video:         -> languages to render the certification video in. Empty list
+#                     means no video yet. `ja` is unavailable: Piper has no
+#                     Japanese voice (see BACKLOG.md).
+certs:
+  lpi-010-160:
+    active: true
+    languages: [es, en, pt, fr, de, zh, ja]
+    video: [es]
+  cka:
+    active: true
+    video: [es]
+  ckad:
+    active: true
+    video: [es]
+  cks:
+    active: true
+    video: [es]
+  kcna:
+    active: true
+    video: [es]
+  lfcs:
+    # Syllabus snapshotted, but only at domain granularity (5 topics, one per
+    # domain) unlike the sub-topic granularity of the CNCF certs. Decide that
+    # before generating — see BACKLOG.md.
+    active: false
+    video: []
+  lfca:
+    active: false
+    video: []
+
+# Career path videos, rendered from catalog.yaml rather than from a syllabus.
+paths:
+  video_languages: [es, en, de]

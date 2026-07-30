@@ -33,6 +33,44 @@ a **different feature that does not exist yet**. See "Real translation" in
 BACKLOG.md. It would be far cheaper and would keep languages in sync, at the
 cost of every language inheriting the Spanish version's structure.
 
+## Everything the pipeline produces is declared in `pipeline.yaml`
+
+Which certifications are active, which languages each is expected to have, how
+many topics one run may generate, which errors are worth retrying, and which
+languages get a video. Scripts read it; none of them keeps its own list.
+
+That is not a style preference. Two scripts used to hold their own copy of
+"which certs in which languages" and both drifted, silently: the audit reported
+*0 corrupt* for combinations it had simply never been told about, three separate
+times. A missing entry produced a clean bill of health rather than an error.
+
+```yaml
+languages:
+  default: [es, en]              # every active cert is expected to have these
+  on_demand: [pt, fr, de, zh, ja]
+
+budget:
+  topics_per_run: 2              # a run generates at most this many
+  fatal_errors: ["spend limit"]  # stop; retrying cannot help
+  retry_errors: ["529", "500"]   # transient; try again
+
+certs:
+  cks: {active: true, video: [es]}
+  lfcs: {active: false}          # declared, not automated yet
+```
+
+`active: false` keeps a certification out of automatic work, so one nobody has
+started does not flood the audit. Flip it in the same commit that starts it.
+
+Read it from Python via `teach.core.pipeline`:
+
+```python
+from teach.core import pipeline
+pipeline.targets()          # [(cert, [langs]), ...] for active certs
+pipeline.topics_per_run()   # batch budget
+pipeline.is_fatal(msg)      # quota exhausted vs transient
+```
+
 ## The loop
 
 ```
@@ -40,6 +78,42 @@ snapshot  →  generate  →  audit  →  status  →  commit  →  publish
 (once per     (per topic   (always) (always)   (freely)  (only when a cert
  syllabus)     × language)                                is COMPLETE)
 ```
+
+Language order is Spanish, then English, then the on-demand tier — `es` is the
+source language everything else is checked against, and `en` is the widest
+audience. Videos come last, after content exists and has been audited.
+
+### The syllabus-change trigger does not exist yet
+
+The intended behaviour is: a syllabus changes upstream → the affected topics are
+marked `stale` → the next run regenerates exactly those, in every language that
+already has them, and re-renders the video. **None of that is implemented.**
+
+`stale` is in `certs.py::VALID_STATUS` and both `cli.py` and `generator.py`
+describe regenerating "pending/stale" topics — but **nothing ever assigns it**.
+`tracker.py::snapshot_topics` preserves the previous status verbatim
+(`topic["status"] = old.get("status", "pending") if old else "pending"`), so a
+re-snapshot where a title or weight changed leaves the topic `generated` and its
+content is never revisited. PLAN.md's claim that "only changed topics are
+regenerated" is aspirational.
+
+Implementing it needs three pieces, in this order:
+
+1. **Detect.** In `snapshot_topics`, compare each incoming topic against the
+   stored one (title, weight, sources) and set `status: stale` when they differ,
+   instead of copying the old status unconditionally. Unchanged topics keep
+   theirs; `edited` still wins unless forced.
+2. **Invalidate every language, not just the source.** Generation currently
+   skips a topic when the target language directory exists at all
+   (`already = lang in topic_langs(...)`) — a file-existence check that ignores
+   status entirely. A stale topic must regenerate in every language that already
+   has it, otherwise the trigger fixes Spanish and leaves six translations
+   describing the old syllabus.
+3. **Re-render the video** for the certification, since the domain-weight scene
+   is derived from the topics that just changed.
+
+Until that exists, a syllabus change is handled by re-snapshotting and then
+manually forcing the affected topics with `--force`.
 
 ### 1. Snapshot the syllabus — once per certification
 
