@@ -299,7 +299,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-12-03'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-07-30'
     file: certs/cnpe.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
