@@ -23,12 +23,14 @@ Reglas: status 'edited' nunca se pisa (salvo --force); se regenera lo
 """
 
 import datetime
+import json
 import os
 import re
 import shlex
 import shutil
 import subprocess
 from collections.abc import Callable
+from pathlib import Path
 
 import yaml
 

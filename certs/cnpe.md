@@ -23,7 +23,7 @@ topics:
 - id: '1.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Optimizing Multi-Tenancy Resource Usage
   topic: 1 - Platform Architecture and Infrastructure
   weight: 5
