@@ -1,6 +1,7 @@
-generated_at: '2026-07-30T02:36:45'
+generated_at: '2026-07-30T02:40:45'
 lang: es
-backend: antigravity
-model: gemini-2.5-pro
+backend: litellm
+model: claude-sonnet-5
+base_url: http://127.0.0.1:4000/v1
 sources:
 - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf

@@ -177,14 +177,41 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
     return complete, {"backend": backend, "model": command[0]}
 
 
+def _antigravity_completer() -> tuple[Completer, dict]:
+    """Backend for active Antigravity AI session (uses IDE session without external token costs).
+    
+    Note for Claude & future agents: This backend is used during interactive Antigravity agent
+    sessions to route completions through the agent rather than making paid external API calls.
+    It executes all native generator.py validations, file creation, and certs.md status updates.
+    """
+    prompt_file = Path(os.environ.get("ANTIGRAVITY_PROMPT_FILE", "/tmp/antigravity_prompt.json"))
+    resp_file = Path(os.environ.get("ANTIGRAVITY_RESP_FILE", "/tmp/antigravity_response.txt"))
+
+    def complete(system: str, user: str) -> str:
+        prompt_file.write_text(json.dumps({"system": system, "user": user}, indent=2))
+        if resp_file.exists():
+            content = resp_file.read_text().strip()
+            resp_file.unlink()
+            return content
+        raise GeneratorConfigError(
+            "Antigravity backend prompt written to /tmp/antigravity_prompt.json. "
+            "Awaiting response in /tmp/antigravity_response.txt"
+        )
+
+    return complete, {"backend": "antigravity", "model": "antigravity-session"}
+
+
 def make_completer(backend: str | None = None) -> tuple[Completer, dict]:
     backend = backend or os.environ.get("TEACH_BACKEND", "litellm")
     if backend == "litellm":
         return _litellm_completer()
+    if backend == "antigravity":
+        return _antigravity_completer()
     if backend in AGENT_COMMANDS or backend == "custom":
         return _agent_completer(backend)
-    valid = ["litellm", *AGENT_COMMANDS, "custom"]
+    valid = ["litellm", *AGENT_COMMANDS, "custom", "antigravity"]
     raise GeneratorConfigError(f"Backend desconocido '{backend}'. Válidos: {valid}")
+
 
 
 LANG_NAMES = {

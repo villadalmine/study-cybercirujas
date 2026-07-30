@@ -1,6 +1,7 @@
 cert: cnpe
-topic: "1.1"
-title: Applying Platform Architecture Best Practices for Networking, Storage, and Compute
+topic: '1.1'
+title: Applying Platform Architecture Best Practices for Networking, Storage, and
+  Compute
 provider: local
 resources:
   vms:
