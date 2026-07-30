@@ -78,6 +78,7 @@ def main() -> int:
           f"generating {len(batch)}: {', '.join(batch)}", flush=True)
 
     done = 0
+    failed: list[str] = []
     for topic in batch:
         for attempt in range(1, attempts + 1):
             print(f"--- {topic} (attempt {attempt}/{attempts}) ---", flush=True)
@@ -86,20 +87,28 @@ def main() -> int:
             if ok:
                 done += 1
                 break
+            # Only a fatal error stops the batch: with quota exhausted, every
+            # remaining call would fail the same way.
             if pipeline.is_fatal(output):
                 print(f"FATAL: retrying cannot help, stopping the batch.\n{output}", flush=True)
                 print(f"generated {done}/{len(batch)}", flush=True)
                 return 2
             if not pipeline.is_retryable(output) or attempt == attempts:
-                print(f"FAILED on {topic}:\n{output}", flush=True)
-                print(f"generated {done}/{len(batch)}", flush=True)
-                return 1
+                # One stubborn topic must not hold up the rest. Nothing was
+                # written for it, so the next pass simply finds it pending again.
+                print(f"GIVING UP on {topic}, moving on:\n{output}", flush=True)
+                failed.append(topic)
+                break
             print(f"transient error, retrying in {delay}s", flush=True)
             time.sleep(delay)
 
     remaining = len(queue) - done
     print(f"batch complete: {done} generated, {remaining} left in {args.cert} ({args.lang})")
-    return 0
+    if failed:
+        print(f"not generated this pass: {', '.join(failed)}")
+    # Exit 1 only when the whole batch failed, so a caller looping over batches
+    # can tell "no progress at all" from "partial progress".
+    return 1 if done == 0 else 0
 
 
 if __name__ == "__main__":

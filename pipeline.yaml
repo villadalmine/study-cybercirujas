@@ -29,11 +29,17 @@ budget:
     - "usage limit"
   # Errors that are transient and worth retrying. All observed in practice on
   # 2026-07-29/30 while generating cks/en.
+  #
+  # "below the quality floor" is here because it is retryable in the same sense:
+  # the model simply produced a weak answer that one time (cks/3.1 came back
+  # with no references section at all). Nothing was written — the generator
+  # rejects before saving — so asking again is both safe and usually enough.
   retry_errors:
     - "529"
     - "Overloaded"
     - "500"
     - "Internal server error"
+    - "below the quality floor"
   retry_attempts: 3
   retry_delay_seconds: 60
 
