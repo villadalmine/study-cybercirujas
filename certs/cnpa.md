@@ -50,28 +50,28 @@ topics:
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Secure Service-to-Service Communication
   topic: 2 - Platform Observability, Security, and Conformance
   weight: 4.0
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Policy Engines for Platform Governance
   topic: 2 - Platform Observability, Security, and Conformance
   weight: 4.0
 - id: '2.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kubernetes Security Essentials and Hardening
   topic: 2 - Platform Observability, Security, and Conformance
   weight: 4.0
 - id: '2.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Security Integration in CI/CD Pipelines
   topic: 2 - Platform Observability, Security, and Conformance
   weight: 4.0
