@@ -1,14 +1,12 @@
 # 4.2 Building and Configuring CI/CD Pipelines Integrated with Kubernetes
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Pipelines Cloud Native
 
-El diseño de pipelines de **Integración Continua y Entrega Continua (CI/CD)** verdaderamente integrados con Kubernetes se basa en motores de ejecución cloud native como **Tekton Pipelines** y herramientas de build daemonless como **Kaniko** o **Buildpack**.
+Pipelines de CI/CD nativos de Kubernetes ejecutados con **Tekton Pipelines** y herramientas de construcción de imágenes daemonless como **Kaniko**.
 
 ---
 
-## 1. Tekton Pipelines (Task, Pipeline, PipelineRun)
-
-Tekton es un framework de CI/CD nativo de Kubernetes que define tareas de build como CRDs ejecutadas en Pods aislados.
+## 1. Tekton Task & Pipeline CRDs
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -36,5 +34,4 @@ spec:
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Tekton Pipelines Documentation — https://tekton.dev/docs/pipelines/
-- Kaniko Container Build — https://github.com/GoogleContainerTools/kaniko
+- Tekton Pipelines Docs — https://tekton.dev/docs/

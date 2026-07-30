@@ -1,22 +1,12 @@
-# 4.3 Deploying Applications Using Progressive Delivery Strategies (Blue/Green, Canary)
+# 4.3 Deploying Applications Using Progressive Delivery Strategies
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Progressive Delivery
 
-**Progressive Delivery** es la evolución de la entrega continua que combina despliegues graduales (Canary, Blue/Green) con observabilidad automatizada en tiempo real para minimizar el radio de impacto de fallas (*Blast Radius*).
-
----
-
-## 1. Estrategias de Progressive Delivery
-
-- **Blue/Green Deployment**: Mantiene dos entornos idénticos (Blue = versión actual, Green = versión nueva). La conmutación de tráfico es instantánea a nivel de LoadBalancer/Ingress.
-- **Canary Deployment**: Dirige un porcentaje pequeño de tráfico (ej. 5%) a la nueva versión, incrementando gradualmente el tráfico si los SLIs/SLOs de error rate y latencia permanecen estables.
+**Progressive Delivery** combina despliegues graduales (Canary, Blue/Green) con observabilidad automatizada en tiempo real para minimizar el radio de impacto de fallas (*Blast Radius*).
 
 ---
 
-## 2. Herramientas Principales: Argo Rollouts & Flagger
-
-### Argo Rollouts (Rollout CRD)
-Reemplaza el controlador estándar `Deployment` de Kubernetes agregando estrategias de Canary y Blue/Green con análisis automático de métricas de Prometheus.
+## 1. Argo Rollouts (Rollout CRD)
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -51,5 +41,4 @@ spec:
 ## Referencias
 
 - CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Argo Rollouts Progressive Delivery — https://argoproj.github.io/argo-rollouts/
-- Flux Flagger — https://flagger.app/
+- Argo Rollouts — https://argoproj.github.io/argo-rollouts/
