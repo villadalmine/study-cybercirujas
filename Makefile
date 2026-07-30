@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local
+.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -72,6 +72,16 @@ image-cluster: ## builda la imagen in-cluster: Kaniko como pod simple, contexto 
 deploy-local: ## helm upgrade con values-local.yaml (TAG=)
 	helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
 	  -f deploy/helm/values-local.yaml --set image.tag=$(TAG)
+
+test: ## corre los tests (stdlib unittest, sin dependencias extra)
+	$(VENV)/bin/python3 -m unittest discover tests -v
+
+audit: ## lista combos pendientes/corruptos sin regenerar nada
+	$(VENV)/bin/python3 scripts/fix_corrupted_content.py --audit-only
+
+batch: ## genera un lote acotado por pipeline.yaml (CERT= LANG= [TOPICS=])
+	$(VENV)/bin/python3 scripts/run_batch.py $(CERT) --lang $(if $(LANG),$(LANG),es) \
+	  $(if $(BACKEND),--backend $(BACKEND)) $(if $(TOPICS),--topics $(TOPICS))
 
 clean: ## borra el venv
 	rm -rf $(VENV)

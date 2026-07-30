@@ -231,9 +231,16 @@ def generate_topic(
     status = topic.get("status", "pending")
     already = lang in certs.topic_langs(cert_id, topic_id)
 
+    # Un topic 'stale' tiene contenido que responde a un temario que cambió. El
+    # chequeo de existencia no alcanza para detectarlo: los archivos están, solo
+    # que desactualizados. `topic_outdated_langs` compara por idioma contra el
+    # momento del cambio, así que esto regenera únicamente los que quedaron
+    # atrás y no vuelve a pagar los que ya se rehicieron.
+    outdated = status == "stale" and lang in certs.topic_outdated_langs(cert_id, topic_id)
+
     if status == "edited" and lang == certs.DEFAULT_LANG and not force:
         return {"topic": topic_id, "skipped": "edited (usar --force para pisar)"}
-    if already and not force:
+    if already and not force and not outdated:
         return {"topic": topic_id, "skipped": f"ya generado en {lang} (usar --force)"}
 
     system = _system(lang)
@@ -307,7 +314,13 @@ def generate_topic(
     }
     (lang_dir / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False))
 
-    if lang == certs.DEFAULT_LANG:
+    if status == "stale":
+        # No dar el topic por actualizado hasta que NINGÚN idioma quede atrás.
+        # Limpiarlo al regenerar el español —el idioma por defecto— dejaría las
+        # traducciones congeladas en el temario viejo sin que nada lo reporte.
+        if not certs.topic_outdated_langs(cert_id, topic_id):
+            certs.clear_topic_stale(cert_id, topic_id)
+    elif lang == certs.DEFAULT_LANG:
         certs.set_topic_status(cert_id, topic_id, "generated")
     return {"topic": topic_id, "written": str(lang_dir)}
 

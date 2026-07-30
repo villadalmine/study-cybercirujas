@@ -151,6 +151,73 @@ def sync_lpi(backend: str | None = None) -> list[str]:
 
 # ---------------------------------------------------------------- temario
 
+def _topic_identity(topic: dict) -> tuple:
+    """Los campos cuyo cambio invalida el contenido ya generado.
+
+    El texto del temario es lo que el generador recibe como prompt, así que si
+    cambia el título, el dominio o el peso (que fija la profundidad pedida), el
+    contenido guardado responde a un temario que ya no existe. `sources` queda
+    afuera a propósito: la URL del PDF oficial cambia de versión sin que cambie
+    lo que hay que estudiar, y compararla marcaría todo como stale en cada
+    re-snapshot.
+    """
+    weight = topic.get("weight")
+    return (
+        (topic.get("title") or "").strip(),
+        (topic.get("topic") or "").strip(),
+        round(float(weight), 2) if weight is not None else None,
+    )
+
+
+def _apply_snapshot_status(
+    topics: list[dict], existing: dict[str, dict], url: str, stale_at: str
+) -> tuple[list[str], list[str], list[str]]:
+    """Asigna el status de cada topic entrante comparándolo con el guardado.
+
+    Antes esto copiaba el status viejo tal cual, así que un re-snapshot con un
+    título o un peso distinto dejaba el topic en 'generated' y su contenido no
+    se volvía a mirar nunca — el disparador por cambio de temario que PLAN.md
+    describía no existía. Devuelve (nuevos, stale, editados_que_cambiaron).
+    """
+    added: list[str] = []
+    stale: list[str] = []
+    edited_changed: list[str] = []
+
+    for topic in topics:
+        tid = str(topic.get("id"))
+        old = existing.get(tid)
+        topic.setdefault("sources", (old or {}).get("sources") or [url])
+
+        if not old:
+            topic["status"] = "pending"
+            added.append(tid)
+            continue
+
+        old_status = old.get("status", "pending")
+        if _topic_identity(topic) == _topic_identity(old):
+            topic["status"] = old_status
+            continue
+
+        # 'edited' es contenido enriquecido a mano: la regla del proyecto es que
+        # no se pisa. Se conserva el status y se reporta aparte para que una
+        # persona decida, en vez de descartar el trabajo manual en silencio.
+        if old_status == "edited":
+            topic["status"] = "edited"
+            edited_changed.append(tid)
+            continue
+
+        # `stale_since` es lo que permite invalidar por idioma. El status vive a
+        # nivel de topic, pero el contenido existe una vez por idioma: sin una
+        # marca temporal, regenerar el español limpiaría el stale y las
+        # traducciones quedarían describiendo el temario viejo para siempre.
+        # Con esto, cada idioma se compara contra el momento del cambio.
+        topic["status"] = "stale"
+        topic["stale_since"] = stale_at
+        stale.append(tid)
+
+    return added, stale, edited_changed
+
+
 def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = False) -> dict:
     """Congela el temario oficial en el MD: fetch objetivos (HTML/PDF) → AI → topics."""
     data = catalog.load()
@@ -189,11 +256,8 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     topics = result.get("topics") or []
     if not topics:
         raise TrackerError("La AI no extrajo topics del documento")
-    for topic in topics:
-        tid = str(topic.get("id"))
-        old = existing.get(tid)
-        topic["status"] = old.get("status", "pending") if old else "pending"
-        topic.setdefault("sources", (old or {}).get("sources") or [url])
+    stale_at = datetime.datetime.now().isoformat(timespec="seconds")
+    added, stale, edited_changed = _apply_snapshot_status(topics, existing, url, stale_at)
 
     total_weight = sum(float(t.get("weight") or 0) for t in topics)
     if abs(total_weight - 100) > 2:
@@ -215,7 +279,14 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     cert["upstream_status"] = "current"
     cert["last_checked"] = datetime.date.today().isoformat()
     catalog.save(data)
-    return {"cert": cert_id, "topics": len(topics), "version": post.metadata["version"]}
+    return {
+        "cert": cert_id,
+        "topics": len(topics),
+        "version": post.metadata["version"],
+        "added": added,
+        "stale": stale,
+        "edited_changed": edited_changed,
+    }
 
 
 # ---------------------------------------------------------------- paths

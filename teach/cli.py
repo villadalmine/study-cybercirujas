@@ -146,6 +146,20 @@ def cert_snapshot(
         typer.echo(f"Error: {error}", err=True)
         raise typer.Exit(1)
     typer.echo(f"  {result['cert']}: {result['topics']} topics congelados (v{result['version']})")
+    if result.get("added"):
+        typer.echo(f"  nuevos: {', '.join(result['added'])}")
+    if result.get("stale"):
+        typer.echo(
+            f"  stale ({len(result['stale'])}): {', '.join(result['stale'])}\n"
+            f"  → cambió el temario; regenerar con 'teach cert generate {result['cert']} "
+            f"--lang <idioma>' en cada idioma que tenga contenido."
+        )
+    if result.get("edited_changed"):
+        typer.echo(
+            f"  editados a mano que cambiaron en el temario: "
+            f"{', '.join(result['edited_changed'])}\n"
+            f"  → no se tocan automáticamente; revisar y regenerar con --force si corresponde."
+        )
 
 
 @cert_app.command("video-script")

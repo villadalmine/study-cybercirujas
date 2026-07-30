@@ -83,37 +83,53 @@ Language order is Spanish, then English, then the on-demand tier — `es` is the
 source language everything else is checked against, and `en` is the widest
 audience. Videos come last, after content exists and has been audited.
 
-### The syllabus-change trigger does not exist yet
+### The syllabus-change trigger
 
-The intended behaviour is: a syllabus changes upstream → the affected topics are
-marked `stale` → the next run regenerates exactly those, in every language that
-already has them, and re-renders the video. **None of that is implemented.**
+Re-snapshotting a certification detects what actually changed and marks only
+those topics for regeneration:
 
-`stale` is in `certs.py::VALID_STATUS` and both `cli.py` and `generator.py`
-describe regenerating "pending/stale" topics — but **nothing ever assigns it**.
-`tracker.py::snapshot_topics` preserves the previous status verbatim
-(`topic["status"] = old.get("status", "pending") if old else "pending"`), so a
-re-snapshot where a title or weight changed leaves the topic `generated` and its
-content is never revisited. PLAN.md's claim that "only changed topics are
-regenerated" is aspirational.
+```bash
+teach cert snapshot cks --force
+#   cks: 26 topics congelados (v1.34)
+#   stale (2): 3.2, 4.1
+#   → cambió el temario; regenerar con 'teach cert generate cks --lang <idioma>'
+```
 
-Implementing it needs three pieces, in this order:
+`snapshot_topics` compares each incoming topic against the stored one on
+**title, domain and weight** — the three things that reach the model as prompt,
+weight included because it sets the requested depth. Anything else changing
+(most often the source URL, which gains a version number without the material
+changing) does not invalidate content, or every re-snapshot would mark
+everything stale. Unchanged topics keep their status; new ones are `pending`.
 
-1. **Detect.** In `snapshot_topics`, compare each incoming topic against the
-   stored one (title, weight, sources) and set `status: stale` when they differ,
-   instead of copying the old status unconditionally. Unchanged topics keep
-   theirs; `edited` still wins unless forced.
-2. **Invalidate every language, not just the source.** Generation currently
-   skips a topic when the target language directory exists at all
-   (`already = lang in topic_langs(...)`) — a file-existence check that ignores
-   status entirely. A stale topic must regenerate in every language that already
-   has it, otherwise the trigger fixes Spanish and leaves six translations
-   describing the old syllabus.
-3. **Re-render the video** for the certification, since the domain-weight scene
-   is derived from the topics that just changed.
+**A `stale` topic regenerates in every language, not just Spanish.** This is the
+part that is easy to get wrong. The status lives on the topic, but content
+exists once per language and is regenerated one language at a time — so clearing
+the flag as soon as Spanish is rebuilt would leave the translations describing
+the old syllabus, silently and permanently. The topic therefore records
+`stale_since`, and each language is compared against it via its own
+`meta.yaml.generated_at`:
 
-Until that exists, a syllabus change is handled by re-snapshotting and then
-manually forcing the affected topics with `--force`.
+```
+topic 1.1  status: stale, stale_since: 2026-07-30T03:00
+  es/meta.yaml  generated_at: 2026-07-30T04:00   → current
+  en/meta.yaml  generated_at: 2026-07-28T10:00   → outdated, regenerates
+```
+
+The topic returns to `generated` and drops `stale_since` only once no language
+is behind. A language whose `meta.yaml` is missing or unreadable counts as
+outdated — if freshness cannot be proven, it is regenerated.
+
+**Content marked `edited`** (enriched by hand) is never overwritten. When the
+syllabus changes underneath one, the snapshot reports it separately so a person
+decides, rather than discarding manual work automatically.
+
+The cycle is covered by `tests/test_stale_cycle.py` — including the ordering
+case above, which is the one worth protecting.
+
+Still manual: **re-rendering the certification video** after a syllabus change.
+Its domain-weight scene is derived from the topics that just changed, so it goes
+out of date with them.
 
 ### 1. Snapshot the syllabus — once per certification
 
