@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality
+.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -88,3 +88,9 @@ clean: ## borra el venv
 
 quality: ## informe de calidad del material (no genera nada)
 	$(VENV)/bin/python3 scripts/quality_report.py $(CERT)
+
+verify: ## verificaciones sin costo de API (citas + manifiestos + piso + tests)
+	$(VENV)/bin/python3 scripts/quality_report.py
+	$(VENV)/bin/python3 scripts/check_manifests.py
+	$(VENV)/bin/python3 -m unittest discover tests
+	@echo "Citas: scripts/check_citations.py (usa red, corre aparte)"

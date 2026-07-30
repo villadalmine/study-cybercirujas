@@ -210,6 +210,60 @@ scripts/quality_report.py cnpe cnpa   # specific certs, including inactive ones
 
 This costs nothing to run — it reads files, it does not generate.
 
+### 2c. What "quality" can and cannot be proven mechanically
+
+The floor above proves the material is not a stub. It does **not** prove the
+explanation is correct, and no check in this repo does. That is worth stating
+plainly, because a 10 000-byte topic with a references section and valid YAML
+can still teach something false with complete confidence.
+
+What is checked, and what each one actually establishes:
+
+| Check | Command | Proves | Does not prove |
+|---|---|---|---|
+| Structural floor | `make quality` | Not a stub; has the sections the prompt required | Anything about correctness |
+| Recap guard | automatic, in the generator | The backend returned material, not a summary of its own actions | — |
+| Citation liveness | `scripts/check_citations.py` | The cited sources exist | That they support the claim made |
+| Manifest syntax | `scripts/check_manifests.py` | Embedded YAML/JSON parses | That the fields are real API fields |
+
+**Citation liveness is the closest thing to a hallucination detector here**, and
+it is still indirect. It catches a specific and common signature: the invented
+documentation URL — plausible, correctly shaped for the official site, and
+nonexistent. Two real examples found in this repo:
+
+```
+https://kubernetes.io/docs/tasks/debug/debug-application/debug-ephemeral-container/
+    → real page is .../debug-running-pod/#ephemeral-container
+https://kubernetes.io/docs/reference/config-api/apiserver-encryption.v1/
+    → does not exist
+```
+
+A model that invents the source backing a claim is often inventing the claim
+too. Roughly 1–3% of citations fail this way. It only inspects the References
+section — URLs inside code blocks are examples (`http://app.example.com`,
+cluster addresses), not citations.
+
+Both checkers were tuned against real content until they stopped crying wolf,
+which matters more than coverage: a check that reports false positives gets
+ignored, and then reports nothing. The manifest checker skips Helm/Go templates
+(invalid as plain YAML **by design**), shell heredocs mislabelled as `yaml`,
+indented fragments of a larger manifest, and elided output. With those
+exclusions it currently reports **0 defects across 685 files** — the embedded
+manifests are clean, and its value from here is as a regression guard.
+
+**What would actually verify correctness**, none of it implemented:
+
+- **Schema validation against the real Kubernetes API** (`kubeconform`, or
+  `kubectl apply --dry-run=server`). This is the big one for this project:
+  syntax checking accepts an invented field like `spec.replicaCount`, and schema
+  validation rejects it. Deterministic, free, no model. The clearest next step.
+- **Running the labs.** `break_fix.sh` is executable ground truth: if the
+  content teaches something wrong about a topic, the lab exercising it fails.
+  This is blocked on the same untested-labs item in BACKLOG.md.
+- **Judging claims against the cited page**, by fetching the source and asking a
+  model which assertions it does not support. The only approach that addresses
+  prose directly, and the only one that costs API budget per check.
+
 ### 3. Audit — never skip this
 
 ```bash

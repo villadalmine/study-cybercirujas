@@ -60,6 +60,30 @@ el otro idioma a partir del temario. Ver [WORKFLOW.md](WORKFLOW.md).
 auditar → status → commit → publicar), cómo cambiar de backend a mitad de
 camino, y los modos de fallo conocidos.
 
+Qué se genera está declarado en [pipeline.yaml](pipeline.yaml): qué
+certificaciones están activas, qué idiomas debe tener cada una, cuánto puede
+generar una corrida, y el piso de calidad. Ningún script guarda su propia lista.
+
+## Calidad
+
+El estándar no depende del modelo que generó el material. El piso vive en
+`pipeline.yaml → quality` y lo aplican tres lugares desde esa única definición:
+el generador **antes de escribir** (material flojo falla, no se guarda), la
+auditoría, y `STATUS.md` — que cuenta solo lo que cumple, no los archivos que
+existen.
+
+```bash
+make quality                      # qué cumple el piso y qué no
+make test                         # tests del piso y del ciclo de invalidación
+scripts/check_citations.py        # las fuentes citadas ¿existen?
+scripts/check_manifests.py        # los manifiestos incrustados ¿parsean?
+```
+
+Ninguno cuesta cuota de API. Y ninguno demuestra que la explicación sea
+correcta: el piso detecta stubs y estructura faltante, las citas detectan
+fuentes inventadas. [WORKFLOW.md](WORKFLOW.md) explica qué prueba cada
+verificación, qué no, y qué haría falta para verificar corrección de verdad.
+
 ## Deploy en Kubernetes
 
 El contenido va horneado en la imagen — publicar = rebuild + upgrade.
