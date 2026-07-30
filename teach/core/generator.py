@@ -34,7 +34,7 @@ from pathlib import Path
 
 import yaml
 
-from . import certs
+from . import certs, quality
 
 
 class GeneratorConfigError(Exception):
@@ -103,6 +103,23 @@ def _reject_if_recap(text: str, label: str) -> str:
             f"herramientas). Primera línea: {first_line[:150]!r}"
         )
     return text
+
+def _reject_if_substandard(text: str, kind: str, topic_id: str, lang: str) -> None:
+    """Corta la generación si el material no llega al piso de pipeline.yaml.
+
+    Deliberadamente falla en vez de guardar: material por debajo del estándar
+    escrito a disco queda marcado `generated` y solo se descubre en la próxima
+    auditoría, si es que alguien la corre. Mejor perder la llamada que ensuciar
+    el temario en silencio.
+    """
+    problems = quality.check(kind, text)
+    if problems:
+        raise GeneratorConfigError(
+            f"{kind} de {topic_id} ({lang}) no llega al piso de calidad: "
+            + "; ".join(problems)
+            + ". Umbrales en pipeline.yaml → quality."
+        )
+
 
 Completer = Callable[[str, str], str]
 
@@ -323,6 +340,13 @@ def generate_topic(
         ),
         "los ejercicios",
     )
+
+    # El piso de calidad se aplica ANTES de escribir y es el mismo para todos
+    # los backends. Escribir primero y auditar después dejaba material flojo en
+    # disco marcado como `generated`, que es como 45 temas de ~1000 bytes se
+    # reportaron completos. Falla fuerte: no se guarda nada a medias.
+    _reject_if_substandard(content, "content", topic_id, lang)
+    _reject_if_substandard(exercises, "exercises", topic_id, lang)
 
     directory = certs.content_dir(cert_id, topic_id)
     lang_dir = directory / lang

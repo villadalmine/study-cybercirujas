@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import pipeline
+from teach.core import pipeline, quality
 
 REPO = Path(__file__).resolve().parent.parent
 TEACH = REPO / ".venv" / "bin" / "teach"
@@ -102,13 +102,14 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
                     lines = stripped.splitlines()
                     first_line = lines[0] if lines else ""
                     last_line = lines[-1] if lines else ""
-                    is_small = f.stat().st_size < MIN_REAL_BYTES
-                    looks_recap = (
-                        bool(RECAP_RE.search(first_line))
-                        or bool(RECAP_RE.search(last_line))
-                        or not stripped.startswith("#")
+                    # El piso (tamaño y estructura) sale de pipeline.yaml, el
+                    # mismo que aplica el generador antes de escribir. Acá solo
+                    # queda el chequeo de recap, que es específico de la
+                    # auditoría porque limpia lo que se guardó antes del fix.
+                    looks_recap = bool(RECAP_RE.search(first_line)) or bool(
+                        RECAP_RE.search(last_line)
                     )
-                    if is_small or looks_recap:
+                    if looks_recap or quality.check_file(f):
                         bad.add((cert, topic, lang))
         # break_fix.sh es compartido entre idiomas (una copia por tema, no
         # por lang) — solo se regenera con force+lang==DEFAULT_LANG. Reusa la

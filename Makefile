@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch
+.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -85,3 +85,6 @@ batch: ## genera un lote acotado por pipeline.yaml (CERT= LANG= [TOPICS=])
 
 clean: ## borra el venv
 	rm -rf $(VENV)
+
+quality: ## informe de calidad del material (no genera nada)
+	$(VENV)/bin/python3 scripts/quality_report.py $(CERT)

@@ -41,6 +41,37 @@ budget:
 # already exist and be verified. Videos are the last step and never block.
 stages: [snapshot, generate, audit, status, video]
 
+# Quality floor, applied identically to every backend.
+#
+# The point is that the standard does not depend on which model produced the
+# material. It is enforced by the generator BEFORE writing — substandard output
+# fails loudly instead of landing on disk and being marked `generated` — and by
+# the audit afterwards, both reading these same numbers.
+#
+# Thresholds are calibrated against 270 files of verified content (cks, cka,
+# ckad, lpi-010-160): content.md ranges 4577–…, median 8685; exercises.md
+# starts at 1778, median 11569. The floors sit below the observed minimum so
+# they never reject material that is already known good — they are a floor, not
+# a target. For reference, the CNPE/CNPA run that motivated this averaged 2999
+# and 1109 bytes of content per topic, roughly a ninth of the median.
+#
+# `requires` checks structure the prompt explicitly asks for, which is the more
+# meaningful half: a topic can hit the byte count and still ship without the
+# collapsible answers section that makes the exercises usable.
+quality:
+  content:
+    min_bytes: 4000
+    starts_with: "#"
+    requires:
+      - pattern: "^#+ *(Referencias|References|参考|参考文献|Referências|Références|Referenzen)"
+        description: "sección de referencias con fuentes oficiales"
+  exercises:
+    min_bytes: 1700
+    starts_with: "#"
+    requires:
+      - pattern: "<details"
+        description: "sección '<details>' colapsable con las respuestas"
+
 # Certifications under automation.
 #
 #   active: false  -> declared but not part of automatic work. The audit ignores
@@ -67,11 +98,17 @@ certs:
   kcna:
     active: true
     video: [es]
+  # Temario snapshoteado y contenido generado en español, pero por debajo del
+  # piso de `quality`: cnpa 0/27 y cnpe 5/18 lo cumplen, con los ejercicios sin
+  # la sección de respuestas colapsable. `active: false` los saca de la cola
+  # automática hasta rehacerlos con el estándar del resto — el material sigue
+  # en el repo, solo que no cuenta como hecho. `scripts/quality_report.py` los
+  # muestra en cualquier momento.
   cnpe:
-    active: true
+    active: false
     video: [es]
   cnpa:
-    active: true
+    active: false
     video: [es]
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per

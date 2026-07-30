@@ -171,6 +171,45 @@ to clean up, no flags to remember. `--force` overrides; topics marked
 certification. API credits are a real constraint here and a long run that dies
 halfway leaves a partial cert either way.
 
+### 2b. The quality floor — the same standard for every backend
+
+A different model must not mean a different standard. The floor lives in
+`pipeline.yaml` under `quality` and is applied in three places from that one
+definition:
+
+- **The generator, before writing.** Substandard output raises and nothing is
+  saved. This is the important one: material written to disk gets marked
+  `generated`, and is then only discovered by an audit somebody has to remember
+  to run.
+- **The audit** (`fix_corrupted_content.py`), which queues it for regeneration.
+- **`STATUS.md`**, which counts only material that passes. A file that exists
+  but is below the floor is pending work, not finished work.
+
+It checks two things — size, and the structure the prompt explicitly asked for:
+
+| | content.md | exercises.md |
+|---|---|---|
+| minimum size | 4000 bytes | 1700 bytes |
+| must start with | `#` | `#` |
+| must contain | a references section (any of the 7 languages) | the `<details>` collapsible answers |
+
+The thresholds are calibrated against 270 files of verified content, whose
+observed minimums are 4577 and 1778 bytes — the floor sits deliberately below
+those, so it never rejects material already known to be good. It is a floor,
+not a target; the median of good content is roughly 8700 bytes.
+
+The structural half matters more than the byte count. A run can hit the size
+and still ship exercises with no answers section, which is exactly what
+happened: a certification generated 18 of 18 exercises without `<details>`
+while reporting 100% complete.
+
+```bash
+scripts/quality_report.py             # what passes, what does not, and why
+scripts/quality_report.py cnpe cnpa   # specific certs, including inactive ones
+```
+
+This costs nothing to run — it reads files, it does not generate.
+
 ### 3. Audit — never skip this
 
 ```bash
