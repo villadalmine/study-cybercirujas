@@ -88,14 +88,14 @@ topics:
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Implementing GitOps Workflows for Application and Infrastructure Deployment
   topic: 4 - GitOps and Continuous Delivery
   weight: 8.33
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Building and Configuring CI/CD Pipelines Integrated with Kubernetes
   topic: 4 - GitOps and Continuous Delivery
   weight: 8.33

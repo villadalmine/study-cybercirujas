@@ -1,0 +1,12 @@
+cert: cnpe
+topic: '4.2'
+title: Building and Configuring CI/CD Pipelines Integrated with Kubernetes
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
