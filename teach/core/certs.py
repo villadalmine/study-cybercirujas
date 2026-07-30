@@ -78,8 +78,8 @@ def set_topic_status(cert_id: str, topic_id: str, status: str) -> None:
 
 
 def clear_topic_stale(cert_id: str, topic_id: str) -> None:
-    """Cierra el ciclo de un topic stale: vuelve a 'generated' y borra la marca
-    temporal, para que un futuro cambio de temario empiece de cero."""
+    """Close the cycle for a stale topic: back to 'generated' and drop the
+    timestamp, so a future syllabus change starts from scratch."""
     post = load(cert_id)
     for topic in post.metadata.get("topics", []):
         if str(topic.get("id")) == topic_id:
@@ -112,17 +112,17 @@ def topic_langs(cert_id: str, topic_id: str) -> list[str]:
 
 
 def topic_outdated_langs(cert_id: str, topic_id: str) -> list[str]:
-    """Idiomas cuyo contenido es anterior al último cambio de temario.
+    """Languages whose content predates the last syllabus change.
 
-    Un topic queda 'stale' a nivel de temario, pero su contenido existe una vez
-    por idioma y se regenera de a un idioma por vez. Comparar el `generated_at`
-    de cada `meta.yaml` contra el `stale_since` del topic es lo que evita el
-    error de orden obvio: regenerar el español, dar el topic por actualizado, y
-    dejar las traducciones describiendo el temario anterior.
+    A topic goes 'stale' at syllabus level, but its content exists once per
+    language and is regenerated one language at a time. Comparing each
+    `meta.yaml` `generated_at` against the topic's `stale_since` is what avoids
+    the obvious ordering mistake: rebuild Spanish, declare the topic current,
+    and leave the translations describing the previous syllabus.
 
-    Sin `stale_since` (topic que nunca cambió) no hay nada viejo que reportar.
-    Un idioma sin `meta.yaml` legible se considera viejo: si no se puede probar
-    que es posterior al cambio, se regenera.
+    With no `stale_since` (a topic that never changed) there is nothing stale to
+    report. A language whose `meta.yaml` is unreadable counts as outdated: if it
+    cannot be proven to postdate the change, it is regenerated.
     """
     try:
         topic = get_topic(cert_id, topic_id)

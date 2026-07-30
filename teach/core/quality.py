@@ -1,13 +1,13 @@
-"""Piso de calidad del material generado, igual para todos los backends.
+"""Quality floor for generated material, identical for every backend.
 
-Un backend distinto no debería producir un estándar distinto. Antes esto vivía
-repartido y descoordinado: el generador aceptaba cualquier respuesta de más de
-400 bytes, mientras que la auditoría rechazaba todo lo que bajara de 1500. Un
-tema de 500 bytes pasaba el generador, se escribía a disco, quedaba marcado
-`generated`, y recién después la auditoría lo llamaba corrupto. Dos estándares
-en dos lugares, la misma clase de problema que las dos listas de targets.
+A different backend must not mean a different standard. This used to be split
+and uncoordinated: the generator accepted any response over 400 bytes while the
+audit rejected anything under 1500. A 500-byte topic passed the generator, was
+written to disk, got marked `generated`, and only afterwards did the audit call
+it corrupt. Two standards in two places — the same class of problem as the two
+target lists.
 
-Ahora los umbrales están en pipeline.yaml y los leen los dos.
+The thresholds now live in pipeline.yaml and both read them.
 """
 from __future__ import annotations
 
@@ -15,23 +15,24 @@ import re
 
 from . import pipeline
 
-# Nombre de archivo → clave en pipeline.yaml. El material se valida por lo que
-# es, no por el idioma: un tema flojo en japonés es tan flojo como en español.
+# Filename -> key in pipeline.yaml. Material is validated for what it is, not
+# for its language: a thin topic in Japanese is as thin as one in Spanish.
 KINDS = {"content.md": "content", "exercises.md": "exercises"}
 
 
 def rules(kind: str) -> dict:
-    """Reglas para 'content' o 'exercises'. Sin bloque `quality` en el YAML no
-    hay reglas, y todo pasa — el piso es opcional, no un requisito de arranque."""
+    """Rules for 'content' or 'exercises'. With no `quality` block in the YAML
+    there are no rules and everything passes — the floor is optional, not a
+    prerequisite for the pipeline to run."""
     return dict((pipeline.load().get("quality") or {}).get(kind) or {})
 
 
 def check(kind: str, text: str) -> list[str]:
-    """Devuelve los problemas encontrados. Lista vacía = cumple el piso.
+    """Return the problems found. An empty list means the floor is met.
 
-    `kind` es 'content' o 'exercises'. No mide si el material es *bueno* —eso
-    no se automatiza— sino si tiene el tamaño mínimo y la estructura que el
-    propio prompt pidió. Es un piso, no una nota.
+    `kind` is 'content' or 'exercises'. This does not measure whether material
+    is *good* — that does not automate — but whether it has the minimum size
+    and the structure the prompt itself asked for. A floor, not a grade.
     """
     spec = rules(kind)
     if not spec:
@@ -43,31 +44,31 @@ def check(kind: str, text: str) -> list[str]:
     min_bytes = spec.get("min_bytes")
     if min_bytes and len(stripped.encode("utf-8")) < int(min_bytes):
         problems.append(
-            f"{len(stripped.encode('utf-8'))} bytes, por debajo del mínimo de {min_bytes}"
+            f"{len(stripped.encode('utf-8'))} bytes, below the {min_bytes} minimum"
         )
 
     prefix = spec.get("starts_with")
     if prefix and not stripped.startswith(str(prefix)):
-        problems.append(f"no empieza con {prefix!r}")
+        problems.append(f"does not start with {prefix!r}")
 
     for requirement in spec.get("requires") or []:
         pattern = requirement.get("pattern")
         if not pattern:
             continue
         if not re.search(pattern, stripped, re.IGNORECASE | re.MULTILINE):
-            problems.append(f"falta {requirement.get('description') or pattern}")
+            problems.append(f"missing {requirement.get('description') or pattern}")
 
     return problems
 
 
 def check_file(path) -> list[str]:
-    """Igual que `check`, resolviendo el tipo por el nombre del archivo. Un
-    archivo que no se puede leer se reporta como problema en vez de asumirse
-    sano: si no se puede probar que cumple, no cumple."""
+    """Same as `check`, resolving the kind from the filename. A file that
+    cannot be read is reported as a problem rather than assumed healthy: if
+    compliance cannot be proven, it is not met."""
     kind = KINDS.get(getattr(path, "name", ""))
     if kind is None:
         return []
     try:
         return check(kind, path.read_text(errors="replace"))
     except OSError as error:
-        return [f"ilegible: {error}"]
+        return [f"unreadable: {error}"]

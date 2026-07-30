@@ -1,10 +1,10 @@
-"""Ciclo de invalidación por cambio de temario.
+"""Invalidation cycle triggered by a syllabus change.
 
-Se testea porque la parte delicada no es detectar el cambio sino no darlo por
-resuelto antes de tiempo: el status vive a nivel de topic pero el contenido
-existe una vez por idioma, así que limpiar el flag al regenerar el español
-dejaría las traducciones describiendo el temario viejo, en silencio y para
-siempre. Ese es el caso que cubre `test_regenerar_default_no_libera_el_resto`.
+Tested because the delicate part is not detecting the change, it is not
+declaring it resolved too early: status lives on the topic but content exists
+once per language, so clearing the flag when Spanish is rebuilt would leave the
+translations describing the old syllabus, silently and permanently. That is the
+case covered by `test_regenerating_default_does_not_release_the_rest`.
 
     .venv/bin/python3 -m unittest discover tests
 """
@@ -46,10 +46,12 @@ class StaleCycleTest(unittest.TestCase):
         (root / "certs").mkdir()
         (root / "certs" / "testcert.md").write_text(CERT_MD)
         for lang in ("es", "en"):
-            d = root / "certs" / "testcert" / "1.1" / lang
-            d.mkdir(parents=True)
-            (d / "content.md").write_text("# content\n")
-            (d / "meta.yaml").write_text(f"generated_at: '{BEFORE_CHANGE}'\nlang: {lang}\n")
+            directory = root / "certs" / "testcert" / "1.1" / lang
+            directory.mkdir(parents=True)
+            (directory / "content.md").write_text("# content\n")
+            (directory / "meta.yaml").write_text(
+                f"generated_at: '{BEFORE_CHANGE}'\nlang: {lang}\n"
+            )
         self._prev_root = os.environ.get("TEACH_ROOT")
         os.environ["TEACH_ROOT"] = str(root)
 
@@ -71,19 +73,19 @@ class StaleCycleTest(unittest.TestCase):
         meta = certs.content_dir("testcert", "1.1") / lang / "meta.yaml"
         meta.write_text(f"generated_at: '{when}'\nlang: {lang}\n")
 
-    def test_contenido_anterior_al_cambio_queda_marcado(self) -> None:
+    def test_content_older_than_the_change_is_flagged(self) -> None:
         self.assertEqual(self._outdated(), ["es", "en"])
 
-    def test_regenerar_default_no_libera_el_resto(self) -> None:
-        """El caso que motivó el diseño: rehacer el español no puede dar el
-        topic por actualizado mientras haya traducciones sin rehacer."""
+    def test_regenerating_default_does_not_release_the_rest(self) -> None:
+        """The case that drove the design: rebuilding Spanish cannot mark the
+        topic current while translations are still pending."""
         from teach.core import certs
 
         self._regenerate("es")
         self.assertEqual(self._outdated(), ["en"])
         self.assertEqual(certs.get_topic("testcert", "1.1")["status"], "stale")
 
-    def test_ciclo_se_cierra_cuando_no_queda_ninguno(self) -> None:
+    def test_cycle_closes_when_none_are_left(self) -> None:
         from teach.core import certs
 
         self._regenerate("es")
@@ -95,17 +97,17 @@ class StaleCycleTest(unittest.TestCase):
         self.assertEqual(topic["status"], "generated")
         self.assertNotIn("stale_since", topic)
 
-    def test_sin_marca_temporal_no_hay_nada_viejo(self) -> None:
-        """Un topic que nunca cambió no reporta idiomas desactualizados, por
-        más que su contenido sea anterior a cualquier fecha."""
+    def test_without_a_timestamp_nothing_is_outdated(self) -> None:
+        """A topic that never changed reports no outdated languages, however
+        old its content is."""
         from teach.core import certs
 
         certs.clear_topic_stale("testcert", "1.1")
         self.assertEqual(self._outdated(), [])
 
-    def test_meta_ilegible_se_considera_viejo(self) -> None:
-        """Ante la duda, regenerar: si no se puede probar que el contenido es
-        posterior al cambio, se asume que no lo es."""
+    def test_unreadable_meta_counts_as_outdated(self) -> None:
+        """When in doubt, regenerate: if freshness cannot be proven, it is not
+        assumed."""
         from teach.core import certs
 
         (certs.content_dir("testcert", "1.1") / "es" / "meta.yaml").unlink()
@@ -114,7 +116,7 @@ class StaleCycleTest(unittest.TestCase):
 
 
 class SnapshotStatusTest(unittest.TestCase):
-    """Detección del cambio en el snapshot, sin tocar disco ni gastar cuota."""
+    """Change detection in the snapshot, touching no disk and spending no budget."""
 
     def _apply(self, incoming, existing):
         from teach.core import tracker
@@ -123,7 +125,7 @@ class SnapshotStatusTest(unittest.TestCase):
             incoming, existing, "http://source", "2026-07-30T03:00:00"
         )
 
-    def test_clasifica_nuevo_cambiado_e_igual(self) -> None:
+    def test_classifies_new_changed_and_unchanged(self) -> None:
         existing = {
             "1.1": {"id": "1.1", "title": "Old", "topic": "1 - D", "weight": 10,
                     "status": "generated"},
@@ -144,18 +146,18 @@ class SnapshotStatusTest(unittest.TestCase):
         self.assertEqual(by_id["1.2"]["status"], "generated")
         self.assertEqual(by_id["1.3"]["status"], "pending")
 
-    def test_el_peso_tambien_invalida(self) -> None:
-        """El peso fija la profundidad que se le pide al modelo, así que un
-        cambio de peso cambia el material esperado."""
+    def test_weight_also_invalidates(self) -> None:
+        """Weight sets the depth requested from the model, so changing it
+        changes the material expected."""
         existing = {"1.1": {"id": "1.1", "title": "T", "topic": "1 - D", "weight": 10,
                             "status": "generated"}}
         incoming = [{"id": "1.1", "title": "T", "topic": "1 - D", "weight": 25}]
         _, stale, _ = self._apply(incoming, existing)
         self.assertEqual(stale, ["1.1"])
 
-    def test_edited_nunca_se_pisa(self) -> None:
-        """Contenido enriquecido a mano se conserva y se reporta aparte para
-        que una persona decida, en vez de descartarlo automáticamente."""
+    def test_edited_is_never_overwritten(self) -> None:
+        """Hand-enriched content is preserved and reported separately so a
+        person decides, rather than being discarded automatically."""
         existing = {"1.1": {"id": "1.1", "title": "Old", "topic": "1 - D", "weight": 10,
                             "status": "edited"}}
         incoming = [{"id": "1.1", "title": "New", "topic": "1 - D", "weight": 10}]

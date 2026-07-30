@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Verifica que las fuentes citadas existan realmente.
+"""Check that cited sources actually exist.
 
-Qué detecta y qué no
---------------------
-Esto NO valida que la explicación sea correcta. Detecta una firma concreta y
-frecuente de alucinación: la URL de documentación inventada — plausible, bien
-formada, con la estructura de rutas correcta del sitio oficial, y que no
-existe. Ejemplo real encontrado en este repo:
+What this catches and what it does not
+--------------------------------------
+This does NOT validate that an explanation is correct. It catches one concrete
+and frequent hallucination signature: the invented documentation URL —
+plausible, well formed, with the official site's path structure, and
+nonexistent. A real example found in this repo:
 
     https://kubernetes.io/docs/tasks/debug/debug-application/debug-ephemeral-container/
-    (la página real es .../debug-running-pod/#ephemeral-container)
+    (the real page is .../debug-running-pod/#ephemeral-container)
 
-Un modelo que inventa la URL de respaldo de una afirmación suele estar
-inventando también la afirmación. Es una señal indirecta, pero es objetiva,
-determinista y no cuesta cuota de API.
+A model that invents the source backing a claim is often inventing the claim
+too. It is an indirect signal, but an objective and deterministic one, and it
+costs no API budget.
 
-Solo mira la sección de Referencias: las URLs dentro de bloques de código son
-ejemplos (`http://app.example.com`, direcciones de cluster) y no citas.
+Only the References section is inspected: URLs inside code blocks are examples
+(`http://app.example.com`, cluster addresses), not citations.
 
-    scripts/check_citations.py                 # todo el repo
-    scripts/check_citations.py certs/cks       # un subárbol
-    scripts/check_citations.py --sample 50     # muestra rápida
+    scripts/check_citations.py                 # whole repo
+    scripts/check_citations.py certs/cks       # one subtree
+    scripts/check_citations.py --sample 50     # quick sample
 """
 from __future__ import annotations
 
@@ -43,8 +43,8 @@ REFS_SECTION = re.compile(
 )
 URL = re.compile(r"https?://[^\s)\]>\"'`]+")
 
-# 403/429/418 son bloqueo de bots (gnu.org, freedesktop), no enlaces muertos.
-# Marcarlos como rotos llenaría el informe de ruido y lo volvería inútil.
+# 403/429/418 mean bot blocking (gnu.org, freedesktop), not dead links.
+# Reporting them as broken would fill the report with noise and make it useless.
 BLOCKED = {401, 403, 405, 418, 429, 503}
 
 
@@ -64,8 +64,8 @@ def status(url: str, cache: dict) -> int | str:
     try:
         code: int | str = urllib.request.urlopen(request).status
     except urllib.error.HTTPError as error:
-        # Algunos sitios rechazan HEAD pero responden GET. Reintentar antes de
-        # acusar a la cita de inexistente.
+        # Some sites reject HEAD but answer GET. Retry before accusing the
+        # citation of not existing.
         if error.code in (405, 403):
             try:
                 code = urllib.request.urlopen(
@@ -87,7 +87,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="*", default=["certs"])
     parser.add_argument("--sample", type=int, default=0,
-                        help="verificar solo N URLs al azar (revisión rápida)")
+                        help="check only N random URLs (quick review)")
     parser.add_argument("--timeout", type=int, default=10)
     args = parser.parse_args()
 
@@ -106,7 +106,7 @@ def main() -> int:
         urls = sorted(random.sample(urls, args.sample))
 
     cache = json.loads(CACHE.read_text()) if CACHE.exists() else {}
-    print(f"{len(by_url)} citas únicas; verificando {len(urls)}", flush=True)
+    print(f"{len(by_url)} unique citations; checking {len(urls)}", flush=True)
 
     broken: list[tuple[str, int | str, list[str]]] = []
     for i, url in enumerate(urls, 1):
@@ -118,18 +118,18 @@ def main() -> int:
     CACHE.write_text(json.dumps(cache, indent=2))
 
     if not broken:
-        print("\nTodas las citas resuelven.")
+        print("\nAll citations resolve.")
         return 0
 
-    print(f"\n{len(broken)} citas no resuelven — revisar si la fuente fue inventada:\n")
+    print(f"\n{len(broken)} citations do not resolve — check whether the source was invented:\n")
     for url, code, files in sorted(broken, key=lambda b: str(b[1])):
         print(f"  [{code}] {url}")
         for f in sorted(files)[:3]:
             print(f"        {f}")
         if len(files) > 3:
-            print(f"        (+{len(files) - 3} archivos más)")
-    print("\nUn 403/429 es bloqueo de bots y no se reporta. Un 404 sobre un "
-          "dominio oficial suele ser una URL inventada por el modelo.")
+            print(f"        (+{len(files) - 3} more files)")
+    print("\nA 403/429 is bot blocking and is not reported. A 404 on an "
+          "official domain is usually a URL the model invented.")
     return 1
 
 

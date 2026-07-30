@@ -64,13 +64,13 @@ quality:
     starts_with: "#"
     requires:
       - pattern: "^#+ *(Referencias|References|参考|参考文献|Referências|Références|Referenzen)"
-        description: "sección de referencias con fuentes oficiales"
+        description: "a references section citing official sources"
   exercises:
     min_bytes: 1700
     starts_with: "#"
     requires:
       - pattern: "<details"
-        description: "sección '<details>' colapsable con las respuestas"
+        description: "the collapsible '<details>' answers section"
 
 # Certifications under automation.
 #
@@ -98,12 +98,12 @@ certs:
   kcna:
     active: true
     video: [es]
-  # Temario snapshoteado y contenido generado en español, pero por debajo del
-  # piso de `quality`: cnpa 0/27 y cnpe 5/18 lo cumplen, con los ejercicios sin
-  # la sección de respuestas colapsable. `active: false` los saca de la cola
-  # automática hasta rehacerlos con el estándar del resto — el material sigue
-  # en el repo, solo que no cuenta como hecho. `scripts/quality_report.py` los
-  # muestra en cualquier momento.
+  # Syllabus snapshotted and Spanish content generated, but below the `quality`
+  # floor: cnpa meets it for 0 of 27 topics and cnpe for 5 of 18, with the
+  # exercises missing the collapsible answers section. `active: false` keeps
+  # them out of the automatic queue until they are regenerated to the same
+  # standard as the rest — the material stays in the repo, it just does not
+  # count as done. `scripts/quality_report.py` shows them at any time.
   cnpe:
     active: false
     video: [es]

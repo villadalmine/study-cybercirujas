@@ -66,10 +66,10 @@ _RECAP_RE = re.compile(
     r"|^(He |Wrote|Written|Escribí|Creado|Created|Content (file )?(written|created)"
     r"|Fichier créé|J'ai créé|Ich habe|Datei erstellt|已创建|作成しました|を作成"
     r"|Listo\.|Done\.|Fertig\.|Task complete)"
-    # Tiene que seguir siendo la frase completa ("content.md fue creado"), no la
-    # mención suelta: un `content\.md\b` pelado rechaza material legítimo que
-    # nombre el archivo —explicar el layout de certs/<cert>/<topic>/<lang>/ es
-    # un caso normal— y falla la generación sin motivo real.
+    # This has to stay the full phrase ("content.md was created"), not the bare
+    # mention: a plain `content\.md\b` rejects legitimate material that names
+    # the file — explaining the certs/<cert>/<topic>/<lang>/ layout is an
+    # ordinary case — and fails generation for no real reason.
     r"|content\.md`? (fue |was |está )?(creado|escrito|written|created)"
     r"|verificad[oa] con `?wc -c`?"
     r"|no es un stub|not a stub",
@@ -105,19 +105,19 @@ def _reject_if_recap(text: str, label: str) -> str:
     return text
 
 def _reject_if_substandard(text: str, kind: str, topic_id: str, lang: str) -> None:
-    """Corta la generación si el material no llega al piso de pipeline.yaml.
+    """Stop generation when material does not meet the pipeline.yaml floor.
 
-    Deliberadamente falla en vez de guardar: material por debajo del estándar
-    escrito a disco queda marcado `generated` y solo se descubre en la próxima
-    auditoría, si es que alguien la corre. Mejor perder la llamada que ensuciar
-    el temario en silencio.
+    Deliberately fails instead of saving: substandard material written to disk
+    gets marked `generated` and is only discovered by the next audit, if anyone
+    remembers to run one. Losing the call costs less than quietly polluting the
+    syllabus.
     """
     problems = quality.check(kind, text)
     if problems:
         raise GeneratorConfigError(
-            f"{kind} de {topic_id} ({lang}) no llega al piso de calidad: "
+            f"{kind} for {topic_id} ({lang}) is below the quality floor: "
             + "; ".join(problems)
-            + ". Umbrales en pipeline.yaml → quality."
+            + ". Thresholds in pipeline.yaml -> quality."
         )
 
 
@@ -214,11 +214,11 @@ def _antigravity_completer() -> tuple[Completer, dict]:
     def complete(system: str, user: str) -> str:
         import hashlib
         cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
-        # La clave incluye `system`, no solo `user`: el idioma vive únicamente en
-        # el system prompt ("Escribís en English"), mientras que el user prompt
-        # es idéntico para todos los idiomas del mismo tema. Con la clave sobre
-        # `user` solamente, generar 1.1 en español y después en inglés devolvía
-        # la entrada cacheada en español y escribía castellano dentro de en/.
+        # The key covers `system`, not just `user`: language lives only in the
+        # system prompt ("Escribís en English"), while the user prompt is
+        # identical across languages for a given topic. Keyed on `user` alone,
+        # generating 1.1 in Spanish and then in English returned the cached
+        # Spanish entry and wrote Spanish into en/.
         key = hashlib.md5(f"{system}\n\n{user}".encode("utf-8")).hexdigest()
         if key in cache:
             return cache[key]
@@ -300,11 +300,11 @@ def generate_topic(
     status = topic.get("status", "pending")
     already = lang in certs.topic_langs(cert_id, topic_id)
 
-    # Un topic 'stale' tiene contenido que responde a un temario que cambió. El
-    # chequeo de existencia no alcanza para detectarlo: los archivos están, solo
-    # que desactualizados. `topic_outdated_langs` compara por idioma contra el
-    # momento del cambio, así que esto regenera únicamente los que quedaron
-    # atrás y no vuelve a pagar los que ya se rehicieron.
+    # A 'stale' topic holds content answering a syllabus that changed. An
+    # existence check cannot detect that: the files are there, just outdated.
+    # `topic_outdated_langs` compares each language against the moment of the
+    # change, so this regenerates only the ones left behind and does not pay
+    # again for those already rebuilt.
     outdated = status == "stale" and lang in certs.topic_outdated_langs(cert_id, topic_id)
 
     if status == "edited" and lang == certs.DEFAULT_LANG and not force:
@@ -341,10 +341,10 @@ def generate_topic(
         "los ejercicios",
     )
 
-    # El piso de calidad se aplica ANTES de escribir y es el mismo para todos
-    # los backends. Escribir primero y auditar después dejaba material flojo en
-    # disco marcado como `generated`, que es como 45 temas de ~1000 bytes se
-    # reportaron completos. Falla fuerte: no se guarda nada a medias.
+    # The quality floor is applied BEFORE writing and is identical for every
+    # backend. Writing first and auditing later left thin material on disk
+    # marked `generated`, which is how 45 topics averaging ~1000 bytes came to
+    # be reported complete. Fail hard: nothing is saved half-done.
     _reject_if_substandard(content, "content", topic_id, lang)
     _reject_if_substandard(exercises, "exercises", topic_id, lang)
 
@@ -393,9 +393,9 @@ def generate_topic(
     (lang_dir / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False))
 
     if status == "stale":
-        # No dar el topic por actualizado hasta que NINGÚN idioma quede atrás.
-        # Limpiarlo al regenerar el español —el idioma por defecto— dejaría las
-        # traducciones congeladas en el temario viejo sin que nada lo reporte.
+        # Do not mark the topic current until NO language is left behind.
+        # Clearing it when Spanish — the default language — is rebuilt would
+        # freeze the translations on the old syllabus with nothing reporting it.
         if not certs.topic_outdated_langs(cert_id, topic_id):
             certs.clear_topic_stale(cert_id, topic_id)
     elif lang == certs.DEFAULT_LANG:

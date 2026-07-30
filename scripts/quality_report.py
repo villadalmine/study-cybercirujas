@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Informe de calidad por certificación, sin generar ni gastar cuota.
+"""Per-certification quality report. Generates nothing and spends no budget.
 
-Responde la pregunta que motivó el piso: qué material cumple el estándar y qué
-material se marcó como `generated` sin llegar. Lee los umbrales de
-pipeline.yaml, los mismos que aplica el generador antes de escribir.
+Answers the question that motivated the floor: which material meets the
+standard, and which was marked `generated` without reaching it. Reads the
+thresholds from pipeline.yaml — the same ones the generator applies before
+writing.
 
-    scripts/quality_report.py            # todas las certs activas
-    scripts/quality_report.py cnpe cnpa  # solo estas
+    scripts/quality_report.py            # all active certs
+    scripts/quality_report.py cnpe cnpa  # only these
 """
 from __future__ import annotations
 
@@ -28,7 +29,7 @@ def main() -> int:
             if cert not in {c for c, _ in targets}:
                 targets.append((cert, pipeline.languages_for(cert)))
 
-    print(f"{'cert':<14} {'lang':<5} {'ok':>4} {'bajo estándar':>14}   detalle")
+    print(f"{'cert':<14} {'lang':<5} {'ok':>4} {'below floor':>12}   detail")
     print("-" * 78)
 
     total_ok = total_bad = 0
@@ -41,10 +42,9 @@ def main() -> int:
                     problems = quality.check_file(path)
                     if problems:
                         for problem in problems:
-                            # agrupar "N bytes, por debajo del mínimo" en una
-                            # sola categoría legible
-                            key = ("tamaño" if "por debajo del mínimo" in problem
-                                   else problem)
+                            # collapse every "N bytes, below the M minimum" into
+                            # one readable category instead of one row per size
+                            key = "size" if "below the" in problem else problem
                             reasons[f"{kind}: {key}"] += 1
                     else:
                         ok += 1
@@ -54,12 +54,12 @@ def main() -> int:
             total_ok += ok
             total_bad += bad
             detail = ", ".join(f"{k} ×{v}" for k, v in sorted(reasons.items())) or "—"
-            print(f"{cert:<14} {lang:<5} {ok:>4} {bad:>14}   {detail}")
+            print(f"{cert:<14} {lang:<5} {ok:>4} {bad:>12}   {detail}")
 
     print("-" * 78)
-    print(f"{'TOTAL':<20} {total_ok:>4} {total_bad:>14}")
+    print(f"{'TOTAL':<20} {total_ok:>4} {total_bad:>12}")
     if total_bad:
-        print("\nUmbrales en pipeline.yaml → quality. Regenerar con:")
+        print("\nThresholds in pipeline.yaml → quality. Regenerate with:")
         print("  scripts/run_batch.py <cert> --lang <lang>")
     return 0
 

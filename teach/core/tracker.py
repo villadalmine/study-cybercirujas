@@ -152,14 +152,14 @@ def sync_lpi(backend: str | None = None) -> list[str]:
 # ---------------------------------------------------------------- temario
 
 def _topic_identity(topic: dict) -> tuple:
-    """Los campos cuyo cambio invalida el contenido ya generado.
+    """The fields whose change invalidates already generated content.
 
-    El texto del temario es lo que el generador recibe como prompt, así que si
-    cambia el título, el dominio o el peso (que fija la profundidad pedida), el
-    contenido guardado responde a un temario que ya no existe. `sources` queda
-    afuera a propósito: la URL del PDF oficial cambia de versión sin que cambie
-    lo que hay que estudiar, y compararla marcaría todo como stale en cada
-    re-snapshot.
+    The syllabus text is what the generator receives as its prompt, so if the
+    title, the domain or the weight (which sets the requested depth) changes,
+    the stored content answers a syllabus that no longer exists. `sources` is
+    deliberately excluded: the official PDF URL gains version numbers without
+    what has to be studied changing, and comparing it would mark everything
+    stale on every re-snapshot.
     """
     weight = topic.get("weight")
     return (
@@ -172,12 +172,12 @@ def _topic_identity(topic: dict) -> tuple:
 def _apply_snapshot_status(
     topics: list[dict], existing: dict[str, dict], url: str, stale_at: str
 ) -> tuple[list[str], list[str], list[str]]:
-    """Asigna el status de cada topic entrante comparándolo con el guardado.
+    """Assign each incoming topic's status by comparing it against the stored one.
 
-    Antes esto copiaba el status viejo tal cual, así que un re-snapshot con un
-    título o un peso distinto dejaba el topic en 'generated' y su contenido no
-    se volvía a mirar nunca — el disparador por cambio de temario que PLAN.md
-    describía no existía. Devuelve (nuevos, stale, editados_que_cambiaron).
+    This used to copy the old status verbatim, so a re-snapshot with a different
+    title or weight left the topic at 'generated' and its content was never
+    revisited — the syllabus-change trigger PLAN.md described did not exist.
+    Returns (added, stale, edited_that_changed).
     """
     added: list[str] = []
     stale: list[str] = []
@@ -198,19 +198,19 @@ def _apply_snapshot_status(
             topic["status"] = old_status
             continue
 
-        # 'edited' es contenido enriquecido a mano: la regla del proyecto es que
-        # no se pisa. Se conserva el status y se reporta aparte para que una
-        # persona decida, en vez de descartar el trabajo manual en silencio.
+        # 'edited' is hand-enriched content and the project rule is that it is
+        # never overwritten. The status is kept and reported separately so a
+        # person decides, rather than discarding manual work silently.
         if old_status == "edited":
             topic["status"] = "edited"
             edited_changed.append(tid)
             continue
 
-        # `stale_since` es lo que permite invalidar por idioma. El status vive a
-        # nivel de topic, pero el contenido existe una vez por idioma: sin una
-        # marca temporal, regenerar el español limpiaría el stale y las
-        # traducciones quedarían describiendo el temario viejo para siempre.
-        # Con esto, cada idioma se compara contra el momento del cambio.
+        # `stale_since` is what makes per-language invalidation possible. Status
+        # lives at topic level but content exists once per language: without a
+        # timestamp, regenerating Spanish would clear the stale flag and the
+        # translations would describe the old syllabus forever. With it, each
+        # language is compared against the moment of the change.
         topic["status"] = "stale"
         topic["stale_since"] = stale_at
         stale.append(tid)

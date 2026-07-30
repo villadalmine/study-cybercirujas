@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Verifica que los manifiestos incrustados en el material parseen.
+"""Check that manifests embedded in the material parse.
 
-Un manifiesto YAML roto en material de estudio de Kubernetes es peor que
-inútil: el estudiante lo copia, falla, y no sabe si se equivocó él o el
-material. A diferencia de la prosa, esto es objetivo — parsea o no parsea — y
-no cuesta cuota.
+A broken YAML manifest in Kubernetes study material is worse than useless: the
+student copies it, it fails, and they cannot tell whether they made the mistake
+or the material did. Unlike prose, this is objective — it parses or it does not
+— and it costs no API budget.
 
-Alcance honesto: comprueba **sintaxis**, no validez contra la API de
-Kubernetes. Un `spec.replicaCount` inventado (el campo real es `replicas`)
-parsea perfecto y pasa este chequeo. Para eso hace falta validación contra los
-esquemas reales — ver WORKFLOW.md, sección de verificación.
+Honest scope: this checks **syntax**, not validity against the Kubernetes API.
+An invented `spec.replicaCount` (the real field is `replicas`) parses fine and
+passes. Catching that needs validation against the real schemas — see the
+verification section of WORKFLOW.md.
 
-    scripts/check_manifests.py              # todo el repo
-    scripts/check_manifests.py certs/cks    # un subárbol
+    scripts/check_manifests.py              # whole repo
+    scripts/check_manifests.py certs/cks    # one subtree
 """
 from __future__ import annotations
 
@@ -25,22 +25,22 @@ import yaml
 
 BLOCK = re.compile(r"^```(yaml|yml|json)[ \t]*\n(.*?)^```", re.MULTILINE | re.DOTALL)
 
-# Elisión didáctica: "..." para recortar una salida larga, tanto en su propia
-# línea como al final de una (`"items":[{...},...`).
+# Teaching elision: "..." trimming a long output, either on its own line or at
+# the end of one (`"items":[{...},...`).
 ELISION = re.compile(r"\.\.\.")
 
-# Un documento YAML no puede empezar indentado: si el bloque arranca con
-# espacios, es un fragmento que muestra parte de un manifiesto más grande, no
-# un manifiesto que el estudiante vaya a aplicar entero.
+# A YAML document cannot start indented: a block beginning with whitespace is a
+# fragment showing part of a larger manifest, not something the student is meant
+# to apply whole.
 FRAGMENT = re.compile(r"\A\s*\n?[ \t]+\S")
 
-# Plantillas Helm/Go y Jinja: NO son YAML plano válido a propósito, ese es el
-# punto de una plantilla. Marcarlas como rotas convertiría el informe en ruido.
+# Helm/Go and Jinja templates are deliberately NOT valid plain YAML — that is
+# the point of a template. Flagging them would turn the report into noise.
 TEMPLATED = re.compile(r"\{\{|\{%")
 
-# Bloques etiquetados `yaml` cuyo contenido real es un comando de shell que
-# lleva YAML adentro (`cat <<'EOF' | kubectl apply -f -`). La etiqueta es
-# imprecisa pero el material es correcto y el estudiante lo usa tal cual.
+# Blocks tagged `yaml` whose actual content is a shell command carrying YAML
+# inside (`cat <<'EOF' | kubectl apply -f -`). The tag is imprecise but the
+# material is correct and the student uses it as-is.
 SHELL_START = re.compile(
     r"^\s*(cat|kubectl|helm|echo|curl|sudo|docker|\$|#!)\b|<<-?\s*['\"]?EOF"
 )
@@ -88,11 +88,11 @@ def main() -> int:
                     report.append(f"  {path}:{line}  {message}")
 
     if not report:
-        print(f"{total} archivos revisados, todos los manifiestos parsean.")
+        print(f"{total} files checked, all embedded manifests parse.")
         return 0
-    print(f"{total} archivos revisados, {broken} con manifiestos que no parsean:\n")
+    print(f"{total} files checked, {broken} with manifests that do not parse:\n")
     print("\n".join(report))
-    print("\nEsto valida sintaxis, no campos de la API de Kubernetes.")
+    print("\nThis validates syntax, not Kubernetes API fields.")
     return 1
 
 

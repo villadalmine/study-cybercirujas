@@ -43,9 +43,9 @@ RECAP_PATTERNS = [
 RECAP_RE = re.compile("|".join(RECAP_PATTERNS), re.IGNORECASE)
 MIN_REAL_BYTES = 1500
 
-# Qué auditar sale de pipeline.yaml, no de una lista acá. Esta lista propia
-# existió y se desincronizó dos veces sin que nada fallara: la auditoría
-# informaba "0 corruptos" sobre combos de los que nunca se le habló.
+# What to audit comes from pipeline.yaml, not from a list here. That private
+# list existed and drifted twice without anything failing: the audit reported
+# "0 corrupt" for combinations it had never been told about.
 TARGETS = pipeline.targets()
 
 DEFAULT_LANG = "es"
@@ -102,10 +102,10 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
                     lines = stripped.splitlines()
                     first_line = lines[0] if lines else ""
                     last_line = lines[-1] if lines else ""
-                    # El piso (tamaño y estructura) sale de pipeline.yaml, el
-                    # mismo que aplica el generador antes de escribir. Acá solo
-                    # queda el chequeo de recap, que es específico de la
-                    # auditoría porque limpia lo que se guardó antes del fix.
+                    # The floor (size and structure) comes from pipeline.yaml,
+                    # the same one the generator applies before writing. Only
+                    # the recap check stays here: it is audit-specific, cleaning
+                    # up what was saved before that guard existed.
                     looks_recap = bool(RECAP_RE.search(first_line)) or bool(
                         RECAP_RE.search(last_line)
                     )
@@ -137,24 +137,24 @@ def main() -> None:
     if n_fenced:
         print(f"Archivos con fence ```markdown envolvente arreglados en el lugar: {n_fenced}", flush=True)
     bad = sorted(find_bad_combos())
-    # "pendientes" y no "corruptos": desde que los targets salen de
-    # pipeline.yaml, esta lista mezcla contenido dañado con contenido que
-    # simplemente todavía no se generó para un idioma declarado. Para
-    # regenerar da igual, pero llamarlo corrupto confunde el informe.
-    print(f"Combos (cert, topic, lang) pendientes o corruptos: {len(bad)}", flush=True)
+    # "pending" rather than "corrupt": now that targets come from pipeline.yaml,
+    # this list mixes damaged content with content simply not generated yet for
+    # a declared language. For regeneration it makes no difference, but calling
+    # it corrupt makes the report misleading.
+    print(f"Pending or corrupt (cert, topic, lang) combos: {len(bad)}", flush=True)
     if "--audit-only" in sys.argv:
         for cert, topic, lang in bad:
             print(f"    {cert} {topic} ({lang})", flush=True)
         return
-    # El presupuesto sale del YAML: una pasada desatendida no debe vaciar la
-    # cuota del mes de una sentada.
+    # The budget comes from the YAML: an unattended pass must not drain the
+    # month's quota in one sitting.
     limit = pipeline.topics_per_run()
     batch = bad[:limit] if limit else bad
     if limit and len(bad) > limit:
-        print(f"Presupuesto por pasada: {limit}. Quedan {len(bad) - limit} "
-              f"para las siguientes.", flush=True)
+        print(f"Budget per pass: {limit}. {len(bad) - limit} left for the "
+              f"following ones.", flush=True)
     for cert, topic, lang in batch:
-        print(f"--- regenerando {cert} {topic} ({lang}) ---", flush=True)
+        print(f"--- regenerating {cert} {topic} ({lang}) ---", flush=True)
         result = subprocess.run(
             [str(TEACH), "cert", "generate", cert, "--topic", topic,
              "--lang", lang, "--backend", "claude", "--force"],
@@ -163,9 +163,9 @@ def main() -> None:
         output = (result.stdout + result.stderr).strip()
         if result.returncode != 0:
             if pipeline.is_fatal(output):
-                print(f"    fatal, corto la pasada:\n{output}", flush=True)
+                print(f"    fatal, stopping this pass:\n{output}", flush=True)
                 return
-            print(f"    falló, se reintenta en la próxima pasada:\n{output}", flush=True)
+            print(f"    failed, will retry on the next pass:\n{output}", flush=True)
 
 
 if __name__ == "__main__":

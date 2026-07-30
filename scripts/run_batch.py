@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Genera un lote acotado de topics, respetando el presupuesto de pipeline.yaml.
+"""Generate a bounded batch of topics, honouring the budget in pipeline.yaml.
 
-Sustituye a los scripts ad-hoc con el tamaño de lote y la política de reintentos
-escritos a mano. Todo lo que decide cuánto trabajo hacer y qué errores merecen
-otro intento sale del YAML, no de acá.
+Replaces the ad-hoc scripts that had batch size and retry policy written by
+hand. Everything deciding how much work to do, and which errors deserve another
+attempt, comes from the YAML rather than from here.
 
     scripts/run_batch.py cks --lang en
     scripts/run_batch.py cks --lang en --topics 4
 
-Idempotente: pregunta al auditor qué falta, así que relanzarlo continúa donde
-quedó sin llevar estado propio.
+Idempotent: it asks the auditor what is missing, so re-running continues where
+it left off without keeping any state of its own.
 """
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ def _sort_key(topic: str) -> list[int]:
 
 
 def pending(cert: str, lang: str) -> list[str]:
-    """Topics que le faltan a esta combinación, en orden de temario."""
+    """Topics still missing for this combination, in syllabus order."""
     return sorted(
         (t for c, t, l in audit.find_bad_combos() if c == cert and l == lang),
         key=_sort_key,
@@ -60,7 +60,7 @@ def main() -> int:
     parser.add_argument("--backend", default="claude")
     parser.add_argument(
         "--topics", type=int, default=None,
-        help="cuántos topics generar (default: budget.topics_per_run de pipeline.yaml)",
+        help="how many topics to generate (default: budget.topics_per_run from pipeline.yaml)",
     )
     args = parser.parse_args()
 
@@ -70,35 +70,35 @@ def main() -> int:
 
     queue = pending(args.cert, args.lang)
     if not queue:
-        print(f"{args.cert} ({args.lang}): nada pendiente")
+        print(f"{args.cert} ({args.lang}): nothing pending")
         return 0
 
     batch = queue[:limit] if limit else queue
-    print(f"{args.cert} ({args.lang}): {len(queue)} pendientes, "
-          f"generando {len(batch)}: {', '.join(batch)}", flush=True)
+    print(f"{args.cert} ({args.lang}): {len(queue)} pending, "
+          f"generating {len(batch)}: {', '.join(batch)}", flush=True)
 
     done = 0
     for topic in batch:
         for attempt in range(1, attempts + 1):
-            print(f"--- {topic} (intento {attempt}/{attempts}) ---", flush=True)
+            print(f"--- {topic} (attempt {attempt}/{attempts}) ---", flush=True)
             ok, output = generate(topic=topic, cert=args.cert, lang=args.lang,
                                   backend=args.backend)
             if ok:
                 done += 1
                 break
             if pipeline.is_fatal(output):
-                print(f"FATAL: reintentar no ayuda, corto el lote.\n{output}", flush=True)
-                print(f"generados {done}/{len(batch)}", flush=True)
+                print(f"FATAL: retrying cannot help, stopping the batch.\n{output}", flush=True)
+                print(f"generated {done}/{len(batch)}", flush=True)
                 return 2
             if not pipeline.is_retryable(output) or attempt == attempts:
-                print(f"FALLO en {topic}:\n{output}", flush=True)
-                print(f"generados {done}/{len(batch)}", flush=True)
+                print(f"FAILED on {topic}:\n{output}", flush=True)
+                print(f"generated {done}/{len(batch)}", flush=True)
                 return 1
-            print(f"transitorio, reintento en {delay}s", flush=True)
+            print(f"transient error, retrying in {delay}s", flush=True)
             time.sleep(delay)
 
     remaining = len(queue) - done
-    print(f"lote completo: {done} generados, quedan {remaining} en {args.cert} ({args.lang})")
+    print(f"batch complete: {done} generated, {remaining} left in {args.cert} ({args.lang})")
     return 0
 
 
