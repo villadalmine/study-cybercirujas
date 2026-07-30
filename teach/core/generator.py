@@ -66,7 +66,11 @@ _RECAP_RE = re.compile(
     r"|^(He |Wrote|Written|Escribí|Creado|Created|Content (file )?(written|created)"
     r"|Fichier créé|J'ai créé|Ich habe|Datei erstellt|已创建|作成しました|を作成"
     r"|Listo\.|Done\.|Fertig\.|Task complete)"
-    r"|content\.md\b"
+    # Tiene que seguir siendo la frase completa ("content.md fue creado"), no la
+    # mención suelta: un `content\.md\b` pelado rechaza material legítimo que
+    # nombre el archivo —explicar el layout de certs/<cert>/<topic>/<lang>/ es
+    # un caso normal— y falla la generación sin motivo real.
+    r"|content\.md`? (fue |was |está )?(creado|escrito|written|created)"
     r"|verificad[oa] con `?wc -c`?"
     r"|no es un stub|not a stub",
     re.IGNORECASE,
@@ -193,7 +197,12 @@ def _antigravity_completer() -> tuple[Completer, dict]:
     def complete(system: str, user: str) -> str:
         import hashlib
         cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
-        key = hashlib.md5(user.encode("utf-8")).hexdigest()
+        # La clave incluye `system`, no solo `user`: el idioma vive únicamente en
+        # el system prompt ("Escribís en English"), mientras que el user prompt
+        # es idéntico para todos los idiomas del mismo tema. Con la clave sobre
+        # `user` solamente, generar 1.1 en español y después en inglés devolvía
+        # la entrada cacheada en español y escribía castellano dentro de en/.
+        key = hashlib.md5(f"{system}\n\n{user}".encode("utf-8")).hexdigest()
         if key in cache:
             return cache[key]
 
