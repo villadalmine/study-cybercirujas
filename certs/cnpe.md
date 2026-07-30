@@ -102,7 +102,7 @@ topics:
 - id: '4.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Deploying Applications Using Progressive Delivery Strategies (e.g., Blue/Green
     or Canary)
   topic: 4 - GitOps and Continuous Delivery
@@ -110,7 +110,7 @@ topics:
 - id: '5.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Designing and Creating Custom Resource Definitions (CRDs) for Platform Services
   topic: 5 - Platform APIs and Self-Service Capabilities
   weight: 6.25
