@@ -45,14 +45,14 @@ topics:
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Diagnosing and Remediating Platform Issue and Incident Scenarios
   topic: 2 - Observability and Operations
   weight: 6.67
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Configuring Secure Service-to-Service Communication
   topic: 3 - Security and Policy Enforcement
   weight: 3
