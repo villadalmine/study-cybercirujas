@@ -37,7 +37,7 @@ topics:
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Measuring and Improving Platform Efficiency Using Deployment Metrics and
     Performance Indicators
   topic: 2 - Observability and Operations
