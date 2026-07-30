@@ -29,12 +29,12 @@ def cert_topics(cert_id: str) -> list[dict]:
 
 
 def lang_cell(cert_dir: Path, lang: str, n: int) -> str:
-    """Cuenta solo el material que llega al piso de calidad de pipeline.yaml.
+    """Count only material that meets the quality floor in pipeline.yaml.
 
-    Contar archivos existentes marcaba ✅ una certificación entera cuyos temas
-    promediaban un noveno del tamaño habitual y a la que le faltaba la sección
-    de respuestas. Un archivo presente pero por debajo del estándar es trabajo
-    pendiente, no trabajo hecho, y la matriz tiene que decir eso.
+    Counting files that merely exist marked a whole certification ✅ while its
+    topics averaged a ninth of the usual size and had no answers section. A
+    file that is present but below the standard is pending work, not finished
+    work, and the matrix has to say so.
     """
     files = list(cert_dir.glob(f"*/{lang}/content.md"))
     exercises = list(cert_dir.glob(f"*/{lang}/exercises.md"))

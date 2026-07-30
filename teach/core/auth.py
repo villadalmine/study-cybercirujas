@@ -1,18 +1,18 @@
-"""Autenticación — interfaz mínima para poder enchufar usuarios reales/OIDC
-después sin tocar el resto de la app.
+"""Authentication — a minimal interface so real users/OIDC can be plugged in
+later without touching the rest of the app.
 
-v1: deshabilitado — todo el contenido es público. Cuando se implemente auth
-real (OIDC + pasarela de pago), reemplazar estas funciones.
+v1: disabled — all content is public. Replace these functions when real auth
+(OIDC + payment gateway) is implemented.
 """
 
 import os
 
 
 def authenticate(username: str, password: str) -> bool:
-    """Siempre rechaza. Auth real pendiente (OIDC/social login)."""
+    """Always denies. Real auth pending (OIDC/social login)."""
     return False
 
 
 def has_subscription(username: str) -> bool:
-    """Siempre rechaza. Pasarela de pago pendiente (Stripe/similar)."""
+    """Always denies. Payment gateway pending (Stripe or similar)."""
     return False

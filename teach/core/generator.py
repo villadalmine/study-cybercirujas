@@ -1,25 +1,33 @@
-"""Generador de contenido — backends intercambiables.
+"""Content generator — interchangeable backends.
 
-Backends (env TEACH_BACKEND o --backend en la CLI):
-  litellm   API del cluster (default). Config: LITELLM_BASE_URL, LITELLM_API_KEY,
+Backends (env TEACH_BACKEND or --backend on the CLI):
+  litellm   Cluster API (default). Config: LITELLM_BASE_URL, LITELLM_API_KEY,
             LITELLM_MODEL.
-  claude    Claude Code CLI local:  claude -p "<prompt>"
-  codex     OpenAI Codex CLI local: codex exec "<prompt>"
-  gemini    Gemini CLI local (Antigravity): gemini -p "<prompt>"
-  custom    Comando propio en TEACH_AGENT_CMD; recibe el prompt como último arg.
+  claude    Local Claude Code CLI:  claude -p "<prompt>"
+  codex     Local OpenAI Codex CLI: codex exec "<prompt>"
+  gemini    Local Gemini CLI (Antigravity): gemini -p "<prompt>"
+  custom    Your own command in TEACH_AGENT_CMD; receives the prompt as its
+            last argument.
 
-Con backends locales el flujo es: generar en tu máquina → revisar → pushear al
-repo que publica la página (make publish).
+With local backends the flow is: generate on your machine -> review -> push to
+the repo that publishes the site (make publish).
 
-Por cada tema genera en certs/<cert>/<topic>/:
-  content.md       texto con ejemplos y referencias a docs oficiales
-  exercises.md     pasos guiados con preguntas
-  lab/break_fix.sh script romper-y-arreglar
-  lab/lab.yaml     spec declarativo del lab (contrato con el runner)
-  meta.yaml        trazabilidad: backend, modelo, fecha, fuentes usadas
+For each topic it generates, under certs/<cert>/<topic>/:
+  content.md       text with examples and references to official docs
+  exercises.md     guided steps with questions
+  lab/break_fix.sh break-and-fix script
+  lab/lab.yaml     declarative lab spec (the contract with the runner)
+  meta.yaml        traceability: backend, model, date, sources used
 
-Reglas: status 'edited' nunca se pisa (salvo --force); se regenera lo
-'pending' y 'stale'.
+Rules: `edited` status is never overwritten (except with --force); `pending`
+and `stale` are regenerated.
+
+NOTE: the prompt strings below (`_system`, `_topic_context` and the generation
+instructions) are deliberately still in Spanish. They are not comments — they
+are what the model receives, and the entire existing corpus was produced with
+them. Translating them would change generated output and invalidate the
+baseline the quality floor in pipeline.yaml was calibrated against, so it is a
+content decision rather than a cleanup one. See BACKLOG.md.
 """
 
 import datetime
@@ -41,12 +49,12 @@ class GeneratorConfigError(Exception):
     pass
 
 
-# claude -p corre en el cwd del repo con acceso a herramientas por default:
-# sin restricción, el modelo a veces actúa como agente de código (explora el
-# repo, intenta escribir el archivo él mismo) y lo que llega por stdout es un
-# resumen de esa acción ("ja/content.md に完全な学習コンテンツを書きました...")
-# en vez del contenido pedido. --disallowedTools lo fuerza a responder en
-# texto plano, que es lo único que puede hacer sin herramientas.
+# `claude -p` runs in the repo cwd with tool access by default: unrestricted,
+# the model sometimes acts as a coding agent (explores the repo, tries to write
+# the file itself) and what arrives on stdout is a summary of that action
+# ("ja/content.md に完全な学習コンテンツを書きました...") instead of the
+# requested content. --disallowedTools forces a plain-text answer, which is all
+# it can do without tools.
 _CLAUDE_NO_TOOLS = (
     "Write,Edit,Bash,Read,Glob,Grep,NotebookEdit,WebFetch,WebSearch,Task"
 )
@@ -57,10 +65,10 @@ AGENT_COMMANDS = {
     "gemini": ["gemini", "-p"],
 }
 
-# Firma del bug de arriba (y variantes: "Escribí", "Wrote", "Fichier créé",
-# "已创建", "を作成しました", autorreferencias a "content.md`", claims de
-# haber verificado con wc -c) — si el completer devuelve esto en vez del
-# contenido pedido, mejor fallar fuerte que guardar un stub silencioso.
+# Signature of the bug above (plus variants: "Escribí", "Wrote", "Fichier
+# créé", "已创建", "を作成しました", self-references to "content.md`", claims of
+# having verified with wc -c). If the completer returns this instead of the
+# requested content, failing hard beats saving a silent stub.
 _RECAP_RE = re.compile(
     r"^`?certs/"
     r"|^(He |Wrote|Written|Escribí|Creado|Created|Content (file )?(written|created)"
@@ -78,9 +86,9 @@ _RECAP_RE = re.compile(
 
 
 def _strip_fence(text: str) -> str:
-    """A veces el backend envuelve toda la respuesta en un fence ```markdown
-    ... ``` a pesar de que el prompt pide el contenido "pelado" — no es
-    corrupción (el contenido real está bien), pero rompe el render en la web."""
+    """Backends sometimes wrap the whole response in a ```markdown ... ``` fence
+    even though the prompt asks for bare content — not corruption (the real
+    content is fine), but it breaks rendering on the web."""
     stripped = text.strip()
     stripped = re.sub(r"^```[a-zA-Z]*\n?", "", stripped)
     stripped = re.sub(r"\n?```\s*$", "", stripped)
@@ -90,17 +98,17 @@ def _strip_fence(text: str) -> str:
 def _reject_if_recap(text: str, label: str) -> str:
     text = _strip_fence(text)
     lines = text.strip().splitlines()
-    # el resumen de proceso puede aparecer al principio (bug original) O al
-    # final (visto en lpi-010-160/2.3/de: contenido real completo + un último
-    # párrafo tipo "no tengo acceso a herramientas de archivo, así que acá va
-    # el texto para pegar a mano" que un chequeo solo-primera-línea no agarra)
+    # The process recap can appear at the start (original bug) OR at the end
+    # (seen in lpi-010-160/2.3/de: complete real content plus a closing
+    # paragraph along the lines of "I have no file tools, so here is the text to
+    # paste by hand") which a first-line-only check does not catch.
     first_line = lines[0] if lines else ""
     last_line = lines[-1] if lines else ""
     if len(text.strip()) < 400 or _RECAP_RE.search(first_line) or _RECAP_RE.search(last_line):
         raise GeneratorConfigError(
-            f"El backend devolvió un resumen de proceso en vez de {label} "
-            f"(bug conocido de agentes de código corriendo sin restricción de "
-            f"herramientas). Primera línea: {first_line[:150]!r}"
+            f"The backend returned a process recap instead of {label} "
+            f"(known bug of coding agents running without tool restrictions). "
+            f"First line: {first_line[:150]!r}"
         )
     return text
 
@@ -139,7 +147,7 @@ def _litellm_completer() -> tuple[Completer, dict]:
     ]
     if missing:
         raise GeneratorConfigError(
-            f"Faltan variables de entorno para el LiteLLM del cluster: {', '.join(missing)}"
+            f"Missing environment variables for the cluster LiteLLM: {', '.join(missing)}"
         )
     from openai import OpenAI
 
@@ -163,14 +171,14 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
         raw = os.environ.get("TEACH_AGENT_CMD")
         if not raw:
             raise GeneratorConfigError(
-                "Backend 'custom' requiere TEACH_AGENT_CMD (ej: 'mi-agente --flag')"
+                "Backend 'custom' requires TEACH_AGENT_CMD (e.g. 'my-agent --flag')"
             )
         command = shlex.split(raw)
     else:
         command = AGENT_COMMANDS[backend]
     if shutil.which(command[0]) is None:
         raise GeneratorConfigError(
-            f"No se encontró '{command[0]}' en el PATH. Instalar la CLI o elegir otro backend."
+            f"'{command[0]}' not found on PATH. Install the CLI or pick another backend."
         )
 
     def complete(system: str, user: str) -> str:
@@ -191,9 +199,9 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
                 for name, stream in (("stderr", result.stderr), ("stdout", result.stdout))
                 if stream.strip()
             ]
-            detail = "\n".join(parts) or "(sin salida)"
+            detail = "\n".join(parts) or "(no output)"
             raise GeneratorConfigError(
-                f"'{command[0]}' falló (exit {result.returncode}):\n{detail}"
+                f"'{command[0]}' failed (exit {result.returncode}):\n{detail}"
             )
         return result.stdout.strip()
 
@@ -249,7 +257,7 @@ def make_completer(backend: str | None = None) -> tuple[Completer, dict]:
     if backend in AGENT_COMMANDS or backend == "custom":
         return _agent_completer(backend)
     valid = ["litellm", *AGENT_COMMANDS, "custom", "antigravity"]
-    raise GeneratorConfigError(f"Backend desconocido '{backend}'. Válidos: {valid}")
+    raise GeneratorConfigError(f"Unknown backend '{backend}'. Valid: {valid}")
 
 
 
@@ -290,9 +298,9 @@ def generate_topic(
     backend: str | None = None,
     lang: str = certs.DEFAULT_LANG,
 ) -> dict:
-    """Genera el contenido de un tema en un idioma. El lab es compartido."""
+    """Generate one topic's content in one language. The lab is shared."""
     if lang not in certs.LANGS:
-        raise GeneratorConfigError(f"Idioma '{lang}' no soportado. Válidos: {certs.LANGS}")
+        raise GeneratorConfigError(f"Language '{lang}' not supported. Valid: {certs.LANGS}")
     complete, backend_meta = make_completer(backend)
 
     post = certs.load(cert_id)
@@ -308,9 +316,9 @@ def generate_topic(
     outdated = status == "stale" and lang in certs.topic_outdated_langs(cert_id, topic_id)
 
     if status == "edited" and lang == certs.DEFAULT_LANG and not force:
-        return {"topic": topic_id, "skipped": "edited (usar --force para pisar)"}
+        return {"topic": topic_id, "skipped": "edited (use --force to overwrite)"}
     if already and not force and not outdated:
-        return {"topic": topic_id, "skipped": f"ya generado en {lang} (usar --force)"}
+        return {"topic": topic_id, "skipped": f"already generated in {lang} (use --force)"}
 
     system = _system(lang)
     context = _topic_context(post.metadata, topic)

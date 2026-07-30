@@ -1,7 +1,7 @@
 """API de la plataforma.
 
-Público (sin login): catálogo, temarios y paths — la landing es referente
-de qué certificaciones existen.
+Public (no login): catalog, syllabi and paths — the landing page is the
+reference for which certifications exist.
 Auth deshabilitado (v1). Endpoints de login/logout existen pero rechazan
 siempre — listos para enchufar OIDC + pasarela de pago cuando se implemente.
 Docs interactivas en /docs (OpenAPI).
@@ -55,7 +55,7 @@ def require_subscriber(request: Request) -> str:
 @app.post("/api/login")
 def login(body: LoginBody, request: Request) -> dict:
     if not auth.authenticate(body.username, body.password):
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+        raise HTTPException(status_code=401, detail="Invalid credentials")
     request.session["user"] = body.username
     return {"user": body.username, "subscription": auth.has_subscription(body.username)}
 
@@ -71,7 +71,7 @@ def me(user: str = Depends(require_user)) -> dict:
     return {"user": user, "subscription": auth.has_subscription(user)}
 
 
-# --- público: el landscape de certificaciones es la carta de presentación ---
+# --- public: the certification landscape is the shop window ---
 
 @app.get("/api/catalog")
 def get_catalog() -> dict:
@@ -96,10 +96,10 @@ def get_paths(lang: str = certs.DEFAULT_LANG) -> dict:
 
 
 def _video_info(rel_dir: str, lang: str) -> dict:
-    """Info de un video (path o cert) si ya se generó: url del mp4 servido
-    desde /media. Si no hay video en el idioma pedido, cae al idioma default
-    (hoy solo hay voz Piper para es/en/de/zh) en vez de esconder un video que
-    sí existe en otro idioma."""
+    """Info about a video (path or cert) if it has been generated: URL of the
+    mp4 served from /media. When there is no video in the requested language it
+    falls back to the default one (today Piper only has voices for es/en/de/zh)
+    rather than hiding a video that does exist in another language."""
     _valid_lang(lang)
     base = MEDIA_DIR / rel_dir / lang
     fallback = lang != certs.DEFAULT_LANG and not (base / "video.mp4").exists()
@@ -119,19 +119,19 @@ def _video_info(rel_dir: str, lang: str) -> dict:
 
 @app.get("/api/paths/{path_slug}/video")
 def get_path_video(path_slug: str, lang: str = certs.DEFAULT_LANG) -> dict:
-    """Video de un path (si ya se generó)."""
+    """A path's video (if it has been generated)."""
     return _video_info(f"paths/{path_slug}", lang)
 
 
 @app.get("/api/certs/{cert_id}/video")
 def get_cert_video(cert_id: str, lang: str = certs.DEFAULT_LANG) -> dict:
-    """Video de una certificación puntual (si ya se generó)."""
+    """A single certification's video (if it has been generated)."""
     return _video_info(f"certs/{cert_id}", lang)
 
 
 def _valid_lang(lang: str) -> str:
     if lang not in certs.LANGS:
-        raise HTTPException(status_code=400, detail=f"Idioma inválido. Válidos: {certs.LANGS}")
+        raise HTTPException(status_code=400, detail=f"Invalid language. Valid: {certs.LANGS}")
     return lang
 
 
@@ -147,8 +147,8 @@ def get_cert(cert_id: str) -> dict:
         topic_list = certs.topics(cert_id)
     except (KeyError, FileNotFoundError) as error:
         raise HTTPException(status_code=404, detail=str(error))
-    # el temario es público; el estado interno de generación no se expone,
-    # se traduce a disponibilidad (+ en qué idiomas existe el material)
+    # The syllabus is public; the internal generation status is not exposed,
+    # it is translated into availability (+ which languages the material exists in)
     public_topics = [
         {
             "id": t.get("id"),
@@ -165,7 +165,7 @@ def get_cert(cert_id: str) -> dict:
 
 @app.get("/api/certs/{cert_id}/topics/{topic_id}/preview")
 def get_topic_preview(cert_id: str, topic_id: str, lang: str = certs.DEFAULT_LANG) -> dict:
-    """Teaser público: primeras líneas del material + qué incluye el tema."""
+    """Public teaser: first lines of the material + what the topic includes."""
     _valid_lang(lang)
     try:
         topic = certs.get_topic(cert_id, topic_id)

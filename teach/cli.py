@@ -1,14 +1,14 @@
-"""CLI de la plataforma. Llama a core directo (archivos locales, sin API)."""
+"""Platform CLI. Calls core directly (local files, no API)."""
 
 import typer
 
 from .core import catalog, certs, generator, labs
 
-app = typer.Typer(help="Plataforma educativa self-service", no_args_is_help=True)
-cert_app = typer.Typer(help="Certificaciones del catálogo", no_args_is_help=True)
-lab_app = typer.Typer(help="Labs por tema", no_args_is_help=True)
-tracker_app = typer.Typer(help="Scraper de fuentes oficiales (nada estático)", no_args_is_help=True)
-paths_app = typer.Typer(help="Paths de carrera", no_args_is_help=True)
+app = typer.Typer(help="Self-service education platform", no_args_is_help=True)
+cert_app = typer.Typer(help="Catalog certifications", no_args_is_help=True)
+lab_app = typer.Typer(help="Per-topic labs", no_args_is_help=True)
+tracker_app = typer.Typer(help="Official-source scraper (nothing is static)", no_args_is_help=True)
+paths_app = typer.Typer(help="Career paths", no_args_is_help=True)
 app.add_typer(cert_app, name="cert")
 app.add_typer(lab_app, name="lab")
 app.add_typer(tracker_app, name="tracker")
@@ -17,10 +17,10 @@ app.add_typer(paths_app, name="paths")
 
 @cert_app.command("list")
 def cert_list() -> None:
-    """Lista las certificaciones del catálogo."""
+    """List the certifications in the catalog."""
     entries = catalog.list_certs()
     if not entries:
-        typer.echo("Catálogo vacío. Agregar con: teach cert add")
+        typer.echo("Empty catalog. Add one with: teach cert add")
         return
     for cert_id, entry in entries.items():
         typer.echo(
@@ -31,59 +31,59 @@ def cert_list() -> None:
 
 @cert_app.command("show")
 def cert_show(cert_id: str) -> None:
-    """Muestra el temario y estado de cada tema."""
+    """Show the syllabus and the status of each topic."""
     entry = catalog.get_cert(cert_id)
-    typer.echo(f"{entry['name']} (examen {entry['exam']}, v{entry['tracked_version']})\n")
+    typer.echo(f"{entry['name']} (exam {entry['exam']}, v{entry['tracked_version']})\n")
     for topic in certs.topics(cert_id):
         typer.echo(
             f"  {topic['id']:5} [{topic.get('status', 'pending'):9}] "
-            f"peso {topic.get('weight', '?')}  {topic['title']}"
+            f"weight {topic.get('weight', '?')}  {topic['title']}"
         )
 
 
 @cert_app.command("add")
 def cert_add(
     cert_id: str,
-    name: str = typer.Option(..., "--name", help="Nombre de la certificación"),
-    exam: str = typer.Option("", "--exam", help="Código de examen"),
-    objectives: str = typer.Option("", "--objectives", help="URL de objetivos oficiales"),
-    category: str = typer.Option("general", "--category", help="Categoría (ej. linux, cloud-native)"),
+    name: str = typer.Option(..., "--name", help="Certification name"),
+    exam: str = typer.Option("", "--exam", help="Exam code"),
+    objectives: str = typer.Option("", "--objectives", help="URL of the official objectives"),
+    category: str = typer.Option("general", "--category", help="Category (e.g. linux, cloud-native)"),
 ) -> None:
-    """Agrega una cert al catálogo y crea el MD template del temario."""
+    """Add a cert to the catalog and create the syllabus MD template."""
     catalog.add_cert(cert_id, name, exam, objectives, category)
     path = certs.scaffold(cert_id, name, exam)
-    typer.echo(f"Creado {path}. Completar los topics y correr: teach cert generate {cert_id}")
+    typer.echo(f"Created {path}. Fill in the topics and run: teach cert generate {cert_id}")
 
 
 @cert_app.command("generate")
 def cert_generate(
     cert_id: str,
-    topic: str = typer.Option(None, "--topic", help="Generar solo este tema (ej. 1.1)"),
-    force: bool = typer.Option(False, "--force", help="Regenerar aunque esté generated/edited"),
+    topic: str = typer.Option(None, "--topic", help="Generate only this topic (e.g. 1.1)"),
+    force: bool = typer.Option(False, "--force", help="Regenerate even when generated/edited"),
     backend: str = typer.Option(
-        None, "--backend", help="litellm | claude | codex | gemini | custom (default: $TEACH_BACKEND o litellm)"
+        None, "--backend", help="litellm | claude | codex | gemini | custom (default: $TEACH_BACKEND or litellm)"
     ),
     lang: str = typer.Option("es", "--lang", help="es | en | fr | de | zh | ja | pt"),
 ) -> None:
-    """Genera contenido con AI para los temas pending/stale."""
+    """Generate content with AI for pending/stale topics."""
     try:
         if topic:
             results = [generator.generate_topic(cert_id, topic, force=force, backend=backend, lang=lang)]
         else:
             results = generator.generate_cert(cert_id, force=force, backend=backend, lang=lang)
     except generator.GeneratorConfigError as error:
-        typer.echo(f"Error de configuración: {error}", err=True)
+        typer.echo(f"Configuration error: {error}", err=True)
         raise typer.Exit(1)
     for result in results:
         if "skipped" in result:
-            typer.echo(f"  {result['topic']}: salteado — {result['skipped']}")
+            typer.echo(f"  {result['topic']}: skipped — {result['skipped']}")
         else:
-            typer.echo(f"  {result['topic']}: generado en {result['written']}")
+            typer.echo(f"  {result['topic']}: generated in {result['written']}")
 
 
 @lab_app.command("up")
 def lab_up(cert_id: str, topic_id: str) -> None:
-    """Levanta el lab de un tema (Docker local, o terraform si el lab.yaml lo pide)."""
+    """Bring up a topic lab (local Docker, or terraform if lab.yaml asks for it)."""
     try:
         result = labs.up(cert_id, topic_id)
     except labs.LabError as error:
@@ -94,7 +94,7 @@ def lab_up(cert_id: str, topic_id: str) -> None:
 
 @lab_app.command("down")
 def lab_down(cert_id: str, topic_id: str) -> None:
-    """Destruye el lab de un tema."""
+    """Tear down a topic lab."""
     try:
         result = labs.down(cert_id, topic_id)
     except labs.LabError as error:
@@ -105,7 +105,7 @@ def lab_down(cert_id: str, topic_id: str) -> None:
 
 @lab_app.command("status")
 def lab_status(cert_id: str, topic_id: str) -> None:
-    """Estado del lab de un tema."""
+    """Status of a topic lab."""
     result = labs.status(cert_id, topic_id)
     typer.echo(f"Lab {cert_id}/{topic_id}: {result.get('state')}")
 
@@ -113,9 +113,9 @@ def lab_status(cert_id: str, topic_id: str) -> None:
 @tracker_app.command("sync")
 def tracker_sync(
     provider: str = typer.Option("all", "--provider", help="all | cncf | lpi"),
-    backend: str = typer.Option(None, "--backend", help="backend AI para parsear páginas"),
+    backend: str = typer.Option(None, "--backend", help="AI backend used to parse pages"),
 ) -> None:
-    """Scrapea las fuentes oficiales y actualiza el catálogo."""
+    """Scrape the official sources and update the catalog."""
     from .core import tracker
 
     try:
@@ -135,9 +135,9 @@ def tracker_sync(
 def cert_snapshot(
     cert_id: str,
     backend: str = typer.Option(None, "--backend"),
-    force: bool = typer.Option(False, "--force", help="Re-snapshotear aunque haya temario"),
+    force: bool = typer.Option(False, "--force", help="Re-snapshot even if a syllabus exists"),
 ) -> None:
-    """Congela el temario oficial (HTML/PDF → AI → topics en el MD)."""
+    """Freeze the official syllabus (HTML/PDF -> AI -> topics in the MD)."""
     from .core import tracker
 
     try:
@@ -145,20 +145,20 @@ def cert_snapshot(
     except Exception as error:
         typer.echo(f"Error: {error}", err=True)
         raise typer.Exit(1)
-    typer.echo(f"  {result['cert']}: {result['topics']} topics congelados (v{result['version']})")
+    typer.echo(f"  {result['cert']}: {result['topics']} topics frozen (v{result['version']})")
     if result.get("added"):
-        typer.echo(f"  nuevos: {', '.join(result['added'])}")
+        typer.echo(f"  added: {', '.join(result['added'])}")
     if result.get("stale"):
         typer.echo(
             f"  stale ({len(result['stale'])}): {', '.join(result['stale'])}\n"
-            f"  → cambió el temario; regenerar con 'teach cert generate {result['cert']} "
-            f"--lang <idioma>' en cada idioma que tenga contenido."
+            f"  -> the syllabus changed; regenerate with 'teach cert generate {result['cert']} "
+            f"--lang <language>' for every language that has content."
         )
     if result.get("edited_changed"):
         typer.echo(
-            f"  editados a mano que cambiaron en el temario: "
+            f"  hand-edited topics whose syllabus entry changed: "
             f"{', '.join(result['edited_changed'])}\n"
-            f"  → no se tocan automáticamente; revisar y regenerar con --force si corresponde."
+            f"  -> not touched automatically; review and regenerate with --force if appropriate."
         )
 
 
@@ -169,7 +169,7 @@ def cert_video_script(
     lang: str = typer.Option("es", "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
-    """La AI escribe el guion del video de una certificación puntual (se congela en script.yaml)."""
+    """The AI writes the video script for a single certification (frozen into script.yaml)."""
     from .core import video
 
     try:
@@ -186,7 +186,7 @@ def cert_video(
     lang: str = typer.Option("es", "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
-    """Renderiza el video de una certificación (slides + voz Piper + ffmpeg)."""
+    """Render a certification video (slides + Piper voice + ffmpeg)."""
     from .core import video
 
     try:
@@ -201,7 +201,7 @@ def cert_video(
 def paths_generate(
     backend: str = typer.Option(None, "--backend"),
 ) -> None:
-    """La AI propone paths de carrera desde el catálogo (edited no se pisa)."""
+    """The AI proposes career paths from the catalog (edited is never overwritten)."""
     from .core import tracker
 
     try:
@@ -218,7 +218,7 @@ def paths_translate(
     backend: str = typer.Option(None, "--backend"),
     lang: str = typer.Option(None, "--lang", help="un idioma (ej. en); omitir = todos"),
 ) -> None:
-    """Traduce los textos de los paths a los idiomas soportados."""
+    """Translate path texts into the supported languages."""
     from .core import tracker
 
     try:
@@ -237,7 +237,7 @@ def paths_video_script(
     lang: str = typer.Option("es", "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
-    """La AI escribe el guion del video de un path (se congela en script.yaml)."""
+    """The AI writes a path's video script (frozen into script.yaml)."""
     from .core import video
 
     try:
@@ -254,7 +254,7 @@ def paths_video(
     lang: str = typer.Option("es", "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
-    """Renderiza el video (slides + voz Piper + ffmpeg) a partir del script.yaml."""
+    """Render the video (slides + Piper voice + ffmpeg) from script.yaml."""
     from .core import video
 
     try:
@@ -270,7 +270,7 @@ def serve(
     host: str = typer.Option("127.0.0.1", "--host"),
     port: int = typer.Option(8000, "--port"),
 ) -> None:
-    """Levanta la API + web sobre el mismo catálogo."""
+    """Serve the API + web over the same catalog."""
     import uvicorn
 
     uvicorn.run("teach.api:app", host=host, port=port)

@@ -1,6 +1,7 @@
-"""Catálogo global de certificaciones (catalog.yaml).
+"""Global certification catalog (catalog.yaml).
 
-Lo escribe el tracker (y `cert add`); el generador y la web/CLI solo lo leen.
+Written by the tracker (and `cert add`); the generator and the web/CLI only
+read it.
 """
 
 import datetime
@@ -11,7 +12,7 @@ import yaml
 
 
 def root() -> Path:
-    """Raíz del repo de datos. Override con TEACH_ROOT."""
+    """Root of the data repo. Override with TEACH_ROOT."""
     return Path(os.environ.get("TEACH_ROOT", Path.cwd()))
 
 
@@ -41,7 +42,7 @@ def list_certs() -> dict:
 def get_cert(cert_id: str) -> dict:
     certs = list_certs()
     if cert_id not in certs:
-        raise KeyError(f"'{cert_id}' no está en el catálogo. Ver: teach cert list")
+        raise KeyError(f"'{cert_id}' is not in the catalog. See: teach cert list")
     return certs[cert_id]
 
 
@@ -54,7 +55,7 @@ def add_cert(
 ) -> dict:
     data = load()
     if cert_id in data["certs"]:
-        raise ValueError(f"'{cert_id}' ya existe en el catálogo")
+        raise ValueError(f"'{cert_id}' already exists in the catalog")
     entry = {
         "name": name,
         "exam": exam,

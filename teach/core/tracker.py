@@ -1,16 +1,19 @@
-"""Tracker/scraper: nada es estático — todo el catálogo se deriva de fuentes.
+"""Tracker/scraper: nothing is static — the whole catalog derives from sources.
 
-- sync_cncf(): determinístico. Lee el repo cncf/curriculum por API de GitHub:
-  fecha de último cambio de cada PDF = versión del curriculum. Marca
-  new-version-available cuando upstream cambió.
-- sync_lpi(): scrapea lpi.org y un modelo AI convierte la página en updates
-  estructurados (nivel, validez, prerequisitos) por cert del catálogo.
-- snapshot_topics(): baja los objetivos oficiales de una cert (HTML o PDF),
-  la AI los convierte en topics YAML y se congelan en el MD (snapshot).
-- generate_paths(): la AI propone los paths de carrera a partir del catálogo
-  (requires, niveles, CARE). Los paths con edited: true nunca se pisan.
+- sync_cncf(): deterministic. Reads the cncf/curriculum repo through the GitHub
+  API: each PDF's last-changed date is the curriculum version. Marks
+  new-version-available when upstream changed.
+- sync_lpi(): scrapes lpi.org and an AI model turns the page into structured
+  updates (level, validity, prerequisites) per catalog cert.
+- snapshot_topics(): downloads a cert's official objectives (HTML or PDF), the
+  AI turns them into YAML topics and they are frozen into the MD (snapshot).
+- generate_paths(): the AI proposes career paths from the catalog (requires,
+  levels, CARE). Paths with edited: true are never overwritten.
 
-La AI usa los mismos backends del generador (litellm/claude/codex/gemini).
+The AI uses the same backends as the generator (litellm/claude/codex/gemini).
+
+NOTE: the prompt strings here are deliberately still in Spanish — see the note
+in generator.py. They are model input, not comments.
 """
 
 import datetime
@@ -44,7 +47,7 @@ def _get(url: str) -> httpx.Response:
 
 
 def fetch_text(url: str, limit: int = 20000) -> str:
-    """Texto plano de una URL: PDF (pypdf) o HTML (tags fuera)."""
+    """Plain text from a URL: PDF (pypdf) or HTML (tags stripped)."""
     response = _get(url)
     if url.lower().endswith(".pdf") or "pdf" in response.headers.get("content-type", ""):
         from pypdf import PdfReader
@@ -64,14 +67,14 @@ def _ai_yaml(backend: str | None, prompt: str) -> dict:
     raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
     data = yaml.safe_load(raw)
     if not isinstance(data, dict):
-        raise TrackerError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
+        raise TrackerError(f"The AI did not return structured YAML:\n{raw[:300]}")
     return data
 
 
 # ---------------------------------------------------------------- CNCF
 
 def sync_cncf() -> list[str]:
-    """Versión de cada curriculum = fecha del último commit que tocó su PDF."""
+    """Each curriculum's version is the date of the last commit touching its PDF."""
     data = catalog.load()
     changes = []
     files = _get(f"{CNCF_REPO_API}/contents/").json()
@@ -82,7 +85,7 @@ def sync_cncf() -> list[str]:
             continue
         cert_id = re.split(r"[_ ]", name)[0].lower()
         if cert_id not in data["certs"]:
-            changes.append(f"NUEVA cert upstream sin catalogar: {name}")
+            changes.append(f"NEW uncatalogued upstream cert: {name}")
             continue
         commits = _get(
             f"{CNCF_REPO_API}/commits?path={httpx.QueryParams({'p': name})['p']}&per_page=1"
@@ -93,13 +96,13 @@ def sync_cncf() -> list[str]:
         if updated and cert.get("curriculum_updated") != updated:
             cert["curriculum_updated"] = updated
             cert["upstream_status"] = "new-version-available"
-            changes.append(f"{cert_id}: curriculum cambió → {updated}")
+            changes.append(f"{cert_id}: curriculum changed -> {updated}")
         semantic = re.search(r"v(\d+\.\d+)", name)
         if semantic and cert.get("tracked_version") != semantic.group(1):
             cert["tracked_version"] = semantic.group(1)
-            changes.append(f"{cert_id}: versión → {semantic.group(1)}")
+            changes.append(f"{cert_id}: version -> {semantic.group(1)}")
     catalog.save(data)
-    return changes or ["cncf: sin cambios upstream"]
+    return changes or ["cncf: no upstream changes"]
 
 
 # ---------------------------------------------------------------- LPI
@@ -108,7 +111,7 @@ LPI_SUMMARY = "https://www.lpi.org/our-certifications/summary-of-lpi-certificati
 
 
 def sync_lpi(backend: str | None = None) -> list[str]:
-    """Scrapea el resumen oficial de LPI y actualiza nivel/validez/requires."""
+    """Scrape the official LPI summary and update level/validity/requires."""
     data = catalog.load()
     known = {
         cert_id: {"name": c["name"], "exam": c.get("exam", "")}
@@ -141,15 +144,15 @@ def sync_lpi(backend: str | None = None) -> list[str]:
         cert["last_checked"] = today
         for field in ("level", "validity", "requires"):
             if field in update and cert.get(field) != update[field]:
-                changes.append(f"{cert_id}: {field} {cert.get(field)} → {update[field]}")
+                changes.append(f"{cert_id}: {field} {cert.get(field)} -> {update[field]}")
                 cert[field] = update[field]
     for new in result.get("new") or []:
-        changes.append(f"NUEVA cert upstream sin catalogar: {new.get('name')} ({new.get('exam')})")
+        changes.append(f"NEW uncatalogued upstream cert: {new.get('name')} ({new.get('exam')})")
     catalog.save(data)
-    return changes or ["lpi: sin cambios"]
+    return changes or ["lpi: no changes"]
 
 
-# ---------------------------------------------------------------- temario
+# ---------------------------------------------------------------- syllabus
 
 def _topic_identity(topic: dict) -> tuple:
     """The fields whose change invalidates already generated content.
@@ -219,20 +222,20 @@ def _apply_snapshot_status(
 
 
 def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = False) -> dict:
-    """Congela el temario oficial en el MD: fetch objetivos (HTML/PDF) → AI → topics."""
+    """Freeze the official syllabus into the MD: fetch objectives (HTML/PDF) -> AI -> topics."""
     data = catalog.load()
     cert = data["certs"].get(cert_id)
     if not cert:
-        raise TrackerError(f"'{cert_id}' no está en el catálogo")
+        raise TrackerError(f"'{cert_id}' is not in the catalog")
     url = (cert.get("sources") or {}).get("objectives")
     if not url:
-        raise TrackerError(f"'{cert_id}' no tiene sources.objectives en el catálogo")
+        raise TrackerError(f"'{cert_id}' has no sources.objectives in the catalog")
 
     post = certs.load(cert_id)
     existing = {str(t.get("id")): t for t in post.metadata.get("topics", [])}
     if existing and not force:
         raise TrackerError(
-            f"'{cert_id}' ya tiene temario ({len(existing)} topics). Usar --force para re-snapshotear."
+            f"'{cert_id}' already has a syllabus ({len(existing)} topics). Use --force to re-snapshot."
         )
 
     text = fetch_text(url)
@@ -255,7 +258,7 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     )
     topics = result.get("topics") or []
     if not topics:
-        raise TrackerError("La AI no extrajo topics del documento")
+        raise TrackerError("The AI extracted no topics from the document")
     stale_at = datetime.datetime.now().isoformat(timespec="seconds")
     added, stale, edited_changed = _apply_snapshot_status(topics, existing, url, stale_at)
 
@@ -295,10 +298,10 @@ TRANSLATABLE_PATH_FIELDS = ("name", "description", "how_to_obtain", "rules")
 
 
 def translate_paths(backend: str | None = None, langs: list[str] | None = None) -> list[str]:
-    """Traduce los textos de los paths a los idiomas soportados.
+    """Translate path texts into the supported languages.
 
-    Guarda las traducciones en paths.<slug>.i18n.<lang> (el texto base queda en
-    el idioma default); la API las mergea según ?lang=.
+    Translations are stored under paths.<slug>.i18n.<lang> (the base text stays
+    in the default language); the API merges them according to ?lang=.
     """
     data = catalog.load()
     paths = data.get("paths") or {}
@@ -331,7 +334,7 @@ def translate_paths(backend: str | None = None, langs: list[str] | None = None) 
 
 
 def generate_paths(backend: str | None = None) -> list[str]:
-    """La AI propone paths de carrera desde el catálogo. edited: true no se pisa."""
+    """The AI proposes career paths from the catalog. edited: true is never overwritten."""
     data = catalog.load()
     summary = {
         cert_id: {
@@ -356,7 +359,7 @@ def generate_paths(backend: str | None = None) -> list[str]:
     existing = data.get("paths") or {}
     for slug, path in (result.get("paths") or {}).items():
         if existing.get(slug, {}).get("edited"):
-            changes.append(f"{slug}: salteado (edited)")
+            changes.append(f"{slug}: skipped (edited)")
             continue
         existing[slug] = path
         changes.append(f"{slug}: {'actualizado' if slug in existing else 'nuevo'}")

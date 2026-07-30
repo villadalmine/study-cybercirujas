@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# Reintenta la generación de contenido cuando el backend Claude quedó
-# bloqueado por límite de uso. Corre desacoplado de cualquier sesión
-# interactiva (systemd --user timer) para que se recupere solo aunque la
-# sesión de Claude Code que lo dejó andando también esté bloqueada por el
-# mismo límite. Es seguro llamarlo aunque no haya nada pendiente: cada
-# `teach cert generate` saltea los temas ya generados y no gasta cuota.
+# Retries content generation after the Claude backend has been blocked by a
+# usage limit. Runs decoupled from any interactive session (systemd --user
+# timer) so it recovers on its own even when the Claude Code session that left
+# it running is blocked by the same limit. Safe to call with nothing pending:
+# each `teach cert generate` skips already generated topics and spends no quota.
 set -uo pipefail
 
 REPO=/var/home/dalmine/Nextcloud/Repos/teach-plat
@@ -15,9 +14,9 @@ LOG="$STATE_DIR/resume.log"
 LOCK="$STATE_DIR/resume.lock"
 mkdir -p "$STATE_DIR"
 
-# Si ya hay una generación corriendo (lanzada a mano o por una corrida
-# anterior de este mismo script), no lanzar otra en paralelo — evita
-# duplicar llamadas a claude sobre el mismo tema.
+# If a generation is already running (started by hand or by an earlier run of
+# this same script), do not start another in parallel — that would duplicate
+# claude calls on the same topic.
 if pgrep -f "teach cert generate" > /dev/null; then
     exit 0
 fi
@@ -25,9 +24,9 @@ fi
 exec 9>"$LOCK"
 flock -n 9 || exit 0
 
-# cert:lang sale de pipeline.yaml, no de una lista acá. Tener la lista propia
-# significaba que agregar un idioma requería acordarse de tres lugares, y no
-# pasó: este script quedó en español-solamente mientras se generaba inglés.
+# cert:lang comes from pipeline.yaml, not from a list here. Keeping its own list
+# meant adding a language required remembering three places, and that did not
+# happen: this script stayed Spanish-only while English was being generated.
 mapfile -t TARGETS < <("$REPO/.venv/bin/python3" -c "
 from teach.core import pipeline
 for cert, langs in pipeline.targets():
@@ -37,9 +36,9 @@ for cert, langs in pipeline.targets():
 
 {
     echo "=== $(date -Iseconds) ==="
-    # fix_corrupted_content ya respeta budget.topics_per_run de pipeline.yaml,
-    # así que una pasada desatendida avanza de a poco en vez de intentar
-    # vaciar la cola (y la cuota) de una sola vez.
+    # fix_corrupted_content already honours budget.topics_per_run from
+    # pipeline.yaml, so an unattended pass advances a little at a time instead
+    # of trying to drain the queue — and the quota — in one go.
     echo "--- fix_corrupted_content ---"
     "$REPO/.venv/bin/python3" "$REPO/scripts/fix_corrupted_content.py"
     for target in "${TARGETS[@]}"; do
@@ -48,5 +47,5 @@ for cert, langs in pipeline.targets():
         echo "--- $cert ($lang) ---"
         "$TEACH" cert generate "$cert" --backend claude --lang "$lang"
     done
-    echo "=== fin $(date -Iseconds) ==="
+    echo "=== end $(date -Iseconds) ==="
 } >> "$LOG" 2>&1
