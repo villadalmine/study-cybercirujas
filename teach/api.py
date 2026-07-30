@@ -1,10 +1,11 @@
-"""API de la plataforma.
+"""Platform API.
 
 Public (no login): catalog, syllabi and paths — the landing page is the
 reference for which certifications exist.
-Auth deshabilitado (v1). Endpoints de login/logout existen pero rechazan
-siempre — listos para enchufar OIDC + pasarela de pago cuando se implemente.
-Docs interactivas en /docs (OpenAPI).
+
+Auth is disabled (v1). The login/logout endpoints exist but always deny —
+ready for OIDC plus a payment gateway to be plugged in when implemented.
+Interactive docs at /docs (OpenAPI).
 """
 
 import os

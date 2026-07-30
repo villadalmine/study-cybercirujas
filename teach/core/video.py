@@ -1,18 +1,22 @@
-"""Video de un path de carrera: guion (AI, grounded en el catálogo) + render.
+"""Career-path video: script (AI, grounded in the catalog) + render.
 
-Dos pasos separados, igual que el resto del contenido generado:
+Two separate steps, like the rest of the generated content:
 
-  generate_script()  la AI escribe el guion a partir de los datos reales del
-                      path (certs, exámenes, vigencias, orden). Se congela en
-                      media/paths/<slug>/<lang>/script.yaml — editable a mano
-                      después, como content.md.
-  render_video()      determinístico y repetible, no llama a la AI: Pillow
-                      dibuja las slides, Piper (TTS neuronal local) narra,
-                      ffmpeg arma el mp4. Se puede rehacer sin gastar cuota.
+  generate_script()  the AI writes the script from the path's real data
+                     (certs, exams, validity, order). Frozen into
+                     media/paths/<slug>/<lang>/script.yaml — editable by hand
+                     afterwards, like content.md.
+  render_video()     deterministic and repeatable, calls no AI: Pillow draws
+                     the slides, Piper (local neural TTS) narrates, ffmpeg
+                     assembles the mp4. Can be redone without spending quota.
 
-La escena "path" (el mapa de certificaciones) nunca la escribe la AI: se arma
-directo desde catalog.yaml para que el dato más sensible a errores (exámenes,
-vigencias, orden) nunca dependa de que el modelo no alucine.
+The "path" scene (the certification map) is never written by the AI: it is
+built straight from catalog.yaml so the data most sensitive to error — exams,
+validity, ordering — never depends on the model not hallucinating.
+
+NOTE: the prompt strings below are deliberately still in Spanish, for the same
+reason as in generator.py: they are model input, and the existing scripts were
+produced with them.
 """
 
 import os
@@ -40,23 +44,24 @@ GOLD = (212, 169, 74)
 
 FONT_BOLD = Path("/usr/share/fonts/liberation-sans-fonts/LiberationSans-Bold.ttf")
 FONT_REGULAR = Path("/usr/share/fonts/liberation-sans-fonts/LiberationSans-Regular.ttf")
-# Liberation Sans no tiene glifos CJK (tofu/cuadraditos en zh/ja) — para esos
-# idiomas se usa Noto Sans CJK (paquete google-noto-sans-cjk-fonts en Fedora).
+# Liberation Sans has no CJK glyphs (tofu boxes in zh/ja) — those languages use
+# Noto Sans CJK instead (package google-noto-sans-cjk-fonts on Fedora).
 FONT_CJK_BOLD = Path("/usr/share/fonts/google-noto-sans-cjk-fonts/NotoSansCJK-Bold.ttc")
 FONT_CJK_REGULAR = Path("/usr/share/fonts/google-noto-sans-cjk-fonts/NotoSansCJK-Regular.ttc")
 CJK_LANGS = {"zh", "ja"}
 
 
 def _fonts_for(lang: str) -> tuple[Path, Path]:
-    """(bold, regular) — Noto Sans CJK para zh/ja si está instalada, si no cae
-    a Liberation Sans (tofu en esos idiomas, pero no rompe el render)."""
+    """(bold, regular) — Noto Sans CJK for zh/ja when installed, otherwise it
+    falls back to Liberation Sans (tofu boxes in those languages, but the render
+    still works)."""
     if lang in CJK_LANGS and FONT_CJK_BOLD.exists() and FONT_CJK_REGULAR.exists():
         return FONT_CJK_BOLD, FONT_CJK_REGULAR
     return FONT_BOLD, FONT_REGULAR
 
 VOICE_CACHE = Path.home() / ".cache" / "teach-plat" / "piper-voices"
 HF_BASE = "https://huggingface.co/rhasspy/piper-voices/resolve/main"
-# un idioma por vez a medida que se valida la voz; sumar acá para habilitarlo
+# one language at a time as each voice is validated; add here to enable it
 VOICES = {
     "es": "es/es_AR/daniela/high/es_AR-daniela-high",
     "en": "en/en_US/amy/medium/en_US-amy-medium",
@@ -75,9 +80,9 @@ SCENES = [
 ]
 AI_SCENE_IDS = [s["id"] for s in SCENES if s["id"] != "path"]
 
-# video corto por certificación puntual (a diferencia de SCENES, que es el
-# video de marketing de un path de carrera entero) — más liviano: 3 escenas
-# de AI en vez de 5, para no duplicar el costo de generación por cada cert.
+# Short video for a single certification (unlike SCENES, which is the marketing
+# video for a whole career path) — lighter: 3 AI scenes instead of 5, so the
+# generation cost is not doubled for every cert.
 CERT_SCENES = [
     {"id": "hook", "kind": "title"},
     {"id": "audience", "kind": "bullets"},
@@ -125,20 +130,51 @@ def _localized_path(path: dict, lang: str) -> dict:
     return {**path, **translated}
 
 
+# Wording for the two deterministic scenes, per language. These sentences are
+# narrated, so they have to be in the video's own language — previously only
+# `en` was special-cased and everything else fell through to Spanish, which is
+# why the German videos ended up with "Arrancás con LPI Linux Essentials..."
+# read aloud by a German voice. Languages absent here fall back to the default,
+# which is correct only for languages with no Piper voice anyway (see VOICES).
+# (opening, joiner, alternative, terminator). The terminator is separate because
+# CJK uses its own full stop, and the opening cannot be a circumfix — Chinese
+# "从 X 开始" would repeat its tail on every joined item, so the wording chosen
+# for zh/ja is deliberately one that reads correctly when simply concatenated.
+PATH_PHRASES = {
+    "es": ("Arrancás con ", ", después seguís con ", " o ", "."),
+    "en": ("You start with ", ", then move on to ", " or ", "."),
+    "de": ("Du beginnst mit ", ", danach folgt ", " oder ", "."),
+    "zh": ("学习顺序是 ", "，然后是 ", " 或 ", "。"),
+    "pt": ("Você começa com ", ", depois segue com ", " ou ", "."),
+    "fr": ("Vous commencez par ", ", puis vous continuez avec ", " ou ", "."),
+    "ja": ("学習順序は ", "、次に ", " または ", " です。"),
+}
+
+DOMAIN_PHRASES = {
+    "es": ("El examen se reparte en ", "{name} con {weight}%", ", ", "."),
+    "en": ("The exam covers ", "{name} at {weight}%", ", ", "."),
+    "de": ("Die Prüfung verteilt sich auf ", "{name} mit {weight}%", ", ", "."),
+    "zh": ("考试内容分布为 ", "{name} 占 {weight}%", "，", "。"),
+    "pt": ("O exame se divide em ", "{name} com {weight}%", ", ", "."),
+    "fr": ("L'examen se répartit en ", "{name} à {weight}%", ", ", "."),
+    "ja": ("試験の構成は ", "{name} が {weight}%", "、", " です。"),
+}
+
+
 def _path_voiceover(stages: list[list[dict]], lang: str) -> str:
-    names = [" o ".join(c["name"] for c in stage) for stage in stages]
-    if lang == "en":
-        return "You start with " + ", then move to ".join(names) + "."
-    return "Arrancás con " + ", después seguís con ".join(names) + "."
+    opening, joiner, alternative, end = PATH_PHRASES.get(
+        lang, PATH_PHRASES[certs.DEFAULT_LANG]
+    )
+    names = [alternative.join(c["name"] for c in stage) for stage in stages]
+    return opening + joiner.join(names) + end
 
 
 def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[str]) -> tuple[dict, dict]:
     complete, backend_meta = make_completer(backend)
-    # el modelo a veces mete un ":" sin comillas dentro de una frase (común en
-    # es/pt/fr), lo que rompe el parseo YAML de un plain scalar — no es un
-    # error de backend ni de contenido, solo de formato; reintentar unas
-    # pocas veces antes de fallar (la próxima generación no tiene por qué
-    # repetir el mismo problema).
+    # The model sometimes puts an unquoted ":" inside a sentence (common in
+    # es/pt/fr), which breaks YAML parsing of a plain scalar. That is a format
+    # problem, not a backend or content one, so retry a few times before
+    # failing — the next generation need not repeat it.
     last_error: Exception | None = None
     for attempt in range(3):
         raw = complete(system, user if attempt == 0 else user + (
@@ -153,14 +189,14 @@ def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[
             last_error = error
             continue
         if not isinstance(data, dict):
-            last_error = VideoError(f"La AI no devolvió YAML estructurado:\n{raw[:300]}")
+            last_error = VideoError(f"The AI did not return structured YAML:\n{raw[:300]}")
             continue
         missing = [key for key in expected_ids if not isinstance(data.get(key), dict)]
         if missing:
             last_error = VideoError(f"Guion incompleto, faltan escenas {missing}:\n{raw[:500]}")
             continue
         return data, backend_meta
-    raise VideoError(f"No se pudo generar un guion YAML válido tras 3 intentos: {last_error}")
+    raise VideoError(f"Could not generate valid YAML script after 3 attempts: {last_error}")
 
 
 def generate_script(
@@ -170,11 +206,11 @@ def generate_script(
     force: bool = False,
 ) -> dict:
     if lang not in certs.LANGS:
-        raise VideoError(f"Idioma '{lang}' no soportado. Válidos: {certs.LANGS}")
+        raise VideoError(f"Language '{lang}' not supported. Valid: {certs.LANGS}")
     paths = catalog.load().get("paths", {})
     path = paths.get(path_slug)
     if path is None:
-        raise VideoError(f"Path '{path_slug}' no existe en el catálogo (ver catalog.yaml paths)")
+        raise VideoError(f"Path '{path_slug}' is not in the catalog (see catalog.yaml paths)")
 
     out_dir = media_dir(path_slug, lang)
     script_path = out_dir / "script.yaml"
@@ -251,13 +287,13 @@ def generate_script(
 
 
 def _cert_domains(cert_id: str) -> list[dict]:
-    """Dominios del examen + peso, sumado desde los topics reales del cert.md
-    (nunca inventado por la AI) — mismo principio que la escena "path".
+    """Exam domains + weight, summed from the real topics in cert.md (never
+    invented by the AI) — the same principle as the "path" scene.
 
-    Normalizado a porcentaje del total: no todos los temarios usan la misma
-    escala (CNCF pesa en % que suma 100; LPI Linux Essentials pesa en puntos
-    que suman 40) — sin normalizar, mostrar "7%" para un dominio que en
-    realidad es "7 de 40 puntos" sería un dato incorrecto en el video.
+    Normalised to a percentage of the total: not every syllabus uses the same
+    scale (CNCF weights are percentages summing to 100; LPI Linux Essentials
+    uses points summing to 40). Without normalising, showing "7%" for a domain
+    that is really "7 out of 40 points" would put wrong data in the video.
     """
     domains: dict[str, float] = {}
     for topic in certs.topics(cert_id):
@@ -268,11 +304,11 @@ def _cert_domains(cert_id: str) -> list[dict]:
 
 
 def _domains_voiceover(domains: list[dict], lang: str) -> str:
-    parts = [f"{d['name']} con {d['weight']}%" for d in domains]
-    if lang == "en":
-        parts = [f"{d['name']} at {d['weight']}%" for d in domains]
-        return "The exam covers " + ", ".join(parts) + "."
-    return "El examen se reparte en " + ", ".join(parts) + "."
+    opening, item, separator, end = DOMAIN_PHRASES.get(
+        lang, DOMAIN_PHRASES[certs.DEFAULT_LANG]
+    )
+    parts = [item.format(name=d["name"], weight=d["weight"]) for d in domains]
+    return opening + separator.join(parts) + end
 
 
 def generate_cert_script(
@@ -281,13 +317,13 @@ def generate_cert_script(
     lang: str = certs.DEFAULT_LANG,
     force: bool = False,
 ) -> dict:
-    """Guion de un video corto sobre UNA certificación puntual (a diferencia
-    de generate_script(), que es el video de marketing de un path entero)."""
+    """Script for a short video about ONE certification (unlike
+    generate_script(), which is the marketing video for a whole path)."""
     if lang not in certs.LANGS:
-        raise VideoError(f"Idioma '{lang}' no soportado. Válidos: {certs.LANGS}")
+        raise VideoError(f"Language '{lang}' not supported. Valid: {certs.LANGS}")
     cert = catalog.load()["certs"].get(cert_id)
     if cert is None:
-        raise VideoError(f"'{cert_id}' no existe en el catálogo")
+        raise VideoError(f"'{cert_id}' is not in the catalog")
 
     out_dir = cert_media_dir(cert_id, lang)
     script_path = out_dir / "script.yaml"
@@ -349,7 +385,7 @@ def generate_cert_script(
 
 def _ensure_voice(lang: str) -> Path:
     if lang not in VOICES:
-        raise VideoError(f"Todavía no hay voz configurada para '{lang}'. Disponibles: {list(VOICES)}")
+        raise VideoError(f"No voice configured for '{lang}' yet. Available: {list(VOICES)}")
     VOICE_CACHE.mkdir(parents=True, exist_ok=True)
     onnx_path = VOICE_CACHE / f"{lang}.onnx"
     json_path = VOICE_CACHE / f"{lang}.onnx.json"
@@ -379,7 +415,7 @@ def _synthesize(text: str, voice_model: Path, audio_path: Path) -> None:
         input=text or ".", capture_output=True, text=True,
     )
     if result.returncode != 0:
-        raise VideoError(f"piper falló: {result.stderr.strip()}")
+        raise VideoError(f"piper failed: {result.stderr.strip()}")
 
 
 def _wav_duration(path: Path) -> float:
@@ -484,7 +520,7 @@ def _slide_path(scene: dict, out_path: Path, lang: str) -> None:
     node_font = _font(bold, 26)
     small_font = _font(regular, 22)
 
-    # alto de caja variable: cada nombre se banquea a las líneas que necesite
+    # Variable box height: each name gets as many lines as it needs
     # (nada se trunca en silencio, ej. "LPIC-3: High Availability and Storage Clusters")
     stage_boxes = []
     for stage in stages:

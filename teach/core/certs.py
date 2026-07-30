@@ -1,7 +1,7 @@
-"""Lectura/escritura del MD por certificación (snapshot del temario + estado).
+"""Read/write the per-certification MD (syllabus snapshot + status).
 
-El MD con frontmatter es la fuente de verdad del curso. El contenido generado
-de cada tema vive en certs/<cert_id>/<topic_id>/.
+The MD with its frontmatter is the course's source of truth. Each topic's
+generated content lives under certs/<cert_id>/<topic_id>/.
 """
 
 from pathlib import Path

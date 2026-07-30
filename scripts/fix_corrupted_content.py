@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Detecta y regenera content.md/exercises.md corruptos (el backend `claude`
-devolvió un resumen de proceso tipo "Escribí certs/.../content.md..." en vez
-del contenido pedido — bug de agente de código corriendo sin restricción de
-herramientas, ver CHANGELOG.MD). teach/core/generator.py ya tiene el fix
-(--disallowedTools) y valida contra este patrón antes de escribir, así que
-esto es solo para limpiar lo que quedó corrupto de antes del fix.
+"""Detect and regenerate corrupt or missing content.md/exercises.md.
 
-Idempotente: escanea de nuevo en cada pasada, así que se puede cortar y
-relanzar sin problema — converge solo hasta que la lista de sospechosos
-quede vacía.
+Originally written for one bug: the `claude` backend returning a process recap
+("Escribí certs/.../content.md...") instead of the requested content, because a
+coding agent was running without tool restrictions (see CHANGELOG.md).
+teach/core/generator.py now blocks that at the source (--disallowedTools plus
+validation before writing), so the recap check here is only cleanup for what
+was saved before the fix.
+
+It has since grown into the work queue: targets come from pipeline.yaml, and a
+combo counts as pending when it is corrupt, missing, or below the quality floor.
+
+Idempotent: it rescans on every pass, so it can be interrupted and relaunched
+freely — it converges on its own until the suspect list is empty.
 """
 import re
 import subprocess
