@@ -127,28 +127,28 @@ topics:
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kubernetes Reconciliation Loop and Control Plane Architecture
   topic: 4 - Platform APIs and Provisioning Infrastructure
   weight: 3.0
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: APIs for Self-Service Platforms (Custom Resource Definitions)
   topic: 4 - Platform APIs and Provisioning Infrastructure
   weight: 3.0
 - id: '4.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Infrastructure Provisioning with Kubernetes (Crossplane/Kratix)
   topic: 4 - Platform APIs and Provisioning Infrastructure
   weight: 3.0
 - id: '4.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kubernetes Operator Pattern for Integration and Automation
   topic: 4 - Platform APIs and Provisioning Infrastructure
   weight: 3.0
