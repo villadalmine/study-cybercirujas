@@ -1,165 +1,81 @@
-#!/usr/bin/env bash
-#
-# CNPE - Tema 1.3: Optimizing Multi-Tenancy Resource Usage
-# Script break & fix para laboratorio descartable (kind/minikube/<PERSON>).
-#
-# ADVERTENCIA: ejecutar SOLO en un cluster de laboratorio descartable.
-# El script crea un namespace propio y no toca nada fuera de él.
+# 1.3 Optimizing Multi-Tenancy Resource Usage
 
-set -euo pipefail
+> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
 
-NAMESPACE="cnpe-lab-mt"
-DEPLOY_NAME="tenant-app"
+En plataformas cloud native corporativas, la **multitenencia (Multi-Tenancy)** permite que múltiples equipos, proyectos o aplicaciones compartan la misma infraestructura de Kubernetes garantizando aislamiento estricto, seguridad y uso optimizado de recursos. Este tema aborda los modelos de aislamiento, cuotas, límites y aislamiento jerárquico necesarios para operar una plataforma multi-tenant eficiente.
 
-log() { echo -e "\n[LAB] $*\n"; }
+---
 
-check_prereqs() {
-  command -v kubectl >/dev/null 2>&1 || { echo "Falta kubectl en el PATH"; exit 1; }
-  kubectl cluster-info >/dev/null 2>&1 || { echo "No se puede contactar al cluster"; exit 1; }
-}
+## 1. Modelos de Multitenencia: Hard vs Soft Multi-Tenancy
 
-cleanup() {
-  log "Limpiando namespace de laboratorio ${NAMESPACE}..."
-  kubectl delete namespace "${NAMESPACE}" --ignore-not-found=true >/dev/null 2>&1 || true
-}
+- **Soft Multi-Tenancy (Multitenencia Suave)**: Compartición de un mismo clúster entre equipos dentro de una misma organización confiable. Se logra aislando mediante `Namespaces`, `RBAC`, `ResourceQuotas` y `LimitRanges`.
+- **Hard Multi-Tenancy (Multitenencia Fuerte)**: Compartición de infraestructura entre tenants no confiables o externos. Requiere aislamiento a nivel de kernel/runtime (ej. Kata Containers, gVisor) o clústeres dedicados virtuales (vcluster).
 
-break_lab() {
-  log "Creando namespace de tenant y aplicando ResourceQuota..."
+---
 
-  kubectl create namespace "${NAMESPACE}" >/dev/null
+## 2. Aislamiento Físico y Lógico con Namespaces, ResourceQuotas y LimitRanges
 
-  # ResourceQuota que simula un tenant en un cluster multi-tenant
-  # con límites acordados por el administrador de la plataforma.
-  cat <<EOF | kubectl apply -f - >/dev/null
+### ResourceQuotas
+Un `ResourceQuota` limita el consumo total acumulado de recursos (CPU, memoria, storage, número de objetos) dentro de un namespace específico.
+
+```yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  name: tenant-quota
-  namespace: ${NAMESPACE}
+  name: tenant-a-quota
+  namespace: tenant-a
 spec:
   hard:
-    requests.cpu: "300m"
-    requests.memory: "384Mi"
-    limits.cpu: "600m"
-    limits.memory: "768Mi"
-    pods: "10"
-EOF
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    pods: "20"
+    services.loadbalancers: "2"
+```
 
-  # Deployment "roto": pide más recursos de los que el quota permite
-  # para el conjunto de réplicas. Esto es un error típico de un equipo
-  # que despliega su carga de trabajo sin considerar los límites del tenant.
-  cat <<EOF | kubectl apply -f - >/dev/null
-apiVersion: apps/v1
-kind: Deployment
+### LimitRanges
+Un `LimitRange` impone valores por defecto y rangos permitidos (mínimo y máximo) para las solicitudes de CPU/Memoria de cada contenedor individual creado en el namespace.
+
+```yaml
+apiVersion: v1
+kind: LimitRange
 metadata:
-  name: ${DEPLOY_NAME}
-  namespace: ${NAMESPACE}
+  name: tenant-a-limits
+  namespace: tenant-a
 spec:
-  replicas: 4
-  selector:
-    matchLabels:
-      app: ${DEPLOY_NAME}
-  template:
-    metadata:
-      labels:
-        app: ${DEPLOY_NAME}
-    spec:
-      containers:
-      - name: app
-        image: nginx:1.25-alpine
-        resources:
-          requests:
-            cpu: "150m"
-            memory: "192Mi"
-          limits:
-            cpu: "200m"
-            memory: "256Mi"
-EOF
+  limits:
+  - default:
+      cpu: "500m"
+      memory: "512Mi"
+    defaultRequest:
+      cpu: "200m"
+      memory: "256Mi"
+    max:
+      cpu: "2"
+      memory: "4Gi"
+    min:
+      cpu: "50m"
+      memory: "64Mi"
+    type: Container
+```
 
-  log "Entorno roto listo."
-  cat <<'MSG'
-SÍNTOMA A OBSERVAR:
---------------------
-Vas a ver que el Deployment "tenant-app" no llega a tener sus 4 réplicas
-corriendo. Investigá con:
+---
 
-  kubectl get deployment tenant-app -n cnpe-lab-mt
-  kubectl get pods -n cnpe-lab-mt
-  kubectl describe resourcequota tenant-quota -n cnpe-lab-mt
-  kubectl get events -n cnpe-lab-mt --sort-by=.lastTimestamp
+## 3. Multitenencia Jerárquica (Hierarchical Namespace Controller - HNC)
 
-Vas a encontrar eventos del tipo "FailedCreate" con el mensaje
-"forbidden: exceeded quota" en el ReplicaSet.
+El proyecto **HNC (Hierarchical Namespace Controller)** de la CNCF permite crear relaciones padre-hijo entre namespaces, propagando automáticamente políticas de seguridad (RBAC, NetworkPolicies, ResourceQuotas) desde los namespaces de la plataforma hacia los namespaces de los sub-equipos.
 
-OBJETIVO:
----------
-Sin modificar ni eliminar el ResourceQuota "tenant-quota" (representa un
-límite acordado por la plataforma para este tenant), <PERSON> réplicas
-necesarias del Deployment queden en estado Running, optimizando el uso de
-recursos del tenant (requests/limits y/o cantidad de réplicas) <PERSON> dentro del quota disponible.
+```bash
+# Ejemplo de creación de sub-namespace con HNC CLI
+kubectl hns create team-subproject -n tenant-a-parent
+```
 
-<PERSON> con:
-  kubectl get pods -n cnpe-lab-mt   (todas en Running)
-  kubectl describe resourcequota tenant-quota -n cnpe-lab-mt  (Used <= Hard)
-MSG
-}
+---
 
-main() {
-  check_prereqs
-  trap 'log "Si querés destruir el laboratorio: cleanup"' EXIT
-  break_lab
-}
+## Referencias
 
-main "$@"
-
-# =========================================================================
-# SOLUCIÓN PASO A PASO (comentada, no se ejecuta automáticamente)
-# =========================================================================
-#
-# 1) Diagnosticar el quota disponible vs lo solicitado:
-#
-#    kubectl describe resourcequota tenant-quota -n cnpe-lab-mt
-#
-#    Hard:  requests.cpu=300m, requests.memory=384Mi
-#    El deployment pide 4 réplicas x 150m/192Mi = 600m/768Mi de requests,
-#    el doble de lo permitido. Por eso solo entran ~2 pods y el resto
-#    queda bloqueado por el admission controller de ResourceQuota.
-#
-# 2) Opción A - Reducir requests/limits por pod para que entren las 4 réplicas:
-#
-#    kubectl -n cnpe-lab-mt set resources deployment/tenant-app \
-#      --requests=cpu=50m,memory=64Mi \
-#      --limits=cpu=100m,memory=128Mi
-#
-#    Cálculo: 4 réplicas x 50m/64Mi = 200m/256Mi de requests,
-#    dentro del hard de 300m/384Mi.
-#
-# 3) Opción B - Si el sizing por pod es fijo por requerimiento de la app,
-#    reducir la cantidad de réplicas a lo que el quota permite:
-#
-#    kubectl -n cnpe-lab-mt scale deployment/tenant-app --replicas=2
-#
-#    Cálculo: 2 réplicas x 150m/192Mi = 300m/384Mi, exactamente el hard.
-#
-# 4) Validar que todos los pods llegaron a Running y que el uso del
-#    tenant está dentro de su cuota:
-#
-#    kubectl get pods -n cnpe-lab-mt
-#    kubectl describe resourcequota tenant-quota -n cnpe-lab-mt
-#
-#    (columna "Used" debe ser <= "Hard" en todas las dimensiones)
-#
-# 5) Reflexión del ejercicio (multi-tenancy):
-#    - El ResourceQuota protege a otros tenants del cluster de un consumo
-#      desmedido de un namespace individual.
-#    - La responsabilidad de "entrar" en el presupuesto asignado es del
-#      equipo dueño del namespace: se <PERSON> requests/limits
-#      (rightsizing) o el número de réplicas, no ampliando el quota.
-#    - Combinar ResourceQuota con LimitRange (valores default de request/
-#      limit) evita que un pod sin resources declarados rompa el cálculo
-#      de cuota del namespace.
-#
-# 6) Para destruir el laboratorio:
-#
-#    kubectl delete namespace cnpe-lab-mt
-# =========================================================================
+- CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+- Kubernetes Multi-tenancy Best Practices — https://kubernetes.io/docs/concepts/security/multi-tenancy/
+- ResourceQuotas & LimitRanges — https://kubernetes.io/docs/concepts/policy/resource-quotas/
+- Hierarchical Namespace Controller (HNC) — https://github.com/kubernetes-sigs/hierarchical-namespaces
