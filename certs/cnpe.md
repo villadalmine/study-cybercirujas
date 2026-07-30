@@ -74,14 +74,14 @@ topics:
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Using Policy Engines and Admission Controllers for Governance
   topic: 3 - Security and Policy Enforcement
   weight: 3
 - id: '3.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Integrating Security Scanning and Compliance Checks into Deployment Pipelines
   topic: 3 - Security and Policy Enforcement
   weight: 3
