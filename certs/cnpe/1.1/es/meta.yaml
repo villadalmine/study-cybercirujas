@@ -1,0 +1,6 @@
+generated_at: '2026-07-30T02:36:20'
+lang: es
+backend: antigravity
+model: gemini-2.5-pro
+sources:
+- https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf

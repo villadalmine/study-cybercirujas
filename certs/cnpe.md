@@ -8,7 +8,7 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-  status: pending
+  status: generated
   title: Applying Platform Architecture Best Practices for Networking, Storage, and
     Compute
   topic: 1 - Platform Architecture and Infrastructure
