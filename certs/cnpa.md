@@ -8,14 +8,14 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Declarative Resource Management and Infrastructure Concepts
   topic: 1 - Platform Engineering Core Fundamentals
   weight: 7.2
 - id: '1.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: DevOps Practices and Culture in Platform Engineering
   topic: 1 - Platform Engineering Core Fundamentals
   weight: 7.2
