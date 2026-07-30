@@ -1,15 +1,15 @@
 # 3.2 Applying RBAC and Security Controls Across Platform Resources
 
-> Referencia: [CNCF CNPE Curriculum](https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf)
+## Motivación y Gobierno de Accesos en la Plataforma
 
-El control de acceso basado en roles (**RBAC**) y las medidas de hardened de seguridad son fundamentales para controlar qué usuarios y ServiceAccounts pueden interactuar con los recursos de la API de Kubernetes.
+El control de acceso basado en roles (**RBAC - Role-Based Access Control**) y las políticas de hardening a nivel de Pod (Pod Security Admission) constituyen la primera línea de defensa para prevenir accesos no autorizados a las APIs de Kubernetes y movimientos laterales en el clúster.
 
 ---
 
-## 1. Arquitectura RBAC (Role, ClusterRole, RoleBinding, ClusterRoleBinding)
+## 1. Arquitectura RBAC (Roles, ClusterRoles, Bindings)
 
 ### Principio de Mínimo Privilegio (Least Privilege)
-- **Role / RoleBinding**: Ámbito limitado a un único namespace.
+- **Role / RoleBinding**: Ámbito limitado a un namespace específico.
 - **ClusterRole / ClusterRoleBinding**: Ámbito global del clúster (nodos, PVs, namespaces).
 
 ```yaml
@@ -28,13 +28,13 @@ rules:
 
 ---
 
-## 2. Pod Security Standards (PSS) y Pod Security Admission (PSA)
+## 2. Pod Security Admission (PSA) y Pod Security Standards (PSS)
 
-Reemplazo nativo de PodSecurityPolicies (PSP). PSA aplica niveles de seguridad mediante labels en los Namespaces:
+Pod Security Admission reemplaza las antiguas PSPs imponiendo niveles de seguridad mediante etiquetas en los Namespaces:
 
 - **Privileged**: Sin restricciones (para agentes de infraestructura como CNI/Prometheus).
 - **Baseline**: Previene escalamiento de privilegios conocido.
-- **Restricted**: Aplica las mejores prácticas extremas de hardened (no root, read-only root filesystem, drop ALL capabilities).
+- **Restricted**: Aplica las mejores prácticas extremas de hardening (no root, read-only root filesystem, drop ALL capabilities).
 
 ```yaml
 apiVersion: v1
@@ -45,6 +45,16 @@ metadata:
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/enforce-version: latest
     pod-security.kubernetes.io/warn: restricted
+```
+
+---
+
+## Verificación de Permisos RBAC (`auth can-i`)
+
+```bash
+# Verificar si una ServiceAccount puede eliminar pods en un namespace
+$ kubectl auth can-i delete pods --as=system:serviceaccount:tenant-a:dev-sa -n tenant-a
+yes
 ```
 
 ---
