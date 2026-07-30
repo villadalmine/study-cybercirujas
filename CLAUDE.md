@@ -31,3 +31,9 @@ Full process in [WORKFLOW.md](WORKFLOW.md) — read it before generating, transl
 - **Idempotency**: All CLI actions (snapshotting, generation, translation) must be idempotent. If interrupted, running the command again must safely skip already generated work.
 - **Copyright Guard**: Never persist scraped official syllabus text directly. Scraped texts are to be processed in-memory by the LLM and outputted as custom original summaries with correct source attributions.
 - **Backends are interchangeable**: all satisfy `complete(system, user) -> str`, so a cert can be started with one and finished with another (`litellm` | `claude` | `codex` | `gemini` | `custom`). CLI-agent backends other than `claude` are invoked without tool-restriction flags and can return process recaps instead of content; `_reject_if_recap` fails loudly rather than saving a stub.
+
+## Agent Idea Synchronization (AGENTS_SYNC.md)
+
+- **Idea Exchange Buffer**: [AGENTS_SYNC.md](AGENTS_SYNC.md) is an asynchronous proposal queue for AI agents (Antigravity, Claude, etc.) working on this repository.
+- **Mandatory Agent Check**: All AI agents MUST inspect [AGENTS_SYNC.md](AGENTS_SYNC.md) during context initialization or task evaluation. Read pending ideas, evaluate them technically, implement or transfer accepted items to [BACKLOG.md](BACKLOG.md) / [PLAN.md](PLAN.md), and delete processed entries from [AGENTS_SYNC.md](AGENTS_SYNC.md) so the queue remains clean for future proposals.
+
