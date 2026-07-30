@@ -22,14 +22,14 @@ topics:
 - id: '1.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Application Environments and Infrastructure Architecture
   topic: 1 - Platform Engineering Core Fundamentals
   weight: 7.2
 - id: '1.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Platform Architecture and Core Capabilities
   topic: 1 - Platform Engineering Core Fundamentals
   weight: 7.2
