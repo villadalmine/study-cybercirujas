@@ -48,8 +48,17 @@ Con backends locales: generar en tu máquina → revisar → `make publish`.
 ## Idiomas
 
 Contenido por idioma en `certs/<cert>/<topic>/<lang>/` (es default; en, fr, de,
-zh, ja, pt). Generar traducciones: `teach cert generate <cert> --lang en`.
+zh, ja, pt). Generar otro idioma: `teach cert generate <cert> --lang en`.
 La web tiene selector de idioma con fallback al español.
+
+Ojo: eso **no traduce** el contenido en español, regenera el tema desde cero en
+el otro idioma a partir del temario. Ver [WORKFLOW.md](WORKFLOW.md).
+
+## Proceso de contenido
+
+[WORKFLOW.md](WORKFLOW.md) documenta el ciclo completo (snapshot → generar →
+auditar → status → commit → publicar), cómo cambiar de backend a mitad de
+camino, y los modos de fallo conocidos.
 
 ## Deploy en Kubernetes
 
