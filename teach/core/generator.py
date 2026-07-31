@@ -42,7 +42,7 @@ from pathlib import Path
 
 import yaml
 
-from . import certs, quality
+from . import certs, pipeline, quality
 
 
 class GeneratorConfigError(Exception):
@@ -185,12 +185,24 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
         # stdin=DEVNULL: the prompt travels as an argument, never on stdin. Without
         # this the agent CLIs wait ~3s per call for input that never comes and emit
         # a warning on stderr, which used to mask the real error below.
-        result = subprocess.run(
-            [*command, f"{system}\n\n{user}"],
-            capture_output=True,
-            text=True,
-            stdin=subprocess.DEVNULL,
-        )
+        # A bounded wait, so a CLI that never returns fails instead of hanging.
+        # An unbounded call also stalls the unattended timer, whose guard sees a
+        # live process and keeps skipping.
+        timeout = pipeline.budget().get("completion_timeout_seconds") or None
+        try:
+            result = subprocess.run(
+                [*command, f"{system}\n\n{user}"],
+                capture_output=True,
+                text=True,
+                stdin=subprocess.DEVNULL,
+                timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+            raise GeneratorConfigError(
+                f"'{command[0]}' produced no answer within {timeout}s "
+                f"(completion_timeout_seconds in pipeline.yaml). Treated as a "
+                f"transient failure; the topic stays pending."
+            ) from None
         if result.returncode != 0:
             # Report both streams: agent CLIs write warnings to stderr and the
             # actual failure to stdout, so picking one hides the diagnosis.

@@ -24,15 +24,26 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import subprocess
 import sys
 import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO / "scripts"))
+VENV_PYTHON = REPO / ".venv" / "bin" / "python3"
 
-from teach.core import generator, pipeline  # noqa: E402
+# Re-exec under the venv interpreter when started with a bare `scripts/quota.py`.
+# The shebang resolves to the system python, which has no `teach` package, so
+# the import below died with ModuleNotFoundError — a script meant to be run by
+# hand at any moment must not require remembering the interpreter.
+if (
+    VENV_PYTHON.exists()
+    and Path(sys.executable).resolve() != VENV_PYTHON.resolve()
+    and not os.environ.get("TEACH_QUOTA_REEXEC")
+):
+    os.environ["TEACH_QUOTA_REEXEC"] = "1"
+    os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), str(Path(__file__).resolve()), *sys.argv[1:]])
 
 STATE_DIR = Path.home() / ".local" / "state" / "teach-plat"
 HISTORY = STATE_DIR / "quota-history.jsonl"
@@ -43,7 +54,13 @@ AVAILABLE, EXHAUSTED, BROKEN = 0, 1, 2
 
 def probe(backend: str = "claude") -> tuple[int, str]:
     """Returns (exit-style status, detail). Cheap by construction: the prompt
-    asks for two characters."""
+    asks for two characters.
+
+    The teach imports are local to this function so that `--history`, which only
+    reads a file, keeps working even where the package is unavailable.
+    """
+    from teach.core import generator, pipeline
+
     try:
         command = generator.AGENT_COMMANDS[backend]
     except KeyError:

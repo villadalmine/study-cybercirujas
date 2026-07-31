@@ -40,8 +40,17 @@ budget:
     - "500"
     - "Internal server error"
     - "below the quality floor"
+    # A completion that never returned: the topic stays pending, so asking
+    # again is safe and usually works.
+    - "produced no answer within"
   retry_attempts: 3
   retry_delay_seconds: 60
+  # Ceiling for a single completion. A topic normally takes ~3-4 minutes per
+  # completion (two per topic), so this is generous — it exists only so a CLI
+  # that never returns cannot stall everything behind it. Without it a hung
+  # call blocks forever, and the unattended timer keeps skipping because its
+  # pgrep guard sees a process that looks alive.
+  completion_timeout_seconds: 900
 
 # Stage order. Content before media, always: a video narrates content that must
 # already exist and be verified. Videos are the last step and never block.

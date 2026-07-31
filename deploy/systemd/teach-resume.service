@@ -5,3 +5,8 @@ Description=teach-plat: one bounded content-generation pass when quota allows
 Type=oneshot
 Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
 ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
+# A pass is 2 topics at ~7 min each, so 40 min is generous. The ceiling matters
+# because the script's pgrep guard skips while a generation looks alive: a call
+# that never returns would otherwise stall every later firing indefinitely.
+TimeoutStartSec=2400
+KillMode=mixed
