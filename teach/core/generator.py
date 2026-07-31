@@ -423,6 +423,128 @@ def generate_topic(
     return {"topic": topic_id, "written": str(lang_dir)}
 
 
+CODE_BLOCK = re.compile(r"^```.*?^```", re.MULTILINE | re.DOTALL)
+URL_RE = re.compile(r"https?://[^\s)\]>\"'`]+")
+HEADING = re.compile(r"^#+ ", re.MULTILINE)
+
+
+def _verify_translation(source: str, translated: str, label: str) -> str:
+    """Structural checks a translation must satisfy but authoring cannot.
+
+    This is what makes translating on a weaker model defensible: the substance
+    is already fixed by the source, so what can go wrong is mechanical — the
+    model summarising instead of translating, dropping sections, or translating
+    command flags and YAML keys, which would silently break every example.
+
+    Code blocks and URLs must survive byte-identical. Headings must match in
+    number. Length is allowed to drift within a band, because languages differ
+    in verbosity, but not to collapse.
+    """
+    problems = []
+
+    source_blocks = CODE_BLOCK.findall(source)
+    result_blocks = CODE_BLOCK.findall(translated)
+    if len(source_blocks) != len(result_blocks):
+        problems.append(
+            f"{len(source_blocks)} code blocks in the source, {len(result_blocks)} in the translation"
+        )
+    else:
+        changed = [i for i, (a, b) in enumerate(zip(source_blocks, result_blocks)) if a != b]
+        if changed:
+            problems.append(
+                f"{len(changed)} code blocks were modified (they must be copied verbatim)"
+            )
+
+    source_urls, result_urls = set(URL_RE.findall(source)), set(URL_RE.findall(translated))
+    if source_urls - result_urls:
+        problems.append(f"{len(source_urls - result_urls)} source URLs are missing")
+
+    if len(HEADING.findall(source)) != len(HEADING.findall(translated)):
+        problems.append(
+            f"{len(HEADING.findall(source))} headings in the source, "
+            f"{len(HEADING.findall(translated))} in the translation"
+        )
+
+    ratio = len(translated) / max(len(source), 1)
+    if not 0.6 <= ratio <= 1.6:
+        problems.append(f"length ratio {ratio:.2f} (expected between 0.6 and 1.6)")
+
+    if problems:
+        raise GeneratorConfigError(
+            f"The {label} translation does not preserve the source structure: "
+            + "; ".join(problems)
+        )
+    return translated
+
+
+def translate_topic(
+    cert_id: str,
+    topic_id: str,
+    lang: str,
+    source_lang: str = certs.DEFAULT_LANG,
+    backend: str | None = None,
+    force: bool = False,
+) -> dict:
+    """Translate an existing topic instead of re-authoring it.
+
+    `generate_topic` never reads existing content: it writes every language from
+    the syllabus, so each one costs full authoring. Translating reuses the work
+    already done, which keeps languages structurally in sync and asks the model
+    for restatement rather than reasoning — the same output length, much less
+    thinking.
+    """
+    if lang not in certs.LANGS:
+        raise GeneratorConfigError(f"Language '{lang}' not supported. Valid: {certs.LANGS}")
+    if lang == source_lang:
+        raise GeneratorConfigError("Source and target language are the same")
+
+    directory = certs.content_dir(cert_id, topic_id)
+    source_dir = directory / source_lang
+    if not (source_dir / "content.md").exists():
+        raise GeneratorConfigError(
+            f"No {source_lang} content for {cert_id}/{topic_id} to translate from"
+        )
+    if lang in certs.topic_langs(cert_id, topic_id) and not force:
+        return {"topic": topic_id, "skipped": f"already exists in {lang} (use --force)"}
+
+    complete, backend_meta = make_completer(backend)
+    system = (
+        f"Sos un traductor técnico especializado. Traducís del "
+        f"{LANG_NAMES.get(source_lang, source_lang)} al "
+        f"{LANG_NAMES.get(lang, lang)}.\n"
+        "REGLAS ESTRICTAS:\n"
+        "1. Copiá los bloques de código EXACTAMENTE como están, sin traducir "
+        "comandos, flags, nombres de campos YAML, ni salidas de terminal.\n"
+        "2. Mantené los términos técnicos en inglés (Pod, Deployment, "
+        "NetworkPolicy, etc).\n"
+        "3. Conservá TODOS los encabezados, en el mismo orden y nivel.\n"
+        "4. Conservá TODAS las URLs sin modificar.\n"
+        "5. No resumas, no expandas, no agregues ni quites secciones.\n"
+        "Respondé SOLO con el markdown traducido."
+    )
+
+    written = {}
+    for kind in ("content.md", "exercises.md"):
+        source = (source_dir / kind).read_text()
+        result = _strip_fence(complete(system, source))
+        _verify_translation(source, result, kind)
+        _reject_if_substandard(result, kind.removesuffix(".md"), topic_id, lang)
+        written[kind] = result
+
+    target = directory / lang
+    target.mkdir(parents=True, exist_ok=True)
+    for kind, text in written.items():
+        (target / kind).write_text(text)
+    (target / "meta.yaml").write_text(yaml.safe_dump({
+        "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "lang": lang,
+        "translated_from": source_lang,
+        **backend_meta,
+        "sources": certs.get_topic(cert_id, topic_id).get("sources", []),
+    }, sort_keys=False))
+    return {"topic": topic_id, "written": str(target), "translated_from": source_lang}
+
+
 def generate_cert(
     cert_id: str,
     force: bool = False,

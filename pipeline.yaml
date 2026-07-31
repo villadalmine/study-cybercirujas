@@ -73,6 +73,20 @@ stages: [snapshot, generate, audit, status, video]
 # `requires` checks structure the prompt explicitly asks for, which is the more
 # meaningful half: a topic can hit the byte count and still ship without the
 # collapsible answers section that makes the exercises usable.
+# NON-NEGOTIABLE: content quality comes first, cost second. A cheaper model is
+# only ever acceptable where it provably does not degrade the material — never
+# as a way to produce weaker content faster.
+#
+# This is why translating and authoring are treated differently. Authoring from
+# a one-line syllabus entry is a reasoning task and its quality tracks model
+# strength directly, so it stays on the strong backend. Translating restates
+# material whose substance is already fixed by the source, and its failure modes
+# are mechanical — summarising instead of translating, dropping sections,
+# translating command flags — which `_verify_translation` checks deterministically
+# (code blocks and URLs byte-identical, heading counts equal, length in band).
+#
+# A translation must therefore read the same regardless of which model produced
+# it. Any model that cannot pass those checks is not cheaper, it is unusable.
 quality:
   content:
     min_bytes: 4000

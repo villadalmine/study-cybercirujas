@@ -162,6 +162,38 @@ def cert_snapshot(
         )
 
 
+@cert_app.command("translate")
+def cert_translate(
+    cert_id: str,
+    topic: str = typer.Option(None, "--topic", help="Translate only this topic (e.g. 1.1)"),
+    to: str = typer.Option(..., "--to", help="Target language: en | fr | de | zh | ja | pt"),
+    source: str = typer.Option("es", "--from", help="Source language (default: es)"),
+    backend: str = typer.Option(None, "--backend"),
+    force: bool = typer.Option(False, "--force", help="Overwrite an existing translation"),
+) -> None:
+    """Translate existing content instead of re-authoring it in another language.
+
+    `generate --lang <x>` writes every language from the syllabus, paying full
+    authoring cost each time. This reuses the source language, so the model
+    restates rather than reasons, and the structure stays identical across
+    languages — which is verified, not assumed.
+    """
+    topics = [topic] if topic else [str(t["id"]) for t in certs.topics(cert_id)]
+    for topic_id in topics:
+        try:
+            result = generator.translate_topic(
+                cert_id, topic_id, lang=to, source_lang=source,
+                backend=backend, force=force,
+            )
+        except generator.GeneratorConfigError as error:
+            typer.echo(f"  {topic_id}: {error}", err=True)
+            continue
+        if "skipped" in result:
+            typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
+        else:
+            typer.echo(f"  {topic_id}: translated into {result['written']}")
+
+
 @cert_app.command("video-script")
 def cert_video_script(
     cert_id: str,

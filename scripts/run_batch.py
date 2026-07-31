@@ -14,6 +14,7 @@ it left off without keeping any state of its own.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import subprocess
 import sys
 import time
@@ -21,6 +22,25 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
+
+# Shared with scripts/resume-generation.sh. Without it the manual and
+# unattended paths generate at the same time — which happened: the systemd pass
+# was working on one topic while a hand-launched run worked on another, both
+# spending quota, and nothing prevented them picking the SAME topic and
+# overwriting each other's output.
+LOCK_FILE = Path.home() / ".local" / "state" / "teach-plat" / "resume.lock"
+
+
+def acquire_lock():
+    """Returns the held file object, or None when another run has it."""
+    LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
+    handle = LOCK_FILE.open("w")
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        handle.close()
+        return None
+    return handle
 
 from teach.core import pipeline  # noqa: E402
 
@@ -63,6 +83,12 @@ def main() -> int:
         help="how many topics to generate (default: budget.topics_per_run from pipeline.yaml)",
     )
     args = parser.parse_args()
+
+    lock = acquire_lock()
+    if lock is None:
+        print("another generation holds the lock (systemd timer or a manual run); "
+              "not starting a second one", file=sys.stderr)
+        return 3
 
     limit = args.topics if args.topics is not None else pipeline.topics_per_run()
     attempts = int(pipeline.budget().get("retry_attempts") or 1)

@@ -169,7 +169,11 @@ def main() -> None:
             if pipeline.is_fatal(output):
                 print(f"    fatal, stopping this pass:\n{output}", flush=True)
                 return
-            print(f"    failed, will retry on the next pass:\n{output}", flush=True)
+            # A killed process exits non-zero with no output at all, which used
+            # to print an empty reason and look like a mystery. Report the exit
+            # code so "someone killed it" is distinguishable from a real error.
+            detail = output or f"no output, exit code {result.returncode} (killed?)"
+            print(f"    failed, will retry on the next pass: {detail}", flush=True)
 
 
 if __name__ == "__main__":
