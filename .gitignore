@@ -7,3 +7,4 @@ certs/*/*/lab/terraform/*.tfstate*
 certs/*/*/lab/status.yaml
 media/**/*.mp4
 media/**/.build/
+.study/

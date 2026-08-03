@@ -318,6 +318,25 @@ was never built.
 (`certs.py::topic_content` falls back to Spanish for any missing language and
 reports `lang_fallback`), but the rule is one image build per finished cert.
 
+## Translating instead of re-authoring
+
+`generate --lang <x>` writes each language from the syllabus, paying full authoring
+cost every time. `teach cert translate <cert> --to <lang>` reuses the Spanish content
+instead, so the model restates rather than reasons, and the structure stays identical
+across languages — verified by `_verify_translation`, not assumed.
+
+Which one applies is decided by whether a good source exists, not by preference:
+
+```bash
+teach cert translate cks --to en --backend litellm   # a good es/ exists -> translate
+teach cert generate  cnpa --lang es --backend claude # nothing to translate from -> author
+```
+
+Translating is measured, not assumed, to be safe on a cheap model — see
+[docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md). Short version: use `cheap` for
+translation (equal prose, 60× cheaper, every failure mode is caught before writing) and
+`claude` for authoring. The saving that matters is Claude quota, not dollars.
+
 ## Backends
 
 Selected by `--backend`, `BACKEND=` or `$TEACH_BACKEND`. Default: `litellm`.

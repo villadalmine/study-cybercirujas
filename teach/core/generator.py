@@ -426,6 +426,29 @@ def generate_topic(
 CODE_BLOCK = re.compile(r"^```.*?^```", re.MULTILINE | re.DOTALL)
 URL_RE = re.compile(r"https?://[^\s)\]>\"'`]+")
 HEADING = re.compile(r"^#+ ", re.MULTILINE)
+# Comment text inside a code block: from an unquoted '#' to end of line.
+COMMENT = re.compile(r"#[^\n]*")
+
+
+def _code_without_comments(block: str) -> str:
+    """A code block with its comment TEXT blanked, the '#' markers kept.
+
+    Comments inside examples are prose and must be translated: the Spanish
+    material explains a manifest with `# a qué pods se aplica`, and the English
+    material a student reads has to say `# which pods this applies to`. That is
+    what the authored English content does, so demanding byte-identical blocks
+    rejected every correct translation — including one a strong model would
+    produce. Everything that actually breaks an example if touched (commands,
+    flags, YAML keys and values, terminal output) still has to match exactly.
+
+    The '#' itself is kept so a model cannot pass by DELETING a comment line:
+    the marker would disappear and the blocks would differ.
+
+    A '#' inside a string or a URL fragment is blanked too, which costs a little
+    sensitivity on those lines. It is applied to both sides identically, so it
+    can never turn a real difference into a false pass on the rest of the line.
+    """
+    return COMMENT.sub("#", block)
 
 
 def _verify_translation(source: str, translated: str, label: str) -> str:
@@ -436,9 +459,10 @@ def _verify_translation(source: str, translated: str, label: str) -> str:
     model summarising instead of translating, dropping sections, or translating
     command flags and YAML keys, which would silently break every example.
 
-    Code blocks and URLs must survive byte-identical. Headings must match in
-    number. Length is allowed to drift within a band, because languages differ
-    in verbosity, but not to collapse.
+    Code blocks must survive byte-identical apart from their comments, which are
+    prose and are meant to be translated. URLs must survive untouched. Headings
+    must match in number. Length is allowed to drift within a band, because
+    languages differ in verbosity, but not to collapse.
     """
     problems = []
 
@@ -449,10 +473,14 @@ def _verify_translation(source: str, translated: str, label: str) -> str:
             f"{len(source_blocks)} code blocks in the source, {len(result_blocks)} in the translation"
         )
     else:
-        changed = [i for i, (a, b) in enumerate(zip(source_blocks, result_blocks)) if a != b]
+        changed = [
+            i for i, (a, b) in enumerate(zip(source_blocks, result_blocks))
+            if _code_without_comments(a) != _code_without_comments(b)
+        ]
         if changed:
             problems.append(
-                f"{len(changed)} code blocks were modified (they must be copied verbatim)"
+                f"{len(changed)} code blocks were modified beyond their comments "
+                f"(commands, flags, YAML keys and output must be copied verbatim)"
             )
 
     source_urls, result_urls = set(URL_RE.findall(source)), set(URL_RE.findall(translated))
