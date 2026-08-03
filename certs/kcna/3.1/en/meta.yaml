@@ -1,0 +1,8 @@
+generated_at: '2026-08-03T18:42:11'
+lang: en
+translated_from: es
+backend: litellm
+model: cheap
+base_url: http://127.0.0.1:4000
+sources:
+- https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf

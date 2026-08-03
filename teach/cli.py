@@ -178,20 +178,37 @@ def cert_translate(
     restates rather than reasons, and the structure stays identical across
     languages — which is verified, not assumed.
     """
+    from .core import pipeline
+
     topics = [topic] if topic else [str(t["id"]) for t in certs.topics(cert_id)]
+    # Structural rejections are usually variance, not incapacity: a cheap model
+    # that mistranslates one placeholder on the first try gets it right on the
+    # next (measured — see docs/TRANSLATION_STUDY.md). Nothing is written on a
+    # rejection, so retrying is free of side effects, and at ~$0.0008 a call it
+    # is cheaper than leaving a topic untranslated.
+    attempts = max(1, int(pipeline.budget().get("retry_attempts") or 1))
     for topic_id in topics:
-        try:
-            result = generator.translate_topic(
-                cert_id, topic_id, lang=to, source_lang=source,
-                backend=backend, force=force,
-            )
-        except generator.GeneratorConfigError as error:
-            typer.echo(f"  {topic_id}: {error}", err=True)
-            continue
-        if "skipped" in result:
-            typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
-        else:
-            typer.echo(f"  {topic_id}: translated into {result['written']}")
+        for attempt in range(1, attempts + 1):
+            try:
+                result = generator.translate_topic(
+                    cert_id, topic_id, lang=to, source_lang=source,
+                    backend=backend, force=force,
+                )
+            except generator.GeneratorConfigError as error:
+                last = attempt == attempts
+                typer.echo(
+                    f"  {topic_id}: {error}"
+                    + ("" if last else f" — retrying ({attempt}/{attempts})"),
+                    err=True,
+                )
+                if last:
+                    break
+                continue
+            if "skipped" in result:
+                typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
+            else:
+                typer.echo(f"  {topic_id}: translated into {result['written']}")
+            break
 
 
 @cert_app.command("video-script")
