@@ -76,6 +76,57 @@ def test_rejects_a_deleted_comment_line():
         _verify_translation(SOURCE, translated, "content.md")
 
 
+DIAGRAM = """# Arquitectura
+
+```text
+┌─────────────────────────────────────────┐
+│  cloud-controller-manager (opcional)    │
+│  kube-scheduler                         │
+└─────────────────────────────────────────┘
+```
+
+## Referencias
+
+- https://kubernetes.io/docs/concepts/overview/components/
+"""
+
+
+def test_accepts_a_translated_diagram_label_that_keeps_alignment():
+    """ASCII diagrams are prose too, and this one is not a retry away: `cheap`
+    translated it on 3 of 3 attempts, so rejecting it meant the topic could
+    never be translated at all."""
+    translated = (
+        DIAGRAM.replace("# Arquitectura", "# Architecture")
+        .replace("(opcional)", "(optional)")
+        .replace("## Referencias", "## References")
+    )
+    assert _verify_translation(DIAGRAM, translated, "content.md") == translated
+
+
+def test_rejects_a_translated_diagram_that_breaks_alignment():
+    """Re-padding is the model's job: a diagram whose borders no longer line up
+    is visibly broken material, so the column positions still have to match."""
+    translated = DIAGRAM.replace(
+        "│  cloud-controller-manager (opcional)    │",
+        "│  cloud-controller-manager (not required) │",
+    )
+    with pytest.raises(GeneratorConfigError, match="code blocks were modified"):
+        _verify_translation(DIAGRAM, translated, "content.md")
+
+
+def test_rejects_a_command_disguised_by_the_diagram_rule():
+    """The box-drawing rule must not leak onto ordinary commands: '|' and '-'
+    are excluded from the box character set precisely so a pipeline stays
+    compared exactly."""
+    source = SOURCE.replace(
+        "```yaml\napiVersion",
+        "```bash\nkubectl get pods -o json | jq '.items[].metadata.name'\n```\n\n```yaml\napiVersion",
+    )
+    translated = source.replace("kubectl get pods", "kubectl obtener pods")
+    with pytest.raises(GeneratorConfigError, match="code blocks were modified"):
+        _verify_translation(source, translated, "content.md")
+
+
 def test_rejects_a_dropped_url():
     translated = SOURCE.replace(
         "https://kubernetes.io/docs/concepts/services-networking/network-policies/",

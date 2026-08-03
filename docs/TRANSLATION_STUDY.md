@@ -52,7 +52,7 @@ read by hand rather than asserted.
 (cks 2.4) passed on both retries. That matters: a rejection costs $0.0008 and 27
 seconds and writes nothing, so the retry policy already in `pipeline.yaml` absorbs it.
 
-## Two bugs this study found in our own checks
+## Three bugs this study found in our own checks
 
 **`_verify_translation` rejected every correct translation.** It demanded code blocks
 be byte-identical, but comments inside them are prose: the Spanish material explains a
@@ -62,6 +62,16 @@ English comments in cks/1.1 against 2 Spanish ones in the source. Every model fa
 this, including Claude. Fixed: comment text is blanked before comparing, the `#`
 marker kept so a deleted comment line is still caught. Covered by
 `tests/test_translation_verify.py`.
+
+**ASCII diagrams were rejected, and no retry could fix it.** `cheap` translated
+`│ cloud-controller-manager (opcional) │` on 3 of 3 attempts — correctly, since a
+diagram label is prose. Unlike the cks 2.4 placeholder, this was deterministic, so
+kcna/1.1 could never have been translated at all. Fixed: on lines drawn with box
+characters, labels are blanked but the box characters must keep their exact column
+positions, so a translation that re-pads correctly passes and one that leaves the
+diagram misaligned is still rejected. `+`, `-` and `|` are excluded from the box
+character set on purpose — they appear in ordinary commands, and a shell pipeline
+must stay compared exactly.
 
 **Placeholders are left strict, deliberately.** The authored English content also
 translates placeholders (`<namespace>`, `<serviceaccount>`), so `<pod-ip-destino>` →
@@ -87,6 +97,23 @@ Authoring those 32 on Claude costs roughly **3.7 hours of quota** (~7 min/topic)
 Translating them costs ~$0.05 and about 25 minutes, and frees that entire quota window
 for the 85 that genuinely need a strong model. Once cnpa/es and cnpe/es are authored,
 their English siblings become translatable too.
+
+## Translating is not the same deliverable as authoring
+
+Worth stating plainly, because the cost numbers above make translation look strictly
+better and it is not. Where English was **authored**, it came out substantially richer
+than its Spanish sibling: across the 12 cks topics that have both, the English is a
+median **2.34×** the size of the Spanish (up to 10.27×). A translation is ~0.98×, by
+construction — it restates the source and nothing more.
+
+So the choice is per certification, and it is about consistency:
+
+- **cks** already has 12 authored English topics. Translating the remaining 14 would
+  leave half the certification rich and half thin. Finish it by authoring.
+- **kcna** has no English at all. Translating all 13 produces a uniform certification
+  that faithfully matches the Spanish, and costs ~$0.02 instead of ~1.5 h of quota.
+- **cnpe / cnpa** have no usable Spanish yet, so there is nothing to translate from.
+  Author Spanish first; the English decision comes after.
 
 ## Recommendation
 

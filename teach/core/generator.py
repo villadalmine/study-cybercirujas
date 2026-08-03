@@ -428,27 +428,46 @@ URL_RE = re.compile(r"https?://[^\s)\]>\"'`]+")
 HEADING = re.compile(r"^#+ ", re.MULTILINE)
 # Comment text inside a code block: from an unquoted '#' to end of line.
 COMMENT = re.compile(r"#[^\n]*")
+# Unicode box-drawing block. Deliberately excludes '+', '-' and '|', which are
+# everywhere in ordinary commands and would misclassify them as diagrams.
+BOX = re.compile(r"[─-╿]")
 
 
-def _code_without_comments(block: str) -> str:
-    """A code block with its comment TEXT blanked, the '#' markers kept.
+def _comparable_code(block: str) -> str:
+    """A code block reduced to the parts a translation must not touch.
 
-    Comments inside examples are prose and must be translated: the Spanish
-    material explains a manifest with `# a qué pods se aplica`, and the English
-    material a student reads has to say `# which pods this applies to`. That is
-    what the authored English content does, so demanding byte-identical blocks
-    rejected every correct translation — including one a strong model would
-    produce. Everything that actually breaks an example if touched (commands,
-    flags, YAML keys and values, terminal output) still has to match exactly.
+    Code blocks are not uniformly code. They hold three kinds of content, and
+    only one of them must survive byte-identical:
 
-    The '#' itself is kept so a model cannot pass by DELETING a comment line:
-    the marker would disappear and the blocks would differ.
+    - **Commands, flags, YAML keys and values, terminal output.** Translating
+      any of these silently breaks the example. Compared exactly.
+    - **Comments.** These are prose and must be translated: the Spanish material
+      explains a manifest with `# a qué pods se aplica`, the English a student
+      reads has to say `# which pods this applies to`. The authored English
+      content does exactly that (12 English comments in cks/1.1 against 2
+      Spanish ones in its source), so demanding byte-identical blocks rejected
+      every correct translation, on every model including Claude. Comment TEXT
+      is blanked; the '#' marker is kept, so a model cannot pass by DELETING a
+      comment line — the marker would vanish and the blocks would differ.
+    - **ASCII diagrams.** Also prose, and also deterministic: `cheap` translated
+      `│ cloud-controller-manager (opcional) │` on 3 of 3 attempts, so no retry
+      policy could ever get that topic through. On lines drawn with box
+      characters, the labels are blanked but the box characters keep their exact
+      COLUMN positions — a translation that re-pads correctly passes, and one
+      that translates without re-padding leaves the diagram visibly misaligned
+      and is rejected, which is the right answer.
 
-    A '#' inside a string or a URL fragment is blanked too, which costs a little
-    sensitivity on those lines. It is applied to both sides identically, so it
-    can never turn a real difference into a false pass on the rest of the line.
+    Both blanking rules are applied to source and translation identically, so
+    they can only reduce sensitivity, never turn a real difference into a pass.
     """
-    return COMMENT.sub("#", block)
+    lines = []
+    for line in block.splitlines():
+        if BOX.search(line):
+            # Keep the drawing, drop the words, preserve every column.
+            lines.append("".join(c if BOX.match(c) else " " for c in line))
+        else:
+            lines.append(COMMENT.sub("#", line))
+    return "\n".join(lines)
 
 
 def _verify_translation(source: str, translated: str, label: str) -> str:
@@ -475,7 +494,7 @@ def _verify_translation(source: str, translated: str, label: str) -> str:
     else:
         changed = [
             i for i, (a, b) in enumerate(zip(source_blocks, result_blocks))
-            if _code_without_comments(a) != _code_without_comments(b)
+            if _comparable_code(a) != _comparable_code(b)
         ]
         if changed:
             problems.append(
