@@ -92,7 +92,15 @@ quality:
     min_bytes: 4000
     starts_with: "#"
     requires:
-      - pattern: "^#+ *(Referencias|References|参考|参考文献|Referências|Références|Referenzen)"
+      # The optional `6)` / `6.` prefix matters: the generation prompt asks for
+      # the sections numbered 1) to 6), so the model sometimes titles the last
+      # one "## 6) References". That is a references section by any reasonable
+      # reading, but the un-prefixed pattern rejected it — and because nothing
+      # is written on rejection, the topic came back pending and was retried on
+      # the next pass, forever. cks 4.1 burned six full generations that way
+      # (~7 min and 2 completions each) across four quota windows, which is what
+      # made the quota vanish within an hour of every renewal.
+      - pattern: "^#+ *(?:[0-9]+[.)]? *)?(Referencias|References|参考|参考文献|Referências|Références|Referenzen)"
         description: "a references section citing official sources"
   exercises:
     min_bytes: 1700

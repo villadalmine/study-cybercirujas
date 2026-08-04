@@ -119,14 +119,35 @@ def _reject_if_substandard(text: str, kind: str, topic_id: str, lang: str) -> No
     gets marked `generated` and is only discovered by the next audit, if anyone
     remembers to run one. Losing the call costs less than quietly polluting the
     syllabus.
+
+    The rejected text IS kept, under `.rejected/`, because discarding it made a
+    repeating failure impossible to diagnose without spending another call. cks
+    4.1 was regenerated six times across four quota windows, rejected every time
+    for the same reason, and left no evidence of what the model had actually
+    written — the quota disappeared within an hour of each renewal with nothing
+    to show. One file on disk would have answered it immediately.
     """
     problems = quality.check(kind, text)
-    if problems:
-        raise GeneratorConfigError(
-            f"{kind} for {topic_id} ({lang}) is below the quality floor: "
-            + "; ".join(problems)
-            + ". Thresholds in pipeline.yaml -> quality."
+    if not problems:
+        return
+
+    try:
+        debris = pipeline.REPO / ".rejected" / f"{topic_id}-{lang}-{kind}.md"
+        debris.parent.mkdir(parents=True, exist_ok=True)
+        debris.write_text(
+            f"<!-- rejected {datetime.datetime.now().isoformat(timespec='seconds')}: "
+            f"{'; '.join(problems)} -->\n\n{text}"
         )
+    except OSError:
+        # Diagnostics must never be the reason a run dies.
+        pass
+
+    raise GeneratorConfigError(
+        f"{kind} for {topic_id} ({lang}) is below the quality floor: "
+        + "; ".join(problems)
+        + f". Thresholds in pipeline.yaml -> quality. "
+        f"Rejected text kept in .rejected/{topic_id}-{lang}-{kind}.md"
+    )
 
 
 Completer = Callable[[str, str], str]
