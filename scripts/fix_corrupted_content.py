@@ -139,6 +139,28 @@ def find_bad_combos() -> set[tuple[str, str, str]]:
     return bad
 
 
+def find_missing_videos() -> list[tuple[str, str]]:
+    """[(cert, lang), ...] declared in pipeline.yaml but not rendered.
+
+    Kept OUT of `find_bad_combos` on purpose: that set drives
+    `teach cert generate --topic`, and a video is per certification, not per
+    topic — feeding it in would make the regeneration loop ask for a topic that
+    does not exist. Reported separately instead.
+
+    It is reported at all because the audit is the work queue, and until now it
+    only looked at content, exercises and labs. A video declared in
+    `pipeline.yaml` and never rendered was invisible here, so "0 pending" could
+    be true of the text and silently wrong about the media — the same blind spot
+    that hit content three separate times (CHANGELOG 2026-07-16 / 07-28 / 07-29).
+    """
+    missing = []
+    for cert, _ in TARGETS:
+        for lang in pipeline.video_languages(cert):
+            if not (REPO / "media" / "certs" / cert / lang / "video.mp4").exists():
+                missing.append((cert, lang))
+    return missing
+
+
 def main() -> None:
     n_fenced = strip_fences_in_place()
     if n_fenced:
@@ -149,6 +171,10 @@ def main() -> None:
     # a declared language. For regeneration it makes no difference, but calling
     # it corrupt makes the report misleading.
     print(f"Pending or corrupt (cert, topic, lang) combos: {len(bad)}", flush=True)
+    videos = find_missing_videos()
+    if videos:
+        print(f"Certification videos declared but not rendered: {len(videos)}"
+              f" ({', '.join(f'{c}/{l}' for c, l in videos)})", flush=True)
     if "--audit-only" in sys.argv:
         for cert, topic, lang in bad:
             print(f"    {cert} {topic} ({lang})", flush=True)
