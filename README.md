@@ -1,29 +1,29 @@
 # teach-plat
 
-Plataforma de estudio para certificaciones IT. Todo el contenido se genera
-dinámicamente desde fuentes oficiales (temarios scrapeados de lpi.org, PDFs
-de github.com/cncf/curriculum, etc.) — nada hardcodeado.
+Study platform for IT certifications. All content is generated from official
+sources (syllabi scraped from lpi.org, PDFs from github.com/cncf/curriculum,
+etc.) — nothing hardcoded.
 
-- **[STATUS.MD](STATUS.MD)** — qué cert/idioma/lab/video está terminado
-- **[PLAN.MD](PLAN.MD)** — diseño completo
-- **[BACKLOG.MD](BACKLOG.MD)** — lo pendiente
-- **[CHANGELOG.MD](CHANGELOG.MD)** — lo entregado
+- **[STATUS.md](STATUS.md)** — which cert/language/lab/video is finished
+- **[PLAN.md](PLAN.md)** — full design
+- **[BACKLOG.md](BACKLOG.md)** — what is pending
+- **[CHANGELOG.md](CHANGELOG.md)** — what has been delivered
 
 ## Quickstart
 
 ```bash
 make install                                   # venv + CLI
-make list                                      # catálogo
-make show CERT=lpi-010-160                     # temario + estado por tema
+make list                                      # catalogue
+make show CERT=lpi-010-160                     # syllabus + per-topic status
 make generate CERT=lpi-010-160 TOPIC=1.1 BACKEND=claude
-make serve                                     # API + web en :8000
+make serve                                     # API + web on :8000
 ```
 
-`make help` lista todos los targets.
+`make help` lists every target.
 
-## Imagen Docker pública
+## Public Docker image
 
-Cada push a `main` publica la imagen en GitHub Container Registry:
+Every push to `main` publishes the image to GitHub Container Registry:
 
 ```bash
 docker pull ghcr.io/villadalmine/study-cybercirujas:latest
@@ -32,114 +32,145 @@ docker run -p 8000:8000 ghcr.io/villadalmine/study-cybercirujas:latest
 
 Web: http://localhost:8000 · API docs: http://localhost:8000/docs
 
-## Backends de generación
+## Generation backends
 
-`BACKEND=` (o `TEACH_BACKEND`):
+`BACKEND=` (or `TEACH_BACKEND`):
 
-- `litellm` (default) — cualquier API compatible OpenAI (LiteLLM, OpenRouter,
-  etc.). Requiere `LITELLM_BASE_URL`, `LITELLM_API_KEY`, `LITELLM_MODEL`.
-- `claude` — Claude Code CLI local (`claude -p`).
-- `codex` — OpenAI Codex CLI local (`codex exec`).
-- `gemini` — Gemini CLI local (`gemini -p`).
-- `custom` — tu comando en `TEACH_AGENT_CMD` (recibe el prompt como último argumento).
+- `litellm` (default) — any OpenAI-compatible API (LiteLLM, OpenRouter, etc.).
+  Requires `LITELLM_BASE_URL`, `LITELLM_API_KEY`, `LITELLM_MODEL`.
+- `claude` — local Claude Code CLI (`claude -p`).
+- `codex` — local OpenAI Codex CLI (`codex exec`).
+- `gemini` — local Gemini CLI (`gemini -p`).
+- `custom` — your command in `TEACH_AGENT_CMD` (receives the prompt as its last argument).
 
-Con backends locales: generar en tu máquina → revisar → `make publish`.
+**Authoring always uses `claude`.** That backend is a subscription: it costs no
+money, it costs a quota window. Authoring quality tracks model strength and
+cannot be checked mechanically, so it never moves to a cheaper model. Translation
+is the one place a cheaper model is measured and used — see
+[docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md).
 
-## Idiomas
+With local backends: generate on your machine → review → `make publish`.
 
-Contenido por idioma en `certs/<cert>/<topic>/<lang>/` (es default; en, fr, de,
-zh, ja, pt). Generar otro idioma: `teach cert generate <cert> --lang en`.
-La web tiene selector de idioma con fallback al español.
+## Languages
 
-Ojo: eso **no traduce** el contenido en español, regenera el tema desde cero en
-el otro idioma a partir del temario. Ver [WORKFLOW.md](WORKFLOW.md).
+Content lives in `certs/<cert>/<topic>/<lang>/` (`en` is the authoring language;
+`es`, `fr`, `de`, `zh`, `ja`, `pt` follow). The web has a language selector and
+falls back along `en → es`.
 
-## Proceso de contenido
-
-[WORKFLOW.md](WORKFLOW.md) documenta el ciclo completo (snapshot → generar →
-auditar → status → commit → publicar), cómo cambiar de backend a mitad de
-camino, y los modos de fallo conocidos.
-
-Qué se genera está declarado en [pipeline.yaml](pipeline.yaml): qué
-certificaciones están activas, qué idiomas debe tener cada una, cuánto puede
-generar una corrida, y el piso de calidad. Ningún script guarda su propia lista.
-
-## Calidad
-
-El estándar no depende del modelo que generó el material. El piso vive en
-`pipeline.yaml → quality` y lo aplican tres lugares desde esa única definición:
-el generador **antes de escribir** (material flojo falla, no se guarda), la
-auditoría, y `STATUS.md` — que cuenta solo lo que cumple, no los archivos que
-existen.
+**English is authored, everything else is translated:**
 
 ```bash
-make quality                      # qué cumple el piso y qué no
-make test                         # tests del piso y del ciclo de invalidación
-scripts/check_citations.py        # las fuentes citadas ¿existen?
-scripts/check_manifests.py        # los manifiestos incrustados ¿parsean?
+teach cert generate  <cert> --lang en --backend claude    # author (from the syllabus)
+teach cert translate <cert> --to es --backend litellm     # translate (from English)
 ```
 
-Ninguno cuesta cuota de API. Y ninguno demuestra que la explicación sea
-correcta: el piso detecta stubs y estructura faltante, las citas detectan
-fuentes inventadas. [WORKFLOW.md](WORKFLOW.md) explica qué prueba cada
-verificación, qué no, y qué haría falta para verificar corrección de verdad.
+The distinction matters and is easy to get wrong: `generate --lang <x>` does
+**not** translate. It rewrites the topic from scratch in that language from
+syllabus metadata alone, never reading existing content — so it costs a full
+authoring pass and produces a sibling that drifts from its source. Use it only
+for the authoring language. `translate` reuses the source and verifies that code
+blocks, URLs, headings and length survive. See [WORKFLOW.md](WORKFLOW.md).
 
-## Deploy en Kubernetes
+## Content process
 
-El contenido va horneado en la imagen — publicar = rebuild + upgrade.
+[WORKFLOW.md](WORKFLOW.md) documents the full cycle (snapshot → generate →
+audit → status → commit → publish), how to switch backends mid-way, and the
+known failure modes.
+
+What gets generated is declared in [pipeline.yaml](pipeline.yaml): which
+certifications are active, which languages each one should have, how much a
+single run may generate, and the quality floor. No script keeps its own list.
+
+## Quality
+
+The standard does not depend on which model produced the material. The floor
+lives in `pipeline.yaml → quality` and three places apply it from that single
+definition: the generator **before writing** (weak material fails and is not
+saved), the audit, and `STATUS.md` — which counts only what meets the floor, not
+files that merely exist.
 
 ```bash
-# Con la imagen pública de GHCR:
+make quality                      # what meets the floor and what does not
+make audit                        # pending/corrupt combos, and unrendered videos
+make test                         # floor and stale-invalidation tests
+scripts/check_citations.py        # do the cited sources exist?
+scripts/check_manifests.py        # do the embedded manifests parse?
+scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught?
+```
+
+None of these costs API quota. And none of them proves an explanation is
+correct: the floor catches stubs and missing structure, the citation check
+catches invented sources. [WORKFLOW.md](WORKFLOW.md) explains what each check
+proves, what it does not, and what real correctness verification would take.
+
+## Deploying to Kubernetes
+
+Content is baked into the image — publishing means rebuild + upgrade.
+
+```bash
+# With the public GHCR image:
 helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
   -f deploy/helm/values-local.yaml \
   --set image.registry=ghcr.io \
   --set image.repository=villadalmine/study-cybercirujas
 
-# O build in-cluster (Kaniko, sin GitHub Actions):
+# Or build in-cluster (Kaniko, no GitHub Actions):
 make image-cluster TAG=mytag
 make deploy-local TAG=mytag
 ```
 
-Para deploy en un cluster propio, copiar `values-study.example.yaml` a
-`values-local.yaml` y editar dominios/secretos. Pre-requisitos: Gateway API
-(Cilium o similar), cert-manager con ClusterIssuer para TLS.
+Pass the **same explicit `TAG=`** to both targets: `TAG` defaults to a fresh
+timestamp per invocation, so omitting it builds one tag and deploys another.
 
-## Variables de entorno
+Build and deploy only when a certification is complete in that language; commit
+partial progress freely.
 
-| Variable | Uso | Default |
+For your own cluster, copy `values-study.example.yaml` to `values-local.yaml`
+and edit domains/secrets. Prerequisites: Gateway API (Cilium or similar) and
+cert-manager with a ClusterIssuer for TLS.
+
+## Environment variables
+
+| Variable | Use | Default |
 |----------|-----|---------|
-| `TEACH_ROOT` | Raíz del repo de datos | `.` (cwd) |
-| `TEACH_SECRET` | Clave de firma de sesión | random |
-| `TEACH_SITE_URL` | Hostname en marca de agua de videos | `study.cybercirujas.club` |
-| `TEACH_BACKEND` | Backend de generación | `litellm` |
-| `LITELLM_BASE_URL` | URL del proxy LiteLLM | — |
-| `LITELLM_API_KEY` | API key para LiteLLM | — |
-| `LITELLM_MODEL` | Modelo a usar vía LiteLLM | — |
+| `TEACH_ROOT` | Data repo root | `.` (cwd) |
+| `TEACH_SECRET` | Session signing key | random |
+| `TEACH_SITE_URL` | Hostname in the video watermark | `study.cybercirujas.club` |
+| `TEACH_BACKEND` | Generation backend | `litellm` |
+| `LITELLM_BASE_URL` | LiteLLM proxy URL | — |
+| `LITELLM_API_KEY` | API key for LiteLLM | — |
+| `LITELLM_MODEL` | Model to use through LiteLLM | — |
 
-## Timer de generación automática
+## Unattended generation timer
 
-Un timer de systemd (`teach-resume.timer`) puede correr `scripts/resume-generation.sh`
-cada 20 minutos para generar contenido desatendido (fix de corruptos + generación
-pendiente). Idempotente — salta lo ya hecho.
+A systemd timer (`teach-resume.timer`) runs `scripts/resume-generation.sh` every
+20 minutes to generate content unattended. It probes the quota first and skips
+the pass when there is none, and it is idempotent — it skips what is already done.
+
+> **It spends API quota on its own.** Do not enable it without the owner's
+> explicit approval, and check `quota-history.jsonl` afterwards to see what it
+> actually did. A pass that repeatedly regenerates the same topic is burning a
+> whole window for nothing (this happened: see CHANGELOG 2026-08-04).
 
 ```bash
-# Activar
+# Enable
 systemctl --user enable --now teach-resume.timer
 
-# Parar
+# Stop
 systemctl --user stop teach-resume.timer && systemctl --user disable teach-resume.timer
 
-# Estado y log
+# Status and logs
 systemctl --user status teach-resume.timer
 tail -50 ~/.local/state/teach-plat/resume.log
+tail -5  ~/.local/state/teach-plat/quota-history.jsonl   # one line per quota probe
 
-# Pasada manual (sin timer)
+# Manual pass (no timer)
 scripts/resume-generation.sh
 ```
 
-Los unit files viven en `~/.config/systemd/user/` (`teach-resume.timer` +
-`teach-resume.service`).
+Unit files are versioned in `deploy/systemd/` and installed into
+`~/.config/systemd/user/`.
 
-## Licencia
+## Licence
 
 [Apache License 2.0](LICENSE)
