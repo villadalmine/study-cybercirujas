@@ -129,8 +129,12 @@ quality:
 #                     Flip to true when starting it, in the same commit.
 #   languages:     -> overrides `languages.default` entirely when present.
 #   video:         -> languages to render the certification video in. Empty list
-#                     means no video yet. `ja` is unavailable: Piper has no
-#                     Japanese voice (see BACKLOG.md).
+#                     means no video yet. Piper has voices for es, en, de and zh
+#                     only (teach/core/video.py VOICES); `ja` and the rest have
+#                     none, so a video in those languages is not just untranslated,
+#                     it cannot be rendered at all (see BACKLOG.md).
+#                     English goes first here for the same reason it does above:
+#                     it is what gets authored, and the rest is translated.
 certs:
   lpi-010-160:
     active: true
@@ -144,10 +148,10 @@ certs:
     video: [es]
   cks:
     active: true
-    video: [es]
+    video: [en, es]
   kcna:
     active: true
-    video: [es]
+    video: [en, es]
   # Content is being regenerated: the first pass came out far below the quality
   # floor (cnpa met it for 0 of 27 topics, cnpe for 5 of 18, with the exercises
   # missing the collapsible answers section entirely). Active again so the queue
