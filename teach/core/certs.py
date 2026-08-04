@@ -16,7 +16,20 @@ VALID_STATUS = {"pending", "generated", "edited", "stale"}
 # contenido por idioma: certs/<cert>/<topic>/<lang>/{content,exercises}.md
 # el lab (spec/terraform/scripts) es compartido entre idiomas
 LANGS = ["es", "en", "fr", "de", "zh", "ja", "pt"]
-DEFAULT_LANG = "es"
+
+# Authoring language. Everything is written here first — content, exercises,
+# labs, video scripts — and every other language is a translation of it.
+DEFAULT_LANG = "en"
+
+# Fallback chain for a language that has no content yet, tried in order.
+#
+# A single default is not enough during (and after) the switch to authoring in
+# English: Spanish is complete for certifications whose English is still being
+# written (cks was 14 of 26 the day this changed), so falling back to English
+# alone would show nothing for a reader asking for German, while a full Spanish
+# version sat right next to it. The chain keeps the authoring language first and
+# the most complete corpus second.
+FALLBACK_LANGS = ["en", "es"]
 
 TEMPLATE = """\
 ---
@@ -152,11 +165,15 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
     content = _read(directory / lang / "content.md")
     exercises = _read(directory / lang / "exercises.md")
     fallback = None
-    if content is None and lang != DEFAULT_LANG:
-        content = _read(directory / DEFAULT_LANG / "content.md")
-        exercises = _read(directory / DEFAULT_LANG / "exercises.md")
-        if content is not None:
-            fallback = DEFAULT_LANG
+    if content is None:
+        for candidate in FALLBACK_LANGS:
+            if candidate == lang:
+                continue
+            content = _read(directory / candidate / "content.md")
+            if content is not None:
+                exercises = _read(directory / candidate / "exercises.md")
+                fallback = candidate
+                break
     return {
         "content": content,
         "exercises": exercises,

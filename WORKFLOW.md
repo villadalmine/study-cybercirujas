@@ -318,6 +318,29 @@ was never built.
 (`certs.py::topic_content` falls back to Spanish for any missing language and
 reports `lang_fallback`), but the rule is one image build per finished cert.
 
+## Language flow: author once in English, translate outwards
+
+```
+   syllabus ──author (claude)──> EN  content · exercises · labs · video script
+                                  │
+                                  ├──translate (openrouter)──> ES  + video + labs
+                                  └──translate, on demand ────> pt fr de zh ja
+```
+
+English is authored, everything else is translated. `--lang en` authors; every
+other language goes through `teach cert translate`. Authoring a second language
+is what the pipeline used to do and it is now a mistake: it costs a full
+authoring pass and produces a sibling that drifts from its source.
+
+Two measured caveats before trusting this end to end:
+
+- **The model depends on the direction.** `gemma4-paid` scored 5/5 on `en→es`
+  where `cheap` scored 3/5; on `es→en` it was the other way round. Pick by
+  direction, not by habit.
+- **`pt fr de zh ja` are not solved.** `cheap` failed every attempt at `zh` and
+  `de` (0 of 6, from either source language). On-demand languages will need a
+  stronger model, and that has not been measured yet.
+
 ## Translating instead of re-authoring
 
 `generate --lang <x>` writes each language from the syllabus, paying full authoring

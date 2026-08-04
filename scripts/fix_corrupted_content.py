@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import pipeline, quality
+from teach.core import certs, pipeline, quality
 
 REPO = Path(__file__).resolve().parent.parent
 TEACH = REPO / ".venv" / "bin" / "teach"
@@ -52,7 +52,10 @@ MIN_REAL_BYTES = 1500
 # "0 corrupt" for combinations it had never been told about.
 TARGETS = pipeline.targets()
 
-DEFAULT_LANG = "es"
+# Never re-declare this here. A private copy of a pipeline-wide constant is the
+# exact shape of the drift that caused three separate audit blind spots, and
+# this one flipped from "es" to "en" on 2026-08-04.
+DEFAULT_LANG = certs.DEFAULT_LANG
 
 FENCE_RE = re.compile(r"^```[a-zA-Z]*\n?|\n?```\s*$")
 

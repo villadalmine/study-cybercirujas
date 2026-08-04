@@ -63,9 +63,17 @@ def cert_generate(
     backend: str = typer.Option(
         None, "--backend", help="litellm | claude | codex | gemini | custom (default: $TEACH_BACKEND or litellm)"
     ),
-    lang: str = typer.Option("es", "--lang", help="es | en | fr | de | zh | ja | pt"),
+    lang: str = typer.Option(
+        certs.DEFAULT_LANG, "--lang",
+        help="es | en | fr | de | zh | ja | pt (default: the authoring language)",
+    ),
 ) -> None:
-    """Generate content with AI for pending/stale topics."""
+    """Generate content with AI for pending/stale topics.
+
+    This AUTHORS from the syllabus; it never reads existing content, so every
+    language costs a full authoring pass. Only the authoring language should be
+    generated this way — use `teach cert translate` for the rest.
+    """
     try:
         if topic:
             results = [generator.generate_topic(cert_id, topic, force=force, backend=backend, lang=lang)]
@@ -167,7 +175,10 @@ def cert_translate(
     cert_id: str,
     topic: str = typer.Option(None, "--topic", help="Translate only this topic (e.g. 1.1)"),
     to: str = typer.Option(..., "--to", help="Target language: en | fr | de | zh | ja | pt"),
-    source: str = typer.Option("es", "--from", help="Source language (default: es)"),
+    source: str = typer.Option(
+        certs.DEFAULT_LANG, "--from",
+        help=f"Source language (default: {certs.DEFAULT_LANG}, the authoring language)",
+    ),
     backend: str = typer.Option(None, "--backend"),
     force: bool = typer.Option(False, "--force", help="Overwrite an existing translation"),
 ) -> None:
@@ -215,7 +226,7 @@ def cert_translate(
 def cert_video_script(
     cert_id: str,
     backend: str = typer.Option(None, "--backend"),
-    lang: str = typer.Option("es", "--lang"),
+    lang: str = typer.Option(certs.DEFAULT_LANG, "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
     """The AI writes the video script for a single certification (frozen into script.yaml)."""
@@ -232,7 +243,7 @@ def cert_video_script(
 @cert_app.command("video")
 def cert_video(
     cert_id: str,
-    lang: str = typer.Option("es", "--lang"),
+    lang: str = typer.Option(certs.DEFAULT_LANG, "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
     """Render a certification video (slides + Piper voice + ffmpeg)."""
@@ -283,7 +294,7 @@ def paths_translate(
 def paths_video_script(
     path_slug: str,
     backend: str = typer.Option(None, "--backend"),
-    lang: str = typer.Option("es", "--lang"),
+    lang: str = typer.Option(certs.DEFAULT_LANG, "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
     """The AI writes a path's video script (frozen into script.yaml)."""
@@ -300,7 +311,7 @@ def paths_video_script(
 @paths_app.command("video")
 def paths_video(
     path_slug: str,
-    lang: str = typer.Option("es", "--lang"),
+    lang: str = typer.Option(certs.DEFAULT_LANG, "--lang"),
     force: bool = typer.Option(False, "--force"),
 ) -> None:
     """Render the video (slides + Piper voice + ffmpeg) from script.yaml."""

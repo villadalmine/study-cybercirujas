@@ -12,8 +12,21 @@
 # Languages every active certification is expected to have. Order is the order
 # work is done in: Spanish first (source language), English second, and only
 # then the on-demand tier — and that one only for certs that opt in below.
+# Order IS the work order, and the first entry is the authoring language:
+# everything is written in English first — content, exercises, labs, video
+# scripts — and every other language is a TRANSLATION of it, never a separate
+# authoring pass. Spanish used to be first; the corpus written before
+# 2026-08-04 has independently authored Spanish and English, which is why the
+# two drifted in size and structure.
+#
+# Honest note on the reason: no quality difference between authoring in English
+# and in Spanish could be measured (identical quality-floor pass rates, 100% of
+# citations resolving in both, 54/54 manifests parsing in both, comparable code
+# block and heading counts). The case for English is that the source material
+# and every technical term already are English, plus ~20% more material per
+# token — not a demonstrated quality gain. See docs/TRANSLATION_STUDY.md.
 languages:
-  default: [es, en]
+  default: [en, es]
   on_demand: [pt, fr, de, zh, ja]
 
 # Guard rails for unattended and batch runs. API credits are a real constraint:
