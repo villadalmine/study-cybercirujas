@@ -59,11 +59,60 @@ _CLAUDE_NO_TOOLS = (
     "Write,Edit,Bash,Read,Glob,Grep,NotebookEdit,WebFetch,WebSearch,Task"
 )
 
+# `--output-format json` is what makes spend measurable. The plain text mode
+# answers and tells you nothing; the JSON envelope carries `result` (the answer)
+# plus `usage`, `modelUsage` and `total_cost_usd`, so every completion can be
+# attributed to a model and a token count instead of being guessed at from the
+# wall clock. Only the claude CLI has it — the others stay plain text.
 AGENT_COMMANDS = {
-    "claude": ["claude", "-p", "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
+    "claude": ["claude", "-p", "--output-format", "json",
+               "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
     "codex": ["codex", "exec"],
-    "gemini": ["gemini", "-p"],
+    "gemini": ["agy", "-p"],
 }
+
+USAGE_LOG = Path.home() / ".local" / "state" / "teach-plat" / "usage.jsonl"
+
+# What the completion currently being run is FOR. `complete(system, user)` has no
+# idea which topic it serves, and attributing spend after the fact by correlating
+# timestamps against resume.log is guesswork. Set by generate_topic /
+# translate_topic around each call.
+_usage_context: dict = {}
+
+
+def _record_usage(envelope: dict) -> None:
+    """Append one line per completion: what it was for, and what it cost.
+
+    Never raises. Telemetry that can break a generation is worse than no
+    telemetry — the run matters, the measurement does not.
+    """
+    try:
+        usage = envelope.get("usage") or {}
+        models = {
+            name: {
+                "in": info.get("inputTokens"),
+                "out": info.get("outputTokens"),
+                "cache_read": info.get("cacheReadInputTokens"),
+                "cache_write": info.get("cacheCreationInputTokens"),
+                "cost_usd": info.get("costUSD"),
+            }
+            for name, info in (envelope.get("modelUsage") or {}).items()
+        }
+        row = {
+            "at": datetime.datetime.now().isoformat(timespec="seconds"),
+            **_usage_context,
+            "cost_usd": envelope.get("total_cost_usd"),
+            "duration_ms": envelope.get("duration_ms"),
+            "output_tokens": usage.get("output_tokens"),
+            "cache_read": usage.get("cache_read_input_tokens"),
+            "cache_write": usage.get("cache_creation_input_tokens"),
+            "models": models,
+        }
+        USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with USAGE_LOG.open("a") as handle:
+            handle.write(json.dumps(row) + "\n")
+    except Exception:
+        pass
 
 # Signature of the bug above (plus variants: "Escribí", "Wrote", "Fichier
 # créé", "已创建", "を作成しました", self-references to "content.md`", claims of
@@ -236,7 +285,21 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
             raise GeneratorConfigError(
                 f"'{command[0]}' failed (exit {result.returncode}):\n{detail}"
             )
-        return result.stdout.strip()
+        output = result.stdout.strip()
+        if "--output-format" not in command:
+            return output
+        # Defensive on purpose: if the envelope ever changes shape, fall back to
+        # the raw text rather than failing a generation that actually succeeded.
+        # Losing a measurement is cheap; losing a completion costs a quota window.
+        try:
+            envelope = json.loads(output)
+            answer = envelope.get("result")
+        except (json.JSONDecodeError, AttributeError):
+            return output
+        if not isinstance(answer, str):
+            return output
+        _record_usage(envelope)
+        return answer.strip()
 
     return complete, {"backend": backend, "model": command[0]}
 
@@ -250,7 +313,7 @@ def _antigravity_completer() -> tuple[Completer, dict]:
     """
     prompt_file = Path(os.environ.get("ANTIGRAVITY_PROMPT_FILE", "/tmp/antigravity_prompt.json"))
     resp_file = Path(os.environ.get("ANTIGRAVITY_RESP_FILE", "/tmp/antigravity_response.txt"))
-    cache_file = Path("/tmp/antigravity_cache.json")
+    cache_file = Path(os.environ.get("ANTIGRAVITY_CACHE_FILE", "/tmp/antigravity_cache.json"))
 
     def complete(system: str, user: str) -> str:
         import hashlib
@@ -357,6 +420,9 @@ def generate_topic(
     context = _topic_context(post.metadata, topic)
     weight = topic.get("weight", 1)
 
+    _usage_context.clear()
+    _usage_context.update({"op": "author", "cert": cert_id, "topic": topic_id,
+                           "lang": lang, "kind": "content", "weight": weight})
     content = _reject_if_recap(
         complete(
             system,
@@ -370,6 +436,7 @@ def generate_topic(
         ),
         "el contenido",
     )
+    _usage_context["kind"] = "exercises"
     exercises = _reject_if_recap(
         complete(
             system,
@@ -594,6 +661,10 @@ def translate_topic(
     written = {}
     for kind in ("content.md", "exercises.md"):
         source = (source_dir / kind).read_text()
+        _usage_context.clear()
+        _usage_context.update({"op": "translate", "cert": cert_id, "topic": topic_id,
+                               "lang": lang, "from": source_lang,
+                               "kind": kind.removesuffix(".md")})
         result = _strip_fence(complete(system, source))
         _verify_translation(source, result, kind)
         _reject_if_substandard(result, kind.removesuffix(".md"), topic_id, lang)
