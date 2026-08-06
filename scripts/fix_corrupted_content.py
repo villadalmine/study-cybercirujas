@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import certs, pipeline, quality
+from teach.core import certs, claims, pipeline, quality
 
 REPO = Path(__file__).resolve().parent.parent
 TEACH = REPO / ".venv" / "bin" / "teach"
@@ -187,12 +187,21 @@ def main() -> None:
         print(f"Budget per pass: {limit}. {len(bad) - limit} left for the "
               f"following ones.", flush=True)
     for cert, topic, lang in batch:
-        print(f"--- regenerating {cert} {topic} ({lang}) ---", flush=True)
-        result = subprocess.run(
-            [str(TEACH), "cert", "generate", cert, "--topic", topic,
-             "--lang", lang, "--backend", "claude", "--force"],
-            cwd=REPO, capture_output=True, text=True,
-        )
+        # Claim it. This is the path the unattended timer runs, and it was the
+        # one place still generating without claiming — so the timer and a manual
+        # run could pick the same topic and both pay for it, which is exactly
+        # what the claim system exists to prevent.
+        with claims.claim(cert, topic, lang) as mine:
+            if not mine:
+                print(f"--- {cert} {topic} ({lang}): claimed by another run, skipping ---",
+                      flush=True)
+                continue
+            print(f"--- regenerating {cert} {topic} ({lang}) ---", flush=True)
+            result = subprocess.run(
+                [str(TEACH), "cert", "generate", cert, "--topic", topic,
+                 "--lang", lang, "--backend", "claude", "--force"],
+                cwd=REPO, capture_output=True, text=True,
+            )
         output = (result.stdout + result.stderr).strip()
         if result.returncode != 0:
             if pipeline.is_fatal(output):
