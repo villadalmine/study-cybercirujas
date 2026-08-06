@@ -82,7 +82,13 @@ initiative is wanted — this file exists to stop rework, not to stop thinking.
 
 1. Material that fails the quality floor is not written. Not written weaker, not
    written with a lowered threshold. Not written.
-2. Everything on disk records where it came from (`meta.yaml`).
+2. Everything on disk records where it came from (`meta.yaml`) — including the
+   **real model**, not the CLI name. `model: claude-fable-5`, not `model: claude`:
+   opus-5, opus-4.8 and fable-5 are indistinguishable otherwise, which makes it
+   impossible to ask afterwards whether a model change helped. The `claude`
+   backend now resolves this automatically from the CLI's JSON envelope. If your
+   backend cannot report it, write what you know and say so — never guess a model
+   name, because a wrong one reads as a fact.
 3. The syllabus `status` matches what is on disk.
 4. Generation goes through the claim system and the budget, so two runs never pay
    for the same topic.

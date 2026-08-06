@@ -1,6 +1,6 @@
 generated_at: '2026-08-06T03:23:29'
 lang: en
 backend: claude
-model: claude
+model: claude-fable-5
 sources:
 - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf

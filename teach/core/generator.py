@@ -80,6 +80,21 @@ USAGE_LOG = Path.home() / ".local" / "state" / "teach-plat" / "usage.jsonl"
 _usage_context: dict = {}
 
 
+def _dominant_model(envelope: dict) -> str | None:
+    """The model that actually wrote the answer.
+
+    A single CLI call bills more than one model: the one doing the work plus a
+    small auxiliary one (haiku) for routing and titles. Attributing a topic to
+    the auxiliary model would be worse than recording nothing, so pick by output
+    tokens — the work is where the output is.
+    """
+    usage = envelope.get("modelUsage") or {}
+    if not usage:
+        return None
+    name, _ = max(usage.items(), key=lambda kv: (kv[1] or {}).get("outputTokens") or 0)
+    return name
+
+
 def _record_usage(envelope: dict) -> None:
     """Append one line per completion: what it was for, and what it cost.
 
@@ -268,6 +283,11 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
             f"'{command[0]}' not found on PATH. Install the CLI or pick another backend."
         )
 
+    # Mutable so `complete` can replace the placeholder with the model that
+    # actually answered, once the CLI tells us. `command[0]` is only the binary
+    # name and is what gets recorded if the backend never reveals more.
+    meta = {"backend": backend, "model": command[0]}
+
     def complete(system: str, user: str) -> str:
         # stdin=DEVNULL: the prompt travels as an argument, never on stdin. Without
         # this the agent CLIs wait ~3s per call for input that never comes and emit
@@ -316,9 +336,18 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
         if not isinstance(answer, str):
             return output
         _record_usage(envelope)
+        # Record WHICH model actually answered, not which CLI was invoked.
+        # `model: claude` said nothing — opus-5, opus-4.8 and fable-5 all look
+        # identical in a meta.yaml that only names the command, which makes it
+        # impossible to ask afterwards whether a model change helped or hurt.
+        # The envelope names it; the dominant one is whichever produced the
+        # output, since the CLI also bills a small auxiliary model per call.
+        resolved = _dominant_model(envelope)
+        if resolved:
+            meta["model"] = resolved
         return answer.strip()
 
-    return complete, {"backend": backend, "model": command[0]}
+    return complete, meta
 
 
 def _antigravity_completer() -> tuple[Completer, dict]:
