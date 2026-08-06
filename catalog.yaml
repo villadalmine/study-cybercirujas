@@ -94,7 +94,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpic-3-305.md
     sources:
       objectives: https://www.lpi.org/our-certifications/lpic-3-305-overview/
