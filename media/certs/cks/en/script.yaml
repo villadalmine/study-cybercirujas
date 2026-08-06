@@ -1,0 +1,46 @@
+cert: cks
+lang: en
+backend: claude
+model: claude
+scenes:
+  hook:
+    title: Kubernetes Runs. Can You Secure It?
+    voiceover: Anyone can get a cluster running. Keeping it safe once real workloads
+      land on it is a different job. The Certified Kubernetes Security Specialist
+      is the exam that puts that job on paper.
+  audience:
+    title: Who it's for
+    voiceover: 'This is a professional-level, cloud-native certification, so it assumes
+      you already live inside Kubernetes day to day. The six domains split almost
+      evenly between hardening what you run and watching what runs: Minimize Microservice
+      Vulnerabilities, Supply Chain Security, and Monitoring, Logging and Runtime
+      Security carry twenty percent each, with Cluster Setup and Cluster Hardening
+      at fifteen, and System Hardening at ten. Your certification stays valid for
+      two years, which tells you something about how fast this ground moves.'
+    bullets:
+    - Kubernetes administrators ready to own security, not just uptime
+    - Platform and DevOps engineers hardening clusters and build pipelines
+    - Security engineers moving into container and cloud-native workloads
+  cta:
+    title: Start CKS on Cert Landscape
+    voiceover: On Cert Landscape you get the CKS syllabus broken down domain by domain,
+      with study material and hands-on labs for each one. Open the CKS track and start
+      with Cluster Setup today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Cluster Setup at 15.0%, Minimize Microservice Vulnerabilities
+      at 20.0%, Cluster Hardening at 15.0%, Supply Chain Security at 20.0%, System
+      Hardening at 10.0%, Monitoring, Logging and Runtime Security at 20.0%.
+    domains:
+    - name: Cluster Setup
+      weight: 15.0
+    - name: Minimize Microservice Vulnerabilities
+      weight: 20.0
+    - name: Cluster Hardening
+      weight: 15.0
+    - name: Supply Chain Security
+      weight: 20.0
+    - name: System Hardening
+      weight: 10.0
+    - name: Monitoring, Logging and Runtime Security
+      weight: 20.0

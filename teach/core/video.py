@@ -33,6 +33,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from . import catalog, certs
 from .generator import LANG_NAMES, make_completer
+from .generator import _usage_context as generator_usage_context
 
 W, H = 1920, 1080
 BG = (13, 17, 23)
@@ -169,8 +170,14 @@ def _path_voiceover(stages: list[list[dict]], lang: str) -> str:
     return opening + joiner.join(names) + end
 
 
-def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[str]) -> tuple[dict, dict]:
+def _ask_scenes(system: str, user: str, backend: str | None, expected_ids: list[str],
+                usage_context: dict | None = None) -> tuple[dict, dict]:
     complete, backend_meta = make_completer(backend)
+    # Tag the spend so a video script does not land in usage.jsonl as an
+    # unattributed row. Retries are counted too, which is the point: a script
+    # that needed three attempts to produce valid YAML cost three completions.
+    generator_usage_context.clear()
+    generator_usage_context.update(usage_context or {"op": "video-script"})
     # The model sometimes puts an unquoted ":" inside a sentence (common in
     # es/pt/fr), which breaks YAML parsing of a plain scalar. That is a format
     # problem, not a backend or content one, so retry a few times before
@@ -267,7 +274,10 @@ def generate_script(
         "  title: <llamado a la acción corto>\n"
         "  voiceover: <1 o 2 frases de cierre invitando a empezar en la plataforma>\n"
     )
-    ai_scenes, backend_meta = _ask_scenes(system, user, backend, AI_SCENE_IDS)
+    ai_scenes, backend_meta = _ask_scenes(
+        system, user, backend, AI_SCENE_IDS,
+        {"op": "video-script", "kind": "path", "cert": path_slug, "lang": lang},
+    )
 
     scenes = {key: ai_scenes[key] for key in AI_SCENE_IDS}
     scenes["path"] = {
@@ -367,7 +377,10 @@ def generate_cert_script(
         "  title: <llamado a la acción corto>\n"
         "  voiceover: <1 o 2 frases de cierre invitando a estudiarla en la plataforma>\n"
     )
-    ai_scenes, backend_meta = _ask_scenes(system, user, backend, CERT_AI_SCENE_IDS)
+    ai_scenes, backend_meta = _ask_scenes(
+        system, user, backend, CERT_AI_SCENE_IDS,
+        {"op": "video-script", "kind": "cert", "cert": cert_id, "lang": lang},
+    )
 
     scenes = {key: ai_scenes[key] for key in CERT_AI_SCENE_IDS}
     scenes["domains"] = {
