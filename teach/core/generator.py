@@ -283,10 +283,19 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
             f"'{command[0]}' not found on PATH. Install the CLI or pick another backend."
         )
 
+    # Pin a specific model for this run: TEACH_CLAUDE_MODEL=opus|fable|haiku|<id>.
+    # Without it the CLI uses whatever the user's default is, which is fine for
+    # ordinary work but useless for a comparison — "generate this with opus-5"
+    # was not expressible at all, and the corpus already mixes opus-5 and fable-5
+    # with nothing on disk marking the boundary.
+    pinned = os.environ.get("TEACH_CLAUDE_MODEL")
+    if pinned and backend == "claude" and "--model" not in command:
+        command = [*command[:-1], "--model", pinned, command[-1]]
+
     # Mutable so `complete` can replace the placeholder with the model that
     # actually answered, once the CLI tells us. `command[0]` is only the binary
     # name and is what gets recorded if the backend never reveals more.
-    meta = {"backend": backend, "model": command[0]}
+    meta = {"backend": backend, "model": pinned or command[0]}
 
     def complete(system: str, user: str) -> str:
         # stdin=DEVNULL: the prompt travels as an argument, never on stdin. Without

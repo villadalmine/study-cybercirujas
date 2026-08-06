@@ -136,6 +136,24 @@ quality:
 #                     English goes first here for the same reason it does above:
 #                     it is what gets authored, and the rest is translated.
 certs:
+  lpic-1:
+    active: true
+    video: [en, es]
+  lpic-2:
+    active: true
+    video: [en, es]
+  lpic-3-300:
+    active: true
+    video: [en, es]
+  lpic-3-303:
+    active: true
+    video: [en, es]
+  lpic-3-305:
+    active: true
+    video: [en, es]
+  lpic-3-306:
+    active: true
+    video: [en, es]
   lpi-010-160:
     active: true
     languages: [es, en, pt, fr, de, zh, ja]
@@ -147,6 +165,9 @@ certs:
     active: true
     video: [es]
   cks:
+    active: true
+    video: [en, es]
+  kcsa:
     active: true
     video: [en, es]
   kcna:
