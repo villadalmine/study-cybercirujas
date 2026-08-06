@@ -1,0 +1,109 @@
+# Official documentation per project — the catalogue the auditor looks things up in.
+#
+# Adding a project is ONE entry. That is the point: every topic in this repo rests
+# on some project's official documentation, and the set of projects grows (argocd,
+# istio, cilium, whatever the next certification covers). Nothing else needs
+# touching — `scripts/check_sources.py` reads this, and the auditor design in
+# docs/AUDITOR_DESIGN.md consumes it as the crawl list.
+#
+# Seeded empirically, not guessed: measured across 4,263 citations in the
+# references sections of the existing corpus (2026-08-06). Notably **zero** of
+# those were blogs, Medium, StackOverflow or similar — the models have been citing
+# primary sources consistently, so this catalogue records what is already true
+# rather than imposing something new.
+#
+# Fields:
+#   domains   hosts that count as official for this project. A citation from a
+#             host in no project's list is not automatically wrong — it is
+#             unrecognised, and that is what gets reported for a human to judge.
+#   docs      documentation root, the crawl entry point.
+#   versioned whether the docs are published per release. Where true, a claim
+#             cannot be checked without knowing WHICH version it is about — a
+#             statement true in 1.29 and false in 1.34 is the likeliest real error
+#             in this corpus, and a version-blind check calls it fine.
+#   spec      machine-readable ground truth, if the project publishes one. This is
+#             what makes a free deterministic check possible instead of retrieval:
+#             field names and apiVersions can be looked up, not inferred.
+
+projects:
+
+  kubernetes:
+    domains: [kubernetes.io, k8s.io, kubectl.docs.kubernetes.io, kubernetes.github.io, sigs.k8s.io]
+    docs: https://kubernetes.io/docs/
+    versioned: true
+    spec: https://raw.githubusercontent.com/kubernetes/kubernetes/release-{version}/api/openapi-spec/swagger.json
+
+  # --- CNCF ecosystem, in citation order -------------------------------------
+  falco:        {domains: [falco.org],              docs: https://falco.org/docs/,        versioned: true}
+  opentelemetry: {domains: [opentelemetry.io],       docs: https://opentelemetry.io/docs/, versioned: true}
+  istio:        {domains: [istio.io],               docs: https://istio.io/latest/docs/,  versioned: true}
+  cilium:       {domains: [docs.cilium.io, cilium.io], docs: https://docs.cilium.io/,     versioned: true}
+  kyverno:      {domains: [kyverno.io],             docs: https://kyverno.io/docs/,       versioned: true}
+  prometheus:   {domains: [prometheus.io],          docs: https://prometheus.io/docs/,    versioned: false}
+  sigstore:     {domains: [docs.sigstore.dev, sigstore.dev], docs: https://docs.sigstore.dev/, versioned: false}
+  helm:         {domains: [helm.sh],                docs: https://helm.sh/docs/,          versioned: true}
+  argocd:       {domains: [argo-cd.readthedocs.io, argoproj.github.io], docs: https://argo-cd.readthedocs.io/en/stable/, versioned: true}
+  cncf:         {domains: [cncf.io, www.cncf.io, landscape.cncf.io, tag-app-delivery.cncf.io, tag-security.cncf.io], docs: https://www.cncf.io/, versioned: false}
+  opa:          {domains: [www.openpolicyagent.org, openpolicyagent.org, open-policy-agent.github.io], docs: https://www.openpolicyagent.org/docs/, versioned: true}
+  etcd:         {domains: [etcd.io],                docs: https://etcd.io/docs/,          versioned: true}
+  containerd:   {domains: [containerd.io],          docs: https://containerd.io/docs/,    versioned: true}
+  docker:       {domains: [docs.docker.com],        docs: https://docs.docker.com/,       versioned: false}
+  gvisor:       {domains: [gvisor.dev],             docs: https://gvisor.dev/docs/,       versioned: false}
+  kata:         {domains: [katacontainers.io],      docs: https://katacontainers.io/docs/, versioned: false}
+
+  # --- Linux / LPI -----------------------------------------------------------
+  linux-man:    {domains: [man7.org],               docs: https://man7.org/linux/man-pages/, versioned: false}
+  gnu:          {domains: [www.gnu.org, gnu.org],   docs: https://www.gnu.org/software/,  versioned: false}
+  kernel:       {domains: [www.kernel.org, kernel.org, docs.kernel.org], docs: https://docs.kernel.org/, versioned: true}
+  systemd:      {domains: [www.freedesktop.org, freedesktop.org], docs: https://www.freedesktop.org/software/systemd/man/, versioned: true}
+  lpi:          {domains: [www.lpi.org, lpi.org, learning.lpi.org, wiki.lpi.org], docs: https://www.lpi.org/our-certifications/, versioned: true}
+  debian:       {domains: [www.debian.org, debian.org, wiki.debian.org], docs: https://www.debian.org/doc/, versioned: true}
+  redhat:       {domains: [access.redhat.com, docs.redhat.com], docs: https://access.redhat.com/documentation/, versioned: true}
+  samba:        {domains: [www.samba.org, samba.org, wiki.samba.org], docs: https://www.samba.org/samba/docs/, versioned: false}
+  linuxfoundation: {domains: [refspecs.linuxfoundation.org, www.linuxfoundation.org, training.linuxfoundation.org], docs: https://refspecs.linuxfoundation.org/, versioned: false}
+
+  # --- Standards and security bodies ----------------------------------------
+  ietf:         {domains: [datatracker.ietf.org, www.rfc-editor.org, rfc-editor.org], docs: https://datatracker.ietf.org/, versioned: false}
+  nist:         {domains: [csrc.nist.gov, nvd.nist.gov, www.nist.gov], docs: https://csrc.nist.gov/publications, versioned: false}
+  cis:          {domains: [www.cisecurity.org, cisecurity.org], docs: https://www.cisecurity.org/cis-benchmarks, versioned: true}
+  mitre:        {domains: [attack.mitre.org, cve.mitre.org, cwe.mitre.org], docs: https://attack.mitre.org/, versioned: true}
+  owasp:        {domains: [owasp.org, cheatsheetseries.owasp.org], docs: https://owasp.org/, versioned: false}
+
+  # --- Cloud providers -------------------------------------------------------
+  aws:          {domains: [docs.aws.amazon.com, aws.github.io], docs: https://docs.aws.amazon.com/, versioned: false}
+  gcp:          {domains: [cloud.google.com],       docs: https://cloud.google.com/docs, versioned: false}
+  azure:        {domains: [learn.microsoft.com, docs.microsoft.com], docs: https://learn.microsoft.com/azure/, versioned: false}
+
+  # --- added 2026-08-06 from the uncatalogued list; each was already the top
+  # --- primary source for its subject, so this records reality rather than policy
+  apache:       {domains: [httpd.apache.org, apache.org, www.apache.org], docs: https://httpd.apache.org/docs/, versioned: true}
+  nginx:        {domains: [nginx.org, docs.nginx.com], docs: https://nginx.org/en/docs/, versioned: true}
+  openssh:      {domains: [www.openssh.com, openssh.com], docs: https://www.openssh.com/manual.html, versioned: false}
+  postfix:      {domains: [www.postfix.org, postfix.org], docs: https://www.postfix.org/documentation.html, versioned: false}
+  trivy:        {domains: [trivy.dev, aquasecurity.github.io], docs: https://trivy.dev/latest/docs/, versioned: true}
+  crossplane:   {domains: [docs.crossplane.io, crossplane.io], docs: https://docs.crossplane.io/, versioned: true}
+  gitops:       {domains: [opengitops.dev], docs: https://opengitops.dev/, versioned: false}
+  gateway-api:  {domains: [gateway-api.sigs.k8s.io], docs: https://gateway-api.sigs.k8s.io/, versioned: true}
+  tetragon:     {domains: [tetragon.io], docs: https://tetragon.io/docs/, versioned: true}
+  grafana:      {domains: [grafana.com], docs: https://grafana.com/docs/, versioned: true}
+  spdx:         {domains: [spdx.org, spdx.dev], docs: https://spdx.dev/use/specifications/, versioned: true}
+  ubuntu:       {domains: [ubuntu.com, help.ubuntu.com, manpages.ubuntu.com], docs: https://ubuntu.com/server/docs, versioned: true}
+  archlinux:    {domains: [wiki.archlinux.org, archlinux.org], docs: https://wiki.archlinux.org/, versioned: false}
+  nftables:     {domains: [wiki.nftables.org, netfilter.org, www.netfilter.org], docs: https://wiki.nftables.org/, versioned: false}
+  sre-google:   {domains: [sre.google], docs: https://sre.google/books/, versioned: false}
+  dora:         {domains: [dora.dev], docs: https://dora.dev/research/, versioned: false}
+  sourceware:   {domains: [sourceware.org], docs: https://sourceware.org/, versioned: false}
+  libreoffice:  {domains: [documentation.libreoffice.org, www.libreoffice.org], docs: https://documentation.libreoffice.org/, versioned: true}
+
+# Hosts that are legitimate to cite but belong to no single project, so they are
+# not "unrecognised" — they just cannot be attributed. github.com is the big one:
+# a project's own repository is a primary source, but the host says nothing about
+# which project, so it is resolved from the path instead.
+neutral_domains:
+  - github.com
+  - raw.githubusercontent.com
+  - gitlab.com
+  - opensource.org
+  - creativecommons.org
+  - www.iso.org
+  - pkg.go.dev
