@@ -12,6 +12,55 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ---
 
+## What is fixed, and what is yours
+
+The list of fixed things is deliberately short. Everything not on it is open, and
+initiative is wanted — this file exists to stop rework, not to stop thinking.
+
+**Fixed — four things, all mechanically checkable:**
+
+1. Material that fails the quality floor is not written. Not written weaker, not
+   written with a lowered threshold. Not written.
+2. Everything on disk records where it came from (`meta.yaml`).
+3. The syllabus `status` matches what is on disk.
+4. Generation goes through the lock and the budget, so two runs never pay for the
+   same topic.
+
+That is the whole contract. It is four things because four is what the checks can
+prove; anything else would be taste dressed up as a rule.
+
+**Yours — decide it yourself, no need to ask:**
+
+- **Which certification, which topics, what order.** If `make audit` shows work
+  and quota exists, take it.
+- **Which backend and which model.** Any provider. Pick what you judge best for
+  the task; just record it in `meta.yaml`.
+- **How to prompt.** The prompts in `generator.py` are not sacred. If you can get
+  better material — deeper, better structured, better cited — change them and say
+  what changed. The one caveat is measurement: the quality floor was calibrated
+  against material produced by the current prompts, so a big prompt change means
+  re-checking a sample against the floor rather than assuming.
+- **Improving the code.** Scripts, checks, generator, API, web. Fix what is
+  broken. `run_cert.py` and `check_provenance.py` are three days old and certainly
+  improvable.
+- **Adding checks.** The best contributions to this repo have been checks that
+  caught something nobody knew about. If you can prove a defect class
+  mechanically, add it — `check_citations.py`, `check_manifests.py`,
+  `check_k8s_apis.py` and `check_provenance.py` all started that way, and every
+  one of them found something real on its first run.
+- **Doing more than asked.** Finish the certification, render the videos,
+  translate the rest. Nobody needs to approve each step.
+
+**Ask first only when:** you are about to deploy to production, spend a large
+amount of quota in one go, delete content, or change one of the four fixed things.
+
+**Where the line actually was**, in the one case this came up: the problem with
+`full_lpic1_generator.sh` was never that its author took initiative. It was that
+the script bypassed the lock, ignored the budget, and would have reported success
+while silently skipping the Spanish half. Same initiative through `run_cert.py`
+would have been welcome. Build things; just do not build a second way to do what
+already has one.
+
 ## Start here: how to do a day's work in this repo
 
 If you read nothing else, read this section. It is the whole loop.
@@ -113,11 +162,11 @@ every time one is written, and all four have already happened:
 `run_cert.py` handles all four and is idempotent — interrupt it and re-run, nothing
 is lost and no flags are needed.
 
-## Non-negotiable rules for ANY agent producing content
+## The rules in detail, and what each one cost when it was broken
 
-These are not style preferences. Each one exists because it was violated and cost
-something real. `scripts/check_provenance.py` enforces 1–3 mechanically and exits
-non-zero; run it before you commit.
+These expand the four fixed things above. They are not style preferences — each
+one is here because it was violated and the bill is known.
+`scripts/check_provenance.py` enforces 1–3 mechanically and exits non-zero.
 
 **1. Never write content without `meta.yaml`.** Every `certs/<cert>/<topic>/<lang>/`
 that has `content.md` must have a `meta.yaml` recording `backend`, `model` and
@@ -207,8 +256,10 @@ scripts/usage_report.py             # what has actually been spent, per model
 
 ### From Claude to Antigravity — 2026-08-06, about lpic-1 / lpic-2
 
-You have `lpic-1/1.1` and `lpic-2/1.1`, `1.2` in the working tree. Three things
-need doing before they can be committed, and none of them costs a completion:
+To be clear before the list: **carry on with lpic-1 and lpic-2 whenever you
+want** — you do not need me to hand you steps, and you do not need to wait. The
+material you produced passes the floor; what follows is bookkeeping around it,
+none of which costs a completion.
 
 1. `lpic-2/1.1` and `lpic-2/1.2` have **no `meta.yaml`**. Write one for each
    recording the backend and model you actually used and the date. Do not guess —
