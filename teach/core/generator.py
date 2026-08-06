@@ -199,6 +199,23 @@ def _reject_if_substandard(text: str, kind: str, topic_id: str, lang: str) -> No
     )
 
 
+def _write_meta(lang_dir: Path, lang: str, backend_meta: dict, topic: dict) -> None:
+    """Provenance for one language directory: who made it, with what, when.
+
+    Written together with the content it describes. It used to be written after
+    the lab, so a process that died in between left content nobody could trace —
+    which is the one defect that cannot be repaired later, because the answer is
+    simply gone.
+    """
+    lang_dir.mkdir(parents=True, exist_ok=True)
+    (lang_dir / "meta.yaml").write_text(yaml.safe_dump({
+        "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "lang": lang,
+        **backend_meta,
+        "sources": topic.get("sources", []),
+    }, sort_keys=False))
+
+
 Completer = Callable[[str, str], str]
 
 
@@ -420,10 +437,39 @@ def generate_topic(
     context = _topic_context(post.metadata, topic)
     weight = topic.get("weight", 1)
 
+    directory = certs.content_dir(cert_id, topic_id)
+    lang_dir = directory / lang
+
+    def _reusable(kind: str) -> str | None:
+        """Existing material good enough to keep instead of paying for it again.
+
+        Only ever used to finish a HALF-WRITTEN topic — never to skip a full
+        regeneration, so `--force` keeps meaning what it says. The case it exists
+        for: content is authored and accepted, the exercises call then fails or
+        the quota runs out, and the next pass would otherwise re-author the
+        content it already paid for. Measured on cks/6.5, which cost $5.28
+        instead of ~$2.10 because 46k and 47k tokens of accepted content were
+        discarded and re-generated twice.
+
+        A file only qualifies if it still clears the quality floor, so this can
+        save a call but can never let weaker material survive.
+        """
+        if outdated:
+            return None  # the syllabus moved; the old text is about the old topic
+        path = lang_dir / f"{kind}.md"
+        sibling = lang_dir / ("exercises.md" if kind == "content" else "content.md")
+        if not path.exists() or sibling.exists():
+            return None  # nothing there, or the topic is complete -> honour --force
+        text = path.read_text()
+        if quality.check(kind, text) or _RECAP_RE.search(text.strip().splitlines()[0] if text.strip() else ""):
+            return None
+        return text
+
     _usage_context.clear()
     _usage_context.update({"op": "author", "cert": cert_id, "topic": topic_id,
                            "lang": lang, "kind": "content", "weight": weight})
-    content = _reject_if_recap(
+    reused = _reusable("content")
+    content = reused if reused is not None else _reject_if_recap(
         complete(
             system,
             f"{context}\n"
@@ -436,8 +482,17 @@ def generate_topic(
         ),
         "el contenido",
     )
+    if reused is None:
+        # Accepted content goes to disk NOW, before the exercises call is made.
+        # Holding both in memory until the end meant one failure threw away two
+        # paid completions; writing here costs nothing and caps the loss at one.
+        _reject_if_substandard(content, "content", topic_id, lang)
+        lang_dir.mkdir(parents=True, exist_ok=True)
+        (lang_dir / "content.md").write_text(content)
+
     _usage_context["kind"] = "exercises"
-    exercises = _reject_if_recap(
+    reused_exercises = _reusable("exercises")
+    exercises = reused_exercises if reused_exercises is not None else _reject_if_recap(
         complete(
             system,
             f"{context}\n"
@@ -456,11 +511,14 @@ def generate_topic(
     _reject_if_substandard(content, "content", topic_id, lang)
     _reject_if_substandard(exercises, "exercises", topic_id, lang)
 
-    directory = certs.content_dir(cert_id, topic_id)
-    lang_dir = directory / lang
     lang_dir.mkdir(parents=True, exist_ok=True)
     (lang_dir / "content.md").write_text(content)
     (lang_dir / "exercises.md").write_text(exercises)
+    # Provenance is written with the content, not after the lab. A process that
+    # died between the two left files nobody could trace — cks/5.3/en and
+    # lpi-010-160/1.2/fr both ended up that way, and check_provenance.py now
+    # rejects exactly that shape.
+    _write_meta(lang_dir, lang, backend_meta, topic)
 
     # el lab es compartido entre idiomas: se crea una vez (o se regenera con
     # --force en el idioma default)
@@ -491,14 +549,6 @@ def generate_topic(
         (lab_dir / "lab.yaml").write_text(
             yaml.safe_dump(lab_spec, sort_keys=False, allow_unicode=True)
         )
-
-    meta = {
-        "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
-        "lang": lang,
-        **backend_meta,
-        "sources": topic.get("sources", []),
-    }
-    (lang_dir / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False))
 
     if status == "stale":
         # Do not mark the topic current until NO language is left behind.

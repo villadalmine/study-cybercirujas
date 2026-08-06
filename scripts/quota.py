@@ -52,9 +52,18 @@ PROBE_PROMPT = "Reply with exactly: OK"
 AVAILABLE, EXHAUSTED, BROKEN = 0, 1, 2
 
 
+# The probe asks a yes/no question about the account, not about Kubernetes, so
+# the cheapest model answers it exactly as well as the most expensive one.
+# Measured before this was pinned: the same two-character probe cost $0.064 cold
+# and $0.011 warm on claude-opus-5[1m], because the CLI loads ~20k tokens of
+# project context whatever it is asked. At one probe every 20 minutes that is
+# real money spent to learn nothing but "yes" or "no".
+PROBE_MODEL = "haiku"
+
+
 def probe(backend: str = "claude") -> tuple[int, str]:
     """Returns (exit-style status, detail). Cheap by construction: the prompt
-    asks for two characters.
+    asks for two characters, and on `claude` it is pinned to the cheapest model.
 
     The teach imports are local to this function so that `--history`, which only
     reads a file, keeps working even where the package is unavailable.
@@ -65,6 +74,10 @@ def probe(backend: str = "claude") -> tuple[int, str]:
         command = generator.AGENT_COMMANDS[backend]
     except KeyError:
         return BROKEN, f"unknown backend {backend!r}"
+
+    if backend == "claude":
+        # Insert before the `--` terminator, which must stay last.
+        command = [*command[:-1], "--model", PROBE_MODEL, command[-1]]
 
     result = subprocess.run(
         [*command, PROBE_PROMPT],
