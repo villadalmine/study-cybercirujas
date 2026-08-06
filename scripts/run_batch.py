@@ -14,7 +14,6 @@ it left off without keeping any state of its own.
 from __future__ import annotations
 
 import argparse
-import fcntl
 import subprocess
 import sys
 import time
@@ -23,25 +22,10 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
 
-# Shared with scripts/resume-generation.sh. Without it the manual and
-# unattended paths generate at the same time — which happened: the systemd pass
-# was working on one topic while a hand-launched run worked on another, both
-# spending quota, and nothing prevented them picking the SAME topic and
-# overwriting each other's output.
-LOCK_FILE = Path.home() / ".local" / "state" / "teach-plat" / "resume.lock"
-
-
-def acquire_lock():
-    """Returns the held file object, or None when another run has it."""
-    LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
-    handle = LOCK_FILE.open("w")
-    try:
-        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-        handle.close()
-        return None
-    return handle
-
+# Exclusion lives in teach/core/claims.py and is per (cert, topic, lang), not
+# global: two agents on different topics are two agents working. The global lock
+# that used to be here made them queue behind each other, which is how an
+# unsynchronised orchestrator came to be written in the first place.
 from teach.core import claims, pipeline  # noqa: E402
 
 import fix_corrupted_content as audit  # noqa: E402
@@ -137,6 +121,16 @@ def main() -> int:
     if not free:
         print(f"{args.cert} ({args.lang}): everything pending is already claimed")
         return 0
+
+    # Probe quota before paying to load the heavy context window for the first topic.
+    probe = subprocess.run(
+        [sys.executable, str(REPO / "scripts" / "quota.py"), "--quiet", "--backend", args.backend]
+    )
+    if probe.returncode == 1:
+        print(f"FATAL: {args.backend} quota is exhausted, stopping the batch before starting.", flush=True)
+        return 2
+    elif probe.returncode != 0:
+        print(f"WARNING: quota probe failed (exit {probe.returncode}), proceeding anyway.", flush=True)
 
     batch = free[:limit] if limit else free
     print(f"{args.cert} ({args.lang}): {len(queue)} pending, "

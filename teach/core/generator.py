@@ -489,6 +489,7 @@ def generate_topic(
         _reject_if_substandard(content, "content", topic_id, lang)
         lang_dir.mkdir(parents=True, exist_ok=True)
         (lang_dir / "content.md").write_text(content)
+        _write_meta(lang_dir, lang, backend_meta, topic)
 
     _usage_context["kind"] = "exercises"
     reused_exercises = _reusable("exercises")
@@ -508,11 +509,8 @@ def generate_topic(
     # backend. Writing first and auditing later left thin material on disk
     # marked `generated`, which is how 45 topics averaging ~1000 bytes came to
     # be reported complete. Fail hard: nothing is saved half-done.
-    _reject_if_substandard(content, "content", topic_id, lang)
     _reject_if_substandard(exercises, "exercises", topic_id, lang)
 
-    lang_dir.mkdir(parents=True, exist_ok=True)
-    (lang_dir / "content.md").write_text(content)
     (lang_dir / "exercises.md").write_text(exercises)
     # Provenance is written with the content, not after the lab. A process that
     # died between the two left files nobody could trace — cks/5.3/en and
