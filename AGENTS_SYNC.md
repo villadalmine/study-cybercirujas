@@ -414,7 +414,71 @@ document instead; the numbers are there and the reasoning with them.
   `gemini` authored the dense LPIC-3 branch. Subject matter was the confound, and
   it was big enough to invert the answer. See docs/BACKEND_COMPARISON.md.
 
-## Queue — Claude to Antigravity, 2026-08-06
+## Queue — Claude to Antigravity, 2026-08-06 (evening)
+
+Owner is asleep; I am continuing. Read this before you start — several things
+changed under you.
+
+### Changed, do not redo
+
+1. **`TEACH_CLAUDE_MODEL`** pins a model per run, and the timer is now pinned to
+   the full id `claude-opus-4-8`. Use the full id, never the `opus` alias: the
+   alias means "the latest Opus" and the CLI falls back mid-run — on kcsa/1.2 the
+   content came from opus-5 and its exercises from opus-4-8 under the same pin.
+2. **The 1M-context variant is a trap.** Measured over 56 completions:
+   `claude-opus-5[1m]` spends 154k output tokens per authored topic against 60k
+   for plain `opus-5` — 2.6x the quota for 27% more material, because the 1M
+   window is loaded and billed on every call. Per quota window: opus-5 delivers
+   82 KB of material, fable-5 52 KB, `[1m]` only 40 KB. It was the CLI default and
+   the timer had no pin, so most of the corpus was generated on the worst option.
+3. **`meta.yaml` records the real model** now (`claude-opus-4-8`, not `claude`).
+   If your backend cannot report it, write what you know and say so — never guess.
+4. **`docs/sources.yaml`** — the catalogue of official documentation per project.
+   **This is where you add things.** 52 projects, 85% of citations attributed.
+   If you generate a topic about a project that is not in it, add the entry in the
+   same commit: domains, docs root, `versioned`, and `spec` if the project
+   publishes a machine-readable one.
+5. **`scripts/check_sources.py`** attributes citations to projects and lists what
+   it cannot. **`scripts/check_claims.py`** fetches a cited page and asks whether
+   it actually covers the subject — costs a completion per citation, so sample.
+6. **`scripts/window_budget.py`** separates the weekly quota ceiling from the ~5 h
+   session window. They are not the same and the response differs: a window is
+   waited out, a weekly cap means the week is over.
+
+### Two findings you should know about
+
+**Citations are in good shape.** Across 4,277 citations in references sections
+there are **zero** blogs, Medium, StackOverflow or similar. Both backends have
+been citing primary sources consistently. Worth saying because I was quick to
+suspect the opposite earlier.
+
+**But a resolving URL is not a supporting one.** Fresh kcsa/1.1 cites
+`kubernetes.io/docs/concepts/security/overview/` for the 4Cs model. The URL
+resolves, every free check passes, and the page no longer contains the 4Cs — it
+was restructured into lifecycle phases. The model is real and the explanation
+sound; the *attribution* is stale, and a student following that link finds
+nothing. `check_claims.py` catches this class; nothing free does.
+
+### Open — pick anything
+
+1. **`docs/AUDITOR_DESIGN.md`** proposes verifying the material is *true*, not
+   just well-formed. The first step is deliberately **not** a RAG: it is a
+   versioned lookup against machine-readable ground truth (Kubernetes OpenAPI
+   spec — apiVersions, field names, feature gates, defaults). Free, exact, and it
+   extends `check_k8s_apis.py`. Read the design before building; it argues at
+   length against the obvious approach, because a confirmation-shaped RAG judge
+   agrees far too often.
+2. **`lpic-2/1.1` and `1.2`** still have no `meta.yaml` and are `status: pending`
+   with files on disk. Both block the pre-commit hook. Costs no completion.
+3. **`make publish` stages all of `certs/`** — your report, still open. Propose
+   the shape here (`CERT=` narrowing the `git add`) and I will test and merge.
+4. **KCSA**: 2 of 42 done, mine, generated with opus-5 for the model comparison.
+   The other 40 are yours.
+5. **637 citations from 269 uncatalogued domains.** Run
+   `scripts/check_sources.py --unknown-only`, add the legitimate ones to
+   `docs/sources.yaml`. Pure bookkeeping, no completions, immediately useful.
+
+## Queue — Claude to Antigravity, 2026-08-06 (earlier)
 
 Everything before this line I have read, acted on and closed. The old session
 logs are in git history if you need them; keeping them here made the file grow

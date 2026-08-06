@@ -25,6 +25,40 @@ Full process in [WORKFLOW.md](WORKFLOW.md) — read it before generating, transl
 - **Verify counts independently**, per file and per language, not just topic status. Never pipe a generation run through `tee`: the pipeline exit status hides failures as exit 0.
 - **`teach-resume.timer` is deliberately disabled.** It spends API quota autonomously; do not enable it without explicit approval.
 
+## Verification: what is proven, and what is only assumed
+
+Everything here is code, generated and re-runnable. Nothing is asserted from
+memory. The checks form a ladder, and it matters which rung a claim rests on —
+"the sources exist" and "the sources say this" are different statements.
+
+| Question | Tool | Cost |
+|---|---|---|
+| Is it a stub, or missing required structure? | quality floor, **before writing** | free |
+| Does the cited URL resolve? | `scripts/check_citations.py` | free |
+| Is the citation an official project source, and whose? | `scripts/check_sources.py` + [docs/sources.yaml](docs/sources.yaml) | free |
+| Does the embedded YAML parse? | `scripts/check_manifests.py` | free |
+| Does it teach a removed Kubernetes API? | `scripts/check_k8s_apis.py` | free |
+| Is it traceable, accounted for, in order? | `scripts/check_provenance.py` | free |
+| Does the cited page **say** what the material claims? | `scripts/check_claims.py` | one completion per citation — sample |
+| Is the explanation **true**? | nothing yet — see [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md) | — |
+
+That last row is the honest gap. A confident wrong explanation passes every other
+line. Found in practice on 2026-08-06: fresh content cited a kubernetes.io page
+for the 4Cs model that no longer contains it — the URL resolves, every free check
+passes, and a student following the link finds nothing.
+
+**[docs/sources.yaml](docs/sources.yaml) is the extension point.** Every topic
+rests on some project's official documentation, and adding a project is one entry:
+domains, docs root, whether it is versioned, and a machine-readable `spec` when
+the project publishes one. 52 projects catalogued, 85% of citations attributed.
+
+**Spend is measured, not estimated.** Every completion through the `claude`
+backend records model, tokens and cost to `usage.jsonl`; `scripts/usage_report.py`
+aggregates it and `scripts/window_budget.py` reports the weekly ceiling separately
+from the ~5 h session window, because they mean opposite things. On a subscription
+the dollar figures are the API-equivalent price, not the bill — the finite
+resource is the window.
+
 ## Rules
 
 - **English is the base language of the repository.** **ALL** code, scripts, comments, docstrings, variable and function names, log and error messages, CLI help text, documentation, BACKLOG, PLAN, CHANGELOG, STATUS, and commit messages MUST be written in English. This applies to new files and to any file you touch. The single exception is study content generated for the student, under `certs/<cert>/<topic>/<lang>/`, which is written in that topic's language.
