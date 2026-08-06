@@ -12,6 +12,45 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ---
 
+## Who decides what — read this first
+
+The owner has set a division of labour, and it is not about capability. It is
+about who can *verify* a change end to end.
+
+**Claude owns the process.** The pipeline, the quality floor and its thresholds,
+the checks, the claim system, the entry points, and the code that enforces all of
+it. It runs on the owner's subscription, which is what lets it exercise the whole
+loop — author, verify, translate, render, build the image, deploy, measure the
+spend — and prove a change works before it becomes the rule everyone follows. A
+process nobody has run end to end is a proposal, not a process.
+
+**Every other agent — Gemini/Antigravity, ChatGPT, whatever comes next — produces
+content through that process, exactly as defined.** That is not a smaller job: it
+is most of the work in this repo, and you have full autonomy inside it. Pick the
+certification, the topics, the order, the provider, the model. Run it, finish it,
+render the videos, translate the rest. Nobody needs to approve each step.
+
+What that division means in practice:
+
+| | Yours, no permission needed | Propose in this file first |
+|---|---|---|
+| Content | Which cert, which topics, what order, which provider/model | — |
+| Process | — | The quality floor, the budget, the checks, the entry points, `generator.py` prompts, anything in `teach/core/` |
+| Tools | Reporting, diagnostics, anything read-only | A second way to do something that already has one |
+
+**Why the process side is not open to everyone:** a change there applies to every
+future topic in every certification, and its effect cannot be seen by looking at
+one file. Lowering a threshold, rewording a prompt or skipping a lock all produce
+output that looks fine. The only way to know is to run the whole loop and measure
+— which is what the subscription is for. So: if you think a process change is
+right, you are probably right. Write it here with the reasoning, and it gets
+tested and adopted. Do not merge it yourself.
+
+**When the process blocks you, that is a finding, not an obstacle.** Report it
+here. The 403 from `agy -p`, reported rather than worked around, was exactly the
+right call — a workaround would have hidden a real entitlement problem behind
+content that looked generated.
+
 ## What is fixed, and what is yours
 
 The list of fixed things is deliberately short. Everything not on it is open, and
@@ -35,21 +74,17 @@ prove; anything else would be taste dressed up as a rule.
   and quota exists, take it.
 - **Which backend and which model.** Any provider. Pick what you judge best for
   the task; just record it in `meta.yaml`.
-- **How to prompt.** The prompts in `generator.py` are not sacred. If you can get
-  better material — deeper, better structured, better cited — change them and say
-  what changed. The one caveat is measurement: the quality floor was calibrated
-  against material produced by the current prompts, so a big prompt change means
-  re-checking a sample against the floor rather than assuming.
-- **Improving the code.** Scripts, checks, generator, API, web. Fix what is
-  broken. `run_cert.py` and `check_provenance.py` are three days old and certainly
-  improvable.
-- **Adding checks.** The best contributions to this repo have been checks that
-  caught something nobody knew about. If you can prove a defect class
-  mechanically, add it — `check_citations.py`, `check_manifests.py`,
-  `check_k8s_apis.py` and `check_provenance.py` all started that way, and every
-  one of them found something real on its first run.
 - **Doing more than asked.** Finish the certification, render the videos,
   translate the rest. Nobody needs to approve each step.
+- **Reporting anything.** Diagnostics, measurements, a note that a topic looks
+  thin, a backend that fails. Free and always welcome.
+
+**Propose rather than merge** (see the table above): prompts in `generator.py`,
+the quality floor, the budget, new checks, changes to the entry points. These are
+often good ideas — `check_citations.py`, `check_manifests.py`, `check_k8s_apis.py`
+and `check_provenance.py` each found something real on their first run, and the
+haiku quota probe in `run_batch.py` came from Antigravity and was better than what
+it replaced. Write them here; they get tested against the whole loop and adopted.
 
 **Ask first only when:** you are about to deploy to production, spend a large
 amount of quota in one go, delete content, or change one of the four fixed things.
