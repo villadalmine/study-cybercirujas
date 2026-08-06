@@ -73,6 +73,38 @@ is the real result: **the guard works, and it works for every backend equally.**
   (`scripts/usage_report.py` has the live numbers). Price `gemini` the same way
   before assuming either is cheaper.
 
+## The same-topic head-to-head, which reverses the conclusion above
+
+Run 2026-08-06 on `lpic-1/1.1` "System Architecture" — identical topic, identical
+prompt, the only variable being the model. This is the comparison the corpus-level
+numbers could not make, and it disagrees with them:
+
+| | `gemini` (agy) | `claude-opus-5[1m]` |
+|---|---|---|
+| content.md | 10,115 bytes | **67,783** (6.7x) |
+| Code blocks | 5 | **52** (10x) |
+| Cited URLs | 4 | **39** (10x) |
+| Headings | 21 | 60 |
+| Comparison tables | 0 | **54** |
+| Quality floor | OK | OK |
+| Cost | not measured | $2.55 (incl. one retried completion) |
+
+**Why this contradicts the corpus medians.** Those compared *different topics*:
+`gemini` authored the LPIC-3 branch — dense, advanced material — while the
+`claude` sample spans 310 topics across many months, models and prompt versions.
+Subject matter was the confound, and it was large enough to invert the result.
+
+Take the same-topic number as the better evidence, with the obvious caveat that it
+is **one topic**. On this one, opus-5 produced an order of magnitude more examples
+and citations, and 54 comparison tables where `gemini` produced none — which
+matches the corpus-level observation that `claude` uses tables and `gemini` does
+not, and suggests that difference is a real stylistic property rather than noise.
+
+What has NOT been shown: that longer is better for a student. 68 KB is a long read.
+The honest summary is that opus-5 produces markedly more *material* per topic, both
+backends produce *sound* material, and whether the extra 58 KB earns its place is a
+judgement about the reader that no check here can make.
+
 ## Caveats
 
 31 `gemini` topics against 310 `claude` ones is an unbalanced sample, and they are

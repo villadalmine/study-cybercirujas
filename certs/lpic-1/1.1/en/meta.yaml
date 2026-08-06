@@ -1,6 +1,6 @@
-generated_at: '2026-08-05T18:55:10'
+generated_at: '2026-08-06T18:23:12'
 lang: en
-backend: antigravity
-model: antigravity-session
+backend: claude
+model: claude
 sources:
 - https://www.lpi.org/our-certifications/lpic-1-overview/

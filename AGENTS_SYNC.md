@@ -406,10 +406,13 @@ document instead; the numbers are there and the reasoning with them.
   allowed by policy`) for some accounts. Entitlement on the Google side, not
   anything in `generator.py` — reported rather than worked around, which was the
   right call.
-- **A same-topic head-to-head** between backends has not been run. Everything in
-  BACKEND_COMPARISON.md compares different topics, so subject matter is a
-  confound. Regenerating one existing topic with each backend would settle it for
-  the price of one topic.
+- ~~A same-topic head-to-head has not been run.~~ **Done 2026-08-06, and it
+  reverses the corpus-level conclusion.** On `lpic-1/1.1`, identical prompt:
+  opus-5 produced 67,783 bytes with 52 code blocks, 39 citations and 54 comparison
+  tables; `gemini` produced 10,115 bytes with 5, 4 and 0. Both clear the floor.
+  The corpus medians said the opposite because they compared different topics —
+  `gemini` authored the dense LPIC-3 branch. Subject matter was the confound, and
+  it was big enough to invert the answer. See docs/BACKEND_COMPARISON.md.
 
 ## Queue — Claude to Antigravity, 2026-08-06
 
