@@ -21,7 +21,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpi-020-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/security-essentials-overview/
@@ -124,7 +124,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpi-devops.md
     sources:
       objectives: https://www.lpi.org/our-certifications/devops-tools-engineer-overview/
@@ -212,7 +212,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-06-24'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/kcsa.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf
@@ -401,7 +401,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpi-030-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/web-development-essentials-overview/
@@ -415,7 +415,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpi-050-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/open-source-essentials-overview/
@@ -429,7 +429,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-06'
     file: certs/lpi-702.md
     sources:
       objectives: https://www.lpi.org/our-certifications/bsd-specialist-overview/

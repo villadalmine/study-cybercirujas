@@ -8,14 +8,14 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf
-  status: pending
+  status: generated
   title: The 4Cs of Cloud Native Security
   topic: 1 - Overview of Cloud Native Security
   weight: 2.33
 - id: '1.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf
-  status: pending
+  status: generated
   title: Cloud Provider and Infrastructure Security
   topic: 1 - Overview of Cloud Native Security
   weight: 2.33
