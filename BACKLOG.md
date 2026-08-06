@@ -15,6 +15,36 @@ Standing rule for any generation run: after finishing, re-run `scripts/fix_corru
 5. **Videos for paths without one**: `linux-devops`, `kubernetes-security`, `gitops-platform`, `observabilidad`, `service-mesh-networking`, `linux-foundation`. The `kubernetes` path is already done (es/en/de).
 6. **RAG study bot, phase 1 (anonymous)** — see the dedicated section below for the audit of the `chart/` proposal. Worth starting whenever there is appetite for a feature rather than more content: the corpus already exists and phase 1 needs no auth and no new cluster.
 
+## Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
+
+The gap nothing else covers: a confident wrong explanation passes the quality
+floor, the citation check, the manifest check and the provenance check. Demonstrated
+on 2026-08-06 — fresh kcsa/1.1 cited a kubernetes.io page for the 4Cs model that no
+longer contains it. The URL resolves; the page was restructured.
+
+Built so far:
+- `scripts/check_sources.py` + `docs/sources.yaml` — 52 projects catalogued, 85% of
+  4,277 citations attributed to an official source. **Extending it is one entry.**
+- `scripts/check_api_facts.py` — apiVersion/kind checked against the tracked
+  release's OpenAPI spec. Free, exact, version-aware, and it replaces a
+  hand-maintained list that was drifting.
+- `scripts/check_claims.py` — fetches a cited page and asks whether it covers the
+  subject. Costs a completion per citation, so it samples.
+
+Next, in order (the design argues at length for this order):
+1. **Extend the spec lookup beyond kind existence** — field names, feature gates,
+   defaults, ports. Same free mechanism, more of the errors that mislead a reader.
+2. **A claim extractor.** Pull the checkable assertions out of a topic (versions,
+   numbers, API shapes, flags). Useful alone; both remaining layers consume it.
+3. **Crawl + diff the cited pages weekly, without judging.** Catches staleness —
+   the failure already observed — for the price of bandwidth.
+4. **Retrieval and adversarial judging last.** Ask for contradiction and absence,
+   never "is this consistent?" — a confirmation-shaped judge agrees far too often.
+   A claim with neither support nor contradiction is *unverified*, not fine.
+
+Also open: 637 citations from 269 uncatalogued domains. `check_sources.py
+--unknown-only` lists them; adding the legitimate ones is bookkeeping, no quota.
+
 ## Pipeline Automation
 
 - **Syllabus-change trigger — the `stale` status is dead code.** It is in `certs.py::VALID_STATUS` and both `cli.py` and `generator.py` claim to regenerate "pending/stale" topics, but nothing ever assigns it: `tracker.py::snapshot_topics` copies the previous status verbatim, so a re-snapshot with a changed title or weight leaves the topic `generated` and its content is never revisited. PLAN.md's "only changed topics are regenerated" describes an intention, not the code. Implementation order and the reason each step matters is in WORKFLOW.md — detect the diff in `snapshot_topics`, invalidate **every** language rather than just Spanish (generation currently skips on file existence and ignores status entirely, so a naive fix would update `es` and leave the translations describing the old syllabus), then re-render the certification video since its domain-weight scene comes from the topics that changed.
