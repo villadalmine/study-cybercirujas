@@ -1,0 +1,12 @@
+cert: lpic-3-300
+topic: '4.1'
+title: Samba Client Configuration
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
