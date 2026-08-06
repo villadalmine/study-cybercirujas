@@ -70,9 +70,18 @@ CLIENT_SIDE_KINDS = {
 }
 
 # Teaching deprecation legitimately requires showing the old API.
+#
+# Stems, not whole words, and checked in BOTH languages. The first version used
+# `migrat`, which matches "migrate" and "migration" but not the Spanish "migrar"
+# or "migración" — so a ckad topic teaching exactly this migration, with a
+# "# Antes" / "# Después" pair, was reported as a defect. The corpus is bilingual
+# and an English-only pattern quietly only works on half of it.
 DELIBERATE = re.compile(
-    r"deprecat|removed in|no longer served|migrat|obsolet|legacy|"
-    r"ya no|eliminad|obsolet|antigu", re.I)
+    r"deprecat|obsolet|legacy|migra|"                    # both languages
+    r"removed in|no longer served|replaced by|"          # en
+    r"ya no|eliminad|antigu|reemplaz|sustitu|"           # es
+    r"^\s*#\s*(antes|before|después|despues|after|old|nuevo|new)\b",
+    re.I | re.M)
 CONTEXT_LINES = 12
 
 
