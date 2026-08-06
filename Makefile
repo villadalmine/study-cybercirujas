@@ -93,8 +93,15 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/quality_report.py
 	$(VENV)/bin/python3 scripts/check_manifests.py
 	$(VENV)/bin/python3 scripts/check_k8s_apis.py
+	$(VENV)/bin/python3 scripts/check_provenance.py
+	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 -m unittest discover tests
-	@echo "Citations: scripts/check_citations.py (uses the network, run separately)"
+	@echo
+	@echo "Network, run separately (still no API quota):"
+	@echo "  scripts/check_citations.py     do the cited URLs resolve?"
+	@echo "  scripts/check_api_facts.py     do manifests use APIs the tracked release serves?"
+	@echo "Costs quota, sample only:"
+	@echo "  scripts/check_claims.py        does the cited page SAY what we claim?"
 
 # ---------------------------------------------------------------------------
 # The paved path. Everything below is one command that does the whole thing in
