@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -95,3 +95,46 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_k8s_apis.py
 	$(VENV)/bin/python3 -m unittest discover tests
 	@echo "Citations: scripts/check_citations.py (uses the network, run separately)"
+
+# ---------------------------------------------------------------------------
+# The paved path. Everything below is one command that does the whole thing in
+# the right order, so nobody has to reconstruct the sequence by reading code.
+#
+# This exists because the alternative is observed, not hypothetical: when the
+# official route is unclear or fails, an agent reads the repo, infers an order,
+# and writes its own runner — which then skips the claim system and the budget
+# and reports success it did not achieve. A command that always works is a
+# better guardrail than a rule that says "do not do that".
+# ---------------------------------------------------------------------------
+
+.PHONY: cert next status setup
+
+setup: ## install the venv AND the pre-commit hook (run this first, once)
+	$(MAKE) install
+	git config core.hooksPath .githooks
+	@echo
+	@echo "Ready. The hook now refuses commits that break the four fixed rules."
+	@echo "Next: make status"
+
+status: ## where everything stands: what is missing, and is what exists sound?
+	@echo "=== pending work ==="
+	@$(VENV)/bin/python3 scripts/fix_corrupted_content.py --audit-only 2>/dev/null | head -20 || true
+	@echo
+	@echo "=== traceability / bookkeeping / ordering ==="
+	@$(VENV)/bin/python3 scripts/check_provenance.py || true
+	@echo
+	@echo "=== being generated right now, by anyone ==="
+	@$(VENV)/bin/python3 -c "from teach.core import claims; a=claims.active(); print('\n'.join(map(str,a)) if a else '  (nothing)')"
+	@echo
+	@echo "=== spend so far ==="
+	@$(VENV)/bin/python3 scripts/usage_report.py 2>/dev/null | head -8 || true
+
+cert: ## take ONE certification from wherever it is to finished (CERT= [BACKEND=])
+	@test -n "$(CERT)" || { echo "Usage: make cert CERT=<id> [BACKEND=claude] [TRANSLATE_BACKEND=litellm]"; exit 1; }
+	$(VENV)/bin/python3 scripts/run_cert.py $(CERT) \
+	  $(if $(BACKEND),--backend $(BACKEND),) \
+	  $(if $(TRANSLATE_BACKEND),--translate-backend $(TRANSLATE_BACKEND),) \
+	  $(if $(DRY),--dry-run,)
+
+next: ## do whatever comes next, deciding for you which certification needs it
+	@$(VENV)/bin/python3 scripts/next_work.py $(if $(BACKEND),--backend $(BACKEND),) $(if $(DRY),--dry-run,)

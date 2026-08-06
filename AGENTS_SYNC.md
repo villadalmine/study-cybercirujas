@@ -160,24 +160,38 @@ same topic.
 If you read nothing else, read this section. It is the whole loop.
 
 ```bash
-# 1. What is already true? (free, no API)
-make audit                      # what is missing, including unrendered videos
-scripts/check_provenance.py     # is what exists traceable and accounted for?
-cat STATUS.md                   # the matrix, generated from disk
-
-# 2. Do the work — ONE command, it handles order/lock/budget/flags
-scripts/run_cert.py <cert> --dry-run      # look first
-scripts/run_cert.py <cert>                # then run
-
-# 3. Prove it (free, no API)
-make test                       # 34 tests
-make audit && scripts/check_provenance.py
-scripts/usage_report.py         # what it cost, per model
-
-# 4. Record it
-.venv/bin/python3 scripts/status_matrix.py     # refresh STATUS.md
-git add … && git commit                        # small commits, one topic each is fine
+make setup          # once per clone: venv + the pre-commit hook
+make status         # what is missing, what is unsound, who is working, what it cost
+make next           # do whatever comes next — it decides which cert and why
+make verify         # prove it: floor + manifests + k8s APIs + tests. No API cost
 ```
+
+That is the whole thing. `make next` needs no arguments and no judgement: it picks
+the certification, in the right order (finish what is started → author before
+translating → content before video → translate last), and runs it through the
+claim system and the budget.
+
+If you want to steer:
+
+```bash
+make next DRY=1                       # what would it do, and why
+make cert CERT=lpic-2                 # a specific certification
+make cert CERT=lpic-2 BACKEND=gemini TRANSLATE_BACKEND=litellm
+make cert CERT=lpic-2 DRY=1
+```
+
+Then record it:
+
+```bash
+.venv/bin/python3 scripts/status_matrix.py     # refresh STATUS.md
+git add … && git commit                        # one topic per commit is fine
+```
+
+**If a command fails, that is information, not a dead end.** Report the error in
+this file. Do not build a way around it — the way around is how an orchestrator
+gets written that skips the claims and the budget and then reports success it did
+not achieve. Every failure mode worth knowing is in the table below with what to
+do about it.
 
 **The single most useful habit: run the free checks before and after.** They cost
 nothing and they are the only thing standing between "it looks finished" and "it
