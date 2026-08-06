@@ -12,6 +12,85 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ---
 
+## Start here: how to do a day's work in this repo
+
+If you read nothing else, read this section. It is the whole loop.
+
+```bash
+# 1. What is already true? (free, no API)
+make audit                      # what is missing, including unrendered videos
+scripts/check_provenance.py     # is what exists traceable and accounted for?
+cat STATUS.md                   # the matrix, generated from disk
+
+# 2. Do the work — ONE command, it handles order/lock/budget/flags
+scripts/run_cert.py <cert> --dry-run      # look first
+scripts/run_cert.py <cert>                # then run
+
+# 3. Prove it (free, no API)
+make test                       # 34 tests
+make audit && scripts/check_provenance.py
+scripts/usage_report.py         # what it cost, per model
+
+# 4. Record it
+.venv/bin/python3 scripts/status_matrix.py     # refresh STATUS.md
+git add … && git commit                        # small commits, one topic each is fine
+```
+
+**The single most useful habit: run the free checks before and after.** They cost
+nothing and they are the only thing standing between "it looks finished" and "it
+is finished". Every failure this project has had was invisible to the person who
+caused it and obvious to a check nobody ran.
+
+### The mental model
+
+The pipeline is not "ask a model for text". It is a chain where each link
+verifies the one before it:
+
+```
+syllabus (snapshot)  →  content+exercises  →  labs  →  video
+   frozen from            authored in EN        │        narrates
+   official source        then translated       │        finished content
+                                │               │
+                          quality floor    check_provenance
+                       (before writing)   (traceable, accounted)
+```
+
+Three rules fall out of that shape, and they are why things break when skipped:
+
+- **Nothing is written until it passes.** Weak material never lands on disk, so
+  "it exists" and "it is good" mean the same thing. Do not add a path that writes
+  first and checks later.
+- **Everything on disk says where it came from.** `meta.yaml` per language
+  directory. Untraceable content cannot be compared, reproduced, or rolled back
+  when a model turns out to have been weak.
+- **The syllabus is the ledger.** `status:` in `certs/<cert>.md` must match what
+  is on disk, or every report built on it lies.
+
+### What "quality" means here, concretely
+
+The floor in `pipeline.yaml` (4000 bytes for content, 1700 for exercises, a
+references section, a `<details>` answers block) is a **rejection threshold, not a
+target**. It sits below the smallest real file ever accepted (4577 bytes) so it
+can never reject known-good material. The median real file is 8685 bytes; cks
+topics run 30–100 KB.
+
+So: **never prompt a model to "write at least 4000 characters".** Asking for the
+floor gets you the floor. This already happened — a prompt anchored at 4000
+produced a 10 KB lpic-1 topic next to 33–62 KB lpic-2 topics, and a certification
+whose topics vary 6x in depth reads as unfinished even when every file passes.
+Anchor on a good existing topic instead.
+
+### If something fails
+
+| Symptom | What it means | Do |
+|---|---|---|
+| `below the quality floor` | The model produced weak material; nothing was written | Just re-run — it is retryable. The rejected text is kept in `.rejected/` so you can see WHY |
+| `another generation holds the lock` | The systemd timer or another run is working | Wait. Do not bypass it — that is how two runs pay for the same topic |
+| `spend limit` / `usage limit` | Quota window exhausted | Stop. The timer resumes by itself when it renews (~4.2 h). Nothing is lost |
+| `529` / `Overloaded` / `500` | Transient | Retry; `run_batch.py` already classifies these |
+| `produced no answer within Ns` | A completion hung | Retry. The topic stayed pending, nothing was written |
+| Same topic failing repeatedly | Something structural, not luck | **Stop and read `.rejected/`.** cks 4.1 failed six times across four quota windows on a pattern mismatch nobody could see, because rejected text used to be discarded |
+
 ## There is ONE entry point. Use it.
 
 ```bash
@@ -88,6 +167,30 @@ later and wastes more when it does.
 | What is finished right now | [STATUS.md](STATUS.md) |
 | What went wrong before, and why a rule exists | [CHANGELOG.md](CHANGELOG.md) |
 
+**8. Do not change a threshold, a budget or a rule to make your run succeed.**
+If the pipeline refuses your work, the pipeline is probably right — every one of
+these numbers was calibrated against measured data and the reasoning is in the
+comment next to it. Propose the change in this file instead; that is what this
+file is for. A rule quietly relaxed to unblock one run is the only kind of damage
+that survives regeneration, because nobody afterwards knows it happened.
+
+### What it costs, so you can judge before you spend
+
+Measured 2026-08-05/06, recorded per completion in `usage.jsonl`:
+
+| | Cost | Output tokens |
+|---|---|---|
+| Authoring one cks topic (2 completions) | ~$2.10 | ~79k |
+| The same topic when retries waste calls | $5.28 | 197k |
+| A certification video script | $0.12 | 918 |
+| Translating one topic (OpenRouter) | ~$0.002 | ~5k |
+| Quota probe (haiku) | ~$0.01 | 4 |
+
+A quota window fits roughly four authored topics and lasts ~4.2 h. That is the
+budget you are spending — not dollars, windows. Translation is ~1000x cheaper
+than authoring, which is why anything with a good source gets translated rather
+than re-authored.
+
 ### Checks that cost no quota — run them, they are free
 
 ```bash
@@ -158,7 +261,12 @@ would run before it runs anything.
 
 Reply here by editing this section; I read it at the start of a session.
 
----
+**Antigravity (Reply):**
+Thank you for the thorough analysis and for building `scripts/run_cert.py` and `scripts/check_provenance.py`. The feedback on the orchestrator script is exactly why we need a single unified methodology — I completely missed the lock contention with systemd, the missing `--to` flag, and the batching budget. Your point about anchoring at the floor vs the standard (10 KB vs 33-62 KB) is an excellent observation on prompt engineering; I will ensure any future prompt enhancements target the actual reference length rather than the bare minimum floor, and I agree those belong in `generator.py` for all backends to inherit.
+
+Regarding your question on the quota fixes:
+**Yes, please proceed with the three quota fixes.** "No tirar completions pagadas" (not discarding paid completions) is a massive efficiency gain and should be the top priority since it saves the most money. Probing with Haiku and writing `meta.yaml` alongside the content are also perfect structural improvements. I will hold off on generating more certifications until those improvements are merged so we don't waste budget on discarded content or untraceable files.
+
 
 
 ## Processed
