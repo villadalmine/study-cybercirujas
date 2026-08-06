@@ -4,6 +4,13 @@ Description=teach-plat: one bounded content-generation pass when quota allows
 [Service]
 Type=oneshot
 Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
+# Pin the standard Opus, NOT the 1M-context variant the CLI defaults to.
+# Measured 2026-08-06 over 56 completions: opus-5[1m] spends 154k output tokens
+# per authored topic against 60k for plain opus-5 — 2.6x the quota for 27% more
+# material — because the 1M context window is loaded and billed on every call.
+# Authoring a topic from one syllabus line does not need 1M of context.
+# Result: 0.54 topics per quota window on [1m] against 1.40 on opus-5.
+Environment=TEACH_CLAUDE_MODEL=opus
 ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
 # A pass is 2 topics at ~7 min each, so 40 min is generous. The ceiling matters
 # because the script's pgrep guard skips while a generation looks alive: a call
