@@ -1,0 +1,12 @@
+cert: lpic-1
+topic: '2.6'
+title: Security
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh

@@ -1,6 +1,6 @@
-generated_at: '2026-07-30T03:05:44'
+generated_at: '2026-08-06T03:14:50'
 lang: es
-backend: antigravity
-model: antigravity-session
+backend: claude
+model: claude
 sources:
 - https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf

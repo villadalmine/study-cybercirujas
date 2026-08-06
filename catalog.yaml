@@ -35,7 +35,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-05'
     file: certs/lpic-1.md
     sources:
       objectives: https://www.lpi.org/our-certifications/lpic-1-overview/
@@ -49,7 +49,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-05'
     file: certs/lpic-2.md
     sources:
       objectives: https://www.lpi.org/our-certifications/lpic-2-overview/
