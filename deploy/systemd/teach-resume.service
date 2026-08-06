@@ -10,7 +10,11 @@ Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
 # material — because the 1M context window is loaded and billed on every call.
 # Authoring a topic from one syllabus line does not need 1M of context.
 # Result: 0.54 topics per quota window on [1m] against 1.40 on opus-5.
-Environment=TEACH_CLAUDE_MODEL=opus
+# Full model id, not the `opus` alias. The alias means "the latest Opus" and
+# the CLI can fall back mid-run: on kcsa/1.2 the content came from opus-5 and its
+# exercises from opus-4-8, under the same pin. meta.yaml records what actually
+# answered, but a comparison needs the model held still.
+Environment=TEACH_CLAUDE_MODEL=claude-opus-4-8
 ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
 # A pass is 2 topics at ~7 min each, so 40 min is generous. The ceiling matters
 # because the script's pgrep guard skips while a generation looks alive: a call
