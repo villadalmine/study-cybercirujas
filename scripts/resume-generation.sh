@@ -13,14 +13,14 @@ LOG="$STATE_DIR/resume.log"
 LOCK="$STATE_DIR/resume.lock"
 mkdir -p "$STATE_DIR"
 
-# If a generation is already running (started by hand or by an earlier run of
-# this same script), do not start another in parallel — that would duplicate
-# claude calls on the same topic.
-if pgrep -f "teach cert generate" > /dev/null; then
-    echo "=== $(date -Iseconds) — generation already running, skipping ===" >> "$LOG"
-    exit 0
-fi
-
+# Only one instance of THIS script at a time — a firing must not stack on top of
+# a previous one that is still working. It deliberately does NOT exclude other
+# agents: collisions are prevented per topic (teach/core/claims.py), so a second
+# agent generating a different certification is two agents working, not a
+# conflict. This used to be a `pgrep -f "teach cert generate"` guard, which
+# blocked the timer whenever ANYONE was generating anything — and an agent that
+# finds itself blocked for no reason writes its own runner that skips the guard,
+# which is precisely what happened on 2026-08-06.
 exec 9>"$LOCK"
 flock -n 9 || exit 0
 

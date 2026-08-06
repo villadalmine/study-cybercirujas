@@ -23,8 +23,8 @@ initiative is wanted — this file exists to stop rework, not to stop thinking.
    written with a lowered threshold. Not written.
 2. Everything on disk records where it came from (`meta.yaml`).
 3. The syllabus `status` matches what is on disk.
-4. Generation goes through the lock and the budget, so two runs never pay for the
-   same topic.
+4. Generation goes through the claim system and the budget, so two runs never pay
+   for the same topic.
 
 That is the whole contract. It is four things because four is what the checks can
 prove; anything else would be taste dressed up as a rule.
@@ -60,6 +60,37 @@ the script bypassed the lock, ignored the budget, and would have reported succes
 while silently skipping the Spanish half. Same initiative through `run_cert.py`
 would have been welcome. Build things; just do not build a second way to do what
 already has one.
+
+## Several agents at once: yes, and you do not have to coordinate
+
+Work in parallel freely. Exclusion is **per topic**, not global, so two agents on
+different topics — or different certifications, languages, or providers — simply
+work. Nobody queues behind anybody.
+
+```bash
+.venv/bin/python3 -c "from teach.core import claims; print(claims.active())"
+# [('cks', '3.1', 'en')]   <- what is being generated right now, by anyone
+```
+
+`run_batch.py` (and therefore `run_cert.py`, and the systemd timer) claims each
+topic before starting it and skips whatever is already claimed, so two agents
+pointed at the same certification drift apart on their own and neither pays twice
+for the same file.
+
+The claim lives on an open file descriptor, so it dies with the process: a run
+that crashes does not strand a topic. A lock file checked with `exists()` would
+have.
+
+You do not need to announce what you are working on, ask permission, or wait.
+Just go through `run_cert.py` / `run_batch.py` so your work is visible to the
+others. The only thing that breaks this is calling `teach cert generate` directly
+in a loop of your own — that bypasses the claim, and then two agents CAN pick the
+same topic.
+
+> This used to be a single global lock plus a `pgrep` guard that skipped the
+> timer whenever anyone was generating anything. It was safe and wrong: an agent
+> blocked for no visible reason writes its own runner that skips the guard, which
+> is exactly what happened on 2026-08-06. The rule now costs nothing to follow.
 
 ## Start here: how to do a day's work in this repo
 

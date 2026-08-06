@@ -42,7 +42,7 @@ def acquire_lock():
         return None
     return handle
 
-from teach.core import pipeline  # noqa: E402
+from teach.core import claims, pipeline  # noqa: E402
 
 import fix_corrupted_content as audit  # noqa: E402
 
@@ -73,6 +73,39 @@ def generate(cert: str, topic: str, lang: str, backend: str) -> tuple[bool, str]
     return result.returncode == 0, (result.stdout + result.stderr).strip()
 
 
+def generate_with_retries(topic: str, args, attempts: int, delay: int) -> str:
+    """One topic, start to finish. Returns done | failed | skipped | fatal.
+
+    The claim is held for exactly as long as the work takes, so a second agent
+    sees this topic as busy and moves to the next one instead of duplicating it.
+    """
+    with claims.claim(args.cert, topic, args.lang) as mine:
+        if not mine:
+            # Claimed between listing and starting. Not an error — someone else
+            # is doing it, which is exactly what should happen.
+            print(f"--- {topic}: claimed by another run, skipping ---", flush=True)
+            return "skipped"
+        for attempt in range(1, attempts + 1):
+            print(f"--- {topic} (attempt {attempt}/{attempts}) ---", flush=True)
+            ok, output = generate(topic=topic, cert=args.cert, lang=args.lang,
+                                  backend=args.backend)
+            if ok:
+                return "done"
+            # Only a fatal error stops the batch: with quota exhausted, every
+            # remaining call would fail the same way.
+            if pipeline.is_fatal(output):
+                print(f"FATAL: retrying cannot help, stopping the batch.\n{output}", flush=True)
+                return "fatal"
+            if not pipeline.is_retryable(output) or attempt == attempts:
+                # One stubborn topic must not hold up the rest. Nothing was
+                # written for it, so the next pass simply finds it pending again.
+                print(f"GIVING UP on {topic}, moving on:\n{output}", flush=True)
+                return "failed"
+            print(f"transient error, retrying in {delay}s", flush=True)
+            time.sleep(delay)
+    return "failed"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("cert")
@@ -84,12 +117,6 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    lock = acquire_lock()
-    if lock is None:
-        print("another generation holds the lock (systemd timer or a manual run); "
-              "not starting a second one", file=sys.stderr)
-        return 3
-
     limit = args.topics if args.topics is not None else pipeline.topics_per_run()
     attempts = int(pipeline.budget().get("retry_attempts") or 1)
     delay = int(pipeline.budget().get("retry_delay_seconds") or 0)
@@ -99,34 +126,33 @@ def main() -> int:
         print(f"{args.cert} ({args.lang}): nothing pending")
         return 0
 
-    batch = queue[:limit] if limit else queue
+    # Skip what another agent is already producing rather than queueing behind
+    # it. Two runs on different topics are two agents working; only the same
+    # topic is a collision.
+    busy = [t for t in queue if claims.is_claimed(args.cert, t, args.lang)]
+    free = [t for t in queue if t not in busy]
+    if busy:
+        print(f"{args.cert} ({args.lang}): {len(busy)} topics claimed by another "
+              f"run ({', '.join(busy[:5])}), skipping them", flush=True)
+    if not free:
+        print(f"{args.cert} ({args.lang}): everything pending is already claimed")
+        return 0
+
+    batch = free[:limit] if limit else free
     print(f"{args.cert} ({args.lang}): {len(queue)} pending, "
           f"generating {len(batch)}: {', '.join(batch)}", flush=True)
 
     done = 0
     failed: list[str] = []
     for topic in batch:
-        for attempt in range(1, attempts + 1):
-            print(f"--- {topic} (attempt {attempt}/{attempts}) ---", flush=True)
-            ok, output = generate(topic=topic, cert=args.cert, lang=args.lang,
-                                  backend=args.backend)
-            if ok:
-                done += 1
-                break
-            # Only a fatal error stops the batch: with quota exhausted, every
-            # remaining call would fail the same way.
-            if pipeline.is_fatal(output):
-                print(f"FATAL: retrying cannot help, stopping the batch.\n{output}", flush=True)
-                print(f"generated {done}/{len(batch)}", flush=True)
-                return 2
-            if not pipeline.is_retryable(output) or attempt == attempts:
-                # One stubborn topic must not hold up the rest. Nothing was
-                # written for it, so the next pass simply finds it pending again.
-                print(f"GIVING UP on {topic}, moving on:\n{output}", flush=True)
-                failed.append(topic)
-                break
-            print(f"transient error, retrying in {delay}s", flush=True)
-            time.sleep(delay)
+        outcome = generate_with_retries(topic, args, attempts, delay)
+        if outcome == "fatal":
+            print(f"generated {done}/{len(batch)}", flush=True)
+            return 2
+        if outcome == "done":
+            done += 1
+        elif outcome == "failed":
+            failed.append(topic)
 
     remaining = len(queue) - done
     print(f"batch complete: {done} generated, {remaining} left in {args.cert} ({args.lang})")
