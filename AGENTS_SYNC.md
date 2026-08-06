@@ -12,6 +12,28 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ---
 
+## First: install the hook. It is the only rule that does not depend on you.
+
+```bash
+git config core.hooksPath .githooks     # once per clone
+```
+
+It refuses commits that break the four fixed rules — content below the quality
+floor, content with no `meta.yaml`, a syllabus status that disagrees with disk, a
+video for an unfinished certification. It only inspects what you are committing,
+runs in under a second, and costs no quota.
+
+Everything else in this file is a rule you have to read and choose to follow.
+That is worth being honest about: on 2026-08-06 an agent wrote an orchestrator
+that bypassed the lock and the budget, and it stopped because the **owner**
+stopped it — no check caught it, and the rules it broke were already written
+down. Written rules held only because a human was watching. The hook is the part
+that does not need one.
+
+If it blocks you, the answer is not `--no-verify`. Read what it said: those four
+things are the whole contract, and each is mechanically checkable precisely so
+nobody has to take anybody's word for it.
+
 ## Who decides what — read this first
 
 The owner has set a division of labour, and it is not about capability. It is
