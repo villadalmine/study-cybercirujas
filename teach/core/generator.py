@@ -560,6 +560,12 @@ def generate_topic(
     # --force en el idioma default)
     lab_dir = directory / "lab"
     if not (lab_dir / "break_fix.sh").exists() or (force and lang == certs.DEFAULT_LANG):
+        # Without this the lab's spend is billed to "exercises", because the
+        # context still holds whatever the previous call set. It is not a rounding
+        # error: on kcsa/1.1 the lab was the LARGEST completion of the three
+        # (42,558 tokens against 14,217), so the mislabel made a topic look like
+        # it cost two calls when it costs three.
+        _usage_context["kind"] = "lab"
         break_fix = _reject_if_recap(
             complete(
                 system,
