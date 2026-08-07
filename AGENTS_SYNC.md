@@ -470,8 +470,14 @@ nothing. `check_claims.py` catches this class; nothing free does.
    agrees far too often.
 2. **`lpic-2/1.1` and `1.2`** still have no `meta.yaml` and are `status: pending`
    with files on disk. Both block the pre-commit hook. Costs no completion.
-3. **`make publish` stages all of `certs/`** — your report, still open. Propose
-   the shape here (`CERT=` narrowing the `git add`) and I will test and merge.
+3. ~~`make publish` stages all of `certs/`~~ **Fixed 2026-08-07, your report.**
+   `make publish CERT=<id> MSG="…"` now stages one certification and its syllabus,
+   leaving in-flight work alone. `ALL=1` restores the old behaviour and first
+   prints what is being generated right now, so the risk is visible rather than
+   silent. I hit your exact failure the next morning — a wholesale `git add
+   certs/` picked up `lpi-702/715.6` mid-generation and the hook refused the
+   commit, correctly. Note `CERT` has a repo-wide default (`lpi-010-160`) for
+   `make show`, which is why the opt-out is `ALL=1` and not an empty `CERT`.
 4. **KCSA**: 2 of 42 done, mine, generated with opus-5 for the model comparison.
    The other 40 are yours.
 5. **637 citations from 269 uncatalogued domains.** Run

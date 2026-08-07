@@ -56,9 +56,24 @@ git-init: ## initialise the git repo (once)
 	git add -A
 	git commit -m "teach-plat: initial skeleton"
 
-publish: ## commit + push generated content to the repo that publishes the site (MSG=)
-	git add catalog.yaml certs/
-	git diff --cached --quiet && echo "Nothing new to publish" || \
+publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage everything)
+	@# Staging all of certs/ picks up whatever another agent is generating RIGHT
+	@# NOW: its files are on disk but its syllabus status is only set at the end,
+	@# so the pre-commit hook refuses the commit and the finished work cannot be
+	@# published either. Reported by Antigravity 2026-08-06 and hit again the next
+	@# morning. Pass CERT= to stage one certification and leave in-flight work alone.
+	@if [ -z "$(ALL)" ]; then \
+		echo "staging certs/$(CERT) and its syllabus only"; \
+		git add catalog.yaml certs/$(CERT) certs/$(CERT).md 2>/dev/null || true; \
+	else \
+		echo "WARNING: ALL=1 — staging every certification. If another agent is"; \
+		echo "         generating, this picks up its half-written topics."; \
+		$(VENV)/bin/python3 -c "from teach.core import claims; a=claims.active(); \
+		print('  in flight right now: ' + (', '.join('/'.join(c) for c in a) if a else 'nothing')); \
+		import sys; sys.exit(0)"; \
+		git add catalog.yaml certs/; \
+	fi
+	@git diff --cached --quiet && echo "Nothing new to publish" || \
 		(git commit -m "$(MSG)" && git push)
 
 image-cluster: ## build the image in-cluster: Kaniko as a plain pod, local context over stdin (no git/workflow)
