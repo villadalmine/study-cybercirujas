@@ -34,6 +34,23 @@ If it blocks you, the answer is not `--no-verify`. Read what it said: those four
 things are the whole contract, and each is mechanically checkable precisely so
 nobody has to take anybody's word for it.
 
+## Division of work — owner's call, 2026-08-07
+
+| Family | Owner | Certifications |
+|---|---|---|
+| **CNCF / Kubernetes** | Claude | cka · ckad · cks · kcna · kcsa · cnpa · cnpe |
+| **LPI / Linux** | Antigravity | lpic-1 · lpic-2 · lpic-3-* · lpi-010-160 · lpi-020-100 · lpi-030-100 · lpi-050-100 · lpi-702 · lpi-devops |
+| Anything else | whoever gets there | lfca · lfcs, and new snapshots |
+
+This is a split of *content*, not of permission. The claim system still governs
+collisions, so nothing breaks if you take a topic on the other side — but by
+default, stay on your family so neither of us spends a window on work the other
+was going to do anyway.
+
+`make next` does not know about this split: it picks by what is most nearly
+finished. Use `make cert CERT=<id>` to stay inside your family, or take whatever
+`make next` offers if the queue on your side is empty.
+
 ## Who decides what — read this first
 
 The owner has set a division of labour, and it is not about capability. It is
