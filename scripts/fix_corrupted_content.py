@@ -14,6 +14,7 @@ combo counts as pending when it is corrupt, missing, or below the quality floor.
 Idempotent: it rescans on every pass, so it can be interrupted and relaunched
 freely — it converges on its own until the suspect list is empty.
 """
+import os
 import re
 import subprocess
 import sys
@@ -56,6 +57,12 @@ TARGETS = pipeline.targets()
 # exact shape of the drift that caused three separate audit blind spots, and
 # this one flipped from "es" to "en" on 2026-08-04.
 DEFAULT_LANG = certs.DEFAULT_LANG
+
+# Translation is measured safe on a cheap model and ~1000x cheaper than
+# authoring (docs/TRANSLATION_STUDY.md). Falls back to claude if the proxy
+# is not configured, since a translation on the strong model is still far
+# cheaper than re-authoring.
+TRANSLATE_BACKEND = os.environ.get("TEACH_TRANSLATE_BACKEND", "claude")
 
 FENCE_RE = re.compile(r"^```[a-zA-Z]*\n?|\n?```\s*$")
 
@@ -207,12 +214,30 @@ def main() -> None:
                 print(f"--- {cert} {topic} ({lang}): claimed by another run, skipping ---",
                       flush=True)
                 continue
-            print(f"--- regenerating {cert} {topic} ({lang}) ---", flush=True)
-            result = subprocess.run(
-                [str(TEACH), "cert", "generate", cert, "--topic", topic,
-                 "--lang", lang, "--backend", "claude", "--force"],
-                cwd=REPO, capture_output=True, text=True,
-            )
+            # AUTHOR the authoring language; TRANSLATE everything else.
+            #
+            # This used to run `generate --lang <x>` for every language, which
+            # re-authors the topic from the syllabus and never reads the English.
+            # That is the mistake the whole pipeline is documented against: it
+            # costs a full authoring pass (~$2 and ~100k output tokens) where a
+            # translation costs ~$0.002, and it produces a sibling that drifts
+            # from its source instead of a translation verified to preserve it.
+            # The unattended timer does most of the generating, so it did this to
+            # every non-English topic in the corpus.
+            source = REPO / "certs" / cert / topic / certs.DEFAULT_LANG / "content.md"
+            translating = lang != certs.DEFAULT_LANG and source.exists() and \
+                not quality.check_file(source)
+            if translating:
+                print(f"--- translating {cert} {topic} "
+                      f"({certs.DEFAULT_LANG} -> {lang}) ---", flush=True)
+                command = [str(TEACH), "cert", "translate", cert, "--topic", topic,
+                           "--to", lang, "--from", certs.DEFAULT_LANG,
+                           "--backend", TRANSLATE_BACKEND, "--force"]
+            else:
+                print(f"--- authoring {cert} {topic} ({lang}) ---", flush=True)
+                command = [str(TEACH), "cert", "generate", cert, "--topic", topic,
+                           "--lang", lang, "--backend", "claude", "--force"]
+            result = subprocess.run(command, cwd=REPO, capture_output=True, text=True)
         output = (result.stdout + result.stderr).strip()
         if result.returncode != 0:
             if pipeline.is_fatal(output):
