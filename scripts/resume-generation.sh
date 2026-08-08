@@ -45,5 +45,16 @@ fi
     # that combination. Unbounded, and contradicting the deliberate pacing.
     # It was redundant too: the audit already enumerates the same queue.
     "$REPO/.venv/bin/python3" "$REPO/scripts/fix_corrupted_content.py"
+
+    # Refresh the matrix here too. `make cert` and `make publish` already do it,
+    # but THIS is the path that does most of the generating, so leaving it out
+    # meant the dashboard drifted exactly when nobody was watching — STATUS.md
+    # sat a day stale reporting kcsa at 2/42 when it was 42/42. A report that is
+    # only right when a human remembers to refresh it is worse than no report,
+    # because it is believed.
+    #
+    # Idempotent, like everything else here: it is derived from disk, so running
+    # it twice changes nothing and running it never is the only way to be wrong.
+    "$REPO/.venv/bin/python3" "$REPO/scripts/status_matrix.py" >/dev/null 2>&1 || true
     echo "=== end $(date -Iseconds) ==="
 } >> "$LOG" 2>&1

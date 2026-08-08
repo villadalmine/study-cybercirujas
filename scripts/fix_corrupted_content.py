@@ -166,6 +166,17 @@ def main() -> None:
     if n_fenced:
         print(f"Archivos con fence ```markdown envolvente arreglados en el lugar: {n_fenced}", flush=True)
     bad = sorted(find_bad_combos())
+    # Only this agent's certifications. The timer runs on the owner's Claude
+    # subscription, so letting it generate LPI work that Antigravity produces with
+    # its own plan spends the scarcer quota on the wrong half. Ownership lives in
+    # pipeline.yaml; TEACH_AGENT selects who this run is.
+    mine = [c for c in bad if pipeline.mine(c[0])]
+    skipped = len(bad) - len(mine)
+    if skipped:
+        others = sorted({c[0] for c in bad if not pipeline.mine(c[0])})
+        print(f"Skipping {skipped} combos owned by another agent "
+              f"({', '.join(others)}); I am '{pipeline.me()}'.", flush=True)
+    bad = mine
     # "pending" rather than "corrupt": now that targets come from pipeline.yaml,
     # this list mixes damaged content with content simply not generated yet for
     # a declared language. For regeneration it makes no difference, but calling

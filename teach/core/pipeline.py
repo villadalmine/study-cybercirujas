@@ -97,3 +97,28 @@ def video_languages(cert_id: str) -> list[str]:
 
 def path_video_languages() -> list[str]:
     return list((load().get("paths") or {}).get("video_languages") or [])
+
+
+def owner(cert_id: str) -> str:
+    """Which agent takes this certification by default; 'any' if unassigned.
+
+    NOT a lock — teach/core/claims.py is what prevents two runs colliding on a
+    topic. This exists so two agents do not spend two quota windows producing the
+    same certification, and it is in YAML rather than prose because prose did not
+    hold: a stale line in AGENTS_SYNC.md outlived the split that replaced it, and
+    the other agent correctly followed what was written.
+    """
+    config = (load().get("certs") or {}).get(cert_id) or {}
+    return str(config.get("owner") or "any")
+
+
+def me() -> str:
+    """This agent's name, from TEACH_AGENT. Unset means 'claude' — the historical
+    default, so nothing changes for a plain checkout."""
+    import os
+    return os.environ.get("TEACH_AGENT", "claude")
+
+
+def mine(cert_id: str) -> bool:
+    who = owner(cert_id)
+    return who in ("any", me())

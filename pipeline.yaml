@@ -128,6 +128,14 @@ quality:
 #                     it, so a cert nobody has started does not flood the report.
 #                     Flip to true when starting it, in the same commit.
 #   languages:     -> overrides `languages.default` entirely when present.
+#   owner:         -> which agent takes this certification by default. Ownership
+#                     is NOT a lock: the per-topic claim system is what prevents
+#                     two runs colliding. This is about not spending two quota
+#                     windows on the same work, and it exists because prose did
+#                     not hold — a stale line in AGENTS_SYNC.md ("the other 40 are
+#                     yours") outlived the split that replaced it, and the other
+#                     agent correctly followed what was written. `any` means
+#                     whoever gets there. Override with TEACH_AGENT=<name>.
 #   video:         -> languages to render the certification video in. Empty list
 #                     means no video yet. Piper has voices for es, en, de and zh
 #                     only (teach/core/video.py VOICES); `ja` and the rest have
@@ -138,40 +146,72 @@ quality:
 certs:
   lpic-1:
     active: true
+    owner: antigravity
     video: [en, es]
   lpic-2:
     active: true
+    owner: antigravity
     video: [en, es]
   lpic-3-300:
     active: true
+    owner: antigravity
     video: [en, es]
   lpic-3-303:
     active: true
+    owner: antigravity
     video: [en, es]
   lpic-3-305:
     active: true
+    owner: antigravity
     video: [en, es]
   lpic-3-306:
     active: true
+    owner: antigravity
+    video: [en, es]
+  lpi-020-100:
+    active: true
+    owner: antigravity
+    video: [en, es]
+  lpi-030-100:
+    active: true
+    owner: antigravity
+    video: [en, es]
+  lpi-050-100:
+    active: true
+    owner: antigravity
+    video: [en, es]
+  lpi-702:
+    active: true
+    owner: antigravity
+    video: [en, es]
+  lpi-devops:
+    active: true
+    owner: antigravity
     video: [en, es]
   lpi-010-160:
     active: true
+    owner: antigravity
     languages: [es, en, pt, fr, de, zh, ja]
     video: [es]
   cka:
     active: true
+    owner: claude
     video: [es]
   ckad:
     active: true
+    owner: claude
     video: [es]
   cks:
     active: true
+    owner: claude
     video: [en, es]
   kcsa:
     active: true
+    owner: claude
     video: [en, es]
   kcna:
     active: true
+    owner: claude
     video: [en, es]
   # Content is being regenerated: the first pass came out far below the quality
   # floor (cnpa met it for 0 of 27 topics, cnpe for 5 of 18, with the exercises
@@ -184,9 +224,11 @@ certs:
   # that has caught bad snapshots before.
   cnpe:
     active: true
+    owner: claude
     video: [es]
   cnpa:
     active: true
+    owner: claude
     video: [es]
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per

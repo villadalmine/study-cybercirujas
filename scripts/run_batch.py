@@ -99,11 +99,23 @@ def main() -> int:
         "--topics", type=int, default=None,
         help="how many topics to generate (default: budget.topics_per_run from pipeline.yaml)",
     )
+    parser.add_argument("--anyway", action="store_true",
+                        help="generate a certification owned by another agent")
     args = parser.parse_args()
 
     limit = args.topics if args.topics is not None else pipeline.topics_per_run()
     attempts = int(pipeline.budget().get("retry_attempts") or 1)
     delay = int(pipeline.budget().get("retry_delay_seconds") or 0)
+
+    # Ownership is advisory and skippable, not a lock — the claim system is what
+    # prevents collisions. This only stops two agents spending two quota windows
+    # on the same certification, which is what happened when the split lived in
+    # prose: a stale line in AGENTS_SYNC.md outlived the split that replaced it.
+    if not pipeline.mine(args.cert) and not args.anyway:
+        print(f"{args.cert} belongs to '{pipeline.owner(args.cert)}' and you are "
+              f"'{pipeline.me()}' (pipeline.yaml -> certs.{args.cert}.owner).\n"
+              f"Take it anyway with --anyway, or set TEACH_AGENT.", file=sys.stderr)
+        return 3
 
     queue = pending(args.cert, args.lang)
     if not queue:
