@@ -326,6 +326,23 @@ def paths_video(
 
 
 @app.command()
+def status() -> None:
+    """Regenerate STATUS.md from the filesystem (idempotent, no API cost).
+
+    The same implementation `make cert`, `make publish` and the unattended timer
+    use. Exposed here so any process can refresh the matrix without shelling out
+    to a script path that might move.
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+    from status_matrix import refresh
+
+    typer.echo("STATUS.md updated" if refresh() else "STATUS.md already current")
+
+
+@app.command()
 def serve(
     host: str = typer.Option("127.0.0.1", "--host"),
     port: int = typer.Option(8000, "--port"),

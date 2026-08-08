@@ -64,7 +64,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 	@# morning. Pass CERT= to stage one certification and leave in-flight work alone.
 	@if [ -z "$(ALL)" ]; then \
 		echo "staging certs/$(CERT) and its syllabus only"; \
-		$(VENV)/bin/python3 scripts/status_matrix.py; \
+		$(TEACH) status; \
 		git add catalog.yaml STATUS.md certs/$(CERT) certs/$(CERT).md 2>/dev/null || true; \
 	else \
 		echo "WARNING: ALL=1 — staging every certification. If another agent is"; \
@@ -72,7 +72,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 		$(VENV)/bin/python3 -c "from teach.core import claims; a=claims.active(); \
 		print('  in flight right now: ' + (', '.join('/'.join(c) for c in a) if a else 'nothing')); \
 		import sys; sys.exit(0)"; \
-		$(VENV)/bin/python3 scripts/status_matrix.py; \
+		$(TEACH) status; \
 		git add catalog.yaml STATUS.md certs/; \
 	fi
 	@git diff --cached --quiet && echo "Nothing new to publish" || \
@@ -163,7 +163,7 @@ cert: ## take ONE certification from wherever it is to finished (CERT= [BACKEND=
 	@# STATUS.md is generated from disk, so it is always truthful about the moment
 	@# it ran — including mid-flight work by another agent, which is correct: a
 	@# topic being generated genuinely is not finished yet.
-	@test -n "$(DRY)" || $(VENV)/bin/python3 scripts/status_matrix.py
+	@test -n "$(DRY)" || $(TEACH) status
 
 next: ## do whatever comes next, deciding for you which certification needs it
 	@$(VENV)/bin/python3 scripts/next_work.py $(if $(BACKEND),--backend $(BACKEND),) $(if $(DRY),--dry-run,)

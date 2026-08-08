@@ -12,14 +12,69 @@ etc.) — nothing hardcoded.
 ## Quickstart
 
 ```bash
-make install                                   # venv + CLI
-make list                                      # catalogue
-make show CERT=lpi-010-160                     # syllabus + per-topic status
-make generate CERT=lpi-010-160 TOPIC=1.1 BACKEND=claude
-make serve                                     # API + web on :8000
+make setup          # once per clone: venv, CLI, and the pre-commit hook
+make status         # what is missing, what is unsound, who is working, what it cost
+make next           # do whatever comes next — it decides which certification and why
+make verify         # prove it: quality floor + manifests + APIs + provenance + tests
+make serve          # API + web on :8000
 ```
 
+`make next` needs no arguments. It picks the certification, in the right order
+(finish what is started → author before translating → content before video →
+translate last), takes a per-topic claim so it cannot collide with another agent
+or with the timer, and stops at the budget in `pipeline.yaml`.
+
 `make help` lists every target.
+
+## Running it yourself, without guessing
+
+Everything the pipeline does is one command, and every decision it obeys is in
+`pipeline.yaml` rather than in someone's head.
+
+**Do work:**
+
+```bash
+make next                                   # whatever is most nearly finished
+make next DRY=1                             # what would it do, and why
+make cert CERT=cks                          # one specific certification, end to end
+make cert CERT=cks DRY=1                    # dry run first
+make cert CERT=cks BACKEND=gemini TRANSLATE_BACKEND=litellm
+```
+
+**Change what it should do** — a decision becomes configuration in one command,
+validated, idempotent, and refusing anything the pipeline could not act on:
+
+```bash
+scripts/steer.py show                       # every knob and its current value
+scripts/steer.py activate lfcs --owner any  # start a certification
+scripts/steer.py deactivate lpi-702         # stop working on one
+scripts/steer.py own kcsa claude            # who takes it by default
+scripts/steer.py languages kcsa en es pt    # which languages it must have
+scripts/steer.py video kcsa en es           # which videos to render
+scripts/steer.py budget 3                   # topics per run
+```
+
+**See what is true** (all free, none of these call a model):
+
+```bash
+make audit                                  # pending/corrupt combos + unrendered videos
+teach status                                # regenerate STATUS.md from disk
+scripts/check_provenance.py                 # traceable? bookkeeping right? order right?
+scripts/check_sources.py                    # are citations official, and whose?
+scripts/usage_report.py                     # what has been spent, per model and topic
+scripts/window_budget.py                    # weekly quota ceiling vs session windows
+python3 -c "from teach.core import claims; print(claims.active())"   # who is working now
+```
+
+**Two agents at once.** Exclusion is per topic, so different topics never
+collide. Ownership (`pipeline.yaml → certs.<id>.owner`) stops two agents spending
+two quota windows on the same certification:
+
+```bash
+export TEACH_AGENT=antigravity              # tell the tools who you are
+scripts/run_batch.py kcsa --lang en         # refused if kcsa belongs to someone else
+scripts/run_batch.py kcsa --lang en --anyway   # override deliberately
+```
 
 ## Public Docker image
 
@@ -43,10 +98,17 @@ Web: http://localhost:8000 · API docs: http://localhost:8000/docs
 - `gemini` — local Gemini CLI (`gemini -p`).
 - `custom` — your command in `TEACH_AGENT_CMD` (receives the prompt as its last argument).
 
-**Authoring always uses `claude`.** That backend is a subscription: it costs no
-money, it costs a quota window. Authoring quality tracks model strength and
-cannot be checked mechanically, so it never moves to a cheaper model. Translation
-is the one place a cheaper model is measured and used — see
+**Any backend may author; none may author untraceably.** Which provider you use
+is your call — `claude` is a subscription, so it costs no money and one quota
+window instead. What is not optional is the `meta.yaml` recording the backend,
+the real model and the date, because content whose origin is unknown cannot be
+reproduced, compared or rolled back. `scripts/check_provenance.py` enforces it.
+
+Pin an exact model with `TEACH_CLAUDE_MODEL=claude-opus-4-8`. Use the full id, not
+the `opus` alias: the alias means "the latest Opus" and the CLI can fall back
+mid-run, which makes two topics incomparable. Measured differences between models
+are in [docs/BACKEND_COMPARISON.md](docs/BACKEND_COMPARISON.md); translation
+specifically is the one step where a cheap model is measured safe, in
 [docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md).
 
 With local backends: generate on your machine → review → `make publish`.
@@ -90,13 +152,34 @@ saved), the audit, and `STATUS.md` — which counts only what meets the floor, n
 files that merely exist.
 
 ```bash
+make verify                       # everything below, in one command
 make quality                      # what meets the floor and what does not
 make audit                        # pending/corrupt combos, and unrendered videos
 make test                         # floor and stale-invalidation tests
 scripts/check_citations.py        # do the cited sources exist?
 scripts/check_manifests.py        # do the embedded manifests parse?
 scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught?
+scripts/check_api_facts.py        # do manifests use APIs the tracked release serves?
+scripts/check_sources.py          # is each citation an official project source?
+scripts/check_provenance.py       # traceable, accounted for, content before video
 ```
+
+`check_api_facts.py` is the only one that needs the network, and it downloads each
+Kubernetes OpenAPI spec once. It is version-aware because it has to be: a claim
+true in 1.29 and false in 1.34 is the likeliest real error here, and checking
+against "latest" would report correct material as wrong.
+
+One check costs quota and is therefore a sampling tool, not a gate:
+
+```bash
+scripts/check_claims.py certs/cks/1.1/en/content.md --sample 3
+```
+
+It fetches a cited page and asks whether it actually covers the subject. The free
+checks prove a URL **resolves**; this one asks whether it **supports the claim**,
+which is a different question — see [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md)
+for what is verified, what is not, and why the obvious RAG approach is last on the
+list rather than first.
 
 None of these costs API quota. And none of them proves an explanation is
 correct: the floor catches stubs and missing structure, the citation check

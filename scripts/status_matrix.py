@@ -13,11 +13,20 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import quality
+from teach.core import certs, quality, video
 
 REPO = Path(__file__).resolve().parent.parent
-LANGS = ["es", "en", "fr", "de", "zh", "ja", "pt"]
-VIDEO_LANGS = ["es", "en", "de", "zh", "ja"]
+STATUS = REPO / "STATUS.md"
+# Derived, never declared here. A private copy of these lists is the exact defect
+# this repo has hit three times: the matrix reported on the languages it had been
+# told about and stayed silent about the rest, which reads as "nothing missing".
+#
+# LANGS       every language the platform supports (teach/core/certs.py)
+# VIDEO_LANGS only those Piper can actually speak — a video column for a language
+#             with no voice would be permanently red for something that cannot be
+#             done at all, which is noise rather than a finding.
+LANGS = list(certs.LANGS)
+VIDEO_LANGS = [l for l in certs.LANGS if l in video.VOICES]
 
 
 def cert_topics(cert_id: str) -> list[dict]:
@@ -59,7 +68,27 @@ def lab_cell(cert_dir: Path, n: int) -> str:
     return f"🔶 {lab}/{n}"
 
 
-def main() -> None:
+def refresh() -> bool:
+    """Regenerate STATUS.md from disk. True if it changed.
+
+    The single implementation every caller shares — `make cert`, `make publish`,
+    the unattended timer and the CLI all land here rather than each shelling out
+    to a script and each getting it slightly wrong. Importable on purpose:
+
+        from status_matrix import refresh
+        refresh()
+
+    Idempotent by construction: it derives everything from the filesystem, so
+    running it twice produces the same bytes and running it never is the only way
+    to be wrong. STATUS.md sat a day stale reporting kcsa at 2/42 when it was
+    42/42, because the one path that does most of the generating did not call it.
+    """
+    before = STATUS.read_text() if STATUS.exists() else None
+    _write()
+    return STATUS.read_text() != before
+
+
+def _write() -> None:
     catalog = yaml.safe_load((REPO / "catalog.yaml").read_text())
     lines = [
         "# Content Status",
@@ -108,13 +137,12 @@ def main() -> None:
     for cert_id in catalog["certs"]:
         row = [f"`{cert_id}`"]
         for lang in VIDEO_LANGS:
-            video = REPO / "media" / "certs" / cert_id / lang / "video.mp4"
-            row.append("✅" if video.exists() else "❌")
+            rendered = REPO / "media" / "certs" / cert_id / lang / "video.mp4"
+            row.append("✅" if rendered.exists() else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
     (REPO / "STATUS.md").write_text("\n".join(lines) + "\n")
-    print("Wrote STATUS.md")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    print("STATUS.md updated" if refresh() else "STATUS.md already current")

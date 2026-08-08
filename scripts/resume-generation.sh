@@ -55,6 +55,6 @@ fi
     #
     # Idempotent, like everything else here: it is derived from disk, so running
     # it twice changes nothing and running it never is the only way to be wrong.
-    "$REPO/.venv/bin/python3" "$REPO/scripts/status_matrix.py" >/dev/null 2>&1 || true
+    "$REPO/.venv/bin/teach" status || true
     echo "=== end $(date -Iseconds) ==="
 } >> "$LOG" 2>&1
