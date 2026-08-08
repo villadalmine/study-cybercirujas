@@ -72,7 +72,16 @@ def check_cert(cert: str, languages: list[str]) -> list[str]:
             content = lang_dir / "content.md"
             if not content.exists():
                 continue
-            present.append(lang)
+            # "Finished in this language" means BOTH files, not just content.md.
+            # The generator writes content as soon as it passes, before asking for
+            # the exercises, so a topic interrupted by an exhausted quota leaves
+            # content on disk and no exercises. That is incomplete work with a
+            # `pending` status — which is consistent, not a defect. Counting it as
+            # present made the check demand `generated` for a topic that genuinely
+            # is not, and then block every commit in that certification until the
+            # window reopened.
+            if (lang_dir / "exercises.md").exists():
+                present.append(lang)
 
             meta_file = lang_dir / "meta.yaml"
             if not meta_file.exists():
