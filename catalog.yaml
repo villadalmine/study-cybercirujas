@@ -333,7 +333,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-08-12'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-08'
     file: certs/ica.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/ICA_Curriculum.pdf
@@ -384,7 +384,7 @@ certs:
     category: cloud-native
     tracked_version: '2022-08-31'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-08'
     file: certs/pca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
