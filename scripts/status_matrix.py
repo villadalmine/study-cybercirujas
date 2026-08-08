@@ -13,7 +13,7 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import certs, quality, video
+from teach.core import certs, pipeline, quality, video
 
 REPO = Path(__file__).resolve().parent.parent
 STATUS = REPO / "STATUS.md"
@@ -37,14 +37,22 @@ def cert_topics(cert_id: str) -> list[dict]:
     return front.get("topics") or []
 
 
-def lang_cell(cert_dir: Path, lang: str, n: int) -> str:
+def lang_cell(cert_dir: Path, lang: str, n: int, wanted: bool = True) -> str:
     """Count only material that meets the quality floor in pipeline.yaml.
+
+    `wanted` is whether the certification declares this language at all. A cert
+    configured for `[en, es]` is not "missing" Japanese — nobody asked for it —
+    and printing ❌ there made a finished certification read as five-sevenths
+    undone. Undeclared languages get – , the same mark used for a syllabus that
+    has not been snapshotted: not applicable, rather than not done.
 
     Counting files that merely exist marked a whole certification ✅ while its
     topics averaged a ninth of the usual size and had no answers section. A
     file that is present but below the standard is pending work, not finished
     work, and the matrix has to say so.
     """
+    if not wanted:
+        return "–"
     files = list(cert_dir.glob(f"*/{lang}/content.md"))
     exercises = list(cert_dir.glob(f"*/{lang}/exercises.md"))
     c = sum(1 for f in files if not quality.check_file(f))
@@ -100,7 +108,9 @@ def _write() -> None:
         "work, not finished work.",
         "",
         "✅ complete · 🔶 partial (details) · ⚠️N N files below the quality "
-        "floor · ❌ not started · – N/A (syllabus not snapshotted yet)",
+        "floor · ❌ declared but not started · – not applicable: the language or "
+        "video is not declared for that certification, or no syllabus has been "
+        "snapshotted yet",
         "",
         "## Certifications",
         "",
@@ -115,7 +125,8 @@ def _write() -> None:
             row = [f"`{cert_id}`", "–"] + ["–"] * len(LANGS) + ["–"]
         else:
             row = [f"`{cert_id}`", str(n)]
-            row += [lang_cell(cert_dir, lang, n) for lang in LANGS]
+            declared = set(pipeline.languages_for(cert_id))
+            row += [lang_cell(cert_dir, lang, n, lang in declared) for lang in LANGS]
             row.append(lab_cell(cert_dir, n))
         lines.append("| " + " | ".join(row) + " |")
 
@@ -136,7 +147,13 @@ def _write() -> None:
               "|---|" + "---|" * len(VIDEO_LANGS)]
     for cert_id in catalog["certs"]:
         row = [f"`{cert_id}`"]
+        # Same distinction as the language columns: a certification that never
+        # declared a video in German is not missing one.
+        declared = set(pipeline.video_languages(cert_id))
         for lang in VIDEO_LANGS:
+            if lang not in declared:
+                row.append("–")
+                continue
             rendered = REPO / "media" / "certs" / cert_id / lang / "video.mp4"
             row.append("✅" if rendered.exists() else "❌")
         lines.append("| " + " | ".join(row) + " |")
