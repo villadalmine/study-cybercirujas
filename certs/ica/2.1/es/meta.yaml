@@ -1,0 +1,6 @@
+generated_at: '2026-08-08T06:52:24'
+lang: es
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://github.com/cncf/curriculum/raw/master/ICA_Curriculum.pdf
