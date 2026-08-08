@@ -1,87 +1,331 @@
-# 2.2 Measuring and Improving Platform Efficiency Using Deployment Metrics and Performance Indicators
+#!/usr/bin/env bash
+#
+# ==============================================================================
+# CNPE 2.2 — Measuring and Improving Platform Efficiency Using Deployment
+#            Metrics and Performance Indicators
+# ------------------------------------------------------------------------------
+# break & fix lab  ·  scenario: "the utilization KPI goes dark"
+#
+# WHAT THIS TEACHES
+#   A platform team measures efficiency with a normalized performance indicator:
+#   CPU utilization = actual_usage / requested_resources. That ratio is what
+#   feeds capacity dashboards, right-sizing reports, and — most visibly — the
+#   HorizontalPodAutoscaler. This lab breaks the *denominator* of that ratio and
+#   shows how a single missing field silently kills the efficiency signal for a
+#   whole workload: telemetry keeps flowing, but the KPI reads <unknown> and the
+#   platform can no longer make an efficiency decision.
+#
+# SAFE / DESTRUCTIVE-BY-DESIGN
+#   Runs ONLY against a disposable lab cluster. It creates an isolated namespace
+#   (eff-lab) and, if needed, installs metrics-server. It never touches your
+#   existing workloads. Undo everything with:  ./break_fix.sh --cleanup
+#
+# REFERENCES (official)
+#   - HorizontalPodAutoscaler:
+#       https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+#   - Resource metrics pipeline (metrics-server / metrics.k8s.io):
+#       https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
+#   - Managing container resources (requests are the KPI denominator):
+#       https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+#   - metrics-server:
+#       https://github.com/kubernetes-sigs/metrics-server
+#   - CNPE curriculum:
+#       https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+# ==============================================================================
 
-## Motivación e Indicadores de Rendimiento de la Plataforma
+set -euo pipefail
 
-Medir la eficiencia de una **Internal Developer Platform (IDP)** requiere una aproximación cuantitativa orientada tanto al rendimiento del software (**Métricas DORA**) como a la salud financiera y operativa de la infraestructura (**SLIs/SLOs/SLAs**).
+NS="eff-lab"
+APP="web"
+IMAGE="registry.k8s.io/hpa-example"   # canonical php-apache HPA demo image
+HPA_TARGET_PCT="50"
 
-Sin métricas claras, las decisiones de plataforma se toman por percepción subjetiva, lo que lleva a dos problemas frecuentes:
-1. **Falta de visibilidad sobre los cuellos de botella**: Desconocimiento de cuánto tiempo tarda un commit en llegar a producción (*Lead Time for Changes*).
-2. **Desperdicio de presupuesto cloud**: Asignación ineficiente de recursos de infraestructura sin relacionarlos con el valor aportado al negocio.
+# ------------------------------------------------------------------------------
+# helpers
+# ------------------------------------------------------------------------------
+log()  { printf '\033[1;34m[break-fix]\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m[break-fix]\033[0m %s\n' "$*" >&2; }
+die()  { printf '\033[1;31m[break-fix]\033[0m %s\n' "$*" >&2; exit 1; }
+rule() { printf '%s\n' "------------------------------------------------------------------------------"; }
 
----
+need() { command -v "$1" >/dev/null 2>&1 || die "required tool not found: $1"; }
 
-## 1. Las 4 Métricas Clave de DORA (DevOps Research and Assessment)
+# ------------------------------------------------------------------------------
+# safety gate: never run against something that looks like production
+# ------------------------------------------------------------------------------
+guard() {
+  need kubectl
+  local ctx; ctx="$(kubectl config current-context 2>/dev/null || true)"
+  [[ -n "$ctx" ]] || die "no current kubectl context; point KUBECONFIG at a LAB cluster first"
+  case "$ctx" in
+    *prod*|*production*|*prd*)
+      die "refusing to run: context '$ctx' looks like production — this script BREAKS things on purpose" ;;
+  esac
+  log "current context: $ctx"
+  if [[ "${LAB_CONFIRM:-}" != "yes" && "${1:-}" != "--i-understand" ]]; then
+    rule
+    warn "This will CREATE namespace '$NS' and deploy an intentionally mis-sized workload."
+    warn "Run only on a throwaway lab cluster."
+    warn "Proceed with:   LAB_CONFIRM=yes $0        (or)   $0 --i-understand"
+    rule
+    exit 1
+  fi
+}
 
-Las métricas DORA son el estándar de la industria para evaluar la madurez de la entrega de software y la efectividad de la plataforma:
+# ------------------------------------------------------------------------------
+# ensure the resource metrics pipeline exists (idempotent)
+# ------------------------------------------------------------------------------
+ensure_metrics_server() {
+  if kubectl top nodes >/dev/null 2>&1; then
+    log "metrics-server is already serving metrics — leaving it untouched"
+    return 0
+  fi
+  log "metrics.k8s.io not answering; installing metrics-server release manifest"
+  kubectl apply -f "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml"
 
-| Métrica DORA | Categoría | Objetivo de Alto Rendimiento (Elite) | Medición en la Plataforma |
-|---|---|---|---|
-| **Deployment Frequency (DF)** | Velocidad | Múltiples despliegues por día (On-Demand) | Conteo de ejecuciones exitosas de pipelines CI/CD por día |
-| **Lead Time for Changes (LTC)** | Velocidad | Menos de 1 hora | Tiempo transcurrido desde el `git commit` hasta el Pod `Running` en prod |
-| **Change Failure Rate (CFR)** | Estabilidad | Menor al 5% | % de despliegues que desencadenan un rollback o hotfix en prod |
-| **Failed Service Recovery Time (MTTR)** | Estabilidad | Menos de 1 hora | Tiempo promedio transcurrido desde la alerta del incidente hasta la resolución |
+  # kind/minikube/k3s present self-signed kubelet certs; allow them in the lab.
+  # Append the flag only once so re-runs stay idempotent.
+  if ! kubectl -n kube-system get deploy metrics-server \
+        -o jsonpath='{.spec.template.spec.containers[0].args}' 2>/dev/null \
+        | grep -q -- '--kubelet-insecure-tls'; then
+    log "patching metrics-server with --kubelet-insecure-tls (lab kubelet certs)"
+    kubectl -n kube-system patch deployment metrics-server --type=json \
+      -p '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+  fi
+  kubectl -n kube-system rollout status deployment/metrics-server --timeout=180s
+}
 
----
+wait_for_pod_metrics() {
+  log "waiting for the metrics pipeline to scrape the workload (~up to 180s)"
+  local deadline=$((SECONDS + 180))
+  until kubectl top pods -n "$NS" >/dev/null 2>&1; do
+    (( SECONDS < deadline )) || { warn "pod metrics still unavailable — symptom below may read differently"; return 0; }
+    sleep 5
+  done
+  log "pod metrics are flowing"
+}
 
-## 2. Gestión de SLIs, SLOs y Error Budgets
+# ------------------------------------------------------------------------------
+# the BREAK: deploy a workload with NO cpu request, plus an HPA that needs one
+# ------------------------------------------------------------------------------
+apply_broken_state() {
+  kubectl create namespace "$NS" --dry-run=client -o yaml | kubectl apply -f -
 
-### 2.1 Definiciones Fundamentales
-
-- **Service Level Indicator (SLI)**: Medición cuantitativa directa del servicio en tiempo real.
-  $$\text{SLI}_{\text{disponibilidad}} = \frac{\text{Peticiones HTTP Exitosas (2xx/3xx)}}{\text{Peticiones HTTP Totales}} \times 100$$
-- **Service Level Objective (SLO)**: La meta acordada para el SLI dentro de una ventana de tiempo definida (ej. 99.9% de disponibilidad en 30 días).
-- **Error Budget (Presupuesto de Error)**: El margen tolerable de fallos permitido por el SLO.
-  $$\text{Error Budget} = 100\% - \text{SLO} \quad (\text{Para un SLO de } 99.9\%, \text{ el Error Budget es } 0.1\%)$$
-
-### 2.2 Implementación Declarativa de SLOs con OpenSLO / Pyrra
-
-```yaml
-apiVersion: pyrra.dev/v1alpha1
-kind: ServiceLevelObjective
+  # NOTE the deliberate bug: the container declares no resources.requests block.
+  # Utilization is defined as usage/request; with no request the ratio has no
+  # denominator, so the efficiency KPI for this Deployment is undefined.
+  kubectl apply -f - <<YAML
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: platform-api-latency-slo
-  namespace: platform-prod
+  name: ${APP}
+  namespace: ${NS}
+  labels: { app: ${APP} }
 spec:
-  target: "99.5"
-  window: 28d
-  indicator:
-    ratio:
-      errors:
-        metric: http_request_duration_seconds_count{job="platform-api", status=~"5.."}
-      total:
-        metric: http_request_duration_seconds_count{job="platform-api"}
-```
-
+  replicas: 1
+  selector:
+    matchLabels: { app: ${APP} }
+  template:
+    metadata:
+      labels: { app: ${APP} }
+    spec:
+      containers:
+        - name: ${APP}
+          image: ${IMAGE}
+          ports:
+            - containerPort: 80
+          # <<< THE BREAK: intentionally no resources.requests here >>>
 ---
-
-## 3. Métricas de Eficiencia de Cómputo e Infraestructura
-
-### Ratio de Eficiencia de Asignación de Recursos (Allocation Efficiency Ratio)
-
-Mide la diferencia entre los recursos reservados por los Pods (`requests`) y los recursos consumidos realmente a nivel de kernel/cgroups.
-
-```bash
-# PromQL: Porcentaje de uso real de CPU respecto al Request asignado en el clúster
-sum(rate(container_cpu_usage_seconds_total{container!=""}[5m]))
-/
-sum(kube_pod_container_resource_requests{resource="cpu"}) * 100
-```
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${APP}
+  namespace: ${NS}
+spec:
+  selector: { app: ${APP} }
+  ports:
+    - port: 80
+      targetPort: 80
 ---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ${APP}
+  namespace: ${NS}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ${APP}
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: ${HPA_TARGET_PCT}
+YAML
 
-## Verificación y Diagnóstico de Métricas DORA y SLOs
+  kubectl rollout status deployment/"$APP" -n "$NS" --timeout=120s
+}
 
-```bash
-# Consultar el estado actual del Error Budget con Prometheus API
-$ curl -s "http://prometheus-k8s.platform-monitoring:9090/api/v1/query?query=pyrra_availability_remaining_error_budget{slo=\"platform-api-latency-slo\"}" | jq .data.result[0].value[1]
-"0.842"  # (84.2% del Error Budget aún disponible)
-```
+# ------------------------------------------------------------------------------
+# brief the student
+# ------------------------------------------------------------------------------
+brief() {
+  rule
+  log "SCENARIO IS ARMED — the efficiency KPI for deployment/${APP} is now dark."
+  rule
+  cat <<EOF
 
----
+WHAT YOU WILL SEE (the symptom)
+  \$ kubectl get hpa ${APP} -n ${NS}
+    NAME   REFERENCE        TARGETS         MINPODS   MAXPODS   REPLICAS
+    ${APP}    Deployment/${APP}   cpu: <unknown>/${HPA_TARGET_PCT}%   1         5         1
 
-## Referencias
+  \$ kubectl describe hpa ${APP} -n ${NS}
+    ...
+    Conditions:
+      Type           Status  Reason                   Message
+      ScalingActive  False   FailedGetResourceMetric  failed to get cpu utilization:
+                                                       missing request for cpu ...
+    Events:
+      Warning  FailedGetResourceMetric   ... did not receive metrics for ...
 
-- CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- DORA Research & Assessment Framework — https://cloud.google.com/devops
-- Google SRE Book: Service Level Objectives — https://sre.google/sre-book/service-level-objectives/
-- OpenSLO Specification — https://openslo.com/
+  The TARGETS column reads <unknown>. The HPA cannot scale, capacity planning
+  cannot right-size, and the efficiency dashboard for this workload flatlines.
+
+  IMPORTANT — telemetry is NOT the problem. Prove it:
+  \$ kubectl top pods -n ${NS}
+    NAME                     CPU(cores)   MEMORY(bytes)
+    ${APP}-xxxxxxxxxx-xxxxx     1m           11Mi
+  Raw usage is visible. What is missing is the DENOMINATOR that turns raw usage
+  into a normalized performance indicator.
+
+YOUR GOAL
+  Restore the utilization KPI so that:
+    - kubectl get hpa ${APP} -n ${NS}  shows a numeric TARGETS (e.g. 0%/${HPA_TARGET_PCT}%),
+      NOT <unknown>; and
+    - the HPA can scale the Deployment under load.
+  Do NOT change the HPA target, min, or max. Fix the workload, not the KPI.
+
+HINTS
+  - averageUtilization is a percentage of *what*? (Check the container spec.)
+  - kubectl explain deployment.spec.template.spec.containers.resources
+  - A namespace LimitRange with default requests would have prevented this
+    entire class of blind spot — think about why that is a platform guardrail.
+
+When you think it is fixed, verify, then reveal the solution at the bottom of
+this script (it is commented out) or run:  ${0} --solution
+
+EOF
+  rule
+}
+
+# ------------------------------------------------------------------------------
+# print the worked solution (also kept as comments at the end of the file)
+# ------------------------------------------------------------------------------
+solution() {
+  cat <<EOF
+
+STEP-BY-STEP SOLUTION
+  1. Confirm the KPI is dark and locate the reason:
+       kubectl get hpa ${APP} -n ${NS}            # TARGETS <unknown>/${HPA_TARGET_PCT}%
+       kubectl describe hpa ${APP} -n ${NS}       # "missing request for cpu"
+       kubectl top pods -n ${NS}                  # raw usage IS present
+
+  2. Root cause: the container has no cpu request. Utilization = usage / request,
+     so with no request the platform cannot compute the ratio -> <unknown>.
+
+  3. Fix — give the container a request (the KPI denominator). Also set a limit
+     so the workload is a good bin-packing citizen:
+       kubectl set resources deployment/${APP} -n ${NS} \\
+         --requests=cpu=100m,memory=64Mi --limits=cpu=250m,memory=128Mi
+     (equivalently: edit spec.template.spec.containers[0].resources.requests)
+
+  4. Roll out and let one scrape cycle pass:
+       kubectl rollout status deployment/${APP} -n ${NS}
+       sleep 30
+
+  5. Verify the KPI is back — TARGETS is now a number:
+       kubectl get hpa ${APP} -n ${NS}            # e.g. cpu: 0%/${HPA_TARGET_PCT}%
+
+  6. (Optional) prove the control loop closes end-to-end — drive load and watch
+     replicas climb toward maxReplicas, then settle:
+       kubectl run load -n ${NS} --rm -it --image=busybox --restart=Never -- \\
+         /bin/sh -c "while true; do wget -q -O- http://${APP}; done"
+       # in another terminal:
+       watch kubectl get hpa,pods -n ${NS}
+
+  PLATFORM LESSON
+    Efficiency indicators are ratios, and a ratio dies quietly when its
+    denominator is absent — no error at deploy time, just a KPI that reads
+    <unknown>. The durable fix is not per-workload firefighting but a policy
+    guardrail: a namespace LimitRange with default requests (or an admission
+    policy) makes "no request" impossible, so every deployment is measurable by
+    construction. Measure what you require; require what you measure.
+
+EOF
+}
+
+# ------------------------------------------------------------------------------
+# teardown
+# ------------------------------------------------------------------------------
+cleanup() {
+  need kubectl
+  log "removing namespace '$NS' (metrics-server is left in place)"
+  kubectl delete namespace "$NS" --ignore-not-found
+  log "done"
+}
+
+# ------------------------------------------------------------------------------
+# main
+# ------------------------------------------------------------------------------
+main() {
+  case "${1:-}" in
+    --cleanup)  cleanup; exit 0 ;;
+    --solution) solution; exit 0 ;;
+  esac
+  guard "${1:-}"
+  ensure_metrics_server
+  apply_broken_state
+  wait_for_pod_metrics
+  brief
+}
+
+main "$@"
+
+# ==============================================================================
+# SOLUTION (kept here so the file is self-contained; also via: ./break_fix.sh --solution)
+# ------------------------------------------------------------------------------
+# 1. Confirm the KPI is dark and locate the reason:
+#      kubectl get hpa web -n eff-lab            # TARGETS <unknown>/50%
+#      kubectl describe hpa web -n eff-lab       # "missing request for cpu"
+#      kubectl top pods -n eff-lab               # raw usage IS present -> telemetry is fine
+#
+# 2. Root cause: the container declares no cpu request. Utilization is
+#    usage/request; with no request the ratio has no denominator, so the HPA
+#    (and every efficiency report built on the same metric) reads <unknown>.
+#
+# 3. Fix — supply the request (the KPI denominator) plus a sane limit:
+#      kubectl set resources deployment/web -n eff-lab \
+#        --requests=cpu=100m,memory=64Mi --limits=cpu=250m,memory=128Mi
+#
+# 4. Roll out and wait ~one scrape cycle:
+#      kubectl rollout status deployment/web -n eff-lab
+#      sleep 30
+#
+# 5. Verify — TARGETS is now numeric, not <unknown>:
+#      kubectl get hpa web -n eff-lab            # e.g. cpu: 0%/50%
+#
+# 6. (Optional) close the loop under load and watch it scale:
+#      kubectl run load -n eff-lab --rm -it --image=busybox --restart=Never -- \
+#        /bin/sh -c "while true; do wget -q -O- http://web; done"
+#      watch kubectl get hpa,pods -n eff-lab
+#
+# LESSON: efficiency KPIs are ratios; a missing request silently nulls the
+# denominator with no deploy-time error. Enforce requests with a namespace
+# LimitRange / admission policy so every workload is measurable by construction.
+# ==============================================================================

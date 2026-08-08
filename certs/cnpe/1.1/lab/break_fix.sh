@@ -1,256 +1,429 @@
-# 1.1 Platform Architecture Best Practices for Networking, Storage, and Compute
+#!/usr/bin/env bash
+#
+# break_fix.sh — CNPE 1.1: Applying Platform Architecture Best Practices
+#                for Networking, Storage, and Compute
+#
+# Cloud Native Platform Engineer (CNPE) — Domain 1, Topic 1.1 (exam weight: 5)
+#
+# WHAT THIS SCRIPT IS
+#   A controlled "break & fix" drill for a DISPOSABLE single-node Kubernetes
+#   lab VM (k3s / kind / minikube). It provisions a small stateful workload the
+#   way a platform team would ship it (Deployment + PersistentVolumeClaim +
+#   Service, with resource requests and a readiness probe) and then injects ONE
+#   realistic platform-architecture defect in the STORAGE layer. Your job is to
+#   diagnose it the way you would on call and drive the workload back to a
+#   healthy, Ready state.
+#
+# WHY STORAGE
+#   Topic 1.1 spans networking, storage and compute. Storage is where most
+#   "the app won't start and nobody changed the app" incidents actually live:
+#   a StorageClass with the wrong provisioner, a missing default class, or a
+#   binding-mode assumption that only fails once a Pod is scheduled. Getting the
+#   StorageClass -> PVC -> PV -> Pod chain right IS platform architecture.
+#
+# SAFETY
+#   - Everything lives in the namespace 'cnpe-lab-1-1' plus ONE clearly-prefixed
+#     cluster-scoped StorageClass ('cnpe-fast-ssd'). The cluster's real default
+#     StorageClass is never touched.
+#   - Refuses to run on a cluster with more than one node unless you set
+#     CNPE_LAB_FORCE=1, so you cannot fire this at a real multi-node cluster by
+#     accident.
+#   - Idempotent: re-running 'break' just re-applies the same manifests.
+#   - 'cleanup' removes every object it created.
+#
+# USAGE
+#   ./break_fix.sh            # same as 'break': inject the fault + print briefing
+#   ./break_fix.sh break      # inject the fault and print the student briefing
+#   ./break_fix.sh verify     # check whether you have restored the workload
+#   ./break_fix.sh cleanup    # delete all lab objects
+#   ./break_fix.sh solution   # print the step-by-step solution
+#
+# SOURCES (official)
+#   - CNPE Curriculum:
+#     https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+#   - StorageClasses & volume binding mode:
+#     https://kubernetes.io/docs/concepts/storage/storage-classes/
+#   - Dynamic provisioning & the default StorageClass:
+#     https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/
+#   - PersistentVolumes / PersistentVolumeClaims:
+#     https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+#   - Debugging Pending Pods:
+#     https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/
+#
+set -euo pipefail
+IFS=$'\n\t'
 
-## Motivación y Principios de Arquitectura de Plataforma
+# --------------------------------------------------------------------------- #
+# Configuration                                                               #
+# --------------------------------------------------------------------------- #
+NS="cnpe-lab-1-1"
+APP="payments"
+BROKEN_SC="cnpe-fast-ssd"          # cluster-scoped, prefixed, removed on cleanup
+PVC="payments-data"
+IMAGE="${CNPE_IMAGE:-nginx:1.27-alpine}"
 
-El diseño de una **Internal Developer Platform (IDP)** sobre Kubernetes requiere tomar decisiones de arquitectura estructurales en tres capas fundamentales: **Networking**, **Storage** y **Compute**. La responsabilidad del Platform Engineer no es simplemente instalar componentes, sino diseñar e implementar **Golden Paths** (rutas automatizadas, pre-configuradas y opinadas) que permitan a los equipos de desarrollo entregar software de forma autónoma sin comprometer la seguridad, la resiliencia ni el gobierno de la infraestructura.
+# --------------------------------------------------------------------------- #
+# Helpers                                                                      #
+# --------------------------------------------------------------------------- #
+say()  { printf '%s\n' "$*"; }
+rule() { printf '%s\n' "-------------------------------------------------------------------------------"; }
+die()  { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
-A diferencia del aprovisionamiento ad-hoc, una arquitectura de plataforma cloud native debe cumplir con cuatro principios cardinales:
-1. **Self-Service con Guardrails**: Acceso autoservicio para los desarrolladores mediante APIs declarativas, acotado por políticas automáticas de seguridad y cuotas.
-2. **Paridad de Entornos (Dev/Staging/Prod)**: Consistencia total en el plano de control, plugins de red y almacenamiento entre entornos.
-3. **Abstracción Progresiva**: Ocultar la complejidad de bajo nivel de Kubernetes mediante abstracciones de alto nivel (como Helm Charts curados, Crossplane Compositions o especificaciones de aplicaciones).
-4. **Resiliencia por Diseño**: Garantizar tolerancia a fallas a nivel de zona de disponibilidad, nodo y contenedor.
+preflight() {
+  command -v kubectl >/dev/null 2>&1 || die \
+    "kubectl not found. This drill needs a disposable single-node cluster (k3s/kind/minikube)."
+  kubectl version >/dev/null 2>&1 || kubectl cluster-info >/dev/null 2>&1 || die \
+    "No reachable Kubernetes cluster. Point KUBECONFIG at your lab cluster and retry."
 
----
+  local ctx node_count
+  ctx="$(kubectl config current-context 2>/dev/null || echo '<unknown>')"
+  node_count="$(kubectl get nodes --no-headers 2>/dev/null | wc -l | tr -d ' ')"
+  say "Context : ${ctx}"
+  say "Nodes   : ${node_count}"
 
-## Capa 1: Networking de Plataforma (CNI, Ingress y Mesh)
+  if [ "${node_count:-0}" -gt 1 ] && [ "${CNPE_LAB_FORCE:-0}" != "1" ]; then
+    die "This looks like a multi-node cluster (${node_count} nodes). Refusing.
+     Run on a disposable single-node lab, or export CNPE_LAB_FORCE=1 to override."
+  fi
+}
 
-El plano de red de la plataforma debe soportar alta densidad de Pods, aislamiento estricto entre tenants y observabilidad detallada de los flujos de tráfico.
+detect_default_sc() {
+  kubectl get storageclass -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.annotations.storageclass\.kubernetes\.io/is-default-class}{"\n"}{end}' 2>/dev/null \
+    | awk -F'\t' '$2=="true"{print $1; exit}'
+}
 
-### 1.1 Selección del CNI: eBPF vs IPTables
+# --------------------------------------------------------------------------- #
+# break — inject the fault                                                     #
+# --------------------------------------------------------------------------- #
+break_it() {
+  preflight
+  say "Injecting the CNPE 1.1 storage fault into namespace '${NS}'..."
 
-| Criterio | Calico (IPTables/IPVS) | Cilium (eBPF) | Flannel |
-|---|---|---|---|
-| **Mecanismo de Datapath** | Filtros del kernel vía iptables/IPVS | Programas eBPF cargados en el kernel | VXLAN básico / Host-gw |
-| **Rendimiento de Red** | Degrada a escala (>10,000 reglas) | Rendimiento casi nativo a cualquier escala | Alto, pero sin políticas |
-| **NetworkPolicies** | L3/L4 completo | L3/L4 y L7 (HTTP/gRPC/Kafka) | No soporta NetworkPolicies |
-| **Cifrado Transparente** | IPsec manual | WireGuard y IPsec nativos | No soporta cifrado |
-| **Observabilidad** | Logs de iptables | Hubble (trazado L3-L7 en tiempo real) | Nula |
+  kubectl create namespace "${NS}" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
 
-Para plataformas modernas orientadas a producción, **Cilium** es la opción estándar de la industria debido a su visibilidad eBPF sin sobrecarga de proxy.
-
-### 1.2 Configuración Recomendada de Cilium para Plataformas Multi-Tenant
-
-El siguiente manifiesto Helm refleja una instalación de Cilium orientada a la plataforma con observabilidad Hubble y cifrado WireGuard activados:
-
-```bash
-helm upgrade --install cilium cilium/cilium \
-  --version 1.16.0 \
-  --namespace kube-system \
-  --set kubeProxyReplacement=true \
-  --set k8sServiceHost=10.0.0.1 \
-  --set k8sServicePort=6443 \
-  --set bpf.masquerade=true \
-  --set hubble.enabled=true \
-  --set hubble.relay.enabled=true \
-  --set hubble.ui.enabled=true \
-  --set encryption.enabled=true \
-  --set encryption.type=wireguard
-```
-
-Verificación del estado del CNI y del cifrado:
-
-```bash
-$ cilium status --wait
-KVStore:                Ok   Disabled
-Kubernetes:             Ok   1.30 (v1.30.2)
-Kubernetes APIs:        ["core/v1", "networking.k8s.io/v1", ...]
-Cilium:                 Ok   1.16.0 (v1.16.0-4a8b9c)
-NodeMonitor:            Listening for events on 2 LNs with levels [Normal, Warning]
-Hubble Relay:           Ok   1.16.0
-Encryption:             Wireguard [cilium_wg0]
-Containers:             cilium            Running (2/2)
-                        cilium-operator   Running (1/1)
-                        hubble-relay      Running (1/1)
-```
-
-### 1.3 Ingress Controllers y Service Mesh
-
-El tráfico Ingress debe ingresar a través de un controlador escalable (ej. Envoy Gateway o Ingress-Nginx) y distribuirse mediante un Service Mesh (Istio o Linkerd) cuando se requiera mTLS estricto e inyección de encabezados de trazabilidad (OpenTelemetry W3C Trace Context).
-
-```yaml
-# Ingress opinado para la plataforma
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: platform-api-ingress
-  namespace: platform-services
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/proxy-body-size: "8m"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-    - api.platform.example.com
-    secretName: platform-api-tls
-  rules:
-  - host: api.platform.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: platform-api-svc
-            port:
-              number: 8080
-```
-
----
-
-## Capa 2: Storage de Plataforma (CSI, StorageClasses y Retención)
-
-El almacenamiento persistente debe abstrarse para que los desarrolladores soliciten capacidad sin conocer los detalles específicos de las LUNs o volúmenes en la nube pública.
-
-### 2.1 Matriz de Clasificación de StorageClasses
-
-```yaml
-# StorageClass para cargas de alta velocidad (Bases de datos)
+  # A StorageClass that a platform team "designed" for a fast local tier but
+  # wired to the static local provisioner with NO backing PV and a lazy binding
+  # mode. Dynamic provisioning therefore never happens.
+  cat <<YAML | kubectl apply -f - >/dev/null
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: fast-ssd
-provisioner: ebspcsi.csi.aws.com # o csi.hetzner.cloud / pd.csi.storage.gcp.com
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Retain
-allowVolumeExpansion: true
-parameters:
-  type: gp3
-  iops: "3000"
-  throughput: "125"
----
-# StorageClass para cargas estándar (Logs, Cachés)
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: standard-hdd
-provisioner: ebspcsi.csi.aws.com
+  name: ${BROKEN_SC}
+  labels:
+    app.kubernetes.io/part-of: ${NS}
+provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
-allowVolumeExpansion: true
-parameters:
-  type: gp2
-```
+YAML
 
-### 2.2 Buenas Prácticas de Storage en la Plataforma
-
-1. **`volumeBindingMode: WaitForFirstConsumer`**: Atrasa la creación del volumen físico hasta que el Pod que lo consume sea asignado a un nodo específico. Esto evita que el volumen se aprovisione en la Zona de Disponibilidad A cuando el Pod termina en la Zona B.
-2. **`reclaimPolicy: Retain`**: Garantiza que si un desarrollador borra un `PersistentVolumeClaim` (PVC) por accidente, el volumen subyacente en la nube NO se borre automáticamente, permitiendo la recuperación de desastres.
-3. **Expansión de Volúmenes (`allowVolumeExpansion: true`)**: Permite aumentar el tamaño de un PVC en caliente sin reiniciar los workloads.
-
+  # The workload, shipped correctly, but pinned to the broken StorageClass.
+  cat <<YAML | kubectl apply -f - >/dev/null
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${PVC}
+  namespace: ${NS}
+  labels:
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${NS}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: ${BROKEN_SC}
+  resources:
+    requests:
+      storage: 1Gi
 ---
-
-## Capa 3: Compute, Aislamiento y Planificación de Cargas de Trabajo
-
-La capa de cómputo debe balancear el aislamiento de seguridad con la máxima eficiencia de empaquetado de recursos (*Bin-Packing*).
-
-### 3.1 Aislamiento de Nodos con Taints y Tolerations
-
-Para reservar nodos con hardware especializado (GPUs o procesadores de alta memoria) únicamente para servicios autorizados:
-
-```bash
-# Aplicar un taint al nodo especializado
-kubectl taint nodes node-gpu-01 hardware=nvidia-a100:NoSchedule
-```
-
-Manifiesto de la aplicación que tolera el taint y solicita el recurso exclusivo:
-
-```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ml-inference-service
-  namespace: data-team
+  name: ${APP}
+  namespace: ${NS}
+  labels:
+    app.kubernetes.io/name: ${APP}
+    app.kubernetes.io/part-of: ${NS}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: ml-inference
+      app: ${APP}
   template:
     metadata:
       labels:
-        app: ml-inference
+        app: ${APP}
     spec:
-      tolerations:
-      - key: "hardware"
-        operator: "Equal"
-        value: "nvidia-a100"
-        effect: "NoSchedule"
-      nodeSelector:
-        hardware: nvidia-a100
       containers:
-      - name: model-server
-        image: myregistry.io/ml/model-server:v1.2.0
-        resources:
-          requests:
-            cpu: "4"
-            memory: "16Gi"
-            nvidia.com/gpu: "1"
-          limits:
-            cpu: "8"
-            memory: "32Gi"
-            nvidia.com/gpu: "1"
-```
-
-### 3.2 Distribución de Alta Disponibilidad con TopologySpreadConstraints
-
-Para asegurar que las réplicas de un microservicio crítico de la plataforma no se concentren en el mismo nodo o en la misma zona de disponibilidad:
-
-```yaml
+        - name: ${APP}
+          image: ${IMAGE}
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ${PVC}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${APP}
+  namespace: ${NS}
+  labels:
+    app.kubernetes.io/name: ${APP}
 spec:
-  topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: topology.kubernetes.io/zone
-    whenUnsatisfiable: DoNotSchedule
-    labelSelector:
-      matchLabels:
-        app: platform-core-api
-  - maxSkew: 1
-    topologyKey: kubernetes.io/hostname
-    whenUnsatisfiable: ScheduleAnyway
-    labelSelector:
-      matchLabels:
-        app: platform-core-api
-```
+  selector:
+    app: ${APP}
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+YAML
 
----
+  briefing
+}
 
-## Verificación y Diagnóstico del Plano de Plataforma
+# --------------------------------------------------------------------------- #
+# briefing — what the student sees and must achieve                            #
+# --------------------------------------------------------------------------- #
+briefing() {
+  local default_sc; default_sc="$(detect_default_sc || true)"
+  rule
+  say "CNPE 1.1 BREAK & FIX — Storage architecture incident"
+  rule
+  say ""
+  say "SCENARIO"
+  say "  The '${APP}' service in namespace '${NS}' was shipped by another team."
+  say "  It has a PersistentVolumeClaim for its data tier. The Deployment is"
+  say "  healthy in YAML, the image is fine, and nobody changed the app code."
+  say "  Yet the Pod never starts."
+  say ""
+  say "SYMPTOM YOU WILL SEE"
+  say "  \$ kubectl -n ${NS} get pods"
+  say "    NAME                        READY   STATUS    RESTARTS   AGE"
+  say "    ${APP}-xxxxxxxxxx-xxxxx      0/1     Pending   0          30s"
+  say ""
+  say "  \$ kubectl -n ${NS} get pvc"
+  say "    NAME            STATUS    VOLUME  CAPACITY  ACCESS MODES  STORAGECLASS"
+  say "    ${PVC}   Pending                                 ${BROKEN_SC}"
+  say ""
+  say "  'kubectl -n ${NS} describe pvc ${PVC}' will report the PVC is"
+  say "  'waiting for first consumer to be created before binding', and once the"
+  say "  Pod is scheduled it still never binds — the Pod events say it is"
+  say "  waiting for a volume that no provisioner will ever create."
+  say ""
+  say "YOUR GOAL"
+  say "  Drive the workload to a healthy state WITHOUT deleting the namespace and"
+  say "  WITHOUT rewriting the application. Success means all of:"
+  say "    - PVC '${PVC}' is Bound"
+  say "    - Deployment '${APP}' has 1/1 available replicas (Pod Running & Ready)"
+  say "    - Service '${APP}' has a ready endpoint"
+  say ""
+  say "THINK LIKE A PLATFORM ARCHITECT"
+  say "  - What does 'provisioner: kubernetes.io/no-provisioner' actually promise?"
+  say "  - What does 'volumeBindingMode: WaitForFirstConsumer' change about WHEN"
+  say "    the failure appears?"
+  say "  - Is a PVC's storageClassName mutable once created?"
+  say "  - Two valid fixes exist: repoint the claim at a working dynamic"
+  say "    StorageClass (best practice), or satisfy the static class with a PV."
+  if [ -n "${default_sc}" ]; then
+    say "  - This cluster's default (dynamic) StorageClass is: '${default_sc}'."
+  else
+    say "  - Heads up: this cluster has NO default StorageClass — that constraint"
+    say "    itself is part of the lesson. The static-PV path will still work."
+  fi
+  say ""
+  say "  Investigate with:"
+  say "    kubectl -n ${NS} get pods,pvc"
+  say "    kubectl -n ${NS} describe pvc ${PVC}"
+  say "    kubectl -n ${NS} describe pod -l app=${APP}"
+  say "    kubectl get storageclass"
+  say ""
+  say "When you believe it is fixed, run:  ./break_fix.sh verify"
+  rule
+}
 
-### Verificación del Estado de Nodos y Recursos
+# --------------------------------------------------------------------------- #
+# verify — did the student restore service?                                    #
+# --------------------------------------------------------------------------- #
+verify() {
+  preflight
+  local pvc_phase avail eps ok=1
 
-```bash
-# Inspección de nodos y etiquetas de topología
-$ kubectl get nodes -L topology.kubernetes.io/zone,node.kubernetes.io/instance-type
-NAME          STATUS   ROLES    AGE   VERSION   ZONE         INSTANCE-TYPE
-node-az-a-1   Ready    <none>   12d   v1.30.2   us-east-1a   t3.xlarge
-node-az-b-1   Ready    <none>   12d   v1.30.2   us-east-1b   t3.xlarge
-node-gpu-01   Ready    <none>   5d    v1.30.2   us-east-1a   g4dn.xlarge
+  pvc_phase="$(kubectl -n "${NS}" get pvc "${PVC}" -o jsonpath='{.status.phase}' 2>/dev/null || true)"
+  avail="$(kubectl -n "${NS}" get deploy "${APP}" -o jsonpath='{.status.availableReplicas}' 2>/dev/null || true)"
+  eps="$(kubectl -n "${NS}" get endpoints "${APP}" -o jsonpath='{.subsets[*].addresses[*].ip}' 2>/dev/null || true)"
 
-# Verificar el consumo real de cómputo por nodo
-$ kubectl top nodes
-NAME          CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
-node-az-a-1   450m         11%    3420Mi          42%
-node-az-b-1   620m         15%    4100Mi          51%
-node-gpu-01   1200m        30%    8900Mi          55%
-```
+  rule
+  say "VERIFY — CNPE 1.1"
+  rule
+  [ "${pvc_phase}" = "Bound" ] && say "[ok]   PVC ${PVC} is Bound" \
+                                || { say "[fail] PVC ${PVC} phase='${pvc_phase:-<none>}' (want Bound)"; ok=0; }
+  [ "${avail:-0}" -ge 1 ] 2>/dev/null && say "[ok]   Deployment ${APP} available replicas=${avail}" \
+                                       || { say "[fail] Deployment ${APP} available replicas='${avail:-0}' (want >=1)"; ok=0; }
+  [ -n "${eps}" ] && say "[ok]   Service ${APP} has endpoint(s): ${eps}" \
+                   || { say "[fail] Service ${APP} has no ready endpoints"; ok=0; }
+  rule
+  if [ "${ok}" -eq 1 ]; then
+    say "PASS — you restored the storage chain and the workload is serving. Well done."
+    return 0
+  fi
+  say "NOT YET — inspect the objects above, then re-run './break_fix.sh verify'."
+  say "Stuck? './break_fix.sh solution' prints the full walkthrough."
+  return 1
+}
 
-### Diagnóstico de Problemas Comunes
+# --------------------------------------------------------------------------- #
+# cleanup — remove everything the drill created                                #
+# --------------------------------------------------------------------------- #
+cleanup() {
+  preflight
+  say "Removing CNPE 1.1 lab objects..."
+  kubectl delete namespace "${NS}" --ignore-not-found >/dev/null 2>&1 || true
+  kubectl delete storageclass "${BROKEN_SC}" --ignore-not-found >/dev/null 2>&1 || true
+  # Any static PV the student may have created to fix the drill:
+  kubectl delete pv -l "app.kubernetes.io/part-of=${NS}" --ignore-not-found >/dev/null 2>&1 || true
+  say "Done."
+}
 
-1. **Pod en estado `Pending` debido a Taints no tolerados**:
-   - *Síntoma*: `0/3 nodes are available: 1 node(s) had untolerated taint {hardware: nvidia-a100}`.
-   - *Solución*: Agregar la sección `tolerations` correspondiente en la spec del Pod.
-2. **PVC trabado en `Pending`**:
-   - *Síntoma*: `waiting for first consumer to be created before binding`.
-   - *Causa*: Es el comportamiento normal de `volumeBindingMode: WaitForFirstConsumer`. El PVC se vinculará únicamente cuando el Pod que lo requiere sea programado.
+print_solution() { sed -n '/^# ===== SOLUTION/,/^# ===== END SOLUTION/p' "$0"; }
 
----
+# --------------------------------------------------------------------------- #
+# main                                                                         #
+# --------------------------------------------------------------------------- #
+main() {
+  case "${1:-break}" in
+    break|"")  break_it ;;
+    verify)    verify ;;
+    cleanup)   cleanup ;;
+    solution)  print_solution ;;
+    *)         die "Unknown action '${1}'. Use: break | verify | cleanup | solution" ;;
+  esac
+}
+main "${@:-}"
 
-## Referencias
-
-- CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- Kubernetes Networking Best Practices — https://kubernetes.io/docs/concepts/services-networking/
-- Cilium eBPF Documentation — https://docs.cilium.io/en/stable/
-- Kubernetes Storage Classes & Dynamic Provisioning — https://kubernetes.io/docs/concepts/storage/storage-classes/
-- Kubernetes Assigning Pods to Nodes — https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+# ===== SOLUTION (step-by-step) ================================================
+#
+# ROOT CAUSE
+#   The PVC 'payments-data' is bound (by name) to StorageClass 'cnpe-fast-ssd',
+#   whose provisioner is 'kubernetes.io/no-provisioner'. That provisioner does
+#   NOT create volumes dynamically — it only binds PVCs to PersistentVolumes an
+#   administrator has already created statically. No such PV exists, so the PVC
+#   can never be satisfied. Because volumeBindingMode is WaitForFirstConsumer,
+#   the PVC sits Pending ("waiting for first consumer to be created before
+#   binding") until the Pod is scheduled, and then STILL never binds — so the
+#   Pod is stuck Pending forever. The application is innocent; the storage
+#   architecture is the fault.
+#
+# DIAGNOSIS (what a platform engineer runs)
+#   1. See the stuck workload and its claim:
+#        kubectl -n cnpe-lab-1-1 get pods,pvc
+#   2. Read the claim's events — this is where the truth is:
+#        kubectl -n cnpe-lab-1-1 describe pvc payments-data
+#      -> "waiting for first consumer..." then no binding = no provisioner.
+#   3. Inspect the StorageClass the claim points at:
+#        kubectl get storageclass cnpe-fast-ssd -o yaml
+#      -> provisioner: kubernetes.io/no-provisioner   (the smoking gun)
+#   4. Confirm the Pod is blocked purely on the volume:
+#        kubectl -n cnpe-lab-1-1 describe pod -l app=payments
+#   5. Find a StorageClass that DOES provision dynamically:
+#        kubectl get storageclass
+#      (the one annotated storageclass.kubernetes.io/is-default-class="true")
+#
+# ------------------------------------------------------------------------------
+# FIX A — RECOMMENDED (best practice): repoint the claim at a dynamic class.
+#   A PVC's spec.storageClassName is IMMUTABLE, so you must delete and recreate
+#   the claim. The PVC is guarded by the pvc-protection finalizer while a Pod
+#   references it, so scale the workload down first, then back up.
+#
+#   # Discover the default/dynamic class name (k3s: local-path, minikube/kind: standard)
+#   SC="$(kubectl get storageclass -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.annotations.storageclass\.kubernetes\.io/is-default-class}{"\n"}{end}' | awk -F"\t" '$2=="true"{print $1; exit}')"
+#   echo "Using dynamic StorageClass: ${SC:?no default StorageClass found — use FIX B}"
+#
+#   kubectl -n cnpe-lab-1-1 scale deploy/payments --replicas=0
+#   kubectl -n cnpe-lab-1-1 delete pvc payments-data
+#   cat <<EOF | kubectl apply -f -
+#   apiVersion: v1
+#   kind: PersistentVolumeClaim
+#   metadata:
+#     name: payments-data
+#     namespace: cnpe-lab-1-1
+#     labels:
+#       app.kubernetes.io/part-of: cnpe-lab-1-1
+#   spec:
+#     accessModes: ["ReadWriteOnce"]
+#     storageClassName: ${SC}
+#     resources:
+#       requests:
+#         storage: 1Gi
+#   EOF
+#   kubectl -n cnpe-lab-1-1 scale deploy/payments --replicas=1
+#
+#   # The default class provisions a volume, the PVC binds, the Pod runs.
+#   kubectl -n cnpe-lab-1-1 get pvc,pods -w
+#
+# ------------------------------------------------------------------------------
+# FIX B — STATIC PROVISIONING: honor the existing class by supplying a PV.
+#   Works on ANY single-node cluster, even one with no default class, because it
+#   gives 'kubernetes.io/no-provisioner' exactly what it expects: a pre-created
+#   PersistentVolume in the same StorageClass. WaitForFirstConsumer then binds it
+#   as soon as the Pod is scheduled. (hostPath is fine for a disposable lab node;
+#   in production you would use a real local/CSI volume with nodeAffinity.)
+#
+#   cat <<EOF | kubectl apply -f -
+#   apiVersion: v1
+#   kind: PersistentVolume
+#   metadata:
+#     name: cnpe-payments-pv
+#     labels:
+#       app.kubernetes.io/part-of: cnpe-lab-1-1
+#   spec:
+#     capacity:
+#       storage: 1Gi
+#     accessModes: ["ReadWriteOnce"]
+#     persistentVolumeReclaimPolicy: Delete
+#     storageClassName: cnpe-fast-ssd
+#     hostPath:
+#       path: /tmp/cnpe-payments-data
+#       type: DirectoryOrCreate
+#   EOF
+#
+#   # No delete/recreate needed — the existing Pending PVC binds to this PV.
+#   kubectl -n cnpe-lab-1-1 get pvc,pods -w
+#
+# ------------------------------------------------------------------------------
+# VERIFY
+#   ./break_fix.sh verify
+#   Expect: PVC Bound, Deployment 1/1, Service endpoint present.
+#
+# CLEANUP
+#   ./break_fix.sh cleanup
+#
+# PLATFORM-ARCHITECTURE TAKEAWAYS (topic 1.1)
+#   - Provisioner choice is an architecture decision: 'no-provisioner' means the
+#     platform team owns PV lifecycle manually; a CSI/dynamic class means the
+#     platform provisions on demand. Never ship a workload against a static class
+#     without also shipping (or automating) the backing PVs.
+#   - WaitForFirstConsumer defers binding to scheduling time so the volume lands
+#     in the right topology (zone/node) as the Pod — powerful, but it also DELAYS
+#     when a misconfiguration surfaces from "apply time" to "first Pod schedule".
+#   - storageClassName is immutable; treat a PVC's class as a day-0 contract.
+#   - A default StorageClass is a platform guarantee: claims that omit a class
+#     should Just Work. A cluster with none is a deliberate (and testable) choice.
+#   Refs: https://kubernetes.io/docs/concepts/storage/storage-classes/
+#         https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/
+#         https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+# ===== END SOLUTION ===========================================================

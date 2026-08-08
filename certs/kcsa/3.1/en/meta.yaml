@@ -1,0 +1,6 @@
+generated_at: '2026-08-07T19:45:41'
+lang: en
+backend: gemini
+model: agy
+sources:
+- https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf

@@ -1,0 +1,6 @@
+generated_at: '2026-08-07T18:17:34'
+lang: en
+backend: gemini
+model: agy
+sources:
+- https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf

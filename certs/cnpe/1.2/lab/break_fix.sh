@@ -1,246 +1,264 @@
-# 1.2 Using Cost Management Solutions for Right-Sizing and Scaling
+#!/usr/bin/env bash
+#
+# CNPE 1.2 — Using Cost Management Solutions for Right-Sizing and Scaling
+# Break & Fix lab  ·  Certified Cloud Native Platform Engineer (CNPE)
+# Syllabus: https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+#
+# WHAT THIS LAB TEACHES
+#   Right-sizing is the primary cost-management lever in Kubernetes: a Pod
+#   reserves exactly what its container `requests`, whether or not it uses it.
+#   Over-provisioned requests do two expensive things at once:
+#     1. They pin capacity the workload never touches, so the scheduler runs out
+#        of room and forces you to add (pay for) more nodes than you need.
+#     2. They break autoscaling economics. The HorizontalPodAutoscaler measures
+#        utilization as usage/request, so an inflated request makes a busy app
+#        look idle forever — it never scales, and you keep overpaying.
+#   You will break a Deployment by over-requesting CPU, watch replicas fail to
+#   schedule, then right-size it so it fits and can scale within one node.
+#
+# SAFETY
+#   Everything lives in a throwaway namespace (cnpe-lab-12) and is pinned to a
+#   single lab node with a nodeSelector. Nothing else on the cluster is touched.
+#   Run only on a DISPOSABLE single-node lab VM (kind / minikube / k3s).
+#   Tear down at any time with:  ./break_fix.sh --cleanup
+#
+set -euo pipefail
 
-## Motivación y Principios de FinOps en Kubernetes
+NS="cnpe-lab-12"
+APP="web-store"
 
-La gestión de costos en entornos cloud native (**FinOps**) combina finanzas, operaciones e ingeniería para optimizar el gasto en infraestructura sin sacrificar el rendimiento, la disponibilidad ni la seguridad. En Kubernetes, el desafío fundamental radica en la discrepancia entre **recursos solicitados (Requests)**, **límites máximos (Limits)** y **consumo real (Usage)**.
+need() { command -v "$1" >/dev/null 2>&1 || { echo "ERROR: '$1' is required but not installed." >&2; exit 1; }; }
 
-```
-+-------------------------------------------------------------------+
-|               LIMIT (Capacidad Máxima Permitida)                 |
-|  +-------------------------------------------------------------+  |
-|  |            REQUEST (Garantía de Reservación de CPU/RAM)     |  |
-|  |  +-------------------------------------------------------+  |  |
-|  |  |         REAL USAGE (Consumo Real del Contenedor)       |  |  |
-|  |  +-------------------------------------------------------+  |  |
-|  +-------------------------------------------------------------+  |
-+-------------------------------------------------------------------+
-```
-
-- **Overprovisioning (Desperdicio de Recursos)**: Cuando `Request >> Real Usage`. Los nodos se llenan por reservación teórica aunque los recursos estén ociosos (*Idle Cost*).
-- **Underprovisioning (Riesgo de Disponibilidad)**: Cuando `Request < Real Usage`. Los contenedores sufren estrangulamiento de CPU (*CPU Throttling*) o terminación por falta de memoria (*OOMKilled*).
-
----
-
-## 1. Visibilidad y Atribución de Costos (OpenCost & Kubecost)
-
-Para optimizar costos, el primer paso es visibilizar el consumo y atribuirlo a unidades de negocio, namespaces, servicios o etiquetas de usuario (*Cost Allocation*).
-
-### 1.1 OpenCost (CNCF Sandbox)
-OpenCost es el estándar abierto de la CNCF para calcular costos de infraestructura en tiempo real mapeando métricas de Kubernetes contra precios de proveedores cloud (AWS, GCP, Azure) o modelos personalizados on-premise.
-
-Despliegue de OpenCost en Kubernetes mediante Helm:
-
-```bash
-helm upgrade --install opencost opencost/opencost \
-  --namespace opencost --create-namespace \
-  --set opencost.exporter.extraEnv[0].name=CLUSTER_ID \
-  --set opencost.exporter.extraEnv[0].value=prod-cluster-01
-```
-
-Consulta de la API de asignación de costos por namespace en formato JSON:
-
-```bash
-$ curl -s "http://opencost.opencost.svc:9003/allocation/compute?window=7d&aggregate=namespace" | jq .
-{
-  "code": 200,
-  "data": [
-    {
-      "platform-prod": {
-        "cpuCost": 142.50,
-        "gpuCost": 0.00,
-        "memoryCost": 68.20,
-        "pvCost": 12.00,
-        "networkCost": 5.40,
-        "totalCost": 228.10,
-        "efficiency": 0.68
-      },
-      "payments-dev": {
-        "cpuCost": 85.00,
-        "gpuCost": 0.00,
-        "memoryCost": 40.10,
-        "pvCost": 0.00,
-        "networkCost": 1.20,
-        "totalCost": 126.30,
-        "efficiency": 0.32
-      }
-    }
-  ]
+# Convert a Kubernetes CPU quantity (e.g. "8", "7910m", "0.5") to integer millicores.
+cpu_to_milli() {
+  awk -v v="$1" 'BEGIN{
+    if (v ~ /m$/) { sub(/m$/,"",v); printf "%d", v }
+    else { printf "%d", v*1000 }
+  }'
 }
-```
 
----
+cleanup() {
+  echo ">> Deleting namespace ${NS} (all lab objects) ..."
+  kubectl delete namespace "${NS}" --ignore-not-found --wait=false
+  echo ">> Cleanup requested. The lab namespace is being removed."
+  exit 0
+}
 
-## 2. Right-Sizing: Ajuste Fino de Requests y Limits
+verify() {
+  echo ">> Acceptance check for CNPE 1.2 right-sizing lab:"
+  local desired ready pending
+  desired=$(kubectl -n "${NS}" get deploy "${APP}" -o jsonpath='{.spec.replicas}' 2>/dev/null || echo 0)
+  ready=$(kubectl -n "${NS}" get deploy "${APP}" -o jsonpath='{.status.readyReplicas}' 2>/dev/null || echo 0)
+  ready=${ready:-0}
+  pending=$(kubectl -n "${NS}" get pods -l app="${APP}" --field-selector=status.phase=Pending -o name 2>/dev/null | wc -l | tr -d ' ')
+  echo "   desired=${desired}  ready=${ready}  pending=${pending}"
+  if [[ "${ready}" == "${desired}" && "${desired}" -gt 0 && "${pending}" -eq 0 ]]; then
+    echo "   RESULT: PASS — all replicas scheduled and Ready on a single node. Right-sized. ✅"
+    exit 0
+  else
+    echo "   RESULT: FAIL — replicas are still Pending. The workload does not fit; keep right-sizing. ❌"
+    exit 1
+  fi
+}
 
-### 2.1 Vertical Pod Autoscaler (VPA)
+case "${1:-}" in
+  --cleanup|-c) need kubectl; cleanup ;;
+  --verify|-v)  need kubectl; verify  ;;
+  -h|--help)
+    echo "Usage: $0 [--cleanup|--verify|--help]"
+    echo "  (no args)   Deploy the broken, over-provisioned workload"
+    echo "  --verify    Check whether you have right-sized it correctly"
+    echo "  --cleanup   Remove the lab namespace"
+    exit 0 ;;
+esac
 
-El **Vertical Pod Autoscaler (VPA)** analiza el consumo histórico de CPU y memoria de las cargas de trabajo y recomienda o aplica automáticamente los valores óptimos de `requests` y `limits`.
+need kubectl
+need awk
 
-Modos de operación del VPA:
-1. `Off`: Únicamente calcula recomendaciones y las muestra en la spec del VPA.
-2. `Initial`: Asigna las recomendaciones de recursos solo al momento de crear el Pod.
-3. `Recreate`: Aplica las recomendaciones evictando y recreando los Pods existentes cuando el consumo varía significativamente.
-4. `Auto`: Actualmente idéntico a `Recreate`.
+echo "==> CNPE 1.2 Break & Fix: over-provisioned requests break scheduling and scaling"
 
-Manifiesto de VPA en modo recomendación (`Off`) para una aplicación crítica:
+# --- Sanity: confirm we can reach a cluster and pick a single lab node ---------
+if ! kubectl get nodes >/dev/null 2>&1; then
+  echo "ERROR: kubectl cannot reach a cluster. Point KUBECONFIG at your lab VM." >&2
+  exit 1
+fi
 
-```yaml
-apiVersion: autoscaling.k8s.io/v1
-kind: VerticalPodAutoscaler
+NODE=$(kubectl get nodes -o jsonpath='{.items[0].metadata.name}')
+NODE_COUNT=$(kubectl get nodes -o name | wc -l | tr -d ' ')
+if [[ "${NODE_COUNT}" -gt 1 ]]; then
+  echo ">> WARNING: cluster has ${NODE_COUNT} nodes. This lab assumes a disposable single-node VM."
+  echo ">> All lab Pods will be pinned to '${NODE}' so the scheduling constraint is deterministic."
+fi
+
+# --- Break: request half the node's CPU per replica ---------------------------
+# We read the node's allocatable CPU and set each replica's request to ~50% of
+# it. With 3 replicas, at most one can ever fit — the rest go Pending. The value
+# is derived from the node so the break is deterministic on any host size, and
+# it dramatizes the waste: nginx idles at ~1m while it *reserves* whole cores.
+ALLOC_RAW=$(kubectl get node "${NODE}" -o jsonpath='{.status.allocatable.cpu}')
+ALLOC_M=$(cpu_to_milli "${ALLOC_RAW}")
+REQ_M=$(( ALLOC_M / 2 ))
+[[ "${REQ_M}" -lt 100 ]] && REQ_M=100
+
+echo ">> Lab node '${NODE}' allocatable CPU: ${ALLOC_RAW} (${ALLOC_M}m)"
+echo ">> Injecting an OVER-PROVISIONED request of ${REQ_M}m CPU per replica (x3 replicas)."
+
+kubectl create namespace "${NS}" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+
+cat <<EOF | kubectl apply -f - >/dev/null
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: platform-api-vpa
-  namespace: platform-prod
+  name: ${APP}
+  namespace: ${NS}
+  labels: { app: ${APP} }
 spec:
-  targetRef:
-    apiVersion: "apps/v1"
-    kind: Deployment
-    name: platform-api
-  updatePolicy:
-    updateMode: "Off"
-  resourcePolicy:
-    containerPolicies:
-      - containerName: '*'
-        minAllowed:
-          cpu: 100m
-          memory: 128Mi
-        maxAllowed:
-          cpu: 4000m
-          memory: 8Gi
-        controlledResources: ["cpu", "memory"]
-```
-
-Inspección de las recomendaciones generadas por VPA:
-
-```bash
-$ kubectl get vpa platform-api-vpa -n platform-prod -o yaml
-status:
-  recommendation:
-    containerRecommendations:
-    - containerName: api-container
-      lowerBound:
-        cpu: 250m
-        memory: 256Mi
-      target:
-        cpu: 500m
-        memory: 512Mi
-      uncappedTarget:
-        cpu: 480m
-        memory: 490Mi
-      upperBound:
-        cpu: 1500m
-        memory: 3Gi
-```
-
+  replicas: 3
+  selector:
+    matchLabels: { app: ${APP} }
+  template:
+    metadata:
+      labels: { app: ${APP} }
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ${NODE}
+      containers:
+        - name: web
+          image: nginx:1.27-alpine
+          ports: [ { containerPort: 80 } ]
+          resources:
+            requests:
+              cpu: "${REQ_M}m"
+              memory: "128Mi"
+            limits:
+              cpu: "${REQ_M}m"
+              memory: "128Mi"
 ---
-
-## 3. Horizontal Autoscaling: HPA y KEDA
-
-### 3.1 Horizontal Pod Autoscaler (HPA) v2
-
-El **HPA** ajusta el número de réplicas de un objeto ejecutable basándose en métricas obtenidas desde Metrics Server o Prometheus via Custom Metrics API.
-
-```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: platform-api-hpa
-  namespace: platform-prod
+  name: ${APP}
+  namespace: ${NS}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: platform-api
+    name: ${APP}
   minReplicas: 3
-  maxReplicas: 20
+  maxReplicas: 6
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 75
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: AverageValue
-        averageValue: 400Mi
-  behavior:
-    scaleUp:
-      stabilizationWindowSeconds: 0
-      policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
-    scaleDown:
-      stabilizationWindowSeconds: 300
-      policies:
-      - type: Percent
-        value: 10
-        periodSeconds: 60
-```
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+EOF
 
-### 3.2 KEDA (Kubernetes Event-driven Autoscaling)
+echo ">> Waiting for the scheduler to react ..."
+sleep 8
 
-KEDA es un proyecto CNCF Graduated que extiende HPA para escalar cargas de trabajo basándose en fuentes de eventos externas (RabbitMQ, Apache Kafka, AWS SQS, NATS) e incluso permite **escalar a cero réplicas** (`scale to 0`) para ahorrar costos cuando no hay eventos pendientes.
+echo
+echo "=========================== SYMPTOM ================================"
+kubectl -n "${NS}" get pods -l app="${APP}" -o wide || true
+echo
+echo "HorizontalPodAutoscaler:"
+kubectl -n "${NS}" get hpa "${APP}" || true
+echo "==================================================================="
+echo
+cat <<'BRIEF'
+WHAT YOU WILL SEE
+  * `kubectl -n cnpe-lab-12 get pods` shows one replica Running and the others
+    stuck in Pending.
+  * `kubectl -n cnpe-lab-12 describe pod <pending-pod>` ends with:
+        Warning  FailedScheduling  ... 0/1 nodes are available:
+        Insufficient cpu.
+  * `kubectl -n cnpe-lab-12 get hpa web-store` shows TARGETS as `<unknown>/50%`
+    (no metrics-server) or a misleadingly low % — either way the HPA cannot do
+    its job, because each replica already reserves half the node.
 
-```yaml
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
-metadata:
-  name: order-processor-scaler
-  namespace: e-commerce
-spec:
-  scaleTargetRef:
-    name: order-processor
-  minReplicaCount: 0
-  maxReplicaCount: 50
-  cooldownPeriod: 300
-  triggers:
-  - type: rabbitmq
-    metadata:
-      protocol: amqp
-      queueName: orders-queue
-      mode: QueueLength
-      value: "20"
-    authenticationRef:
-      name: rabbitmq-auth
-```
+WHY IT MATTERS (the cost angle)
+  The container asks for ~half a CPU core but nginx uses ~1m. You are paying to
+  reserve capacity that is never used, and that reservation is exactly what
+  keeps the extra replicas from scheduling. In a real cluster the autoscaler
+  would now add a node — spending money — to satisfy a request the workload
+  does not need. Right-sizing removes the spend and lets the app scale in place.
 
----
+YOUR GOAL
+  Right-size the container's CPU request so all 3 replicas schedule and become
+  Ready on the single lab node — WITHOUT adding nodes and WITHOUT dropping
+  replicas. Base the new value on real usage (a few tens of millicores), not on
+  a guess. Then confirm with:
 
-## 4. Autoscaling de Infraestructura: Karpenter vs Cluster Autoscaler
+      ./break_fix.sh --verify
 
-| Característica | Cluster Autoscaler | Karpenter (AWS / Open Source) |
-|---|---|---|
-| **Velocidad de Aprovisionamiento** | 2 - 5 minutos (espera a los NodeGroups) | 30 - 60 segundos (directo via EC2 API) |
-| **Modelado de Nodos** | Basado en grupos homogéneos pre-definidos | Selección dinámica del tipo de instancia exacta |
-| **Consolidación de Costos** | Limitada | Empaquetado agresivo y reemplazo por Spot Instances |
+  (Hint: derive the real number from measured usage — `kubectl top pods`,
+   a VerticalPodAutoscaler recommendation, or an OpenCost report — then set the
+   request a little above the observed peak, not at it.)
+BRIEF
 
----
+exit 0
 
-## Verificación y Diagnóstico del Autoscaling
-
-### Comandos de Diagnóstico en Vivo
-
-```bash
-# Consultar el estado del HPA
-$ kubectl get hpa platform-api-hpa -n platform-prod
-NAME               REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
-platform-api-hpa   Deployment/platform-api   42%/75%, 210Mi/400Mi   3         20        3          5d
-
-# Verificar eventos de escalado del cluster
-$ kubectl get events -n platform-prod --field-selector reason=SuccessfulRescale
-LAST SEEN   TYPE     REASON              OBJECT                             MESSAGE
-12m         Normal   SuccessfulRescale   horizontalpodautoscaler/platform-api-hpa   New size: 8; reason: cpu resource utilization above target
-```
-
----
-
-## Referencias
-
-- CNCF CNPE Curriculum — https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
-- OpenCost Specification & Docs — https://www.opencost.io/docs/
-- Kubernetes HPA v2 Specification — https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-- KEDA Event-driven Autoscaler — https://keda.sh/docs/latest/
-- Karpenter High-Performance Autoscaling — https://karpenter.sh/docs/
+# =============================================================================
+# SOLUTION — step by step (do not peek until you have tried it)
+# =============================================================================
+#
+# The defect: `resources.requests.cpu` is set to ~50% of the node per replica,
+# so the scheduler can only place one Pod and the HPA has no headroom to scale.
+# The fix is to right-size the request down to what the workload actually uses.
+#
+# 1) Prove the failure and read the reason:
+#      kubectl -n cnpe-lab-12 get pods -o wide
+#      kubectl -n cnpe-lab-12 describe pod -l app=web-store | grep -A2 FailedScheduling
+#      #   -> "Insufficient cpu"  (the request, not real usage, is the blocker)
+#
+# 2) Measure real usage instead of guessing. Any ONE of these is enough:
+#      # a) metrics-server (fastest signal):
+#      kubectl -n cnpe-lab-12 top pods            # nginx idles at ~1-5m CPU
+#      # b) a VerticalPodAutoscaler in "Off" mode, which only *recommends*:
+#      #    it will suggest a target request close to observed usage.
+#      # c) an OpenCost / OpenCost-based report showing request-vs-usage waste.
+#
+# 3) Right-size the request (and matching limit) to a realistic value.
+#    ~50m CPU is comfortably above nginx's real peak and leaves scaling room:
+#      kubectl -n cnpe-lab-12 set resources deployment/web-store \
+#        --requests=cpu=50m,memory=64Mi \
+#        --limits=cpu=250m,memory=128Mi
+#
+#    Equivalent declarative fix (preferred for GitOps): edit the manifest's
+#    resources block to requests cpu=50m/memory=64Mi and `kubectl apply` it.
+#
+# 4) Watch the rollout place every replica on the single node:
+#      kubectl -n cnpe-lab-12 rollout status deployment/web-store
+#      kubectl -n cnpe-lab-12 get pods -o wide      # 3/3 Running, all on one node
+#
+# 5) Confirm the HPA is now healthy and has room to scale to maxReplicas=6
+#    within the node's budget (3 x 50m = 150m, vs whole cores before):
+#      kubectl -n cnpe-lab-12 get hpa web-store
+#      #   TARGETS now reads a real, meaningful % because the request reflects
+#      #   actual usage — utilization = usage/request is no longer diluted.
+#
+# 6) Verify acceptance:
+#      ./break_fix.sh --verify        # expect: PASS — 3/3 Ready, 0 Pending
+#
+# 7) Tear down when finished:
+#      ./break_fix.sh --cleanup
+#
+# TAKEAWAY
+#   Requests are a reservation, and utilization percentages are measured against
+#   them. Set requests from observed p95/peak usage (via metrics-server, VPA
+#   recommendations, or OpenCost), not from fear. Right-sizing is what makes both
+#   bin-packing and autoscaling — and therefore your bill — behave.
+#
+# SOURCES (official)
+#   Managing Resources for Containers:
+#     https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+#   HorizontalPodAutoscaler:
+#     https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+#   VerticalPodAutoscaler (recommendations):
+#     https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
+#   OpenCost (cost monitoring / right-sizing):
+#     https://www.opencost.io/docs/
+#   CNPE Curriculum:
+#     https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
+# =============================================================================
