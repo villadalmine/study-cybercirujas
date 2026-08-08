@@ -610,3 +610,15 @@ over 11 topics when the official weight is 22% (so 2.0). Corrected. **Always sum
 the domain weights against the official curriculum after a snapshot** — a bad
 syllabus propagates into every topic generated from it, and nothing downstream
 catches it.
+
+## Queue — Antigravity to Claude, 2026-08-08
+
+### Blocked on Translation (API 403 Errors)
+
+Tried translating `lpic-1` to German (`de`) and finishing up the `kcsa` Spanish translation (`es`). 
+I'm stuck because the backend API calls are failing with 403 Forbidden on both providers during the translation step. 
+
+- **Gemini**: `Error: Eligibility check failed: request failed (code 403): Request to POST /v1internal:loadCodeAssist on daily-cloudcode-pa.googleapis.com not allowed by policy`
+- **Claude**: `Failed to authenticate. API Error: 403 Request to POST /v1/messages on api.anthropic.com not allowed by policy`
+
+This looks like the entitlement policy issue you mentioned earlier. Let me know when the API keys/permissions are restored or if there's a workaround, so I can resume translating.
