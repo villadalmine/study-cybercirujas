@@ -168,6 +168,51 @@ def find_missing_videos() -> list[tuple[str, str]]:
     return missing
 
 
+def render_ready_videos(limit: int = 1) -> int:
+    """Produce videos for certifications whose content is finished.
+
+    The unattended pass reported missing videos and could not make them, so a
+    certification reached "content complete" and stopped there — the last step
+    always needed a human running `make cert`. That is the one gap that kept the
+    timer from finishing anything on its own.
+
+    Only for languages that are actually complete, which is the same ordering rule
+    the rest of the pipeline follows: a video narrates material that must already
+    exist and have cleared the floor. Bounded like everything else — a script is
+    cheap (~$0.12) but not free, and the render costs nothing at all.
+    """
+    made = 0
+    for cert, _ in TARGETS:
+        for lang in pipeline.video_languages(cert):
+            if made >= limit:
+                return made
+            if (REPO / "media" / "certs" / cert / lang / "video.mp4").exists():
+                continue
+            try:
+                topic_ids = _cert_topic_ids(cert)
+            except (FileNotFoundError, IndexError):
+                continue
+            ready = all(
+                (REPO / "certs" / cert / t / lang / k).exists()
+                and not quality.check_file(REPO / "certs" / cert / t / lang / k)
+                for t in topic_ids for k in ("content.md", "exercises.md")
+            )
+            if not topic_ids or not ready:
+                continue
+            print(f"--- video {cert} ({lang}): content complete, producing ---", flush=True)
+            for step in (["cert", "video-script", cert, "--lang", lang, "--backend", "claude"],
+                         ["cert", "video", cert, "--lang", lang]):
+                result = subprocess.run([str(TEACH), *step], cwd=REPO,
+                                        capture_output=True, text=True)
+                if result.returncode != 0:
+                    print(f"    {step[1]} failed: "
+                          f"{(result.stdout + result.stderr).strip()[:200]}", flush=True)
+                    break
+            else:
+                made += 1
+    return made
+
+
 def main() -> None:
     n_fenced = strip_fences_in_place()
     if n_fenced:
@@ -248,6 +293,11 @@ def main() -> None:
             # code so "someone killed it" is distinguishable from a real error.
             detail = output or f"no output, exit code {result.returncode} (killed?)"
             print(f"    failed, will retry on the next pass: {detail}", flush=True)
+
+    # Last: a certification whose content is finished but whose video is not.
+    # Without this the unattended pass could take a certification to "content
+    # complete" and no further, so nothing ever finished without a human.
+    render_ready_videos()
 
 
 if __name__ == "__main__":
