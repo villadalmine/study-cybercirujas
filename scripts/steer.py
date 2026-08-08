@@ -58,6 +58,31 @@ def _cert_block(text: str, cert: str) -> tuple[int, int]:
     return start, len(lines)
 
 
+def create_block(cert: str) -> None:
+    """Add a certification to pipeline.yaml that is not there yet.
+
+    `activate` used to require the block to exist, which is backwards: the moment
+    you most want to activate something is right after snapshotting it, when it
+    has a syllabus and no entry at all. Appended to the end of `certs:` so the
+    surrounding comments — which explain what each field means — stay put.
+    """
+    text = PIPELINE.read_text()
+    lines = text.splitlines()
+    end = None
+    for i, line in enumerate(lines):
+        if line.startswith("certs:"):
+            end = i
+        elif end is not None and line and not line.startswith(" "):
+            break
+        elif end is not None:
+            end = i
+    if end is None:
+        raise SystemExit("pipeline.yaml has no `certs:` section")
+    lines.insert(end + 1, f"  {cert}:\n    active: false")
+    PIPELINE.write_text("\n".join(lines) + "\n")
+    print(f"added {cert} to pipeline.yaml")
+
+
 def set_key(cert: str, key: str, value: str) -> bool:
     """Set one key inside one certification. True if the file changed."""
     text = PIPELINE.read_text()
@@ -119,6 +144,11 @@ def main() -> int:
         changed = set_key(args.cert, "owner", args.agent)
 
     elif args.command == "activate":
+        if f"\n  {args.cert}:\n" not in PIPELINE.read_text():
+            if not (REPO / "certs" / f"{args.cert}.md").exists():
+                raise SystemExit(f"No syllabus at certs/{args.cert}.md — snapshot it "
+                                 f"first: teach cert snapshot {args.cert}")
+            create_block(args.cert)
         changed = set_key(args.cert, "active", "true")
         if args.owner:
             changed |= set_key(args.cert, "owner", args.owner)
