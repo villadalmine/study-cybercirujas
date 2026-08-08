@@ -40,7 +40,7 @@ import yaml
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from teach.core import certs, pipeline  # noqa: E402
+from teach.core import certs, claims, pipeline  # noqa: E402
 
 # What every meta.yaml must record. The backend VALUE is unconstrained on
 # purpose — any provider may author — but its absence is not: content whose
@@ -55,6 +55,7 @@ def _topics(cert: str) -> list[dict]:
 
 def check_cert(cert: str, languages: list[str]) -> list[str]:
     problems: list[str] = []
+    in_flight = claims.active()
     try:
         topics = _topics(cert)
     except (FileNotFoundError, IndexError):
@@ -91,6 +92,14 @@ def check_cert(cert: str, languages: list[str]) -> list[str]:
                 problems.append(
                     f"{cert}/{topic_id} ({lang}): meta.yaml is missing {', '.join(missing)}"
                 )
+
+        # A topic being generated RIGHT NOW is not inconsistent, it is in
+        # progress: content.md is written as soon as it passes and the syllabus
+        # status only at the end, so between those two moments this check would
+        # report a defect that resolves itself in minutes. The claim system knows
+        # which topics those are, so ask it rather than guessing from timestamps.
+        if any(c == cert and t == topic_id for c, t, _ in in_flight):
+            continue
 
         if present and status == "pending":
             problems.append(

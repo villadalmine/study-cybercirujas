@@ -66,6 +66,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 		echo "staging certs/$(CERT) and its syllabus only"; \
 		$(TEACH) status; \
 		git add catalog.yaml STATUS.md certs/$(CERT) certs/$(CERT).md 2>/dev/null || true; \
+		$(VENV)/bin/python3 scripts/unstage_inflight.py; \
 	else \
 		echo "WARNING: ALL=1 — staging every certification. If another agent is"; \
 		echo "         generating, this picks up its half-written topics."; \
