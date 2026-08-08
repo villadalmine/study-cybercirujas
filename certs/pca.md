@@ -8,63 +8,63 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Selecting Data
   topic: 1 - PromQL
   weight: 4
 - id: '1.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Rates and Derivatives
   topic: 1 - PromQL
   weight: 4
 - id: '1.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Aggregating over time
   topic: 1 - PromQL
   weight: 4
 - id: '1.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Aggregating over dimensions
   topic: 1 - PromQL
   weight: 4
 - id: '1.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Binary operators
   topic: 1 - PromQL
   weight: 4
 - id: '1.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Histograms
   topic: 1 - PromQL
   weight: 4
 - id: '1.7'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Timestamp Metrics
   topic: 1 - PromQL
   weight: 4
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: System Architecture
   topic: 2 - Prometheus Fundamentals
   weight: 4
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Configuration and Scraping
   topic: 2 - Prometheus Fundamentals
   weight: 4
