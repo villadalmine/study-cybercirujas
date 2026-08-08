@@ -80,6 +80,12 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 		(git commit -m "$(MSG)" && git push)
 
 image-cluster: ## build the image in-cluster: Kaniko as a plain pod, local context over stdin (no git/workflow)
+	@# Remove a pod left behind by an interrupted build. `kubectl run --rm` only
+	@# cleans up if it survives to the end, so a build killed by a timeout leaves
+	@# one Completed and every later build dies with AlreadyExists — and the real
+	@# error is invisible, because the failure surfaces as `tar: Wrote only 4096 of
+	@# 10240 bytes` from the broken pipe.
+	-kubectl delete pod kaniko-teach-plat -n kaniko --ignore-not-found --wait=true
 	tar --exclude .git --exclude .venv --exclude '*.egg-info' --exclude __pycache__ -czf - . | \
 	kubectl run kaniko-teach-plat --rm -i --restart=Never -n kaniko \
 	  --image=gcr.io/kaniko-project/executor:latest -- \
