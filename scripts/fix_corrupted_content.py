@@ -205,8 +205,14 @@ def render_ready_videos(limit: int = 1) -> int:
                 result = subprocess.run([str(TEACH), *step], cwd=REPO,
                                         capture_output=True, text=True)
                 if result.returncode != 0:
-                    print(f"    {step[1]} failed: "
-                          f"{(result.stdout + result.stderr).strip()[:200]}", flush=True)
+                    # Full output, not a 200-character slice. The first failure
+                    # here was an ffmpeg error whose actual cause sat past the cut,
+                    # so the log said "video failed" and nothing usable — the same
+                    # mistake that made a repeating generation failure impossible
+                    # to diagnose until rejected text started being kept.
+                    detail = (result.stdout + result.stderr).strip() or \
+                        f"no output, exit code {result.returncode}"
+                    print(f"    {step[1]} failed:\n{detail}", flush=True)
                     break
             else:
                 made += 1

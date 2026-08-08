@@ -1,0 +1,42 @@
+cert: ica
+lang: en
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: Prove You Can Tame the Service Mesh
+    voiceover: Istio runs the traffic, security, and observability layer for some
+      of the busiest Kubernetes clusters out there. The Istio Certified Associate
+      exam proves you can actually operate it — not just describe it. It's the associate-level
+      credential that says you know how requests really move through a mesh.
+  audience:
+    title: Who It's For
+    voiceover: This one is built for hands-on cloud-native practitioners, not architects
+      who only draw diagrams. If you already work with Kubernetes and you want the
+      mesh layer on your résumé, this is your exam. The blueprint leans hardest on
+      Traffic Management at 35%, so routing, retries, and canary releases are where
+      you'll live.
+    bullets:
+    - Kubernetes engineers adding service mesh skills
+    - Platform and DevOps folks running Istio in production
+    - SREs who troubleshoot traffic, security, and connectivity
+  cta:
+    title: Start Studying Today
+    voiceover: We've mapped every exam domain — install and config, troubleshooting,
+      traffic management, and securing workloads — into hands-on lessons and labs.
+      Open the Istio Certified Associate track on Cert Landscape and start building
+      the skills the exam actually tests.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Installation, Upgrades, and Configuration at 20.0%,
+      Troubleshooting at 20.0%, Traffic Management at 35.0%, Securing Workloads at
+      25.0%.
+    domains:
+    - name: Installation, Upgrades, and Configuration
+      weight: 20.0
+    - name: Troubleshooting
+      weight: 20.0
+    - name: Traffic Management
+      weight: 35.0
+    - name: Securing Workloads
+      weight: 25.0

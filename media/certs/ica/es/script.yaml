@@ -1,0 +1,39 @@
+cert: ica
+lang: es
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: ¿Dominás Istio de verdad?
+    voiceover: El service mesh dejó de ser un extra y hoy es infraestructura crítica.
+      La certificación Istio Certified Associate valida que sabés instalar, asegurar
+      y enrutar tráfico en una malla real, no solo en teoría.
+  audience:
+    title: Para quién es
+    voiceover: Es una certificación de nivel associate, pensada para quienes ya trabajan
+      con Kubernetes y quieren demostrar que controlan Istio de punta a punta. Con
+      el 35% del examen en Traffic Management y un 25% en Securing Workloads, apunta
+      a manos que tocan el tráfico y la seguridad todos los días.
+    bullets:
+    - Ingenieros de plataforma y DevOps que operan clústeres Kubernetes
+    - SRE que necesitan enrutar, observar y depurar el tráfico entre servicios
+    - Especialistas en seguridad cloud-native enfocados en mTLS y políticas de acceso
+  cta:
+    title: Empezá hoy
+    voiceover: 'Válida por 3 años, la ICA te ordena el camino: instalación, troubleshooting,
+      tráfico y seguridad. Estudiala paso a paso en Cert Landscape y llegá al examen
+      con la malla dominada.'
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Installation, Upgrades, and Configuration con
+      20.0%, Troubleshooting con 20.0%, Traffic Management con 35.0%, Securing Workloads
+      con 25.0%.
+    domains:
+    - name: Installation, Upgrades, and Configuration
+      weight: 20.0
+    - name: Troubleshooting
+      weight: 20.0
+    - name: Traffic Management
+      weight: 35.0
+    - name: Securing Workloads
+      weight: 25.0
