@@ -69,6 +69,48 @@ Also open: 637 citations from 269 uncatalogued domains. `check_sources.py
 - ~~No Piper voice configured for de/zh~~ **Resolved (2026-07-17)**: Piper does have de/zh voices (`de_DE-thorsten-high`, `zh_CN-huayan-medium`), added to `VOICES` in `core/video.py`. **`ja` remains blocked** — Piper does not have any Japanese voice (full list of supported languages verified against the `rhasspy/piper-voices` repository); another TTS would be needed to narrate in Japanese.
 - ~~No CJK font installed~~ **Resolved (2026-07-17)**: `core/video.py` now picks Noto Sans CJK (`google-noto-sans-cjk-fonts`) for zh/ja if installed (falls back to Liberation Sans if not, without breaking) — installed manually on the dev machine with `sudo dnf install google-noto-sans-cjk-fonts`. Only needed on the machine rendering the videos (local Pillow), not in the Docker image — the generated mp4 is baked into the build like any other file in `media/`.
 
+## Labs — what an audit found, 2026-08-08 (design parked, not started)
+
+Full design in `~/.claude/plans/breezy-skipping-spring.md`. Recorded here because
+the *measurements* are facts about this repo and would otherwise be lost. Nothing
+below is implemented.
+
+**The 342 generated labs share no interface**, because the prompt that writes them
+(`generator.py:569-580`) never asked for one:
+
+| Measured over the 342 | |
+|---|---|
+| With an **executable** `solve`/`fix` arm | **7** |
+| With a `verify`/`check` arm | 66 (only 25 signal failure by exit code) |
+| Interactive (`read -p`; blocks with no TTY) | 98 |
+| Call `sudo`, which `debian:12` does not ship | 94 |
+| Require root and exit 1 otherwise | 99 |
+| Distinct subcommand names across the corpus | 24 |
+
+The other 335 carry the solution **as a comment**, so `break → verify fails →
+solve → verify passes` is impossible today on 98% of the corpus. No codemod turns
+a comment into a solution — that number, not the dollar cost, is what decides the
+shape of any migration.
+
+**Two defects worth knowing about regardless of whether the design is built:**
+
+1. **Labs are outside the `stale` cycle.** `tracker.py::snapshot_topics` marks a
+   topic `stale` when the syllabus changes and `certs.topic_outdated_langs()`
+   invalidates content per language — but `generator.py:561` regenerates the lab
+   only if the file is absent or `--force` is passed in the authoring language. A
+   new exam version leaves the old lab attached to new content, and nothing
+   reports it.
+2. **`labs.py` runs Kubernetes labs on the student's own machine.** `_up_cluster`
+   creates `kind` on the host, calls `kubectl config use-context` **without
+   checking the result** (line 148), and then runs an LLM-authored destructive
+   script against whatever context was current. The "disposable VM" premise all
+   342 headers state is false. Also `_needs_cluster()` picks the environment by
+   grepping the script for the string `kubectl`, which misroutes 15 labs.
+
+Measured lab generation cost, from `usage.jsonl` (n=51): median **$0.509**, ~205 s.
+Regenerating all 342 is ~**$195** and ~5 quota windows — the windows are the
+constraint, not the dollars.
+
 ## Labs — Execution Modes (see PLAN.md, SDD section)
 
 Suggested order (each stage reuses the previous one):
