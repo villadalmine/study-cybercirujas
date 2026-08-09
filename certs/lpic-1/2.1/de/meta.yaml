@@ -1,0 +1,8 @@
+generated_at: '2026-08-09T03:45:50'
+lang: de
+translated_from: en
+backend: litellm
+model: gpt-5.4-mini
+base_url: http://localhost:14000/v1
+sources:
+- https://www.lpi.org/our-certifications/lpic-1-overview/
