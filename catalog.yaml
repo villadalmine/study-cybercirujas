@@ -367,7 +367,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-11-28'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-08'
     file: certs/otca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
