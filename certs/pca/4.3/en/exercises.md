@@ -1,0 +1,560 @@
+# Topic 4.3 — Understand and Use Alertmanager: Guided Exercises
+
+> **Scope.** These exercises take you from a bare Alertmanager process to a full alerting pipeline: Prometheus evaluating rules, pushing alerts over the wire, and Alertmanager deduplicating, grouping, routing, inhibiting, silencing and notifying. Every step is executable and every output is what you should actually see. The division of labour is the single most tested idea in this domain — **Prometheus decides *when* an alert fires; Alertmanager decides *who* hears about it and *how often***.
+>
+> **Reference sources**
+> - Alertmanager overview — https://prometheus.io/docs/alerting/latest/alertmanager/
+> - Alertmanager configuration — https://prometheus.io/docs/alerting/latest/configuration/
+> - Alerting rules (Prometheus side) — https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+> - `alertmanager_config` in `prometheus.yml` — https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config
+> - Alertmanager clients / webhook payload — https://prometheus.io/docs/alerting/latest/clients/ and https://prometheus.io/docs/alerting/latest/configuration/#webhook_config
+> - `amtool` and HA clustering — https://github.com/prometheus/alertmanager
+
+---
+
+## Lab environment
+
+You need two binaries on `PATH`: `prometheus` (v2.53 LTS or v3.x) and `alertmanager` + `amtool` (v0.27.0 or newer, shipped together in the same tarball). Work from an empty directory:
+
+```bash
+mkdir -p ~/pca-4.3 && cd ~/pca-4.3
+alertmanager --version
+amtool --version
+prometheus --version
+```
+
+Expected (versions may differ):
+
+```
+alertmanager, version 0.27.0 (branch: HEAD, revision: 0aa3c2aad14cff039931923ab16b26b7481783b5)
+amtool, version 0.27.0 ...
+prometheus, version 2.53.2 ...
+```
+
+---
+
+## Exercise 1 — Start Alertmanager and read its runtime state
+
+1. Write a minimal Alertmanager config `alertmanager.yml`:
+
+   ```yaml
+   route:
+     receiver: 'null'
+     group_by: ['alertname']
+     group_wait: 30s
+     group_interval: 5m
+     repeat_interval: 4h
+
+   receivers:
+     - name: 'null'
+   ```
+
+2. **Validate the config before starting the process** — a dry-run parse that also compiles any templates:
+
+   ```bash
+   amtool check-config alertmanager.yml
+   ```
+
+   Expected:
+
+   ```
+   Checking 'alertmanager.yml'  SUCCESS
+   Found:
+    - global config
+    - route
+    - 0 inhibit rules
+    - 1 receivers
+    - 0 templates
+   ```
+
+3. Launch it (leave it running in this terminal):
+
+   ```bash
+   alertmanager --config.file=alertmanager.yml
+   ```
+
+   You should see `Listening address=[::]:9093` and `msg="Loading configuration file"`.
+
+4. In a **second** terminal, point `amtool` at the running instance and read the cluster/build status through the v2 API:
+
+   ```bash
+   export ALERTMANAGER_URL=http://localhost:9093
+   amtool config show --alertmanager.url=$ALERTMANAGER_URL
+   curl -s http://localhost:9093/api/v2/status | python3 -m json.tool | head -n 25
+   ```
+
+   The `curl` output includes `cluster`, `versionInfo` and the live `config` block.
+
+**Verification**
+
+- **Q1.1** Which TCP ports does a default Alertmanager bind, and what is each one for?
+- **Q1.2** `amtool check-config` passed but you *never contacted the server*. What exactly did it prove, and what did it **not** prove?
+- **Q1.3** The receiver is literally named `'null'` and has no `*_configs`. What happens to an alert routed here, and why is that a legitimate configuration?
+
+---
+
+## Exercise 2 — Make Prometheus fire an alert and push it to Alertmanager
+
+1. Create an alerting rule file `rules/alerts.yml`:
+
+   ```yaml
+   groups:
+     - name: demo.rules
+       rules:
+         - alert: AlwaysFiring
+           expr: vector(1) > 0
+           for: 30s
+           labels:
+             severity: warning
+             team: platform
+           annotations:
+             summary: "Synthetic alert used to exercise the pipeline"
+             description: "This alert is up {{ $value }} and always fires."
+   ```
+
+2. Create `prometheus.yml` that both **loads the rules** and **knows where Alertmanager lives**:
+
+   ```yaml
+   global:
+     scrape_interval: 15s
+     evaluation_interval: 15s
+
+   rule_files:
+     - "rules/*.yml"
+
+   alerting:
+     alertmanagers:
+       - static_configs:
+           - targets:
+               - localhost:9093
+
+   scrape_configs:
+     - job_name: prometheus
+       static_configs:
+         - targets: ['localhost:9090']
+   ```
+
+3. Validate the rule file, then start Prometheus in a third terminal:
+
+   ```bash
+   promtool check rules rules/alerts.yml
+   prometheus --config.file=prometheus.yml
+   ```
+
+   `promtool` expected output:
+
+   ```
+   Checking rules/alerts.yml
+     SUCCESS: 1 rules found
+   ```
+
+4. Watch the alert climb the state machine. Immediately after start it is **pending** (the `for: 30s` timer is running); after ~30 s it becomes **firing**:
+
+   ```bash
+   # synthetic ALERTS series generated by Prometheus itself
+   curl -s 'http://localhost:9090/api/v1/query?query=ALERTS' \
+     | python3 -c 'import sys,json; [print(r["metric"]["alertstate"], r["metric"]) for r in json.load(sys.stdin)["data"]["result"]]'
+   ```
+
+   First run (within 30 s): `pending {...}`. After the `for` elapses: `firing {...}`.
+
+5. Confirm the alert actually crossed the wire into Alertmanager:
+
+   ```bash
+   amtool alert query
+   ```
+
+   Expected:
+
+   ```
+   Alertname     Starts At                Summary
+   AlwaysFiring  2026-08-09 12:00:31 UTC  Synthetic alert used to exercise the pipeline
+   ```
+
+**Verification**
+
+- **Q2.1** Name the three states a Prometheus alert moves through, and state precisely which of them cause Prometheus to send anything to Alertmanager.
+- **Q2.2** What is the role of the `for` clause? If you removed it, how would step 4 change?
+- **Q2.3** The `alerting:` block lives in `prometheus.yml`, but `route:`/`receivers:` live in `alertmanager.yml`. Draw the responsibility line: which component evaluates `expr`, and which component decides the destination channel?
+- **Q2.4** Prometheus keeps re-sending the firing alert to Alertmanager on every evaluation cycle. Why doesn't the operator get spammed once per 15 s?
+
+---
+
+## Exercise 3 — Grouping and the timing knobs
+
+1. Add a second, correlated rule so grouping has something to collapse. Append to `rules/alerts.yml`:
+
+   ```yaml
+         - alert: AlwaysFiringToo
+           expr: vector(1) > 0
+           for: 30s
+           labels:
+             severity: warning
+             team: platform
+           annotations:
+             summary: "Second synthetic alert in the same group"
+   ```
+
+2. Change the Alertmanager `route` so both alerts land in one group and so timings are short enough to observe. Edit `alertmanager.yml`:
+
+   ```yaml
+   route:
+     receiver: 'webhook'
+     group_by: ['team']          # both alerts share team=platform → ONE group
+     group_wait: 10s             # buffer before the FIRST notification of a new group
+     group_interval: 30s         # wait before a notification about CHANGES to an existing group
+     repeat_interval: 2m         # re-send an unchanged, still-firing group after this
+
+   receivers:
+     - name: 'webhook'
+       webhook_configs:
+         - url: 'http://127.0.0.1:5001/'
+   ```
+
+3. Start a throwaway receiver so you can *see* the batched notifications with their timestamps:
+
+   ```bash
+   # terminal 4 — prints every JSON payload Alertmanager POSTs, with a timestamp
+   python3 -m http.server 5001 &   # NO — use the line below instead:
+   ```
+
+   Use this one-liner instead (the stdlib server can't echo bodies):
+
+   ```bash
+   python3 - <<'PY'
+   from http.server import BaseHTTPRequestHandler, HTTPServer
+   import json, datetime
+   class H(BaseHTTPRequestHandler):
+       def do_POST(self):
+           n = int(self.headers.get('Content-Length', 0))
+           body = json.loads(self.rfile.read(n) or b'{}')
+           ts = datetime.datetime.now().strftime('%H:%M:%S')
+           names = [a['labels']['alertname'] for a in body.get('alerts', [])]
+           print(f"[{ts}] status={body.get('status')} groupKey={body.get('groupKey')} alerts={names}")
+           self.send_response(200); self.end_headers()
+       def log_message(self, *a): pass
+   HTTPServer(('127.0.0.1', 5001), H).serve_forever()
+   PY
+   ```
+
+4. Reload Alertmanager (SIGHUP, no restart needed) and force both rules into firing again by restarting Prometheus if necessary:
+
+   ```bash
+   curl -s -X POST http://localhost:9093/-/reload
+   ```
+
+5. Watch terminal 4. You should see **one** payload containing **both** alerts, arriving ~10 s after they became active (that is `group_wait`), then a repeat ~2 min later (`repeat_interval`):
+
+   ```
+   [12:10:41] status=firing groupKey={}:{team="platform"} alerts=['AlwaysFiring', 'AlwaysFiringToo']
+   [12:12:41] status=firing groupKey={}:{team="platform"} alerts=['AlwaysFiring', 'AlwaysFiringToo']
+   ```
+
+**Verification**
+
+- **Q3.1** Define `group_wait`, `group_interval` and `repeat_interval` in one sentence each. Which one governed the ~10 s delay before the first notification? Which one governed the ~2 min repeat?
+- **Q3.2** Both alerts arrived in a **single** POST. Which config line caused that, and what would you set it to if you wanted *one notification per alertname* instead?
+- **Q3.3** A third alert with `team=platform` starts firing 5 s after the first notification was sent. Under the timings above, roughly how long until the operator is told about it, and which knob decides that?
+- **Q3.4** What is the difference between `group_by: []` (empty list) and `group_by: ['...']` with real labels? When is the empty list the right choice?
+
+---
+
+## Exercise 4 — The routing tree, matchers, and `amtool config routes test`
+
+1. Replace the `route` block with a real tree: a default receiver, a critical-severity branch that also continues, and a per-team branch. Edit `alertmanager.yml`:
+
+   ```yaml
+   route:
+     receiver: 'default'
+     group_by: ['alertname']
+     routes:
+       - matchers:
+           - severity="critical"
+         receiver: 'pager'
+         continue: true            # keep evaluating siblings after a match
+       - matchers:
+           - team="database"
+         receiver: 'db-team'
+       - matchers:
+           - team=~"platform|infra"
+         receiver: 'platform-team'
+
+   receivers:
+     - name: 'default'
+       webhook_configs: [{ url: 'http://127.0.0.1:5001/' }]
+     - name: 'pager'
+       webhook_configs: [{ url: 'http://127.0.0.1:5001/pager' }]
+     - name: 'db-team'
+       webhook_configs: [{ url: 'http://127.0.0.1:5001/db' }]
+     - name: 'platform-team'
+       webhook_configs: [{ url: 'http://127.0.0.1:5001/platform' }]
+   ```
+
+2. Validate, then **render the tree** as Alertmanager understands it:
+
+   ```bash
+   amtool check-config alertmanager.yml
+   amtool config routes show --config.file=alertmanager.yml
+   ```
+
+   `routes show` prints an indented tree of matchers → receivers.
+
+3. **Test routing without sending anything** — feed a synthetic label set and see which receiver(s) win:
+
+   ```bash
+   amtool config routes test --config.file=alertmanager.yml severity=critical team=database
+   ```
+
+   Expected (two receivers, because `pager` has `continue: true`):
+
+   ```
+   pager
+   db-team
+   ```
+
+4. Test a label set that only the regex branch matches:
+
+   ```bash
+   amtool config routes test --config.file=alertmanager.yml team=infra
+   ```
+
+   Expected:
+
+   ```
+   platform-team
+   ```
+
+5. Add a hard assertion you can put in CI — fail the pipeline if routing ever changes:
+
+   ```bash
+   amtool config routes test --config.file=alertmanager.yml \
+     --verify.receivers=pager severity=critical team=database
+   echo "exit=$?"
+   ```
+
+   `exit=0` means the expected receiver was among the matches; a non-zero exit means routing regressed.
+
+**Verification**
+
+- **Q4.1** Routing is a **depth-first tree walk**. What does `continue: true` change about that walk, and why did the critical alert reach two receivers in step 3?
+- **Q4.2** A route matches an alert but the alert's labels don't match any of its *child* routes. Which receiver handles it — the parent's, or none?
+- **Q4.3** Write the matcher that selects alerts where `severity` is anything **except** `info`. Then write one that matches `region` against the regex `us-(east|west)-\d`.
+- **Q4.4** Why is `amtool config routes test` considered safer than reloading the live config and watching notifications when validating a routing change?
+
+---
+
+## Exercise 5 — Silences and inhibition (the two ways to suppress)
+
+### Part A — Silences (operator-driven, temporary, label-matched)
+
+1. With `AlwaysFiring` still firing, create a two-hour silence that matches it:
+
+   ```bash
+   amtool silence add alertname=AlwaysFiring severity=warning \
+     --duration=2h --author="$USER" --comment="Planned maintenance window"
+   ```
+
+   Output is the silence UUID:
+
+   ```
+   6ab7f6c1-6d3d-4b8a-9c0e-2e0d0b5a1f22
+   ```
+
+2. Confirm the alert is now **suppressed**, and inspect the silence:
+
+   ```bash
+   amtool silence query
+   amtool alert query --alertmanager.url=$ALERTMANAGER_URL
+   ```
+
+   `amtool silence query` shows the matchers, expiry and author. The alert is still *active* in Alertmanager but its state becomes `suppressed`, so no notification is sent.
+
+3. End the silence early:
+
+   ```bash
+   amtool silence expire 6ab7f6c1-6d3d-4b8a-9c0e-2e0d0b5a1f22
+   ```
+
+   Notifications resume on the next evaluation.
+
+### Part B — Inhibition (rule-driven, one alert mutes another)
+
+4. Add an `inhibit_rules` block to `alertmanager.yml` so a `critical` mutes a `warning` **for the same alert identity**:
+
+   ```yaml
+   inhibit_rules:
+     - source_matchers:
+         - severity="critical"
+       target_matchers:
+         - severity="warning"
+       equal: ['alertname', 'cluster']
+   ```
+
+5. Reload, then inject a critical and a warning that share `alertname` and `cluster` directly into Alertmanager with `amtool` (bypassing Prometheus so you control the labels exactly):
+
+   ```bash
+   curl -s -X POST http://localhost:9093/-/reload
+   amtool alert add alertname=DiskFull cluster=prod severity=critical --annotation=summary="disk full"
+   amtool alert add alertname=DiskFull cluster=prod severity=warning  --annotation=summary="disk high"
+   amtool alert query
+   ```
+
+   Both appear in `alert query`, but the **warning is suppressed by inhibition** — check its state:
+
+   ```bash
+   curl -s http://localhost:9093/api/v2/alerts | \
+     python3 -c 'import sys,json; [print(a["labels"]["severity"], a["status"]["state"], a["status"]["inhibitedBy"]) for a in json.load(sys.stdin)]'
+   ```
+
+   Expected:
+
+   ```
+   critical active []
+   warning suppressed ['<fingerprint-of-critical>']
+   ```
+
+**Verification**
+
+- **Q5.1** State the fundamental difference between a **silence** and an **inhibition** — who creates each, how long each lasts, and what triggers it.
+- **Q5.2** In the inhibit rule, what is the purpose of the `equal:` field? What bug appears if you omit it while keeping the same source/target matchers?
+- **Q5.3** A silenced alert and an inhibited alert both show up in `amtool alert query`. So how do you tell, for a given alert, *why* it isn't notifying?
+- **Q5.4** You created the silence with a matcher on `severity=warning`. If the alert's `severity` label changed to `critical` while the silence was active, would it still be silenced? Explain.
+
+---
+
+## Exercise 6 — Templated receiver and high-availability clustering
+
+1. Add a reusable template file `templates/notifications.tmpl`:
+
+   ```
+   {{ define "slack.custom.text" }}{{ range .Alerts }}*{{ .Labels.alertname }}* ({{ .Labels.severity }})
+   {{ .Annotations.summary }}
+   {{ end }}{{ end }}
+   ```
+
+2. Reference it and use it in a receiver in `alertmanager.yml`:
+
+   ```yaml
+   templates:
+     - 'templates/*.tmpl'
+
+   receivers:
+     - name: 'default'
+       slack_configs:
+         - api_url: 'https://hooks.slack.com/services/T000/B000/XXXX'
+           channel: '#alerts'
+           send_resolved: true
+           title: '[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}'
+           text: '{{ template "slack.custom.text" . }}'
+   ```
+
+3. Validate that the template compiles (this is why `check-config` reports template count):
+
+   ```bash
+   amtool check-config alertmanager.yml
+   ```
+
+   The `Found:` block now shows `1 templates`.
+
+4. Understand HA. Alertmanager is meant to run as a **cluster of ≥2 peers that gossip over port 9094** so a duplicate alert stream (from HA Prometheis) is still notified **once**. Start a two-node local cluster:
+
+   ```bash
+   # node 1
+   alertmanager --config.file=alertmanager.yml \
+     --cluster.listen-address=127.0.0.1:9094 \
+     --web.listen-address=127.0.0.1:9093 \
+     --storage.path=/tmp/am1 &
+
+   # node 2 joins node 1
+   alertmanager --config.file=alertmanager.yml \
+     --cluster.listen-address=127.0.0.1:9095 \
+     --cluster.peer=127.0.0.1:9094 \
+     --web.listen-address=127.0.0.1:9096 \
+     --storage.path=/tmp/am2 &
+   ```
+
+5. Confirm the mesh formed:
+
+   ```bash
+   curl -s http://127.0.0.1:9093/api/v2/status | python3 -c 'import sys,json; s=json.load(sys.stdin)["cluster"]; print("status:", s["status"], "peers:", len(s["peers"]))'
+   ```
+
+   Expected:
+
+   ```
+   status: ready peers: 2
+   ```
+
+   Configure **every** Prometheus to send to **all** peers (not a load balancer):
+
+   ```yaml
+   alerting:
+     alertmanagers:
+       - static_configs:
+           - targets: ['127.0.0.1:9093', '127.0.0.1:9096']
+   ```
+
+**Verification**
+
+- **Q6.1** Why must each Prometheus be configured with **all** Alertmanager peers, rather than a single VIP/load balancer in front of them?
+- **Q6.2** If both peers receive the same firing alert, what mechanism stops the operator from getting two identical pages? Name the concept and the port the peers use to coordinate.
+- **Q6.3** Alertmanager clustering is described as "AP" (from CAP). What does a **partitioned** cluster do — drop notifications, or risk sending duplicates — and why is that the safer default for alerting?
+- **Q6.4** `send_resolved: true` is set. What extra notification does the operator now receive, and which top-level field in the webhook/Slack payload distinguishes it (`firing` vs …)?
+
+---
+
+## Answers
+
+<details>
+<summary>Click to reveal answers</summary>
+
+**Q1.1** `9093/tcp` serves the web UI and the HTTP API (`/api/v2/...`). `9094` (TCP **and** UDP) is the cluster gossip port used by the HashiCorp memberlist protocol for peer state synchronisation. Only `9093` matters for a single-node install.
+
+**Q1.2** It proved the file is **syntactically valid YAML, structurally a legal Alertmanager config, and that all referenced templates compile**. It did **not** prove that the running server has loaded this file, that receivers can actually reach Slack/SMTP/webhooks, or that the routing does what you intend for real label sets. It is a static lint, not a live check.
+
+**Q1.3** The alert is matched, grouped and processed normally, then handed to a receiver that has **no notification integrations**, so nothing is sent — it is a deliberate "swallow" / black-hole. Legitimate uses: a catch-all default so alerts don't error out while you build routing, or an explicit branch for alerts you knowingly want to discard.
+
+**Q2.1** `inactive → pending → firing`. Prometheus sends to Alertmanager **only for alerts in the `firing` state** (and it also sends resolved notifications when a firing alert clears). `pending` alerts — those still inside their `for` window — are never sent.
+
+**Q2.2** `for` requires the `expr` to be continuously true for that duration before the alert transitions from `pending` to `firing`; it debounces flapping/transient spikes. Remove it and the alert goes straight to `firing` on the first true evaluation — in step 4 you would see `firing` immediately with no `pending` phase.
+
+**Q2.3** Prometheus evaluates `expr` on `evaluation_interval`, owns the `for` timer, and generates the alert with its labels/annotations — it decides **when**. Alertmanager receives the firing alert and, via its `route`/`receivers`, decides **who** is notified and **how** — the destination channel. The line: rule evaluation and firing logic = Prometheus; grouping, routing, silencing, inhibition, notification = Alertmanager.
+
+**Q2.4** Alertmanager **deduplicates**. Prometheus re-sends the same alert every cycle as a keep-alive, but Alertmanager keys alerts by their label fingerprint and only notifies according to its own timers (`group_wait`, `group_interval`, `repeat_interval`) — repeated identical sends collapse into one tracked alert.
+
+**Q3.1**
+- `group_wait`: how long to buffer a **newly created** group before the *first* notification, so co-occurring alerts batch together (default 30s). ← governed the ~10 s delay.
+- `group_interval`: how long to wait before sending a notification about **changes** (new/resolved alerts) to a group that has *already* notified (default 5m).
+- `repeat_interval`: how long before **re-sending** a notification for an unchanged, still-firing group (default 4h). ← governed the ~2 min repeat.
+
+**Q3.2** `group_by: ['team']` — both alerts share `team=platform`, so they collapse into one group and one POST. For one notification per alertname, set `group_by: ['alertname']` (or add `alertname` such that the two alerts no longer share every grouping label).
+
+**Q3.3** Roughly `group_interval` (~30 s) after it starts, because the group already exists and already notified — adding an alert is a *change*, which is gated by `group_interval`, not `group_wait`.
+
+**Q3.4** With real labels, Alertmanager creates one group per distinct combination of those label values. `group_by: []` puts **every** alert flowing through that route into a **single** group (aggregate everything into one notification stream). The empty list is right when you want a single digest and never want alerts split apart — e.g. a low-volume catch-all. (Note: `group_by: ['...']` cannot be mixed with the special `'...'` wildcard except via the literal `['...']` form, which groups by *all* labels.)
+
+**Q4.1** The tree is walked depth-first; by default, once a route matches, its subtree handles the alert and **sibling routes are not evaluated**. `continue: true` overrides that: after this route matches, evaluation **continues to sibling routes**, so an alert can be delivered to several receivers. The critical alert matched `pager` (which had `continue: true`) and then also matched the `team="database"` sibling → two receivers.
+
+**Q4.2** The **parent route's** receiver handles it. A matched route always falls back to its own `receiver` if none of its children match — routing never "falls through" to nothing once a parent has matched.
+
+**Q4.3** Not-info: `severity!="info"`. Regex: `region=~"us-(east|west)-\d"`. (Operators: `=` equal, `!=` not-equal, `=~` regex-match, `!~` regex-not-match; regexes are fully anchored.)
+
+**Q4.4** `amtool config routes test` is a **pure, offline simulation** against the config file — it sends no notifications, mutates no state, and needs no running server, so it's safe to run in CI and can't page anyone. Reloading the live config and watching real notifications risks alerting on-call during a test and only exercises the label sets that happen to be firing.
+
+**Q5.1** A **silence** is created by an operator (UI/`amtool`/API), is temporary (has an explicit expiry), and matches alerts by **label matchers** — it says "mute anything matching these labels for N hours." An **inhibition** is defined declaratively in config (`inhibit_rules`), lasts as long as the **source** alert is firing, and is triggered by the *presence of another alert* — "while a critical is firing, mute the related warnings."
+
+**Q5.2** `equal:` lists the labels that must be **identical** between source and target for the inhibition to apply — it scopes suppression to the *same* entity. Omit it and **any** critical alert anywhere would inhibit **every** warning matching the target matcher, cluster-wide — you'd silence unrelated warnings the moment a single unrelated critical fired.
+
+**Q5.3** Query the alert's status via the API (`/api/v2/alerts`) or the UI: the `status.state` is `suppressed` in both cases, but the payload distinguishes the cause — `status.silencedBy` lists silence IDs, and `status.inhibitedBy` lists the fingerprints of the inhibiting source alerts. A non-empty `silencedBy` = silence; a non-empty `inhibitedBy` = inhibition.
+
+**Q5.4** No — silences match on **current label values**. If `severity` changed from `warning` to `critical`, the alert no longer satisfies the `severity=warning` matcher, the silence stops applying, and notifications resume (assuming nothing else suppresses it). Matching is re-evaluated against the alert's live labels, not frozen at silence-creation time.
+
+**Q6.1** Because Alertmanager peers **do not proxy alerts to each other** — each Prometheus must deliver every firing alert to **every** peer independently. The peers then gossip *notification* state to deduplicate. A single VIP would send each alert to only one peer; if that peer died you'd lose alerts, and the surviving peer would never learn about them. Sending to all peers is how the system tolerates a peer failure without gaps.
+
+**Q6.2** Deduplication via the **gossip cluster**: peers share which notifications have already been sent (using memberlist over the cluster port, `9094` by default), and a designated peer sends after a short per-position delay while others hold back, so identical alerts from HA Prometheis produce a single page.
+
+**Q6.3** It is **AP**: under a network partition the peers keep operating independently and will rather **send duplicate notifications** than drop them. For alerting that's the safer failure mode — a duplicate page is annoying, a *missed* page during an incident is dangerous — so Alertmanager favours availability over strict consistency of dedup state.
+
+**Q6.4** With `send_resolved: true`, when a firing alert clears Prometheus sends a **resolved** notification and Alertmanager forwards it, so the operator gets an "all clear." The payload's top-level `status` field is `resolved` (versus `firing`), and each alert object also carries an `endsAt` in the past; templates typically branch on `.Status`/`{{ .Status | toUpper }}` to render it differently.
+
+</details>
