@@ -1,0 +1,7 @@
+generated_at: '2026-08-08T22:04:38'
+lang: es
+translated_from: en
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
