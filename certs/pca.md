@@ -71,119 +71,119 @@ topics:
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Understanding Prometheus Limitations
   topic: 2 - Prometheus Fundamentals
   weight: 4
 - id: '2.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Data Model and Labels
   topic: 2 - Prometheus Fundamentals
   weight: 4
 - id: '2.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Exposition Format
   topic: 2 - Prometheus Fundamentals
   weight: 4
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Metrics
   topic: 3 - Observability Concepts
   weight: 3
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Understand logs and events
   topic: 3 - Observability Concepts
   weight: 3
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Tracing and Spans
   topic: 3 - Observability Concepts
   weight: 3
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Push vs Pull
   topic: 3 - Observability Concepts
   weight: 3
 - id: '3.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Service Discovery
   topic: 3 - Observability Concepts
   weight: 3
 - id: '3.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Basics of SLOs, SLAs, and SLIs
   topic: 3 - Observability Concepts
   weight: 3
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Dashboarding basics
   topic: 4 - Alerting & Dashboarding
   weight: 4.5
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Configuring Alerting rules
   topic: 4 - Alerting & Dashboarding
   weight: 4.5
 - id: '4.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Understand and Use Alertmanager
   topic: 4 - Alerting & Dashboarding
   weight: 4.5
 - id: '4.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Alerting basics (when, what, and why)
   topic: 4 - Alerting & Dashboarding
   weight: 4.5
 - id: '5.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Client Libraries
   topic: 5 - Instrumentation and Exporters
   weight: 4
 - id: '5.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Instrumentation
   topic: 5 - Instrumentation and Exporters
   weight: 4
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Exporters
   topic: 5 - Instrumentation and Exporters
   weight: 4
 - id: '5.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Structuring and naming metrics
   topic: 5 - Instrumentation and Exporters
   weight: 4
