@@ -130,6 +130,28 @@ def _write() -> None:
             row.append(lab_cell(cert_dir, n))
         lines.append("| " + " | ".join(row) + " |")
 
+    # Exam versions: what the material was built on vs what upstream publishes.
+    # Two different questions that used to share one field — see
+    # scripts/check_versions.py for why that made the comparison impossible.
+    sys.path.insert(0, str(REPO / "scripts"))
+    from check_versions import survey as version_survey
+
+    lines += ["", "## Exam versions", "",
+              "`built on` is frozen by `teach cert snapshot` and never touched by a "
+              "sync; `upstream` is refreshed by `teach tracker sync` and never touched "
+              "by a snapshot. **outdated** means upstream changed after we froze — "
+              "re-snapshot and the changed topics go stale automatically. **unknown** "
+              "means unmeasured, not fine.", "",
+              "| Cert | Built on | Snapshot | Upstream | Upstream changed | Checked | State |",
+              "|---|---|---|---|---|---|---|"]
+    MARK = {"current": "✅ current", "outdated": "⚠️ **outdated**", "unknown": "– unknown"}
+    for row in sorted(version_survey(), key=lambda r: (r["state"] != "outdated", r["cert"])):
+        lines.append(
+            f"| `{row['cert']}` | {row['version'] or '–'} | {row['snapshot'] or '–'} "
+            f"| {row['upstream_version'] or '–'} | {row['upstream_changed'] or '–'} "
+            f"| {row['last_checked'] or 'never'} | {MARK[row['state']]} |"
+        )
+
     lines += ["", "## Path Videos", "",
               "| Path | " + " | ".join(l.upper() for l in VIDEO_LANGS) + " |",
               "|---|" + "---|" * len(VIDEO_LANGS)]

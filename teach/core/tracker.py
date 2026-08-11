@@ -97,10 +97,16 @@ def sync_cncf() -> list[str]:
             cert["curriculum_updated"] = updated
             cert["upstream_status"] = "new-version-available"
             changes.append(f"{cert_id}: curriculum changed -> {updated}")
+        # `tracked_version` records what UPSTREAM publishes. What our material was
+        # built on lives in the syllabus frontmatter (`version` + `snapshot_date`),
+        # written by `teach cert snapshot` and never touched here — otherwise a
+        # sync would silently rewrite the record of what we froze, and "is our
+        # content current?" would become unanswerable by the act of asking.
+        # scripts/check_versions.py compares the two.
         semantic = re.search(r"v(\d+\.\d+)", name)
         if semantic and cert.get("tracked_version") != semantic.group(1):
             cert["tracked_version"] = semantic.group(1)
-            changes.append(f"{cert_id}: version -> {semantic.group(1)}")
+            changes.append(f"{cert_id}: upstream version -> {semantic.group(1)}")
     catalog.save(data)
     return changes or ["cncf: no upstream changes"]
 

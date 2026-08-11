@@ -1,0 +1,6 @@
+generated_at: '2026-08-11T03:07:12'
+lang: en
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
