@@ -14,6 +14,8 @@ configuration in one command instead of prose someone has to remember.
     scripts/steer.py languages kcsa en es pt          # what it must have
     scripts/steer.py video kcsa en es                 # which videos to render
     scripts/steer.py budget 3                         # topics per run
+    scripts/steer.py milestone lpic-3-306 en es       # what the timer works toward
+    scripts/steer.py milestone --clear                # timer idles
 
 Idempotent: setting a value it already has changes nothing and says so. It
 rewrites only the keys you name, never reformats the rest of the file, and
@@ -130,6 +132,9 @@ def main() -> int:
     p = sub.add_parser("languages"); p.add_argument("cert"); p.add_argument("langs", nargs="+")
     p = sub.add_parser("video"); p.add_argument("cert"); p.add_argument("langs", nargs="*")
     p = sub.add_parser("budget"); p.add_argument("topics", type=int)
+    p = sub.add_parser("milestone")
+    p.add_argument("cert", nargs="?"); p.add_argument("langs", nargs="*")
+    p.add_argument("--clear", action="store_true")
     args = parser.parse_args()
 
     if args.command == "show":
@@ -173,6 +178,48 @@ def main() -> int:
             raise SystemExit(f"Piper has no voice for: {', '.join(mute)}. "
                              f"Available: {', '.join(sorted(video.VOICES))}")
         changed = set_key(args.cert, "video", "[" + ", ".join(args.langs) + "]")
+
+    elif args.command == "milestone":
+        # The bounded goal the unattended timer works toward, and the only thing
+        # it may work on. Cleared means it generates nothing — an unset goal must
+        # never read as "everything", which is what it did before this existed.
+        text = PIPELINE.read_text()
+        lines = text.splitlines()
+        start = next((i for i, l in enumerate(lines) if l.startswith("milestone:")), None)
+        if start is None:
+            raise SystemExit("pipeline.yaml has no `milestone:` block")
+        end = next((i for i in range(start + 1, len(lines))
+                    if lines[i] and not lines[i].startswith(" ")), len(lines))
+
+        if args.clear:
+            block = ["milestone:", "  name: none", "  targets: {}"]
+        else:
+            if not args.cert:
+                raise SystemExit("Name a certification, or pass --clear.")
+            if not (REPO / "certs" / f"{args.cert}.md").exists():
+                raise SystemExit(f"No syllabus at certs/{args.cert}.md")
+            langs = args.langs or pipeline.languages_for(args.cert)
+            unknown = [l for l in langs if l not in certs.LANGS]
+            if unknown:
+                raise SystemExit(f"Not supported: {', '.join(unknown)}")
+            # A goal outside the active pipeline can never be met, and an
+            # unattended process retrying an impossible goal forever is worse
+            # than one with no goal at all.
+            if args.cert not in pipeline.certs():
+                raise SystemExit(f"{args.cert} is not active — activate it first, "
+                                 f"or the timer would work toward something it is "
+                                 f"not allowed to touch.")
+            block = ["milestone:", f"  name: {args.cert} in {', '.join(langs)}",
+                     "  targets:", f"    {args.cert}: [{', '.join(langs)}]"]
+
+        if lines[start:end] == block:
+            print("The milestone is already that — nothing to do.")
+            return 0
+        lines[start:end] = block
+        PIPELINE.write_text("\n".join(lines) + "\n")
+        print("milestone -> " + ("(none: the timer will not generate)"
+                                 if args.clear else block[1].split(": ", 1)[1]))
+        changed = True
 
     elif args.command == "budget":
         if not 1 <= args.topics <= 10:

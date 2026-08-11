@@ -224,6 +224,8 @@ def main() -> None:
     if n_fenced:
         print(f"Archivos con fence ```markdown envolvente arreglados en el lugar: {n_fenced}", flush=True)
     bad = sorted(find_bad_combos())
+    all_bad = list(bad)   # before ownership, so the milestone can tell
+                          # "finished" from "someone else's to finish"
     # Only this agent's certifications. The timer runs on the owner's Claude
     # subscription, so letting it generate LPI work that Antigravity produces with
     # its own plan spends the scarcer quota on the wrong half. Ownership lives in
@@ -244,11 +246,25 @@ def main() -> None:
     # that treats "unspecified" as "everything" is the failure this prevents.
     if "--milestone" in sys.argv:
         goal = pipeline.milestone()
-        scoped = [c for c in bad if pipeline.in_milestone(c[0], c[2])]
         if pipeline.milestone_targets() is None:
             print("No milestone declared in pipeline.yaml, so there is nothing to "
                   "work toward and nothing will be generated. Set one with "
                   "`scripts/steer.py milestone <cert> <langs...>`.", flush=True)
+            return
+        scoped = [c for c in bad if pipeline.in_milestone(c[0], c[2])]
+        # Measured against the queue BEFORE ownership was applied, because
+        # "finished" and "not mine to do" are different states that produce the
+        # same empty list. Reporting the second as the first would have this
+        # timer announce a goal complete while another agent had not started it.
+        in_scope_anywhere = [c for c in all_bad if pipeline.in_milestone(c[0], c[2])]
+        if not scoped and in_scope_anywhere:
+            others = sorted({c[0] for c in in_scope_anywhere})
+            print(f"Milestone NOT met and not mine to do: "
+                  f"{goal.get('name') or 'declared goal'} needs "
+                  f"{len(in_scope_anywhere)} combos in {', '.join(others)}, owned by "
+                  f"another agent. Either reassign it "
+                  f"(`scripts/steer.py own {others[0]} {pipeline.me()}`) or set a "
+                  f"goal this agent can finish.", flush=True)
             return
         if not scoped:
             print(f"Milestone met: {goal.get('name') or 'declared goal'} — "
