@@ -1,0 +1,32 @@
+cert: lpic-3-305
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Dominá la virtualización y contenedores en Linux
+    voiceover: Si querés llevar tus conocimientos de Linux al nivel profesional más
+      alto, el examen LPIC-3 305-300 es tu siguiente paso. Esta certificación valida
+      al 100% tu dominio avanzado en virtualización y contenedores empresariales.
+      Con una vigencia de 5 años, demuestra tu capacidad para gestionar infraestructuras
+      modernas.
+  audience:
+    title: ¿Para quién es?
+    voiceover: Está diseñada para profesionales que ya cuentan con experiencia en
+      Linux y buscan certificar su especialización técnica. Es ideal si querés consolidar
+      tu perfil en administración de entornos virtualizados y contenedores a nivel
+      profesional.
+    bullets:
+    - Administradores de sistemas Linux de nivel avanzado
+    - Especialistas en infraestructura y virtualización empresarial
+    - Ingenieros orientados a la gestión de contenedores y despliegue
+  cta:
+    title: Comenzá hoy en Cert Landscape
+    voiceover: Preparate para el examen LPIC-3 305-300 con nuestros recursos especializados.
+      Sumate a Cert Landscape y da el siguiente salto en tu carrera.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Virtualization and Containerization con 100.0%.
+    domains:
+    - name: Virtualization and Containerization
+      weight: 100.0

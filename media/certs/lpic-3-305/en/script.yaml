@@ -1,0 +1,30 @@
+cert: lpic-3-305
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master Enterprise Virtualization and Containerization Skills
+    voiceover: Ready to take your Linux expertise to the highest professional level?
+      The LPIC-3 Virtualization and Containerization exam 305-300 validates your ability
+      to plan, execute, and manage enterprise virtualized environments and container
+      deployments. It represents a key professional milestone valid for 5 years.
+  audience:
+    title: Who Is This Certification For
+    voiceover: This professional certification is built for experienced Linux administrators
+      and infrastructure engineers looking to validate specialized skills. It focuses
+      100% on virtualization and containerization techniques across enterprise systems.
+    bullets:
+    - Experienced Linux system administrators
+    - DevOps and container infrastructure engineers
+    - Cloud engineers managing virtualized environments
+  cta:
+    title: Ready to Earn Your LPIC-3?
+    voiceover: Start preparing for the LPIC-3 305-300 exam today with structured practice
+      tools on Cert Landscape.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Virtualization and Containerization at 100.0%.
+    domains:
+    - name: Virtualization and Containerization
+      weight: 100.0
