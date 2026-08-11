@@ -58,7 +58,7 @@ import yaml
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from teach.core.tracker import objective_ids as _objective_ids  # noqa: E402
+from teach.core.tracker import fetch_text, objective_ids as _objective_ids  # noqa: E402
 
 # The same definition the snapshot validates against, imported rather than
 # repeated: two copies of "what counts as an objective" would drift, and the
@@ -124,10 +124,13 @@ def upstream_objectives(sources: list[str]) -> tuple[int | None, str | None]:
         if "objectives" not in url:
             continue
         try:
-            request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-            with urllib.request.urlopen(request, timeout=30) as response:
-                body = response.read().decode("utf-8", "replace")
-        except (urllib.error.URLError, TimeoutError, OSError):
+            # The same extraction the snapshot reads, not the raw HTML: markup
+            # between an id and the word "Removed" hides a withdrawn objective
+            # from the filter, and the two paths then disagree about the same
+            # page — which is how this check reported lpic-1 one objective short
+            # of a syllabus that is complete.
+            body = fetch_text(url)
+        except Exception:
             continue
         # The page repeats each id in a summary and again in the detail.
         found = _objective_ids(body)

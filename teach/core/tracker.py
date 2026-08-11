@@ -233,6 +233,12 @@ def _apply_snapshot_status(
 # return four topics from a document that numbers thirteen.
 OBJECTIVE_ID = re.compile(r"\b(\d{3})\.([1-9]\d?)\b")
 
+# Syllabi keep retired objectives in the numbering so the ids of the survivors do
+# not shift: LPIC-1 prints "104.4 Removed" between 104.3 and 104.5. Counting it
+# would demand a topic for something the exam no longer asks about — and did,
+# rejecting a correct 42-topic extraction for being one short of a phantom.
+WITHDRAWN = re.compile(r"\s*(removed|retired|deleted|withdrawn)\b", re.I)
+
 
 def objective_ids(text: str) -> set[str]:
     """Numbered objectives present in a syllabus document.
@@ -247,10 +253,42 @@ def objective_ids(text: str) -> set[str]:
     That rule is a property of the numbering, not a list of strings to maintain.
     """
     areas: dict[str, set[int]] = {}
-    for area, index in OBJECTIVE_ID.findall(text):
-        areas.setdefault(area, set()).add(int(index))
+    for match in OBJECTIVE_ID.finditer(text):
+        if WITHDRAWN.match(text, match.end()):
+            continue
+        area, index = match.group(1), int(match.group(2))
+        areas.setdefault(area, set()).add(index)
     return {f"{area}.{i}" for area, indexes in areas.items()
             if 1 in indexes for i in indexes}
+
+
+def normalise_weights(topics: list[dict]) -> None:
+    """Scale the published weights to percentages summing to exactly 100.
+
+    Syllabi publish on their own scale — LPI's 305 objectives total 57, CNCF gives
+    one percentage per domain — and the schema wants percentages. Asking the model
+    to convert made it do arithmetic, and it came back 5% over on the first real
+    document: correct extraction, thrown away for a rounding error.
+
+    So the model copies the printed number and this does the sum. Largest
+    remainder, so the parts are as close to proportional as two decimals allow and
+    the total is exactly 100 rather than 99.99 — which matters only because the
+    total is checked, and a check that fails on rounding gets deleted eventually.
+    """
+    raw = [float(t.get("weight") or 0) for t in topics]
+    total = sum(raw)
+    if total <= 0:
+        raise TrackerError("Every extracted topic has weight 0 — nothing was read.")
+
+    scaled = [w * 100 / total for w in raw]
+    floors = [int(w * 100) for w in scaled]          # hundredths, rounded down
+    short = 10000 - sum(floors)
+    order = sorted(range(len(scaled)), key=lambda i: scaled[i] * 100 - floors[i],
+                   reverse=True)
+    for i in order[:short]:
+        floors[i] += 1
+    for topic, hundredths in zip(topics, floors):
+        topic["weight"] = round(hundredths / 100, 2)
 
 
 def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None:
@@ -268,13 +306,20 @@ def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None
     """
     upstream = objective_ids(text)
     if upstream and len(topics) < len(upstream):
-        missing = len(upstream) - len(topics)
+        # When the extraction adopted the document's own numbering, the set
+        # difference names the objectives that would be missing — which turns
+        # "one short" from something to argue about into something to look up.
+        got = {str(t.get("id")) for t in topics}
+        missing = sorted(upstream - got,
+                         key=lambda s: tuple(int(p) for p in s.split(".")))
+        detail = (f" Missing: {', '.join(missing)}." if missing and got & upstream
+                  else "")
         raise TrackerError(
             f"{url} numbers {len(upstream)} objectives and the extraction returned "
-            f"{len(topics)} topics — {missing} would never be written. Either the "
-            f"URL points at an overview page instead of the objectives, or the "
-            f"extraction collapsed objectives into their chapter headings. "
-            f"Snapshot not saved."
+            f"{len(topics)} topics — {len(upstream) - len(topics)} would never be "
+            f"written.{detail} Either the URL points at an overview page instead of "
+            f"the objectives, or the extraction collapsed objectives into their "
+            f"chapter headings. Snapshot not saved."
         )
 
     # A weighting nobody read. `sum == 100` was the only rule this ever had, and
@@ -324,14 +369,14 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         "empty topics list rather than inventing a level of detail it does not "
         "have — that means the wrong page was fetched, and it will be fixed at the "
         "source instead of guessed at here.\n"
-        "'weight': many syllabi publish weights that do not sum to 100 (LPI totals "
-        "about 57; CNCF gives one percentage per whole domain). Normalise, never "
-        "invent: scale published per-objective weights so the total is 100, or "
-        "split a domain percentage among the objectives inside it (20% over 4 "
-        "objectives is 5 each). The weights of ALL topics must sum to exactly 100, "
-        "and must reflect the relative importance the document states — if they "
-        "come out all equal, that is a sign the weights were computed from the "
-        "count instead of read.",
+        "'weight': copy the number the document prints for that objective, on "
+        "whatever scale it uses — LPI prints per-objective weights totalling about "
+        "57, and that is the right answer, not 100. Do NOT rescale: the totals are "
+        "normalised in code afterwards, and arithmetic done here is arithmetic that "
+        "can be wrong. The only case that needs judgement is a document that weights "
+        "whole domains and not the objectives inside them (CNCF does this): split "
+        "the domain's percentage evenly among its objectives, and say so by using "
+        "the same value for those siblings only.",
     )
     topics = result.get("topics") or []
     if not topics:
@@ -340,6 +385,10 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
             f"wrong page: an overview page describes a certification and does not list "
             f"its objectives. Point catalog.yaml at the objectives document."
         )
+
+    # Published scale -> percentages, in code. Scaling stays proportional, so the
+    # uniformity check below still sees weights computed from a count as uniform.
+    normalise_weights(topics)
 
     # Check the answer against the document it came from, before anything is
     # written. Both facts are derived from the fetched text, so this is not

@@ -40,6 +40,13 @@ class SyllabusCoverageTests(unittest.TestCase):
         ids = tracker.objective_ids(self.PAGE + " 160.5 100.00")
         self.assertEqual(len(ids), 13)
 
+    def test_does_not_count_an_objective_the_exam_withdrew(self):
+        # LPIC-1 prints "104.4 Removed" so the surviving ids keep their numbers.
+        # Counting it demanded a topic for something the exam no longer asks,
+        # and rejected a correct 42-topic extraction for missing a phantom.
+        page = "104.1 Partitions 104.2 Integrity 104.3 Mounting 104.4 Removed 104.5 Permissions"
+        self.assertEqual(tracker.objective_ids(page), {"104.1", "104.2", "104.3", "104.5"})
+
     def test_unnumbered_document_yields_nothing_rather_than_a_pass(self):
         self.assertEqual(tracker.objective_ids("Domain 1: Full Virtualization"), set())
 
@@ -56,6 +63,22 @@ class SyllabusCoverageTests(unittest.TestCase):
         with self.assertRaises(tracker.TrackerError) as caught:
             tracker._reject_unreadable_syllabus(topics, "no numbering here", "u")
         self.assertIn("divided", str(caught.exception))
+
+    def test_normalises_a_published_scale_to_exactly_one_hundred(self):
+        # LPIC-3 305 prints weights totalling 57. The first real extraction was
+        # correct and was thrown away because the model rescaled them to 105.26.
+        topics = [{"id": f"351.{i}", "weight": w} for i, w in
+                  enumerate([6, 3, 4, 9, 3, 7, 6, 9, 3, 2, 2, 3, 3], 1)]
+        tracker.normalise_weights(topics)
+        self.assertEqual(round(sum(t["weight"] for t in topics), 2), 100.0)
+        # Proportions survive: Libvirt (9) stays three times Xen (3).
+        self.assertAlmostEqual(topics[3]["weight"] / topics[1]["weight"], 3.0, places=1)
+
+    def test_normalising_does_not_disguise_weights_taken_from_the_count(self):
+        topics = [{"id": f"1.{i}", "weight": 5} for i in range(1, 5)]
+        tracker.normalise_weights(topics)
+        with self.assertRaises(tracker.TrackerError):
+            tracker._reject_unreadable_syllabus(topics, "no numbering", "u")
 
     def test_accepts_a_full_extraction(self):
         topics = [{"id": f"351.{i}", "weight": w} for i, w in
