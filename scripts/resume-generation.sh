@@ -44,7 +44,12 @@ fi
     # every target, with no --topic, which generates EVERY pending topic for
     # that combination. Unbounded, and contradicting the deliberate pacing.
     # It was redundant too: the audit already enumerates the same queue.
-    "$REPO/.venv/bin/python3" "$REPO/scripts/fix_corrupted_content.py"
+    # --milestone: work ONLY toward the goal declared in pipeline.yaml, and stop
+    # when it is met. Without it this drains everything pending, which is not a
+    # bounded amount of work — re-snapshotting seven syllabi on 2026-08-11 put
+    # 162 topics into the queue in one commit, and an unattended process would
+    # have started on all of them overnight. No milestone set means no work.
+    "$REPO/.venv/bin/python3" "$REPO/scripts/fix_corrupted_content.py" --milestone
 
     # Refresh the matrix here too. `make cert` and `make publish` already do it,
     # but THIS is the path that does most of the generating, so leaving it out

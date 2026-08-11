@@ -64,6 +64,48 @@ def is_retryable(message: str) -> bool:
     return any(marker.lower() in text for marker in budget().get("retry_errors") or [])
 
 
+def milestone() -> dict:
+    """The bounded goal the unattended timer is working toward, or {}.
+
+    The timer used to derive its queue from every active certification, which
+    means it works until nothing is pending — and "nothing is pending" is not a
+    state this repository reaches: re-snapshotting seven syllabi put 162 topics
+    back in the queue in one commit, and the timer would have started on all of
+    them overnight without anyone choosing that.
+
+    A milestone is the opposite shape: a named, finite thing to finish. The timer
+    works only inside it and stops when it is met, so leaving the machine running
+    has a defined end instead of an open-ended spend.
+
+    Empty is the safe default and means the timer generates nothing at all — an
+    unset goal must not read as "everything".
+    """
+    return dict(load().get("milestone") or {})
+
+
+def milestone_targets() -> list[tuple[str, list[str]]] | None:
+    """[(cert, [langs])] for the milestone, or None when none is declared.
+
+    None and [] mean different things and both matter: None is "no goal set, do
+    nothing", [] would be "a goal that names no work", and returning the full
+    target list for either is how an unattended process quietly becomes unbounded.
+    """
+    goal = milestone()
+    declared = goal.get("targets")
+    if not declared:
+        return None
+    return [(cert, list(langs) if langs else languages_for(cert))
+            for cert, langs in declared.items()]
+
+
+def in_milestone(cert_id: str, lang: str) -> bool:
+    """Is this cert/language part of the declared goal?"""
+    targets_ = milestone_targets()
+    if targets_ is None:
+        return False
+    return any(cert == cert_id and lang in langs for cert, langs in targets_)
+
+
 def certs(active_only: bool = True) -> dict[str, dict]:
     """Certifications declared in the pipeline, as {cert_id: config}."""
     declared = load().get("certs") or {}

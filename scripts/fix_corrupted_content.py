@@ -235,6 +235,31 @@ def main() -> None:
         print(f"Skipping {skipped} combos owned by another agent "
               f"({', '.join(others)}); I am '{pipeline.me()}'.", flush=True)
     bad = mine
+
+    # `--milestone` narrows the queue to the declared goal and is how the
+    # unattended timer runs. Without it the timer works until nothing is pending,
+    # and "nothing is pending" is not a state this repository reaches — one
+    # commit re-snapshotting seven syllabi put 162 topics back in the queue.
+    # A goal that is not set means no work, never all work: an unattended process
+    # that treats "unspecified" as "everything" is the failure this prevents.
+    if "--milestone" in sys.argv:
+        goal = pipeline.milestone()
+        scoped = [c for c in bad if pipeline.in_milestone(c[0], c[2])]
+        if pipeline.milestone_targets() is None:
+            print("No milestone declared in pipeline.yaml, so there is nothing to "
+                  "work toward and nothing will be generated. Set one with "
+                  "`scripts/steer.py milestone <cert> <langs...>`.", flush=True)
+            return
+        if not scoped:
+            print(f"Milestone met: {goal.get('name') or 'declared goal'} — "
+                  f"{len(bad)} combos are pending elsewhere and are deliberately "
+                  f"not being worked on. Set the next goal with "
+                  f"`scripts/steer.py milestone <cert> <langs...>`.", flush=True)
+            return
+        print(f"Milestone: {goal.get('name') or 'declared goal'} — "
+              f"{len(scoped)} of {len(bad)} pending combos are in scope.", flush=True)
+        bad = scoped
+
     # "pending" rather than "corrupt": now that targets come from pipeline.yaml,
     # this list mixes damaged content with content simply not generated yet for
     # a declared language. For regeneration it makes no difference, but calling

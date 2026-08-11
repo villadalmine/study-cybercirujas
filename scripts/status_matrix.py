@@ -37,7 +37,8 @@ def cert_topics(cert_id: str) -> list[dict]:
     return front.get("topics") or []
 
 
-def lang_cell(cert_dir: Path, lang: str, n: int, wanted: bool = True) -> str:
+def lang_cell(cert_dir: Path, lang: str, n: int, wanted: bool = True,
+              topic_ids: list[str] | None = None) -> str:
     """Count only material that meets the quality floor in pipeline.yaml.
 
     `wanted` is whether the certification declares this language at all. A cert
@@ -53,8 +54,17 @@ def lang_cell(cert_dir: Path, lang: str, n: int, wanted: bool = True) -> str:
     """
     if not wanted:
         return "–"
-    files = list(cert_dir.glob(f"*/{lang}/content.md"))
-    exercises = list(cert_dir.glob(f"*/{lang}/exercises.md"))
+    # Enumerate topics from the syllabus, never from disk. Globbing counts any
+    # directory that happens to be there, including topics a re-snapshot removed:
+    # lpic-3-305 read "16/13c" because the three chapter-level directories from
+    # the old syllabus were still on disk and were counted as progress toward the
+    # thirteen objectives that replaced them. The audit learned this in
+    # 2026-07-16; the matrix did not, so the two disagreed about the same tree.
+    ids = topic_ids if topic_ids is not None else [d.name for d in cert_dir.iterdir()
+                                                   if d.is_dir()]
+    files = [p for p in (cert_dir / t / lang / "content.md" for t in ids) if p.exists()]
+    exercises = [p for p in (cert_dir / t / lang / "exercises.md" for t in ids)
+                 if p.exists()]
     c = sum(1 for f in files if not quality.check_file(f))
     e = sum(1 for f in exercises if not quality.check_file(f))
     below = (len(files) - c) + (len(exercises) - e)
@@ -67,8 +77,12 @@ def lang_cell(cert_dir: Path, lang: str, n: int, wanted: bool = True) -> str:
     return f"{cell} ⚠️{below}" if below else cell
 
 
-def lab_cell(cert_dir: Path, n: int) -> str:
-    lab = len(list(cert_dir.glob("*/lab/break_fix.sh")))
+def lab_cell(cert_dir: Path, n: int, topic_ids: list[str] | None = None) -> str:
+    # Same reason as lang_cell: a lab under a topic the syllabus no longer
+    # has is not progress toward the topics it does have.
+    ids = topic_ids if topic_ids is not None else [d.name for d in
+                                                   cert_dir.iterdir() if d.is_dir()]
+    lab = sum(1 for t in ids if (cert_dir / t / "lab" / "break_fix.sh").exists())
     if lab == n:
         return "✅"
     if lab == 0:
@@ -126,8 +140,10 @@ def _write() -> None:
         else:
             row = [f"`{cert_id}`", str(n)]
             declared = set(pipeline.languages_for(cert_id))
-            row += [lang_cell(cert_dir, lang, n, lang in declared) for lang in LANGS]
-            row.append(lab_cell(cert_dir, n))
+            ids = [str(topic['id']) for topic in topics]
+            row += [lang_cell(cert_dir, lang, n, lang in declared, ids)
+                    for lang in LANGS]
+            row.append(lab_cell(cert_dir, n, ids))
         lines.append("| " + " | ".join(row) + " |")
 
     # Exam versions: what the material was built on vs what upstream publishes.

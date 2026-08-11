@@ -1,0 +1,6 @@
+generated_at: '2026-08-11T07:57:25'
+lang: es
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://www.lpi.org/our-certifications/exam-305-objectives/

@@ -143,6 +143,25 @@ quality:
 #                     it cannot be rendered at all (see BACKLOG.md).
 #                     English goes first here for the same reason it does above:
 #                     it is what gets authored, and the rest is translated.
+# What the unattended timer is working toward — and the ONLY thing it may work
+# on. Set it, and leaving the machine running has a defined end: the timer stops
+# when the goal is met instead of moving on to whatever else is pending.
+#
+# It exists because the timer used to derive its queue from every active
+# certification, i.e. it worked until nothing was pending — and that is not a
+# state this repository reaches. Re-snapshotting seven LPI syllabi on 2026-08-11
+# put 162 topics back in the queue in a single commit, and the timer would have
+# started on all of them overnight without anyone choosing that.
+#
+# An EMPTY milestone means the timer generates nothing. That is deliberate: an
+# unset goal must not read as "everything". Set it with
+#     scripts/steer.py milestone lpic-3-305 en es
+#     scripts/steer.py milestone --clear        # timer idles
+milestone:
+  name: lpic-3-305 complete in English and Spanish
+  targets:
+    lpic-3-305: [en, es]
+
 certs:
   lpic-1:
     active: true
