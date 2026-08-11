@@ -3,7 +3,8 @@ cert: lpic-1
 exam: 101-500 + 102-500
 snapshot_date: '2026-08-05'
 sources:
-- https://www.lpi.org/our-certifications/lpic-1-overview/
+- https://www.lpi.org/our-certifications/exam-101-objectives/
+- https://www.lpi.org/our-certifications/exam-102-objectives/
 topics:
 - id: '1.1'
   sources:

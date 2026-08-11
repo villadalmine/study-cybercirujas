@@ -24,7 +24,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpi-020-100.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/security-essentials-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-020-objectives/
     level: essentials
     validity: lifetime
     requires: []
@@ -38,7 +38,7 @@ certs:
     last_checked: '2026-08-05'
     file: certs/lpic-1.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-1-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
     level: professional
     validity: 5 años
     requires: []
@@ -52,7 +52,7 @@ certs:
     last_checked: '2026-08-05'
     file: certs/lpic-2.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-2-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-201-objectives/
     level: professional
     validity: 5 años
     requires:
@@ -67,7 +67,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpic-3-300.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-3-300-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-300-objectives/
     level: professional
     validity: 5 años
     requires:
@@ -82,7 +82,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpic-3-303.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-3-303-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-303-objectives/
     level: professional
     validity: 5 años
     requires:
@@ -97,7 +97,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpic-3-305.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-3-305-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-305-objectives/
     level: professional
     validity: 5 años
     requires:
@@ -112,7 +112,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpic-3-306.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/lpic-3-306-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-306-objectives/
     level: professional
     validity: 5 años
     requires:
@@ -127,7 +127,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpi-devops.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/devops-tools-engineer-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-701-objectives/
     level: specialty
     validity: 5 años
     requires: []
@@ -404,7 +404,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpi-030-100.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/web-development-essentials-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-030-objectives/
     level: essentials
     validity: lifetime
     requires: []
@@ -418,7 +418,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpi-050-100.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/open-source-essentials-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-050-objectives/
     level: essentials
     validity: lifetime
     requires: []
@@ -432,7 +432,7 @@ certs:
     last_checked: '2026-08-06'
     file: certs/lpi-702.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/bsd-specialist-overview/
+      objectives: https://www.lpi.org/our-certifications/exam-702-objectives/
     level: specialty
     validity: 5 años
     requires: []

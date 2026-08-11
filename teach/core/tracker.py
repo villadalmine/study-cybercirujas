@@ -227,6 +227,68 @@ def _apply_snapshot_status(
     return added, stale, edited_changed
 
 
+# Exams that number their objectives do it as <area>.<index>, with a three-digit
+# area: LPI publishes 351.1, 301.2. Counting the distinct ids IN THE FETCHED TEXT
+# is what makes the extraction checkable against its own input — the model cannot
+# return four topics from a document that numbers thirteen.
+OBJECTIVE_ID = re.compile(r"\b(\d{3})\.([1-9]\d?)\b")
+
+
+def objective_ids(text: str) -> set[str]:
+    """Numbered objectives present in a syllabus document.
+
+    Empty when the document does not number its objectives — CNCF curricula and
+    the Essentials-level LPI exams do not — and an empty set means "this check
+    does not apply here", never "the document is fine". A check that cannot see
+    something must say so rather than pass.
+
+    Ids come in runs starting at 1, so an area with no `.1` is page furniture: a
+    price ("160.5") and a percentage ("100.00") both match the shape otherwise.
+    That rule is a property of the numbering, not a list of strings to maintain.
+    """
+    areas: dict[str, set[int]] = {}
+    for area, index in OBJECTIVE_ID.findall(text):
+        areas.setdefault(area, set()).add(int(index))
+    return {f"{area}.{i}" for area, indexes in areas.items()
+            if 1 in indexes for i in indexes}
+
+
+def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None:
+    """Refuse a topic list that the source document does not support.
+
+    Both checks exist because of the same incident: seven LPI certifications were
+    snapshotted from their *overview* page — which lists chapter titles and no
+    objectives — and the extraction dutifully returned the chapter titles. The
+    material generated from them is well written and covers about a quarter of
+    each exam. Every per-file check passed, because every file was fine; the list
+    of files was the defect.
+
+    Nothing here is specific to a vendor or an exam. Both facts are derived from
+    the document that was actually fetched, so they hold for any syllabus.
+    """
+    upstream = objective_ids(text)
+    if upstream and len(topics) < len(upstream):
+        missing = len(upstream) - len(topics)
+        raise TrackerError(
+            f"{url} numbers {len(upstream)} objectives and the extraction returned "
+            f"{len(topics)} topics — {missing} would never be written. Either the "
+            f"URL points at an overview page instead of the objectives, or the "
+            f"extraction collapsed objectives into their chapter headings. "
+            f"Snapshot not saved."
+        )
+
+    # A weighting nobody read. `sum == 100` was the only rule this ever had, and
+    # dividing 100 by the topic count satisfies it exactly — so the guardrail was
+    # passed most easily by the worst available answer.
+    weights = [round(float(t.get("weight") or 0), 2) for t in topics]
+    if len(topics) > 2 and max(weights) - min(weights) < 0.02:
+        raise TrackerError(
+            f"all {len(topics)} weights came back as {weights[0]:g}, which is 100 divided "
+            f"by the topic count rather than anything the exam publishes. Real syllabi "
+            f"weight objectives by importance. Snapshot not saved."
+        )
+
+
 def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = False) -> dict:
     """Freeze the official syllabus into the MD: fetch objectives (HTML/PDF) -> AI -> topics."""
     data = catalog.load()
@@ -253,18 +315,37 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         "version: <versión del temario si aparece, si no 'unknown'>\n"
         "topics:\n  - id: '1.1'\n    title: ...\n    topic: '1 - <nombre del dominio>'\n"
         "    weight: <número, el % que ESE SUB-TEMA vale del examen total>\n"
-        "Cubrí TODOS los dominios/temas del documento, en orden. Si el documento "
-        "solo tiene dominios (sin subtemas numerados), usá el dominio como topic y "
-        "sus bullets principales como topics con ids '1.1', '1.2', etc.\n"
-        "IMPORTANTE sobre 'weight': muchos temarios de CNCF dan el porcentaje "
-        "SOLO a nivel de dominio completo (ej. 'Domain 1: 20%' con 4 sub-temas "
-        "adentro). En ese caso NO copies ese 20% en cada sub-tema — repartilo "
-        "entre ellos (20/4 = 5 cada uno). La suma de los weight de TODOS los "
-        "topics del YAML debe dar exactamente 100.",
+        "One entry per NUMBERED OBJECTIVE — the deepest numbered level the document "
+        "has. If it numbers 351.1, 351.2 … 353.4, that is 13 entries and 13 is the "
+        "answer; the chapter headings ('351 Full Virtualization') go in 'topic', "
+        "never in place of the objectives underneath them. Returning the headings "
+        "loses most of the exam.\n"
+        "If the document has no numbered objectives at all, say so by returning an "
+        "empty topics list rather than inventing a level of detail it does not "
+        "have — that means the wrong page was fetched, and it will be fixed at the "
+        "source instead of guessed at here.\n"
+        "'weight': many syllabi publish weights that do not sum to 100 (LPI totals "
+        "about 57; CNCF gives one percentage per whole domain). Normalise, never "
+        "invent: scale published per-objective weights so the total is 100, or "
+        "split a domain percentage among the objectives inside it (20% over 4 "
+        "objectives is 5 each). The weights of ALL topics must sum to exactly 100, "
+        "and must reflect the relative importance the document states — if they "
+        "come out all equal, that is a sign the weights were computed from the "
+        "count instead of read.",
     )
     topics = result.get("topics") or []
     if not topics:
-        raise TrackerError("The AI extracted no topics from the document")
+        raise TrackerError(
+            f"No topics could be extracted from {url}. If the page loads, it is the "
+            f"wrong page: an overview page describes a certification and does not list "
+            f"its objectives. Point catalog.yaml at the objectives document."
+        )
+
+    # Check the answer against the document it came from, before anything is
+    # written. Both facts are derived from the fetched text, so this is not
+    # specific to a vendor, an exam, or a page layout.
+    _reject_unreadable_syllabus(topics, text, url)
+
     stale_at = datetime.datetime.now().isoformat(timespec="seconds")
     added, stale, edited_changed = _apply_snapshot_status(topics, existing, url, stale_at)
 

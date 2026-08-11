@@ -3,7 +3,8 @@ cert: lpic-2
 exam: 201-450 + 202-450
 snapshot_date: '2026-08-05'
 sources:
-- https://www.lpi.org/our-certifications/lpic-2-overview/
+- https://www.lpi.org/our-certifications/exam-201-objectives/
+- https://www.lpi.org/our-certifications/exam-202-objectives/
 topics:
 - id: '1.1'
   sources:

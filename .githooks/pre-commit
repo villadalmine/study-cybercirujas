@@ -39,6 +39,18 @@ if [ -n "$certs_touched" ]; then
     fi
 fi
 
+# 3b: do not write MORE content against a syllabus that is a quarter of its exam.
+# Scoped to certifications whose content is being committed, not every one they
+# touch, so that fixing a bad syllabus is never blocked by the syllabus being
+# bad — the check would otherwise refuse exactly the commits that repair it.
+content_certs="$(echo "$staged" | sed -n 's#^certs/\([^/]*\)/.*#\1#p' | sort -u | tr '\n' ' ')"
+if [ -n "$content_certs" ]; then
+    # shellcheck disable=SC2086
+    if ! "$PY" "$REPO/scripts/check_syllabus.py" $content_certs 2>&1; then
+        fail=1
+    fi
+fi
+
 # 4: nothing below the quality floor may be committed. The generator already
 # refuses to write it, so a violation here means it arrived some other way —
 # by hand, by an agent writing files directly, or from a merge.
