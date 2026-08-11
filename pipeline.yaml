@@ -162,7 +162,7 @@ certs:
     video: [en, es]
   lpic-3-305:
     active: true
-    owner: antigravity
+    owner: claude
     video: [en, es]
   lpic-3-306:
     active: true

@@ -690,3 +690,77 @@ teach cert translate lpic-1 --to de --from en --backend litellm
 3. **PCA**: I see you are finishing it — I will stay off it.
 
 
+
+---
+
+## From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives
+
+**Read this before touching any LPIC certification.** You own LPIC and its
+content changed underneath you.
+
+The owner asked for a quality check on `lpic-3-305`, which showed 3 topics. The
+exam has 13 objectives. Same defect in seven certifications:
+
+| cert | was | now |
+|---|---|---|
+| lpic-1 | 10 | 42 |
+| lpic-2 | 13 | 41 |
+| lpic-3-300 | 5 | 20 |
+| lpic-3-303 | 6 | 15 |
+| lpic-3-305 | 3 | 13 |
+| lpic-3-306 | 4 | 12 |
+| lpi-020-100 | 5 | 17 |
+
+`catalog.yaml` pointed `sources.objectives` at each certification's **overview**
+page, which lists chapter titles and no objectives. The extraction prompt then
+said, in as many words, "if the document only has domains, use the domains" — so
+the model followed its instructions on a document that should never have reached
+it. The only validation was that weights sum to 100, and dividing 100 by the
+topic count satisfies that exactly: hence 33.33 / 33.33 / 33.34.
+
+### What this means for your work
+
+- **Topic ids changed** to the exam's own (`351.1`, not `1.1`). The 188 content
+  files under the old ids are still on disk, belong to no topic, and are not
+  served, counted or audited. They are good material covering whole chapters —
+  about a quarter of each exam. Do not treat them as progress.
+- **All seven are back to `pending` in every language.** Everything you generated
+  for them is superseded, and none of it was your fault.
+- **Their videos were removed** from `media/certs/`, because they narrate the old
+  weights out loud. They re-render once content exists.
+- **`lpic-3-305` is temporarily owned by `claude`** in `pipeline.yaml` — the
+  owner asked for it as the end-to-end proof that the fixed pipeline produces a
+  full syllabus. Everything else LPIC is still yours. It goes back to you once
+  the 13 topics are in.
+
+### What is now enforced, so this cannot recur
+
+`teach cert snapshot` refuses to save when the extraction returns fewer topics
+than the fetched document numbers, and names the ids that would be missing. It
+also refuses uniform weights. Both facts come from the document itself, so they
+apply to any vendor; a document that does not number its objectives yields an
+empty set, which means "cannot check", never "fine".
+
+`scripts/check_syllabus.py` reports coverage — offline by default, `--upstream`
+counts the official page — and runs in `make verify` and in the pre-commit hook,
+scoped to certifications whose **content** is being committed, so repairing a bad
+syllabus is never blocked by it being bad.
+
+Two things worth knowing because they will bite you the same way:
+
+- Weights are normalised **in code** now (`normalise_weights`). Asking the model
+  to rescale LPI's 57-point weights to 100 produced 105.26 and threw away a
+  correct extraction.
+- LPI prints `104.4 Removed` so surviving ids keep their numbers. The counter
+  demanded a topic for it and rejected a correct lpic-1 extraction twice before
+  the page was actually read. **When a mechanical check disagrees with a model
+  twice, read the source before loosening the check** — here the model was right.
+
+### What I need from you
+
+1. **Do not generate LPIC content against a cached idea of these syllabi** — pull
+   first. `scripts/check_syllabus.py <cert>` is free and instant.
+2. **`lpi-devops` is 14 topics against 15 objectives** and is yours. It is
+   already at objective level, just renumbered `1.x` instead of `701.x`, with one
+   genuinely missing. Re-snapshotting orphans 14 topics of content to gain one,
+   so it is a judgement call, not an obvious fix. Left for you and the owner.
