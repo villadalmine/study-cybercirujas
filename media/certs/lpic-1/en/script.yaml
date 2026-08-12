@@ -1,0 +1,34 @@
+cert: lpic-1
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master Linux Administration with LPIC-1 Certification
+    voiceover: Ready to prove your core Linux administration skills? The professional
+      LPIC-1 Linux Administrator certification validates your real-world ability to
+      manage systems across exams 101-500 and 102-500. Valid for 5 years, it demonstrates
+      true competency in handling fundamental Linux tasks.
+  audience:
+    title: Who Is This Certification For
+    voiceover: This professional credential is ideal for practitioners aiming to solidify
+      their Linux system administration knowledge. It equips you to handle system
+      maintenance, architecture, and network configuration with confidence.
+    bullets:
+    - System administrators managing Linux workstations and servers
+    - IT professionals looking to validate Linux skills at a professional level
+    - Tech specialists preparing for exams 101-500 and 102-500
+  cta:
+    title: Start Learning on Cert Landscape
+    voiceover: Prepare effectively for LPIC-1 exam 101 topics (40.0%) and LPIC-1 exam
+      102 topics (60.0%) with our structured learning materials. Head over to Cert
+      Landscape today and take the next step in your Linux journey.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers LPIC-1 exam 101 topics at 40.0%, LPIC-1 exam 102 topics
+      at 60.0%.
+    domains:
+    - name: LPIC-1 exam 101 topics
+      weight: 40.0
+    - name: LPIC-1 exam 102 topics
+      weight: 60.0

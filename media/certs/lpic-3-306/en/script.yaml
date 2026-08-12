@@ -1,0 +1,32 @@
+cert: lpic-3-306
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master High Availability with LPIC-3 306-300
+    voiceover: If you want to demonstrate advanced expertise in keeping critical Linux
+      enterprise systems running non-stop, the LPIC-3 High Availability and Storage
+      Clusters certification is built for you. Passing exam 306-300 proves your capability
+      to design, configure, and manage high-availability infrastructure and enterprise
+      storage clusters. It stands as a professional-level credential valid for 5 years.
+  audience:
+    title: Who this certification is for
+    voiceover: This professional certification targets seasoned Linux system administrators,
+      infrastructure engineers, and systems architects who manage uptime-critical
+      environments. It specifically validates deep domain expertise fully focused
+      on high availability and storage cluster management.
+    bullets:
+    - Senior Linux System Administrators
+    - Infrastructure Engineers managing critical clusters
+    - Enterprise Systems Architects
+  cta:
+    title: Start learning on Cert Landscape
+    voiceover: Ready to take your Linux expertise to the professional tier? Start
+      preparing for LPIC-3 exam 306-300 today on Cert Landscape.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers High Availability and Storage Clusters at 100.0%.
+    domains:
+    - name: High Availability and Storage Clusters
+      weight: 100.0

@@ -1,0 +1,45 @@
+cert: lpic-3-303
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master Enterprise Linux Security with LPIC-3
+    voiceover: Ready to validate your top-tier Linux security skills? The LPIC-3 Security
+      exam 303-300 is an enterprise-level professional certification valid for 5 years.
+      It proves your practical expertise across essential defense capabilities, from
+      cryptography to vulnerability assessment.
+  audience:
+    title: Who It Is For
+    voiceover: This professional certification is built for experienced Linux system
+      defenders. It evaluates your skills evenly across six core domains weighted
+      at 16.7% each—Cryptography, Access Control, Application Security, Operations
+      Security, Network Security, and Threats and Vulnerability Assessment. If you
+      want to demonstrate advanced competency in safeguarding Linux environments,
+      this certification is for you.
+    bullets:
+    - Experienced Linux system administrators
+    - Systems security engineers and specialists
+    - IT professionals securing enterprise Linux infrastructure
+  cta:
+    title: Take the Next Step
+    voiceover: Start preparing for the LPIC-3 Security exam on Cert Landscape today
+      and advance your professional skills.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Cryptography at 16.7%, Access Control at 16.7%, Application
+      Security at 16.7%, Operations Security at 16.7%, Network Security at 16.7%,
+      Threats and Vulnerability Assessment at 16.7%.
+    domains:
+    - name: Cryptography
+      weight: 16.7
+    - name: Access Control
+      weight: 16.7
+    - name: Application Security
+      weight: 16.7
+    - name: Operations Security
+      weight: 16.7
+    - name: Network Security
+      weight: 16.7
+    - name: Threats and Vulnerability Assessment
+      weight: 16.7

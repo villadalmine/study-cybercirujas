@@ -1,0 +1,33 @@
+cert: lpic-1
+lang: es
+backend: antigravity
+model: antigravity-session
+scenes:
+  hook:
+    title: Dominá la Administración en Linux
+    voiceover: Si trabajás con servidores, saber moverte en la consola de Linux no
+      es opcional, es un requisito. La certificación LPIC-1 valida tu capacidad para
+      administrar sistemas Linux en el mundo real, dándote las bases que toda infraestructura
+      moderna necesita.
+  audience:
+    title: Para quién es
+    voiceover: Esta certificación de nivel profesional es el primer gran paso para
+      consolidarte en el área de sistemas. Evalúa desde la arquitectura y comandos
+      básicos en el examen 101, hasta networking, seguridad y scripting en el 102.
+    bullets:
+    - Administradores de Sistemas Junior
+    - Ingenieros DevOps iniciales
+    - Especialistas de Soporte IT
+  cta:
+    title: Da el primer paso
+    voiceover: Con una vigencia de 5 años, obtener la LPIC-1 demuestra que conocés
+      Linux de verdad. Empezá a prepararte hoy mismo en Cert Landscape.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en LPIC-1 exam 101 topics con 40.0%, LPIC-1 exam
+      102 topics con 60.0%.
+    domains:
+    - name: LPIC-1 exam 101 topics
+      weight: 40.0
+    - name: LPIC-1 exam 102 topics
+      weight: 60.0

@@ -141,7 +141,7 @@ topics:
 - id: '4.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Schema Management
   topic: 4 - Maintaining and Debugging Observability Pipelines
   weight: 2.5

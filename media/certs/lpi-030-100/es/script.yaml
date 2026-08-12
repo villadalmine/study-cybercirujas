@@ -1,0 +1,45 @@
+cert: lpi-030-100
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Demostrá tus bases en desarrollo web
+    voiceover: ¿Querés validar formalmente tus conocimientos iniciales en desarrollo
+      frontend y backend? La certificación LPI Web Development Essentials, examen
+      030-100, es una credencial de vigencia permanente que demuestra tus conocimientos
+      fundamentales en la industria. Acredita tus competencias esenciales en tecnologías
+      web para darle un respaldo oficial a tu perfil.
+  audience:
+    title: A quién está dirigida
+    voiceover: Este examen de nivel essentials está pensado para quienes están iniciando
+      su camino tecnológico y buscan una certificación oficial. Su temario evalúa
+      un 15% en Software Development and Web Technologies, 20% en HTML Document Markup,
+      20% en CSS Content Styling, 25% en JavaScript Programming y 20% en Node.js Server
+      Programming. Es la opción ideal para consolidar tu aprendizaje de forma práctica
+      y sin vencimiento.
+    bullets:
+    - Personas que se inician en el desarrollo web
+    - Estudiantes que quieren validar sus fundamentos en HTML, CSS, JavaScript y Node.js
+    - Profesionales en busca de un certificado oficial de por vida
+  cta:
+    title: Comenzá a estudiar en Cert Landscape
+    voiceover: Prepará el examen 030-100 en la plataforma de Cert Landscape y avanzá
+      a tu propio ritmo. ¡Da el primer paso para certificar tus habilidades en desarrollo
+      web!
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Software Development and Web Technologies con
+      15.0%, HTML Document Markup con 20.0%, CSS Content Styling con 20.0%, JavaScript
+      Programming con 25.0%, Node.js Server Programming con 20.0%.
+    domains:
+    - name: Software Development and Web Technologies
+      weight: 15.0
+    - name: HTML Document Markup
+      weight: 20.0
+    - name: CSS Content Styling
+      weight: 20.0
+    - name: JavaScript Programming
+      weight: 25.0
+    - name: Node.js Server Programming
+      weight: 20.0

@@ -1,0 +1,43 @@
+cert: cnpe
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Validá tu experiencia como Cloud Native Platform Engineer
+    voiceover: Si querés demostrar tus habilidades construyendo plataformas modernas,
+      el examen Certified Cloud Native Platform Engineer es para vos. Esta certificación
+      de nivel profesional valida tus conocimientos en arquitectura, observabilidad,
+      seguridad, GitOps y capacidades self-service. Cuenta con una vigencia de 2 años
+      y demuestra tu dominio en el ecosistema cloud-native.
+  audience:
+    title: ¿Para quién es esta certificación?
+    voiceover: Está diseñada para profesionales que gestionan infraestructura moderna
+      e integran metodologías ágiles de entrega. Es ideal si querés consolidar tu
+      dominio en la creación de APIs de plataforma y la automatización mediante GitOps.
+    bullets:
+    - Ingenieros de plataforma y profesionales DevOps
+    - Especialistas en GitOps, Continuous Delivery y seguridad
+    - Arquitectos de infraestructura y operaciones cloud-native
+  cta:
+    title: Preparate en Cert Landscape
+    voiceover: Repasá los dominios clave del examen CNPE y comenzá a estudiar en Cert
+      Landscape. Potenciá tu perfil profesional y certificá tus conocimientos hoy
+      mismo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Platform Architecture and Infrastructure con
+      15.0%, Observability and Operations con 20.0%, Security and Policy Enforcement
+      con 15.0%, GitOps and Continuous Delivery con 25.0%, Platform APIs and Self-Service
+      Capabilities con 25.0%.
+    domains:
+    - name: Platform Architecture and Infrastructure
+      weight: 15.0
+    - name: Observability and Operations
+      weight: 20.0
+    - name: Security and Policy Enforcement
+      weight: 15.0
+    - name: GitOps and Continuous Delivery
+      weight: 25.0
+    - name: Platform APIs and Self-Service Capabilities
+      weight: 25.0

@@ -1,0 +1,46 @@
+cert: lpi-702
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Dominá la administración BSD con LPI Specialist
+    voiceover: Si querés respaldar tus conocimientos en sistemas Unix, la certificación
+      LPI BSD Specialist examen 702-100 es la credencial indicada. Con nivel specialty
+      y una vigencia de 5 años, evalúa tus habilidades reales en la administración
+      de plataformas BSD. Te permite validar competencias fundamentales como la instalación,
+      la gestión de almacenamiento, el control de red y habilidades Unix clave.
+  audience:
+    title: Para quién es esta certificación
+    voiceover: Esta certificación está orientada a profesionales de la categoría linux
+      y Unix que buscan especializar su perfil técnico. El temario equilibra la instalación
+      de software y habilidades Unix básicas con un 23.3% cada dominio, administración
+      de sistemas y almacenamiento con un 18.3% cada uno, y red BSD con un 16.7%.
+      Es ideal si querés certificar de forma sólida tu capacidad de gestión en estos
+      entornos.
+    bullets:
+    - Administradores de sistemas que gestionan o integran entornos BSD.
+    - Profesionales de infraestructura Linux que desean profundizar en sistemas Unix.
+    - Técnicos IT que buscan validar sus habilidades de administración, almacenamiento
+      y red.
+  cta:
+    title: Estudiá en Cert Landscape
+    voiceover: Prepará el examen LPI 702-100 con la formación de Cert Landscape. Impulsá
+      tu perfil profesional y certificá tus conocimientos BSD hoy mismo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en BSD Installation and Software Management con
+      23.3%, Storage Devices and BSD Filesystems con 18.3%, Basic BSD System Administration
+      con 18.3%, Basic BSD Network Administration con 16.7%, Basic Unix Skills con
+      23.3%.
+    domains:
+    - name: BSD Installation and Software Management
+      weight: 23.3
+    - name: Storage Devices and BSD Filesystems
+      weight: 18.3
+    - name: Basic BSD System Administration
+      weight: 18.3
+    - name: Basic BSD Network Administration
+      weight: 16.7
+    - name: Basic Unix Skills
+      weight: 23.3

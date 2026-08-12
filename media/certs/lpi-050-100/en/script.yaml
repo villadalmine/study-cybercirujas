@@ -1,0 +1,44 @@
+cert: lpi-050-100
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master Open Source Fundamentals with LPI 050-100
+    voiceover: Want to prove you understand how open source software, licensing, and
+      collaboration work in modern tech? The LPI Open Source Essentials exam 050-100
+      validates key domains like Open Source Software Licenses at 22.5%, Business
+      Models, Project Management, and Collaboration at 17.5% each, plus Software and
+      Open Content Licenses at 12.5% each. It is an essentials-level certification
+      that comes with lifetime validity.
+  audience:
+    title: Who This Certification Is For
+    voiceover: This exam is ideal for anyone looking to navigate open source practices
+      and projects with confidence. It offers clear, structured proof of your core
+      understanding without requiring deep technical prerequisites.
+    bullets:
+    - Tech beginners building foundational knowledge in Linux and open source topics
+    - Project managers seeking clarity on open source licenses and business models
+    - Professionals looking for a recognized, lifetime credential in open source fundamentals
+  cta:
+    title: Build Your Knowledge on Cert Landscape
+    voiceover: Ready to prepare for your LPI Open Source Essentials 050-100 exam?
+      Start exploring structured learning materials on Cert Landscape today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Software Fundamentals at 12.5%, Open Source Software
+      Licenses at 22.5%, Open Content Licenses at 12.5%, Open Source Business Models
+      at 17.5%, Project Management at 17.5%, Collaboration and Communication at 17.5%.
+    domains:
+    - name: Software Fundamentals
+      weight: 12.5
+    - name: Open Source Software Licenses
+      weight: 22.5
+    - name: Open Content Licenses
+      weight: 12.5
+    - name: Open Source Business Models
+      weight: 17.5
+    - name: Project Management
+      weight: 17.5
+    - name: Collaboration and Communication
+      weight: 17.5

@@ -1,0 +1,40 @@
+cert: otca
+lang: es
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: 'Observabilidad sin ataduras: certificate en OTCA'
+    voiceover: OpenTelemetry se convirtió en el estándar abierto para instrumentar
+      tus sistemas, y la OTCA lo pone negro sobre blanco. Este examen valida que entendés
+      cómo generar, exportar y depurar telemetría sin quedar atado a ningún proveedor.
+      Trazas, métricas y logs, con un mismo lenguaje.
+  audience:
+    title: Para quién es
+    voiceover: 'Es una certificación de nivel associate, pensada para quien ya trabaja
+      cerca de la telemetría o quiere dar el salto a observabilidad moderna. El peso
+      del examen habla claro: casi la mitad es API y SDK, y un cuarto es el Collector,
+      así que premia la práctica real, no la teoría suelta.'
+    bullets:
+    - DevOps y SRE que instrumentan servicios en producción
+    - Desarrolladores que integran trazas, métricas y logs con el SDK
+    - Ingenieros de plataforma que configuran y depuran el OpenTelemetry Collector
+  cta:
+    title: Empezá hoy
+    voiceover: En Cert Landscape tenés el temario de la OTCA ordenado por dominios
+      y con su peso real, para que estudies donde más suma. Entrá, seguí la ruta y
+      llegá al examen con la telemetría dominada.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Fundamentals of Observability con 18.0%, The
+      OpenTelemetry API and SDK con 46.0%, The OpenTelemetry Collector con 26.0%,
+      Maintaining and Debugging Observability Pipelines con 10.0%.
+    domains:
+    - name: Fundamentals of Observability
+      weight: 18.0
+    - name: The OpenTelemetry API and SDK
+      weight: 46.0
+    - name: The OpenTelemetry Collector
+      weight: 26.0
+    - name: Maintaining and Debugging Observability Pipelines
+      weight: 10.0

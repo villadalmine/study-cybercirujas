@@ -1,0 +1,50 @@
+cert: cnpa
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Validá tus conocimientos en Platform Engineering
+    voiceover: Si trabajás con plataformas nativas de la nube, la certificación Certified
+      Cloud Native Platform Engineering Associate (CNPA) valida tus conocimientos
+      fundamentales en esta disciplina. Este examen de nivel associate, con una vigencia
+      de 3 años, abarca desde los fundamentos centrales de ingeniería de plataformas
+      hasta observabilidad, seguridad y entrega continua. Es una excelente acreditación
+      para demostrar que entendés cómo aprovisionar infraestructura y mejorar la experiencia
+      de los desarrolladores.
+  audience:
+    title: ¿Para quién es esta certificación?
+    voiceover: Esta certificación está pensada para profesionales IT que buscan formalizar
+      sus habilidades en arquitectura e infraestructura cloud-native. Es ideal si
+      querés consolidar tus competencias en automatización, entrega continua e integración
+      de portales de desarrollo internos.
+    bullets:
+    - Ingenieros de DevOps o SRE que buscan validar sus bases en Platform Engineering.
+    - Desarrolladores enfocados en mejorar la experiencia del desarrollador y el uso
+      de IDPs.
+    - Administradores de sistemas y profesionales IT que migran hacia entornos cloud-native.
+  cta:
+    title: Preparate hoy en Cert Landscape
+    voiceover: Conocé todos los dominios del examen CNPA y organizá tu estudio en
+      Cert Landscape. Empezá a prepararte hoy mismo y potenciá tu perfil profesional
+      a tu propio ritmo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Platform Engineering Core Fundamentals con
+      36.0%, Platform Observability, Security, and Conformance con 20.0%, Continuous
+      Delivery and Platform Engineering con 16.0%, Platform APIs and Provisioning
+      Infrastructure con 12.0%, IDPs and Developer Experience con 8.0%, Measuring
+      your Platform con 8.0%.
+    domains:
+    - name: Platform Engineering Core Fundamentals
+      weight: 36.0
+    - name: Platform Observability, Security, and Conformance
+      weight: 20.0
+    - name: Continuous Delivery and Platform Engineering
+      weight: 16.0
+    - name: Platform APIs and Provisioning Infrastructure
+      weight: 12.0
+    - name: IDPs and Developer Experience
+      weight: 8.0
+    - name: Measuring your Platform
+      weight: 8.0

@@ -1,0 +1,32 @@
+cert: lpic-3-306
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Dominá la alta disponibilidad en Linux profesional
+    voiceover: ¿Querés que tus sistemas Linux nunca se caigan y soporten almacenamiento
+      a gran escala? El examen LPIC-3 306-300 valida tu capacidad profesional en High
+      Availability y Storage Clusters. Es la certificación ideal para demostrar tus
+      conocimientos en arquitectura de clusters e infraestructura resiliente.
+  audience:
+    title: ¿Para quién es esta certificación?
+    voiceover: Está diseñada para profesionales con experiencia en administración
+      de sistemas Linux que buscan especializarse en entornos de misión crítica. Si
+      necesitás asegurar la continuidad operativa y gestionar almacenamiento distribuido,
+      este examen es para vos.
+    bullets:
+    - Administradores de sistemas Linux de nivel profesional
+    - Ingenieros de infraestructura y continuidad de negocio
+    - Especialistas en clusters de almacenamiento y alta disponibilidad
+  cta:
+    title: Dominá el examen en Cert Landscape
+    voiceover: Explorá la guía y el contenido del examen 306-300 dentro de Cert Landscape.
+      Potenciá tu perfil técnico y preparate para rendir con confianza.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en High Availability and Storage Clusters con
+      100.0%.
+    domains:
+    - name: High Availability and Storage Clusters
+      weight: 100.0

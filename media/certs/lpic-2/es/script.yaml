@@ -1,0 +1,33 @@
+cert: lpic-2
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Lleva tus habilidades Linux al nivel profesional
+    voiceover: '¿Ya manejás las bases de Linux y querés dar el salto definitivo? La
+      certificación LPIC-2: Linux Engineer demuestra que podés administrar servidores
+      y redes mixtas. Se evalúa mediante dos exámenes, el 201-450 y el 202-450, con
+      un peso del 50% cada uno.'
+  audience:
+    title: Para quién es esta certificación
+    voiceover: Esta acreditación de nivel profesional está diseñada para quienes administran
+      infraestructura Linux en entornos corporativos. Te permite validar tus competencias
+      técnicas con una vigencia de 5 años.
+    bullets:
+    - Administradores de sistemas Linux con experiencia intermedia
+    - Técnicos de TI que gestionan servidores y servicios de red
+    - Profesionales que buscan certificar sus conocimientos avanzados en Linux
+  cta:
+    title: Comenzá a estudiar en Cert Landscape
+    voiceover: Preparate para superar los exámenes 201-450 y 202-450 a tu propio ritmo.
+      Iniciá tu preparación profesional hoy mismo en Cert Landscape.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en LPIC-2 Exam 201 con 50.0%, LPIC-2 Exam 202
+      con 50.0%.
+    domains:
+    - name: LPIC-2 Exam 201
+      weight: 50.0
+    - name: LPIC-2 Exam 202
+      weight: 50.0

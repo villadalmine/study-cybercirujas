@@ -1,0 +1,41 @@
+cert: lpi-020-100
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Asegurá tus primeros pasos en ciberseguridad Linux
+    voiceover: Si querés validar tus conocimientos fundamentales de seguridad en sistemas
+      Linux, la certificación LPI Security Essentials examen 020-100 es una opción
+      sólida. Evalúa tus bases en conceptos de seguridad, encriptación, seguridad
+      en nodos y redes, e identidad con validez de por vida.
+  audience:
+    title: Para quién es
+    voiceover: Está orientada a quienes inician en la protección de sistemas y buscan
+      certificar competencias clave de nivel essentials. El examen evalúa 5 dominios
+      ponderados en un 20% cada uno para asegurar una formación equilibrada.
+    bullets:
+    - Estudiantes de tecnología que quieren ingresar al área de ciberseguridad
+    - Administradores de sistemas Linux que buscan formalizar sus conocimientos de
+      seguridad
+    - Profesionales IT interesados en comprender fundamentos de encriptación y privacidad
+  cta:
+    title: Empezá hoy en Cert Landscape
+    voiceover: Explorá el contenido para la LPI Security Essentials en Cert Landscape.
+      Preparate a tu ritmo y conseguí tu certificación vitalicia.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Security Concepts con 20.0%, Encryption con
+      20.0%, Node, Device and Storage Security con 20.0%, Network and Service Security
+      con 20.0%, Identity and Privacy con 20.0%.
+    domains:
+    - name: Security Concepts
+      weight: 20.0
+    - name: Encryption
+      weight: 20.0
+    - name: Node, Device and Storage Security
+      weight: 20.0
+    - name: Network and Service Security
+      weight: 20.0
+    - name: Identity and Privacy
+      weight: 20.0

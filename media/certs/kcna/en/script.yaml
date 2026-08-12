@@ -1,0 +1,40 @@
+cert: kcna
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Start Your Journey with the KCNA Exam
+    voiceover: If you want to validate your cloud-native foundation, the Kubernetes
+      and Cloud Native Associate certification is an ideal starting point. This associate-level
+      exam covers Kubernetes Fundamentals at 44%, Container Orchestration at 28%,
+      Cloud Native Application Delivery at 16%, and Cloud Native Architecture at 12%.
+      Valid for three years, it demonstrates that you understand the core concepts
+      powering modern infrastructure.
+  audience:
+    title: Who It Is For
+    voiceover: The KCNA is designed for individuals seeking to build and prove a solid
+      baseline in cloud-native concepts. It is perfect if you want to align your skills
+      with industry standards before taking on advanced technical roles.
+    bullets:
+    - Developers and IT professionals stepping into the cloud-native ecosystem
+    - Systems administrators transitioning to container orchestration
+    - Technical leads and project managers overseeing cloud infrastructure
+  cta:
+    title: Start Preparing on Cert Landscape
+    voiceover: Ready to pass the KCNA exam and earn your 3-year certification? Explore
+      structured prep materials and start studying today on Cert Landscape.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Kubernetes Fundamentals at 44.0%, Cloud Native Application
+      Delivery at 16.0%, Container Orchestration at 28.0%, Cloud Native Architecture
+      at 12.0%.
+    domains:
+    - name: Kubernetes Fundamentals
+      weight: 44.0
+    - name: Cloud Native Application Delivery
+      weight: 16.0
+    - name: Container Orchestration
+      weight: 28.0
+    - name: Cloud Native Architecture
+      weight: 12.0

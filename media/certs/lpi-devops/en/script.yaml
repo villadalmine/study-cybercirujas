@@ -1,0 +1,43 @@
+cert: lpi-devops
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master DevOps Tools with LPI Certification
+    voiceover: The LPI DevOps Tools Engineer exam 701-100 validates your practical
+      skills in using open-source tools to automate and streamline software delivery.
+      This specialty-level Linux certification covers key domains including Software
+      Engineering at 30.0% and Container Management at 26.7%, alongside Configuration
+      Management, Machine Deployment, and Service Operations. Valid for 5 years, it
+      proves your real-world capability in modern DevOps environments.
+  audience:
+    title: Who This Exam Is For
+    voiceover: This certification is built for IT professionals who work with Linux
+      systems and want to formalize their technical proficiency in automation and
+      containerization. It is ideal for practitioners ready to prove specialized skills
+      across the entire application lifecycle.
+    bullets:
+    - Linux system administrators expanding into automation and container management
+    - Developers wanting to validate their knowledge of open-source DevOps tools
+    - Systems engineers aiming for a specialty-level credential from LPI
+  cta:
+    title: Start Studying on Cert Landscape
+    voiceover: Ready to validate your DevOps expertise? Dive into your preparation
+      for the LPI 701-100 exam on Cert Landscape today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Software Engineering at 30.0%, Container Management
+      at 26.7%, Machine Deployment at 13.3%, Configuration Management at 16.7%, Service
+      Operations at 13.3%.
+    domains:
+    - name: Software Engineering
+      weight: 30.0
+    - name: Container Management
+      weight: 26.7
+    - name: Machine Deployment
+      weight: 13.3
+    - name: Configuration Management
+      weight: 16.7
+    - name: Service Operations
+      weight: 13.3

@@ -1,0 +1,42 @@
+cert: lpi-020-100
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Start Your Cybersecurity Journey with LPI
+    voiceover: If you want to build a solid foundation in system security, the LPI
+      Security Essentials Exam 020-100 is designed for you. It validates fundamental
+      knowledge across Security Concepts, Encryption, Node Device and Storage Security,
+      Network and Service Security, and Identity and Privacy. Best of all, this essentials-level
+      credential comes with lifetime validity.
+  audience:
+    title: Who Should Take This Exam
+    voiceover: This credential is tailored for anyone starting out in tech who needs
+      a clear, trusted baseline in security principles. It helps you demonstrate practical
+      awareness when protecting devices, networks, and user data. It is a fantastic
+      starting point for building confidence across core security topics.
+    bullets:
+    - Beginners and students starting a career in IT security
+    - Junior system administrators and technical support specialists
+    - IT professionals seeking foundational security validation
+  cta:
+    title: Master Exam 020-100 Today
+    voiceover: Ready to master these essential security domains and earn your lifetime
+      certification? Start your preparation with us today on Cert Landscape!
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Security Concepts at 20.0%, Encryption at 20.0%, Node,
+      Device and Storage Security at 20.0%, Network and Service Security at 20.0%,
+      Identity and Privacy at 20.0%.
+    domains:
+    - name: Security Concepts
+      weight: 20.0
+    - name: Encryption
+      weight: 20.0
+    - name: Node, Device and Storage Security
+      weight: 20.0
+    - name: Network and Service Security
+      weight: 20.0
+    - name: Identity and Privacy
+      weight: 20.0

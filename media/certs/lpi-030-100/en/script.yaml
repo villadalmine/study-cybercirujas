@@ -1,0 +1,42 @@
+cert: lpi-030-100
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Validate Your Full Stack Web Fundamentals Today
+    voiceover: Looking to prove your web development skills with an entry-level credential
+      that never expires? The LPI Web Development Essentials exam 030-100 validates
+      your foundational mastery across front-end markup and back-end Node.js server
+      programming. It covers software development concepts, HTML, CSS, JavaScript,
+      and Node.js in one balanced certification.
+  audience:
+    title: Who This Exam Is For
+    voiceover: This essentials-level certification is ideal for beginners and aspiring
+      developers starting their path in web technologies. It gives you a structured
+      way to verify core competencies from client-side markup to server-side JavaScript.
+    bullets:
+    - Beginners starting out in web development and software technologies
+    - Junior developers wanting an entry-level credential with lifetime validity
+    - Tech enthusiasts looking to validate HTML, CSS, JavaScript, and Node.js basics
+  cta:
+    title: Start Preparing on Cert Landscape
+    voiceover: Ready to build a solid foundation and earn a credential that stays
+      valid for life? Explore the LPI Web Development Essentials course today on Cert
+      Landscape.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Software Development and Web Technologies at 15.0%,
+      HTML Document Markup at 20.0%, CSS Content Styling at 20.0%, JavaScript Programming
+      at 25.0%, Node.js Server Programming at 20.0%.
+    domains:
+    - name: Software Development and Web Technologies
+      weight: 15.0
+    - name: HTML Document Markup
+      weight: 20.0
+    - name: CSS Content Styling
+      weight: 20.0
+    - name: JavaScript Programming
+      weight: 25.0
+    - name: Node.js Server Programming
+      weight: 20.0

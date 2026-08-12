@@ -1,0 +1,43 @@
+cert: lpic-3-300
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Master Linux and Windows Integration Today
+    voiceover: Ready to bridge the gap between Linux systems and Active Directory
+      environments? The LPIC-3 Mixed Environments exam 300-300 is a professional-level
+      certification valid for 5 years that proves your enterprise-grade expertise
+      in cross-platform integration. It thoroughly validates your skills across key
+      areas like Samba administration, file sharing, and Linux identity management.
+  audience:
+    title: Who Should Take Exam 300-300
+    voiceover: If you are a Linux system administrator looking to advance your enterprise
+      capabilities, this exam is designed for your career progression. It tests your
+      hands-on knowledge across five equal 20% domains covering Samba basics, Active
+      Directory domains, share and client configuration, and Linux identity management.
+    bullets:
+    - Senior Linux System Administrators managing mixed operating system fleets
+    - Infrastructure Engineers integrating Linux servers into Active Directory domains
+    - Systems Architects designing enterprise file sharing and identity solutions
+  cta:
+    title: Start Preparing on Cert Landscape
+    voiceover: Ready to validate your cross-platform administration skills for the
+      next 5 years? Explore the complete LPIC-3 exam breakdown and launch your prep
+      on Cert Landscape today!
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Samba Basics at 20.0%, Samba and Active Directory Domains
+      at 20.0%, Samba Share Configuration at 20.0%, Samba Client Configuration at
+      20.0%, Linux Identity Management and File Sharing at 20.0%.
+    domains:
+    - name: Samba Basics
+      weight: 20.0
+    - name: Samba and Active Directory Domains
+      weight: 20.0
+    - name: Samba Share Configuration
+      weight: 20.0
+    - name: Samba Client Configuration
+      weight: 20.0
+    - name: Linux Identity Management and File Sharing
+      weight: 20.0

@@ -1,0 +1,40 @@
+cert: pca
+lang: es
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: ¿Sabés observar tus sistemas?
+    voiceover: 'Prometheus es el motor de monitoreo del mundo cloud-native, y el examen
+      PCA demuestra que sabés usarlo de verdad. No mide teoría suelta: valida que
+      entendés métricas, consultas y alertas sobre sistemas reales, de nivel associate.'
+  audience:
+    title: Para quién es
+    voiceover: Es una certificación de entrada pensada para quienes ya tocan infraestructura
+      y quieren probar su base en observabilidad. Si tu día a día pasa cerca de la
+      operación de sistemas, este examen es para vos.
+    bullets:
+    - DevOps y SRE que monitorean servicios en producción
+    - Administradores de sistemas que dan el salto a cloud-native
+    - Ingenieros de plataforma que quieren dominar PromQL
+  cta:
+    title: Empezá hoy en Cert Landscape
+    voiceover: En Cert Landscape tenés el temario completo del PCA, dominio por dominio
+      y con la certificación vigente por 3 años. Arrancá por PromQL, que pesa el 28%
+      del examen, y avanzá a tu ritmo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en PromQL con 28.0%, Prometheus Fundamentals con
+      20.0%, Observability Concepts con 18.0%, Alerting & Dashboarding con 18.0%,
+      Instrumentation and Exporters con 16.0%.
+    domains:
+    - name: PromQL
+      weight: 28.0
+    - name: Prometheus Fundamentals
+      weight: 20.0
+    - name: Observability Concepts
+      weight: 18.0
+    - name: Alerting & Dashboarding
+      weight: 18.0
+    - name: Instrumentation and Exporters
+      weight: 16.0

@@ -1,0 +1,44 @@
+cert: lpic-3-300
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Integrá Linux y Windows a nivel profesional
+    voiceover: ¿Trabajás en un entorno donde conviven servidores Linux y dominios
+      de Windows? El examen LPIC-3 300-300 de nivel profesional valida tu capacidad
+      para integrar ambos mundos mediante Samba y gestión de identidades en entornos
+      mixtos. Con una vigencia de 5 años, esta certificación demuestra tu dominio
+      técnico en la configuración de clientes, recursos compartidos y servicios de
+      directorio.
+  audience:
+    title: ¿Para quién es esta certificación?
+    voiceover: Está pensada para administradores de sistemas y especialistas en Linux
+      que buscan consolidar sus conocimientos avanzados en interoperabilidad. Es ideal
+      si necesitás gestionar la convivencia fluida entre infraestructuras Linux y
+      redes basadas en Active Directory.
+    bullets:
+    - Administradores de sistemas Linux en entornos corporativos mixtos.
+    - Especialistas que configuran integración entre Samba y dominios Active Directory.
+    - Profesionales que gestionan servicios de archivos y gestión de identidades.
+  cta:
+    title: Preparate hoy en Cert Landscape
+    voiceover: Dominá los dominios clave del examen 300-300 y llevá tus habilidades
+      en Linux al nivel profesional. Sumate a Cert Landscape y empezá a preparar tu
+      certificación ahora mismo.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Samba Basics con 20.0%, Samba and Active Directory
+      Domains con 20.0%, Samba Share Configuration con 20.0%, Samba Client Configuration
+      con 20.0%, Linux Identity Management and File Sharing con 20.0%.
+    domains:
+    - name: Samba Basics
+      weight: 20.0
+    - name: Samba and Active Directory Domains
+      weight: 20.0
+    - name: Samba Share Configuration
+      weight: 20.0
+    - name: Samba Client Configuration
+      weight: 20.0
+    - name: Linux Identity Management and File Sharing
+      weight: 20.0

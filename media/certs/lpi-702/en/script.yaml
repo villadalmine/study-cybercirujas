@@ -1,0 +1,40 @@
+cert: lpi-702
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Validate Your Skills with LPI BSD Specialist
+    voiceover: Looking to stand out in BSD system administration? The LPI BSD Specialist
+      exam 702-100 validates your practical knowledge across key BSD environments.
+      It covers essential domains including software management, BSD filesystems,
+      network administration, system administration, and core Unix skills.
+  audience:
+    title: Who Is This Certification For
+    voiceover: This specialty credential is ideal for professionals who work with
+      BSD operating systems or want to prove targeted Unix expertise. Earning this
+      certification validates your skills for a full five-year period.
+    bullets:
+    - System administrators managing FreeBSD, NetBSD, or OpenBSD systems
+    - Linux administrators seeking to expand their Unix skill set
+    - IT specialists aiming for a recognized 5-year specialty credential
+  cta:
+    title: Start Preparing on Cert Landscape
+    voiceover: Ready to master BSD administration and earn your certification? Start
+      your exam preparation today on Cert Landscape.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers BSD Installation and Software Management at 23.3%,
+      Storage Devices and BSD Filesystems at 18.3%, Basic BSD System Administration
+      at 18.3%, Basic BSD Network Administration at 16.7%, Basic Unix Skills at 23.3%.
+    domains:
+    - name: BSD Installation and Software Management
+      weight: 23.3
+    - name: Storage Devices and BSD Filesystems
+      weight: 18.3
+    - name: Basic BSD System Administration
+      weight: 18.3
+    - name: Basic BSD Network Administration
+      weight: 16.7
+    - name: Basic Unix Skills
+      weight: 23.3

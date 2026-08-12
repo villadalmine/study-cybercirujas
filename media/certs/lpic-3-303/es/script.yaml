@@ -1,0 +1,49 @@
+cert: lpic-3-303
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Llevá tu seguridad en Linux al nivel profesional
+    voiceover: 'Si querés validar tus competencias avanzadas en la protección de sistemas
+      Linux empresariales, la certificación LPIC-3 Security examen 303-300 es el paso
+      definitivo. Este examen de nivel profesional evalúa con un 16.7% cada dominio
+      clave: Cryptography, Access Control, Application Security, Operations Security,
+      Network Security y Threats and Vulnerability Assessment. Con una vigencia de
+      5 años, respalda de forma integral tu capacidad para asegurar infraestructuras
+      críticas.'
+  audience:
+    title: Para quién es
+    voiceover: Esta certificación está pensada para administradores de sistemas y
+      profesionales de IT que buscan dar el salto al nivel profesional en seguridad
+      sobre Linux. Es ideal si querés consolidar tus competencias en gestión de accesos,
+      seguridad de red y mitigación de vulnerabilidades. Si contás con experiencia
+      en entornos Linux y querés certificar tu perfil técnico, este es el examen indicado.
+    bullets:
+    - Administradores de sistemas Linux que buscan especializarse en seguridad avanzada.
+    - Especialistas en ciberseguridad que necesitan respaldar sus conocimientos técnicos
+      en Linux.
+    - Ingenieros de infraestructura enfocados en proteger entornos empresariales.
+  cta:
+    title: Preparate hoy en Cert Landscape
+    voiceover: Explorá la ruta de preparación para el examen LPIC-3 303-300 y organizá
+      tu estudio en Cert Landscape. Sumate a la plataforma y llevá tus habilidades
+      en Linux al siguiente nivel.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Cryptography con 16.7%, Access Control con
+      16.7%, Application Security con 16.7%, Operations Security con 16.7%, Network
+      Security con 16.7%, Threats and Vulnerability Assessment con 16.7%.
+    domains:
+    - name: Cryptography
+      weight: 16.7
+    - name: Access Control
+      weight: 16.7
+    - name: Application Security
+      weight: 16.7
+    - name: Operations Security
+      weight: 16.7
+    - name: Network Security
+      weight: 16.7
+    - name: Threats and Vulnerability Assessment
+      weight: 16.7

@@ -1,0 +1,41 @@
+cert: otca
+lang: en
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: One Standard for All Your Telemetry
+    voiceover: Metrics, logs, and traces used to live in separate silos with a different
+      agent for each. The OpenTelemetry Certified Associate proves you can instrument,
+      collect, and ship all three through one vendor-neutral pipeline. It's the exam
+      that says you speak observability the way the whole cloud-native world now does.
+  audience:
+    title: Who it's for
+    voiceover: This is an associate-level, cloud-native cert, so it meets you early
+      in the journey. It leans hard into the API and SDK, which make up nearly half
+      the exam, plus the Collector, so it rewards people who actually wire up telemetry,
+      not just read about it.
+    bullets:
+    - Backend and application developers instrumenting services with the OTel API
+      and SDK
+    - SREs and platform engineers running the Collector and keeping pipelines healthy
+    - DevOps and observability practitioners moving off vendor-locked agents
+  cta:
+    title: Start today
+    voiceover: We've mapped every domain into hands-on lessons on Cert Landscape,
+      from observability fundamentals to debugging live pipelines. Open the OTCA track
+      and start building telemetry you can prove you understand.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Fundamentals of Observability at 18.0%, The OpenTelemetry
+      API and SDK at 46.0%, The OpenTelemetry Collector at 26.0%, Maintaining and
+      Debugging Observability Pipelines at 10.0%.
+    domains:
+    - name: Fundamentals of Observability
+      weight: 18.0
+    - name: The OpenTelemetry API and SDK
+      weight: 46.0
+    - name: The OpenTelemetry Collector
+      weight: 26.0
+    - name: Maintaining and Debugging Observability Pipelines
+      weight: 10.0

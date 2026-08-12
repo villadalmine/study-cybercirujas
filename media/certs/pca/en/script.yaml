@@ -1,0 +1,41 @@
+cert: pca
+lang: en
+backend: claude
+model: claude-opus-4-8
+scenes:
+  hook:
+    title: Prove You Speak Prometheus
+    voiceover: Metrics are everywhere in cloud-native systems, but reading them well
+      is a skill you have to prove. The Prometheus Certified Associate validates that
+      you can actually query, monitor, and alert with Prometheus — not just talk about
+      it.
+  audience:
+    title: Who it's for
+    voiceover: This associate-level exam is built for people who work with metrics
+      day to day and want it on paper. If PromQL, alerting, and observability are
+      part of your job, this is your checkpoint.
+    bullets:
+    - SREs and DevOps engineers running Prometheus in production
+    - Platform and cloud-native engineers who want observability skills verified
+    - Developers instrumenting apps with metrics and exporters
+  cta:
+    title: Start today
+    voiceover: The exam leans hardest on PromQL, then Prometheus fundamentals and
+      observability concepts — and that's exactly how we've built the path. Start
+      studying PCA on Cert Landscape and turn your metrics know-how into a credential.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers PromQL at 28.0%, Prometheus Fundamentals at 20.0%,
+      Observability Concepts at 18.0%, Alerting & Dashboarding at 18.0%, Instrumentation
+      and Exporters at 16.0%.
+    domains:
+    - name: PromQL
+      weight: 28.0
+    - name: Prometheus Fundamentals
+      weight: 20.0
+    - name: Observability Concepts
+      weight: 18.0
+    - name: Alerting & Dashboarding
+      weight: 18.0
+    - name: Instrumentation and Exporters
+      weight: 16.0

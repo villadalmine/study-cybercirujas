@@ -1,0 +1,49 @@
+cert: kcsa
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Validate Your Kubernetes and Cloud Native Security
+    voiceover: Securing containerized workloads requires a solid understanding of
+      cloud-native security principles. The Kubernetes and Cloud Native Security Associate,
+      or KCSA, is an associate-level certification valid for three years that tests
+      your foundational knowledge across key security domains. From cluster component
+      security to threat modeling and compliance frameworks, it proves you know how
+      to safeguard Kubernetes environments.
+  audience:
+    title: Who This Certification Is For
+    voiceover: This exam is ideal for IT professionals looking to demonstrate foundational
+      skills in cloud-native security. Whether you are entering the cloud-native ecosystem
+      or expanding your Kubernetes skill set, KCSA provides a clear benchmark across
+      its core domains. It covers essential topics such as platform security, cluster
+      component security, and compliance frameworks.
+    bullets:
+    - System administrators and DevOps engineers expanding into security roles
+    - Developers wanting to understand Kubernetes threat models and cluster component
+      security
+    - IT professionals aiming to earn an associate-level certification valid for 3
+      years
+  cta:
+    title: Start Preparing on Cert Landscape
+    voiceover: Ready to build your cloud-native security foundation? Head over to
+      Cert Landscape to start preparing for your KCSA exam today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Overview of Cloud Native Security at 14.0%, Kubernetes
+      Cluster Component Security at 22.0%, Kubernetes Security Fundamentals at 22.0%,
+      Kubernetes Threat Model at 16.0%, Platform Security at 16.0%, Compliance and
+      Security Frameworks at 10.0%.
+    domains:
+    - name: Overview of Cloud Native Security
+      weight: 14.0
+    - name: Kubernetes Cluster Component Security
+      weight: 22.0
+    - name: Kubernetes Security Fundamentals
+      weight: 22.0
+    - name: Kubernetes Threat Model
+      weight: 16.0
+    - name: Platform Security
+      weight: 16.0
+    - name: Compliance and Security Frameworks
+      weight: 10.0

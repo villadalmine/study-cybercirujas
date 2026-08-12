@@ -1,0 +1,36 @@
+cert: lpic-2
+lang: en
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Ready to Advance as a Linux Engineer?
+    voiceover: 'If you already know Linux fundamentals and want to validate your ability
+      to manage network services, the LPIC-2 certification is your next step. Valid
+      for 5 years, this professional-level credential evaluates your expertise across
+      two equal parts: LPIC-2 Exam 201 and LPIC-2 Exam 202, each representing 50.0%
+      of the certification requirements. Passing exams 201-450 and 202-450 confirms
+      your hands-on capability to administer real-world Linux environments.'
+  audience:
+    title: Who It Is For
+    voiceover: This certification is designed for IT professionals aiming to formalize
+      their Linux administration skills at a professional level. It is ideal if you
+      are looking to demonstrate strong technical competency in system maintenance
+      and network service management.
+    bullets:
+    - System administrators seeking to validate professional-level Linux skills
+    - IT professionals preparing for exams 201-450 and 202-450
+    - Linux engineers looking for an industry-recognized 5-year credential
+  cta:
+    title: Start Learning on Cert Landscape
+    voiceover: Prepare for your LPIC-2 exams with structured study materials tailored
+      to your goals. Join Cert Landscape today and take the next step in your Linux
+      career!
+  domains:
+    title: Exam domains
+    voiceover: The exam covers LPIC-2 Exam 201 at 50.0%, LPIC-2 Exam 202 at 50.0%.
+    domains:
+    - name: LPIC-2 Exam 201
+      weight: 50.0
+    - name: LPIC-2 Exam 202
+      weight: 50.0

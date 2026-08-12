@@ -1,0 +1,49 @@
+cert: lpi-050-100
+lang: es
+backend: gemini
+model: agy
+scenes:
+  hook:
+    title: Dominá las bases del Open Source
+    voiceover: ¿Querés respaldar tu conocimiento sobre la cultura y gestión del software
+      libre? La certificación LPI Open Source Essentials, correspondiente al examen
+      050-100, valida tu comprensión sobre licencias, modelos de negocio y trabajo
+      colaborativo. Es una credencial de nivel essentials con vigencia de por vida
+      que fortalece tu perfil IT.
+  audience:
+    title: Para quién es
+    voiceover: Esta certificación está pensada para quienes buscan comprender los
+      fundamentos legales, comerciales y operativos del código abierto. Te permite
+      demostrar dominio en áreas como licencias de software y contenido, fundamentos
+      de software, modelos de negocio, gestión de proyectos y comunicación.
+    bullets:
+    - Estudiantes y principiantes que inician su camino en tecnología y el ecosistema
+      Linux.
+    - Desarrolladores que quieren entender el marco legal, licencias y modelos de
+      negocio del Open Source.
+    - Gestores de proyectos y profesionales IT que colaboran en entornos de desarrollo
+      abierto.
+  cta:
+    title: Preperate en Cert Landscape
+    voiceover: Revisá los dominios del examen y formate con contenido estructurado.
+      Empezá a estudiar la certificación LPI Open Source Essentials hoy mismo en Cert
+      Landscape.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Software Fundamentals con 12.5%, Open Source
+      Software Licenses con 22.5%, Open Content Licenses con 12.5%, Open Source Business
+      Models con 17.5%, Project Management con 17.5%, Collaboration and Communication
+      con 17.5%.
+    domains:
+    - name: Software Fundamentals
+      weight: 12.5
+    - name: Open Source Software Licenses
+      weight: 22.5
+    - name: Open Content Licenses
+      weight: 12.5
+    - name: Open Source Business Models
+      weight: 17.5
+    - name: Project Management
+      weight: 17.5
+    - name: Collaboration and Communication
+      weight: 17.5
