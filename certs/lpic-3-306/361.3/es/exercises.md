@@ -1,88 +1,104 @@
-# Tema 361.3: Failover Clusters — Ejercicios guiados
+# Tópico 361.3: Failover Clusters — Ejercicios guiados
 
-> **Certificación:** LPIC-3 306 (examen 306-300, v3.0) · **Objetivo 361.3** — Peso 13.34
-> **Stack:** Corosync 3.x (kronosnet) + Pacemaker 2.x, gestionado con `pcs` (RHEL/AlmaLinux/Rocky 9) y referencias equivalentes en `crmsh` (SUSE/Debian).
-> **Fuentes oficiales:**
-> - LPI, *Exam 306 Objectives* — https://www.lpi.org/our-certifications/exam-306-objectives/
-> - ClusterLabs, *Pacemaker — Clusters from Scratch / Configuration Explained* — https://clusterlabs.org/pacemaker/doc/
-> - Corosync, *corosync.conf(5)* — https://manpages.org/corosconf/5 · proyecto: https://corosync.github.io/corosync/
-> - ClusterLabs, *pcs* — https://clusterlabs.org/projects/pcs/
-> - ClusterLabs, *booth (multi-site)* — https://github.com/ClusterLabs/booth
+> **Examen 306-300, v3.0 — Topic 361 (High Availability Cluster Management).** El objetivo 361.3 es el objetivo más pesado del examen, y es donde la teoría se convierte en un sistema en funcionamiento: una capa de membresía/quorum de Corosync, un gestor de recursos Pacemaker por encima, fencing/STONITH para hacer seguro el failover, y restricciones de recursos que deciden *dónde* y *en qué orden* se ejecutan los servicios.
 
-## Entorno de laboratorio
+**Topología de laboratorio usada a lo largo de todo el documento.** Tres nodos para que el quorum se comporte normalmente (2 de 3 votos), un dispositivo de bloque compartido para el fencing por poison-pill de SBD, y un dispositivo de bloque compartido para un sistema de archivos en cluster.
 
-Dos nodos KVM (o físicos), red de gestión `192.168.122.0/24`, un hypervisor con `fence_virt`/`fence_xvm` disponible para STONITH real, y una VIP libre en `192.168.122.100`.
+| Host | Dirección de Ring 0 | Rol |
+|---|---|---|
+| `node1` | 192.168.122.11 | miembro del cluster, DC inicial |
+| `node2` | 192.168.122.12 | miembro del cluster |
+| `node3` | 192.168.122.13 | miembro del cluster |
+| — | 192.168.122.100 | VIP flotante del servicio (un recurso, no un host) |
+| `/dev/disk/by-id/…-sbd` | LUN compartida | dispositivo de slot SBD (~10 MiB) |
+| `/dev/disk/by-id/…-web` | LUN compartida | sistema de archivos XFS para el contenido web |
 
-```
-node1  192.168.122.11
-node2  192.168.122.12
-VIP    192.168.122.100   (recurso a gestionar)
-```
-
-Salvo indicación contraria, los comandos `pcs` se ejecutan desde `node1` como `root`. Todos los nodos comparten `/etc/hosts` con las tres entradas anteriores y tienen la hora sincronizada con `chrony` (requisito de membership de `totem`).
+Ejecutá cada comando como `root`. Cuando un paso diga *"en todos los nodos"*, ejecutalo en `node1`, `node2` y `node3`; todo lo demás se ejecuta una sola vez en `node1` salvo que se indique, porque Pacemaker replica la CIB (Cluster Information Base) a cada nodo automáticamente.
 
 ---
 
-## Ejercicio 1 — Bootstrap: instalar, autenticar y levantar el cluster
+## Ejercicio 1 — Arrancar el cluster Corosync/Pacemaker con `pcs`
 
-**Objetivo:** entender la capa de messaging (Corosync/totem) y la de gestión (Pacemaker/pcsd), y cómo `pcs` genera `corosync.conf` y el `authkey`.
-
-1. Instalá la pila y el daemon de gestión **en ambos nodos**:
+1. Instalá el stack **en todos los nodos** (se muestran los nombres de paquete de RHEL/Alma/Rocky 9; en SUSE el metapaquete es `ha_sles`, en Debian es `pacemaker corosync pcs`):
 
    ```bash
-   dnf install -y pacemaker corosync pcs fence-agents-all
+   dnf install -y pacemaker corosync pcs sbd fence-agents-sbd fence-agents-all
+   ```
+
+2. El demonio `pcs` autentica los nodos con un usuario de sistema local `hacluster` creado por el paquete. Asignale una contraseña **en todos los nodos** (usá la misma contraseña en todos):
+
+   ```bash
+   echo 'S0meStr0ngP@ss' | passwd --stdin hacluster
+   ```
+
+3. Habilitá y arrancá el demonio `pcsd` **en todos los nodos** — este es el plano de control REST/CLI, distinto de Corosync/Pacemaker:
+
+   ```bash
    systemctl enable --now pcsd
    ```
 
-2. Fijá la contraseña del usuario de cluster **en ambos nodos** (lo crea el paquete):
+4. Desde `node1`, autenticá los tres nodos entre sí. En `pcs` ≥ 0.10 el subcomando es `host auth` (el antiguo `pcs cluster auth` es la grafía de 0.9):
 
    ```bash
-   echo 'S3cr3t-HA!' | passwd --stdin hacluster
-   ```
-
-3. Autenticá los nodos entre sí (esto establece el token de `pcsd`, no toca Corosync todavía):
-
-   ```bash
-   pcs host auth node1 node2 -u hacluster -p 'S3cr3t-HA!'
+   pcs host auth node1 node2 node3 -u hacluster -p 'S0meStr0ngP@ss'
    ```
    ```
    node1: Authorized
    node2: Authorized
+   node3: Authorized
    ```
 
-4. Creá el cluster. `pcs` escribe `/etc/corosync/corosync.conf` idéntico en ambos nodos y **genera y distribuye** `/etc/corosync/authkey`:
+5. Generá y distribuí `/etc/corosync/corosync.conf` a los tres nodos de una sola vez. `pcs cluster setup` escribe la configuración, arma la authkey, y envía ambas a todo el cluster:
 
    ```bash
-   pcs cluster setup ha_prod node1 addr=192.168.122.11 node2 addr=192.168.122.12
+   pcs cluster setup hacluster node1 node2 node3
+   ```
+
+6. Arrancá Corosync + Pacemaker en todos lados, y habilitalos en el arranque:
+
+   ```bash
    pcs cluster start --all
    pcs cluster enable --all
    ```
 
-5. Inspeccioná el `corosync.conf` generado:
+7. Confirmá que el cluster está levantado y con quorum:
 
    ```bash
-   cat /etc/corosync/corosync.conf
+   pcs status
    ```
    ```
-   totem {
-       version: 2
-       cluster_name: ha_prod
-       transport: knet
-       crypto_cipher: aes256
-       crypto_hash: sha256
-   }
-   nodelist {
-       node { ring0_addr: 192.168.122.11  name: node1  nodeid: 1 }
-       node { ring0_addr: 192.168.122.12  name: node2  nodeid: 2 }
-   }
-   quorum {
-       provider: corosync_votequorum
-       two_node: 1
-   }
-   logging { to_logfile: yes  logfile: /var/log/cluster/corosync.log  to_syslog: yes }
+   Cluster name: hacluster
+   Cluster Summary:
+     * Stack: corosync
+     * Current DC: node1 (version 2.1.5-a3f44794f94) - partition with quorum
+     * 3 nodes configured
+     * 0 resource instances configured
+
+   Node List:
+     * Online: [ node1 node2 node3 ]
+
+   Full List of Resources:
+     * No resources
+
+   Daemon Status:
+     corosync: active/enabled
+     pacemaker: active/enabled
+     pcsd: active/enabled
    ```
 
-6. Verificá el anillo de comunicación y el estado de quorum a bajo nivel:
+**Verificación de comprensión 1**
+
+- **1a.** Ahora hay tres demonios corriendo por nodo: `pcsd`, `corosync` y `pacemaker`. ¿Cuál es la tarea propia de cada uno, y cuál *no* necesitarías estrictamente en ejecución para que el cluster siga dando servicio después de la configuración?
+- **1b.** El paso 4 (`pcs host auth`) y el paso 5 (`pcs cluster setup`) tocan ambos todos los nodos. ¿Por qué no podés saltarte el paso 4 e ir directo a `setup`?
+- **1c.** `pcs status` informa "partition with quorum". Con tres nodos en línea, ¿cuántos votos hay presentes y cuántos se requieren para el quorum? ¿A qué se refiere "partition" acá?
+
+---
+
+## Ejercicio 2 — Inspeccionar la capa de membresía y quorum (Corosync)
+
+Pacemaker está tan sano como la capa Corosync que le alimenta los eventos de membresía. Estas herramientas consultan Corosync directamente.
+
+1. Mirá el estado del anillo totem y el transporte en uso (Corosync 3 usa por defecto el transporte `knet`):
 
    ```bash
    corosync-cfgtool -s
@@ -90,42 +106,14 @@ Salvo indicación contraria, los comandos `pcs` se ejecutan desde `node1` como `
    ```
    Local node ID 1, transport knet
    LINK ID 0 udp
-       addr = 192.168.122.11
+       addr    = 192.168.122.11
        status:
-           nodeid:   1:  localhost
-           nodeid:   2:  connected
+           nodeid:   1:    localhost
+           nodeid:   2:    connected
+           nodeid:   3:    connected
    ```
 
-7. Mirá el estado global con la vista de Pacemaker:
-
-   ```bash
-   pcs status
-   crm_mon -1
-   ```
-   ```
-   Cluster name: ha_prod
-   Cluster Summary:
-     * Stack: corosync (Pacemaker is running)
-     * Current DC: node1 (version 2.1.x) - partition with quorum
-     * 2 nodes configured
-     * 0 resource instances configured
-   Node List:
-     * Online: [ node1 node2 ]
-   ```
-
-> **Preguntas de comprensión (P1)**
-> 1. ¿Qué dos "capas" distintas gestionás en los pasos 3 y 4, y por qué la autenticación de `pcsd` es independiente de que Corosync arranque?
-> 2. En el paso 4 `pcs` crea `/etc/corosync/authkey`. ¿Qué protege ese archivo y qué campos de `totem` lo activan? ¿Qué pasa si un nodo tiene un `authkey` distinto?
-> 3. El `pcs status` reporta un **Current DC**. ¿Qué es el DC, qué componente de Pacemaker corre en él y qué ocurre si ese nodo cae?
-> 4. Diferenciá `transport: knet` de `udpu`. ¿Por qué `knet` permite `crypto_cipher`/`crypto_hash` y múltiples links de forma nativa?
-
----
-
-## Ejercicio 2 — Quorum, votequorum y el problema del cluster de dos nodos
-
-**Objetivo:** comprender por qué un cluster de 2 nodos es un caso especial y cómo `two_node`, `wait_for_all` y `no-quorum-policy` interactúan para evitar split-brain.
-
-1. Consultá el estado de quorum desde Corosync:
+2. Consultá el servicio votequorum — esta es la vista autoritativa del quorum:
 
    ```bash
    corosync-quorumtool -s
@@ -133,456 +121,453 @@ Salvo indicación contraria, los comandos `pcs` se ejecutan desde `node1` como `
    ```
    Quorum information
    ------------------
-   Nodes:             2
-   Node ID:           1
-   Ring ID:           1.1a
-   Quorate:           Yes
+   Quorum provider:  corosync_votequorum
+   Nodes:            3
+   Node ID:          1
+   Ring ID:          1.1a
+   Quorate:          Yes
+
    Votequorum information
    ----------------------
-   Expected votes:    2
-   Highest expected:  2
-   Total votes:       2
-   Quorum:            1
-   Flags:             2Node Quorate WaitForAll
+   Expected votes:   3
+   Highest expected: 3
+   Total votes:      3
+   Quorum:           2
+   Flags:            Quorate
+
+   Membership information
+   ----------------------
+       Nodeid      Votes Name
+            1          1 node1 (local)
+            2          1 node2
+            3          1 node3
    ```
 
-2. Observá que con `two_node: 1`, Corosync fija `Quorum: 1` y activa `WaitForAll`. Revisá la política de Pacemaker ante pérdida de quorum:
-
-   ```bash
-   pcs property config no-quorum-policy
-   ```
-   ```
-   Cluster Properties: no-quorum-policy
-     no-quorum-policy: stop   (default)
-   ```
-
-3. Simulá la pérdida de un nodo y observá que el superviviente **mantiene** quorum (gracias a `two_node`):
+3. Volcá y filtrá con grep el mapa de configuración en memoria (CMAP), donde Corosync guarda las claves de runtime:
 
    ```bash
-   # En node2:
-   pcs cluster stop
-   # En node1:
-   corosync-quorumtool -s | grep -E 'Quorate|Total'
+   corosync-cmapctl | grep -E 'quorum|two_node|members'
    ```
    ```
-   Total votes:       1
-   Quorate:           Yes
-   ```
-
-4. Volvé a levantar `node2` y confirmá que `WaitForAll` obliga a ver a **ambos** nodos tras un arranque en frío antes de otorgar quorum:
-
-   ```bash
-   pcs cluster start   # en node2
-   corosync-quorumtool -s | grep Flags
+   quorum.provider (str) = corosync_votequorum
+   runtime.members.1.status (str) = joined
+   runtime.members.2.status (str) = joined
+   runtime.members.3.status (str) = joined
    ```
 
-5. (Concepto de escala) En clusters de 3+ nodos, en vez de `two_node` se usa un árbitro de votos. Mostrá cómo se declararía un **qdevice**:
+4. Leé la configuración que generó `pcs cluster setup`:
 
    ```bash
-   pcs quorum config
-   # Configuración típica con árbitro externo:
-   #   pcs quorum device add model net host=qnetd.example.com algorithm=ffsplit
+   cat /etc/corosync/corosync.conf
+   ```
+   ```
+   totem {
+       version: 2
+       cluster_name: hacluster
+       transport: knet
+       crypto_cipher: aes256
+       crypto_hash: sha256
+   }
+
+   nodelist {
+       node { ring0_addr: node1  name: node1  nodeid: 1 }
+       node { ring0_addr: node2  name: node2  nodeid: 2 }
+       node { ring0_addr: node3  name: node3  nodeid: 3 }
+   }
+
+   quorum {
+       provider: corosync_votequorum
+   }
+
+   logging {
+       to_logfile: yes
+       logfile: /var/log/cluster/corosync.log
+       to_syslog: yes
+       timestamp: on
+   }
    ```
 
-> **Preguntas de comprensión (P2)**
-> 1. Con `two_node: 1` el quorum efectivo es 1. ¿Qué peligro reintroduce esto y qué mecanismo (obligatorio en 361.3) es el que realmente evita el split-brain en un cluster de 2 nodos?
-> 2. ¿Qué hace la flag `WaitForAll` y qué escenario concreto de "doble arranque" previene?
-> 3. Explicá las tres opciones de `no-quorum-policy` (`stop`, `ignore`, `freeze`) y en qué situación elegirías cada una.
-> 4. ¿Para qué sirve un `qdevice`/`qnetd` y en qué se diferencia del algoritmo `ffsplit` vs `lms`?
+**Verificación de comprensión 2**
+
+- **2a.** En la salida de `corosync-quorumtool`, `Quorum: 2`. Derivá ese número a partir de `Expected votes`. Si más adelante agregás un cuarto nodo, ¿en cuánto quedará `Quorum`, y por qué un cluster de 4 nodos puede ser *más* frágil que uno de 3 ante una partición limpia 50/50?
+- **2b.** El `corosync.conf` generado **no** tiene línea `two_node: 1`. ¿Cuándo agregaría `pcs` una, y qué dos efectos secundarios habilita `two_node` en el proveedor `votequorum`?
+- **2c.** `corosync-cfgtool -s` muestra `nodeid: 2: connected`, pero `corosync-quorumtool` muestra `Nodeid 2 … joined`. Uno es un estado de *link* y el otro un estado de *membresía*. ¿Qué herramienta revelaría primero un anillo de red roto mientras el nodo por lo demás sigue arriba?
 
 ---
 
-## Ejercicio 3 — El primer recurso: VIP con el resource agent `IPaddr2`
+## Ejercicio 3 — Hacer seguro el failover: fencing / STONITH con SBD
 
-**Objetivo:** entender las **clases de recursos** (OCF, systemd, lsb, service, stonith), providers, agentes, operaciones (`monitor`/`start`/`stop`) y meta-atributos.
+Un cluster de failover que no puede hacer fencing no debe hacer failover — de lo contrario un nodo particionado que Pacemaker *cree* muerto podría seguir escribiendo en el almacenamiento compartido (split-brain → corrupción). Configuramos **SBD (Storage-Based Death)**: una poison-pill escrita en un dispositivo de slot compartido, respaldada por un watchdog de hardware/software.
 
-1. Enumerá las clases de recursos, los providers OCF y los agentes de un provider:
-
-   ```bash
-   pcs resource standards
-   ```
-   ```
-   lsb
-   ocf
-   service
-   systemd
-   ```
-   ```bash
-   pcs resource providers
-   ```
-   ```
-   heartbeat
-   openstack
-   pacemaker
-   ```
-   ```bash
-   pcs resource agents ocf:heartbeat | head
-   ```
-   ```
-   IPaddr2
-   Filesystem
-   apache
-   nfsserver
-   ...
-   ```
-
-2. Inspeccioná los parámetros que espera el agente antes de usarlo:
+1. Confirmá que STONITH está actualmente *habilitado como política* pero que todavía no existe ningún dispositivo — el cluster está en un estado inseguro y se negará a arrancar recursos de forma limpia:
 
    ```bash
-   pcs resource describe ocf:heartbeat:IPaddr2 | head -n 20
+   pcs property config stonith-enabled
+   ```
+   ```
+   Cluster Properties:
+     stonith-enabled: true   # default; never disable this in production
    ```
 
-3. Creá la VIP. `op monitor interval=30s` define el chequeo periódico de salud:
+2. Cargá un watchdog **en todos los nodos**. El hardware real expone `/dev/watchdog` (p. ej. `iTCO_wdt`); para un laboratorio, el watchdog por software sirve:
 
    ```bash
-   pcs resource create VIP ocf:heartbeat:IPaddr2 \
-       ip=192.168.122.100 cidr_netmask=24 nic=eth0 \
-       op monitor interval=30s timeout=20s \
-       op start timeout=20s op stop timeout=20s
+   modprobe softdog
+   ls -l /dev/watchdog
    ```
 
-4. Verificá dónde quedó activa y comprobalo en el kernel:
+3. Inicializá los metadatos de SBD en el dispositivo de slot compartido (hacé esto **una sola vez**, solo desde `node1` — escribe el encabezado en disco que todos los nodos van a compartir):
+
+   ```bash
+   sbd -d /dev/disk/by-id/scsi-360014...-sbd create
+   ```
+
+4. Habilitá SBD a nivel de todo el cluster con `pcs`. Esto escribe `/etc/sysconfig/sbd` en cada nodo, conecta el watchdog, y requiere reiniciar el cluster para tomar efecto:
+
+   ```bash
+   pcs cluster stop --all
+   pcs stonith sbd enable \
+       --device=/dev/disk/by-id/scsi-360014...-sbd \
+       SBD_WATCHDOG_TIMEOUT=5 \
+       SBD_STARTMODE=clean
+   pcs cluster start --all
+   ```
+
+5. Creá el recurso de fencing que arma el mecanismo de poison-pill (el SBD con disco compartido necesita un primitive STONITH `fence_sbd`; el SBD sin disco no):
+
+   ```bash
+   pcs stonith create sbd-fence fence_sbd \
+       devices=/dev/disk/by-id/scsi-360014...-sbd \
+       pcmk_delay_base=5s
+   ```
+
+6. Verificá el demonio SBD e inspeccioná la tabla de asignación de slots:
+
+   ```bash
+   pcs stonith sbd status --full
+   sbd -d /dev/disk/by-id/scsi-360014...-sbd list
+   ```
+   ```
+   0  node1  clear
+   1  node2  clear
+   2  node3  clear
+   ```
+
+7. Probá el mecanismo *sin* matar un nodo — enviá un mensaje `test` a un slot y observá cómo se limpia:
+
+   ```bash
+   sbd -d /dev/disk/by-id/scsi-360014...-sbd message node2 test
+   ```
+
+**Verificación de comprensión 3**
+
+- **3a.** SBD depende de *dos* componentes independientes que trabajan juntos para garantizar que un nodo esté muerto. Nombrá ambos, y explicá qué garantiza cada uno por sí solo — ¿por qué es indispensable el watchdog incluso cuando el mecanismo del slot en disco funciona?
+- **3b.** `pcs property config` muestra `stonith-enabled: true`. ¿Qué le hace Pacemaker a un recurso que necesita recuperación si `stonith-enabled=true` pero **no** existe un dispositivo STONITH que funcione?
+- **3c.** El paso 5 fija `pcmk_delay_base=5s`. En una "fence race" simétrica de dos nodos, ¿qué problema resuelve un retardo de fencing, y por qué se aplica típicamente de forma asimétrica (retardo en un solo nodo)?
+- **3d.** Contrastá el **SBD con disco compartido** (este ejercicio) con el **SBD sin disco**. ¿En qué se apoya *por completo* el SBD sin disco para su decisión de fencing, y cuál es la cantidad mínima de nodos que realistamente necesita?
+
+---
+
+## Ejercicio 4 — Crear recursos y restringirlos
+
+Ahora construí el servicio real: un sistema de archivos XFS compartido, una VIP flotante y Apache, dispuestos para que siempre se ejecuten juntos, en el mismo nodo, en el orden correcto.
+
+1. Inspeccioná los agentes de recurso OCF disponibles para el proveedor `heartbeat` (esta es la *clase de recurso* `ocf` que el examen te pide conocer, junto con `lsb`, `systemd`, `service`, `stonith` y `nagios`):
+
+   ```bash
+   pcs resource list ocf:heartbeat: | grep -E 'IPaddr2|Filesystem|apache'
+   ```
+
+2. Creá el recurso del sistema de archivos compartido (asume que la LUN ya contiene un sistema de archivos `xfs`):
+
+   ```bash
+   pcs resource create WebFS ocf:heartbeat:Filesystem \
+       device="/dev/disk/by-id/scsi-360014...-web" \
+       directory="/var/www/html" fstype="xfs" \
+       op monitor interval=20s timeout=40s
+   ```
+
+3. Creá la VIP flotante:
+
+   ```bash
+   pcs resource create ClusterVIP ocf:heartbeat:IPaddr2 \
+       ip=192.168.122.100 cidr_netmask=24 \
+       op monitor interval=30s
+   ```
+
+4. Creá el servidor web. Acá usamos el agente **OCF** `apache` (puede sondear `server-status`), no la unidad systemd simple, para mostrar un agente más inteligente:
+
+   ```bash
+   pcs resource create WebSite ocf:heartbeat:apache \
+       configfile="/etc/httpd/conf/httpd.conf" \
+       statusurl="http://127.0.0.1/server-status" \
+       op monitor interval=1min
+   ```
+
+5. Uní los tres en un **grupo de recursos**. Un grupo es una abreviatura: los miembros se colocan (colocation) en el mismo nodo *y* se arrancan en el orden listado (se detienen en orden inverso):
+
+   ```bash
+   pcs resource group add WebStack WebFS ClusterVIP WebSite
+   ```
+
+6. Agregá una preferencia explícita de **location** para que el stack favorezca a `node1` cuando pueda, sin fijarlo ahí:
+
+   ```bash
+   pcs constraint location WebStack prefers node1=50
+   ```
+
+7. Revisá el grafo de restricciones y dónde terminaron realmente las cosas:
+
+   ```bash
+   pcs constraint --full
+   pcs status resources
+   ```
+   ```
+     * Resource Group: WebStack:
+       * WebFS       (ocf:heartbeat:Filesystem):   Started node1
+       * ClusterVIP  (ocf:heartbeat:IPaddr2):      Started node1
+       * WebSite     (ocf:heartbeat:apache):       Started node1
+   ```
+
+**Verificación de comprensión 4**
+
+- **4a.** Agrupaste `WebFS → ClusterVIP → WebSite`. Escribí las dos restricciones *explícitas* (una de colocation, una de ordering) que un grupo crea implícitamente entre `WebFS` y `WebSite`. ¿Qué score usa la colocation implícita?
+- **4b.** La restricción de location usa el score `50`, pero una colocation dentro de un grupo usa `INFINITY`. ¿Qué tiene de especial el score `INFINITY` en la aritmética de Pacemaker, y por qué `prefers node1=50` *no* alcanzaría para anular una regla de location `-INFINITY`?
+- **4c.** El paso 4 usa `ocf:heartbeat:apache` en lugar de `systemd:httpd`. Dá una capacidad de monitoreo concreta que tiene el agente OCF y que el recurso de clase `systemd` simple no tiene.
+- **4d.** Si hubieras creado los tres recursos *sin* un grupo y *sin* restricciones, describí una ubicación válida pero inútil que Pacemaker podría elegir.
+
+---
+
+## Ejercicio 5 — Provocar un failover y gestionar el estado de nodos/recursos
+
+1. Observá el cluster en vivo en una terminal (`-Arf` muestra atributos, failcounts y operaciones pendientes):
+
+   ```bash
+   crm_mon -Arf
+   ```
+
+2. En otra terminal, poné `node1` en **standby** — sigue siendo miembro del cluster y sigue votando, pero no aloja ningún recurso:
+
+   ```bash
+   pcs node standby node1
+   ```
+   Todo el `WebStack` debería reubicarse en `node2` (o `node3`) como una sola unidad. Confirmá:
 
    ```bash
    pcs status resources
    ```
    ```
-   * VIP  (ocf:heartbeat:IPaddr2):   Started node1
-   ```
-   ```bash
-   ip -o addr show eth0 | grep 192.168.122.100
-   ```
-
-5. Provocá un failover manual moviendo el recurso y observá la migración:
-
-   ```bash
-   pcs resource move VIP node2
-   crm_mon -1 | grep VIP
-   ```
-   ```
-   * VIP  (ocf:heartbeat:IPaddr2):   Started node2
+     * Resource Group: WebStack:
+       * WebFS       (ocf:heartbeat:Filesystem):   Started node2
+       * ClusterVIP  (ocf:heartbeat:IPaddr2):      Started node2
+       * WebSite     (ocf:heartbeat:apache):       Started node2
    ```
 
-6. `pcs resource move` crea una **constraint de location permanente** implícita. Limpiala para no fijar el recurso:
-
-   ```bash
-   pcs constraint location config --full   # verás la regla cli-prefer-VIP
-   pcs resource clear VIP
-   ```
-
-> **Preguntas de comprensión (P3)**
-> 1. Nombrá las cinco clases de recursos que reporta Pacemaker y explicá la diferencia semántica entre un agente `ocf:heartbeat:apache` y uno `systemd:httpd`. ¿Cuál puede hacer *monitor* con mayor granularidad y por qué?
-> 2. Un OCF resource agent es un script que devuelve códigos estandarizados. ¿Qué significan `OCF_SUCCESS (0)`, `OCF_NOT_RUNNING (7)` y `OCF_ERR_CONFIGURED (6)`, y por qué Pacemaker trata `6` distinto de `1`?
-> 3. En el paso 5, `pcs resource move` "funcionó" pero dejó un efecto colateral que corregiste en el paso 6. ¿Cuál fue y por qué es peligroso olvidarlo?
-> 4. ¿Qué diferencia hay entre las operaciones `start`, `stop` y `monitor`, y qué pasa si el `timeout` de `monitor` es menor que el tiempo real de respuesta del servicio?
-
----
-
-## Ejercicio 4 — Grupos y constraints: colocation, order y location
-
-**Objetivo:** modelar una dependencia real (Filesystem → VIP → Apache) con las tres constraints fundamentales y con la abstracción de **resource group**.
-
-1. Creá los recursos de una pila web (asumiendo un DRBD/almacenamiento ya montado en `/dev/vg_ha/lv_web`):
-
-   ```bash
-   pcs resource create WebFS ocf:heartbeat:Filesystem \
-       device=/dev/vg_ha/lv_web directory=/var/www/html fstype=xfs \
-       op monitor interval=20s
-   pcs resource create WebSite ocf:heartbeat:apache \
-       configfile=/etc/httpd/conf/httpd.conf \
-       statusurl="http://127.0.0.1/server-status" \
-       op monitor interval=1min
-   ```
-
-2. **Opción A — Constraints explícitas.** El sitio debe correr *con* la VIP, y el orden debe ser FS → VIP → Apache:
-
-   ```bash
-   pcs constraint colocation add WebSite with VIP INFINITY
-   pcs constraint colocation add VIP with WebFS INFINITY
-   pcs constraint order WebFS then VIP
-   pcs constraint order VIP then WebSite
-   ```
-
-3. **Opción B — Resource group** (equivalente y más legible: colocation + order implícitos, en el orden listado):
-
-   ```bash
-   pcs resource group add WebStack WebFS VIP WebSite
-   ```
-
-4. Preferí que la pila corra en `node1` cuando sea posible, sin fijarla de forma absoluta:
-
-   ```bash
-   pcs constraint location WebStack prefers node1=200
-   ```
-
-5. Revisá el grafo de constraints y validá la CIB antes de confiar en ella:
-
-   ```bash
-   pcs constraint config
-   crm_verify -LV
-   ```
-   ```
-   (sin salida = configuración válida)
-   ```
-
-6. Consultá el efecto de los scores en la ubicación:
-
-   ```bash
-   crm_simulate -sL | grep -A2 'Allocation Scores'
-   ```
-
-> **Preguntas de comprensión (P4)**
-> 1. ¿Qué significa un score de `INFINITY` en una colocation frente a un `200`? Si `colocation add A with B INFINITY` y B no puede arrancar en ningún lado, ¿qué le pasa a A?
-> 2. `colocation add WebSite with VIP` fija *dónde* corren juntos, pero no *en qué orden* arrancan. ¿Por qué necesitás además una `order` constraint, y qué desastre ocurre sin ella?
-> 3. El `resource group` del paso 3 reemplaza a las cuatro constraints del paso 2. Explicá exactamente qué colocation y qué order impone un grupo, y en qué dirección se detienen los recursos ante un fallo.
-> 4. La location del paso 4 usa `prefers node1=200`. ¿Es lo mismo que `INFINITY`? ¿Qué diferencia hay entre una location "opt-in" y una "opt-out", y cómo se combina el `200` con el `resource-stickiness` por defecto?
-
----
-
-## Ejercicio 5 — STONITH / fencing: sin esto, no hay HA real
-
-**Objetivo:** configurar un dispositivo de fencing, entender por qué es obligatorio y ver cómo Pacemaker "acuchilla" a un nodo perdido antes de recuperar sus recursos.
-
-1. Confirmá el estado por defecto y por qué Pacemaker se queja si está deshabilitado:
-
-   ```bash
-   pcs property config stonith-enabled
-   crm_verify -LV
-   ```
-   ```
-   error: Resource start-up disabled since no STONITH resources have been defined
-   error: Either configure some or disable STONITH with the stonith-enabled option
-   ```
-
-2. Listá los fence agents disponibles y describí el que usa el hypervisor KVM:
-
-   ```bash
-   pcs stonith list | grep -E 'fence_xvm|fence_virt|fence_ipmilan'
-   pcs stonith describe fence_xvm | head -n 15
-   ```
-
-3. Creá el dispositivo STONITH. `pcmk_host_map` traduce el nombre de nodo Pacemaker al nombre de la VM en el hypervisor:
-
-   ```bash
-   pcs stonith create fence_vms fence_xvm \
-       pcmk_host_map="node1:vm-node1;node2:vm-node2" \
-       key_file=/etc/cluster/fence_xvm.key \
-       op monitor interval=60s
-   pcs property set stonith-enabled=true
-   ```
-
-4. Verificá que el fencing "ve" a ambos nodos:
-
-   ```bash
-   pcs stonith status
-   fence_xvm -o list -k /etc/cluster/fence_xvm.key
-   ```
-
-5. **Prueba controlada de fencing.** Acuchillá deliberadamente a `node2` y observá cómo Pacemaker confirma la muerte y reubica sus recursos:
-
-   ```bash
-   pcs stonith fence node2
-   pcs status | grep -A3 'Fencing'
-   ```
-   ```
-   Fencing History:
-     * reboot of node2 successful: delegate=node1, ... completed
-   ```
-
-6. (Doble fencing / fence race) En clusters de 2 nodos, definí un **delay** en uno de los dispositivos para que, ante un split, gane siempre el mismo nodo y no se maten mutuamente:
-
-   ```bash
-   pcs stonith update fence_vms pcmk_delay_base=node1:0s;node2:10s
-   ```
-
-> **Preguntas de comprensión (P5)**
-> 1. Explicá con tus palabras por qué Pacemaker se **niega a arrancar recursos** sin STONITH configurado (paso 1). ¿Qué garantiza el fencing que ni el quorum ni el heartbeat pueden garantizar por sí solos?
-> 2. Un nodo deja de responder al heartbeat pero podría seguir escribiendo en el almacenamiento compartido. ¿Cómo se llama este escenario y por qué recuperar sus recursos *sin* fencerlo corrompería los datos?
-> 3. ¿Qué hace `pcmk_host_map` y por qué es necesario cuando el nombre del nodo en Pacemaker no coincide con el identificador que entiende el fence agent?
-> 4. En el paso 6 agregaste un `pcmk_delay_base` asimétrico. ¿Qué problema de "fence race" resuelve en un cluster de 2 nodos y qué habría pasado sin él ante una partición de red simétrica?
-
----
-
-## Ejercicio 6 — Clones, standby, y predicción con `crm_simulate`
-
-**Objetivo:** desplegar un recurso activo/activo (clone), ejercitar failover por `standby`, limpiar fallos y **predecir** decisiones del scheduler sin aplicarlas.
-
-1. Cloná un recurso que debe correr en **todos** los nodos (ej. un daemon `ping`/connectivity o `clvmd`). Ejemplo con un recurso de conectividad:
-
-   ```bash
-   pcs resource create net_ping ocf:pacemaker:ping \
-       dampen=5s multiplier=1000 host_list=192.168.122.1 \
-       op monitor interval=10s clone
-   ```
-   ```bash
-   pcs status resources | grep -A2 net_ping
-   ```
-   ```
-   * Clone Set: net_ping-clone [net_ping]
-     * Started: [ node1 node2 ]
-   ```
-
-2. Usá el atributo del clone en una **location rule** para desalojar la pila web de un nodo sin gateway:
-
-   ```bash
-   pcs constraint location WebStack rule score=-INFINITY \
-       pingd lt 1 or not_defined pingd
-   ```
-
-3. Poné `node1` en **standby** (mantenimiento planificado) y observá la migración completa del grupo:
-
-   ```bash
-   pcs node standby node1
-   crm_mon -1
-   ```
-   ```
-   Node List:
-     * Node node1: standby
-     * Online: [ node2 ]
-   * Resource Group: WebStack
-     * WebFS   (...): Started node2
-     * VIP     (...): Started node2
-     * WebSite (...): Started node2
-   ```
-
-4. Devolvé `node1` al servicio:
+3. Traé de vuelta `node1`:
 
    ```bash
    pcs node unstandby node1
    ```
+   Notá que el stack **se queda en node2** aunque `node1` esté preferido con score 50 — los recursos son "sticky" una vez en ejecución (`resource-stickiness` por defecto). 
 
-5. **Predecí sin aplicar.** Antes de tocar producción, pedile al scheduler que muestre qué haría, y forzá un fallo hipotético:
+4. Ahora forzá un movimiento a un nodo específico. `pcs resource move` crea una regla de location `-INFINITY` temporal:
 
    ```bash
-   crm_simulate -sL                        # estado y scores actuales
-   crm_simulate -S -i "WebSite_monitor_60000@node1=1"   # inyecta un fallo de monitor
+   pcs resource move WebStack node3
+   pcs constraint --full | grep cli-
+   ```
+   ```
+     Location Constraints:
+       Constraint: cli-prefer-WebStack
+         Rule: score=INFINITY  ... #uname eq node3
    ```
 
-6. Cuando un recurso queda en estado `FAILED` por un fallo transitorio ya resuelto, limpiá el contador de fallos para permitir su re-arranque:
+5. **Limpiá la restricción que quedó** para que la planificación futura vuelva a ser libre (olvidarse de esto es una trampa clásica de examen y una causa real de caídas):
+
+   ```bash
+   pcs resource clear WebStack
+   ```
+
+6. Simulá una falla real. Matá el proceso de Apache por debajo de Pacemaker en el nodo activo y observá cómo la operación de monitor lo detecta:
+
+   ```bash
+   ssh node3 'pkill -9 httpd'
+   ```
+   Dentro de un `monitor interval` el recurso se marca como fallado y se recupera (se reinicia en el lugar, o se reubica si sigue fallando). Inspeccioná el contador de fallas:
 
    ```bash
    pcs resource failcount show WebSite
+   ```
+   ```
+   Failcounts for resource 'WebSite'
+     node3: 1
+   ```
+
+7. Reiniciá el historial de fallas después de haber entendido la causa:
+
+   ```bash
    pcs resource cleanup WebSite
    ```
 
-> **Preguntas de comprensión (P6)**
-> 1. ¿Qué diferencia hay entre un recurso normal, un `clone` y un `promotable clone` (antes *master/slave*)? Dá un ejemplo real de cada uno.
-> 2. En el paso 2 usaste el atributo `pingd` en una regla de location. ¿Cómo lo produce el clone del paso 1 y qué comportamiento consigue la regla `score=-INFINITY` cuando `pingd lt 1`?
-> 3. `pcs node standby` vs `pcs resource ban` vs `pcs cluster stop`: describí el efecto de cada uno sobre los recursos y sobre la membership de Corosync.
-> 4. ¿Por qué `crm_simulate` es más seguro que "probar y ver"? ¿Qué es el `migration-threshold` y cómo se relaciona con el `failcount` que limpiaste en el paso 6?
+**Verificación de comprensión 5**
+
+- **5a.** En el paso 3, `node1` está preferido (score 50) pero el recurso no volvió después de `unstandby`. ¿Qué propiedad de cluster/recurso contrarresta la preferencia de location, y qué problema del mundo real previene?
+- **5b.** `pcs resource move` "funcionó", pero el paso 5 igual fue necesario. Explicá *mecánicamente* qué deja atrás `move` y qué saldría mal en la próxima falla de nodo si nunca ejecutaras `pcs resource clear`.
+- **5c.** Un recurso con `migration-threshold=3` alcanza un failcount de 3 en `node3`. ¿Qué hace Pacemaker a continuación, y cómo interactúa `failure-timeout` con eso?
+- **5d.** Contrastá **standby** (paso 2) con **fencing** (Ejercicio 3). Ambos sacan un nodo de servicio — ¿por qué solo uno es seguro de disparar para mantenimiento planificado, y por qué standby no puede sustituir al fencing durante un split-brain real?
 
 ---
 
-## Ejercicio 7 — Multi-site con `booth` (tickets geográficos) y equivalencias `crmsh`
+## Ejercicio 6 — El mismo cluster a través de `crmsh`
 
-**Objetivo:** conocer la arquitectura de clusters geo-distribuidos con tickets `booth` y traducir la operación básica a `crmsh` (entornos SUSE/Debian).
+`pcs` y `crmsh` (`crm`) son dos front-ends de la *misma* CIB. SUSE trae `crmsh`; RHEL trae `pcs`; el examen espera fluidez en ambos. Nada de lo que sigue cambia el diseño — vuelve a leer y edita levemente el cluster en ejecución.
 
-1. Conceptualmente, `booth` coordina **varios clusters Pacemaker** en sitios distintos mediante un *ticket* que sólo un sitio puede poseer a la vez. Un tercer sitio actúa de **arbitrator**. Config típica `/etc/booth/booth.conf`:
-
-   ```ini
-   transport = UDP
-   port = 9929
-   arbitrator = 192.0.2.99
-   site = 198.51.100.10
-   site = 203.0.113.10
-   ticket = "web-ticket"
-       expire = 600
-       timeout = 10
-       retries = 5
-   ```
-
-2. El ticket se ata a los recursos mediante una constraint que exige poseerlo para poder correr:
-
-   ```bash
-   pcs constraint ticket add web-ticket WebStack loss-policy=fence
-   ```
-
-3. Operación del ticket (otorgar / revocar / consultar):
-
-   ```bash
-   booth ticket grant web-ticket
-   booth ticket show
-   booth ticket revoke web-ticket
-   ```
-
-4. **Equivalencias en `crmsh`** (mismo cluster, otra herramienta). Verificá que producen el mismo modelo:
+1. Estado y monitor en vivo vía `crmsh`:
 
    ```bash
    crm status
-   crm configure show
-   crm configure primitive VIP ocf:heartbeat:IPaddr2 \
-       params ip=192.168.122.100 cidr_netmask=24 \
-       op monitor interval=30s
-   crm node standby node1
-   crm resource move WebStack node2
    crm_mon -1
    ```
 
-5. Exportá y respaldá la CIB completa (imprescindible antes de cambios mayores):
+2. Volcá toda la configuración en la sintaxis compacta de `crmsh`:
 
    ```bash
-   pcs config backup ha_prod_backup     # genera ha_prod_backup.tar.bz2
-   cibadmin --query > /root/cib-$(date +%F).xml
+   crm configure show
+   ```
+   ```
+   node 1: node1
+   node 2: node2
+   node 3: node3
+   primitive ClusterVIP IPaddr2 params ip=192.168.122.100 cidr_netmask=24 \
+       op monitor interval=30s
+   primitive WebFS Filesystem params device="/dev/disk/by-id/...-web" \
+       directory="/var/www/html" fstype=xfs op monitor interval=20s
+   primitive WebSite apache params configfile="/etc/httpd/conf/httpd.conf" \
+       op monitor interval=1min
+   primitive sbd-fence stonith:fence_sbd params devices="/dev/...-sbd"
+   group WebStack WebFS ClusterVIP WebSite
+   location cli-WebStack-on-node1 WebStack 50: node1
+   property cib-bootstrap-options: stonith-enabled=true ...
    ```
 
-> **Preguntas de comprensión (P7)**
-> 1. ¿Por qué `booth` NO es simplemente "un cluster Pacemaker más grande estirado entre dos sitios"? ¿Qué problema de la red WAN (latencia/particiones) hace inviable un único cluster geo-distribuido y cómo lo resuelve el modelo de ticket?
-> 2. ¿Qué rol cumple el **arbitrator** y por qué debe estar en un tercer sitio? ¿Cuántos votos hacen falta para otorgar un ticket con 2 sites + 1 arbitrator?
-> 3. La constraint del paso 2 usa `loss-policy=fence`. ¿Qué otras `loss-policy` existen y qué le pasa a `WebStack` si el sitio pierde el ticket con cada una?
-> 4. `pcs` y `crmsh` son front-ends distintos sobre el mismo backend. ¿Cuál es ese backend común y qué herramienta de bajo nivel (mencionada en el paso 5) manipula directamente la CIB en XML?
+3. Ejecutá el planificador en seco (dry-run): preguntá "¿qué *pasaría* ahora mismo?" sin cambiar nada. `crm_simulate` lee la CIB en vivo e imprime el grafo de transición:
+
+   ```bash
+   crm_simulate -sL
+   ```
+
+4. Hacé una edición a través de `crmsh` para demostrar la paridad — subí la frecuencia de monitor de la VIP — luego verificá con `pcs` que ambos front-ends la ven:
+
+   ```bash
+   crm configure edit ClusterVIP     # opens $EDITOR on that primitive
+   pcs resource config ClusterVIP    # confirm the change via the other tool
+   ```
+
+5. Poné en standby/quitá del standby un nodo a la manera de `crmsh`:
+
+   ```bash
+   crm node standby node2
+   crm node online node2
+   ```
+
+**Verificación de comprensión 6**
+
+- **6a.** Cambiaste el intervalo de monitor de la VIP con `crm configure edit` y lo confirmaste con `pcs resource config`. ¿Qué objeto compartido hace que ambas herramientas coincidan, y dónde vive físicamente y se replica?
+- **6b.** `crm_simulate -sL` informó una transición aunque no cambiaste nada. ¿Para qué sirve `crm_simulate`, y cómo lo usarías *antes* de un cambio riesgoso para predecir las consecuencias?
+- **6c.** Mapeá estos verbos de `crmsh` a sus equivalentes en `pcs`: `crm node standby`, `crm configure show`, `crm resource cleanup`, `crm status`.
+
+---
+
+## Ejercicio 7 (a nivel de conocimiento) — Failover multi-sitio con Booth
+
+Un único cluster Pacemaker asume enlaces de baja latencia; no puede estirarse a través de sitios geográficamente separados y seguir haciendo fencing de forma segura. **Booth** coordina *entre* clusters Pacemaker independientes usando un **ticket** que una mayoría de arbitradores le otorga a exactamente un sitio a la vez.
+
+1. Leé el esqueleto de configuración de Booth (no lo despliegues — esto es a nivel de conocimiento):
+
+   ```bash
+   cat /etc/booth/booth.conf
+   ```
+   ```
+   transport = UDP
+   port = 9929
+   arbitrator = 192.0.2.50
+   site = 198.51.100.10        # cluster at site A
+   site = 203.0.113.10         # cluster at site B
+   ticket = "web-ticket"
+       expire = 600
+   ```
+
+2. Observá cómo un ticket controla un grupo de recursos para que se ejecute en **un solo sitio**:
+
+   ```bash
+   pcs constraint ticket add web-ticket WebStack loss-policy=fence
+   booth ticket grant web-ticket
+   ```
+
+**Verificación de comprensión 7**
+
+- **7a.** ¿Por qué Booth necesita un número impar de participantes (sitios + arbitradores), y cuál es la *única* tarea del arbitrador?
+- **7b.** La restricción de ticket fija `loss-policy=fence`. Si el sitio A pierde el `web-ticket`, ¿qué le pasa a `WebStack` en el sitio A, y por qué es esa la opción segura para un cluster estirado?
 
 ---
 
 <details>
-<summary><strong>Respuestas — comprobá tu comprensión</strong></summary>
+<summary><strong>Respuestas</strong> (clic para expandir)</summary>
 
-### P1 — Bootstrap
+### Ejercicio 1
 
-1. En el paso 3 autenticás la **capa de gestión** (`pcsd`, daemon HTTP en el puerto 2224 que ejecuta las órdenes de `pcs`); en el paso 4 configurás y arrancás la **capa de messaging/membership** (Corosync/totem). Son independientes porque `pcsd` sólo necesita un token compartido para que un nodo acepte comandos remotos de `pcs`; podés autenticar y luego decidir *no* crear cluster, o recrear el cluster sin re-autenticar. Corosync ni siquiera tiene que estar corriendo para que `pcs host auth` funcione.
-2. `/etc/corosync/authkey` es una clave simétrica que autentica y (con `crypto_hash`/`crypto_cipher`) cifra el tráfico de totem entre nodos, impidiendo que una máquina no autorizada se una a la membership o inyecte mensajes. Lo activan los campos `crypto_cipher: aes256` y `crypto_hash: sha256` de la sección `totem`. Si un nodo tiene un `authkey` distinto, sus paquetes de totem se descartan: no formará membership y quedará fuera del cluster (aparece como `OFFLINE`/no se une al anillo).
-3. El **DC (Designated Coordinator)** es el nodo donde corre activamente el `pacemaker-schedulerd` (policy engine) que calcula el estado deseado del cluster; el `pacemaker-controld` de todos los nodos elige uno. Si el DC cae, los nodos supervivientes eligen un nuevo DC automáticamente (elección basada en la membership de Corosync); no hay pérdida de servicio porque el DC es sólo quien *calcula* las decisiones, no dónde corren los recursos.
-4. `udpu` (UDP unicast) es transporte plano sin cifrado nativo ni multi-ring gestionado; `knet` (kronosnet, default moderno) soporta cifrado (`crypto_cipher`/`crypto_hash`), compresión y **múltiples links redundantes** con failover/balanceo entre ellos de forma nativa. Por eso el cifrado y los anillos redundantes son parámetros de primera clase sólo con `knet`.
+- **1a.** `pcsd` es el demonio de **configuración/gestión** — un plano de control REST + CLI en el puerto 2224 que autentica nodos y envía configuración; *no* es parte de la ruta de datos, así que una vez configurado el cluster podés detener `pcsd` y los recursos siguen corriendo (solo perdés la gestión cómoda). `corosync` es la capa de **mensajería/membresía/quorum** (protocolo totem + votequorum). `pacemaker` es el **gestor de recursos del cluster** que decide dónde corren los recursos e impulsa start/stop/monitor/fence. El que no necesitás estrictamente en ejecución para que continúe el servicio es **`pcsd`**.
+- **1b.** `pcs cluster setup` distribuye archivos (`corosync.conf`, la authkey de Corosync) a los otros nodos por el canal de `pcsd`. Ese canal solo es de confianza después de que `pcs host auth` establece un token mutuo entre los nodos. Sin el paso 4, `setup` no tiene una ruta autenticada para escribir en `node2`/`node3` y falla.
+- **1c.** Tres nodos → tres votos presentes; quorum = `floor(expected/2) + 1 = floor(3/2)+1 = 2`. "Partition" es el término de Corosync para el conjunto de nodos que en ese momento pueden verse entre sí; "partition with quorum" significa que el nodo local está en un grupo que tiene ≥ 2 votos y por lo tanto tiene permitido ejecutar recursos.
 
-### P2 — Quorum
+### Ejercicio 2
 
-1. `two_node: 1` baja el quorum a 1, así que ante una **partición de red** *ambos* nodos creen tener quorum y podrían activar los mismos recursos → split-brain con corrupción de datos. El único mecanismo que realmente lo evita en 2 nodos es el **STONITH/fencing**: el nodo que gana la carrera fencea al otro antes de tomar sus recursos.
-2. `WaitForAll` obliga a que, **tras un arranque en frío**, el cluster vea a *todos* los nodos al menos una vez antes de otorgar quorum. Previene el escenario en que un solo nodo arranca aislado (el otro sigue apagado tras un corte), asume quorum y levanta recursos mientras el segundo nodo — que quizás tenía datos más nuevos — arranca por separado.
-3. `stop` (default): sin quorum, detiene ordenadamente los recursos → prioriza integridad. `ignore`: sigue corriendo recursos sin quorum → sólo seguro si el fencing es 100% confiable (típico en 2 nodos con STONITH robusto). `freeze`: mantiene los recursos que ya corren pero no arranca/mueve nada nuevo → útil cuando parar causaría más daño que congelar.
-4. Un `qdevice` es un demonio (`corosync-qdevice`) en cada nodo que consulta a un árbitro externo `qnetd` para conseguir un voto extra, dando quorum determinista sin necesidad de un tercer nodo completo. `ffsplit` (fifty-fifty split) otorga el voto a la partición con más nodos (o, si empatan, a una determinista) — ideal para clusters pares; `lms` (last-man-standing) permite que hasta un único nodo sobreviviente conserve quorum mientras mantenga contacto con `qnetd`.
+- **2a.** `Quorum = floor(3/2)+1 = 2`. Con cuatro nodos, `Quorum = floor(4/2)+1 = 3`. Una partición limpia 2/2 de un cluster de 4 nodos deja a **ninguno** de los lados con 3 votos, así que *ambas* particiones pierden el quorum y detienen todos los recursos — una cantidad par de nodos no te da tolerancia a fallos extra sobre la cantidad impar inmediatamente inferior, y agrega un modo de falla por empate. (Por esto se prefieren los dispositivos de quorum / las cantidades impares.)
+- **2b.** `pcs` agrega `two_node: 1` automáticamente cuando el cluster se crea con exactamente **dos** nodos. Habilita (1) un quorum efectivo de 1 para que un único nodo sobreviviente siga con quorum, y (2) `wait_for_all` en el arranque para que el cluster no asuma quorum hasta que ambos nodos se hayan visto al menos una vez (evitando que un nodo solitario haga fencing a su par sano en el arranque).
+- **2c.** `corosync-cfgtool -s` — informa el estado de **link/anillo** por nodo. Un anillo puede romperse (link `status: … 2: disconnected`) antes de que el nodo sea completamente expulsado de la membresía, así que la vista de link de cfgtool expone primero la falla de red.
 
-### P3 — Recursos y VIP
+### Ejercicio 3
 
-1. Clases: **ocf, lsb, systemd, service, stonith** (también `nagios` en algunas builds). `ocf:heartbeat:apache` es un script OCF que acepta parámetros y hace un *monitor* semántico (ej. consulta `server-status`), devolviendo códigos OCF granulares; `systemd:httpd` sólo envuelve el unit de systemd y su monitor equivale a `systemctl is-active` (vivo/muerto). El OCF hace monitoreo más fino porque puede verificar salud aplicativa real, no sólo que el proceso exista.
-2. `OCF_SUCCESS (0)`: la operación fue bien / el recurso está corriendo. `OCF_NOT_RUNNING (7)`: el recurso está limpiamente detenido (estado esperado, no un error). `OCF_ERR_CONFIGURED (6)`: la configuración es inválida de forma **permanente** — Pacemaker no reintenta en otros nodos porque fallaría igual en todos; un `OCF_ERR_GENERIC (1)` es un fallo transitorio que sí justifica reintentar/migrar.
-3. `pcs resource move` inserta una **constraint de location permanente** (`cli-prefer-VIP` con score INFINITY) que fija el recurso al nodo destino para siempre. Si te olvidás de `pcs resource clear`, el recurso nunca volverá a balancearse y no fallará-back aunque el nodo original se recupere, dejando el cluster desequilibrado y sorprendiendo al próximo operador.
-4. `start`/`stop` son transiciones one-shot que llevan el recurso a running/stopped; `monitor` es el chequeo periódico de salud (con `interval`). Si el `timeout` del `monitor` es menor que el tiempo real de respuesta del servicio, Pacemaker lo declara `failed` por falso positivo, incrementa el `failcount` y puede migrarlo/reiniciarlo innecesariamente (flapping).
+- **3a.** Los dos componentes son el **slot de disco compartido** y el **watchdog de hardware/software**. El slot de disco le permite a un nodo sano *decirle* a un objetivo que muera escribiendo un mensaje de poison-pill; el watchdog garantiza que un nodo colgado, o que perdió el acceso al dispositivo de slot, **se reinicie a sí mismo** porque ya no puede acariciar (pet) `/dev/watchdog`. El watchdog es indispensable porque un nodo que no puede leer su poison-pill (p. ej. ruta de almacenamiento caída, cuelgue de kernel) nunca moriría voluntariamente — el watchdog hace que "ya no puedo probar que estoy sano" equivalga a "me reinicio a mí mismo", que es lo que vuelve incondicional la garantía de muerte de SBD.
+- **3b.** Con `stonith-enabled=true` y sin dispositivo que funcione, Pacemaker **bloqueará la recuperación**: se niega a arrancar el recurso afectado en otro lado porque no puede confirmar que la ubicación anterior está muerta. Los recursos que necesitan recuperación condicionada por fencing quedan detenidos hasta que un fence tenga éxito — el cluster elige deliberadamente la indisponibilidad antes que arriesgar un split-brain.
+- **3c.** En una partición simétrica de dos nodos, ambos nodos deciden hacer fencing al otro simultáneamente y pueden matarse mutuamente ("fence race" → ambos caídos). Un **retardo** de fencing hace que un nodo se detenga antes de disparar; el nodo sin retardo gana la carrera y sobrevive. Se aplica de forma asimétrica (retardo en un solo nodo, p. ej. vía `pcmk_delay_base`/`priority-fencing-delay`) precisamente para que haya un ganador determinista en lugar de un empate.
+- **3d.** El **SBD sin disco** no tiene dispositivo de slot compartido; se apoya **por completo en el watchdog más el quorum** — un nodo que pierde el quorum simplemente deja de acariciar el watchdog y se hace fencing a sí mismo. No tiene forma de enviar una poison-pill positiva a otro nodo, así que necesita una señal de quorum confiable y realistamente **tres o más nodos** (o un dispositivo de quorum) para evitar que ambas particiones se hagan fencing a sí mismas ante un empate.
 
-### P4 — Constraints
+### Ejercicio 4
 
-1. `INFINITY` (1000000) es una restricción **mandatoria**: A *debe* correr con B, cueste lo que cueste; un `200` es una **preferencia** que se suma a otros scores y puede ser superada. Si `colocation add A with B INFINITY` y B no arranca en ningún nodo, A tampoco arranca (queda `Stopped`), porque la única ubicación válida para A es junto a B.
-2. `colocation` fija el *lugar* (mismo nodo) pero no el *orden temporal* de arranque/parada. Necesitás `order` porque sin ella Apache podría arrancar antes de que el Filesystem esté montado o la VIP asignada → el servicio arranca sin su documento raíz o sin dirección donde escuchar, y falla. El order garantiza FS → VIP → Apache al arrancar y el inverso al parar.
-3. Un `resource group` impone: (a) **colocation INFINITY** de todos los miembros entre sí (corren juntos en el mismo nodo) y (b) **order** en la secuencia listada (arrancan en orden, paran en orden inverso). Ante el fallo de un miembro, se detienen en orden inverso los que van *después* de él en la lista.
-4. No es lo mismo: `200` es una preferencia superable; `INFINITY` fijaría el recurso obligatoriamente a ese nodo. "Opt-in" = por defecto el recurso no corre en ningún nodo salvo donde una location con score positivo lo permita; "opt-out" = corre en todos salvo donde una location lo prohíba (score negativo). El `200` se suma al `resource-stickiness` (adherencia al nodo actual): si stickiness ≥ 200, el recurso puede quedarse donde está en vez de migrar de vuelta a node1, evitando failback innecesario.
+- **4a.** Un grupo `WebFS ClusterVIP WebSite` implica, entre los extremos `WebFS` y `WebSite`: una colocation `colocation … WebSite with WebFS INFINITY` (mismo nodo, obligatoria) y un ordering `order … WebFS then WebSite` (arrancar WebFS primero, detenerlo último). El score de la colocation implícita es **`INFINITY`**.
+- **4b.** `INFINITY` (y `-INFINITY`) se tratan como absolutos, no solo como grandes: cualquier score finito sumado a `-INFINITY` sigue siendo `-INFINITY`. Así que una regla obligatoria (`INFINITY`/`-INFINITY`) siempre gana sobre cualquier preferencia finita de tipo consultivo. `prefers node1=50` es un empujón *finito*; puede perder ante la stickiness o ante cualquier regla `-INFINITY` de "nunca correr acá", que no se puede contrapesar sumando 50.
+- **4c.** El agente OCF `apache` puede realizar un **sondeo de salud a nivel de aplicación** — obtiene `statusurl` (`/server-status`) y considera el recurso como fallado si el chequeo HTTP falla, atrapando un demonio colgado-pero-en-ejecución. El recurso `systemd:httpd` simple solo sabe si systemd informa la unidad como activa, así que un servidor trabado que todavía muestra "active" pasaría inadvertido.
+- **4d.** Sin restricciones, Pacemaker balancea la carga por defecto y podría colocar `WebFS` en `node1`, `ClusterVIP` en `node2`, y `WebSite` en `node3` — cada pieza "corriendo", pero Apache no tiene ni sistema de archivos ni VIP en su nodo, así que el servicio es completamente no funcional.
 
-### P5 — STONITH / fencing
+### Ejercicio 5
 
-1. Sin STONITH, Pacemaker no puede **garantizar** que un nodo que perdió el heartbeat esté realmente apagado; podría seguir vivo accediendo a recursos compartidos. Arrancar esos recursos en otro nodo sin certeza produciría dos escritores → corrupción. El fencing es lo único que convierte "no lo veo" en "está garantizadamente fuera" (recovery seguro). Por eso `crm_verify` lo exige.
-2. Es un **split-brain** (o nodo en estado desconocido/`UNCLEAN`). Recuperar sus recursos sin fencerlo significa que dos nodos podrían montar el mismo filesystem o escribir la misma VIP/almacenamiento simultáneamente, corrompiendo datos irreversiblemente. El fencing (poison pill / power off) elimina esa posibilidad antes del failover.
-3. `pcmk_host_map` mapea el **nombre del nodo en Pacemaker** (`node1`) al **identificador que el fence agent entiende** (`vm-node1`, el nombre de la VM en libvirt). Es necesario porque el hypervisor no conoce los hostnames del cluster; sin el map, `fence_xvm` no sabría qué dominio KVM apagar.
-4. `pcmk_delay_base` asimétrico introduce un retardo distinto por nodo, de modo que ante una partición **simétrica** (ambos deciden fencear al otro a la vez) uno espera 10 s y el otro 0 s: el de delay 0 fencea primero y gana. Sin él, en un "fence race" ambos nodos podrían apagarse mutuamente casi simultáneamente → cluster completamente caído (double fencing).
+- **5a.** `resource-stickiness` (un score de stickiness positivo por defecto) hace que un recurso ya en ejecución "prefiera quedarse donde está". Cuando la stickiness ≥ la preferencia de location (50), el recurso no migra de vuelta al nodo preferido después de que este regresa. Esto evita un failback innecesario y disruptivo del servicio (y el flapping) solo porque un nodo preferido volvió a unirse.
+- **5b.** `pcs resource move` implementa el movimiento inyectando una restricción de location `cli-prefer-*` permanente en `INFINITY` que fija el recurso al nodo objetivo. Si nunca la limpiás (`clear`), ese nodo es ahora el *único* lugar donde el recurso está dispuesto a correr; cuando ese nodo falle más adelante, Pacemaker no puede reubicar el recurso y el servicio queda caído — el "move" deshabilitó silenciosamente el failover.
+- **5c.** Alcanzar el `migration-threshold` en un nodo vuelve a ese nodo **no elegible** para el recurso (efectivamente `-INFINITY` ahí), forzando la reubicación a otro nodo. `failure-timeout` hace caducar las fallas viejas después de un intervalo fijado, decayendo el failcount para que el nodo vuelva a ser elegible automáticamente en lugar de quedar vetado para siempre.
+- **5d.** **Standby** es un cambio de estado *cooperativo*: el nodo está sano y acepta ceder sus recursos, que se detienen y mueven limpiamente — seguro para mantenimiento planificado. **Fencing** es para un nodo *no cooperativo o desconocido*: no podés confiar en que se detenga limpiamente, así que le cortás la energía/lo reiniciás. Standby no puede sustituir al fencing en un split-brain porque a un nodo particionado no se le puede *pedir* que entre en standby — no tenés comunicación con él, y solo un fence forzoso puede garantizar que no siga escribiendo en el almacenamiento compartido.
 
-### P6 — Clones y simulación
+### Ejercicio 6
 
-1. **Recurso normal**: una sola instancia activa en un nodo (ej. una VIP). **Clone**: N instancias idénticas activas a la vez, una por nodo (ej. `ping`/connectivity, `clvmd`, un daemon de filesystem clusterizado). **Promotable clone** (ex master/slave): un clone donde las instancias tienen roles Promoted/Unpromoted, típicamente un master y varios réplica (ej. DRBD Primary/Secondary, PostgreSQL con replicación).
-2. El clone `ocf:pacemaker:ping` escribe en cada nodo el atributo de nodo `pingd` = (nº de hosts alcanzables × `multiplier`). La regla `location ... score=-INFINITY pingd lt 1` significa "prohibí `WebStack` en cualquier nodo cuyo `pingd` sea menor que 1", es decir, desaloja la pila de un nodo que perdió conectividad con el gateway hacia uno que sí lo alcanza.
-3. `pcs node standby`: marca el nodo como no elegible para recursos; **migra todo** fuera de él pero lo mantiene en la membership de Corosync (sigue votando). `pcs resource ban`: prohíbe *un recurso concreto* en un nodo (crea una location -INFINITY). `pcs cluster stop`: detiene Pacemaker **y** Corosync en el nodo → sale de la membership (deja de votar) y sus recursos se recuperan en otro lado.
-4. `crm_simulate` calcula la transición que el scheduler *haría* a partir de la CIB, sin aplicarla — así ves scores y acciones antes de tocar producción. `migration-threshold` es el número de fallos (failcount) de un recurso en un nodo tras el cual Pacemaker lo prohíbe ahí y lo migra; al hacer `pcs resource cleanup` reseteás ese failcount para que el recurso vuelva a ser elegible en ese nodo.
+- **6a.** Ambos front-ends leen y escriben la **CIB (Cluster Information Base)**, un documento XML gestionado por el demonio `pacemaker-based` (CIB) de Pacemaker. Vive en `/var/lib/pacemaker/cib/cib.xml` en cada nodo y se **replica automáticamente** a todos los nodos, así que un cambio hecho a través de `crmsh` es inmediatamente visible para `pcs` y viceversa.
+- **6b.** `crm_simulate` ejecuta el **motor de políticas offline** contra una CIB para mostrar el grafo de transición que *ejecutaría* — qué recursos arranca/detiene/mueve/hace fencing — sin tocar el cluster. Antes de un cambio riesgoso guardás la CIB, aplicás el cambio a esa copia, y lo simulás (p. ej. `crm_simulate -Sx new.xml`) para ver las consecuencias (reinicios inesperados, un fence, una reubicación del stack) *antes* de confirmar.
+- **6c.** `crm node standby` → `pcs node standby`; `crm configure show` → `pcs config` / `pcs resource config` (completo: `pcs cluster cib`); `crm resource cleanup` → `pcs resource cleanup`; `crm status` → `pcs status`.
 
-### P7 — Multi-site y crmsh
+### Ejercicio 7
 
-1. Un único cluster Pacemaker asume messaging de baja latencia y fencing confiable entre todos los nodos — inviable sobre WAN, donde las particiones son frecuentes y el fencing cross-site poco fiable. `booth` mantiene **clusters independientes por sitio**, cada uno con su propio quorum y fencing local, y coordina cuál sitio está "activo" mediante un **ticket** que sólo un sitio posee a la vez; así una partición WAN no provoca doble activación.
-2. El **arbitrator** es un tercer nodo (sin recursos) que rompe empates al otorgar el ticket; debe estar en un **tercer sitio** para que una partición que aísle a un site no lo aísle también a él. Con 2 sites + 1 arbitrator hay 3 votos y hacen falta **2** (mayoría) para conceder el ticket: el sitio superviviente más el arbitrator.
-3. `loss-policy` posibles: `fence` (fencea los nodos del sitio que perdió el ticket — máxima seguridad), `stop` (detiene ordenadamente los recursos atados al ticket), `freeze` (mantiene los recursos en su estado actual sin arrancar nada nuevo), y `demote` (para recursos promotable, los baja a rol Unpromoted). Con `fence`, perder el ticket cuesta un reboot del nodo; con `stop`/`freeze`/`demote` la reacción es progresivamente menos drástica.
-4. El backend común es **Pacemaker y su CIB (Cluster Information Base)**, un documento XML replicado; tanto `pcs` como `crmsh` generan/parchean esa misma CIB. La herramienta de bajo nivel que la manipula directamente es **`cibadmin`** (`cibadmin --query` / `--replace`), sobre la que ambos front-ends se apoyan.
+- **7a.** Booth otorga un ticket por **voto mayoritario**, así que el número total de participantes (sitios + arbitradores) debe ser **impar** para garantizar una mayoría decisiva y evitar que dos sitios reclamen ambos el ticket. La única tarea del arbitrador es ser un **votante de desempate** — no ejecuta recursos; existe puramente para hacer impar el total de votos y decidir qué sitio tiene el ticket.
+- **7b.** Con `loss-policy=fence`, si el sitio A pierde `web-ticket`, Pacemaker en el sitio A **hace fencing a sus propios nodos** que ejecutan `WebStack`, garantizando que se detengan antes de que al sitio B se le permita arrancar los mismos recursos. Para un cluster multi-sitio estirado esta es la opción segura: se asegura absolutamente de que la carga de trabajo (y cualquier escritura de datos compartidos) se ejecute en exactamente un sitio, eliminando el split-brain entre sitios incluso cuando el enlace inter-sitio desaparece.
 
 </details>
+
+---
+
+### Fuentes
+
+- LPI — Exam 306 Objectives, Topic 361.3 *Failover Clusters*: https://www.lpi.org/our-certifications/exam-306-objectives/
+- ClusterLabs — *Pacemaker Administration* y *Pacemaker Explained*: https://clusterlabs.org/pacemaker/doc/
+- ClusterLabs — páginas de manual `votequorum(5)` y `corosync.conf(5)` de Corosync: https://clusterlabs.org/corosync.html
+- Manual de `pcs`(8), ClusterLabs: https://clusterlabs.org/pcs/
+- Documentación de `crmsh` (SUSE/ClusterLabs): https://crmsh.github.io/
+- SBD — demonio Storage-Based Death: https://github.com/ClusterLabs/sbd
+- Booth — Cluster Ticket Manager: https://github.com/ClusterLabs/booth
