@@ -1,298 +1,364 @@
 #!/usr/bin/env bash
 #
-# ==============================================================================
-# LPIC-3 306 (Exam 306-300, v3.0) — Topic 362.2: Cluster Storage Access
-# Break & Fix lab: GFS2 shared-storage volume that will not mount
-# ==============================================================================
+# =============================================================================
+#  LPIC-3 306  (Exam 306-300, version 3.0)
+#  Topic 362.2 — Cluster Storage Access   (exam weight: 5)
 #
-# WHAT THIS TEACHES
-# -----------------
-# A GFS2 file system does not carry its own locking. At mkfs time you bind it to
-# a *lock protocol* and a *lock table* written into the superblock:
+#  BREAK & FIX LAB  —  iSCSI shared-storage access denied by an ACL mismatch
+# =============================================================================
 #
-#     lockproto = lock_dlm         -> coordinate access through the kernel DLM,
-#                                     driven by dlm_controld, fed by the cluster
-#                                     membership layer (corosync/pacemaker).
-#     locktable = <cluster>:<fs>   -> e.g. "labcluster:shared". The part before
-#                                     the colon MUST equal the corosync cluster
-#                                     name, or the mount is refused.
-#     lockproto = lock_nolock      -> no distributed locking; single mounter only.
+#  WHAT THIS LAB TEACHES
+#  ---------------------
+#  In a High Availability storage cluster the shared block device that later
+#  feeds CLVM / GFS2 / OCFS2 (and is arbitrated by the Distributed Lock
+#  Manager, DLM) is almost never a local disk: it is a LUN exported over a SAN.
+#  On Linux the software SAN is Linux-IO (LIO) on the target side, driven by
+#  'targetcli', and open-iscsi ('iscsiadm' + 'iscsid') on the initiator side.
 #
-# In production a GFS2 volume is lock_dlm and is mounted by every node while the
-# DLM (dlm_controld + the `dlm` kernel module) and cluster membership are up.
-# When those are absent — a rescue box, a maintenance VM, a node evicted from the
-# cluster — a lock_dlm mount fails hard, because there is no lock manager to talk
-# to. Recovering the data from such a volume on a single, cluster-less host is a
-# real operational skill and the subject of this exercise.
+#  A LUN is only visible to an initiator whose IQN matches an ACL entry on the
+#  target's TPG (when generate_node_acls=0, ACLs are strictly enforced). Get
+#  that identity wrong and the node simply cannot see the storage — the classic
+#  "the cluster came up but /dev/sdX never appeared" incident.
 #
-# This lab reproduces that exact failure on ONE disposable VM using a loopback
-# block device, so no corosync/pacemaker stack and no second node are required.
+#  This script builds a self-contained, loopback-only (127.0.0.1) iSCSI SAN,
+#  proves it works, then breaks the target ACL so the initiator loses the LUN.
+#  Your job is to restore access. Nothing outside this VM is touched.
 #
-# SAFETY
-# ------
-#   * Run ONLY on a throwaway lab VM. You must be root.
-#   * Everything lives under /root/lab-362.2 on a private loop device.
-#   * It never touches real disks, real LVM volume groups, /etc, or fstab.
-#   * `--clean` tears the whole thing down so the VM returns to a clean state.
+#  SAFE FOR:   a disposable/throwaway lab VM ONLY. It rewrites
+#              /etc/iscsi/initiatorname.iscsi (backed up) and creates one LIO
+#              target. Do NOT run on a host with real iSCSI storage.
 #
-# USAGE
-# -----
-#   ./362.2-break.sh --break     # arm the failure (default)
-#   ./362.2-break.sh --verify    # check whether you solved it
-#   ./362.2-break.sh --clean     # remove all lab artifacts
+#  USAGE:      sudo ./362.2-break-and-fix.sh          # build + break the lab
+#              sudo ./362.2-break-and-fix.sh cleanup  # tear everything down
 #
-# Reference sources (official):
-#   - LPI 306-300 objectives: https://www.lpi.org/our-certifications/exam-306-objectives/
-#   - Configuring GFS2 File Systems (Red Hat):
-#       https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_gfs2_file_systems/
-#   - man 8 mkfs.gfs2 ; man 8 mount.gfs2 ; man 8 tunegfs2 ; man 8 dlm_tool
-# ==============================================================================
+#  SOURCES (official):
+#    - LPI Exam 306 Objectives:
+#        https://www.lpi.org/our-certifications/exam-306-objectives/
+#    - Linux-IO (LIO) / targetcli:            http://linux-iscsi.org/
+#        man 8 targetcli   —   man 5 targetcli
+#    - open-iscsi (iscsiadm/iscsid):
+#        https://github.com/open-iscsi/open-iscsi   —   man 8 iscsiadm
+# =============================================================================
 
 set -euo pipefail
 
-LAB_DIR="/root/lab-362.2"
-IMG="${LAB_DIR}/gfs2-shared.img"
-MNT="${LAB_DIR}/mnt"
-STATE="${LAB_DIR}/state.env"
-LOCKTABLE="labcluster:shared"
-SENTINEL="IMPORTANT-BACKUP.txt"
+# ---------------------------------------------------------------------------
+# Lab configuration (all identifiers are lab-scoped and reversible)
+# ---------------------------------------------------------------------------
+PORTAL_IP="127.0.0.1"
+PORTAL_PORT="3260"
+TARGET_IQN="iqn.2026-08.lab.lpic3:target01"
+INIT_IQN="iqn.2026-08.lab.lpic3:initiator01"
+ROGUE_IQN="iqn.2026-08.lab.lpic3:rogue"          # the wrong identity we inject
+BACKSTORE="disk01"
+BACKING_DIR="/var/lib/lab362"
+BACKING_FILE="${BACKING_DIR}/${BACKSTORE}.img"
+BACKING_SIZE="100M"
+INIT_NAME_FILE="/etc/iscsi/initiatorname.iscsi"
+INIT_NAME_BAK="/etc/iscsi/initiatorname.iscsi.lab362-bak"
 
-log()  { printf '\033[1;34m[*]\033[0m %s\n' "$*"; }
-ok()   { printf '\033[1;32m[+]\033[0m %s\n' "$*"; }
-warn() { printf '\033[1;33m[!]\033[0m %s\n' "$*"; }
-die()  { printf '\033[1;31m[x]\033[0m %s\n' "$*" >&2; exit 1; }
+# ---------------------------------------------------------------------------
+# Pretty output
+# ---------------------------------------------------------------------------
+if [ -t 1 ]; then
+  C_R="$(printf '\033[0;31m')"; C_G="$(printf '\033[0;32m')"
+  C_Y="$(printf '\033[0;33m')"; C_B="$(printf '\033[0;34m')"
+  C_BOLD="$(printf '\033[1m')";  C_0="$(printf '\033[0m')"
+else
+  C_R=""; C_G=""; C_Y=""; C_B=""; C_BOLD=""; C_0=""
+fi
+info()  { printf '%s[*]%s %s\n'  "${C_B}"   "${C_0}" "$*"; }
+ok()    { printf '%s[+]%s %s\n'  "${C_G}"   "${C_0}" "$*"; }
+warn()  { printf '%s[!]%s %s\n'  "${C_Y}"   "${C_0}" "$*"; }
+die()   { printf '%s[x]%s %s\n'  "${C_R}"   "${C_0}" "$*" >&2; exit 1; }
+rule()  { printf '%s----------------------------------------------------------------------%s\n' "${C_BOLD}" "${C_0}"; }
 
+# ---------------------------------------------------------------------------
+# Preconditions
+# ---------------------------------------------------------------------------
 require_root() {
-    [ "$(id -u)" -eq 0 ] || die "This lab must run as root."
+  [ "$(id -u)" -eq 0 ] || die "Run as root (sudo). This lab manipulates the kernel LIO target and iscsid."
 }
 
-confirm_lab() {
-    # Refuse to run unattended on anything that is not obviously disposable.
-    if [ "${LAB_FORCE:-0}" != "1" ]; then
-        warn "This will load kernel modules and create a loop device under ${LAB_DIR}."
-        warn "Run this ONLY on a disposable lab VM."
-        read -r -p "Type 'lab' to continue: " reply
-        [ "$reply" = "lab" ] || die "Aborted by user."
-    fi
+ensure_packages() {
+  local need_targetcli=0 need_iscsi=0
+  command -v targetcli >/dev/null 2>&1 || need_targetcli=1
+  command -v iscsiadm  >/dev/null 2>&1 || need_iscsi=1
+  [ "$need_targetcli" -eq 0 ] && [ "$need_iscsi" -eq 0 ] && return 0
+
+  info "Installing missing packages (targetcli / open-iscsi)..."
+  if   command -v apt-get >/dev/null 2>&1; then
+    apt-get update -qq && apt-get install -y targetcli-fb open-iscsi
+  elif command -v dnf >/dev/null 2>&1; then
+    dnf install -y targetcli iscsi-initiator-utils
+  elif command -v yum >/dev/null 2>&1; then
+    yum install -y targetcli iscsi-initiator-utils
+  elif command -v zypper >/dev/null 2>&1; then
+    zypper --non-interactive install targetcli iscsi-initiator-utils
+  else
+    die "No supported package manager found. Install 'targetcli' and 'open-iscsi/iscsi-initiator-utils' manually."
+  fi
+  command -v targetcli >/dev/null 2>&1 || die "targetcli still not available."
+  command -v iscsiadm  >/dev/null 2>&1 || die "iscsiadm still not available."
 }
 
-ensure_tools() {
-    # Best-effort dependency setup. On a real exam-style lab you would have
-    # gfs2-utils installed already; here we try, but never fail silently.
-    if ! command -v mkfs.gfs2 >/dev/null 2>&1; then
-        log "mkfs.gfs2 not found — attempting to install gfs2-utils..."
-        if   command -v dnf     >/dev/null 2>&1; then dnf install -y gfs2-utils || true
-        elif command -v apt-get >/dev/null 2>&1; then apt-get update && apt-get install -y gfs2-utils || true
-        elif command -v zypper  >/dev/null 2>&1; then zypper --non-interactive install gfs2-utils || true
-        fi
-    fi
-    command -v mkfs.gfs2 >/dev/null 2>&1 || die "gfs2-utils is required (package 'gfs2-utils')."
-    command -v losetup   >/dev/null 2>&1 || die "util-linux 'losetup' is required."
-
-    # The gfs2 module is mandatory. Note we deliberately do NOT start the DLM
-    # cluster stack — its absence is precisely what breaks the mount.
-    if ! modprobe gfs2 2>/dev/null; then
-        die "Cannot load the 'gfs2' kernel module (install the matching kernel modules)."
-    fi
+start_iscsid() {
+  modprobe iscsi_tcp 2>/dev/null || true
+  systemctl start iscsid 2>/dev/null || service iscsid start 2>/dev/null || true
+  # iscsid may be socket-activated; a discovery below will spin it up regardless.
 }
 
+# ---------------------------------------------------------------------------
+# Helper: current iSCSI block device (by-path) for our portal/target, if any
+# ---------------------------------------------------------------------------
+lun_device() {
+  ls -l /dev/disk/by-path/ 2>/dev/null \
+    | grep -F "${PORTAL_IP}:${PORTAL_PORT}" \
+    | grep -F "iscsi-${TARGET_IQN}" \
+    | grep -oE '[a-z]*/(sd[a-z]+)$' | awk -F/ '{print $NF}' | head -n1
+}
+
+# ---------------------------------------------------------------------------
+# BUILD: target (LIO) side
+# ---------------------------------------------------------------------------
+setup_target() {
+  info "Building the iSCSI target (Linux-IO) ..."
+  mkdir -p "${BACKING_DIR}"
+  if [ ! -f "${BACKING_FILE}" ]; then
+    truncate -s "${BACKING_SIZE}" "${BACKING_FILE}"
+    ok "Created backing file ${BACKING_FILE} (${BACKING_SIZE})"
+  fi
+
+  # fileio backstore (idempotent: ignore 'already exists')
+  targetcli /backstores/fileio create "${BACKSTORE}" "${BACKING_FILE}" "${BACKING_SIZE}" 2>/dev/null || true
+
+  # target IQN + TPG
+  targetcli /iscsi create "${TARGET_IQN}" 2>/dev/null || true
+
+  # Bind the portal to loopback only (delete the default 0.0.0.0 wildcard)
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/portals" delete 0.0.0.0 3260 2>/dev/null || true
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/portals" create "${PORTAL_IP}" "${PORTAL_PORT}" 2>/dev/null || true
+
+  # Map the LUN
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/luns" create "/backstores/fileio/${BACKSTORE}" 2>/dev/null || true
+
+  # No CHAP; enforce explicit ACLs (generate_node_acls=0 -> the ACL matters)
+  targetcli "/iscsi/${TARGET_IQN}/tpg1" set attribute authentication=0            >/dev/null
+  targetcli "/iscsi/${TARGET_IQN}/tpg1" set attribute generate_node_acls=0        >/dev/null
+  targetcli "/iscsi/${TARGET_IQN}/tpg1" set attribute demo_mode_write_protect=0   >/dev/null
+
+  # The correct ACL: only our initiator IQN may see the LUN
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/acls" create "${INIT_IQN}" 2>/dev/null || true
+
+  targetcli saveconfig >/dev/null
+  systemctl enable --now target >/dev/null 2>&1 || true
+  ok "Target ${TARGET_IQN} exporting 1 LUN on ${PORTAL_IP}:${PORTAL_PORT}, ACL=${INIT_IQN}"
+}
+
+# ---------------------------------------------------------------------------
+# BUILD: initiator (open-iscsi) side + verify the LUN really appears
+# ---------------------------------------------------------------------------
+setup_initiator() {
+  info "Configuring the iSCSI initiator (open-iscsi) ..."
+  [ -f "${INIT_NAME_FILE}" ] && [ ! -f "${INIT_NAME_BAK}" ] && cp -a "${INIT_NAME_FILE}" "${INIT_NAME_BAK}"
+  echo "InitiatorName=${INIT_IQN}" > "${INIT_NAME_FILE}"
+  start_iscsid
+  systemctl restart iscsid 2>/dev/null || service iscsid restart 2>/dev/null || true
+  sleep 1
+
+  info "Discovery (SendTargets) against ${PORTAL_IP}:${PORTAL_PORT} ..."
+  iscsiadm -m discovery -t sendtargets -p "${PORTAL_IP}:${PORTAL_PORT}" >/dev/null
+  # Expected:  127.0.0.1:3260,1 iqn.2026-08.lab.lpic3:target01
+
+  info "Logging in ..."
+  iscsiadm -m node -T "${TARGET_IQN}" -p "${PORTAL_IP}:${PORTAL_PORT}" --login >/dev/null
+  # Expected:  Login to [iface: default, target: ...:target01, portal: 127.0.0.1,3260] successful.
+
+  # Wait for udev to publish the block device
+  local dev="" i
+  for i in 1 2 3 4 5 6 7 8; do
+    dev="$(lun_device || true)"; [ -n "${dev}" ] && break; sleep 1
+  done
+  [ -n "${dev}" ] || die "LUN did not appear after login — the base lab failed to build."
+  ok "LUN is visible as /dev/${dev} — the SAN path works end to end."
+}
+
+# ---------------------------------------------------------------------------
+# THE BREAK: swap the target ACL to a wrong IQN, drop the live session.
+# Controlled, reversible, and confined to this VM.
+# ---------------------------------------------------------------------------
 do_break() {
-    require_root
-    [ -f "$STATE" ] && die "Lab already armed. Run '--clean' first to reset it."
-    confirm_lab
-    ensure_tools
+  rule
+  info "Injecting the fault ..."
+  # 1) Replace the correct ACL with a rogue IQN the initiator will never match.
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/acls" delete "${INIT_IQN}"  2>/dev/null || true
+  targetcli "/iscsi/${TARGET_IQN}/tpg1/acls" create "${ROGUE_IQN}" 2>/dev/null || true
+  targetcli saveconfig >/dev/null
+  # 2) Tear down the currently established session so the LUN disappears.
+  iscsiadm -m node -T "${TARGET_IQN}" -p "${PORTAL_IP}:${PORTAL_PORT}" --logout >/dev/null 2>&1 || true
+  sleep 1
+  ok "Fault injected. The target no longer authorizes this initiator."
+}
 
-    mkdir -p "$LAB_DIR" "$MNT"
+# ---------------------------------------------------------------------------
+# CLEANUP: full teardown, restore initiator name
+# ---------------------------------------------------------------------------
+cleanup() {
+  require_root
+  info "Tearing down lab 362.2 ..."
+  iscsiadm -m node -T "${TARGET_IQN}" -p "${PORTAL_IP}:${PORTAL_PORT}" --logout          >/dev/null 2>&1 || true
+  iscsiadm -m node -T "${TARGET_IQN}" -p "${PORTAL_IP}:${PORTAL_PORT}" -o delete          >/dev/null 2>&1 || true
+  targetcli "/iscsi" delete "${TARGET_IQN}"               2>/dev/null || true
+  targetcli "/backstores/fileio" delete "${BACKSTORE}"    2>/dev/null || true
+  targetcli saveconfig >/dev/null 2>&1 || true
+  rm -f "${BACKING_FILE}"
+  rmdir "${BACKING_DIR}" 2>/dev/null || true
+  if [ -f "${INIT_NAME_BAK}" ]; then
+    mv -f "${INIT_NAME_BAK}" "${INIT_NAME_FILE}"
+    systemctl restart iscsid 2>/dev/null || service iscsid restart 2>/dev/null || true
+    ok "Restored original ${INIT_NAME_FILE}"
+  fi
+  ok "Lab removed."
+}
 
-    # --- Build a private block device ----------------------------------------
-    log "Creating a 512 MiB backing image and attaching a loop device..."
-    truncate -s 512M "$IMG"
-    local loop
-    loop="$(losetup --find --show "$IMG")"
-    echo "LOOP=${loop}" > "$STATE"
-    ok "Loop device: ${loop}"
+# ---------------------------------------------------------------------------
+# Challenge briefing
+# ---------------------------------------------------------------------------
+briefing() {
+  rule
+  printf '%s  LPIC-3 306 · 362.2 Cluster Storage Access — YOUR MISSION%s\n' "${C_BOLD}" "${C_0}"
+  rule
+  cat <<EOF
+CONTEXT
+  A single-node loopback iSCSI SAN has just been built and was working:
+  target ${C_BOLD}${TARGET_IQN}${C_0}
+  exported one LUN on ${C_BOLD}${PORTAL_IP}:${PORTAL_PORT}${C_0}, and the initiator
+  ${C_BOLD}${INIT_IQN}${C_0} could see it as a block device.
 
-    # --- Format as a *clustered* GFS2 volume ---------------------------------
-    # -p lock_dlm  : bind the fs to the DLM (needs a running cluster to mount).
-    # -t <table>   : cluster:fsname stamped into the superblock.
-    # -j 2 -J 32   : two 32 MiB journals (one per would-be node).
-    log "Formatting ${loop} as GFS2 with lockproto=lock_dlm, locktable=${LOCKTABLE}..."
-    mkfs.gfs2 -O -p lock_dlm -t "$LOCKTABLE" -j 2 -J 32 "$loop" >/dev/null
+  A change was then applied to the target and the session was lost.
 
-    # --- Seed data the student must recover ----------------------------------
-    # We use the single-node override here purely as the instructor's setup, so
-    # that after you solve the challenge there is verifiable data to read back.
-    log "Seeding data onto the volume (instructor setup)..."
-    mount -t gfs2 -o lockproto=lock_nolock,noatime "$loop" "$MNT"
-    cat > "${MNT}/${SENTINEL}" <<EOF
-Quarterly billing export — DO NOT DELETE.
-If you can read this file, you recovered the GFS2 volume on a single node.
+SYMPTOM YOU WILL OBSERVE
+  * 'lsblk' no longer shows the iSCSI LUN; there is no active session
+    ('iscsiadm -m session' reports "No active sessions").
+  * Trying to log back in FAILS, e.g.:
+
+      # iscsiadm -m node -T ${TARGET_IQN} -p ${PORTAL_IP}:${PORTAL_PORT} --login
+      iscsiadm: Could not login to [iface: default, target: ${TARGET_IQN}, \
+                portal: ${PORTAL_IP},${PORTAL_PORT}].
+      iscsiadm: initiator reported error (24 - iSCSI login failed due to \
+                authorization failure)
+
+    (LIO logs the reason as "Security negotiation failed" / reason 02,
+     authorization failure — the target refuses the initiator.)
+
+YOUR GOAL
+  Restore the initiator's access to the LUN WITHOUT recreating the target or
+  the backstore, and WITHOUT weakening security (do not disable ACLs, do not
+  turn on demo/generate_node_acls). Success =
+      - 'iscsiadm ... --login' reports "successful", and
+      - 'lsblk' again shows the LUN as a local block device.
+
+USEFUL STARTING POINTS
+  cat ${INIT_NAME_FILE}
+  iscsiadm -m session -P3
+  targetcli ls /iscsi/${TARGET_IQN}/tpg1/acls
+  journalctl -k | tail   # kernel/LIO messages about the rejected login
+
+  When you are done experimenting, reset the VM with:
+      sudo $0 cleanup
 EOF
-    sync
-    umount "$MNT"
-    ok "Data written. Volume superblock still says lockproto=lock_dlm."
-
-    # --- Demonstrate the failure the student inherits -------------------------
-    echo
-    warn "Reproducing the fault a normal mount would hit on this cluster-less VM:"
-    echo  "    # mount -t gfs2 ${loop} ${MNT}"
-    if mount -t gfs2 "$loop" "$MNT" 2>/tmp/362.2-mount.err; then
-        # Extremely unlikely here (no DLM), but stay honest if it somehow works.
-        umount "$MNT" || true
-        warn "Unexpected: the mount succeeded. Is a DLM stack running on this host?"
-    else
-        sed 's/^/        /' /tmp/362.2-mount.err || true
-        echo "        (kernel ring buffer:)"
-        dmesg | tail -n 4 | sed 's/^/        /' || true
-    fi
-    rm -f /tmp/362.2-mount.err
-
-    # --- The challenge briefing ----------------------------------------------
-    cat <<EOF
-
-==============================================================================
-                          >>> YOUR CHALLENGE <<<
-==============================================================================
-SCENARIO
-  A colleague built the GFS2 volume now on ${loop} for a Pacemaker cluster
-  named "labcluster". That cluster is gone; THIS box has no corosync, no
-  pacemaker, and no running DLM. You have been handed the disk to pull a
-  backup off it before it is wiped.
-
-SYMPTOM YOU WILL SEE
-  * 'mount -t gfs2 ${loop} ${MNT}' exits non-zero.
-  * 'mount' reports: "wrong fs type, bad option, bad superblock ...".
-  * 'dmesg' shows a line such as:
-        gfs2: can't find locking protocol lock_dlm
-    or  gfs2: ... no cluster infrastructure / DLM not available.
-  The superblock demands the DLM, but nothing here can provide it.
-
-WHAT YOU MUST ACHIEVE
-  1. Mount the volume READ-WRITE at ${MNT} on THIS single node.
-  2. Read the file '${SENTINEL}' from the volume.
-  3. (Bonus) Make the volume mountable normally on a standalone node so a
-     plain 'mount -t gfs2' no longer fails.
-
-USEFUL TOOLS
-  losetup -a | blkid | tunegfs2 -l ${loop} | dmesg | man 8 mount.gfs2
-
-CHECK YOUR WORK
-  ./$(basename "$0") --verify
-==============================================================================
-EOF
+  rule
 }
 
-do_verify() {
-    require_root
-    [ -f "$STATE" ] || die "Nothing to verify — the lab is not armed."
-    # shellcheck disable=SC1090
-    . "$STATE"
-    if mountpoint -q "$MNT" && [ -f "${MNT}/${SENTINEL}" ]; then
-        ok "SOLVED — ${LOOP} is mounted at ${MNT} and the backup file is readable:"
-        echo "----------------------------------------------------------------------"
-        cat "${MNT}/${SENTINEL}"
-        echo "----------------------------------------------------------------------"
-    else
-        warn "Not solved yet: ${MNT} is not a mounted GFS2 volume exposing ${SENTINEL}."
-        warn "Re-read the challenge and inspect the superblock with: tunegfs2 -l ${LOOP}"
-        exit 1
-    fi
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+main() {
+  case "${1:-run}" in
+    cleanup) cleanup; exit 0 ;;
+    run) : ;;
+    *) die "Unknown argument '${1}'. Use no argument to build the lab, or 'cleanup'." ;;
+  esac
+
+  require_root
+  ensure_packages
+  setup_target
+  setup_initiator
+  do_break
+  briefing
 }
+main "$@"
 
-do_clean() {
-    require_root
-    if [ -f "$STATE" ]; then
-        # shellcheck disable=SC1090
-        . "$STATE"
-        mountpoint -q "$MNT" && { log "Unmounting ${MNT}..."; umount "$MNT" || umount -l "$MNT"; }
-        if [ -n "${LOOP:-}" ] && losetup "$LOOP" >/dev/null 2>&1; then
-            log "Detaching ${LOOP}..."; losetup -d "$LOOP" || true
-        fi
-    fi
-    log "Removing ${LAB_DIR}..."
-    rm -rf "$LAB_DIR"
-    ok "Lab environment removed. VM is back to a clean state."
-}
-
-case "${1:---break}" in
-    --break|break) do_break  ;;
-    --verify|verify) do_verify ;;
-    --clean|clean) do_clean  ;;
-    -h|--help|help)
-        grep -E '^#( |$)' "$0" | sed 's/^# \{0,1\}//'
-        ;;
-    *) die "Unknown option '$1' (use --break | --verify | --clean)";;
-esac
-
-# ==============================================================================
-# ============================ SOLUTION (spoiler) ==============================
-# ==============================================================================
-# Do not read this until you have tried it. Every command below is unprivileged
-# to reason about but must be run as root.
+# =============================================================================
+#  SOLUTION  —  step by step (do not read until you have tried it yourself)
+# =============================================================================
 #
-# ---- Step 0: Understand what you are looking at ------------------------------
-#   losetup -a
-#   blkid /dev/loopX                 # -> TYPE="gfs2"
-#   tunegfs2 -l /dev/loopX           # -> Lock Protocol: lock_dlm
-#                                    #    Lock Table:    labcluster:shared
-#   dmesg | tail                     # the failed mount logged "lock_dlm not found"
+#  ROOT CAUSE
+#  ----------
+#  The target's TPG has  generate_node_acls=0, so LIO enforces explicit
+#  Node ACLs: an initiator may log in ONLY if its InitiatorName (IQN) exactly
+#  matches an ACL entry under the TPG. The break replaced the correct ACL
+#  (iqn.2026-08.lab.lpic3:initiator01) with a rogue one
+#  (iqn.2026-08.lab.lpic3:rogue). The initiator's own IQN never changed, so it
+#  no longer matches any ACL -> the target rejects login with an authorization
+#  failure (iscsiadm error 24, iSCSI login reason code 02).
 #
-#   The on-disk superblock says "use the DLM". This host has no DLM
-#   (no dlm_controld, no corosync membership), so mount_gfs2 cannot proceed.
+#  DIAGNOSIS
+#  ---------
+#  1) Confirm the LUN is gone and there is no session:
+#       lsblk
+#       iscsiadm -m session            # -> "iscsiadm: No active sessions."
 #
-# ---- Step 1: Immediate recovery — override the lock protocol at mount --------
-#   The mount.gfs2 helper accepts 'lockproto=' to override the superblock value
-#   for this mount only. lock_nolock means "I am the sole mounter, skip the DLM".
-#   This does NOT alter the disk; it is the correct, minimally invasive way to
-#   read a clustered volume from one node.
+#  2) Reproduce the failure and read the exact error:
+#       iscsiadm -m node -T iqn.2026-08.lab.lpic3:target01 \
+#                -p 127.0.0.1:3260 --login
+#       # iscsiadm: initiator reported error (24 - iSCSI login failed due to
+#       #           authorization failure)
+#       journalctl -k | tail
+#       # LIO: "Rejecting non-authorized login ... reason 02" for our IQN.
 #
-#     mkdir -p /root/lab-362.2/mnt
-#     mount -t gfs2 -o lockproto=lock_nolock,noatime /dev/loopX /root/lab-362.2/mnt
+#  3) Establish the initiator's true identity:
+#       cat /etc/iscsi/initiatorname.iscsi
+#       # InitiatorName=iqn.2026-08.lab.lpic3:initiator01
 #
-#   *** SAFETY RULE: only ever mount lock_nolock when you are ABSOLUTELY certain
-#       no other node has this volume mounted. Two nolock mounters = corruption,
-#       because each believes it owns the file system exclusively. ***
+#  4) Inspect what the target actually authorizes:
+#       targetcli ls /iscsi/iqn.2026-08.lab.lpic3:target01/tpg1/acls
+#       # o- acls .................................. [ACLs: 1]
+#       #   o- iqn.2026-08.lab.lpic3:rogue ......... [Mapped LUNs: 1]
+#       #
+#       # Mismatch: the ACL lists ':rogue', the initiator is ':initiator01'.
 #
-# ---- Step 2: Recover the data ------------------------------------------------
-#     cat /root/lab-362.2/mnt/IMPORTANT-BACKUP.txt
-#     # ...copy it off, then: umount /root/lab-362.2/mnt
+#  FIX  (make the target authorize the real initiator; keep ACLs enforced)
+#  ----------------------------------------------------------------------
+#  5) Remove the wrong ACL and add the correct one:
+#       targetcli /iscsi/iqn.2026-08.lab.lpic3:target01/tpg1/acls \
+#                 delete iqn.2026-08.lab.lpic3:rogue
+#       targetcli /iscsi/iqn.2026-08.lab.lpic3:target01/tpg1/acls \
+#                 create iqn.2026-08.lab.lpic3:initiator01
+#       targetcli saveconfig
 #
-#   Verify with: ./362.2-break.sh --verify
+#     (Equivalent alternative — if the initiator's IQN were the authoritative
+#      value and the ACL were 'correct', you would instead change the node:
+#         echo "InitiatorName=iqn.2026-08.lab.lpic3:rogue" \
+#              > /etc/iscsi/initiatorname.iscsi ; systemctl restart iscsid
+#      Fix ONE side so the two IQNs agree — never both, and never by disabling
+#      ACL enforcement.)
 #
-# ---- Step 3 (bonus): Make it a true standalone volume ------------------------
-#   To let a plain 'mount -t gfs2' succeed forever on a single node, rewrite the
-#   lock protocol in the superblock (volume MUST be unmounted first):
+#  6) Log back in and verify:
+#       iscsiadm -m node -T iqn.2026-08.lab.lpic3:target01 \
+#                -p 127.0.0.1:3260 --login
+#       # Login to [iface: default, target: ...:target01,
+#       #           portal: 127.0.0.1,3260] successful.
+#       lsblk
+#       iscsiadm -m session -P3          # session state: LOGGED_IN, 1 LUN
 #
-#     umount /root/lab-362.2/mnt 2>/dev/null || true
-#     tunegfs2 -o lockproto=lock_nolock /dev/loopX      # modern gfs2-utils
-#     # legacy equivalent on older systems:
-#     #   gfs2_tool sb /dev/loopX proto lock_nolock
-#     tunegfs2 -l /dev/loopX                            # confirm: Lock Protocol lock_nolock
-#     mount -t gfs2 /dev/loopX /root/lab-362.2/mnt      # now works with no override
-#
-# ---- How you would REALLY fix this inside a cluster --------------------------
-#   The single-node trick is for rescue only. In production the mount fails
-#   because the storage stack is down, and the fix is to bring the stack up so
-#   lock_dlm has something to talk to:
-#
-#     systemctl start corosync pacemaker      # membership + resource manager
-#     pcs status                              # confirm the node is a member
-#     dlm_tool ls ; dlm_tool status           # DLM lockspaces are present
-#     # ensure the cluster's name matches the locktable prefix ("labcluster"):
-#     #   corosync-cmapctl | grep cluster_name   (or 'pcs property' / cluster.conf)
-#     mount -t gfs2 /dev/loopX /mnt/shared    # normal clustered mount, all nodes
-#
-#   Related 362.2 building blocks the exam expects you to recognise:
-#     * DLM         : dlm_controld, the 'dlm' kernel module, dlm_tool ls/status,
-#                     lockspaces exposed under /sys/kernel/config/dlm.
-#     * Clustered LVM (shared VG): lvmlockd + 'use_lvmlockd = 1' in lvm.conf;
-#                     vgcreate --shared, then per node 'vgchange --lockstart',
-#                     and 'lvchange -a sy <vg>/<lv>' for shared activation.
-#     * Growing GFS2 online: gfs2_grow (fs), gfs2_jadd (add a journal per new node).
-#     * OCFS2 analogue: mkfs.ocfs2 / mount.ocfs2 with the o2cb stack and
-#                       /etc/ocfs2/cluster.conf; the same "no cluster = no mount"
-#                       failure mode applies.
-#
-# ---- Reset the lab -----------------------------------------------------------
-#     ./362.2-break.sh --clean
-# ==============================================================================
+#  WHY THIS MATTERS FOR 362.2
+#  --------------------------
+#  This same LUN is the foundation of clustered storage: once every node's IQN
+#  is ACL-authorized and the LUN is multipathed (multipath/multipathd) so all
+#  paths present one /dev/mapper/mpathN, it is handed to CLVM/GFS2/OCFS2, whose
+#  concurrent access is serialized by the Distributed Lock Manager (DLM,
+#  dlm_tool). An ACL/IQN mismatch on even one node is a silent way for that
+#  node to be missing from the shared storage while Pacemaker still believes
+#  the cluster is healthy.
+# =============================================================================
