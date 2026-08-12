@@ -158,8 +158,9 @@ quality:
 #     scripts/steer.py milestone lpic-3-305 en es
 #     scripts/steer.py milestone --clear        # timer idles
 milestone:
-  name: none
-  targets: {}
+  name: lpic-3-306 in en, es
+  targets:
+    lpic-3-306: [en, es]
 certs:
   lpic-1:
     active: true
@@ -183,7 +184,7 @@ certs:
     video: [en, es]
   lpic-3-306:
     active: true
-    owner: antigravity
+    owner: claude
     video: [en, es]
   lpi-020-100:
     active: true
