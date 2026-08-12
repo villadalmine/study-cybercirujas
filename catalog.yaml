@@ -251,7 +251,11 @@ certs:
     last_checked: '2026-08-12'
     file: certs/capa.md
     sources:
-      objectives: https://github.com/cncf/curriculum/raw/master/CAPA_Curriculum.pdf
+      # The PDF is drawn, not written: pypdf and pdftotext both extract the same
+      # 44 characters from it. The same repository publishes the curriculum as
+      # text, so that is the readable source. The PDF stays recorded below.
+      objectives: https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
+      objectives_pdf: https://github.com/cncf/curriculum/raw/master/CAPA_Curriculum.pdf
       repo: https://github.com/cncf/curriculum
     license: CC-BY 4.0
     level: associate
