@@ -4,7 +4,7 @@ certs:
     exam: 010-160
     tracked_version: '1.6'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/lpi-010-160.md
     sources:
       overview: https://www.lpi.org/our-certifications/linux-essentials-overview/
@@ -19,9 +19,9 @@ certs:
     name: LPI Security Essentials
     exam: 020-100
     category: linux
-    tracked_version: unknown
+    tracked_version: '1.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpi-020-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-020-objectives/
@@ -33,9 +33,9 @@ certs:
     name: 'LPIC-1: Linux Administrator'
     exam: 101-500 + 102-500
     category: linux
-    tracked_version: unknown
+    tracked_version: '5.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-1.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
@@ -47,9 +47,9 @@ certs:
     name: 'LPIC-2: Linux Engineer'
     exam: 201-450 + 202-450
     category: linux
-    tracked_version: unknown
+    tracked_version: '4.5'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-2.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-201-objectives/
@@ -62,9 +62,9 @@ certs:
     name: 'LPIC-3: Mixed Environments'
     exam: 300-300
     category: linux
-    tracked_version: unknown
+    tracked_version: '3.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-3-300.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-300-objectives/
@@ -77,9 +77,9 @@ certs:
     name: 'LPIC-3: Security'
     exam: 303-300
     category: linux
-    tracked_version: unknown
+    tracked_version: '3.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-3-303.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-303-objectives/
@@ -92,9 +92,9 @@ certs:
     name: 'LPIC-3: Virtualization and Containerization'
     exam: 305-300
     category: linux
-    tracked_version: unknown
+    tracked_version: '3.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-3-305.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-305-objectives/
@@ -107,9 +107,9 @@ certs:
     name: 'LPIC-3: High Availability and Storage Clusters'
     exam: 306-300
     category: linux
-    tracked_version: unknown
+    tracked_version: '3.0'
     upstream_status: current
-    last_checked: '2026-08-11'
+    last_checked: '2026-08-12'
     file: certs/lpic-3-306.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-306-objectives/
@@ -122,9 +122,9 @@ certs:
     name: LPI DevOps Tools Engineer
     exam: 701-100
     category: linux
-    tracked_version: unknown
+    tracked_version: '2.0'
     upstream_status: current
-    last_checked: '2026-08-06'
+    last_checked: '2026-08-12'
     file: certs/lpi-devops.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-701-objectives/
@@ -138,7 +138,7 @@ certs:
     category: cloud-native
     tracked_version: '1.35'
     upstream_status: current
-    last_checked: '2026-07-16'
+    last_checked: '2026-08-12'
     file: certs/cka.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
@@ -157,7 +157,7 @@ certs:
     category: cloud-native
     tracked_version: '1.35'
     upstream_status: current
-    last_checked: '2026-07-11'
+    last_checked: '2026-08-12'
     file: certs/ckad.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
@@ -174,7 +174,7 @@ certs:
     category: cloud-native
     tracked_version: '1.34'
     upstream_status: current
-    last_checked: '2026-07-17'
+    last_checked: '2026-08-12'
     file: certs/cks.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
@@ -192,7 +192,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-11-24'
     upstream_status: current
-    last_checked: '2026-07-17'
+    last_checked: '2026-08-12'
     file: certs/kcna.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum.pdf
@@ -212,7 +212,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-06-24'
     upstream_status: current
-    last_checked: '2026-08-06'
+    last_checked: '2026-08-12'
     file: certs/kcsa.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf
@@ -231,7 +231,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-11-19'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/cgoa.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CGOA_Curriculum.pdf
@@ -248,7 +248,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-10-21'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/capa.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CAPA_Curriculum.pdf
@@ -265,7 +265,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-10-22'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/cba.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CBA_Curriculum.pdf
@@ -282,7 +282,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-04-01'
     upstream_status: current
-    last_checked: '2026-07-30'
+    last_checked: '2026-08-12'
     file: certs/cnpa.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CNPA_Curriculum.pdf
@@ -299,7 +299,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-12-03'
     upstream_status: current
-    last_checked: '2026-07-30'
+    last_checked: '2026-08-12'
     file: certs/cnpe.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
@@ -316,7 +316,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-10-21'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/cca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/CCA_Curriculum.pdf
@@ -333,7 +333,7 @@ certs:
     category: cloud-native
     tracked_version: '2025-08-12'
     upstream_status: current
-    last_checked: '2026-08-08'
+    last_checked: '2026-08-12'
     file: certs/ica.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/ICA_Curriculum.pdf
@@ -350,7 +350,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-11-28'
     upstream_status: current
-    last_checked: '2026-07-07'
+    last_checked: '2026-08-12'
     file: certs/kca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
@@ -367,7 +367,7 @@ certs:
     category: cloud-native
     tracked_version: '2024-11-28'
     upstream_status: current
-    last_checked: '2026-08-08'
+    last_checked: '2026-08-12'
     file: certs/otca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
@@ -384,7 +384,7 @@ certs:
     category: cloud-native
     tracked_version: '2022-08-31'
     upstream_status: current
-    last_checked: '2026-08-08'
+    last_checked: '2026-08-12'
     file: certs/pca.md
     sources:
       objectives: https://github.com/cncf/curriculum/raw/master/PCA_Curriculum.pdf
@@ -401,7 +401,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-08-06'
+    last_checked: '2026-08-12'
     file: certs/lpi-030-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-030-objectives/
@@ -415,7 +415,7 @@ certs:
     category: linux
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-08-06'
+    last_checked: '2026-08-12'
     file: certs/lpi-050-100.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-050-objectives/
@@ -427,9 +427,9 @@ certs:
     name: LPI BSD Specialist
     exam: 702-100
     category: linux
-    tracked_version: unknown
+    tracked_version: '1.0'
     upstream_status: current
-    last_checked: '2026-08-06'
+    last_checked: '2026-08-12'
     file: certs/lpi-702.md
     sources:
       objectives: https://www.lpi.org/our-certifications/exam-702-objectives/

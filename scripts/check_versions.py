@@ -14,9 +14,17 @@ The two facts are already recorded separately, in the right places:
   what is current catalog.yaml: `curriculum_updated` (date upstream last changed)
                   written by `teach tracker sync`, never by a snapshot
 
-If upstream changed AFTER we snapshotted, the material describes an exam that has
-moved. That is the whole check, and it is a date comparison — deterministic,
-free, and repeatable: running it twice on the same tree gives the same answer.
+Two ways to answer it, in order of how directly they answer it:
+
+  version   the objectives document states its own version, and so does our
+            syllabus. Equality is exact and about the same thing. Preferred.
+  date      upstream changed AFTER we snapshotted. A proxy, used when no version
+            is published on either side.
+
+Both are deterministic and repeatable: running twice on the same tree gives the
+same answer. LPI publishes no change date at all, so twelve certifications read
+"unknown" until the version path existed — and one of them, lpi-devops, had been
+outdated the whole time (frozen 1.0, published 2.0, exam code 701-100 -> 701-200).
 
     scripts/check_versions.py            # every catalogued certification
     scripts/check_versions.py --stale    # only the ones that have moved
@@ -51,7 +59,32 @@ def frozen(cert: str) -> tuple[str | None, str | None]:
     return version, date
 
 
-def state(snapshot_date: str | None, upstream_date: str | None) -> str:
+def _same_version(a: str | None, b: str | None) -> bool | None:
+    """True/False if both versions are known and comparable, else None.
+
+    "3.0" and "3.0.0" are the same release written twice — LPI prints the short
+    form on the page and the snapshot recorded the long one — so they are
+    compared as numbers with trailing zeros dropped, not as strings. Doing it by
+    string would report every one of those as outdated and the table would be
+    ignored within a day.
+    """
+    if not a or not b or "unknown" in (a, b):
+        return None
+    def parts(v: str) -> tuple[int, ...]:
+        try:
+            out = [int(p) for p in v.split(".")]
+        except ValueError:
+            return ()
+        while len(out) > 1 and out[-1] == 0:
+            out.pop()
+        return tuple(out)
+    pa, pb = parts(a), parts(b)
+    return None if not pa or not pb else pa == pb
+
+
+def state(snapshot_date: str | None, upstream_date: str | None,
+          frozen_version: str | None = None,
+          upstream_version: str | None = None) -> str:
     """current | outdated | unknown.
 
     `unknown` is a real answer and is reported as such rather than assumed to be
@@ -59,6 +92,14 @@ def state(snapshot_date: str | None, upstream_date: str | None) -> str:
     been checked, is not 'current' — it is unmeasured, and saying otherwise is how
     a dashboard becomes reassuring instead of informative.
     """
+    # Versions first when both are known: it is an exact statement about the same
+    # thing, where the dates are only a proxy for it. LPI publishes no change
+    # date at all, so twelve certifications read "unknown" on the date path while
+    # the page states its version plainly — and one of them (lpi-devops, frozen
+    # 1.0 against a published 2.0) was outdated the whole time.
+    same = _same_version(frozen_version, upstream_version)
+    if same is not None:
+        return "current" if same else "outdated"
     if not snapshot_date or not upstream_date:
         return "unknown"
     return "outdated" if upstream_date > snapshot_date else "current"
@@ -78,7 +119,8 @@ def survey() -> list[dict]:
             "upstream_version": str(entry.get("tracked_version") or "") or None,
             "upstream_changed": upstream_date,
             "last_checked": str(entry.get("last_checked") or "") or None,
-            "state": state(snapshot_date, upstream_date),
+            "state": state(snapshot_date, upstream_date, version,
+                           str(entry.get("tracked_version") or "") or None),
         })
     return rows
 
@@ -92,10 +134,30 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.refresh:
-        from teach.core import tracker
+        from teach.core import catalog as catalog_mod, tracker
         print("refreshing upstream …", flush=True)
         for change in tracker.sync_cncf():
             print(f"  {change}")
+        # LPI publishes no change date, so sync_cncf leaves those twelve
+        # unmeasured. The objectives page states its own version, which is a
+        # better comparison than a date anyway: exact, and about the same thing.
+        data = catalog_mod.load()
+        today = datetime.date.today().isoformat()
+        for cert_id, entry in (data.get("certs") or {}).items():
+            entry = entry or {}
+            url = (entry.get("sources") or {}).get("objectives") or ""
+            if entry.get("vendor") != "LPI" or not url:
+                continue
+            try:
+                found = tracker.published_version(tracker.fetch_text(url))
+            except Exception as error:
+                print(f"  {cert_id}: could not read {url} ({error})")
+                continue
+            entry["last_checked"] = today
+            if found and str(entry.get("tracked_version") or "") != found:
+                print(f"  {cert_id}: upstream version -> {found}")
+                entry["tracked_version"] = found
+        catalog_mod.save(data)
 
     rows = survey()
     shown = [r for r in rows if r["state"] == "outdated"] if args.stale else rows

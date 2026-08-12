@@ -240,6 +240,25 @@ OBJECTIVE_ID = re.compile(r"\b(\d{3})\.([1-9]\d?)\b")
 WITHDRAWN = re.compile(r"\s*(removed|retired|deleted|withdrawn)\b", re.I)
 
 
+# The version the objectives document states for ITSELF. The colon is load
+# bearing: without it this matches prose like "results from a split of version
+# 2.0 of the exam 304", and lpic-3-305 reads as 2.0 when it publishes 3.0.
+# Changelog entries further down the page name older versions, so the FIRST
+# labelled match is the current one.
+PUBLISHED_VERSION = re.compile(r"Version:\s*([0-9]+(?:\.[0-9]+)+)")
+
+
+def published_version(text: str) -> str | None:
+    """The version an objectives page states, or None if it states none.
+
+    None means unmeasured, not current — a page that does not say which version
+    it is cannot be compared against what we froze, and pretending otherwise is
+    how "unknown" quietly becomes "fine".
+    """
+    match = PUBLISHED_VERSION.search(text)
+    return match.group(1) if match else None
+
+
 def objective_ids(text: str) -> set[str]:
     """Numbered objectives present in a syllabus document.
 
