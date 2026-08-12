@@ -110,7 +110,37 @@ def refresh() -> bool:
     return STATUS.read_text() != before
 
 
+def check() -> list[str]:
+    """[] if STATUS.md matches the filesystem; the differing lines otherwise.
+
+    `refresh()` keeps it current, but nothing proved it WAS current, so the file
+    could drift for two reasons that look identical in a diff: a work path that
+    forgot to call refresh (which happened — see `_refresh_status`), or someone
+    editing the dashboard by hand. Both make it a claim rather than a report, and
+    a report that is only right when someone remembers is worse than none,
+    because it is believed.
+
+    Reads nothing but the tree: STATUS.md is derived from what is on disk, never
+    from what a process said it did. A generator that crashes after writing half
+    a topic cannot produce a green dashboard, because nobody asked it.
+
+    Does not write, so it is safe in a gate.
+    """
+    current = STATUS.read_text() if STATUS.exists() else ""
+    expected = _render()
+    if current == expected:
+        return []
+    import difflib
+    return [l for l in difflib.unified_diff(
+        current.splitlines(), expected.splitlines(),
+        fromfile="STATUS.md (committed)", tofile="STATUS.md (from disk)", lineterm="")]
+
+
 def _write() -> None:
+    STATUS.write_text(_render())
+
+
+def _render() -> str:
     catalog = yaml.safe_load((REPO / "catalog.yaml").read_text())
     lines = [
         "# Content Status",
@@ -126,6 +156,43 @@ def _write() -> None:
         "video is not declared for that certification, or no syllabus has been "
         "snapshotted yet",
         "",
+    ]
+
+    # What the unattended timer is working toward, and how far it is. Without
+    # this the goal lives only in pipeline.yaml, so the dashboard could show a
+    # certification at 3/12 and give no way to tell whether anything is working
+    # on it — or whether the timer is deliberately idle, which is a normal state
+    # here and must not read as a stall.
+    goal = pipeline.milestone()
+    goal_targets = pipeline.milestone_targets()
+    lines += ["## Milestone", ""]
+    if goal_targets is None:
+        lines += ["None declared — the unattended timer generates nothing. That is "
+                  "the safe default: an unset goal must not read as \"everything\". "
+                  "Set one with `scripts/steer.py milestone <cert> <langs...>`.", ""]
+    else:
+        lines += [f"**{goal.get('name') or 'declared goal'}** — the timer works only "
+                  f"on this and stops when it is met.", "",
+                  "| Cert | Language | Topics done | Remaining |", "|---|---|---|---|"]
+        for cert_id, langs in goal_targets:
+            topics = cert_topics(cert_id)
+            ids = [str(t["id"]) for t in topics]
+            cert_dir = REPO / "certs" / cert_id
+            for lang in langs:
+                # Existence is checked explicitly rather than inferred from the
+                # floor. `quality.check_file` keys its rules on the filename, so
+                # it returns "no problems" for anything it does not recognise —
+                # true of a missing file only by accident of how it fails, and
+                # counting "done" on an accident is how a dashboard lies.
+                done = sum(1 for t in ids if all(
+                    (cert_dir / t / lang / kind).exists()
+                    and not quality.check_file(cert_dir / t / lang / kind)
+                    for kind in ("content.md", "exercises.md"))) if ids else 0
+                mark = "✅" if done == len(ids) else f"{done}/{len(ids)}"
+                lines.append(f"| `{cert_id}` | {lang} | {mark} | {len(ids) - done} |")
+        lines.append("")
+
+    lines += [
         "## Certifications",
         "",
         "| Cert | Topics | " + " | ".join(l.upper() for l in LANGS) + " | Labs |",
@@ -196,8 +263,18 @@ def _write() -> None:
             row.append("✅" if rendered.exists() else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
-    (REPO / "STATUS.md").write_text("\n".join(lines) + "\n")
+    return "\n".join(lines) + "\n"
 
 
 if __name__ == "__main__":
+    if "--check" in sys.argv:
+        # Gate mode: prove the dashboard matches the tree instead of assuming it.
+        drift = check()
+        if drift:
+            print("STATUS.md does not match the filesystem. It is generated, never "
+                  "written by hand — run `teach status`:\n")
+            print("\n".join(drift[:40]))
+            sys.exit(1)
+        print("STATUS.md matches the filesystem.")
+        sys.exit(0)
     print("STATUS.md updated" if refresh() else "STATUS.md already current")

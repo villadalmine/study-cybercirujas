@@ -345,6 +345,36 @@ def main() -> None:
     # Without this the unattended pass could take a certification to "content
     # complete" and no further, so nothing ever finished without a human.
     render_ready_videos()
+    _refresh_status()
+
+
+def _refresh_status() -> None:
+    """Regenerate STATUS.md here, in the thing that does the work.
+
+    It used to live only in `resume-generation.sh`, so any other caller of this
+    script left the dashboard stale — and the timer's own comment records what
+    that costs: STATUS.md sat a day reporting kcsa at 2/42 when it was 42/42,
+    because the path doing most of the generating did not call it. That is
+    exactly what happened again while writing this: an ad-hoc runner calling
+    this script directly generated for an hour against a dashboard that never
+    moved.
+
+    A caller that must remember to refresh is a caller that will forget. Putting
+    it after the work means every path gets it — the timer, `make next`, a
+    one-off run, anything written later — and the shell script's own call
+    becomes harmless duplication rather than the only copy.
+
+    Idempotent and derived from disk: running it twice writes the same bytes.
+    Never fatal — a broken dashboard must not discard finished generation.
+    """
+    try:
+        sys.path.insert(0, str(REPO / "scripts"))
+        from status_matrix import refresh
+        print("STATUS.md updated" if refresh() else "STATUS.md already current",
+              flush=True)
+    except Exception as error:
+        print(f"    STATUS.md not refreshed ({error}); the content is fine, "
+              f"run `teach status` to catch the dashboard up", flush=True)
 
 
 if __name__ == "__main__":
