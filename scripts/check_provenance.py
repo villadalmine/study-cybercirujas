@@ -146,7 +146,13 @@ def main() -> int:
     if wanted:
         targets = [(c, l) for c, l in targets if c in wanted]
         if not targets:
-            raise SystemExit(f"No active certification matches {wanted}")
+            # Nothing to check is not a failure. The commit hook passes whatever
+            # certifications a commit touches, and freezing a syllabus for a new
+            # certification necessarily happens BEFORE it is activated — so this
+            # used to block precisely the commit that introduces one.
+            print(f"Nothing to check: {', '.join(sorted(wanted))} "
+                  f"{'is' if len(wanted) == 1 else 'are'} not active in pipeline.yaml.")
+            return 0
 
     all_problems: list[str] = []
     for cert, languages in targets:

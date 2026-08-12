@@ -80,6 +80,15 @@ class SyllabusCoverageTests(unittest.TestCase):
         with self.assertRaises(tracker.TrackerError):
             tracker._reject_unreadable_syllabus(topics, "no numbering", "u")
 
+    def test_accepts_equal_weights_the_document_actually_publishes(self):
+        # CNCF publishes CAPA as five domains at 20% each. Rejecting that would
+        # block a correct syllabus for having the shape of a wrong one, so the
+        # distinction is whether the DOCUMENT prints a weight per topic.
+        page = ("| Argo Project Fundamentals | 20% | | Argo Workflows | 20% | "
+                "| Argo CD | 20% | | Argo Rollouts | 20% | | Argo Events | 20% |")
+        topics = [{"id": f"{i}.1", "weight": 20} for i in range(1, 6)]
+        tracker._reject_unreadable_syllabus(topics, page, "u")
+
     def test_accepts_a_full_extraction(self):
         topics = [{"id": f"351.{i}", "weight": w} for i, w in
                   enumerate([10, 5, 7, 15, 5, 12, 10, 15, 5, 4, 4, 4, 4], 1)]

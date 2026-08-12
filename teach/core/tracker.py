@@ -284,6 +284,11 @@ OBJECTIVE_ID = re.compile(r"\b(\d{3})\.([1-9]\d?)\b")
 # rejecting a correct 42-topic extraction for being one short of a phantom.
 WITHDRAWN = re.compile(r"\s*(removed|retired|deleted|withdrawn)\b", re.I)
 
+# A weight the document itself prints, in either form syllabi use: a percentage
+# ("20%") or a labelled number ("Weight: 6"). Counting these answers "were the
+# weights read or computed?" from the source rather than from their shape.
+WEIGHT_TOKEN = re.compile(r"\b\d{1,3}\s?%|[Ww]eight:?\s*\d{1,3}\b")
+
 
 # The version the objectives document states for ITSELF. The colon is load
 # bearing: without it this matches prose like "results from a split of version
@@ -389,12 +394,20 @@ def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None
     # A weighting nobody read. `sum == 100` was the only rule this ever had, and
     # dividing 100 by the topic count satisfies it exactly — so the guardrail was
     # passed most easily by the worst available answer.
+    #
+    # But equal weights are sometimes the truth: CNCF publishes CAPA as five
+    # domains at 20% each, and rejecting that would block a correct syllabus for
+    # having the shape of a wrong one. The distinction is in the document, not in
+    # the numbers — if it prints a weight per topic, the weights were read.
     weights = [round(float(t.get("weight") or 0), 2) for t in topics]
-    if len(topics) > 2 and max(weights) - min(weights) < 0.02:
+    published = WEIGHT_TOKEN.findall(text)
+    if (len(topics) > 2 and max(weights) - min(weights) < 0.02
+            and len(published) < len(topics)):
         raise TrackerError(
-            f"all {len(topics)} weights came back as {weights[0]:g}, which is 100 divided "
-            f"by the topic count rather than anything the exam publishes. Real syllabi "
-            f"weight objectives by importance. Snapshot not saved."
+            f"all {len(topics)} weights came back as {weights[0]:g}, and {url} prints "
+            f"only {len(published)} weights for {len(topics)} topics — so this is 100 "
+            f"divided by the topic count rather than anything the exam publishes. "
+            f"Snapshot not saved."
         )
 
 
