@@ -89,6 +89,16 @@ class SyllabusCoverageTests(unittest.TestCase):
         topics = [{"id": f"{i}.1", "weight": 20} for i in range(1, 6)]
         tracker._reject_unreadable_syllabus(topics, page, "u")
 
+    def test_strips_backend_diagnostics_that_are_not_the_answer(self):
+        # A CAPA snapshot died at line 2 on "Client.listTools() called but
+        # server has no tools" — a model call thrown away for a diagnostic that
+        # has nothing to do with the content.
+        noisy = "version: '1.0'\nClient.listTools() called but server has no tools\ntopics: []"
+        cleaned = "\n".join(l for l in noisy.splitlines()
+                            if not tracker.CLI_NOISE.match(l))
+        self.assertNotIn("listTools", cleaned)
+        self.assertIn("version", cleaned)
+
     def test_accepts_a_full_extraction(self):
         topics = [{"id": f"351.{i}", "weight": w} for i, w in
                   enumerate([10, 5, 7, 15, 5, 12, 10, 15, 5, 4, 4, 4, 4], 1)]

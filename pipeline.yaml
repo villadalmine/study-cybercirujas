@@ -271,6 +271,12 @@ certs:
     video: [en, es]
     owner: claude
     active: true
+  kca:
+    owner: claude
+    active: true
+  capa:
+    owner: claude
+    active: true
 # Career path videos, rendered from catalog.yaml rather than from a syllabus.
 paths:
   video_languages: [es, en, de]

@@ -106,11 +106,32 @@ def fetch_text(url: str, limit: int = 20000) -> str:
     return re.sub(r"\s+", " ", text).strip()[:limit]
 
 
+# Lines a CLI backend prints about itself, which are not the answer. Seen on a
+# CAPA snapshot: "Client.listTools() called but server has no tools" landed in
+# the middle of the YAML and the parse died at line 2, throwing away a model call
+# for a diagnostic that has nothing to do with the content.
+CLI_NOISE = re.compile(
+    r"^\s*(Client\.\w+\(\)|\[?(DEBUG|INFO|WARN|WARNING|ERROR)\]?[: ]|"
+    r"(MCP|mcp) server |Loaded \d+|Using model )", re.M)
+
+
 def _ai_yaml(backend: str | None, prompt: str) -> dict:
     complete, _ = make_completer(backend)
     raw = complete(YAML_SYSTEM, prompt).strip()
     raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
-    data = yaml.safe_load(raw)
+    try:
+        data = yaml.safe_load(raw)
+    except yaml.YAMLError:
+        # Retry without the backend talking about itself. Only on failure: a
+        # clean answer is never touched, so this cannot corrupt a good parse.
+        cleaned = "\n".join(l for l in raw.splitlines() if not CLI_NOISE.match(l))
+        try:
+            data = yaml.safe_load(cleaned)
+        except yaml.YAMLError as error:
+            raise TrackerError(
+                f"The backend's answer is not YAML, with or without its own "
+                f"diagnostics stripped ({error}). First 300 characters:\n{raw[:300]}"
+            ) from error
     if not isinstance(data, dict):
         raise TrackerError(f"The AI did not return structured YAML:\n{raw[:300]}")
     return data
@@ -442,10 +463,15 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         "answer; the chapter headings ('351 Full Virtualization') go in 'topic', "
         "never in place of the objectives underneath them. Returning the headings "
         "loses most of the exam.\n"
-        "If the document has no numbered objectives at all, say so by returning an "
-        "empty topics list rather than inventing a level of detail it does not "
-        "have — that means the wrong page was fetched, and it will be fixed at the "
-        "source instead of guessed at here.\n"
+        "Some syllabi publish only domains, with no numbered objectives beneath "
+        "them — CNCF associate-level curricula do. There the domain IS the "
+        "deepest level the document has, so one entry per domain is the right "
+        "answer, not a collapse. Use the document's own granularity: never "
+        "shallower than what it publishes, never deeper than what it publishes.\n"
+        "Return an empty topics list only if the document describes the "
+        "certification without listing what it covers at all. That means the "
+        "wrong page was fetched, and it will be fixed at the source rather than "
+        "guessed at here.\n"
         "'weight': copy the number the document prints for that objective, on "
         "whatever scale it uses — LPI prints per-objective weights totalling about "
         "57, and that is the right answer, not 100. Do NOT rescale: the totals are "
