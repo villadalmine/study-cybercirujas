@@ -346,6 +346,30 @@ def main() -> None:
     # complete" and no further, so nothing ever finished without a human.
     render_ready_videos()
     _refresh_status()
+    _publish_if_complete()
+
+
+def _publish_if_complete() -> None:
+    """Ship a certification the moment it is finished, without being asked.
+
+    Finishing and publishing were two steps and the second needed a human to
+    notice the first — the same shape as the dashboard going stale. It publishes
+    only when the SET of complete certifications changes, so an unattended pass
+    that finishes nothing does not rebuild the cluster for no reason.
+
+    Never fatal: a cluster that is unreachable must not discard generated
+    content, and the record is left untouched so the next pass retries.
+    """
+    try:
+        sys.path.insert(0, str(REPO / "scripts"))
+        import publish_if_complete
+        publish_if_complete.main()
+    except SystemExit:
+        pass
+    except Exception as error:
+        print(f"    not published ({error}); content is safe, run "
+              f"`scripts/publish_if_complete.py` when the cluster is reachable",
+              flush=True)
 
 
 def _refresh_status() -> None:
