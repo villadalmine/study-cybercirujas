@@ -20,6 +20,7 @@ import datetime
 import html as html_lib
 import io
 import re
+import subprocess
 
 import httpx
 import yaml
@@ -46,16 +47,60 @@ def _get(url: str) -> httpx.Response:
     return response
 
 
+def _get_bytes(url: str) -> tuple[bytes, str]:
+    """(body, content-type), with a fetch that cannot hang the caller.
+
+    httpx hangs indefinitely on the CNCF curriculum PDFs on this machine — its
+    own `timeout=60` never fires, so a snapshot blocks forever rather than
+    failing — while curl fetches the same URL in half a second. The cause is
+    below httpx and not worth chasing; the defect worth fixing is that one
+    unreachable file could stall an unattended pass with no error at all.
+
+    So: httpx in a worker thread with a short deadline, then curl. 15s costs
+    nothing in the working case — httpx returns HTML in well under a second —
+    and bounds the broken one. A fetch that fails loudly is recoverable; one
+    that hangs silently is not.
+    """
+    import concurrent.futures
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(_get, url)
+        try:
+            response = future.result(timeout=15)
+            return response.content, response.headers.get("content-type", "")
+        except concurrent.futures.TimeoutError:
+            pass                      # the thread is abandoned; curl decides
+        except Exception:
+            pass
+
+    result = subprocess.run(
+        ["curl", "-sL", "--max-time", "60", "-A", UA.get("User-Agent", "teach-plat"),
+         "-w", "%{content_type}", "--output", "-", url],
+        capture_output=True, timeout=90)
+    if result.returncode != 0 or not result.stdout:
+        raise TrackerError(f"Could not fetch {url} with either client "
+                           f"(curl exit {result.returncode})")
+    # `-w` appends the content type after the body, so split it back off.
+    body = result.stdout
+    marker = body.rfind(b"application/") if b"application/" in body[-120:] else -1
+    if marker == -1:
+        marker = body.rfind(b"text/") if b"text/" in body[-120:] else -1
+    if marker > 0:
+        return body[:marker], body[marker:].decode("ascii", "replace")
+    return body, ""
+
+
 def fetch_text(url: str, limit: int = 20000) -> str:
     """Plain text from a URL: PDF (pypdf) or HTML (tags stripped)."""
-    response = _get(url)
-    if url.lower().endswith(".pdf") or "pdf" in response.headers.get("content-type", ""):
+    body, content_type = _get_bytes(url)
+    if url.lower().endswith(".pdf") or "pdf" in content_type:
         from pypdf import PdfReader
 
-        reader = PdfReader(io.BytesIO(response.content))
+        reader = PdfReader(io.BytesIO(body))
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
     else:
-        text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", response.text, flags=re.S)
+        decoded = body.decode("utf-8", "replace")
+        text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", decoded, flags=re.S)
         text = re.sub(r"<[^>]+>", " ", text)
         text = html_lib.unescape(text)
     return re.sub(r"\s+", " ", text).strip()[:limit]
