@@ -1,0 +1,6 @@
+generated_at: '2026-08-13T04:28:31'
+lang: en
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
