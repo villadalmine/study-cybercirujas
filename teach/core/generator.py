@@ -65,8 +65,9 @@ _CLAUDE_NO_TOOLS = (
 # attributed to a model and a token count instead of being guessed at from the
 # wall clock. Only the claude CLI has it — the others stay plain text.
 AGENT_COMMANDS = {
-    # `--effort` is appended below when TEACH_CLAUDE_EFFORT is set. Unset means
-    # the CLI default, which is what the entire corpus so far was written at.
+    # `--model` and `--effort` are appended below from pipeline.yaml `generation`
+    # (or the matching env var). Neither is hardcoded here: what authors is a
+    # declared decision, not a property of the command table.
     "claude": ["claude", "-p", "--output-format", "json",
                "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
     "codex": ["codex", "exec"],
@@ -128,7 +129,8 @@ def _record_usage(envelope: dict) -> None:
             # corpus generated at an unknown setting cannot be compared against
             # one generated at a known one. Same reason meta.yaml carries the
             # model — see scripts/topic_cost.py.
-            "effort": os.environ.get("TEACH_CLAUDE_EFFORT") or "default",
+            "effort": (os.environ.get("TEACH_CLAUDE_EFFORT")
+                       or pipeline.generation().get("effort") or "default"),
             "models": models,
         }
         USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
@@ -296,7 +298,12 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
     # ordinary work but useless for a comparison — "generate this with opus-5"
     # was not expressible at all, and the corpus already mixes opus-5 and fable-5
     # with nothing on disk marking the boundary.
-    pinned = os.environ.get("TEACH_CLAUDE_MODEL")
+    # Environment first (a deliberate one-off, e.g. a comparison run), then
+    # pipeline.yaml. Falling through to the CLI's own default is the case that
+    # produced untraceable content: two CAPA video scripts came out on opus-5
+    # while everything else was opus-4-8, because a hand-typed command had no
+    # TEACH_CLAUDE_MODEL and nothing else declared one.
+    pinned = os.environ.get("TEACH_CLAUDE_MODEL") or pipeline.generation().get("model")
     if pinned and backend == "claude" and "--model" not in command:
         command = [*command[:-1], "--model", pinned, command[-1]]
 
@@ -306,7 +313,7 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
     # flag and the record exist now, so raising it stays comparable against what
     # came before. Inserted before the trailing `--`, which separates flags from
     # the prompt: after it, `--effort` would be read as part of the prompt.
-    effort = os.environ.get("TEACH_CLAUDE_EFFORT")
+    effort = os.environ.get("TEACH_CLAUDE_EFFORT") or pipeline.generation().get("effort")
     if effort and backend == "claude" and "--effort" not in command:
         command = [*command[:-1], "--effort", effort, command[-1]]
 

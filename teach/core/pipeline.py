@@ -41,6 +41,17 @@ def on_demand_languages() -> list[str]:
     return list(load().get("languages", {}).get("on_demand") or [])
 
 
+def generation() -> dict:
+    """Which model authors and at what effort. Declared, not left to the CLI.
+
+    Read by the generator when the environment does not say. Without this the
+    pin lived only in the timer unit and one shell script, so any other path —
+    a command typed by hand, a new script, another agent — got whatever the
+    CLI's default happened to be, and the corpus quietly mixed models.
+    """
+    return dict(load().get("generation") or {})
+
+
 def budget() -> dict:
     return dict(load().get("budget") or {})
 

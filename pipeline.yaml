@@ -32,6 +32,25 @@ languages:
 # Guard rails for unattended and batch runs. API credits are a real constraint:
 # a full certification is ~26 topics x ~7 min x 2 completions, so an unbounded
 # run both takes hours and can exhaust the monthly limit mid-certification.
+# Which model authors, and how hard it thinks. Declared here so EVERY invocation
+# path gets it — the environment variable was set by the timer and by
+# scripts/run_milestone.sh, so a command typed by hand silently fell back to
+# whatever the CLI's default happened to be. That is how two CAPA video scripts
+# came out on opus-5 while the rest of the corpus was opus-4-8, with nothing
+# choosing it (2026-08-13).
+#
+# Use the full model id, never the `opus` alias: the alias means "the latest
+# Opus" and the CLI can fall back mid-run, which makes two topics incomparable.
+# TEACH_CLAUDE_MODEL / TEACH_CLAUDE_EFFORT still win when set, so a deliberate
+# comparison run needs no edit here.
+#
+# `effort` unset means the CLI default, which is what the whole corpus before
+# 2026-08-13 was written at. Raising it is a real change: measure it against
+# scripts/topic_cost.py --by-model before adopting it.
+generation:
+  model: claude-opus-4-8
+  effort:
+
 budget:
   # Maximum topics generated per invocation. Raise deliberately, not by habit.
   topics_per_run: 2
