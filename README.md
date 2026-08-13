@@ -62,6 +62,25 @@ That asymmetry is deliberate — an unattended process that reads "unspecified" 
 "everything" is how a single commit re-snapshotting seven syllabi put 162 topics
 into the queue overnight. STATUS.md shows the goal and how far it is.
 
+**Finishing one certification, start to published**, is three commands:
+
+```bash
+scripts/steer.py milestone kca en es   # 1. declare the goal
+make milestone                         # 2. work it to completion, then stop
+git add -A certs media STATUS.md && git commit && git push
+```
+
+Step 2 is a loop around the single pass, because one pass generates
+`budget.topics_per_run` topics and exits — right for a timer every 20 minutes,
+wrong for "finish this". It stops three ways and says which: the goal is met, the
+quota window closed (probed before each pass, so nothing is wasted), or the pass
+cap. Safe to run twice — each pass rescans from disk and claims per topic, so a
+second copy takes different topics.
+
+**There is no separate publish step.** Video, STATUS.md, and building and
+deploying the image all happen inside the pass, the moment the certification
+becomes complete.
+
 **Finishing publishes itself.** When a certification becomes complete — every
 topic, every declared language, above the quality floor, videos rendered — the
 pass builds and deploys it. It only fires when the set of complete certifications

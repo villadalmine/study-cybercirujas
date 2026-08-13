@@ -97,6 +97,9 @@ deploy-local: ## helm upgrade with values-local.yaml (TAG=)
 	helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
 	  -f deploy/helm/values-local.yaml --set image.tag=$(TAG)
 
+milestone: ## work the declared milestone to completion, then stop
+	@scripts/run_milestone.sh
+
 publish-complete: ## build+deploy if a certification became complete (same TAG to both)
 	$(VENV)/bin/python3 scripts/publish_if_complete.py $(if $(DRY),--dry-run,)
 
