@@ -43,7 +43,7 @@ sys.path.insert(0, str(REPO))
 
 import yaml  # noqa: E402
 
-from teach.core import quality  # noqa: E402
+from teach.core import claims, quality  # noqa: E402
 
 USAGE = (Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
          / "teach-plat" / "usage.jsonl")
@@ -85,6 +85,12 @@ def observations(cert_filter: str | None) -> list[dict]:
     provenance is written per topic.
     """
     tokens = usage_by_topic()
+    # A topic being generated RIGHT NOW has some of its files and some of its
+    # token records, and the ratio between them is meaningless until both are
+    # settled. Measured mid-flight, opus-5 read 1.76 KB/1k tokens; the same five
+    # topics finished read 0.99 — a reversal produced entirely by timing. The
+    # claim system already knows which topics those are, so ask it.
+    in_flight = {(c, t) for c, t, _ in claims.active()}
     rows = []
     for syllabus in sorted((REPO / "certs").glob("*.md")):
         cert = syllabus.stem
@@ -96,6 +102,8 @@ def observations(cert_filter: str | None) -> list[dict]:
             continue
         for topic in front.get("topics") or []:
             topic_id = str(topic["id"])
+            if (cert, topic_id) in in_flight:
+                continue
             for lang_dir in sorted((REPO / "certs" / cert / topic_id).glob("*")):
                 meta_file = lang_dir / "meta.yaml"
                 content = lang_dir / "content.md"
