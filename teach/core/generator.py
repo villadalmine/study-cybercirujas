@@ -65,6 +65,8 @@ _CLAUDE_NO_TOOLS = (
 # attributed to a model and a token count instead of being guessed at from the
 # wall clock. Only the claude CLI has it — the others stay plain text.
 AGENT_COMMANDS = {
+    # `--effort` is appended below when TEACH_CLAUDE_EFFORT is set. Unset means
+    # the CLI default, which is what the entire corpus so far was written at.
     "claude": ["claude", "-p", "--output-format", "json",
                "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
     "codex": ["codex", "exec"],
@@ -121,6 +123,12 @@ def _record_usage(envelope: dict) -> None:
             "output_tokens": usage.get("output_tokens"),
             "cache_read": usage.get("cache_read_input_tokens"),
             "cache_write": usage.get("cache_creation_input_tokens"),
+            # What thinking level produced this. Unset for every topic written
+            # before 2026-08-13, which is itself the fact worth recording: a
+            # corpus generated at an unknown setting cannot be compared against
+            # one generated at a known one. Same reason meta.yaml carries the
+            # model — see scripts/topic_cost.py.
+            "effort": os.environ.get("TEACH_CLAUDE_EFFORT") or "default",
             "models": models,
         }
         USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
@@ -291,6 +299,16 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
     pinned = os.environ.get("TEACH_CLAUDE_MODEL")
     if pinned and backend == "claude" and "--model" not in command:
         command = [*command[:-1], "--model", pinned, command[-1]]
+
+    # Same argument, for thinking level. It was never set, so the whole corpus so
+    # far was written at the CLI default — and because nothing recorded that,
+    # "was this topic written with more thinking?" had no answer at all. Both the
+    # flag and the record exist now, so raising it stays comparable against what
+    # came before. Inserted before the trailing `--`, which separates flags from
+    # the prompt: after it, `--effort` would be read as part of the prompt.
+    effort = os.environ.get("TEACH_CLAUDE_EFFORT")
+    if effort and backend == "claude" and "--effort" not in command:
+        command = [*command[:-1], "--effort", effort, command[-1]]
 
     # Mutable so `complete` can replace the placeholder with the model that
     # actually answered, once the CLI tells us. `command[0]` is only the binary

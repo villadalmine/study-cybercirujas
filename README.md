@@ -99,6 +99,9 @@ scripts/check_provenance.py                 # traceable? bookkeeping right? orde
 scripts/check_sources.py                    # are citations official, and whose?
 scripts/usage_report.py                     # what has been spent, per model and topic
 scripts/window_budget.py                    # weekly quota ceiling vs session windows
+scripts/topic_cost.py --cert kca            # tokens, context and cost per topic
+scripts/topic_cost.py --by-model            # what each model costs per topic
+scripts/topic_cost.py --forecast 135        # what N more topics would take
 python3 -c "from teach.core import claims; print(claims.active())"   # who is working now
 ```
 
