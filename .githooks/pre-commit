@@ -21,8 +21,41 @@ REPO="$(git rev-parse --show-toplevel)"
 PY="$REPO/.venv/bin/python3"
 [ -x "$PY" ] || PY="python3"
 
-# Only worth running when content or the syllabus is involved.
-staged="$(git diff --cached --name-only --diff-filter=ACM)"
+# ACMR, not ACM: a RENAME is filtered out by ACM, and that is exactly how a
+# populated .env.example walked past the secret scan below on 2026-08-13 while
+# being renamed from deploy/ to the repository root. A file being moved is a
+# file whose contents are being committed.
+staged="$(git diff --cached --name-only --diff-filter=ACMR)"
+
+# 0: no credential leaves the working tree. FIRST, and before the early exit
+# below, because a commit that stages only `.env` touches no certs/ file and
+# would otherwise never be looked at.
+#
+# The credential lives in the repository by the owner's decision (2026-08-13),
+# which makes this the check that matters most: the repository is public, and a
+# key that is ever pushed must be rotated, not deleted. It is still only a
+# backstop — `--no-verify` bypasses it, and so does a clone that never ran
+# `git config core.hooksPath .githooks`.
+if echo "$staged" | grep -qxE '\.env|.*/\.env'; then
+    echo "Refusing to commit .env — it is the file the key lives in." >&2
+    echo "  git restore --staged .env      (and keep it ignored)" >&2
+    exit 1
+fi
+# A key pasted into some other file. Matches the shapes these providers issue,
+# not the word "key", so it does not fire on documentation that mentions one.
+# .env.example is exempt by being empty after the '=' — a populated example
+# is a leak like any other, so it is checked too.
+if secrets="$(git diff --cached -U0 -- $staged 2>/dev/null \
+    | grep -E '^\+' \
+    | grep -oE '(sk-[A-Za-z0-9_-]{20,}|sk-or-v1-[A-Za-z0-9]{32,}|AIza[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})' \
+    | head -3)" && [ -n "$secrets" ]; then
+    echo "Refusing to commit: this looks like a live API key." >&2
+    echo "$secrets" | sed 's/\(.\{12\}\).*/  \1… (truncated)/' >&2
+    echo "If it was ever pushed, rotate it — deleting the commit is not enough." >&2
+    exit 1
+fi
+
+# Everything below is about content, so stop here when none is involved.
 echo "$staged" | grep -qE '^certs/' || exit 0
 
 fail=0

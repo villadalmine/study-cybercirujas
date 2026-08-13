@@ -139,14 +139,28 @@ dollar figures are an API-equivalent price, not a bill. The saving is the ~5 h
 quota window, and a window spent translating is a window not spent authoring.
 
 ```bash
-install -m 600 deploy/litellm.env.example ~/.config/teach-plat/litellm.env
-$EDITOR ~/.config/teach-plat/litellm.env     # add the key
+cp .env.example .env && chmod 600 .env && $EDITOR .env
 ```
 
-Never inside the repository — it is public, so a `.env` here becomes a published
-key. The timer loads that path on its own. **Without the file everything still
-works**: translation falls back to `claude`, which is the current setup and costs
-only more of the scarce resource.
+**`.env` configures translation and nothing else**, and that is enforced rather
+than documented: the loader accepts five variables and refuses the rest out
+loud. `TEACH_BACKEND=...` there does nothing, because moving *authoring* to a
+cheap model would be invisible afterwards except in the `meta.yaml` of every
+topic written while it was set. To change what authors, pass `--backend` or set
+the variable in the real environment, where it is a visible decision.
+
+`.env` is git-ignored and loaded by `teach/core/__init__.py`, so every entry
+point sees it — CLI, scripts and timer alike. Variables already set in the
+environment win, so the file is a default and never an override. **Without it
+everything still works**: translation falls back to `claude`, which is the
+current setup and costs only more of the scarce resource.
+
+The pre-commit hook refuses to commit `.env`, or an OpenAI/OpenRouter/Google/
+GitHub key pasted into any other file. It is a backstop, not the protection:
+`--no-verify` bypasses it, and so does a clone that never ran `git config
+core.hooksPath .githooks`. This repository is public **and** lives inside a
+Nextcloud folder, so a key here is on the sync server and every attached device
+regardless of git — and one that is ever pushed must be rotated, not deleted.
 
 ## Languages
 
