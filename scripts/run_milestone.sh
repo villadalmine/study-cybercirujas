@@ -39,7 +39,28 @@ export TEACH_AGENT="${TEACH_AGENT:-claude}"
 # win over the file, which is the failure the declaration exists to prevent.
 # TEACH_CLAUDE_MODEL still works for a deliberate one-off comparison run.
 
-MAX_PASSES="${MAX_PASSES:-30}"
+# Derived from the work actually left, not a magic number: a fixed 30 passes at
+# budget.topics_per_run=2 is 60 combos, and kca needs 62 — so the cap stopped the
+# loop two topics short of the goal it exists to reach. Doubled for margin,
+# because a pass whose topic is already claimed by another run does no work and
+# still counts (13 of them in one session, from two loops running at once).
+NEEDED="$("$REPO/.venv/bin/python3" - <<'PYEOF'
+import sys
+sys.path.insert(0, ".")
+sys.path.insert(0, "scripts")
+try:
+    from teach.core import pipeline
+    import fix_corrupted_content as audit
+    todo = [c for c in audit.find_bad_combos()
+            if pipeline.in_milestone(c[0], c[2]) and pipeline.mine(c[0])]
+    per = pipeline.topics_per_run() or 1
+    print(max(4, -(-len(todo) // per) * 2))
+except Exception:
+    print(30)
+PYEOF
+)"
+MAX_PASSES="${MAX_PASSES:-$NEEDED}"
+echo "=== milestone: $NEEDED passes budgeted for the work remaining ===" >> "$LOG"
 PASS_OUT="$(mktemp)"
 trap 'rm -f "$PASS_OUT"' EXIT
 
