@@ -15,35 +15,35 @@ topics:
 - id: '1.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: YAML Manifests
   topic: 1 - Fundamentals of Kyverno
   weight: 4.5
 - id: '1.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Admission Controllers
   topic: 1 - Fundamentals of Kyverno
   weight: 4.5
 - id: '1.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: OCI Images
   topic: 1 - Fundamentals of Kyverno
   weight: 4.5
 - id: '2.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Helm-based Installation and Configuration
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
 - id: '2.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kyverno Custom Resource Definitions (CRDs)
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
