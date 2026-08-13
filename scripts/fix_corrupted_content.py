@@ -271,6 +271,13 @@ def main() -> None:
                   f"{len(bad)} combos are pending elsewhere and are deliberately "
                   f"not being worked on. Set the next goal with "
                   f"`scripts/steer.py milestone <cert> <langs...>`.", flush=True)
+            # Finish it rather than return: video, dashboard, publish. Returning
+            # here meant the pass that COMPLETES a milestone was the one pass
+            # that skipped every finishing step, so a certification reached
+            # "content done" and stopped — which is the exact failure the
+            # automatic publish exists to remove. Hit on capa, whose content
+            # finished on pass 8 and then sat there with no video and unpublished.
+            _finish()
             return
         print(f"Milestone: {goal.get('name') or 'declared goal'} — "
               f"{len(scoped)} of {len(bad)} pending combos are in scope.", flush=True)
@@ -344,6 +351,17 @@ def main() -> None:
     # Last: a certification whose content is finished but whose video is not.
     # Without this the unattended pass could take a certification to "content
     # complete" and no further, so nothing ever finished without a human.
+    _finish()
+
+
+def _finish() -> None:
+    """Everything that turns finished content into a published certification.
+
+    One function because every early return in the pass was a chance to skip it,
+    and one of them did: the pass that met a milestone returned before rendering
+    the video, so completing a goal was the single case where nothing got
+    finished.
+    """
     render_ready_videos()
     _refresh_status()
     _publish_if_complete()
