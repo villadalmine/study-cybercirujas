@@ -78,10 +78,18 @@ def load_syllabus(path: Path) -> dict:
         return {}
 
 
-def smells(topics: list[dict], sources: list[str]) -> list[str]:
-    """Structural signs the topic list was computed rather than read. Offline."""
+def smells(topics: list[dict], sources: list[str], published: int = 0) -> list[str]:
+    """Structural signs the topic list was computed rather than read. Offline.
+
+    `published` is how many weights the source document printed, recorded by the
+    snapshot. Without it, both offline signals below fire on CNCF's CAPA — five
+    domains at 20% each, which is genuinely what the curriculum says. A syllabus
+    that matches its source is not fabricated for having the shape of one that is.
+    """
     found = []
     weights = [round(float(t.get("weight") or 0), 2) for t in topics]
+    if published >= len(topics):
+        return found
 
     # 1. Weights derived from the count. `sum == 100` was the only rule, and
     #    dividing 100 by len(topics) passes it without reading a single weight.
@@ -162,7 +170,8 @@ def main() -> int:
         if not topics:
             continue
         sources = front.get("sources") or []
-        problems = smells(topics, sources)
+        problems = smells(topics, sources,
+                          int(front.get("weights_published") or 0))
 
         if args.upstream:
             count, url = upstream_objectives(sources)

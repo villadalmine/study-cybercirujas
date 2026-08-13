@@ -8,39 +8,40 @@ topics:
 - id: '1.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
-  status: pending
+  status: generated
   title: Argo Project Fundamentals
   topic: 1 - Argo Project Fundamentals
   weight: 20.0
 - id: '2.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
-  status: pending
+  status: generated
   title: Argo Workflows
   topic: 2 - Argo Workflows
   weight: 20.0
 - id: '3.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
-  status: pending
+  status: generated
   title: Argo CD
   topic: 3 - Argo CD
   weight: 20.0
 - id: '4.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
-  status: pending
+  status: generated
   title: Argo Rollouts
   topic: 4 - Argo Rollouts
   weight: 20.0
 - id: '5.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
-  status: pending
+  status: generated
   title: Argo Events
   topic: 5 - Argo Events
   weight: 20.0
 version: unknown
+weights_published: 5
 ---
 
 # Certified Argo Project Associate (CAPA)

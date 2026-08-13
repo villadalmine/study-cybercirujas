@@ -153,11 +153,23 @@ def sync_cncf() -> list[str]:
         if cert_id not in data["certs"]:
             changes.append(f"NEW uncatalogued upstream cert: {name}")
             continue
+        cert = data["certs"][cert_id]
+        # Date the document we ACTUALLY READ last changed, which is not always
+        # the PDF. CAPA's PDF was last touched 2024-10-21 and describes four
+        # domains with uneven weights; the repository's capa/README.md was
+        # rewritten 2025-11-28 with five domains at 20% each, and that is the
+        # curriculum in force. Tracking the PDF would have reported CAPA as
+        # current while it sat a full revision behind — the same shape of blind
+        # spot as a syllabus scraped from the wrong page.
+        objectives = (cert.get("sources") or {}).get("objectives") or ""
+        tracked_path = name
+        if "/curriculum/master/" in objectives:
+            tracked_path = objectives.split("/curriculum/master/", 1)[1]
         commits = _get(
-            f"{CNCF_REPO_API}/commits?path={httpx.QueryParams({'p': name})['p']}&per_page=1"
+            f"{CNCF_REPO_API}/commits?path={httpx.QueryParams({'p': tracked_path})['p']}"
+            f"&per_page=1"
         ).json()
         updated = commits[0]["commit"]["committer"]["date"][:10] if commits else None
-        cert = data["certs"][cert_id]
         cert["last_checked"] = today
         if updated and cert.get("curriculum_updated") != updated:
             cert["curriculum_updated"] = updated
@@ -511,6 +523,12 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         )
 
     post.metadata["topics"] = topics
+    # How many weights the source document printed. The snapshot knows this
+    # because it just checked; nothing downstream can find out without
+    # re-fetching. Recording it lets the offline checker tell "every weight is
+    # 20% because CNCF publishes it that way" from "every weight is 20% because
+    # nobody read one" — the same distinction, available for free, forever.
+    post.metadata["weights_published"] = len(WEIGHT_TOKEN.findall(text))
     post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))
     post.metadata["snapshot_date"] = datetime.date.today().isoformat()
     sources = post.metadata.get("sources") or []

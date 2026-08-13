@@ -1,0 +1,7 @@
+generated_at: '2026-08-12T19:44:02'
+lang: es
+translated_from: en
+backend: claude
+model: claude-opus-4-8
+sources:
+- https://raw.githubusercontent.com/cncf/curriculum/master/capa/README.md
