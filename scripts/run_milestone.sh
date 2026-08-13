@@ -65,10 +65,19 @@ PASS_OUT="$(mktemp)"
 trap 'rm -f "$PASS_OUT"' EXIT
 
 for i in $(seq 1 "$MAX_PASSES"); do
-    if ! "$REPO/.venv/bin/python3" "$REPO/scripts/quota.py" --quiet; then
-        echo "=== pass $i: quota window closed, stopping ===" | tee -a "$LOG"
-        exit 0
-    fi
+    # quota.py: 0 available, 1 exhausted, 2 the probe itself failed. Treating
+    # every non-zero as "window closed" would report a broken CLI as a spent
+    # quota — two states that call for opposite responses, and the log would say
+    # the wrong one.
+    "$REPO/.venv/bin/python3" "$REPO/scripts/quota.py" --quiet
+    case $? in
+        0) ;;
+        1) echo "=== pass $i: quota window exhausted, stopping ===" | tee -a "$LOG"
+           exit 0 ;;
+        *) echo "=== pass $i: quota probe failed (not a quota problem) ===" \
+               | tee -a "$LOG"
+           exit 2 ;;
+    esac
 
     # This pass's own output, not the tail of the shared log. Grepping the log
     # matched the PREVIOUS milestone's "Milestone met" line and exited on pass 1
