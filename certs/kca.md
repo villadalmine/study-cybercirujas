@@ -64,21 +64,21 @@ topics:
 - id: '2.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: High Availability Installations
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
 - id: '2.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Upgrading Kyverno
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
 - id: '3.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: apply
   topic: 3 - Kyverno CLI
   weight: 3.0
