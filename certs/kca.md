@@ -50,14 +50,14 @@ topics:
 - id: '2.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Controller Configuration with Flags
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
 - id: '2.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Configuring Kyverno RBAC, roles, and permissions
   topic: 2 - Installation, Configuration, and Upgrades
   weight: 3.0
