@@ -10,3 +10,12 @@ media/**/.build/
 .study/
 .rejected/
 .antigravitycli/
+
+# Credentials never live in the repo: this one is public, and until now the only
+# ignore rule was .venv/ — so a .env dropped in here would have been committed
+# and pushed. The pipeline reads plain environment variables; put them in
+# ~/.config/teach-plat/litellm.env, which the timer loads and nothing here sees.
+.env
+.env.*
+*.env
+litellm.env

@@ -15,6 +15,12 @@ Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
 # exercises from opus-4-8, under the same pin. meta.yaml records what actually
 # answered, but a comparison needs the model held still.
 Environment=TEACH_CLAUDE_MODEL=claude-opus-4-8
+# Optional, and optional on purpose: the leading '-' means the timer starts
+# normally when the file is absent. With it, translation goes to a cheap model
+# instead of spending a Claude window — measured in docs/TRANSLATION_STUDY.md at
+# about $0.07 for the whole remaining workload. Without it, translation falls
+# back to claude, which works and merely costs more of the scarce resource.
+EnvironmentFile=-%h/.config/teach-plat/litellm.env
 ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
 # A pass is 2 topics at ~7 min each, so 40 min is generous. The ceiling matters
 # because the script's pgrep guard skips while a generation looks alive: a call
