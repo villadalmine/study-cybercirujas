@@ -77,17 +77,16 @@ quota window closed (probed before each pass, so nothing is wasted), or the pass
 cap. Safe to run twice — each pass rescans from disk and claims per topic, so a
 second copy takes different topics.
 
-**There is no separate publish step.** Video, STATUS.md, and building and
-deploying the image all happen inside the pass, the moment the certification
-becomes complete.
-
-**Finishing publishes itself.** When a certification becomes complete — every
-topic, every declared language, above the quality floor, videos rendered — the
-pass builds and deploys it. It only fires when the set of complete certifications
-changes, so a pass that finishes nothing rebuilds nothing.
+**There is no separate publish step.** When a certification becomes complete —
+every topic, every declared language, above the quality floor, videos rendered —
+the pass renders the video, refreshes STATUS.md, and builds and deploys the
+image. Completeness is derived from the tree, not from a status field, so a run
+that dies half way through cannot produce a publishable state. It fires only when
+the set of complete certifications changes, so a pass that finishes nothing
+rebuilds nothing.
 
 ```bash
-make publish-complete                       # or DRY=1 to see what it would do
+make publish-complete                       # force it, or DRY=1 to see the plan
 ```
 
 **See what is true** (all free, none of these call a model):
