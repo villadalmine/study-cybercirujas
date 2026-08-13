@@ -52,6 +52,23 @@ scripts/steer.py own kcsa claude            # who takes it by default
 scripts/steer.py languages kcsa en es pt    # which languages it must have
 scripts/steer.py video kcsa en es           # which videos to render
 scripts/steer.py budget 3                   # topics per run
+scripts/steer.py milestone kcsa en es       # what the timer works toward
+scripts/steer.py milestone --clear          # timer idles
+```
+
+**The milestone is what bounds unattended work.** The timer works only on the
+declared goal and stops when it is met; with none declared it generates nothing.
+That asymmetry is deliberate — an unattended process that reads "unspecified" as
+"everything" is how a single commit re-snapshotting seven syllabi put 162 topics
+into the queue overnight. STATUS.md shows the goal and how far it is.
+
+**Finishing publishes itself.** When a certification becomes complete — every
+topic, every declared language, above the quality floor, videos rendered — the
+pass builds and deploys it. It only fires when the set of complete certifications
+changes, so a pass that finishes nothing rebuilds nothing.
+
+```bash
+make publish-complete                       # or DRY=1 to see what it would do
 ```
 
 **See what is true** (all free, none of these call a model):
@@ -162,6 +179,29 @@ scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught
 scripts/check_api_facts.py        # do manifests use APIs the tracked release serves?
 scripts/check_sources.py          # is each citation an official project source?
 scripts/check_provenance.py       # traceable, accounted for, content before video
+scripts/check_syllabus.py         # does the syllabus cover the exam, or its index?
+scripts/check_versions.py         # what we built on vs what the exam publishes now
+scripts/status_matrix.py --check  # is STATUS.md still what the filesystem says?
+```
+
+**A syllabus is the list of everything that will be written, so it is checked
+first.** Seven LPI certifications were frozen from their *overview* page — chapter
+titles, no objectives — and produced material that passes every per-file check
+while covering a quarter of the exam. `check_syllabus.py` compares the topic list
+against the source document: uniform weights nobody published, sub-numbering with
+nothing under it, and (with `--upstream`) fewer topics than the page numbers
+objectives. `check_versions.py` answers the other half — whether the exam has
+moved since we froze it — by version when both sides publish one, by date
+otherwise.
+
+Some official PDFs cannot be read at all: CAPA's has embedded fonts with no
+Unicode map, so every extractor returns 44 characters from three pages. That is
+what `scripts/ocr_pdf.py` is for. It is not wired into the fetch path on purpose
+— OCR makes mistakes, and a syllabus is worth reading before it is frozen.
+
+```bash
+scripts/ocr_pdf.py <url> --check  # does this PDF even need OCR?
+scripts/ocr_pdf.py <url>          # render it and read the pixels
 ```
 
 `check_api_facts.py` is the only one that needs the network, and it downloads each
