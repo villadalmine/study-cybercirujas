@@ -381,7 +381,7 @@ def _publish_if_complete() -> None:
     try:
         sys.path.insert(0, str(REPO / "scripts"))
         import publish_if_complete
-        publish_if_complete.main()
+        publish_if_complete.main([])
     except SystemExit:
         pass
     except Exception as error:

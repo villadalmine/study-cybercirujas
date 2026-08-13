@@ -120,13 +120,17 @@ def publish(tag: str) -> bool:
     return True
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    # argv is explicit because this is called in-process by the generation pass,
+    # and argparse defaults to sys.argv — so it parsed the CALLER's flags and
+    # died on `--milestone`, silently disabling every automatic publish. The
+    # SystemExit was caught and looked like nothing happening.
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--force", action="store_true",
                         help="publish even if the set has not changed")
-    args = parser.parse_args()
+    args = parser.parse_args(argv or [])
 
     complete = complete_certs()
     published = _record()
@@ -157,4 +161,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
