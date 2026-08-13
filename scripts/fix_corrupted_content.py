@@ -64,6 +64,36 @@ DEFAULT_LANG = certs.DEFAULT_LANG
 # cheaper than re-authoring.
 TRANSLATE_BACKEND = os.environ.get("TEACH_TRANSLATE_BACKEND", "claude")
 
+
+def _usable_translate_backend() -> str:
+    """TRANSLATE_BACKEND if it can actually answer, else claude.
+
+    A misconfigured backend used to fail once per topic, forever: a `.env`
+    pointing translation at OpenRouter with a LiteLLM key returned 401 on every
+    call, and the loop burned all 48 of its budgeted passes in minutes without
+    writing anything. Failing 48 times is not more informative than failing once.
+
+    So: one probe before the pass, and fall back to the backend that is known to
+    work. Loud, because silently translating on the subscription when the config
+    says otherwise is its own surprise — just a much cheaper one than not
+    translating at all.
+    """
+    if TRANSLATE_BACKEND == "claude":
+        return "claude"
+    try:
+        from teach.core.generator import make_completer
+        complete, _ = make_completer(TRANSLATE_BACKEND)
+        complete("Reply with the single word OK.", "Ready?")
+        return TRANSLATE_BACKEND
+    except Exception as error:
+        print(f"Translation backend '{TRANSLATE_BACKEND}' is not answering "
+              f"({str(error).strip().splitlines()[-1][:120]}).\n"
+              f"  Falling back to claude for translation this pass. Fix or remove "
+              f"the setting in .env — note that an OpenRouter URL needs an "
+              f"OpenRouter key (sk-or-v1-...), not a LiteLLM master key.",
+              flush=True)
+        return "claude"
+
 FENCE_RE = re.compile(r"^```[a-zA-Z]*\n?|\n?```\s*$")
 
 
@@ -303,6 +333,10 @@ def main() -> None:
     if limit and len(bad) > limit:
         print(f"Budget per pass: {limit}. {len(bad) - limit} left for the "
               f"following ones.", flush=True)
+    # Once per pass, not once per topic: the probe costs one tiny completion and
+    # saves every topic in the batch from failing the same way.
+    translate_backend = _usable_translate_backend()
+
     for cert, topic, lang in batch:
         # Claim it. This is the path the unattended timer runs, and it was the
         # one place still generating without claiming — so the timer and a manual
@@ -331,7 +365,7 @@ def main() -> None:
                       f"({certs.DEFAULT_LANG} -> {lang}) ---", flush=True)
                 command = [str(TEACH), "cert", "translate", cert, "--topic", topic,
                            "--to", lang, "--from", certs.DEFAULT_LANG,
-                           "--backend", TRANSLATE_BACKEND, "--force"]
+                           "--backend", translate_backend, "--force"]
             else:
                 print(f"--- authoring {cert} {topic} ({lang}) ---", flush=True)
                 command = [str(TEACH), "cert", "generate", cert, "--topic", topic,
