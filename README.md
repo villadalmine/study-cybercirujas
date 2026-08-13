@@ -130,6 +130,24 @@ specifically is the one step where a cheap model is measured safe, in
 
 With local backends: generate on your machine → review → `make publish`.
 
+**Translation can be routed elsewhere; authoring should not.** Authoring decides
+what is true and is worth the strongest model available. Translation has its
+substance fixed by the source and every failure mode is mechanically detectable,
+which is why it is the one place a cheap model is measured safe — about **$0.07**
+for the whole remaining workload. The saving is not money: on a subscription the
+dollar figures are an API-equivalent price, not a bill. The saving is the ~5 h
+quota window, and a window spent translating is a window not spent authoring.
+
+```bash
+install -m 600 deploy/litellm.env.example ~/.config/teach-plat/litellm.env
+$EDITOR ~/.config/teach-plat/litellm.env     # add the key
+```
+
+Never inside the repository — it is public, so a `.env` here becomes a published
+key. The timer loads that path on its own. **Without the file everything still
+works**: translation falls back to `claude`, which is the current setup and costs
+only more of the scarce resource.
+
 ## Languages
 
 Content lives in `certs/<cert>/<topic>/<lang>/` (`en` is the authoring language;
