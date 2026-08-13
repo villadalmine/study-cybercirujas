@@ -8,7 +8,7 @@ topics:
 - id: '1.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kyverno Policies & Rules
   topic: 1 - Fundamentals of Kyverno
   weight: 4.51

@@ -1,0 +1,43 @@
+cert: capa
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Cinco proyectos Argo, un solo examen
+    voiceover: 'Argo no es una herramienta: son cinco, y casi nadie las conoce todas.
+      El Certified Argo Project Associate mide justamente eso, y las pesa igual: 20%
+      Fundamentals, 20% Workflows, 20% Argo CD, 20% Rollouts y 20% Events. No hay
+      dominio de relleno, no hay atajo por el que colarse.'
+  audience:
+    title: Para quién es
+    voiceover: 'Es nivel associate: no te pide años de producción, te pide criterio
+      y una base sólida del ecosistema completo. Si ya te movés con Kubernetes y querés
+      ordenar cómo entregás software, este es el punto de entrada natural. Y la certificación
+      vale tres años, así que lo que estudies ahora te acompaña un buen rato.'
+    bullets:
+    - Gente de plataforma o SRE que está montando GitOps con Argo CD
+    - Desarrolladores que quieren despliegues progresivos sin jugarse producción en
+      cada release
+    - Quien ya usa Kubernetes y quiere una base formal de todo el proyecto Argo, no
+      solo de la pieza que le tocó
+  cta:
+    title: Arrancá por los fundamentos
+    voiceover: En Cert Landscape tenés el temario abierto, dominio por dominio, con
+      ejercicios para practicar cada uno. Entrá, empezá por Argo Project Fundamentals
+      y seguí el orden del examen.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Argo Project Fundamentals con 20.0%, Argo Workflows
+      con 20.0%, Argo CD con 20.0%, Argo Rollouts con 20.0%, Argo Events con 20.0%.
+    domains:
+    - name: Argo Project Fundamentals
+      weight: 20.0
+    - name: Argo Workflows
+      weight: 20.0
+    - name: Argo CD
+      weight: 20.0
+    - name: Argo Rollouts
+      weight: 20.0
+    - name: Argo Events
+      weight: 20.0
