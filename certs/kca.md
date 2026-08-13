@@ -85,7 +85,7 @@ topics:
 - id: '3.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: test
   topic: 3 - Kyverno CLI
   weight: 3.0

@@ -1,72 +1,145 @@
-## Nota de integridad antes del material
+# KCA 3.2 — `kyverno test`
 
-El input llega con metadatos rotos: el tema es la etiqueta literal **"test"** y la versión de la certificación es **"unknown"**. Eso, más el historial reciente del repo (`…cost 48 passes instead of one probe`) y los archivos sin trackear (`hola`, `seguir`, `test_agy.py`), me hace sospechar que esto es un *probe* del pipeline y no un objetivo real de syllabus. Además, en esta sesión **no tengo acceso al filesystem del repo** (ni `Read` ni `Bash`), así que no puedo abrir `certs/kca.md` ni el `KCA_Curriculum.pdf` para verificarlo yo mismo.
+**Dominio 3 — Kyverno CLI · Peso en el examen 3.0 %**
 
-Procedo bajo la interpretación mejor fundamentada: **KCA = Kyverno Certified Associate** (LF/CNCF), y el objetivo "test" del dominio 3 corresponde a **testear políticas con la Kyverno CLI (`kyverno test`)**. Si el tema real es otro, corregime y lo regenero. Escribo para una versión reciente de Kyverno y marco explícitamente los puntos sensibles a versión, ya que llega como `unknown`.
-
----
-
-# KCA 3.2 — Testing declarativo de políticas con la Kyverno CLI (`kyverno test`)
-
-## 1. Motivación y problema arquitectónico de producción
-
-Kyverno es un admission controller: sus políticas (`ClusterPolicy` / `Policy`) son código que se ejecuta en el *hot path* de cada `CREATE`/`UPDATE` que pasa por el API server. Un `validate` mal escrito rechaza deployments legítimos de toda la organización; un `mutate` mal escrito inyecta un sidecar o un `securityContext` incorrecto en cada Pod. La política **es** infraestructura crítica, y como toda infraestructura crítica necesita una suite de tests que corra **antes** de llegar al cluster.
-
-El problema de producción concreto: una política evoluciona (se agrega un `precondition`, se cambia un `pattern`, se migra `validationFailureAction` a `failureAction` por rule). Sin tests, cada cambio es una apuesta. Los modos de falla típicos:
-
-- **Regresión silenciosa**: un refactor del `match/exclude` deja de cubrir un `kind` que antes cubría. El cluster deja de estar protegido y nadie se entera hasta el incidente.
-- **Falso positivo masivo**: un `pattern` demasiado estricto empieza a bloquear cargas válidas. En `Enforce`, esto es un outage autoinfligido a escala de cluster.
-- **Autogen no considerado**: se testea contra un `Pod` pero en producción los recursos son `Deployment`/`CronJob`, y Kyverno evalúa la regla **autogenerada** `autogen-<rule>`, cuyo comportamiento nunca se validó.
-
-`kyverno test` resuelve esto ejecutando el motor de políticas **offline, sin cluster**, contra un set de recursos fijo, y **aseverando el resultado esperado** de cada `(policy, rule, resource)`. Es el equivalente a un unit test: determinista, rápido, gate-able en CI, y sin depender de un API server. Es la pieza que convierte "policy-as-code" en "policy-as-code **con CI**".
-
-Fuente oficial: https://kyverno.io/docs/kyverno-cli/usage/test/
+> **Alcance.** Este tema cubre el subcomando `kyverno test`: el arnés de pruebas unitarias declarativo y sin clúster que ejecuta políticas contra recursos de fixture y afirma un resultado esperado por cada terna (policy, rule, resource). *No* cubre `kyverno apply` (evaluación ad‑hoc, sin aserciones — tema 3.1) ni las pruebas de clúster de extremo a extremo con Chainsaw.
 
 ---
 
-## 2. Comparativa técnica: dónde encaja `test` en el espectro de verificación
+## 1. El problema en producción
 
-| Herramienta | Qué prueba | Necesita cluster | Determinismo | Uso típico | Gate en CI |
+Una `ClusterPolicy` de Kyverno en modo `Enforce` es una **compuerta de admisión síncrona y de alcance de todo el clúster**. Su radio de impacto es toda la superficie de la API que coincida. Los dos modos de fallo son asimétricos y ambos son costosos:
+
+| Modo de fallo | Mecanismo | Síntoma en producción |
+|---|---|---|
+| **Falso positivo** (coincidencia excesiva) | Bloque `match` demasiado amplio, falta `exclude`, interacción `autogen` olvidada | Cada despliegue de `Deployment` falla la admisión. `kubectl apply` devuelve `admission webhook "validate.kyverno.svc-fail.kyverno.svc" denied the request`. El autoescalado de nodos se atasca porque los pods de DaemonSet son rechazados. Caída total. |
+| **Falso negativo** (coincidencia insuficiente) | Error de tipeo en una expresión JMESPath, `apiVersion` incorrecto en `match.resources.kinds`, una `precondition` que silenciosamente evalúa a `false` | El control reporta "0 violaciones" para siempre. El auditor ve un PolicyReport en verde. Nada se aplica en realidad. Silencioso, y solo se descubre a la hora de la auditoría. |
+
+El segundo es peor. Una política que nunca coincide con nada no produce *ninguna señal en absoluto* — `kubectl get polr -A` no muestra nada, y un reporte vacío es indistinguible del cumplimiento total. Este es el defecto más común en los repositorios de policy‑as‑code.
+
+La respuesta arquitectónica es una **pirámide de pruebas de políticas**, y `kyverno test` es su capa base:
+
+```
+                 ┌───────────────────────────┐
+                 │  Chainsaw / real cluster  │  e2e: webhook wiring, background scans,
+                 │  (minutes, needs a cluster)│  generate lifecycle, RBAC, reports
+                 ├───────────────────────────┤
+                 │  kyverno apply --cluster  │  integration: policy vs. live resources
+                 │  (seconds, needs kubeconfig)│
+                 ├───────────────────────────┤
+                 │      kyverno test         │  UNIT: policy vs. fixture, asserted,
+                 │  (milliseconds, no cluster)│  hermetic, runs in a PR check
+                 └───────────────────────────┘
+```
+
+`kyverno test` enlaza con la **misma biblioteca de motor** (`pkg/engine`) que ejecuta el controlador de admisión. No es una reimplementación ni un linter — la semántica de evaluación es la semántica de producción, menos el servidor de API. Esa fidelidad es lo que hace que valga la pena usarlo como compuerta de los merges, y la §10 documenta exactamente dónde tiene fugas la parte del "menos el servidor de API".
+
+---
+
+## 2. Dónde encaja `test` — compensaciones comparativas
+
+| Herramienta | Requiere clúster | Aserciones | Fidelidad del motor | Tiempo real típico | Trabajo adecuado |
 |---|---|---|---|---|---|
-| **Quality floor / lint** (`kyverno-json`, `kubectl kyverno` schema) | Que el YAML de la política sea válido y parseable | No | Alto | Pre-commit | Sí |
-| **`kyverno apply`** | Evaluación *ad hoc* de política(s) contra recurso(s); imprime el resultado real | No | Alto | Exploración interactiva, debug, generar policy reports offline | Parcial (`--warn-exit-code`) |
-| **`kyverno test`** | **Aserción declarativa**: resultado esperado (`pass/fail/skip/warn/error`) por regla y recurso | No | Alto | **Unit/regression testing de la lógica de la política** | **Sí (exit code)** |
-| **Chainsaw** (`kyverno/chainsaw`) | e2e: aplica recursos a un cluster real y aseveran el estado resultante | **Sí** | Medio (depende del cluster) | e2e de la instalación de Kyverno, generate/mutate contra API real, background scans | Sí (en cluster efímero) |
-| **`kuttl`** (predecesor) | e2e declarativo genérico de operators | Sí | Medio | Legacy e2e | Sí |
+| `kyverno apply` | No (opcional `--cluster`) | Ninguna — imprime un reporte, uno lo lee | Motor completo | ~100 ms | Exploración, "¿qué le hace esta política a este YAML?" |
+| **`kyverno test`** | **No** | **Declarativa, por regla, por recurso** | **Motor completo, contexto simulado** | **~200 ms–2 s** | **Compuerta de PR, suite de regresión, red de seguridad para refactors** |
+| `kyverno apply --cluster` | Sí (kubeconfig de solo lectura) | Ninguna | Motor completo + contexto en vivo de `apiCall`/ConfigMap | Segundos | Verificación previa contra el inventario de un clúster real |
+| Chainsaw (`kyverno/chainsaw`) | Sí (kind/k3d) | Sí, sobre el estado del clúster | Webhook real, servidor de API real | Minutos | Configuración de webhook, `generate` + `synchronize`, escaneos en segundo plano, pruebas de actualización |
+| Pruebas Conftest / OPA `rego` | No | Sí | **Motor distinto** — no prueba nada sobre Kyverno | ~50 ms | No aplicable; una pila de políticas separada |
+| `kubectl apply --dry-run=server` | Sí | Ninguna | Real, cadena completa | Segundos | Comprobación final de cordura antes del merge |
 
-Trade-offs clave:
-
-- **`apply` vs `test`**: `apply` te dice *qué pasó*; `test` te dice *si lo que pasó es lo que esperabas*. `apply` no falla el build por sí solo cuando la lógica cambia; `test` sí, porque compara contra `results:` declarados. Para CI usás `test`; para "a ver qué hace esta regla" usás `apply`.
-- **`test` vs Chainsaw**: `test` valida la **lógica de admission** de la política sin latencia de cluster (ideal para el 90% de los casos: validate/mutate/verifyImages). Chainsaw valida lo que **solo** un cluster real revela: `generate` con `synchronize`, background scans, cleanup policies con TTL, interacción con otros controllers. Regla práctica SRE: `test` para la lógica, Chainsaw para el comportamiento del controller en el tiempo.
+**La regla de decisión.** Si la aserción trata sobre *el veredicto del motor respecto a un manifiesto*, corresponde a `kyverno test`. Si trata sobre *el estado del clúster cambiando con el tiempo* — un recurso generado que aparece, un reporte que se escribe, `synchronize: true` propagando una edición — corresponde a Chainsaw. No intentes forzar lo segundo dentro de lo primero; escribirás pruebas que pasan mientras la política está rota en producción.
 
 ---
 
-## 3. Manifiestos completos (sin recortar)
+## 3. Anatomía del manifiesto `Test`
 
-Estructura de directorio de un caso de test:
+Desde Kyverno 1.11 el archivo de prueba es un objeto tipado bajo `cli.kyverno.io/v1alpha1`. Los archivos heredados sin versión (con `name:`/`policies:`/`results:` a secas y sin `apiVersion`) están obsoletos — migrálos (§8.3).
+
+```yaml
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: require-team-label          # test suite name, surfaced in output
+policies:                           # paths, relative to THIS file
+  - policy.yaml
+resources:                          # fixture manifests (may be multi-doc)
+  - resources.yaml
+variables: values.yaml              # OPTIONAL: mocked context (kind: Value)
+userinfo: user-info.yaml            # OPTIONAL: mocked AdmissionReview.userInfo
+results:                            # the assertions
+  - policy: require-team-label      # metadata.name of the policy
+    rule: check-team-label          # spec.rules[].name — see §7 for autogen
+    kind: Pod                       # resource kind under test
+    namespace: default              # OPTIONAL: disambiguates same-named fixtures
+    resources:                      # metadata.name of one or more fixtures
+      - good-pod
+    result: pass                    # the EXPECTED engine verdict
+```
+
+### 3.1 El vocabulario de `result`
+
+Esta es la tabla de mayor rendimiento del tema. El examen evalúa la distinción entre `fail` y `skip` sin descanso, y la producción también.
+
+| `result` | Significado en el motor | Qué prueba | Causa común cuando es inesperado |
+|---|---|---|---|
+| `pass` | La regla **se aplicó**; el recurso **cumplió** | El camino feliz no se bloquea por accidente | — |
+| `fail` | La regla **se aplicó**; el recurso **violó** | El control efectivamente atrapa la entrada mala | — |
+| `skip` | La regla **no se aplicó** — `match`/`exclude` no la seleccionó, o una `precondition` evaluó a falso | El alcance es correcto (las exclusiones funcionan) | **Obtener `skip` donde esperabas `fail` es el bug del falso negativo.** `kinds` incorrecto, `apiVersion` incorrecto, variable de precondición sin resolver |
+| `warn` | Un fallo que emerge como advertencia en lugar de una denegación — la semántica de `Audit` (`kyverno apply --audit-warn`) | Una política de aviso es de aviso | Afirmar `fail` sobre una política que moviste a `Audit` |
+| `error` | El motor no pudo evaluar: patrón mal formado, fallo de sustitución de variables, JMESPath incorrecto | Nada — esto es una política rota | Falta una entrada en `variables`; `apiCall` sin clúster |
+
+> **`skip` ≠ `pass`.** Un `skip` significa que la regla no tuvo opinión. Si tu suite solo afirma `pass`, una política cuyo bloque `match` rompiste seguirá en verde — cada recurso hace skip silenciosamente. **Cada regla validate necesita al menos un `fail` afirmado.** Tratá eso como un ítem de la lista de revisión.
+
+### 3.2 Campos de mutación y generación
+
+| Campo | Aplica a | Valor |
+|---|---|---|
+| `patchedResources` | reglas `mutate` | Ruta a un archivo YAML que contiene el **recurso exacto esperado tras la mutación** |
+| `generatedResource` | reglas `generate` | Ruta a un archivo YAML que contiene el objeto generado esperado |
+| `cloneSourceResource` | `generate` con `clone` | Ruta al objeto de origen que se clona |
+| `isValidatingAdmissionPolicy: true` | VAP nativa / generada por Kyverno | Marca la fila como una aserción de ValidatingAdmissionPolicy |
+
+---
+
+## 4. Convención de disposición del repositorio
+
+El repositorio upstream `kyverno/policies` usa esta disposición, y los fixtures del examen la siguen. Mantené las pruebas junto a la política — una prueba que vive a tres directorios de distancia se pudre.
 
 ```
-require-labels/
-├── policy.yaml
-├── resources.yaml
-└── kyverno-test.yaml
+policies/
+└── governance/
+    └── require-team-label/
+        ├── require-team-label.yaml          # the ClusterPolicy
+        ├── artifacthub-pkg.yml              # catalogue metadata
+        └── .kyverno-test/
+            ├── kyverno-test.yaml            # the Test object
+            ├── resources.yaml               # fixtures
+            └── values.yaml                  # optional mocked context
 ```
 
-### `policy.yaml` — la política bajo test
+`kyverno test <dir>` recorre `<dir>` de forma **recursiva** y ejecuta cada archivo llamado `kyverno-test.yaml` (o `.yml`). Una sola invocación en la raíz del repositorio ejecuta toda la suite.
+
+---
+
+## 5. Ejemplo resuelto 1 — validate: `pass`, `fail`, y el `skip` obligatorio
+
+### 5.1 `require-team-label.yaml`
 
 ```yaml
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: require-labels
+  name: require-team-label
   annotations:
     policies.kyverno.io/title: Require team label
+    policies.kyverno.io/category: Governance
     policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Every workload Pod must carry a non-empty `team` label so that cost
+      allocation and incident routing can attribute it to an owning group.
+      Platform namespaces are exempt.
 spec:
-  # NOTA DE VERSIÓN: en Kyverno < 1.12 la acción va aquí, a nivel spec.
-  # En >= 1.12 se declara por regla: spec.rules[].validate.failureAction: Enforce
-  # (spec.validationFailureAction quedó deprecado). Como la versión llega "unknown",
-  # uso la forma spec-level, compatible con el mayor rango de releases.
   validationFailureAction: Enforce
   background: true
   rules:
@@ -76,248 +149,681 @@ spec:
           - resources:
               kinds:
                 - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kube-system
+                - kube-node-lease
+                - kyverno
       validate:
-        message: "El label 'team' es obligatorio en todo Pod."
+        message: "The label `team` is required and must be non-empty on all Pods."
         pattern:
           metadata:
             labels:
-              team: "?*"        # ?* = string no vacío
+              team: "?*"
 ```
 
-### `resources.yaml` — los recursos de prueba (uno conforme, uno violatorio)
+> **Nota de versión.** `spec.validationFailureAction` es la ubicación de 1.10–1.12; Kyverno 1.13 la mueve a `spec.rules[].validate.failureAction` por regla y deprecia el campo a nivel de spec. Ambos se aceptan durante la ventana de deprecación. Confirmá cuál usa tu imagen de examen con `kyverno version`, y mantené la CLI en la **misma versión minor que el clúster** — la CLI lleva su propia copia del motor y su propia validación de esquema.
+
+### 5.2 `resources.yaml`
 
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-with-team-label
+  name: good-pod
   namespace: default
   labels:
-    team: sre
+    team: payments
 spec:
   containers:
     - name: app
-      image: registry.k8s.io/pause:3.9
+      image: ghcr.io/example/app:1.4.2
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-without-team-label
+  name: bad-pod
   namespace: default
+  labels:
+    app: checkout
 spec:
   containers:
     - name: app
-      image: registry.k8s.io/pause:3.9
+      image: ghcr.io/example/app:1.4.2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: empty-label-pod
+  namespace: default
+  labels:
+    team: ""
+spec:
+  containers:
+    - name: app
+      image: ghcr.io/example/app:1.4.2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: system-pod
+  namespace: kube-system
+  labels:
+    component: etcd
+spec:
+  containers:
+    - name: etcd
+      image: registry.k8s.io/etcd:3.5.15-0
 ```
 
-### `kyverno-test.yaml` — el manifiesto de test (schema CLI v1alpha1, Kyverno ≥ 1.11)
+`empty-label-pod` es deliberado: `"?*"` en un patrón de Kyverno significa "un carácter seguido de cualquier cantidad de caracteres", es decir, **no vacío**. Una etiqueta `team: ""` satisface "la clave existe" pero aún así debe fallar. Sin este fixture, cambiar `?*` por `*` — que *sí* coincide con vacío — es una regresión indetectable.
+
+### 5.3 `.kyverno-test/kyverno-test.yaml`
 
 ```yaml
 apiVersion: cli.kyverno.io/v1alpha1
 kind: Test
 metadata:
-  name: require-labels-test
+  name: require-team-label
 policies:
-  - policy.yaml
+  - ../require-team-label.yaml
 resources:
   - resources.yaml
 results:
-  - policy: require-labels
+  - policy: require-team-label
     rule: check-team-label
     kind: Pod
     resources:
-      - pod-with-team-label       # conforme -> la regla lo admite
+      - good-pod
     result: pass
-  - policy: require-labels
+
+  - policy: require-team-label
     rule: check-team-label
     kind: Pod
     resources:
-      - pod-without-team-label    # viola el pattern -> la regla lo rechaza
+      - bad-pod
+      - empty-label-pod
     result: fail
-```
 
-> **Sensible a versión (importante para `unknown`)**: en Kyverno < 1.10 el manifiesto **no** llevaba `apiVersion`/`kind`, los campos eran top-level (`name`, `policies`, `resources`, `results`) y el campo de aserción se llamaba **`status`**, no `result`. Si el motor es viejo, el schema de arriba falla a parsear. Verificá con `kyverno version` y elegí el schema acorde.
-
-### Variante `mutate`: aseverar el recurso mutado
-
-Para un `mutate` no alcanza con `pass/fail`: hay que aseverar el **output**. El manifiesto de test referencia el recurso ya parcheado esperado:
-
-```yaml
-# results[] de un test de mutación
-results:
-  - policy: add-default-securitycontext
-    rule: set-runasnonroot
+  - policy: require-team-label
+    rule: check-team-label
     kind: Pod
+    namespace: kube-system
     resources:
-      - pod-input
-    patchedResources: patched.yaml   # el YAML del Pod tal como debe quedar tras el mutate
-    result: pass
+      - system-pod
+    result: skip
 ```
 
-`patched.yaml` contiene el Pod completo con el `securityContext.runAsNonRoot: true` ya inyectado; la CLI aplica la mutación real y hace *diff* contra este archivo. Cualquier divergencia → `fail`.
-
----
-
-## 4. Comandos CLI y salidas reales
-
-Instalación de la CLI (vía Krew) y verificación de versión — **primer paso** dado que el schema depende de ella:
+### 5.4 Ejecución
 
 ```console
-$ kubectl krew install kyverno
 $ kyverno version
 Version: 1.13.2
-Time: 2025-01-20T10:14:52Z
-Git commit ID: 9f3c1a...
-```
+Time: 2025-01-14T09:12:44Z
+Git commit ID: 8e3f4b1c0d2a5e9f7b1c3d4e5f6a7b8c9d0e1f2a
 
-Ejecución del test sobre el directorio (descubre `kyverno-test.yaml` recursivamente):
-
-```console
 $ kyverno test .
-
-Loading test  ( ./require-labels/kyverno-test.yaml ) ...
+Loading test  ( .kyverno-test/kyverno-test.yaml ) ...
   Loading values/variables ...
   Loading policies ...
   Loading resources ...
-  Applying 1 policy to 2 resources ...
+  Applying 1 policy to 4 resources ...
   Checking results ...
 
-│───│────────────────│──────────────────│──────────────────────────────────│────────│
-│ ID│ POLICY         │ RULE             │ RESOURCE                         │ RESULT │
-│───│────────────────│──────────────────│──────────────────────────────────│────────│
-│ 1 │ require-labels │ check-team-label │ default/Pod/pod-with-team-label  │ Pass ✅ │
-│ 2 │ require-labels │ check-team-label │ default/Pod/pod-without-team-... │ Pass ✅ │
-│───│────────────────│──────────────────│──────────────────────────────────│────────│
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ ID │ POLICY               │ RULE              │ RESOURCE                        │ RESULT │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ 1  │ require-team-label   │ check-team-label  │ default/Pod/good-pod            │ Pass   │
+│ 2  │ require-team-label   │ check-team-label  │ default/Pod/bad-pod             │ Pass   │
+│ 3  │ require-team-label   │ check-team-label  │ default/Pod/empty-label-pod     │ Pass   │
+│ 4  │ require-team-label   │ check-team-label  │ kube-system/Pod/system-pod      │ Pass   │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
 
-Test Summary: 2 tests passed and 0 tests failed
+Test Summary: 4 tests passed and 0 tests failed
+
+$ echo $?
+0
 ```
 
-> Ambas filas dan **Pass** porque `test` valida que el resultado **real** coincida con el **esperado**: el caso violatorio esperaba `fail` y efectivamente falló ⇒ el *test* pasa. No confundas "resultado de la regla" (`fail`) con "resultado del test" (`Pass`).
+> **Leé la columna `RESULT` correctamente.** Es el **veredicto de la prueba**, no el veredicto de la política. La fila 2 dice `Pass` porque el motor devolvió `fail` para `bad-pod` **y la prueba esperaba `fail`**. Un `Fail` en esa columna significa *que la aserción no se cumplió* — el resultado del motor difirió de lo que declaraste. Los candidatos pierden puntos al leer la fila 2 como "el pod malo fue permitido".
 
-Exit code (lo que hace gate-able la suite):
+### 5.5 Una ejecución que falla
+
+Ahora rompé la política: cambiá `exclude` para omitir `kube-system`.
 
 ```console
-$ kyverno test . ; echo "exit=$?"
-...
-Test Summary: 2 tests passed and 0 tests failed
-exit=0
+$ kyverno test .
+Loading test  ( .kyverno-test/kyverno-test.yaml ) ...
+  Loading values/variables ...
+  Loading policies ...
+  Loading resources ...
+  Applying 1 policy to 4 resources ...
+  Checking results ...
+
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ ID │ POLICY               │ RULE              │ RESOURCE                        │ RESULT │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ 1  │ require-team-label   │ check-team-label  │ default/Pod/good-pod            │ Pass   │
+│ 2  │ require-team-label   │ check-team-label  │ default/Pod/bad-pod             │ Pass   │
+│ 3  │ require-team-label   │ check-team-label  │ default/Pod/empty-label-pod     │ Pass   │
+│ 4  │ require-team-label   │ check-team-label  │ kube-system/Pod/system-pod      │ Fail   │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+
+Aggregated Failed Test Cases :
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ ID │ POLICY               │ RULE              │ RESOURCE                        │ RESULT │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+│ 1  │ require-team-label   │ check-team-label  │ kube-system/Pod/system-pod      │ Fail   │
+│────│──────────────────────│───────────────────│─────────────────────────────────│────────│
+
+Test Summary: 3 tests passed and 1 tests failed
+
+$ echo $?
+1
 ```
 
-Cuando una aserción no coincide (p. ej. alguien afloja el `pattern` y el Pod violatorio ahora pasa):
-
-```console
-$ kyverno test . ; echo "exit=$?"
-...
-│ 2 │ require-labels │ check-team-label │ default/Pod/pod-without-team-... │ Fail ❌ │
-Test Summary: 1 tests passed and 1 tests failed
-exit=1
-```
-
-Ver solo lo que falla y con detalle:
-
-```console
-$ kyverno test . --fail-only --detailed-results
-```
-
-Correr contra un repositorio Git remoto (útil para testear una policy library upstream sin clonar):
-
-```console
-$ kyverno test https://github.com/kyverno/policies/best-practices --git-branch main
-```
-
-Sibling `kyverno apply` para debug interactivo (imprime el resultado real, sin aserción):
-
-```console
-$ kyverno apply require-labels/policy.yaml --resource require-labels/resources.yaml
-
-Applying 1 policy rule(s) to 2 resource(s)...
-
-policy require-labels -> resource default/Pod/pod-without-team-label failed:
-1. check-team-label: validation error: El label 'team' es obligatorio en todo Pod.
-   rule check-team-label failed at path /metadata/labels/team/
-
-pass: 1, fail: 1, warn: 0, error: 0, skip: 0
-```
+El código de salida distinto de cero es lo esencial: es lo que hace que el comando sea usable como compuerta de merge. `--fail-only` suprime las filas que pasan pero **no** cambia el código de salida.
 
 ---
 
-## 5. Guía de verificación y diagnóstico de fallas
+## 6. Ejemplo resuelto 2 — mutación y `patchedResources`
 
-Los errores de `kyverno test` casi nunca son bugs del motor: son *mismatches* entre lo que el autor cree que evalúa la política y lo que evalúa. Tabla de diagnóstico:
+Las pruebas de mutación afirman sobre el *documento de salida*, byte por byte tras la normalización de YAML. Esto es más estricto que una aserción validate y atrapa errores de clave de merge que un `pass`/`fail` nunca detectaría.
 
-| Síntoma en la salida | Causa raíz probable | Verificación / fix |
+### 6.1 `add-default-requests.yaml`
+
+```yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-requests
+  annotations:
+    policies.kyverno.io/title: Add default resource requests
+    policies.kyverno.io/category: Scheduling
+    policies.kyverno.io/subject: Pod
+spec:
+  background: false
+  rules:
+    - name: add-default-requests
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      preconditions:
+        any:
+          - key: "{{ request.operation || 'BACKGROUND' }}"
+            operator: AnyIn
+            value:
+              - CREATE
+              - UPDATE
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+              - (name): "*"
+                resources:
+                  requests:
+                    +(memory): "128Mi"
+                    +(cpu): "100m"
+```
+
+Dos anclas de Kyverno son fundamentales aquí y ambas son material de examen:
+
+| Ancla | Sintaxis | Semántica |
 |---|---|---|
-| `Error: ... unable to load test file` / parseo falla | Schema del manifiesto no coincide con la versión del binario (`result` vs `status`, con/sin `apiVersion`+`kind`) | `kyverno version` y alinear el schema; migrar `status:`→`result:` |
-| Resultado real `skip` donde esperabas `fail`/`pass` | El recurso no matchea (`match/exclude`) o un `precondition` lo excluye | Correr `kyverno apply` sobre ese recurso; revisar `match.any[].resources.kinds`, namespaces y preconditions |
-| La regla no aparece para un `Deployment`/`CronJob` | **Autogen**: Kyverno generó `autogen-<rule>` para controllers de Pod; testeaste el nombre base | Aseverar contra `autogen-check-team-label` (y `autogen-cronjob-check-team-label` para CronJob) |
-| `mutate` da `fail` inesperado | Falta `patchedResources` o el YAML esperado difiere en un campo sutil (orden, defaults, `null`) | Comparar con `kyverno apply ... --output yaml` y copiar el output real como baseline |
-| Todo `pass` pero la política "no hace nada" en el cluster | Testeaste la lógica, no el enforcement: `validationFailureAction`/`failureAction` en `Audit` no bloquea | `test` valida la **regla**, no la acción; verificar el modo por separado y con e2e (Chainsaw) |
-| Necesita `request.operation`, `apiCall`, context vars | El motor offline no tiene API server para resolver context | Proveer un `Values`/variables file que *mockee* esos valores |
+| Condicional | `(name): "*"` | Selecciona todo elemento de la lista cuyo `name` coincida; se usa como clave de merge para que el parche se aplique por contenedor |
+| Agregar‑si‑ausente | `+(memory): "128Mi"` | Agrega el campo **solo cuando aún no está definido**; nunca sobrescribe un request explícito |
 
-Archivo de variables para mockear contexto (cuando la regla usa `{{ request.operation }}`, `apiCall`, etc.):
+### 6.2 `resources.yaml`
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27.3
+    - name: sidecar
+      image: ghcr.io/example/agent:2.1.0
+      resources:
+        requests:
+          cpu: "500m"
+```
+
+### 6.3 `patched.yaml` — la salida esperada
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27.3
+      resources:
+        requests:
+          memory: 128Mi
+          cpu: 100m
+    - name: sidecar
+      image: ghcr.io/example/agent:2.1.0
+      resources:
+        requests:
+          cpu: "500m"
+          memory: 128Mi
+```
+
+Fijate en el contenedor `sidecar`: `cpu` se **preserva en `500m`** gracias a `+(cpu)`, mientras que `memory` se agrega. Si tu archivo patched muestra `cpu: 100m` ahí, el ancla está mal — y solo la prueba de mutación lo atrapa.
+
+### 6.4 `values.yaml` — simulando el contexto de admisión
+
+`request.operation` es un campo de AdmissionReview. No hay servidor de API, así que hay que suministrarlo. El fallback `|| 'BACKGROUND'` en la política previene un veredicto `error`, pero aun así deberías simular el valor real para que la prueba ejercite la rama `CREATE`.
 
 ```yaml
 apiVersion: cli.kyverno.io/v1alpha1
-kind: Values
+kind: Value
 metadata:
   name: values
-policies:
-  - name: require-labels
-    resources:
-      - name: pod-without-team-label
-        values:
-          request.operation: CREATE
 globalValues:
   request.operation: CREATE
+policies:
+  - name: add-default-requests
+    resources:
+      - name: nginx
+        values:
+          request.object.metadata.namespace: default
+namespaceSelector:
+  - name: default
+    labels:
+      kubernetes.io/metadata.name: default
+```
+
+| Campo de `Value` | Propósito |
+|---|---|
+| `globalValues` | Pares clave/valor visibles para **cada** política y recurso |
+| `policies[].rules[].values` | Acotado a una regla — usalo para simulaciones de `apiCall`/ConfigMap por regla |
+| `policies[].resources[].values` | Acotado a un fixture — permite que un recurso tome un contexto distinto |
+| `namespaceSelector` | Suministra las **labels** del namespace, que la CLI no puede consultar; requerido siempre que una política use `match.any.resources.namespaceSelector` |
+
+### 6.5 La prueba y su ejecución
+
+```yaml
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-default-requests
+policies:
+  - ../add-default-requests.yaml
+resources:
+  - resources.yaml
+variables: values.yaml
+results:
+  - policy: add-default-requests
+    rule: add-default-requests
+    kind: Pod
+    resources:
+      - nginx
+    patchedResources: patched.yaml
+    result: pass
 ```
 
 ```console
-$ kyverno test . --values-file values.yaml
+$ kyverno test . --detailed-results
+Loading test  ( .kyverno-test/kyverno-test.yaml ) ...
+  Loading values/variables ...
+  Loading policies ...
+  Loading resources ...
+  Applying 1 policy to 1 resource ...
+  Checking results ...
+
+│────│───────────────────────│─────────────────────────│───────────────────────│────────│
+│ ID │ POLICY                │ RULE                    │ RESOURCE              │ RESULT │
+│────│───────────────────────│─────────────────────────│───────────────────────│────────│
+│ 1  │ add-default-requests  │ add-default-requests    │ default/Pod/nginx     │ Pass   │
+│────│───────────────────────│─────────────────────────│───────────────────────│────────│
+
+Test Summary: 1 tests passed and 0 tests failed
 ```
 
-Checklist de verificación antes de dar por buena una suite:
+Cuando el parche no coincide, la CLI imprime un diff estructurado de esperado vs. real — esta es la recompensa de `--detailed-results`:
 
-1. **Cobertura de kinds reales**: si producción usa `Deployment`, hay un caso con `Deployment` y su regla `autogen-*`, no solo `Pod`.
-2. **Ambos lados de cada regla**: al menos un caso `pass` y uno `fail` por regla (una regla que solo se testea con recursos que pasan no prueba nada).
-3. **Casos `skip` explícitos**: recursos que *deben* ser excluidos, aseverados como `skip`, para blindar el `exclude`.
-4. **Gate real en CI**: el pipeline chequea `exit code`, no el texto de salida.
+```console
+$ kyverno test . --detailed-results
+...
+│ 1  │ add-default-requests  │ add-default-requests    │ default/Pod/nginx     │ Fail   │
 
-### Integración en CI (GitHub Actions)
+Aggregated Failed Test Cases :
+patched resource mismatch for default/Pod/nginx:
+  spec.containers[1].resources.requests.cpu:
+    expected: 500m
+    actual:   100m
+
+Test Summary: 0 tests passed and 1 tests failed
+```
+
+> **La trampa del defaulting del servidor de API.** `patched.yaml` debe contener **solo el manifiesto en crudo más el parche de Kyverno**. *No* pegues la salida de `kubectl get pod -o yaml`: el servidor de API inyecta `terminationMessagePath`, `imagePullPolicy`, `dnsPolicy`, `restartPolicy`, `serviceAccountName`, `status`, `metadata.uid`, y `creationTimestamp`. Ninguno de esos existe en la evaluación de la CLI, y cada uno de ellos hace que la comparación falle. La forma confiable de producir `patched.yaml` es ejecutar `kyverno apply` y copiar el recurso parcheado que emite — nunca el del clúster.
+
+---
+
+## 7. Reglas autogeneradas — el fallo de prueba más común
+
+Cuando una política coincide con `Pod` y `spec.background` es `true` (o la anotación `pod-policies.kyverno.io/autogen-controllers` está definida), Kyverno **sintetiza reglas adicionales** para los controladores de pods, de modo que un `Deployment` malo se rechace a nivel de Deployment, con un error comprensible, en lugar de producir silenciosamente cero réplicas listas.
+
+Las reglas generadas son visibles en la política almacenada:
+
+```console
+$ kubectl get clusterpolicy require-team-label -o jsonpath='{.spec.rules[*].name}{"\n"}'
+check-team-label
+
+$ kubectl get clusterpolicy require-team-label -o jsonpath='{.status.autogen.rules[*].name}{"\n"}'
+autogen-check-team-label autogen-cronjob-check-team-label
+```
+
+| Kind del recurso coincidente | Nombre de regla a afirmar en `results` |
+|---|---|
+| `Pod` | `check-team-label` |
+| `Deployment`, `StatefulSet`, `DaemonSet`, `ReplicaSet`, `Job`, `ReplicationController` | `autogen-check-team-label` |
+| `CronJob` | `autogen-cronjob-check-team-label` |
+
+Afirmar el nombre de regla a secas contra un fixture de `Deployment` es el error clásico:
+
+```console
+$ kyverno test .
+...
+Error: test case has invalid rule: rule "check-team-label" not found in policy "require-team-label"
+```
+
+Forma correcta:
+
+```yaml
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: require-team-label-autogen
+policies:
+  - ../require-team-label.yaml
+resources:
+  - controllers.yaml
+results:
+  - policy: require-team-label
+    rule: autogen-check-team-label
+    kind: Deployment
+    resources:
+      - bad-deployment
+    result: fail
+
+  - policy: require-team-label
+    rule: autogen-cronjob-check-team-label
+    kind: CronJob
+    resources:
+      - bad-cronjob
+    result: fail
+```
+
+La cobertura de autogen no es opcional en una suite seria. Una política puede ser perfectamente correcta para `Pod` y completamente incorrecta para `CronJob`, porque la regla autogen de CronJob reescribe la ruta a `spec.jobTemplate.spec.template.metadata.labels` — un patrón que asumía `spec.template.metadata` no sobrevivirá a la reescritura.
+
+---
+
+## 8. Superficie de la CLI
+
+### 8.1 Flags
+
+```console
+$ kyverno test --help
+Run tests from a local filesystem or a git repository.
+...
+```
+
+| Flag | Efecto | Uso en producción |
+|---|---|---|
+| `-f, --file-name` | Nombre de archivo de prueba a descubrir (por defecto `kyverno-test.yaml`) | Solo cuando debés desviarte de la convención |
+| `-t, --test-case-selector` | Ejecuta un subconjunto: `"policy=require-team-label, rule=check-team-label, resource=bad-pod"` | Iterar sobre un solo fallo en una suite de 400 pruebas |
+| `--fail-only` | Imprime solo las filas que fallan (el código de salida no cambia) | Logs de CI — colapsa un muro de verde |
+| `--detailed-results` | Expande el detalle por comprobación y los diffs de parche | Diagnosticar un desajuste de mutación |
+| `--remove-color` | Elimina los escapes ANSI | **Siempre activado en CI**; de lo contrario los logs son ilegibles |
+| `--registry` | Permite acceso de red a registries OCI | Solo reglas `imageVerify` / `imageData` |
+| `-b, --git-branch` | Rama a usar cuando la ruta es una URL de Git | Probar una biblioteca upstream |
+
+### 8.2 Ejecutar contra un repositorio Git
+
+El argumento de ruta acepta una URL de Git, así que podés hacer pruebas de regresión de una biblioteca de políticas que consumís sin vendorizarla:
+
+```console
+$ kyverno test https://github.com/kyverno/policies/pod-security --git-branch main
+Loading test  ( .kyverno-test/kyverno-test.yaml ) ...
+...
+Test Summary: 62 tests passed and 0 tests failed
+```
+
+### 8.3 Andamiaje y migración
+
+```console
+# Generate a Test manifest skeleton instead of writing YAML from memory
+$ kyverno create test --help
+
+# Migrate legacy (unversioned) test files to cli.kyverno.io/v1alpha1 in place
+$ KYVERNO_EXPERIMENTAL=true kyverno fix test . --save
+Processing file ( .kyverno-test/kyverno-test.yaml )...
+  WARNING: test file is not in the expected format
+  OK
+Done.
+```
+
+`kyverno fix test` también normaliza los campos singulares obsoletos (`resource:` → `resources:`, `patchedResource:` → `patchedResources:`). Ejecutalo una vez, commiteá el resultado, y dejá de mantener a mano la forma vieja.
+
+### 8.4 Árboles de aserción (`checks`) — Kyverno 1.12+
+
+Para aserciones más ricas que un solo veredicto — "la entrada del reporte debe llevar esta severidad", "el mensaje debe mencionar el nombre de la label" — las CLIs más nuevas aceptan un bloque `checks` respaldado por árboles de aserción de kyverno‑json:
+
+```yaml
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: require-team-label-checks
+policies:
+  - ../require-team-label.yaml
+resources:
+  - resources.yaml
+checks:
+  - match:
+      resource:
+        metadata:
+          name: bad-pod
+    assert:
+      result: fail
+      message: "(contains(@, 'team'))": true
+```
+
+Tratá esto como aditivo: `results` sigue siendo el mecanismo primario y relevante para el examen, y la disponibilidad de `checks` varía según la versión minor de la CLI. Verificá con `kyverno test --help` en la imagen que tenés delante antes de depender de ello.
+
+---
+
+## 9. Integración con CI
+
+### 9.1 GitHub Actions
 
 ```yaml
 name: kyverno-policy-tests
-on: [pull_request]
+
+on:
+  pull_request:
+    paths:
+      - 'policies/**'
+      - '.github/workflows/kyverno-policy-tests.yaml'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Install Kyverno CLI
         uses: kyverno/action-install-cli@v0.2.0
         with:
-          release: v1.13.2          # PIN la versión: fija el schema del manifiesto de test
-      - name: Verify CLI
+          release: v1.13.2          # pin: must match the cluster's minor version
+
+      - name: Report CLI version
         run: kyverno version
-      - name: Run policy tests
-        run: kyverno test . --detailed-results   # exit != 0 falla el job
+
+      - name: Validate policy syntax
+        run: |
+          find policies -name '*.yaml' -not -path '*/.kyverno-test/*' \
+            -exec kyverno apply {} --resource /dev/null \; > /dev/null
+
+      - name: Run policy unit tests
+        run: kyverno test ./policies --remove-color --detailed-results
 ```
 
-Pin de la versión de la CLI = pin del schema. Con la versión "unknown" del enunciado, este pin es exactamente lo que evita que un upgrade del runner rompa la suite de forma silenciosa.
+El job falla ante una salida distinta de cero de `kyverno test`. Sin clúster, sin kubeconfig, sin secretos — que es exactamente por qué esto corresponde a `pull_request` desde forks.
+
+### 9.2 Target de Makefile
+
+```makefile
+KYVERNO_VERSION ?= 1.13.2
+POLICY_DIR      ?= ./policies
+
+.PHONY: test-policies
+test-policies:
+	@kyverno version | grep -q "Version: $(KYVERNO_VERSION)" \
+		|| { echo "ERROR: expected Kyverno CLI $(KYVERNO_VERSION)"; exit 1; }
+	kyverno test $(POLICY_DIR) --remove-color
+
+.PHONY: test-policies-failed
+test-policies-failed:
+	kyverno test $(POLICY_DIR) --remove-color --fail-only --detailed-results
+```
+
+La aserción de versión no es paranoia. La CLI incrusta su propia compilación de motor; ejecutar pruebas con una CLI dos minors por delante del clúster produce pruebas en verde para semánticas que el clúster no implementa.
 
 ---
 
-## 6. Referencias
+## 10. Verificación y diagnóstico de fallos
+
+### 10.1 Síntoma → causa → solución
+
+| Síntoma | Causa raíz | Solución |
+|---|---|---|
+| `Test Summary: 0 tests passed and 0 tests failed` | No se encontró ningún `kyverno-test.yaml` bajo la ruta | Verificá el nombre de archivo exacto, o pasá `-f`. Confirmá con `find . -name 'kyverno-test.y*ml'` |
+| `Error: failed to load test file: ... unknown field` | Esquema heredado sin versión, o un campo singular obsoleto | `KYVERNO_EXPERIMENTAL=true kyverno fix test . --save` |
+| `Error: test case has invalid rule: rule "X" not found` | Afirmar una regla de Pod contra un fixture de controlador | Usá `autogen-X` / `autogen-cronjob-X` (§7) |
+| Esperabas `fail`, obtuviste `skip` | `match` no seleccionó el recurso: `kinds` incorrecto, group/version incorrecto, o un `exclude` demasiado amplio | `kyverno apply policy.yaml --resource resources.yaml` y leé la salida por regla |
+| Esperabas `pass`, obtuviste `error` | Variable sin resolver — `request.*`, `serviceAccountName`, un contexto de ConfigMap o `apiCall` | Agregala a `variables: values.yaml`, o dale a la política un fallback `\|\| 'default'` |
+| `variable substitution failed: ... variable ... not resolved` | Lo mismo que arriba, hecho explícito | `globalValues:` para hechos de todo el clúster, `policies[].resources[].values` para hechos por fixture |
+| Esperabas `fail`, obtuviste `skip`, y la política usa `namespaceSelector` | La CLI no puede leer las labels de namespace | Agregá una entrada `namespaceSelector:` al objeto `Value` |
+| `patched resource mismatch` en campos que nunca escribiste | `patched.yaml` fue copiado de un clúster en vivo | Regeneralo desde `kyverno apply`, no desde `kubectl get -o yaml` |
+| Pasa localmente, falla en CI | Deriva de versión de la CLI | Fijá `release:` en la acción de instalación; afirmá la versión en el Makefile |
+| La regla `imageVerify` devuelve `error` | Sin acceso a registry | Agregá `--registry`, o mové la aserción a Chainsaw |
+
+### 10.2 La escalera de escalado del diagnóstico
+
+Cuando una fila está en rojo y la tabla por sí sola no lo explica, escalá en este orden — cada paso cuesta más y revela más:
+
+```console
+# 1. Narrow to the single failing case
+$ kyverno test . -t "policy=require-team-label, resource=bad-pod"
+
+# 2. Expand the assertion detail and the patch diff
+$ kyverno test . -t "policy=require-team-label, resource=bad-pod" --detailed-results
+
+# 3. Drop the assertions entirely — see what the engine actually returns
+$ kyverno apply ../require-team-label.yaml --resource resources.yaml --policy-report
+apiVersion: policy.kyverno.io/v1alpha2
+kind: ClusterPolicyReport
+metadata:
+  name: merged
+results:
+- message: 'validation error: The label `team` is required and must be non-empty on
+    all Pods. rule check-team-label failed at path /metadata/labels/team/'
+  policy: require-team-label
+  resources:
+  - apiVersion: v1
+    kind: Pod
+    name: bad-pod
+    namespace: default
+  result: fail
+  rule: check-team-label
+  scored: true
+  source: kyverno
+summary:
+  error: 0
+  fail: 1
+  pass: 1
+  skip: 1
+  warn: 0
+
+# 4. Turn on engine tracing
+$ kyverno test . --v=4 2>&1 | grep -i 'match\|precondition'
+
+# 5. Compare against a real API server
+$ kubectl apply -f resources.yaml --dry-run=server
+```
+
+El paso 3 es el que resuelve la mayoría de la confusión `skip`‑vs‑`fail`: `--policy-report` imprime el veredicto propio del motor con la ruta JSON que falla (`failed at path /metadata/labels/team/`), que te dice con precisión qué elemento del patrón rechazó el documento.
+
+---
+
+## 11. Lo que `kyverno test` no puede probar
+
+Conocer el límite es una competencia de nivel senior, y el examen lo indaga como "¿qué herramienta usarías para verificar X?".
+
+| Preocupación | Por qué la CLI no puede cubrirlo | A dónde corresponde |
+|---|---|---|
+| El webhook está registrado para los recursos correctos | Sin servidor de API, sin `ValidatingWebhookConfiguration` | Chainsaw; `kubectl get validatingwebhookconfigurations` |
+| Comportamiento de `failurePolicy: Fail` cuando Kyverno está caído | Requiere un plano de control en ejecución para derribarlo | Chainsaw / prueba de caos |
+| `generate` con `synchronize: true` propagando ediciones | Afirma estado a lo largo del tiempo, no una sola evaluación | Chainsaw |
+| Resultados de escaneo en segundo plano y ciclo de vida del PolicyReport | El controlador de reportes es un componente del clúster | Chainsaw; `kubectl get polr -A` |
+| Consultas de contexto en vivo de `apiCall` / ConfigMap | Simuladas vía `variables`, así que probás tu simulación | `kyverno apply --cluster`, luego Chainsaw |
+| Verificación de firma de Cosign | Necesita registry + material de claves | `--registry`, y Chainsaw para el camino real |
+| Interacción con otros webhooks de admisión (orden, cadenas de mutación) | Evaluación de un solo motor | `--dry-run=server` en un clúster real |
+| Defaulting del servidor de API aplicado antes de que Kyverno vea el objeto | La CLI evalúa el manifiesto en crudo | `--dry-run=server` |
+| RBAC para reglas `generate` (los permisos del controlador en segundo plano) | Sin subsistema RBAC en la CLI | Chainsaw |
+
+La mitigación no es desconfiar de `kyverno test` — es ser explícito sobre la capa. Probá unitariamente aquí la lógica de veredicto de cada regla, donde cuesta 200 ms, y reservá el clúster para el puñado de comportamientos que genuinamente requieren uno.
+
+---
+
+## 12. Lista de verificación de examen y operativa
+
+- [ ] El archivo de prueba se llama `kyverno-test.yaml`, vive bajo `.kyverno-test/`, y las rutas dentro de él son **relativas al archivo de prueba**.
+- [ ] El manifiesto lleva `apiVersion: cli.kyverno.io/v1alpha1` y `kind: Test`.
+- [ ] Cada regla validate tiene al menos un `pass` afirmado **y** un `fail` afirmado.
+- [ ] Cada bloque `exclude` tiene un fixture que afirma `skip`.
+- [ ] Los fixtures de controladores afirman `autogen-<rule>`; los fixtures de CronJob afirman `autogen-cronjob-<rule>`.
+- [ ] Las reglas de mutación afirman `patchedResources`, construidas desde la salida de `kyverno apply` — nunca desde un clúster en vivo.
+- [ ] Cada variable que la política referencia aparece en `variables: values.yaml`, o la política lleva un fallback `||`.
+- [ ] Las políticas que usan `namespaceSelector` tienen una entrada `namespaceSelector:` correspondiente en el objeto `Value`.
+- [ ] CI fija el release de la CLI y pasa `--remove-color`; el job usa el código de salida como compuerta.
+- [ ] `kyverno test <repo-root>` está en verde antes de promover cualquier política de `Audit` a `Enforce`.
+
+---
+
+## Referencias
 
 - Kyverno CLI — comando `test`: https://kyverno.io/docs/kyverno-cli/usage/test/
+- Kyverno CLI — descripción general e instalación: https://kyverno.io/docs/kyverno-cli/
 - Kyverno CLI — comando `apply`: https://kyverno.io/docs/kyverno-cli/usage/apply/
-- Kyverno CLI (overview e instalación): https://kyverno.io/docs/kyverno-cli/
-- Auto-generación de reglas para Pod controllers (autogen): https://kyverno.io/docs/writing-policies/autogen/
-- Escritura de políticas `validate`: https://kyverno.io/docs/writing-policies/validate/
-- Chainsaw (testing e2e declarativo): https://github.com/kyverno/chainsaw
-- GitHub Action de instalación de la CLI: https://github.com/kyverno/action-install-cli
-- Currícula CNCF (incluye `KCA_Curriculum.pdf`): https://github.com/cncf/curriculum
-- Kyverno Certified Associate (KCA) — Linux Foundation: https://training.linuxfoundation.org/certification/kyverno-certified-associate-kca/
-
----
-
-Si "3.2 test" en tu syllabus **no** es esto (o si KCA en tu repo no es Kyverno), decime el título real del objetivo y lo reescribo. Y aparte del contenido: te recomiendo revisar por qué el generador está pasando `version=unknown` y el label crudo `test` — eso es el metadato roto que conviene arreglar en la fuente antes de que dispare más *passes* como este.
+- Kyverno — autogeneración de reglas de controladores de pod: https://kyverno.io/docs/writing-policies/autogen/
+- Kyverno — variables y contexto: https://kyverno.io/docs/writing-policies/variables/
+- Kyverno — fuentes de datos externas (`apiCall`, ConfigMap): https://kyverno.io/docs/writing-policies/external-data-sources/
+- Kyverno — reglas mutate y anclas: https://kyverno.io/docs/writing-policies/mutate/
+- Kyverno — reglas generate: https://kyverno.io/docs/writing-policies/generate/
+- Kyverno — reportes de políticas: https://kyverno.io/docs/policy-reports/
+- Kyverno — repositorio de código fuente: https://github.com/kyverno/kyverno
+- Kyverno — biblioteca oficial de políticas (disposición canónica de pruebas): https://github.com/kyverno/policies
+- Kyverno — GitHub Action de instalación de la CLI: https://github.com/kyverno/action-install-cli
+- Chainsaw — pruebas de extremo a extremo para Kyverno: https://github.com/kyverno/chainsaw
+- CNCF — currículas de certificación (KCA): https://github.com/cncf/curriculum
+- Linux Foundation — Kyverno Certified Associate (KCA): https://training.linuxfoundation.org/certification/kyverno-certified-associate-kca/
