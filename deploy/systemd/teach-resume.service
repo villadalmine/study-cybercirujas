@@ -14,7 +14,8 @@ Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
 # the CLI can fall back mid-run: on kcsa/1.2 the content came from opus-5 and its
 # exercises from opus-4-8, under the same pin. meta.yaml records what actually
 # answered, but a comparison needs the model held still.
-Environment=TEACH_CLAUDE_MODEL=claude-opus-4-8
+# No model pin here: pipeline.yaml `generation.model` is the declared decision
+# and this would override it. Set it here only to force a one-off experiment.
 # `.env` in the repository, by the owner's decision (2026-08-13). The leading
 # '-' means the timer starts normally when it is absent, which is the current
 # state: translation falls back to claude, which works and merely costs more of

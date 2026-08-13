@@ -34,9 +34,10 @@ LOG="$STATE_DIR/milestone.log"
 mkdir -p "$STATE_DIR"
 
 export TEACH_AGENT="${TEACH_AGENT:-claude}"
-# Pin the exact model, never the `opus` alias: the alias means "the latest Opus"
-# and the CLI can fall back mid-run, which makes two topics incomparable.
-export TEACH_CLAUDE_MODEL="${TEACH_CLAUDE_MODEL:-claude-opus-4-8}"
+# No model pin here on purpose. pipeline.yaml `generation.model` is the declared
+# decision and the generator reads it; a default in this script would silently
+# win over the file, which is the failure the declaration exists to prevent.
+# TEACH_CLAUDE_MODEL still works for a deliberate one-off comparison run.
 
 MAX_PASSES="${MAX_PASSES:-30}"
 PASS_OUT="$(mktemp)"
