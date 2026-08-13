@@ -79,6 +79,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("paths", nargs="+")
+    parser.add_argument("--all", action="store_true",
+                        help="every citation, not a sample. The owner's "
+                             "constraint is quality, not quota (2026-08-13): "
+                             "content written once and read for years is worth "
+                             "verifying completely.")
     parser.add_argument("--sample", type=int, default=3,
                         help="citations to check per file (default 3). Each costs a completion.")
     parser.add_argument("--backend", default="claude")
@@ -99,7 +104,7 @@ def main() -> int:
         if not refs:
             print(f"{path}: no references section found")
             continue
-        picked = rng.sample(refs, min(args.sample, len(refs)))
+        picked = refs if args.all else rng.sample(refs, min(args.sample, len(refs)))
         print(f"\n=== {path} — {len(picked)} of {len(refs)} citations ===")
         for label, url in picked:
             verdict = ask(url, label, args.backend)

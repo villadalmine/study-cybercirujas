@@ -49,7 +49,18 @@ languages:
 # scripts/topic_cost.py --by-model before adopting it.
 generation:
   model: claude-opus-5
-  effort:
+  # `xhigh`, not the default, and not `max`. The owner's constraint is quality,
+  # not quota (2026-08-13): "no me importan las ventanas, quiero el mejor código,
+  # ejemplos, contenido teórico y validación de que las fuentes son reales — esto
+  # se hace una vez cada mucho tiempo". Content written once and read for years
+  # is exactly the case where more thinking per topic is worth more topics per
+  # window.
+  #
+  # `max` is left on the table deliberately: nothing here has measured it, and
+  # adopting an untested setting for the whole corpus is how the last three
+  # comparisons went wrong. Raise it after `scripts/model_comparison.py` has
+  # something to say.
+  effort: xhigh
 
 budget:
   # Maximum topics generated per invocation. Raise deliberately, not by habit.
