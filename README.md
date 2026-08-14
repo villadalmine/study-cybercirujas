@@ -94,6 +94,8 @@ make publish-complete                       # force it, or DRY=1 to see the plan
 ```bash
 make audit                                  # pending/corrupt combos + unrendered videos
 teach status                                # regenerate STATUS.md from disk
+scripts/check_config.py                     # is it running on what it says it runs on?
+scripts/check_units.py                      # installed systemd units vs the repo
 scripts/check_provenance.py                 # traceable? bookkeeping right? order right?
 scripts/check_sources.py                    # are citations official, and whose?
 scripts/usage_report.py                     # what has been spent, per model and topic

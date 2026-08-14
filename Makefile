@@ -129,6 +129,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_syllabus.py
 	$(VENV)/bin/python3 scripts/status_matrix.py --check
 	$(VENV)/bin/python3 scripts/check_units.py
+	$(VENV)/bin/python3 scripts/check_config.py
 	$(VENV)/bin/python3 -m unittest discover tests
 	@echo
 	@echo "Network, run separately (still no API quota):"

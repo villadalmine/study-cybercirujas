@@ -41,6 +41,18 @@ def main() -> int:
         print(f"No units in {SOURCE}.")
         return 0
 
+    # A unit that sets a generation variable at all is a problem even when the
+    # two copies agree: the environment beats pipeline.yaml, so the unit would
+    # override the declared decision on every timer firing and the declaration
+    # would be decoration. This is the door the 2026-08-13 drift came through.
+    forbidden = []
+    for unit in units:
+        for line in unit.read_text(errors="replace").splitlines():
+            if line.startswith("Environment=") and any(
+                    v in line for v in ("TEACH_CLAUDE_MODEL", "TEACH_CLAUDE_EFFORT",
+                                        "TEACH_BACKEND")):
+                forbidden.append((unit.name, line.strip()))
+
     drifted = []
     for unit in units:
         target = INSTALLED / unit.name
@@ -52,8 +64,18 @@ def main() -> int:
         if not filecmp.cmp(unit, target, shallow=False):
             drifted.append((unit, target))
 
+    if forbidden:
+        print("A unit sets what pipeline.yaml is supposed to decide:\n")
+        for name, line in forbidden:
+            print(f"  {name}: {line}")
+        print("\nThe environment beats pipeline.yaml, so this wins on every "
+              "firing and the\ndeclaration becomes decoration. Remove it, or "
+              "set it deliberately and say why.")
+        return 1
+
     if not drifted:
-        print(f"{len(units)} unit(s) checked: installed copies match the repository.")
+        print(f"{len(units)} unit(s) checked: installed copies match the repository, "
+              f"and none overrides pipeline.yaml.")
         return 0
 
     if args.install:
