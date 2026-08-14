@@ -23,16 +23,22 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
+
+from teach.core import quota_facts  # noqa: E402
 
 USAGE = (Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
          / "teach-plat" / "usage.jsonl")
 
-# Measured from this machine's own history rather than assumed: window_budget.py
-# derives it from actual exhaustions. Used only for the forecast, and printed
-# alongside so the number is never mistaken for a promise.
-DEFAULT_TOKENS_PER_WINDOW = 800_000
+# Derived from this machine's recorded history, never a constant. 800_000 used to
+# be written here and in model_comparison.py, and an invented number printed in a
+# table is indistinguishable from a measured one. The real median is 725,399 —
+# close enough to look right, which is what made it dangerous.
 
 
 def records() -> list[dict]:
@@ -147,12 +153,18 @@ def main() -> int:
         print(f"{args.forecast} more topics would be:")
         print(f"  {total_out:,.0f} output tokens · ${cost * args.forecast:,.2f} "
               f"API-equivalent · {hours * args.forecast:,.1f} h of generation")
-        print(f"  about {total_out / DEFAULT_TOKENS_PER_WINDOW:,.1f} quota windows "
-              f"at {DEFAULT_TOKENS_PER_WINDOW:,} tokens per window")
+        per_window = quota_facts.tokens_per_window()
+        if per_window:
+            print(f"  about {total_out / per_window:,.1f} quota windows, at "
+                  f"{per_window:,} output tokens per window — MEASURED from this "
+                  f"machine's\n  own history, not a published figure, and it moves "
+                  f"when the model changes.")
+        else:
+            print("  windows: not measured yet — fewer than three complete windows "
+                  "are on record.\n  A number here would be invented, so there "
+                  "is none.")
         print("\nThe window is the real constraint, not the dollars: on a "
-              "subscription those are\nan API-equivalent price. Check "
-              "`scripts/window_budget.py` for what this machine\nactually "
-              "achieved per window — that number moves with the model.")
+              "subscription those are\nan API-equivalent price.")
         return 0
 
     print(f"{'cert':14} {'topic':7} {'lg':3} {'op':10} {'model':22} "

@@ -51,10 +51,10 @@ USAGE = (Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
 CODE_BLOCK = re.compile(r"^```", re.M)
 CITATION = re.compile(r"https?://")
 
-# Measured on this machine; window_budget.py derives it from real exhaustions.
-# Only used to turn tokens into windows, and printed so it is never mistaken for
-# a fact about the model.
-TOKENS_PER_WINDOW = 800_000
+from teach.core import quota_facts  # noqa: E402
+
+# Derived, never assumed: see teach/core/quota_facts.py. A guessed constant
+# printed next to measured columns reads as evidence.
 
 
 def usage_by_topic() -> dict[tuple, dict]:
@@ -184,10 +184,15 @@ def main() -> int:
 
     measurable = {m: s for m, s in summary.items() if s["ktok"]}
     if len(measurable) >= 2:
-        print("\nWhat a quota window buys, at "
-              f"{TOKENS_PER_WINDOW:,} output tokens per window:\n")
+        per_window = quota_facts.tokens_per_window()
+        if not per_window:
+            print("\nWindows: not measured yet — fewer than three complete windows "
+                  "on record.\nA figure here would be invented, so there is none.")
+            return 0
+        print(f"\nWhat a quota window buys, at {per_window:,} output tokens per "
+              f"window\n(measured from this machine's history, not published):\n")
         for model, s in sorted(measurable.items(), key=lambda kv: -kv[1]["eff"]):
-            topics = TOKENS_PER_WINDOW / (s["ktok"] * 1000)
+            topics = per_window / (s["ktok"] * 1000)
             print(f"  {model[:26]:26} {topics:>5.1f} topics/window · "
                   f"{topics * s['kb']:>6.0f} KB/window   (n={s['n']})")
         thin = [m for m, s in measurable.items() if s["n"] < 10]
