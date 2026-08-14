@@ -144,9 +144,23 @@ window instead. What is not optional is the `meta.yaml` recording the backend,
 the real model and the date, because content whose origin is unknown cannot be
 reproduced, compared or rolled back. `scripts/check_provenance.py` enforces it.
 
-Pin an exact model with `TEACH_CLAUDE_MODEL=claude-opus-4-8`. Use the full id, not
-the `opus` alias: the alias means "the latest Opus" and the CLI can fall back
-mid-run, which makes two topics incomparable. Measured differences between models
+**What authors is declared in `pipeline.yaml`**, under `generation`:
+
+```yaml
+generation:
+  model: claude-opus-5
+  effort: xhigh
+```
+
+Every path reads it — the timer, `make milestone`, `make cert`, a command typed
+by hand — so none of them can quietly use something else. `TEACH_CLAUDE_MODEL`
+and `TEACH_CLAUDE_EFFORT` still win when set, for a deliberate one-off
+comparison; `scripts/check_config.py` reports when something is overriding the
+declaration, and reads the usage log to check what recent content *actually* ran
+on, which is the only way to catch an override path nobody anticipated.
+
+Use the full model id, not the `opus` alias: the alias means "the latest Opus"
+and the CLI can fall back mid-run, which makes two topics incomparable. Measured differences between models
 are in [docs/BACKEND_COMPARISON.md](docs/BACKEND_COMPARISON.md); translation
 specifically is the one step where a cheap model is measured safe, in
 [docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md).
