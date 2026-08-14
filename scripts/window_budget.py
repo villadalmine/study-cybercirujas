@@ -57,6 +57,22 @@ def _week(stamp: str) -> str:
     return monday.isoformat()
 
 
+def _kind(detail: str) -> str:
+    """What the API actually said the limit was: spend | weekly | "".
+
+    Read from the message rather than guessed from duration. A monthly spend
+    ceiling and a session window both present as "exhausted" and behave
+    completely differently: one refills in hours on its own, the other does not
+    refill at all until the month rolls over or the ceiling is raised.
+    """
+    text = (detail or "").lower()
+    if "spend limit" in text or "monthly" in text:
+        return "spend"
+    if "weekly" in text:
+        return "weekly"
+    return ""
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -68,26 +84,40 @@ def main() -> int:
         raise SystemExit(f"No quota history at {QUOTA}. It fills as the timer probes.")
 
     # Runs of the same status, so an exhaustion can be measured end to end.
-    runs, prev, start = [], None, None
+    # Carry the API's own words through, not just the status. The kind of limit
+    # was being inferred from how long the exhaustion lasted, while the response
+    # states it outright — and 153 of 456 recorded exhaustions say "monthly
+    # spend limit", which no duration threshold would have separated from a
+    # session window. A report that says "every exhaustion refilled on its own"
+    # when a third of them were a spend ceiling is worse than no report.
+    runs, prev, start, detail = [], None, None, ""
     for row in quota:
         if row.get("status") != prev:
             if prev is not None:
-                runs.append((prev, start, row["at"]))
-            prev, start = row.get("status"), row["at"]
-    runs.append((prev, start, quota[-1]["at"]))
+                runs.append((prev, start, row["at"], detail))
+            prev, start, detail = row.get("status"), row["at"], str(row.get("detail") or "")
+        elif row.get("status") == "exhausted" and not _kind(detail):
+            detail = str(row.get("detail") or "")
+    runs.append((prev, start, quota[-1]["at"], detail))
 
     per_week: dict[str, dict] = defaultdict(
-        lambda: {"windows": 0, "exhaustions": [], "weekly_caps": [], "tokens": 0, "topics": set()}
+        lambda: {"windows": 0, "exhaustions": [], "weekly_caps": [],
+                 "spend_limits": [], "tokens": 0, "topics": set()}
     )
-    for status, begin, end in runs:
+    for status, begin, end, detail in runs:
         hours = (datetime.datetime.fromisoformat(end)
                  - datetime.datetime.fromisoformat(begin)).total_seconds() / 3600
         bucket = per_week[_week(begin)]
         if status == "available":
             bucket["windows"] += 1
         elif status == "exhausted":
-            (bucket["weekly_caps"] if hours >= WEEKLY_CAP_HOURS
-             else bucket["exhaustions"]).append(hours)
+            kind = _kind(detail)
+            if kind == "spend":
+                bucket["spend_limits"].append(hours)
+            elif kind == "weekly" or hours >= WEEKLY_CAP_HOURS:
+                bucket["weekly_caps"].append(hours)
+            else:
+                bucket["exhaustions"].append(hours)
 
     for row in _load(USAGE):
         bucket = per_week[_week(row.get("at", "1970-01-01"))]
@@ -96,28 +126,37 @@ def main() -> int:
             bucket["topics"].add((row.get("cert"), row.get("topic"), row.get("lang")))
 
     weeks = sorted(per_week)[-args.weeks:]
-    print(f"{'week of':12} {'windows':>8} {'exhausted':>10} {'weekly cap':>11} "
+    print(f"{'week of':12} {'windows':>8} {'session':>8} {'weekly':>7} {'spend':>7} "
           f"{'out tokens':>12} {'topics':>7}")
-    print("-" * 66)
+    print("-" * 70)
     for week in weeks:
         b = per_week[week]
         caps = f"{len(b['weekly_caps'])}" if b["weekly_caps"] else "—"
-        print(f"{week:12} {b['windows']:8} {len(b['exhaustions']):10} {caps:>11} "
-              f"{b['tokens']:12,} {len(b['topics']):7}")
+        spend = f"{len(b['spend_limits'])}" if b["spend_limits"] else "—"
+        print(f"{week:12} {b['windows']:8} {len(b['exhaustions']):8} {caps:>7} "
+              f"{spend:>7} {b['tokens']:12,} {len(b['topics']):7}")
 
     current = per_week[weeks[-1]] if weeks else None
     if not current:
         return 0
 
     print()
+    if current["spend_limits"]:
+        longest = max(current["spend_limits"])
+        print(f"⚠️  SPEND LIMIT hit this week: {len(current['spend_limits'])} "
+              f"exhaustion(s), longest {longest:.1f} h. This is NOT a session "
+              f"window:\n    the API said so outright, and nothing but the month "
+              f"rolling over or the\n    ceiling being raised at "
+              f"claude.ai/settings/usage will clear it. Waiting does\n    not help "
+              f"the way it does with a window.")
     if current["weekly_caps"]:
         longest = max(current["weekly_caps"])
         print(f"⚠️  WEEKLY CAP HIT this week: {len(current['weekly_caps'])} exhaustion(s) "
               f"of {longest:.1f} h — far longer than a session reset. Nothing but "
               f"the week rolling over fixes that; the timer will pick up on its own.")
-    else:
-        print("No weekly cap reached this week — every exhaustion was a session "
-              "window refilling on its own.")
+    elif not current["spend_limits"]:
+        print("No weekly cap or spend limit this week — every exhaustion was a "
+              "session window refilling on its own.")
         if current["exhaustions"]:
             print(f"  {len(current['exhaustions'])} session exhaustions, "
                   f"median {statistics.median(current['exhaustions']):.1f} h.")

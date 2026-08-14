@@ -14,6 +14,7 @@ combo counts as pending when it is corrupt, missing, or below the quality floor.
 Idempotent: it rescans on every pass, so it can be interrupted and relaunched
 freely — it converges on its own until the suspect list is empty.
 """
+import json
 import os
 import re
 import subprocess
@@ -375,6 +376,7 @@ def main() -> None:
         if result.returncode != 0:
             if pipeline.is_fatal(output):
                 print(f"    fatal, stopping this pass:\n{output}", flush=True)
+                _record_quota_block(output)
                 return
             # A killed process exits non-zero with no output at all, which used
             # to print an empty reason and look like a mystery. Report the exit
@@ -386,6 +388,34 @@ def main() -> None:
     # Without this the unattended pass could take a certification to "content
     # complete" and no further, so nothing ever finished without a human.
     _finish()
+
+
+def _record_quota_block(output: str) -> None:
+    """Write a generation-time limit into the quota history.
+
+    Only `quota.py` wrote there, so the history recorded what the PROBE saw —
+    and the probe is a two-token call by design. A monthly spend ceiling blocked
+    a real generation on 2026-08-14 while the probe answered "available" moments
+    later, so nothing about it reached the history and window_budget.py went on
+    reporting "no spend limit this week" while every topic was being refused.
+
+    A report derived from a log that only one path writes to describes that path,
+    not reality.
+    """
+    try:
+        import datetime as _dt
+        state = Path(os.environ.get("XDG_STATE_HOME",
+                                    Path.home() / ".local/state")) / "teach-plat"
+        state.mkdir(parents=True, exist_ok=True)
+        line = (output or "").strip().splitlines()[-1][:400] if output else "fatal"
+        with (state / "quota-history.jsonl").open("a") as handle:
+            handle.write(json.dumps({
+                "at": _dt.datetime.now().isoformat(timespec="seconds"),
+                "status": "exhausted", "backend": "claude",
+                "detail": line, "source": "generation",
+            }) + "\n")
+    except Exception:
+        pass
 
 
 def _finish() -> None:
