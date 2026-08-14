@@ -1,0 +1,49 @@
+cert: kca
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Policy as Code, Proven on Kubernetes
+    voiceover: 'Every cluster eventually asks the same question: who decides what
+      is allowed to run here? The Kyverno Certified Associate, exam code KCA, is where
+      you prove the answer is you — and that you can write it as policy, not as a
+      wiki page nobody reads. It is an associate-level, cloud-native certification,
+      valid for three years.'
+  audience:
+    title: Who it is for
+    voiceover: This one is for people already living inside Kubernetes who are tired
+      of enforcing standards by asking nicely. Almost a third of the exam, thirty-two
+      percent, is writing policies — so it rewards hands-on practice, not memorization.
+      Add eighteen percent on Kyverno fundamentals and another eighteen on installation,
+      configuration and upgrades, and you get a very honest picture of the day-to-day
+      job.
+    bullets:
+    - Kubernetes platform and SRE engineers who own cluster guardrails
+    - DevOps practitioners moving from manual reviews to automated admission control
+    - Cloud-native security folks who need governance that developers can actually
+      ship with
+  cta:
+    title: Start studying today
+    voiceover: On Cert Landscape you get the KCA broken down domain by domain — fundamentals,
+      installation, the Kyverno CLI, applying and writing policies, and policy management
+      — with the exercises and labs that make the twelve percent CLI section feel
+      routine. Open the certification and start with the first objective.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Fundamentals of Kyverno at 18.0%, Installation, Configuration,
+      and Upgrades at 18.0%, Kyverno CLI at 12.0%, Applying Policies at 10.0%, Writing
+      Policies at 32.0%, Policy Management at 10.0%.
+    domains:
+    - name: Fundamentals of Kyverno
+      weight: 18.0
+    - name: Installation, Configuration, and Upgrades
+      weight: 18.0
+    - name: Kyverno CLI
+      weight: 12.0
+    - name: Applying Policies
+      weight: 10.0
+    - name: Writing Policies
+      weight: 32.0
+    - name: Policy Management
+      weight: 10.0

@@ -301,6 +301,7 @@ certs:
     owner: claude
     active: true
   kca:
+    video: [en, es]
     owner: claude
     active: true
   capa:

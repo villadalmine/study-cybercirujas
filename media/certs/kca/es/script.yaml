@@ -1,0 +1,46 @@
+cert: kca
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Políticas que tu clúster obedece
+    voiceover: 'Kyverno es el motor que decide qué entra a tu clúster de Kubernetes
+      y qué se queda afuera. El KCA valida que sabés escribir esas políticas, aplicarlas
+      y sostenerlas en el tiempo. Y no es teoría suelta: escribir políticas es el
+      32% del examen, el dominio más pesado de los seis.'
+  audience:
+    title: Para quién es
+    voiceover: Es un examen de nivel associate, así que asume que ya te movés en Kubernetes
+      y querés gobernarlo con reglas en vez de con recordatorios. Cubre desde los
+      fundamentos y la instalación, un 18% cada uno, hasta el CLI, la aplicación y
+      la gestión de políticas. Si tu trabajo toca admisión, seguridad o cumplimiento,
+      este examen habla tu idioma.
+    bullets:
+    - Administradores de Kubernetes que necesitan controlar la admisión al clúster
+    - Ingenieros de plataforma y DevOps que automatizan reglas en el pipeline
+    - Perfiles de seguridad cloud-native que auditan configuración y cumplimiento
+  cta:
+    title: Arrancá el KCA hoy
+    voiceover: 'En Cert Landscape tenés los seis dominios del KCA desglosados, con
+      ejercicios y laboratorios para escribir políticas de verdad. La certificación
+      vale tres años: empezá ahora y llegá al examen con tus propias políticas ya
+      probadas.'
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Fundamentals of Kyverno con 18.0%, Installation,
+      Configuration, and Upgrades con 18.0%, Kyverno CLI con 12.0%, Applying Policies
+      con 10.0%, Writing Policies con 32.0%, Policy Management con 10.0%.
+    domains:
+    - name: Fundamentals of Kyverno
+      weight: 18.0
+    - name: Installation, Configuration, and Upgrades
+      weight: 18.0
+    - name: Kyverno CLI
+      weight: 12.0
+    - name: Applying Policies
+      weight: 10.0
+    - name: Writing Policies
+      weight: 32.0
+    - name: Policy Management
+      weight: 10.0
