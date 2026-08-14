@@ -764,3 +764,95 @@ Two things worth knowing because they will bite you the same way:
    already at objective level, just renumbered `1.x` instead of `701.x`, with one
    genuinely missing. Re-snapshotting orphans 14 topics of content to gain one,
    so it is a judgement call, not an obvious fix. Left for you and the owner.
+
+---
+
+## From claude — 2026-08-14: where this stands, and how to resume
+
+Session closed at the weekly quota limit. **The milestone is cleared, so the
+timer generates nothing** — that is deliberate and is the safe state. Nothing is
+half-written: every certification is either complete or at zero.
+
+### Resume in three commands
+
+```bash
+scripts/steer.py milestone <cert> en es   # declare the goal
+make milestone                            # work it to completion, then stop
+git add -A certs media STATUS.md && git commit && git push
+```
+
+Video, STATUS.md and the image build+deploy happen **inside the pass** when a
+certification becomes complete. There is no separate publish step to remember.
+
+### What is done
+
+19 certifications complete in en + es. `kca` finished last (31 objectives, 124
+files) and is the only one **missing its video**, because rendering the script
+costs quota and the limit was reached. One pass finishes it.
+
+### What is pending, in the order I would do it
+
+| cert | topics | why this order |
+|---|---|---|
+| `kca` video | — | one pass, finishes an otherwise complete cert |
+| `lpi-020-100` | 17 | smallest of the re-snapshotted five |
+| `lpic-3-303` | 15 | not published, so no visible regression |
+| `lpic-3-300` | 20 | same |
+| `lpic-2` | 41 | **published** — see the warning below |
+| `lpic-1` | 42 | **published** — see the warning below |
+| `lfca`, `lfcs` | 11 | never started, no syllabus urgency |
+
+**146 topics.** At the measured opus-5 rate that is roughly 8-10 quota windows;
+`scripts/topic_cost.py --forecast 146` gives the current number rather than this
+one, which ages.
+
+**lpic-1 and lpic-2 are live with their OLD content.** Their syllabi were
+re-snapshotted from 10/13 chapter headings to 42/41 real objectives, so the
+deployed image still serves material built on a syllabus that no longer exists.
+Regenerating them is the only way to make the site true, and until then do not
+rebuild the image expecting them to look finished.
+
+### Decisions left to the owner, not to us
+
+- **`lpi-devops` is one objective short** (14 of 15; LPI added 701.5 and renamed
+  the exam 701-100 -> 701-200). Re-snapshotting orphans 14 topics of good content
+  to gain one. It is a judgement call, and it has been deferred twice on purpose.
+- **A LiteLLM master key was leaked** in a commit on 2026-08-13 and force-pushed
+  away, but GitHub still returns HTTP 200 for the old commit by SHA. The proxy has
+  no public route (verified), so it is exposure without a path. **Not rotated.**
+- **`.env` currently points translation at OpenRouter with a LiteLLM key** — two
+  different systems' credentials, so every call 401s. The pass detects this with
+  one probe and falls back to claude, which costs one wasted completion per pass.
+  Either comment out `TEACH_TRANSLATE_BACKEND` or supply an `sk-or-v1-...` key.
+
+### What changed in the machinery this session, and why you should not undo it
+
+- **`pipeline.yaml generation: {model, effort}`** decides what authors. Do NOT
+  set `TEACH_CLAUDE_MODEL` in a unit or a runner: the environment beats the file
+  and the declaration becomes decoration. That exact drift ran for hours from a
+  stale copy in `~/.config/systemd/user/`. `scripts/check_units.py` now refuses
+  such a unit and `scripts/check_config.py` compares declared vs effective vs
+  **what recent completions actually ran on**.
+- **`milestone`** bounds unattended work. No milestone means no generation — an
+  unattended process that reads "unspecified" as "everything" is how one commit
+  put 162 topics in the queue overnight.
+- **Quota facts are derived, never guessed** (`teach/core/quota_facts.py`).
+  `TOKENS_PER_WINDOW = 800_000` used to be hardcoded in two scripts; the measured
+  median is 725,399, and the module returns None rather than a default when
+  fewer than three windows are on record.
+- **A monthly spend limit is not a session window.** 153 of 456 recorded
+  exhaustions said "monthly spend limit" and were all counted as windows. One
+  refills in ~2 h by itself; the other does not refill at all.
+
+### Two measurement traps that cost me real time
+
+- **Never compare models across certifications** — different syllabi, different
+  work. `scripts/model_comparison.py --cert <x>` compares within one.
+- **Exclude in-flight topics.** The same five opus-5 topics read 1.76 KB per 1k
+  tokens mid-generation and 0.99 finished. I reported that reversal twice as a
+  property of the model before noticing it was timing.
+
+The measured verdict, 34 opus-4-8 topics against 26 opus-5 inside kca: opus-5
+writes **2.1x the material and 1.8x the code blocks at the same efficiency per
+token**. Per window they are within 3% of each other. The owner's constraint is
+quality, so opus-5 at `effort: xhigh` is the setting.
