@@ -92,133 +92,133 @@ topics:
 - id: '3.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: jp
   topic: 3 - Kyverno CLI
   weight: 3.0
 - id: '3.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Installing Kyverno CLI
   topic: 3 - Kyverno CLI
   weight: 3.0
 - id: '4.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Applying Policy in Cluster
   topic: 4 - Applying Policies
   weight: 3.33
 - id: '4.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Resource Selection
   topic: 4 - Applying Policies
   weight: 3.33
 - id: '4.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Common Policy Settings for Kyverno Rules
   topic: 4 - Applying Policies
   weight: 3.33
 - id: '5.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Validation Rules
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Preconditions
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Background Scans
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.4'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Mutation Rules
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.5'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Generation Rules
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.6'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: VerifyImage Rules
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.7'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Variables & API Calls in Policies
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.8'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: JSON Patches
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.9'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Autogen Rules
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.10'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Cleanup Policies
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '5.11'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Common Expression Language (CEL)
   topic: 5 - Writing Policies
   weight: 2.91
 - id: '6.1'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Policy Reports
   topic: 6 - Policy Management
   weight: 3.33
 - id: '6.2'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: PolicyExceptions
   topic: 6 - Policy Management
   weight: 3.33
 - id: '6.3'
   sources:
   - https://github.com/cncf/curriculum/raw/master/KCA_Curriculum.pdf
-  status: pending
+  status: generated
   title: Kyverno Metrics
   topic: 6 - Policy Management
   weight: 3.33
