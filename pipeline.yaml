@@ -188,9 +188,13 @@ quality:
 #     scripts/steer.py milestone lpic-3-305 en es
 #     scripts/steer.py milestone --clear        # timer idles
 milestone:
-  name: lpic-3-303 in en, es
+  name: lpic-3-303 + cgoa in en, es
   targets:
     lpic-3-303: [en, es]
+    # cgoa joins AFTER the fable half (1.1, 2.1) completed: the timer authors
+    # with the pipeline model, which is exactly the opus-5 half the comparison
+    # needs (3.1 lab + 4.1). See docs/DEVTOOLS.md and model_comparison.py.
+    cgoa: [en, es]
 certs:
   lpic-1:
     active: true
