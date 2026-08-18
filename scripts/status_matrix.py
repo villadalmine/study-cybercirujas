@@ -13,10 +13,16 @@ from pathlib import Path
 
 import yaml
 
-from teach.core import certs, pipeline, quality, video
+from teach.core import certs, pipeline, quality, quota_facts, video
 
 REPO = Path(__file__).resolve().parent.parent
 STATUS = REPO / "STATUS.md"
+# Everything above this marker is the content ledger and stays under proof
+# (check() compares it against the tree). Everything below is the measured
+# spend, which moves without content moving — a rejected completion bills and
+# lands nothing — so gating on it would fail the check for reasons that are
+# not lies, and a gate that cries for non-lies gets ignored.
+SPEND_MARKER = "## Spend (measured)"
 # Derived, never declared here. A private copy of these lists is the exact defect
 # this repo has hit three times: the matrix reported on the languages it had been
 # told about and stayed silent about the rest, which reads as "nothing missing".
@@ -126,8 +132,8 @@ def check() -> list[str]:
 
     Does not write, so it is safe in a gate.
     """
-    current = STATUS.read_text() if STATUS.exists() else ""
-    expected = _render()
+    current = (STATUS.read_text() if STATUS.exists() else "").split(SPEND_MARKER)[0]
+    expected = _render().split(SPEND_MARKER)[0]
     if current == expected:
         return []
     import difflib
@@ -263,7 +269,44 @@ def _render() -> str:
             row.append("✅" if rendered.exists() else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
+    lines += _spend_section()
     return "\n".join(lines) + "\n"
+
+
+def _spend_section() -> list[str]:
+    """The budget footer: what generation has actually consumed, from records.
+
+    STATUS.md is the first thing anyone reads, and on a subscription the real
+    budget is windows, not dollars — so the dashboard carries both, derived
+    from usage.jsonl and quota-history.jsonl exactly like `make metrics`.
+    Below SPEND_MARKER, therefore outside check() — see the marker's comment.
+    """
+    rows = quota_facts._rows(quota_facts.USAGE)
+    lines = ["", SPEND_MARKER, "",
+             "From `usage.jsonl` and `quota-history.jsonl` at the last refresh. "
+             "Outside `--check` on purpose: spend moves without content moving. "
+             "Detail: `make metrics`.", ""]
+    if not rows:
+        lines += ["Nothing recorded yet.", ""]
+        return lines[:-1]
+    out_tokens = sum(int(r.get("output_tokens") or 0) for r in rows)
+    cost = sum(r.get("cost_usd") or 0 for r in rows)
+    ops: dict[str, int] = {}
+    for r in rows:
+        op = str(r.get("op") or "untagged")
+        ops[op] = ops.get(op, 0) + 1
+    windows = [b for b in quota_facts.exhaustions() if b["kind"] == "session"]
+    median = quota_facts.tokens_per_window()
+    lines += [
+        f"- {len(rows):,} completions · {out_tokens:,} output tokens · "
+        f"${cost:,.2f} API-equivalent",
+        f"- {len(windows)} session windows observed · "
+        + (f"median {median:,} output tokens per window"
+           if median else "tokens-per-window not yet measured"),
+        "- per stage: " + " · ".join(
+            f"{k} {v}" for k, v in sorted(ops.items(), key=lambda kv: -kv[1])),
+    ]
+    return lines
 
 
 if __name__ == "__main__":

@@ -235,6 +235,13 @@ scripts/topic_cost.py --forecast N    # what will N topics cost, from history
 Dollar figures are API-equivalent prices; on the subscription the real
 budget is windows. That is why the daily table counts windows, not dollars.
 
+`STATUS.md` carries the same numbers as a **Spend (measured)** footer,
+regenerated on every refresh (`make cert`, `make publish`, `teach status`).
+The footer sits below a marker that `status_matrix.py --check` deliberately
+ignores: spend moves without content moving (a rejected completion bills
+and lands nothing), and the gate must only fail when the content ledger
+lies, never because money was spent.
+
 ### What changed on 2026-08-18 (blind spots closed)
 
 - Snapshot/catalog/paths completions were recorded **untagged** (no `op`) —

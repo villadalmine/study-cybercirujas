@@ -116,7 +116,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `cnpe` | ✅ | – | – | – |
 | `cca` | – | – | – | – |
 | `ica` | ✅ | ✅ | – | – |
-| `kca` | – | – | – | – |
+| `kca` | ✅ | ✅ | – | – |
 | `otca` | ✅ | ✅ | – | – |
 | `pca` | ✅ | ✅ | – | – |
 | `lpi-030-100` | ✅ | ✅ | – | – |
@@ -124,3 +124,11 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpi-702` | ✅ | ✅ | – | – |
 | `lfcs` | – | – | – | – |
 | `lfca` | – | – | – | – |
+
+## Spend (measured)
+
+From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
+
+- 976 completions · 18,917,243 output tokens · $658.95 API-equivalent
+- 48 session windows observed · median 725,399 output tokens per window
+- per stage: author 715 · translate 230 · untagged 21 · video-script 10
