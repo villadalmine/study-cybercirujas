@@ -11,6 +11,7 @@
 - **Deploy to Kubernetes**: `make deploy-local TAG=<tag>`
 - **Run Status Matrix Script**: `.venv/bin/python3 scripts/status_matrix.py`
 - **Run Corruption Fix Script**: `.venv/bin/python3 scripts/fix_corrupted_content.py`
+- **Model Comparison Dashboard**: [MODELS.md](MODELS.md) — generated, regenerates with STATUS.md; per-cert tables are the only fair model comparisons
 - **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
 - **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
 - **Update Wiki**: `make wiki` (OpenWiki — COSTS API credits, manual only)

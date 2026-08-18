@@ -113,6 +113,15 @@ def refresh() -> bool:
     """
     before = STATUS.read_text() if STATUS.exists() else None
     _write()
+    # MODELS.md rides along: same triggers, same philosophy (derived from disk
+    # and records, deterministic, never edited). Guarded like _record_usage —
+    # a dashboard that can break a generation pass is worse than a stale one.
+    try:
+        sys.path.insert(0, str(REPO / "scripts"))
+        import model_comparison
+        model_comparison.write()
+    except Exception as error:  # noqa: BLE001
+        print(f"warning: MODELS.md not refreshed ({error})")
     return STATUS.read_text() != before
 
 
