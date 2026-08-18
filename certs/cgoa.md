@@ -8,14 +8,14 @@ topics:
 - id: '1.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cgoa/README.md
-  status: pending
+  status: generated
   title: GitOps Fundamentals
   topic: 1 - GitOps Fundamentals
   weight: 25.0
 - id: '2.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cgoa/README.md
-  status: pending
+  status: generated
   title: GitOps Principles & Practices
   topic: 2 - GitOps Principles & Practices
   weight: 25.0
