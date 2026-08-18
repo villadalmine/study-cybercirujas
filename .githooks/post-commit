@@ -11,10 +11,14 @@
 # The refreshed graph.json lands in the WORKING TREE, so it rides along with
 # the NEXT commit — the committed graph lags HEAD by exactly one commit, and
 # scripts/check_graph.py is what tells you when that matters.
+#
+# `update` takes no --no-viz flag (that belongs to cluster-only); the first
+# version of this hook passed it and failed silently on every commit, which
+# is exactly the failure mode the freshness check exists to catch.
 
 REPO="$(git rev-parse --show-toplevel)" || exit 0
 GRAPHIFY="$REPO/.venv/bin/graphify"
 [ -x "$GRAPHIFY" ] || exit 0
 [ -d "$REPO/graphify-out" ] || exit 0
-(cd "$REPO" && "$GRAPHIFY" update . --no-viz >/dev/null 2>&1) || true
+(cd "$REPO" && "$GRAPHIFY" update . >/dev/null 2>&1) || true
 exit 0

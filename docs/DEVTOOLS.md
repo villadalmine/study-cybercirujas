@@ -67,8 +67,8 @@ For other assistants or shared access there is an HTTP mode:
 
 Nothing to remember:
 
-1. **Every commit** → `.githooks/post-commit` runs `graphify update .
-   --no-viz` (seconds, no API call). The refreshed graph lands in the working
+1. **Every commit** → `.githooks/post-commit` runs `graphify update .`
+   (seconds, no API call). The refreshed graph lands in the working
    tree and rides along with the *next* commit — the committed graph lags
    HEAD by exactly one commit, by design.
 2. **`make verify`** runs `scripts/check_graph.py`, which compares the commit
