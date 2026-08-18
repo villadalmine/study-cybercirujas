@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics graph graph-setup wiki
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -119,6 +119,21 @@ clean: ## remove the venv
 quality: ## quality report for the material (generates nothing)
 	$(VENV)/bin/python3 scripts/quality_report.py $(CERT)
 
+metrics: ## real spend per stage/day/window from usage.jsonl + quota-history (free)
+	$(VENV)/bin/python3 scripts/metrics_report.py
+
+graph: ## rebuild the code graph (tree-sitter AST — no LLM, no quota, seconds)
+	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
+	$(VENV)/bin/graphify update .
+
+graph-setup: ## one-time: install graphifyy into the venv (~40 tree-sitter grammars)
+	$(VENV)/bin/pip install -q graphifyy
+	@echo "OK: $(VENV)/bin/graphify — now: make graph"
+
+wiki: ## update the OpenWiki wiki — COSTS API credits, never runs unattended (docs/DEVTOOLS.md)
+	@command -v openwiki >/dev/null 2>&1 || { echo "openwiki not installed: npm install -g openwiki"; exit 1; }
+	OPENWIKI_TELEMETRY_DISABLED=1 openwiki --update
+
 verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/quality_report.py
 	$(VENV)/bin/python3 scripts/check_manifests.py
@@ -130,6 +145,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/status_matrix.py --check
 	$(VENV)/bin/python3 scripts/check_units.py
 	$(VENV)/bin/python3 scripts/check_config.py
+	$(VENV)/bin/python3 scripts/check_graph.py
 	$(VENV)/bin/python3 -m unittest discover tests
 	@echo
 	@echo "Network, run separately (still no API quota):"

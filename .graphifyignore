@@ -1,0 +1,14 @@
+# Graphify scope: map the machinery (teach/, scripts/, tests/, configs),
+# never the generated study corpus or rendered media — they are outputs,
+# not architecture, and they dwarf the code (63M + 104M vs <1M).
+certs/
+media/
+.venv/
+.rejected/
+node_modules/
+__pycache__/
+usage.jsonl
+lpic-1-text.txt
+hola
+seguir
+graphify-out/

@@ -26,7 +26,7 @@ import httpx
 import yaml
 
 from . import catalog, certs
-from .generator import make_completer
+from .generator import _usage_context, make_completer
 
 UA = {"User-Agent": "Mozilla/5.0 (compatible; teach-plat-tracker)"}
 CNCF_REPO_API = "https://api.github.com/repos/cncf/curriculum"
@@ -115,8 +115,14 @@ CLI_NOISE = re.compile(
     r"(MCP|mcp) server |Loaded \d+|Using model )", re.M)
 
 
-def _ai_yaml(backend: str | None, prompt: str) -> dict:
+def _ai_yaml(backend: str | None, prompt: str, usage: dict | None = None) -> dict:
     complete, _ = make_completer(backend)
+    # Tag the spend before the call: without this, snapshot/catalog completions
+    # land in usage.jsonl with no `op` (or worse, with a stale one left over
+    # from a previous author/translate call in the same process) and the
+    # per-stage report cannot account for them.
+    _usage_context.clear()
+    _usage_context.update(usage or {"op": "snapshot"})
     raw = complete(YAML_SYSTEM, prompt).strip()
     raw = re.sub(r"^```[a-z]*\n?|\n?```$", "", raw).strip()
     try:
@@ -205,7 +211,8 @@ def sync_lpi(backend: str | None = None) -> list[str]:
     page = fetch_text(LPI_SUMMARY)
     result = _ai_yaml(
         backend,
-        f"Página oficial de LPI (texto plano):\n{page}\n\n"
+        usage={"op": "catalog-sync", "kind": "lpi"},
+        prompt=f"Página oficial de LPI (texto plano):\n{page}\n\n"
         f"Certs en mi catálogo (id → nombre/examen):\n{yaml.safe_dump(known, allow_unicode=True)}\n"
         "Devolvé YAML con esta forma exacta:\n"
         "updates:\n  <id-del-catalogo>:\n    level: essentials|professional|specialty\n"
@@ -464,7 +471,8 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     text = fetch_text(url)
     result = _ai_yaml(
         backend,
-        f"Objetivos oficiales de la certificación {cert['name']} "
+        usage={"op": "snapshot", "cert": cert_id},
+        prompt=f"Objetivos oficiales de la certificación {cert['name']} "
         f"(examen {cert.get('exam')}), texto extraído de {url}:\n{text}\n\n"
         "Devolvé YAML con esta forma exacta:\n"
         "version: <versión del temario si aparece, si no 'unknown'>\n"
@@ -571,7 +579,8 @@ def translate_paths(backend: str | None = None, langs: list[str] | None = None) 
     for lang in langs:
         result = _ai_yaml(
             backend,
-            f"Textos de paths de carrera (en español):\n"
+            usage={"op": "paths", "kind": "translate", "lang": lang},
+            prompt=f"Textos de paths de carrera (en español):\n"
             f"{yaml.safe_dump(base, allow_unicode=True)}\n"
             f"Traducilos al idioma con código '{lang}'. Mantené los términos "
             "técnicos y nombres de certificaciones en inglés (CKA, LPIC-1, "
@@ -603,7 +612,8 @@ def generate_paths(backend: str | None = None) -> list[str]:
     }
     result = _ai_yaml(
         backend,
-        f"Catálogo de certificaciones:\n{yaml.safe_dump(summary, allow_unicode=True)}\n\n"
+        usage={"op": "paths", "kind": "generate"},
+        prompt=f"Catálogo de certificaciones:\n{yaml.safe_dump(summary, allow_unicode=True)}\n\n"
         "Armá paths de carrera. Devolvé YAML:\n"
         "paths:\n  <slug>:\n    name: ...\n    description: <1-2 frases, en español>\n"
         "    steps: [[ids en paralelo], [siguiente paso], ...]\n"

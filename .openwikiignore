@@ -1,0 +1,16 @@
+# OpenWiki documents the machinery, never the product: the generated study
+# corpus and rendered media are outputs of the pipeline (63M + 104M), and a
+# wiki that ingests them would burn the whole budget describing what
+# STATUS.md already accounts for.
+certs/
+media/
+.venv/
+.rejected/
+.study/
+node_modules/
+__pycache__/
+*.egg-info/
+graphify-out/
+lpic-1-text.txt
+hola
+seguir

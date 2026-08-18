@@ -11,6 +11,15 @@ media/**/.build/
 .rejected/
 .antigravitycli/
 
+# Code graph: graph.json + GRAPH_REPORT.md ARE committed (they are the shared
+# map other agents read). The cache is per-machine, cost.json is per-run, and
+# graph.html is regenerated on demand by `make graph` — committing it would
+# pin a stale visual next to a fresh graph, since the post-commit hook
+# refreshes with --no-viz.
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/graph.html
+
 # Credentials never live in the repo: this one is public, and until now the only
 # ignore rule was .venv/ — so a .env dropped in here would have been committed
 # and pushed. The pipeline reads plain environment variables; put them in

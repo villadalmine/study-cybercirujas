@@ -37,6 +37,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import time
 from collections.abc import Callable
 from pathlib import Path
 
@@ -119,6 +120,7 @@ def _record_usage(envelope: dict) -> None:
         row = {
             "at": datetime.datetime.now().isoformat(timespec="seconds"),
             **_usage_context,
+            "backend": "claude",
             "cost_usd": envelope.get("total_cost_usd"),
             "duration_ms": envelope.get("duration_ms"),
             "output_tokens": usage.get("output_tokens"),
@@ -132,6 +134,40 @@ def _record_usage(envelope: dict) -> None:
             "effort": (os.environ.get("TEACH_CLAUDE_EFFORT")
                        or pipeline.generation().get("effort") or "default"),
             "models": models,
+        }
+        USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with USAGE_LOG.open("a") as handle:
+            handle.write(json.dumps(row) + "\n")
+    except Exception:
+        pass
+
+
+def _record_plain_usage(backend: str, model: str | None, *,
+                        input_tokens: int | None = None,
+                        output_tokens: int | None = None,
+                        output_chars: int | None = None,
+                        cost_usd: float | None = None,
+                        duration_ms: int | None = None) -> None:
+    """Usage line for backends without the claude JSON envelope.
+
+    litellm reports exact token counts in the API response, so its rows carry
+    them. Plain-text CLIs (codex/gemini/custom) report nothing, so their rows
+    carry measured character counts and duration and leave the token fields
+    null — a null is honest; a plausible substitute for "not measured" is the
+    exact failure quota_facts exists to remove. Never raises, same reason as
+    _record_usage: the run matters, the measurement does not.
+    """
+    try:
+        row = {
+            "at": datetime.datetime.now().isoformat(timespec="seconds"),
+            **_usage_context,
+            "backend": backend,
+            "model": model,
+            "cost_usd": cost_usd,
+            "duration_ms": duration_ms,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "output_chars": output_chars,
         }
         USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
         with USAGE_LOG.open("a") as handle:
@@ -266,12 +302,23 @@ def _litellm_completer() -> tuple[Completer, dict]:
     client = OpenAI(base_url=base_url, api_key=api_key)
 
     def complete(system: str, user: str) -> str:
+        started = time.monotonic()
         response = client.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
+        )
+        # The response carries exact counts; before this they were dropped, so
+        # every litellm translation was invisible in usage.jsonl and the only
+        # spend evidence was the provider's own dashboard.
+        usage = getattr(response, "usage", None)
+        _record_plain_usage(
+            "litellm", model,
+            input_tokens=getattr(usage, "prompt_tokens", None),
+            output_tokens=getattr(usage, "completion_tokens", None),
+            duration_ms=int((time.monotonic() - started) * 1000),
         )
         return response.choices[0].message.content or ""
 
@@ -330,6 +377,7 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
         # An unbounded call also stalls the unattended timer, whose guard sees a
         # live process and keeps skipping.
         timeout = pipeline.budget().get("completion_timeout_seconds") or None
+        started = time.monotonic()
         try:
             result = subprocess.run(
                 [*command, f"{system}\n\n{user}"],
@@ -358,6 +406,13 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
             )
         output = result.stdout.strip()
         if "--output-format" not in command:
+            # No envelope, no token counts — record what was measured anyway
+            # (duration, size, and what the call was for), so codex/gemini
+            # completions at least show up in per-stage and per-day reports
+            # instead of not existing.
+            _record_plain_usage(backend, meta.get("model"),
+                                output_chars=len(output),
+                                duration_ms=int((time.monotonic() - started) * 1000))
             return output
         # Defensive on purpose: if the envelope ever changes shape, fall back to
         # the raw text rather than failing a generation that actually succeeded.

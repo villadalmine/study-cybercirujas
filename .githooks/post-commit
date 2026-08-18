@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# Keep the code graph in step with HEAD. Tree-sitter AST only: no LLM, no API
+# quota, seconds of wall clock. See docs/DEVTOOLS.md.
+#
+# Deliberately never blocks and never fails the commit (post-commit cannot
+# abort anyway, but a noisy error here trains people to dread committing):
+# a clone without graphify simply skips, and a failed rebuild is retried by
+# the next `make graph` or the freshness check in `make verify`.
+#
+# The refreshed graph.json lands in the WORKING TREE, so it rides along with
+# the NEXT commit — the committed graph lags HEAD by exactly one commit, and
+# scripts/check_graph.py is what tells you when that matters.
+
+REPO="$(git rev-parse --show-toplevel)" || exit 0
+GRAPHIFY="$REPO/.venv/bin/graphify"
+[ -x "$GRAPHIFY" ] || exit 0
+[ -d "$REPO/graphify-out" ] || exit 0
+(cd "$REPO" && "$GRAPHIFY" update . --no-viz >/dev/null 2>&1) || true
+exit 0

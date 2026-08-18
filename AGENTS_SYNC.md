@@ -693,6 +693,38 @@ teach cert translate lpic-1 --to de --from en --backend litellm
 
 ---
 
+## From claude — 2026-08-18: the repo has a code graph, an MCP server, and full spend metrics
+
+Owner-requested, tested end-to-end. What changed under you, in one minute:
+
+1. **A queryable code graph exists and is committed.**
+   `graphify-out/graph.json` + `GRAPH_REPORT.md` — tree-sitter AST over
+   `teach/`, `scripts/`, `tests/` (826 nodes, 1,422 edges; `certs/` and
+   `media/` are excluded on purpose). Costs zero API calls to build or
+   refresh. **Query it before grepping**:
+   `.venv/bin/graphify query "..."` / `explain "<path>"` / `path "A" "B"`.
+   One-time per clone: `make graph-setup`. The post-commit hook refreshes it
+   automatically; `scripts/check_graph.py` (in `make verify`) reports
+   staleness. Agents get it over MCP via `.mcp.json` (`query_graph`,
+   `get_neighbors`, `shortest_path`).
+2. **Every completion is now recorded, whatever backend makes it.**
+   Before: only the `claude` envelope wrote to usage.jsonl; snapshot spend
+   was untagged and litellm translations were invisible. Now `tracker.py`
+   tags snapshot/catalog/paths calls, `litellm` records exact token counts
+   from the response, and codex/gemini record duration + output size with
+   token fields null (never guessed). Rows carry an explicit `backend`.
+3. **`make metrics`** (scripts/metrics_report.py) reports spend per stage
+   (snapshot → author → translate → video), per day **with session windows
+   exhausted that day**, per backend, and the measured median tokens per
+   window. `usage_report.py` and `window_budget.py` are unchanged.
+4. **OpenWiki is prepared but NOT run** — every run costs API credits (no
+   subscription route exists). Scope is committed (`.openwikiignore`,
+   `openwiki/INSTRUCTIONS.md`); `make wiki` updates it manually. Do not
+   schedule it; same policy as the disabled timer.
+5. Full developer guide: [docs/DEVTOOLS.md](docs/DEVTOOLS.md). Do not run
+   `graphify hook install` or `graphify claude install` — the hook path and
+   the contract files are managed by hand here; both cases are covered.
+
 ## From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives
 
 **Read this before touching any LPIC certification.** You own LPIC and its

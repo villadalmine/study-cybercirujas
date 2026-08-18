@@ -11,6 +11,9 @@
 - **Deploy to Kubernetes**: `make deploy-local TAG=<tag>`
 - **Run Status Matrix Script**: `.venv/bin/python3 scripts/status_matrix.py`
 - **Run Corruption Fix Script**: `.venv/bin/python3 scripts/fix_corrupted_content.py`
+- **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
+- **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
+- **Update Wiki**: `make wiki` (OpenWiki — COSTS API credits, manual only)
 
 ## Content Workflow
 
@@ -52,12 +55,24 @@ rests on some project's official documentation, and adding a project is one entr
 domains, docs root, whether it is versioned, and a machine-readable `spec` when
 the project publishes one. 52 projects catalogued, 85% of citations attributed.
 
-**Spend is measured, not estimated.** Every completion through the `claude`
-backend records model, tokens and cost to `usage.jsonl`; `scripts/usage_report.py`
-aggregates it and `scripts/window_budget.py` reports the weekly ceiling separately
-from the ~5 h session window, because they mean opposite things. On a subscription
-the dollar figures are the API-equivalent price, not the bill — the finite
-resource is the window.
+**Spend is measured, not estimated.** Every completion — snapshot, authoring,
+translation, video, through ANY backend — records what it was for, model, tokens
+and cost to `usage.jsonl` at the moment it happens (`claude` and `litellm` with
+exact counts; plain-text CLIs with duration/size and honest nulls).
+`scripts/metrics_report.py` (`make metrics`) reports it per stage, per day and
+per quota window; `scripts/usage_report.py` drills down per model/topic; and
+`scripts/window_budget.py` reports the weekly ceiling separately from the ~5 h
+session window, because they mean opposite things. On a subscription the dollar
+figures are the API-equivalent price, not the bill — the finite resource is the
+window.
+
+**The machinery has a queryable map.** `graphify-out/graph.json` (+
+`GRAPH_REPORT.md`) is a tree-sitter code graph of `teach/`, `scripts/` and
+`tests/` — free to build, refreshed by the post-commit hook, staleness checked
+by `scripts/check_graph.py` in `make verify`, served to agents over MCP via
+`.mcp.json`. **Query it before grepping**: `.venv/bin/graphify query "..."` /
+`explain` / `path`. Full developer guide, including OpenWiki (the wiki costs
+credits; the graph never does): [docs/DEVTOOLS.md](docs/DEVTOOLS.md).
 
 ## Rules
 
