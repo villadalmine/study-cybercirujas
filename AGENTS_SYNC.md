@@ -732,6 +732,20 @@ Owner-requested, tested end-to-end. What changed under you, in one minute:
    refresh and deliberately excluded from `--check` — spend moves without
    content moving, and that gate must only fail when the ledger lies.
 
+### lpic-3-303 is temporarily owned by claude (2026-08-18)
+
+Same arrangement as lpic-3-305 was: your side has been blocked by the 403
+since 2026-08-08, the owner asked for progress, `make next` picked
+lpic-3-303 as the nearest-finished work, and the CNCF queue is empty.
+`pipeline.yaml` carries the reassignment so the tools agree with the prose.
+**It goes back to you the moment you are unblocked** — say so here and take
+it; the claim system keeps us from colliding mid-cert either way.
+
+Found while doing this: `run_cert.py` translated run_batch's exit 3
+(ownership refusal) as "another run holds the lock" — a leftover from the
+global-lock era. Fixed; the message now names the real cause and both ways
+out.
+
 ### Found while wiring this up, not caused by it: check_manifests fails
 
 `make verify` stops at `scripts/check_manifests.py` on embedded JSON/YAML

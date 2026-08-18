@@ -95,7 +95,13 @@ def main() -> int:
             if args.dry_run:
                 break
             if code == 3:
-                print("[author] another run holds the lock; try again later")
+                # run_batch's exit 3 means OWNERSHIP, not the lock: the global
+                # lock died with per-topic claims, but this message outlived it
+                # and diagnosed a refusal as contention on 2026-08-18.
+                print("[author] refused: this certification belongs to another "
+                      "agent (pipeline.yaml -> owner). Reassign with "
+                      "`scripts/steer.py own <cert> <agent>`, or take one "
+                      "deliberate batch with run_batch --anyway.")
                 return 3
             if code != 0:
                 print("[author] stopped (quota, or a topic that will not pass). "
