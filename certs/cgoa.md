@@ -22,14 +22,14 @@ topics:
 - id: '3.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cgoa/README.md
-  status: pending
+  status: generated
   title: GitOps Tooling & Implementation
   topic: 3 - GitOps Tooling & Implementation
   weight: 25.0
 - id: '4.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cgoa/README.md
-  status: pending
+  status: generated
   title: GitOps Security & Observability
   topic: 4 - GitOps Security & Observability
   weight: 25.0
