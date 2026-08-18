@@ -188,7 +188,7 @@ groups:
       - record: job:http_requests_errors:ratio5m
         expr: |
             sum by (job) (rate(http_requests_total{code=~"5.."}[5m]))
-          /
+            /
             sum by (job) (rate(http_requests_total[5m]))
 
       # p99 latency: histogram aggregation MUST keep the `le` bucket dimension
@@ -250,7 +250,7 @@ spec:
         - record: job:http_requests_errors:ratio5m
           expr: |
               sum by (job) (rate(http_requests_total{code=~"5.."}[5m]))
-            /
+              /
               sum by (job) (rate(http_requests_total[5m]))
 ```
 

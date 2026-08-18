@@ -104,13 +104,43 @@ it uses come from the one paid step below. Done 2026-08-18: 69 articles.
 
 ```bash
 .venv/bin/graphify label . --backend claude-cli   # LLM names for communities
-.venv/bin/graphify extract docs --backend claude-cli   # semantic pass over docs
 ```
 
 `--backend claude-cli` spends the owner's subscription window (one batched
 call named all 59 communities on 2026-08-18); the same flags accept
 `openai` + `OPENAI_BASE_URL` for the cluster LiteLLM proxy. Code extraction
 and the wiki export never need any of this.
+
+### Semantic enrichment — documented, deliberately not run
+
+```bash
+.venv/bin/graphify extract docs --backend claude-cli   # or a scoped path
+.venv/bin/graphify export wiki                         # refresh derived wiki
+git add graphify-out/ && git commit                    # share the new layer
+```
+
+What it adds: today the graph sees prose only *structurally* (headings,
+explicit links). The semantic pass has an LLM read the text and extract
+concepts and relations that are written but not linked — "the quality floor
+is applied before writing", "the timer respects ownership" — as nodes with
+edges bridging docs ↔ code where no import or link exists. Conceptual
+queries ("why is the timer disabled?") start returning connected answers
+instead of section titles.
+
+Why it stays off by default (decision with the owner, 2026-08-18):
+- Its edges are `INFERRED` with partial confidence; the current graph is
+  100% `EXTRACTED` — everything provable. Reach up, certainty down.
+- Agents mostly ask the graph structural questions, which are already
+  covered; conceptual ones are answered by the docs themselves.
+- **It ages while costing**: the semantic layer goes stale on every doc
+  edit and refreshing it costs LLM each time, unlike the AST layer the
+  post-commit hook refreshes for free. A half-stale inferred layer gets
+  believed, which is worse than none.
+
+When to turn it on: the first time an agent's conceptual graph query comes
+back empty and that mattered. Run it scoped (a path, not the repo root),
+re-export the wiki, commit, and note the spend — it lands in graphify's own
+accounting, not `usage.jsonl`.
 
 ## 2. The wiki (OpenWiki)
 

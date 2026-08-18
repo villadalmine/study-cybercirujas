@@ -181,7 +181,7 @@ curl -s localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job:.labels
 
 Esperado:
 
-```json
+```jsonl
 {"job":"prometheus","url":"http://localhost:9090/metrics","health":"up","lastScrape":"2026-08-08T11:05:02.11Z","scrapeInterval":"15s"}
 {"job":"node","url":"http://localhost:9100/metrics","health":"up","lastScrape":"2026-08-08T11:05:04.90Z","scrapeInterval":"15s"}
 ```
@@ -371,7 +371,7 @@ curl -s localhost:9090/api/v1/status/tsdb | jq '.data.seriesCountByMetricName[0:
 
 Esperado:
 
-```json
+```
 {"numSeries":1284,"chunkCount":1284,"minTime":1754647200110,"maxTime":1754648103110}
 [{"name":"node_cpu_seconds_total","value":112},
  {"name":"go_gc_duration_seconds","value":40},
