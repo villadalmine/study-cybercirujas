@@ -18,6 +18,9 @@ media/**/.build/
 graphify-out/cache/
 graphify-out/cost.json
 graphify-out/graph.html
+# graphify backs up the curated graph into a dated directory before relabeling;
+# per-machine history, not shared state.
+graphify-out/20*/
 
 # Credentials never live in the repo: this one is public, and until now the only
 # ignore rule was .venv/ — so a .env dropped in here would have been committed
