@@ -43,7 +43,7 @@ sys.path.insert(0, str(REPO))
 
 import yaml  # noqa: E402
 
-from teach.core import claims, quality  # noqa: E402
+from teach.core import certs, claims, quality  # noqa: E402
 
 USAGE = (Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
          / "teach-plat" / "usage.jsonl")
@@ -76,7 +76,7 @@ def usage_by_topic() -> dict[tuple, dict]:
     return out
 
 
-def observations(cert_filter: str | None) -> list[dict]:
+def observations(cert_filter: str | None, lang: str | None = None) -> list[dict]:
     """One row per generated topic/language, attributed to the model in meta.yaml.
 
     meta.yaml is the attribution of record — it holds the model that actually
@@ -105,6 +105,8 @@ def observations(cert_filter: str | None) -> list[dict]:
             if (cert, topic_id) in in_flight:
                 continue
             for lang_dir in sorted((REPO / "certs" / cert / topic_id).glob("*")):
+                if lang and lang_dir.name != lang:
+                    continue
                 meta_file = lang_dir / "meta.yaml"
                 content = lang_dir / "content.md"
                 if not meta_file.exists() or not content.exists():
@@ -190,9 +192,15 @@ def render_markdown() -> str:
         "the material is CORRECT — see docs/AUDITOR_DESIGN.md.",
     ]
     per_cert: dict[str, list[dict]] = defaultdict(list)
+    # Authoring language only: a translation restates substance that is fixed
+    # by its source, so its size/token profile measures a different task. The
+    # overnight cgoa run proved the confusion is real — es translations rode
+    # into the authoring table attributed to the translating model.
     for row in rows:
-        per_cert[row["cert"]].append(row)
-    lines += ["", "## Within one certification (the only fair comparisons)"]
+        if row["lang"] == certs.DEFAULT_LANG:
+            per_cert[row["cert"]].append(row)
+    lines += ["", "## Within one certification (the only fair comparisons; "
+                  f"authoring language `{certs.DEFAULT_LANG}` only)"]
     any_cert = False
     for cert in sorted(per_cert):
         models: dict[str, list[dict]] = defaultdict(list)
@@ -241,6 +249,8 @@ def main() -> int:
     parser.add_argument("--cert", help="compare within one certification (recommended)")
     parser.add_argument("--min-samples", type=int, default=1,
                         help="hide models with fewer topics than this")
+    parser.add_argument("--lang", help="restrict to one language (use the "
+                        "authoring language to compare authoring, not translation)")
     parser.add_argument("--write", action="store_true",
                         help="regenerate MODELS.md instead of printing")
     args = parser.parse_args()
@@ -250,7 +260,7 @@ def main() -> int:
         print(f"MODELS.md {'updated' if changed else 'already current'}")
         return 0
 
-    rows = observations(args.cert)
+    rows = observations(args.cert, args.lang)
     if not rows:
         print("Nothing generated matches that." if args.cert else "Nothing generated yet.")
         return 0

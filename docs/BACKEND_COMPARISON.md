@@ -112,3 +112,42 @@ not the same topics: `gemini` authored the LPIC-3 branch, `claude` most of the
 CNCF ones. Subject matter affects length — the cks English content runs 2.55x its
 own Spanish while cka, ckad and lpi sit at 0.91–1.05, so a single certification
 can skew a median. A same-topic head-to-head would settle it and has not been run.
+
+## fable-5 vs opus-5, within cgoa (2026-08-19)
+
+The owner asked which model delivers better material. Designed as the clean
+in-cert experiment: cgoa freshly snapshotted, four domains, `1.1`+`2.1`
+authored on `claude-fable-5` (explicit `TEACH_CLAUDE_MODEL` pin), `3.1`+`4.1`
+on `claude-opus-5` (the pipeline declaration), same day, same prompts, same
+`effort: xhigh`, same quality floor. Authoring language only — the overnight
+run demonstrated why that filter exists: es translations rode into the table
+attributed to the translating model until `--lang en` was added.
+
+Numbers at the time of writing (`scripts/model_comparison.py --cert cgoa
+--lang en`; MODELS.md regenerates them continuously):
+
+| model | topics | KB/topic | ktok/topic | KB/1k | min/topic | topics/window | KB/window |
+|---|---|---|---|---|---|---|---|
+| claude-fable-5 | 2 | 52.0 | 58.3 | 0.89 | 12.6 | 12.2 | 637 |
+| claude-opus-5 | 1–2* | 164.7 | 206.3 | 0.80 | 42.2 | 3.5 | 570 |
+
+\* one opus topic was claim-excluded (being translated) when this was written;
+MODELS.md shows the settled figures.
+
+**Reading, with the thin-evidence caveat (n=2 per side):**
+
+- **Per topic, opus-5 writes ~3x the material** (165 vs 52 KB) with more code
+  blocks and citations — same pattern as the kca comparison (opus-5 2.1x
+  opus-4-8). fable-5's topics pass every floor and check; they are simply a
+  third the depth.
+- **Per window they deliver similar total material** (637 vs 570 KB), split
+  differently: fable finishes ~3.5x more topics, each shallower; opus
+  produces fewer, deeper ones.
+- **Both models are equally traceable and equally clean** — 100% floor pass,
+  citations resolving. Nothing here measures truth (docs/AUDITOR_DESIGN.md).
+
+**Verdict for this repo:** unchanged. The owner's declared constraint is
+depth/quality per topic, not topics per window ("no me importan las
+ventanas", 2026-08-13) — so `claude-opus-5` at `xhigh` stays the authoring
+setting. fable-5 is a reasonable choice where breadth-per-window matters
+more than depth, which is not this project's trade.
