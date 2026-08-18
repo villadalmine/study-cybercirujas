@@ -88,16 +88,29 @@ the first fights `core.hooksPath`, the second appends to hand-authored
 contract files (CLAUDE.md / AGENTS.md). Both are replaced by the two files
 above.
 
+### The derived wiki (free — no LLM at all)
+
+```bash
+.venv/bin/graphify export wiki    # also runs as part of `make graph`
+```
+
+Writes `graphify-out/wiki/` — one Markdown article per community and per god
+node, plus `index.md` as the agent entry point. It is generated
+deterministically from the graph (`graphify/wiki.py` contains no LLM call),
+so it costs nothing and never drifts from graph.json. The community *names*
+it uses come from the one paid step below. Done 2026-08-18: 69 articles.
+
 ### Optional, costs completions
 
 ```bash
-.venv/bin/graphify label .                      # LLM names for communities
+.venv/bin/graphify label . --backend claude-cli   # LLM names for communities
 .venv/bin/graphify extract docs --backend claude-cli   # semantic pass over docs
 ```
 
-`--backend claude-cli` spends the owner's subscription window; the same
-flags accept `openai` + `OPENAI_BASE_URL` for the cluster LiteLLM proxy.
-Code extraction never needs any of this.
+`--backend claude-cli` spends the owner's subscription window (one batched
+call named all 59 communities on 2026-08-18); the same flags accept
+`openai` + `OPENAI_BASE_URL` for the cluster LiteLLM proxy. Code extraction
+and the wiki export never need any of this.
 
 ## 2. The wiki (OpenWiki)
 
@@ -114,12 +127,32 @@ export OPENWIKI_TELEMETRY_DISABLED=1
 openwiki --init          # interactive: pick provider, key, model
 ```
 
+**There is no Claude-subscription route** — checked against the provider
+list on 2026-08-18. The `anthropic` provider takes `ANTHROPIC_API_KEY` only;
+the subscription-based providers OpenWiki does have are `openai-chatgpt`
+(browser OAuth against a ChatGPT plan) and `copilot` (an existing GitHub
+Copilot plan), neither of which is Anthropic. No provider shells out to a
+local CLI. Wrapping the claude CLI behind a local OpenAI-compatible bridge
+would technically fit the `openai-compatible` provider, but routing a
+Claude subscription through an unofficial API bridge is outside the
+subscription's terms — not prepared here. (If a free wiki is the goal,
+`graphify export wiki` above already produces one from the graph at zero
+cost.)
+
 Provider choice, in order of preference:
 1. **OpenAI-compatible → cluster LiteLLM proxy** (cheapest; wiki synthesis is
    translation-grade work). Needs the tunnel: `kubectl port-forward -n ai
-   svc/litellm-proxy 14000:4000`, base URL `http://localhost:14000/v1`.
+   svc/litellm-proxy 14000:4000`, then:
+   ```
+   OPENWIKI_PROVIDER=openai-compatible
+   OPENAI_COMPATIBLE_BASE_URL=http://localhost:14000/v1
+   OPENAI_COMPATIBLE_API_KEY=<LiteLLM key>
+   OPENWIKI_MODEL_ID=<model id on the proxy>
+   ```
 2. **Anthropic API key** (real money, higher quality — owner approved spend
-   2026-08-18).
+   2026-08-18): `OPENWIKI_PROVIDER=anthropic`, `ANTHROPIC_API_KEY=...`.
+3. `openai-chatgpt` / `copilot` only if the owner happens to hold those
+   subscriptions.
 
 Scope is already prepared and committed:
 - [.openwikiignore](../.openwikiignore) keeps `certs/` and `media/` out.

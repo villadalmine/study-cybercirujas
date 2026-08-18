@@ -122,9 +122,10 @@ quality: ## quality report for the material (generates nothing)
 metrics: ## real spend per stage/day/window from usage.jsonl + quota-history (free)
 	$(VENV)/bin/python3 scripts/metrics_report.py
 
-graph: ## rebuild the code graph (tree-sitter AST — no LLM, no quota, seconds)
+graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
+	$(VENV)/bin/graphify export wiki
 
 graph-setup: ## one-time: install graphifyy into the venv (~40 tree-sitter grammars)
 	$(VENV)/bin/pip install -q graphifyy
