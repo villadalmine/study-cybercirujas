@@ -307,6 +307,18 @@ certs:
   capa:
     owner: claude
     active: true
+  # Snapshotted 2026-08-18 (golden-kubestronaut gap: cgoa/cba/cca were the
+  # last CNCF certs with no syllabus). cgoa doubles as the fable-5 vs opus-5
+  # comparison ground — owner asked to author part of it on fable-5, so
+  # model_comparison.py --cert cgoa can answer within one syllabus.
+  cgoa:
+    video: [en, es]
+    owner: claude
+    active: true
+  cca:
+    video: [en, es]
+    owner: claude
+    active: true
 # Career path videos, rendered from catalog.yaml rather than from a syllabus.
 paths:
   video_languages: [es, en, de]

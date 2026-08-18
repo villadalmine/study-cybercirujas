@@ -231,10 +231,11 @@ certs:
     category: cloud-native
     tracked_version: '2024-11-19'
     upstream_status: current
-    last_checked: '2026-08-13'
+    last_checked: '2026-08-18'
     file: certs/cgoa.md
     sources:
-      objectives: https://github.com/cncf/curriculum/raw/master/CGOA_Curriculum.pdf
+      objectives: https://raw.githubusercontent.com/cncf/curriculum/master/cgoa/README.md
+      objectives_pdf: https://github.com/cncf/curriculum/raw/master/CGOA_Curriculum.pdf
       repo: https://github.com/cncf/curriculum
     license: CC-BY 4.0
     level: associate
@@ -317,10 +318,11 @@ certs:
     category: cloud-native
     tracked_version: '2024-10-21'
     upstream_status: current
-    last_checked: '2026-08-13'
+    last_checked: '2026-08-18'
     file: certs/cca.md
     sources:
-      objectives: https://github.com/cncf/curriculum/raw/master/CCA_Curriculum.pdf
+      objectives: https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
+      objectives_pdf: https://github.com/cncf/curriculum/raw/master/CCA_Curriculum.pdf
       repo: https://github.com/cncf/curriculum
     license: CC-BY 4.0
     level: associate

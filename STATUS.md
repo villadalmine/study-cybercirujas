@@ -17,7 +17,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpic-1` | 42 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `lpic-2` | 41 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `lpic-3-300` | 20 | ❌ | ❌ | – | – | – | – | – | ❌ |
-| `lpic-3-303` | 15 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `lpic-3-303` | 15 | ❌ | 🔶 1/15c·1/15e | – | – | – | – | – | ❌ |
 | `lpic-3-305` | 13 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpic-3-306` | 12 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpi-devops` | 14 | ✅ | ✅ | – | – | – | – | – | ✅ |
@@ -26,12 +26,12 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `cks` | 26 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `kcna` | 13 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `kcsa` | 42 | ✅ | ✅ | – | – | – | – | – | ✅ |
-| `cgoa` | – | – | – | – | – | – | – | – | – |
+| `cgoa` | 4 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `capa` | 5 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `cba` | – | – | – | – | – | – | – | – | – |
 | `cnpa` | 27 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `cnpe` | 18 | ✅ | ✅ | – | – | – | – | – | ✅ |
-| `cca` | – | – | – | – | – | – | – | – | – |
+| `cca` | 5 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ica` | 17 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `kca` | 31 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `otca` | 20 | ✅ | ✅ | – | – | – | – | – | ✅ |
@@ -51,8 +51,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpi-devops` | 1.0 | 2026-08-06 | 2.0 | – | 2026-08-12 | ⚠️ **outdated** |
 | `capa` | unknown | 2026-08-12 | 2024-10-21 | 2025-11-28 | 2026-08-13 | ✅ current |
 | `cba` | unknown | – | 2024-10-22 | 2024-10-22 | 2026-08-13 | – unknown |
-| `cca` | unknown | – | 2024-10-21 | 2024-10-21 | 2026-08-13 | – unknown |
-| `cgoa` | unknown | – | 2024-11-19 | 2024-11-19 | 2026-08-13 | – unknown |
+| `cca` | unknown | 2026-08-18 | 2024-10-21 | 2024-10-21 | 2026-08-18 | ✅ current |
+| `cgoa` | unknown | 2026-08-18 | 2024-11-19 | 2024-11-19 | 2026-08-18 | ✅ current |
 | `cka` | 1.35 | 2026-07-16 | 1.35 | 2026-03-03 | 2026-08-13 | ✅ current |
 | `ckad` | 1.35 | 2026-07-11 | 1.35 | 2026-02-25 | 2026-08-13 | ✅ current |
 | `cks` | 1.34 | 2026-07-17 | 1.34 | 2025-10-30 | 2026-08-13 | ✅ current |
@@ -109,12 +109,12 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `cks` | ✅ | ✅ | – | – |
 | `kcna` | ✅ | ✅ | – | – |
 | `kcsa` | ✅ | ✅ | – | – |
-| `cgoa` | – | – | – | – |
+| `cgoa` | ❌ | ❌ | – | – |
 | `capa` | – | – | – | – |
 | `cba` | – | – | – | – |
 | `cnpa` | ✅ | – | – | – |
 | `cnpe` | ✅ | – | – | – |
-| `cca` | – | – | – | – |
+| `cca` | ❌ | ❌ | – | – |
 | `ica` | ✅ | ✅ | – | – |
 | `kca` | ✅ | ✅ | – | – |
 | `otca` | ✅ | ✅ | – | – |
@@ -129,6 +129,6 @@ None declared — the unattended timer generates nothing. That is the safe defau
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 976 completions · 18,917,243 output tokens · $658.95 API-equivalent
+- 981 completions · 19,031,369 output tokens · $662.41 API-equivalent
 - 48 session windows observed · median 725,399 output tokens per window
-- per stage: author 715 · translate 230 · untagged 21 · video-script 10
+- per stage: author 717 · translate 230 · untagged 21 · video-script 10 · snapshot 3
