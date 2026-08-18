@@ -188,8 +188,9 @@ quality:
 #     scripts/steer.py milestone lpic-3-305 en es
 #     scripts/steer.py milestone --clear        # timer idles
 milestone:
-  name: none
-  targets: {}
+  name: lpic-3-303 in en, es
+  targets:
+    lpic-3-303: [en, es]
 certs:
   lpic-1:
     active: true
