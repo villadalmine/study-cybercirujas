@@ -71,9 +71,13 @@ Nothing to remember:
    (seconds, no API call). The refreshed graph lands in the working
    tree and rides along with the *next* commit — the committed graph lags
    HEAD by exactly one commit, by design.
-2. **`make verify`** runs `scripts/check_graph.py`, which compares the commit
-   recorded in `GRAPH_REPORT.md` against HEAD and says stale/OK. Warn-only by
-   default; `--strict` for anything that relies on the graph.
+2. **`make verify`** runs `scripts/check_graph.py`, which says stale/OK.
+   Fresh means: the report's commit stamp is HEAD, or the hook's scan marker
+   (`graphify-out/.last-scan`) is HEAD, or nothing the graph covers changed
+   since that baseline — `update` deliberately leaves outputs (stamp
+   included) untouched when no topology changed, so the stamp alone lags on
+   docs-only commits. Warn-only by default; `--strict` for anything that
+   relies on the graph.
 3. Manual at any time: `make graph` (also regenerates `graph.html`).
 
 The hook needs `git config core.hooksPath .githooks`, which `make setup`

@@ -20,5 +20,12 @@ REPO="$(git rev-parse --show-toplevel)" || exit 0
 GRAPHIFY="$REPO/.venv/bin/graphify"
 [ -x "$GRAPHIFY" ] || exit 0
 [ -d "$REPO/graphify-out" ] || exit 0
-(cd "$REPO" && "$GRAPHIFY" update . >/dev/null 2>&1) || true
+if (cd "$REPO" && "$GRAPHIFY" update . >/dev/null 2>&1); then
+    # Record how far the scan got. `update` leaves every output untouched
+    # (commit stamp included) when no topology changed, so the stamp alone
+    # cannot say "current"; this file is what lets check_graph.py tell a
+    # scanned-and-unchanged graph from a never-scanned one. Per-machine,
+    # gitignored.
+    git -C "$REPO" rev-parse HEAD > "$REPO/graphify-out/.last-scan" 2>/dev/null || true
+fi
 exit 0

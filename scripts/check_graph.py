@@ -57,15 +57,25 @@ def main() -> int:
 
     # The stamp lags legitimately: `graphify update` leaves every output
     # untouched (stamp included) when no topology changed, so a docs-only or
-    # bookkeeping commit keeps the old stamp forever. Stale therefore cannot
-    # mean "stamp != HEAD"; it means "something the graph covers changed since
-    # the stamp". And even then it is only *possibly* stale — an edit inside a
-    # function body changes no topology — which is why this stays a warning.
-    diff = subprocess.run(["git", "diff", "--name-only", f"{built_from}..HEAD"],
+    # body-only commit keeps the old stamp forever. The post-commit hook
+    # therefore records how far the scanner actually got (.last-scan); the
+    # freshness baseline is that scan when we have one, the stamp when we
+    # don't (fresh clone, hook never ran).
+    last_scan_file = REPO / "graphify-out" / ".last-scan"
+    baseline = built_from
+    if last_scan_file.exists():
+        scanned = last_scan_file.read_text().strip()
+        if re.fullmatch(r"[0-9a-f]{7,40}", scanned):
+            if head == scanned:
+                print(f"graph: OK — scanned at HEAD ({scanned[:8]}); "
+                      "no topology change since the last rebuild.")
+                return 0
+            baseline = scanned
+    diff = subprocess.run(["git", "diff", "--name-only", f"{baseline}..HEAD"],
                           cwd=REPO, capture_output=True, text=True)
     if diff.returncode != 0:
-        print(f"graph: built from {built_from}, which this history does not "
-              "contain — rebuild with `make graph`.")
+        print(f"graph: baseline {baseline[:8]} is not in this history — "
+              "rebuild with `make graph`.")
         return fail
     ignored = [line.strip().rstrip("/") for line in
                (REPO / ".graphifyignore").read_text().splitlines()
@@ -74,10 +84,10 @@ def main() -> int:
                if f and not any(f == p or f.startswith(p + "/") for p in ignored)
                and not f.startswith(".git")]
     if not covered:
-        print(f"graph: OK — built from {built_from}; nothing it covers changed since.")
+        print(f"graph: OK — nothing it covers changed since {baseline[:8]}.")
         return 0
     print(f"graph: possibly STALE — {len(covered)} covered file(s) changed since "
-          f"{built_from} (e.g. {covered[0]}). Run `make graph` (free) to settle it.")
+          f"{baseline[:8]} (e.g. {covered[0]}). Run `make graph` (free) to settle it.")
     return fail
 
 

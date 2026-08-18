@@ -21,6 +21,8 @@ graphify-out/graph.html
 # graphify backs up the curated graph into a dated directory before relabeling;
 # per-machine history, not shared state.
 graphify-out/20*/
+# Written by the post-commit hook: the last commit the scanner ran at.
+graphify-out/.last-scan
 
 # Credentials never live in the repo: this one is public, and until now the only
 # ignore rule was .venv/ — so a .env dropped in here would have been committed
