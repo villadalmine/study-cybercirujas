@@ -127,8 +127,17 @@ export OPENWIKI_TELEMETRY_DISABLED=1
 openwiki --init          # interactive: pick provider, key, model
 ```
 
-**There is no Claude-subscription route** — checked against the provider
-list on 2026-08-18. The `anthropic` provider takes `ANTHROPIC_API_KEY` only;
+**There is no Claude-subscription route** — settled 2026-08-18 against the
+installed package's source, not the README: `SELECTABLE_OPENWIKI_PROVIDERS`
+in `dist/config/constants.js` is exactly `openai, openai-chatgpt, anthropic,
+copilot, gemini, gemini-enterprise, openrouter, openai-compatible, bedrock,
+fireworks, baseten, nebius, nvidia` — no `claude`. The `claude-*` strings in
+that file are MODEL ids under the `anthropic` provider
+(`OPENWIKI_MODEL_ID=claude-opus-4-8`), and the only external-CLI auth
+adapter in the codebase is `github-cli` (Copilot). The `anthropic` provider
+takes `ANTHROPIC_API_KEY` only — though it also honors `ANTHROPIC_BASE_URL`,
+so a proxy that speaks the Anthropic API format (LiteLLM does) is usable
+with real API keys behind it;
 the subscription-based providers OpenWiki does have are `openai-chatgpt`
 (browser OAuth against a ChatGPT plan) and `copilot` (an existing GitHub
 Copilot plan), neither of which is Anthropic. No provider shells out to a
