@@ -614,6 +614,44 @@ def _render_slide(kind: str, scene: dict, out_path: Path, lang: str) -> None:
 
 # ------------------------------------------------------------------ render
 
+# Encoder preference, first one that PROVABLY works here. A listed encoder is
+# a claim, not a capability: Fedora's ffmpeg-free dlopens libopenh264 from the
+# `openh264` package at creation time, so on a machine without that package
+# the encoder lists fine and fails only when asked to encode. That exact gap
+# burned 136 render attempts overnight on 2026-08-18/19 — the interactive
+# toolbox had the library, the host running the timer did not, and nothing
+# probed. SVT-AV1 is the fallback because it is royalty-free, ships in
+# ffmpeg-free everywhere, and browsers have decoded AV1-in-MP4 for years.
+_ENCODERS = [
+    ["-c:v", "libopenh264", "-b:v", "3M"],
+    ["-c:v", "libsvtav1", "-preset", "8", "-b:v", "2M"],
+]
+_encoder_flags: list[str] | None = None
+
+
+def _working_encoder() -> list[str]:
+    """Probe with a real 3-frame encode, once per process, and remember."""
+    global _encoder_flags
+    if _encoder_flags is not None:
+        return _encoder_flags
+    for flags in _ENCODERS:
+        probe = subprocess.run(
+            ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+             "-f", "lavfi", "-i", "color=c=black:s=192x108:r=30",
+             "-frames:v", "3", *flags, "-f", "null", "-"],
+            capture_output=True, text=True,
+        )
+        if probe.returncode == 0:
+            _encoder_flags = flags
+            return flags
+    raise VideoError(
+        "No working video encoder: tried "
+        + ", ".join(f[1] for f in _ENCODERS)
+        + ". On Fedora, `openh264` (fedora-cisco-openh264 repo) provides the "
+          "library libopenh264 loads at runtime."
+    )
+
+
 def _mux_scene(image_path: Path, audio_path: Path, out_path: Path) -> None:
     duration = _wav_duration(audio_path) + 0.9
     fade_out_start = max(duration - 0.4, 0)
@@ -624,7 +662,7 @@ def _mux_scene(image_path: Path, audio_path: Path, out_path: Path) -> None:
             "-t", f"{duration:.3f}",
             "-vf", f"fade=t=in:st=0:d=0.25,fade=t=out:st={fade_out_start:.3f}:d=0.4,format=yuv420p",
             # esta build de ffmpeg no trae libx264 (solo encoders de hw + openh264)
-            "-c:v", "libopenh264", "-b:v", "3M",
+            *_working_encoder(),
             "-c:a", "aac", "-b:a", "160k",
             str(out_path),
         ],

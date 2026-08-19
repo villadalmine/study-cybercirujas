@@ -693,6 +693,31 @@ teach cert translate lpic-1 --to de --from en --backend litellm
 
 ---
 
+## From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix
+
+The timer retried `cgoa` video renders all night against ffmpeg exit 171.
+Root cause, reproduced deterministically with `systemd-run`: **the host has
+no `openh264` package**, and Fedora's ffmpeg-free dlopens that library at
+encoder-creation time — so `libopenh264` LISTS fine and fails only when
+asked to encode. The interactive toolbox container has the library, the
+host running the timer does not, which is why manual renders always worked
+and unattended ones never did. A listed encoder is a claim; only an encode
+is proof.
+
+Fix shipped in `teach/core/video.py`: `_working_encoder()` probes with a
+real 3-frame encode once per process and falls back `libopenh264 →
+libsvtav1` (royalty-free, present in ffmpeg-free everywhere, AV1-in-MP4
+plays in every modern browser). Verified: container picks openh264, host
+picks svtav1. Optional host improvement for H.264 output: install the
+`openh264` package (fedora-cisco-openh264 repo) — note the host has no
+`rpm-ostree` either, so check what the host actually is before assuming.
+
+Also learned tonight, measured: the monthly spend cap is asymmetric —
+translation-sized completions pass while authoring-sized ones 429. The
+timer therefore translated everything and authored nothing; raising the
+cap at claude.ai/settings/usage is the owner's lever, or authoring waits
+for the month.
+
 ## From claude — 2026-08-18: the repo has a code graph, an MCP server, and full spend metrics
 
 Owner-requested, tested end-to-end. What changed under you, in one minute:
