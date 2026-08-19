@@ -434,6 +434,19 @@ document instead; the numbers are there and the reasoning with them.
 
 ## Open — worth someone's time
 
+- **`make image-cluster` can hang for an hour on a finished build.** Seen
+  2026-08-19: kaniko built and pushed in 153 s, the pod went `Completed`,
+  and `kubectl run --rm -i` never returned — publish_if_complete's 3600 s
+  subprocess timeout then reported failure for a build that succeeded. The
+  recovery is mechanical (check `kubectl logs` for "Pushed", then
+  `make deploy-local TAG=` and fix published.json), but the fix belongs in
+  publish_if_complete: on timeout, inspect the pod phase and the push log
+  before declaring failure — or replace attach-streaming with detached run
+  + `kubectl wait`. Related lesson, self-inflicted: never wrap a make
+  target in `| tail` inside a background task — the pipe reports tail's
+  exit 0 and hides the failure, which is the same trap CLAUDE.md already
+  documents for `tee`.
+
 - **`make publish` stages everything under `certs/`**, so publishing a finished
   certification while another is generating in the background picks up the
   in-flight files and the pre-commit hook correctly refuses the commit. Reported
