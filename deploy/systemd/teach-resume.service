@@ -24,8 +24,14 @@ Environment=PATH=/home/dalmine/.local/bin:/usr/local/bin:/usr/bin
 # process before Python is involved.
 EnvironmentFile=-/var/home/dalmine/Nextcloud/Repos/teach-plat/.env
 ExecStart=/var/home/dalmine/Nextcloud/Repos/teach-plat/scripts/resume-generation.sh
-# A pass is 2 topics at ~7 min each, so 40 min is generous. The ceiling matters
-# because the script's pgrep guard skips while a generation looks alive: a call
-# that never returns would otherwise stall every later firing indefinitely.
-TimeoutStartSec=2400
+# The ceiling exists so a call that never returns cannot stall every later
+# firing — but it must exceed the worst LEGITIMATE pass, and 2400 did not:
+# on 2026-08-19 translating one 209 KB topic (3 completions at xhigh) ran
+# past 40 min, systemd killed the pass mid-translation, nothing was written
+# by design, and the next firing repeated it — 12 paid-and-discarded cycles
+# (~1.9M tokens) before anyone noticed. Each completion is already bounded
+# by pipeline.yaml completion_timeout_seconds=900, so this is a backstop
+# against a hung SCRIPT, not a hung completion: 3 h ≈ twelve max-length
+# completions, far beyond any real pass, far short of forever.
+TimeoutStartSec=10800
 KillMode=mixed
