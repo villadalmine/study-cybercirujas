@@ -1,0 +1,44 @@
+cert: cgoa
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: GitOps ya no es opcional
+    voiceover: 'Cada vez más equipos despliegan sin tocar un solo comando manual:
+      el repositorio es la única fuente de verdad. La Certified GitOps Associate valida
+      justamente eso, que entendés los principios, las herramientas y los controles
+      detrás de ese modelo. Es una certificación de nivel associate del ecosistema
+      cloud-native, con examen CGOA.'
+  audience:
+    title: Para quién es
+    voiceover: Es para quien ya trabaja cerca del despliegue y quiere ordenar el criterio,
+      no solo apretar botones. El examen reparte el peso en partes iguales entre cuatro
+      dominios, así que no alcanza con dominar una herramienta suelta. Si venís de
+      Kubernetes o de CI/CD, el terreno te va a resultar familiar.
+    bullets:
+    - Personas DevOps o SRE que ya despliegan sobre Kubernetes y quieren formalizar
+      la práctica de GitOps
+    - Quienes administran plataformas o pipelines de CI/CD y necesitan cubrir tooling,
+      seguridad y observabilidad, no solo el flujo feliz
+    - Perfiles de desarrollo o cloud que arrancan en cloud-native y buscan una certificación
+      de entrada con alcance acotado
+  cta:
+    title: Empezá por los cuatro dominios
+    voiceover: 'En Cert Landscape tenés el temario dividido por esos cuatro dominios
+      de 25% cada uno, con ejercicios y laboratorios para practicar. Entrá, elegí
+      el primer dominio y arrancá hoy: la certificación tiene una vigencia de 3 años.'
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en GitOps Fundamentals con 25.0%, GitOps Principles
+      & Practices con 25.0%, GitOps Tooling & Implementation con 25.0%, GitOps Security
+      & Observability con 25.0%.
+    domains:
+    - name: GitOps Fundamentals
+      weight: 25.0
+    - name: GitOps Principles & Practices
+      weight: 25.0
+    - name: GitOps Tooling & Implementation
+      weight: 25.0
+    - name: GitOps Security & Observability
+      weight: 25.0

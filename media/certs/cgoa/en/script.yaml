@@ -1,0 +1,45 @@
+cert: cgoa
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Git As The Single Source Of Truth
+    voiceover: 'You already push code to Git. GitOps asks a bigger question: what
+      if the same repo drove your whole cluster, and every change was reviewable,
+      revertible, and auditable? The Certified GitOps Associate exam is where you
+      prove you actually understand that model, not just the tools around it.'
+  audience:
+    title: Who it's for
+    voiceover: 'CGOA is an associate-level, cloud-native certification, so it''s built
+      for people early in the GitOps journey rather than for seasoned platform architects.
+      Its four domains carry equal weight at 25% each: GitOps Fundamentals, Principles
+      and Practices, Tooling and Implementation, and Security and Observability. That
+      balance means you can''t pass by only knowing one tool, and it also means no
+      single area can sink you.'
+    bullets:
+    - Developers who deploy to Kubernetes and want the declarative side to stop feeling
+      like magic
+    - Ops, SRE and platform engineers formalizing what they already do with pull requests
+      and reconciliation
+    - Anyone holding a cloud-native cert who wants the delivery model that ties it
+      together, valid for three years
+  cta:
+    title: Start with the fundamentals
+    voiceover: On Cert Landscape you get all four CGOA domains broken into topics,
+      with exercises and hands-on labs for each one. Open the CGOA track and take
+      the first domain today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers GitOps Fundamentals at 25.0%, GitOps Principles & Practices
+      at 25.0%, GitOps Tooling & Implementation at 25.0%, GitOps Security & Observability
+      at 25.0%.
+    domains:
+    - name: GitOps Fundamentals
+      weight: 25.0
+    - name: GitOps Principles & Practices
+      weight: 25.0
+    - name: GitOps Tooling & Implementation
+      weight: 25.0
+    - name: GitOps Security & Observability
+      weight: 25.0
