@@ -2,6 +2,10 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-08-20
+
+- **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
+
 ## 2026-08-04
 
 - **English Is Now the Authoring Language; Everything Else Is a Translation.** Owner's decision. Content, exercises, labs, video scripts and validation are authored in English; Spanish is translated from it, and `pt fr de zh ja` stay on demand. `certs.DEFAULT_LANG` is `en`. The fallback had to become a **chain** (`FALLBACK_LANGS = [en, es]`) rather than a constant, because flipping it alone would have regressed the site: Spanish is complete for certifications whose English is unfinished (cks was 14 of 26), so a reader asking for German would have got a blank page next to a full Spanish version. Verified both directions — cks/5.1 (no English) still falls back to Spanish, cks/1.1 (English present) prefers English. Recorded honestly in `pipeline.yaml`: **no quality difference between authoring in English and in Spanish could be measured** (identical quality-floor pass rates across 7 languages, 100% of citations resolving in en/es/de/zh, 54/54 manifests parsing in both, comparable code-block and heading counts). The case for English is that the source material and the technical terms already are English, plus ~20% more material per token — not a demonstrated quality gain.

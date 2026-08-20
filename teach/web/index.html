@@ -155,6 +155,7 @@ const STR = {
     user: 'usuario', pass: 'contraseña',
     fallback: 'Este tema todavía no está traducido a este idioma — se muestra en español.',
     foot: 'Temarios de fuentes oficiales: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — El contenido de estudio es original, generado con AI y con atribución de fuentes.',
+    aiGen: 'Contenido generado con IA por', aiTrans: 'traducido del',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Otras' },
   en: { certs: 'Certifications', paths: 'Career paths', login: 'Sign in', logout: 'Sign out',
     heroTitle: 'The IT certification landscape',
@@ -173,6 +174,7 @@ const STR = {
     user: 'username', pass: 'password',
     fallback: 'This topic is not translated to this language yet — showing Spanish.',
     foot: 'Syllabi from official sources: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Study content is original, AI-generated, with source attribution.',
+    aiGen: 'AI-generated content by', aiTrans: 'translated from',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Other' },
   fr: { certs: 'Certifications', paths: 'Parcours de carrière', login: 'Connexion', logout: 'Déconnexion',
     heroTitle: 'La carte des certifications IT',
@@ -191,6 +193,7 @@ const STR = {
     user: 'utilisateur', pass: 'mot de passe',
     fallback: 'Ce sujet n\'est pas encore traduit — affiché en espagnol.',
     foot: 'Programmes des sources officielles : lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Contenu original généré par IA, avec attribution des sources.',
+    aiGen: 'Contenu généré par IA par', aiTrans: 'traduit depuis',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Autres' },
   de: { certs: 'Zertifizierungen', paths: 'Karrierepfade', login: 'Anmelden', logout: 'Abmelden',
     heroTitle: 'Die IT-Zertifizierungslandkarte',
@@ -209,6 +212,7 @@ const STR = {
     user: 'Benutzer', pass: 'Passwort',
     fallback: 'Dieses Thema ist noch nicht übersetzt — Anzeige auf Spanisch.',
     foot: 'Lehrpläne aus offiziellen Quellen: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Lerninhalte sind original, KI-generiert, mit Quellenangabe.',
+    aiGen: 'KI-generierter Inhalt von', aiTrans: 'übersetzt aus',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Weitere' },
   zh: { certs: '认证', paths: '职业路径', login: '登录', logout: '退出',
     heroTitle: 'IT 认证全景图',
@@ -227,6 +231,7 @@ const STR = {
     user: '用户名', pass: '密码',
     fallback: '该主题尚未翻译成此语言——显示西班牙语版本。',
     foot: '考纲来自官方来源：lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学习内容为 AI 生成的原创内容，并注明来源。',
+    aiGen: 'AI 生成内容，模型：', aiTrans: '译自',
     linux: '🐧 Linux', cn: '☸️ 云原生 (CNCF)', other: '其他' },
   ja: { certs: '認定資格', paths: 'キャリアパス', login: 'ログイン', logout: 'ログアウト',
     heroTitle: 'IT認定資格の全体マップ',
@@ -245,6 +250,7 @@ const STR = {
     user: 'ユーザー名', pass: 'パスワード',
     fallback: 'このトピックはまだ翻訳されていません——スペイン語で表示します。',
     foot: 'シラバスは公式ソースから: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学習コンテンツはAI生成のオリジナルで、出典を明記。',
+    aiGen: 'AI生成コンテンツ（モデル）:', aiTrans: '翻訳元:',
     linux: '🐧 Linux', cn: '☸️ クラウドネイティブ (CNCF)', other: 'その他' },
   pt: { certs: 'Certificações', paths: 'Trilhas de carreira', login: 'Entrar', logout: 'Sair',
     heroTitle: 'O mapa das certificações de TI',
@@ -263,6 +269,7 @@ const STR = {
     user: 'usuário', pass: 'senha',
     fallback: 'Este tema ainda não foi traduzido — exibindo em espanhol.',
     foot: 'Conteúdos de fontes oficiais: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — O material de estudo é original, gerado com IA e com atribuição de fontes.',
+    aiGen: 'Conteúdo gerado com IA por', aiTrans: 'traduzido do',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Outras' },
 };
 let LANG = localStorage.getItem('teach_lang')
@@ -282,7 +289,12 @@ function setLang(lang) {
 function renderChrome() {
   document.querySelector('[data-nav="certs"]').textContent = t('certs');
   document.querySelector('[data-nav="paths"]').textContent = t('paths');
-  $('foot').textContent = t('foot');
+  // innerHTML on purpose: the strings are our own constants (escaped anyway)
+  // and the EU AI Act Art. 50 disclosure needs a real link to the provenance
+  // (the repo carries meta.yaml per topic, MODELS.md, and the full pipeline).
+  $('foot').innerHTML = esc(t('foot')) +
+    ' · <a href="https://github.com/villadalmine/study-cybercirujas" target="_blank" rel="noopener">GitHub</a>' +
+    ' <span style="opacity:.7">(EU AI Act Art. 50)</span>';
   $('langSel').innerHTML = Object.entries(LANG_LABELS)
     .map(([code, label]) => `<option value="${code}"${code === LANG ? ' selected' : ''}>${label}</option>`)
     .join('');
@@ -493,6 +505,7 @@ async function showTopic(certId, topicId) {
     <a class="back" onclick="go(showCert,'${certId}')">${t('backSyl')}</a>
     <h2>${data.topic.id} — ${data.topic.title}</h2>
     ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
+    ${data.generated_by && data.generated_by.model ? `<p class="note" title="EU AI Act, Art. 50">🤖 ${t('aiGen')} <code>${esc(data.generated_by.model)}</code>${data.generated_by.translated_from ? ` · ${t('aiTrans')} ${esc(data.generated_by.translated_from.toUpperCase())}` : ''} · ${esc((data.generated_by.generated_at || '').slice(0, 10))} · <a href="https://github.com/villadalmine/study-cybercirujas" target="_blank" rel="noopener">GitHub</a></p>` : ''}
     <div class="md">${md(data.content || '')}
       ${section(t('exercises'), data.exercises)}
       ${section(t('lab'), data.break_fix, true)}</div>`;

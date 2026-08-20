@@ -174,6 +174,19 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
                 exercises = _read(directory / candidate / "exercises.md")
                 fallback = candidate
                 break
+    # Provenance of what is actually being served, for the point-of-use AI
+    # disclosure (EU AI Act Art. 50 — the reader of the SITE is the one the
+    # disclosure is for; the README only reaches repo readers). Read from the
+    # served language's meta.yaml, so a fallback shows the fallback's origin.
+    generated_by = None
+    meta_file = directory / (fallback or lang) / "meta.yaml"
+    if meta_file.exists():
+        try:
+            raw = yaml.safe_load(meta_file.read_text()) or {}
+            generated_by = {key: raw.get(key) for key in
+                            ("model", "backend", "generated_at", "translated_from")}
+        except yaml.YAMLError:
+            generated_by = None
     return {
         "content": content,
         "exercises": exercises,
@@ -181,4 +194,5 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
         "lab_spec": _read(directory / "lab" / "lab.yaml"),
         "lang": fallback or lang,
         "lang_fallback": fallback,
+        "generated_by": generated_by,
     }
