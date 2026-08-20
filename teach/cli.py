@@ -198,6 +198,7 @@ def cert_translate(
     # rejection, so retrying is free of side effects, and at ~$0.0008 a call it
     # is cheaper than leaving a topic untranslated.
     attempts = max(1, int(pipeline.budget().get("retry_attempts") or 1))
+    failed: list[str] = []
     for topic_id in topics:
         for attempt in range(1, attempts + 1):
             try:
@@ -213,6 +214,7 @@ def cert_translate(
                     err=True,
                 )
                 if last:
+                    failed.append(topic_id)
                     break
                 continue
             if "skipped" in result:
@@ -220,6 +222,12 @@ def cert_translate(
             else:
                 typer.echo(f"  {topic_id}: translated into {result['written']}")
             break
+    if failed:
+        # Exit non-zero or the caller cannot tell. This exact hole let the
+        # unattended pass re-pay lpic-3-303/331.1 nineteen times in one day:
+        # every attempt failed verification, the CLI said so on stderr, exited
+        # 0 — and the pass, seeing 0, logged nothing and retried next firing.
+        raise typer.Exit(1)
 
 
 @cert_app.command("video-script")
