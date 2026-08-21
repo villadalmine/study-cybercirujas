@@ -762,7 +762,15 @@ def _verify_translation(source: str, translated: str, label: str) -> str:
                 f"(commands, flags, YAML keys and output must be copied verbatim)"
             )
 
-    source_urls, result_urls = set(URL_RE.findall(source)), set(URL_RE.findall(translated))
+    # A "URL" containing `<` is a placeholder template in prose
+    # (`http://<that-exact-host>`), not a citation — and translating the
+    # placeholder text IS the correct behaviour, so demanding byte identity
+    # fights the translator for doing its job. Real citations never contain
+    # angle brackets. Measured: lpic-3-303/331.1 failed this check 20+ times
+    # over two days on exactly one such placeholder, at two completions per
+    # attempt, before the rejected text was kept and the diff showed it.
+    source_urls = {u for u in URL_RE.findall(source) if "<" not in u}
+    result_urls = {u for u in URL_RE.findall(translated) if "<" not in u}
     if source_urls - result_urls:
         problems.append(f"{len(source_urls - result_urls)} source URLs are missing")
 
