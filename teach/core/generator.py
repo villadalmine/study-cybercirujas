@@ -825,7 +825,10 @@ def translate_topic(
         "2. Mantené los términos técnicos en inglés (Pod, Deployment, "
         "NetworkPolicy, etc).\n"
         "3. Conservá TODOS los encabezados, en el mismo orden y nivel.\n"
-        "4. Conservá TODAS las URLs sin modificar.\n"
+        "4. Conservá TODAS las URLs byte a byte — incluidos los códigos de "
+        "idioma que contengan (`/en/`, `en.`, `?hl=en`): NO las localices al "
+        "idioma destino aunque esa versión exista. La URL citada es la que se "
+        "verificó; una variante traducida puede no existir o decir otra cosa.\n"
         "5. No resumas, no expandas, no agregues ni quites secciones.\n"
         "Respondé SOLO con el markdown traducido."
     )
@@ -838,7 +841,20 @@ def translate_topic(
                                "lang": lang, "from": source_lang,
                                "kind": kind.removesuffix(".md")})
         result = _strip_fence(complete(system, source))
-        _verify_translation(source, result, kind)
+        try:
+            _verify_translation(source, result, kind)
+        except GeneratorConfigError as error:
+            # Same lesson as cks 4.1, applied to translation: discarding the
+            # failing text makes a repeating failure undiagnosable without
+            # paying another call. lpic-3-303/331.1 failed "1 source URL
+            # missing" 20+ times before anyone could see WHICH url or WHAT
+            # the model wrote instead.
+            debris = pipeline.REPO / ".rejected" / f"{cert_id}-{topic_id}-{lang}-{kind}"
+            debris.parent.mkdir(exist_ok=True)
+            debris.write_text(f"<!-- REJECTED: {error} -->\n{result}")
+            raise GeneratorConfigError(
+                f"{error} — rejected text kept in .rejected/{debris.name}"
+            ) from None
         _reject_if_substandard(result, kind.removesuffix(".md"), topic_id, lang)
         written[kind] = result
 
