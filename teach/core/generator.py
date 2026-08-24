@@ -493,11 +493,18 @@ def make_completer(backend: str | None = None, *,
 
     "default" means the CLI's own default (no --effort flag at all). Exists
     because the xhigh pin is calibrated for AUTHORING — reasoning from a
-    one-line syllabus entry — while translation restates fixed substance.
-    Measured 2026-08-21/24 over the landed lpic-3-303 translations: billed
-    2.0–2.25 chars/token against ~3.5 for the text alone, i.e. roughly 35–40%
-    of every translation completion was thinking spent on a task whose every
-    failure mode is caught mechanically by _verify_translation.
+    one-line syllabus entry — while translation restates fixed substance
+    whose every failure mode _verify_translation catches mechanically.
+
+    Honest measurement note (2026-08-24): the first hypothesis — that xhigh
+    was spending ~35-40% of translation tokens on thinking — did NOT survive
+    contact with data. Translations bill ~2.2 chars/token at xhigh AND at
+    the default (332.1: 2.18 after the change; 331.x: 2.0-2.25 before), so
+    either the default thinks similarly here or 2.2 is just how Spanish
+    markdown tokenises; the "~3.5 for text alone" baseline was assumed, not
+    measured. The override stays because restatement should not inherit
+    authoring-grade thinking as a matter of declaration — but it is a
+    correctness of intent, not a measured saving. Do not cite it as one.
     """
     backend = backend or os.environ.get("TEACH_BACKEND", "litellm")
     if backend == "litellm":
