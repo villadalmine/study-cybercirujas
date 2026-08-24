@@ -131,7 +131,10 @@ def _record_usage(envelope: dict) -> None:
             # corpus generated at an unknown setting cannot be compared against
             # one generated at a known one. Same reason meta.yaml carries the
             # model — see scripts/topic_cost.py.
-            "effort": (os.environ.get("TEACH_CLAUDE_EFFORT")
+            # Context first: an op that overrode the effort (translation runs
+            # at the CLI default) must not be recorded as if it ran the pin.
+            "effort": (_usage_context.get("effort")
+                       or os.environ.get("TEACH_CLAUDE_EFFORT")
                        or pipeline.generation().get("effort") or "default"),
             "models": models,
         }
@@ -325,7 +328,7 @@ def _litellm_completer() -> tuple[Completer, dict]:
     return complete, {"backend": "litellm", "model": model, "base_url": base_url}
 
 
-def _agent_completer(backend: str) -> tuple[Completer, dict]:
+def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer, dict]:
     if backend == "custom":
         raw = os.environ.get("TEACH_AGENT_CMD")
         if not raw:
@@ -360,7 +363,12 @@ def _agent_completer(backend: str) -> tuple[Completer, dict]:
     # flag and the record exist now, so raising it stays comparable against what
     # came before. Inserted before the trailing `--`, which separates flags from
     # the prompt: after it, `--effort` would be read as part of the prompt.
-    effort = os.environ.get("TEACH_CLAUDE_EFFORT") or pipeline.generation().get("effort")
+    if effort is None:
+        effort = os.environ.get("TEACH_CLAUDE_EFFORT") or pipeline.generation().get("effort")
+    elif effort == "default":
+        # Explicit "use the CLI default": append nothing. Distinct from None
+        # (= nobody chose, fall through to the declared pin) on purpose.
+        effort = None
     if effort and backend == "claude" and "--effort" not in command:
         command = [*command[:-1], "--effort", effort, command[-1]]
 
@@ -479,14 +487,25 @@ def _antigravity_completer() -> tuple[Completer, dict]:
 
 
 
-def make_completer(backend: str | None = None) -> tuple[Completer, dict]:
+def make_completer(backend: str | None = None, *,
+                   effort: str | None = None) -> tuple[Completer, dict]:
+    """`effort` overrides the declared thinking level for THIS completer.
+
+    "default" means the CLI's own default (no --effort flag at all). Exists
+    because the xhigh pin is calibrated for AUTHORING — reasoning from a
+    one-line syllabus entry — while translation restates fixed substance.
+    Measured 2026-08-21/24 over the landed lpic-3-303 translations: billed
+    2.0–2.25 chars/token against ~3.5 for the text alone, i.e. roughly 35–40%
+    of every translation completion was thinking spent on a task whose every
+    failure mode is caught mechanically by _verify_translation.
+    """
     backend = backend or os.environ.get("TEACH_BACKEND", "litellm")
     if backend == "litellm":
         return _litellm_completer()
     if backend == "antigravity":
         return _antigravity_completer()
     if backend in AGENT_COMMANDS or backend == "custom":
-        return _agent_completer(backend)
+        return _agent_completer(backend, effort=effort)
     valid = ["litellm", *AGENT_COMMANDS, "custom", "antigravity"]
     raise GeneratorConfigError(f"Unknown backend '{backend}'. Valid: {valid}")
 
@@ -822,7 +841,10 @@ def translate_topic(
     if lang in certs.topic_langs(cert_id, topic_id) and not force:
         return {"topic": topic_id, "skipped": f"already exists in {lang} (use --force)"}
 
-    complete, backend_meta = make_completer(backend)
+    # Translation restates substance that is already fixed; every failure mode
+    # is caught mechanically. The xhigh authoring pin spent ~35-40% of each
+    # translation completion on thinking (measured — see make_completer).
+    complete, backend_meta = make_completer(backend, effort="default")
     system = (
         f"Sos un traductor técnico especializado. Traducís del "
         f"{LANG_NAMES.get(source_lang, source_lang)} al "
@@ -841,30 +863,42 @@ def translate_topic(
         "Respondé SOLO con el markdown traducido."
     )
 
+    # Retry PER FILE, not per topic: the old shape re-translated content.md on
+    # every retry of a failing exercises.md — during the 331.1 saga that
+    # doubled the cost of every one of 20+ attempts for a file that had
+    # already passed.
+    attempts = max(1, int(pipeline.budget().get("retry_attempts") or 1))
     written = {}
     for kind in ("content.md", "exercises.md"):
         source = (source_dir / kind).read_text()
-        _usage_context.clear()
-        _usage_context.update({"op": "translate", "cert": cert_id, "topic": topic_id,
-                               "lang": lang, "from": source_lang,
-                               "kind": kind.removesuffix(".md")})
-        result = _strip_fence(complete(system, source))
-        try:
-            _verify_translation(source, result, kind)
-        except GeneratorConfigError as error:
-            # Same lesson as cks 4.1, applied to translation: discarding the
-            # failing text makes a repeating failure undiagnosable without
-            # paying another call. lpic-3-303/331.1 failed "1 source URL
-            # missing" 20+ times before anyone could see WHICH url or WHAT
-            # the model wrote instead.
-            debris = pipeline.REPO / ".rejected" / f"{cert_id}-{topic_id}-{lang}-{kind}"
-            debris.parent.mkdir(exist_ok=True)
-            debris.write_text(f"<!-- REJECTED: {error} -->\n{result}")
-            raise GeneratorConfigError(
-                f"{error} — rejected text kept in .rejected/{debris.name}"
-            ) from None
-        _reject_if_substandard(result, kind.removesuffix(".md"), topic_id, lang)
-        written[kind] = result
+        for attempt in range(1, attempts + 1):
+            _usage_context.clear()
+            _usage_context.update({"op": "translate", "cert": cert_id,
+                                   "topic": topic_id, "lang": lang,
+                                   "from": source_lang, "effort": "default",
+                                   "kind": kind.removesuffix(".md")})
+            result = _strip_fence(complete(system, source))
+            try:
+                _verify_translation(source, result, kind)
+                _reject_if_substandard(result, kind.removesuffix(".md"),
+                                       topic_id, lang)
+            except GeneratorConfigError as error:
+                # Same lesson as cks 4.1, applied to translation: discarding
+                # the failing text makes a repeating failure undiagnosable
+                # without paying another call. lpic-3-303/331.1 failed "1
+                # source URL missing" 20+ times before anyone could see WHICH
+                # url or WHAT the model wrote instead.
+                debris = pipeline.REPO / ".rejected" / f"{cert_id}-{topic_id}-{lang}-{kind}"
+                debris.parent.mkdir(exist_ok=True)
+                debris.write_text(f"<!-- REJECTED: {error} -->\n{result}")
+                if attempt == attempts:
+                    raise GeneratorConfigError(
+                        f"{kind}: {error} — rejected text kept in "
+                        f".rejected/{debris.name}"
+                    ) from None
+                continue
+            written[kind] = result
+            break
 
     target = directory / lang
     target.mkdir(parents=True, exist_ok=True)

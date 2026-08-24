@@ -93,7 +93,11 @@ budget:
   # that never returns cannot stall everything behind it. Without it a hung
   # call blocks forever, and the unattended timer keeps skipping because its
   # pgrep guard sees a process that looks alive.
-  completion_timeout_seconds: 900
+  # Raised from 900 on 2026-08-24: nine completions were killed at the old
+  # ceiling (resume.log), each discarding a full in-flight generation —
+  # lpic-3-303 topics at xhigh legitimately run 10-14 minutes per completion.
+  # The ceiling exists for a CLI that never returns, not to pace real work.
+  completion_timeout_seconds: 1500
 
 # Stage order. Content before media, always: a video narrates content that must
 # already exist and be verified. Videos are the last step and never block.

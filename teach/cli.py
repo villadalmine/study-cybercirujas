@@ -189,39 +189,29 @@ def cert_translate(
     restates rather than reasons, and the structure stays identical across
     languages — which is verified, not assumed.
     """
-    from .core import pipeline
-
     topics = [topic] if topic else [str(t["id"]) for t in certs.topics(cert_id)]
     # Structural rejections are usually variance, not incapacity: a cheap model
     # that mistranslates one placeholder on the first try gets it right on the
     # next (measured — see docs/TRANSLATION_STUDY.md). Nothing is written on a
     # rejection, so retrying is free of side effects, and at ~$0.0008 a call it
     # is cheaper than leaving a topic untranslated.
-    attempts = max(1, int(pipeline.budget().get("retry_attempts") or 1))
+    # Retries live INSIDE translate_topic now, per file — retrying here as
+    # well would square the attempts and re-pay files that already passed.
     failed: list[str] = []
     for topic_id in topics:
-        for attempt in range(1, attempts + 1):
-            try:
-                result = generator.translate_topic(
-                    cert_id, topic_id, lang=to, source_lang=source,
-                    backend=backend, force=force,
-                )
-            except generator.GeneratorConfigError as error:
-                last = attempt == attempts
-                typer.echo(
-                    f"  {topic_id}: {error}"
-                    + ("" if last else f" — retrying ({attempt}/{attempts})"),
-                    err=True,
-                )
-                if last:
-                    failed.append(topic_id)
-                    break
-                continue
-            if "skipped" in result:
-                typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
-            else:
-                typer.echo(f"  {topic_id}: translated into {result['written']}")
-            break
+        try:
+            result = generator.translate_topic(
+                cert_id, topic_id, lang=to, source_lang=source,
+                backend=backend, force=force,
+            )
+        except generator.GeneratorConfigError as error:
+            typer.echo(f"  {topic_id}: {error}", err=True)
+            failed.append(topic_id)
+            continue
+        if "skipped" in result:
+            typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
+        else:
+            typer.echo(f"  {topic_id}: translated into {result['written']}")
     if failed:
         # Exit non-zero or the caller cannot tell. This exact hole let the
         # unattended pass re-pay lpic-3-303/331.1 nineteen times in one day:
