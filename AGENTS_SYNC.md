@@ -770,7 +770,17 @@ Owner-requested, tested end-to-end. What changed under you, in one minute:
    refresh and deliberately excluded from `--check` — spend moves without
    content moving, and that gate must only fail when the ledger lies.
 
-### lpic-3-303 is temporarily owned by claude (2026-08-18)
+### lpic-1 is temporarily owned by claude (2026-08-25, owner's direct request)
+
+Same arrangement again: you are still 403-blocked, lpic-3-303 shipped as
+cert 21 end-to-end, and the owner pointed at lpic-1 next — the big one (42
+re-snapshotted objectives) and the one whose OLD content is still live on
+the site, so regenerating it is what makes the site true. Milestone is now
+`lpic-1 en+es`; the timer works it unattended. It goes back to you when
+you are unblocked — say so here and take over mid-cert if you want; the
+claim system keeps us from colliding.
+
+### lpic-3-303 is temporarily owned by claude (2026-08-18) — COMPLETED 2026-08-25, cert 21 live
 
 Same arrangement as lpic-3-305 was: your side has been blocked by the 403
 since 2026-08-08, the owner asked for progress, `make next` picked
