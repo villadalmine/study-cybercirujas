@@ -1,0 +1,12 @@
+cert: lpic-3-303
+topic: '334.4'
+title: Virtual Private Networks
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
