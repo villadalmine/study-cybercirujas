@@ -359,9 +359,20 @@ def main() -> None:
             # The unattended timer does most of the generating, so it did this to
             # every non-English topic in the corpus.
             source = REPO / "certs" / cert / topic / certs.DEFAULT_LANG / "content.md"
-            translating = lang != certs.DEFAULT_LANG and source.exists() and \
-                not quality.check_file(source)
-            if translating:
+            if lang != certs.DEFAULT_LANG:
+                if not (source.exists() and not quality.check_file(source)):
+                    # A non-authoring language is NEVER authored directly — but
+                    # that is exactly what the else-branch below did when the
+                    # English source was missing or still failing the floor:
+                    # on 2026-08-25 the pass authored lpic-3-303/334.1 in
+                    # Spanish (full authoring cost, drift-prone sibling, no
+                    # translated_from) because 334.1's English kept being
+                    # rejected. Wait for the source instead; the combo stays
+                    # pending and translates on a later pass.
+                    print(f"--- {cert} {topic} ({lang}): waiting for "
+                          f"{certs.DEFAULT_LANG} to exist and pass the floor — "
+                          f"never authored directly ---", flush=True)
+                    continue
                 print(f"--- translating {cert} {topic} "
                       f"({certs.DEFAULT_LANG} -> {lang}) ---", flush=True)
                 command = [str(TEACH), "cert", "translate", cert, "--topic", topic,
