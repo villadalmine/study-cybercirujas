@@ -43,11 +43,15 @@ if echo "$staged" | grep -qxE '\.env|.*/\.env'; then
 fi
 # A key pasted into some other file. Matches the shapes these providers issue,
 # not the word "key", so it does not fire on documentation that mentions one.
+# `sk-ssh-` is excluded: that is OpenSSH's FIDO key TYPE (sk-ssh-ed25519@...),
+# legitimate study material — it blocked the whole lpic-1 publish on
+# 2026-08-31 as a false positive. A key type is not a key.
 # .env.example is exempt by being empty after the '=' — a populated example
 # is a leak like any other, so it is checked too.
 if secrets="$(git diff --cached -U0 -- $staged 2>/dev/null \
     | grep -E '^\+' \
     | grep -oE '(sk-[A-Za-z0-9_-]{20,}|sk-or-v1-[A-Za-z0-9]{32,}|AIza[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})' \
+    | grep -vE '^sk-ssh-' \
     | head -3)" && [ -n "$secrets" ]; then
     echo "Refusing to commit: this looks like a live API key." >&2
     echo "$secrets" | sed 's/\(.\{12\}\).*/  \1… (truncated)/' >&2
