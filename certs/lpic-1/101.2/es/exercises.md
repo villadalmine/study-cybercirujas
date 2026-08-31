@@ -1,0 +1,1212 @@
+# LPIC-1 101.2 — Arrancar el sistema
+## Ejercicios guiados (Examen 101-500, temario v5.0 — peso 4.69)
+
+> **Seguridad en el laboratorio.** Cada bloque que escribe en `/etc/default/grub`, `/boot`, `/etc/fstab` o en entradas de arranque de la NVRAM puede dejar una máquina sin poder arrancar. Ejecutá esto en una **VM descartable con un snapshot tomado antes de empezar**. Los bloques marcados como *solo lectura* son seguros en cualquier host. Las instrucciones de recuperación de cada paso destructivo están incluidas en el propio bloque.
+>
+> Plataforma de referencia: **Fedora 40 / RHEL 9** (GRUB 2 + BLS + dracut + systemd 255). Los equivalentes de Debian/Ubuntu se dan en línea, porque los objetivos del examen son neutrales respecto de la distribución.
+
+---
+
+## Bloque 1 — Establecer la ruta del firmware: BIOS/MBR vs UEFI/ESP *(solo lectura)*
+
+Todo lo que viene después — dónde vive el bootloader, cómo se lo encuentra, si la NVRAM importa o no — lo decide este único hecho. Determinalo empíricamente, nunca por suposición.
+
+1. Preguntale al kernel si recibió una tabla de sistema EFI:
+
+```bash
+[ -d /sys/firmware/efi ] && echo "UEFI mode" || echo "BIOS/Legacy (CSM) mode"
+```
+
+```
+UEFI mode
+```
+
+2. Si es UEFI, leé las variables de arranque del firmware desde la NVRAM:
+
+```bash
+sudo efibootmgr -v
+```
+
+```
+BootCurrent: 0002
+Timeout: 1 seconds
+BootOrder: 0002,0000,0001,2001,2002,2003
+Boot0000* UiApp         FvVol(7cb8bdc9-f8eb-4f34-aaea-3ee4af6516a1)/FvFile(462caa21-...)
+Boot0001* UEFI QEMU DVD-ROM QM00003  PciRoot(0x0)/Pci(0x1,0x1)/Ata(1,0,0)
+Boot0002* Fedora        HD(1,GPT,4c1f2b7a-9e3d-4a51-8f0c-2b7d5e9a1c33,0x800,0x12c000)/File(\EFI\FEDORA\SHIMX64.EFI)
+Boot2001* EFI Hard Drive
+```
+
+3. Localizá la partición de sistema EFI (ESP) y confirmá su tipo, sistema de archivos y punto de montaje:
+
+```bash
+lsblk -o NAME,SIZE,FSTYPE,PARTTYPENAME,MOUNTPOINT
+```
+
+```
+NAME        SIZE FSTYPE      PARTTYPENAME              MOUNTPOINT
+vda          40G
+├─vda1      600M vfat        EFI System                /boot/efi
+├─vda2        1G xfs         Linux filesystem          /boot
+└─vda3     38.4G LVM2_member Linux LVM
+  ├─fedora-root  34G xfs                               /
+  └─fedora-swap   4G swap                              [SWAP]
+```
+
+4. Recorré la ESP y mirá los archivos exactos que ejecuta el firmware:
+
+```bash
+sudo find /boot/efi/EFI -maxdepth 2 -type f -name '*.efi' -o -maxdepth 2 -name 'grub.cfg' | sort
+```
+
+```
+/boot/efi/EFI/BOOT/BOOTX64.EFI
+/boot/efi/EFI/fedora/grub.cfg
+/boot/efi/EFI/fedora/grubx64.efi
+/boot/efi/EFI/fedora/mmx64.efi
+/boot/efi/EFI/fedora/shimx64.efi
+```
+
+5. Comprobá si Secure Boot está activo (esta es la razón por la que el objetivo en NVRAM es `shimx64.efi` y no `grubx64.efi`):
+
+```bash
+mokutil --sb-state
+```
+
+```
+SecureBoot enabled
+```
+
+6. Ahora inspeccioná una máquina **BIOS/MBR** para contrastar (o una segunda VM). En una instalación legacy:
+
+```bash
+sudo dd if=/dev/vda bs=512 count=1 status=none | hexdump -C | head -4
+sudo parted /dev/vda print | head -8
+```
+
+```
+00000000  eb 63 90 10 8e d0 bc 00  b0 b8 00 00 8e d8 8e c0  |.c..............|
+00000010  fb be 00 7c bf 00 06 b9  00 02 f3 a4 ea 21 06 00  |...|.........!..|
+...
+Partition Table: gpt
+Number  Start   End     Size    File system  Name                  Flags
+ 1      1049kB  2097kB  1049kB               BIOS boot partition   bios_grub
+ 2      2097kB  1076MB  1074MB  xfs
+```
+
+**Verificación de comprensión — Bloque 1**
+
+- **P1.1** — `/sys/firmware/efi` lo puebla el kernel, no el firmware. ¿Qué prueba su *ausencia*, y qué no logra probar acerca del hardware de la máquina?
+- **P1.2** — En la salida de `efibootmgr -v`, `Boot0002` apunta a `HD(1,GPT,4c1f2b7a-...)/File(\EFI\FEDORA\SHIMX64.EFI)`. ¿Qué componente almacena esa cadena, y qué pasa con el arranque si hacés `dd` de una imagen de disco nueva sobre la misma máquina pero nunca tocás la NVRAM?
+- **P1.3** — ¿Por qué la ESP debe ser `vfat` y no `xfs` o `ext4`?
+- **P1.4** — En el paso 6 el disco usa **GPT** y sin embargo arranca por **BIOS**. ¿Para qué sirve la partición `bios_grub` de 1 MiB, y qué usaba GRUB en cambio en un disco con etiqueta MBR/DOS?
+- **P1.5** — El MBR tiene 512 bytes y contiene una tabla de particiones de 64 bytes más una firma de 2 bytes. ¿Cuántos bytes quedan para el código de arranque, y por qué ese número es la razón por la que GRUB está dividido en etapas?
+
+---
+
+## Bloque 2 — Leer la configuración del bootloader y editarla en tiempo de arranque
+
+7. Identificá la configuración de GRUB en uso. Fedora/RHEL:
+
+```bash
+ls -l /boot/grub2/grub.cfg /boot/efi/EFI/fedora/grub.cfg 2>/dev/null
+sudo grep -c '' /boot/grub2/grub.cfg
+```
+
+```
+-rw-r--r--. 1 root root 6394 Aug 12 09:41 /boot/grub2/grub.cfg
+-rw-r--r--. 1 root root  138 Aug 12 09:41 /boot/efi/EFI/fedora/grub.cfg
+```
+
+Debian/Ubuntu: `/boot/grub/grub.cfg`.
+
+8. Confirmá que `grub.cfg` es **generado**, nunca editado a mano:
+
+```bash
+sudo head -6 /boot/grub2/grub.cfg
+```
+
+```
+#
+# DO NOT EDIT THIS FILE
+#
+# It is automatically generated by grub2-mkconfig using templates
+# from /etc/grub.d and settings from /etc/default/grub
+#
+```
+
+9. Leé la verdadera fuente de verdad — el archivo de parámetros ajustables:
+
+```bash
+sudo grep -v '^\s*#' /etc/default/grub | grep -v '^$'
+```
+
+```
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=fedora/root rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_ENABLE_BLSCFG=true
+```
+
+10. Como `GRUB_ENABLE_BLSCFG=true`, las entradas del menú **no** viven en `grub.cfg`. Son fragmentos de la Boot Loader Specification:
+
+```bash
+ls /boot/loader/entries/
+sudo cat /boot/loader/entries/*-6.9.7-200.fc40.x86_64.conf
+```
+
+```
+c8f1a2e4b3d5460fa1b2c3d4e5f60718-6.9.7-200.fc40.x86_64.conf
+c8f1a2e4b3d5460fa1b2c3d4e5f60718-0-rescue.conf
+```
+```
+title Fedora Linux (6.9.7-200.fc40.x86_64) 40 (Server Edition)
+version 6.9.7-200.fc40.x86_64
+linux /vmlinuz-6.9.7-200.fc40.x86_64
+initrd /initramfs-6.9.7-200.fc40.x86_64.img
+options root=/dev/mapper/fedora-root ro rd.lvm.lv=fedora/root rhgb quiet
+grub_users $grub_users
+grub_arg --unrestricted
+grub_class fedora
+```
+
+11. Inspeccioná los mismos datos a través de la capa de abstracción de la distribución, y observá el valor por defecto persistido:
+
+```bash
+sudo grubby --info=DEFAULT
+sudo grub2-editenv list
+```
+
+```
+index=0
+kernel="/boot/vmlinuz-6.9.7-200.fc40.x86_64"
+args="ro rd.lvm.lv=fedora/root rhgb quiet"
+root="/dev/mapper/fedora-root"
+initrd="/boot/initramfs-6.9.7-200.fc40.x86_64.img"
+title="Fedora Linux (6.9.7-200.fc40.x86_64) 40 (Server Edition)"
+id="c8f1a2e4b3d5460fa1b2c3d4e5f60718-6.9.7-200.fc40.x86_64"
+```
+```
+saved_entry=c8f1a2e4b3d5460fa1b2c3d4e5f60718-6.9.7-200.fc40.x86_64
+boot_success=1
+```
+
+12. Cambiá un parámetro ajustable y regenerá. Alargá el tiempo de espera del menú para poder llegar al menú de forma confiable:
+
+```bash
+sudo sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=10/' /etc/default/grub
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+```
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-6.9.7-200.fc40.x86_64
+Found initrd image: /boot/initramfs-6.9.7-200.fc40.x86_64.img
+done
+```
+
+Debian/Ubuntu: `sudo update-grub` (un envoltorio alrededor de `grub-mkconfig -o /boot/grub/grub.cfg`).
+
+13. Reiniciá y, en el menú, presioná **`e`** sobre la entrada por defecto. Ahora estás en el editor de GRUB, mirando los comandos de shell de la entrada:
+
+```
+        load_video
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_gpt
+        insmod xfs
+        search --no-floppy --fs-uuid --set=root 8f2c1d90-4a7e-4b31-9c02-77aa1e5b6d40
+        linux ($root)/vmlinuz-6.9.7-200.fc40.x86_64 root=/dev/mapper/fedora-root ro \
+              rd.lvm.lv=fedora/root rhgb quiet
+        initrd ($root)/initramfs-6.9.7-200.fc40.x86_64.img
+```
+
+Movete al final de la línea `linux`, borrá `rhgb quiet`, agregá `systemd.log_level=debug` al final, y presioná **Ctrl-X** (o **F10**) para arrancar esa entrada una sola vez.
+
+14. Reiniciá de nuevo, y esta vez presioná **`c`** en el menú para llegar a la shell de comandos de GRUB. Explorá la visión que el propio cargador tiene del hardware:
+
+```
+grub> ls
+(hd0) (hd0,gpt3) (hd0,gpt2) (hd0,gpt1)
+grub> ls (hd0,gpt2)/
+efi/ grub2/ loader/ vmlinuz-6.9.7-200.fc40.x86_64 initramfs-6.9.7-200.fc40.x86_64.img ...
+grub> echo $root
+hd0,gpt2
+grub> set pager=1
+```
+
+Arrancá manualmente, sin ninguna entrada del menú:
+
+```
+grub> set root=(hd0,gpt2)
+grub> linux /vmlinuz-6.9.7-200.fc40.x86_64 root=/dev/mapper/fedora-root ro rd.lvm.lv=fedora/root
+grub> initrd /initramfs-6.9.7-200.fc40.x86_64.img
+grub> boot
+```
+
+**Verificación de comprensión — Bloque 2**
+
+- **P2.1** — Agregaste `nosmt` a `GRUB_CMDLINE_LINUX` y reiniciaste sin ejecutar ningún otro comando. El parámetro no aparece en `/proc/cmdline`. ¿Por qué, y cuáles son los **dos** comandos distintos que lo habrían aplicado en un sistema Fedora/RHEL con BLS habilitado?
+- **P2.2** — ¿Cuál es la diferencia práctica entre editar una entrada con `e` en el menú y editar `/boot/loader/entries/*.conf`? ¿Cuál sobrevive a un reinicio, y cuál sobrevive a una actualización de kernel?
+- **P2.3** — En la línea `linux`, `($root)/vmlinuz-...` no lleva el prefijo `/boot`, y sin embargo el archivo está en `/boot/vmlinuz-...` en el sistema en ejecución. Explicalo.
+- **P2.4** — `GRUB_DEFAULT=saved` combinado con `grub2-editenv list` mostrando `saved_entry=...`. ¿Dónde se almacena físicamente esa variable, y qué comando la establece desde un sistema en ejecución?
+- **P2.5** — Se usa `search --no-floppy --fs-uuid --set=root 8f2c1d90-...` en lugar de un `(hd0,gpt2)` fijo. Dá un fallo concreto que esta línea previene.
+- **P2.6** — En la máquina BIOS/GPT del Bloque 1, reinstalás GRUB con `grub2-install /dev/vda`. En la máquina UEFI el mismo comando es incorrecto. ¿Cuál es el procedimiento correcto en UEFI, y por qué se desaconseja `grub2-install` allí en sistemas con Secure Boot?
+
+---
+
+## Bloque 3 — La línea de comandos del kernel: parámetros que deciden hasta dónde llega el arranque *(mayormente solo lectura)*
+
+15. Leé la línea exacta que recibió el kernel en ejecución:
+
+```bash
+cat /proc/cmdline
+```
+
+```
+BOOT_IMAGE=(hd0,gpt2)/vmlinuz-6.9.7-200.fc40.x86_64 root=/dev/mapper/fedora-root ro rd.lvm.lv=fedora/root rhgb quiet
+```
+
+16. Confirmá que el kernel la registró, y mirá lo que el propio kernel **no** consumió:
+
+```bash
+sudo dmesg | grep -m1 'Command line'
+sudo dmesg | grep -iE 'Unknown kernel command line parameters|Run /init'
+```
+
+```
+[    0.000000] Command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-6.9.7-200.fc40.x86_64 root=/dev/mapper/fedora-root ro rd.lvm.lv=fedora/root rhgb quiet
+[    0.114882] Unknown kernel command line parameters "BOOT_IMAGE rhgb", will be passed to user space.
+```
+
+17. Verificá cómo está montado actualmente el sistema de archivos raíz, y probá que `ro` en la línea de comandos no es el estado final:
+
+```bash
+findmnt -no SOURCE,FSTYPE,OPTIONS /
+```
+
+```
+/dev/mapper/fedora-root xfs rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota
+```
+
+18. Ahora ejercitá los parámetros que cambian el objetivo del arranque. Reiniciá, presioná `e`, y para cada uno de los siguientes agregalo al final de la línea `linux`, arrancá, observá, y después reiniciá de vuelta a la normalidad.
+
+**(a) Arranque verboso** — quitá `rhgb quiet`:
+
+```
+[  OK  ] Started Journal Service.
+[  OK  ] Mounted /boot.
+[  OK  ] Reached target Local File Systems.
+```
+
+**(b) Arrancar en modo rescate (usuario único):**
+
+```
+systemd.unit=rescue.target
+```
+
+Después de arrancar:
+
+```bash
+systemctl get-default
+systemctl list-units --type=target --state=active
+who -r
+```
+
+```
+multi-user.target
+UNIT              LOAD   ACTIVE SUB    DESCRIPTION
+basic.target      loaded active active Basic System
+local-fs.target   loaded active active Local File Systems
+rescue.target     loaded active active Rescue Mode
+sysinit.target    loaded active active System Initialization
+```
+```
+         run-level 1  2026-08-25 10:14
+```
+
+**(c) Las grafías compatibles con SysV** — cada una de estas es aceptada por systemd y produce el mismo resultado que (b):
+
+```
+single
+1
+s
+```
+
+**(d) Modo de emergencia** — sin sistemas de archivos montados más allá de una raíz de solo lectura, sin servicios:
+
+```
+systemd.unit=emergency.target
+```
+```bash
+findmnt -no OPTIONS /
+mount -o remount,rw /
+```
+```
+ro,relatime,seclabel,attr2,inode64
+```
+
+**(e) Saltear init por completo:**
+
+```
+init=/bin/bash
+```
+```bash
+# no prompt, no job control, PID 1 is bash:
+echo $$
+mount -o remount,rw /
+mount -t proc proc /proc
+exec /usr/lib/systemd/systemd
+```
+```
+1
+```
+
+19. Persistí un parámetro correctamente, y después quitalo de nuevo:
+
+```bash
+sudo grubby --update-kernel=ALL --args="audit=0"
+sudo grubby --info=DEFAULT | grep ^args
+sudo grubby --update-kernel=ALL --remove-args="audit=0"
+```
+
+```
+args="ro rd.lvm.lv=fedora/root rhgb quiet audit=0"
+```
+
+Equivalente Debian/Ubuntu: editar `GRUB_CMDLINE_LINUX_DEFAULT` en `/etc/default/grub`, y después `sudo update-grub`.
+
+**Verificación de comprensión — Bloque 3**
+
+- **P3.1** — El paso 17 muestra `/` montado como `rw` aunque `/proc/cmdline` dice `ro`. ¿Quién lo remontó, cuándo, y por qué el kernel arranca con `ro` en primer lugar?
+- **P3.2** — El kernel informó `Unknown kernel command line parameters "BOOT_IMAGE rhgb"`. ¿Es eso un error? Describí la división en tres vías de un token de la línea de comandos del kernel (parámetro del kernel / `key=value` para el entorno de init / argumento para init).
+- **P3.3** — Contrastá `rescue.target` y `emergency.target` en términos de: sistemas de archivos montados, si `sysinit.target` se ejecutó, y cuál usarías cuando `/etc/fstab` contiene una entrada defectuosa.
+- **P3.4** — `init=/bin/bash` te dá PID 1 sin `/proc` y con una raíz de solo lectura. Dá la secuencia exacta de comandos para cambiar la contraseña de root y volver a un arranque normal **sin** apagar y encender la máquina.
+- **P3.5** — ¿Por qué `systemd.unit=rescue.target` es más seguro que `systemctl isolate rescue.target` en una máquina que estás administrando por SSH?
+- **P3.6** — `root=/dev/mapper/fedora-root` vs `root=UUID=8f2c...` vs `root=/dev/sda2`. Ordenalos por robustez y justificá el orden con un escenario de fallo para el más débil.
+
+---
+
+## Bloque 4 — initramfs: la raíz temporal que encuentra a la real
+
+20. Mirá lo que GRUB carga realmente junto con el kernel:
+
+```bash
+ls -lh /boot/vmlinuz-* /boot/initramfs-*.img
+file /boot/initramfs-$(uname -r).img
+```
+
+```
+-rwxr-xr-x. 1 root root 14M Jul  9 00:00 /boot/vmlinuz-6.9.7-200.fc40.x86_64
+-rw-------. 1 root root 38M Aug 12 09:40 /boot/initramfs-6.9.7-200.fc40.x86_64.img
+/boot/initramfs-6.9.7-200.fc40.x86_64.img: ASCII cpio archive (SVR4 with no CRC)
+```
+
+21. Listá su contenido sin desempaquetar (dracut):
+
+```bash
+sudo lsinitrd /boot/initramfs-$(uname -r).img | head -20
+```
+
+```
+Image: /boot/initramfs-6.9.7-200.fc40.x86_64.img: 38M
+========================================================================
+Early CPIO image
+========================================================================
+drwxr-xr-x   3 root     root            0 Jan  1  1970 .
+-rw-r--r--   1 root     root            2 Jan  1  1970 early_cpio
+drwxr-xr-x   3 root     root            0 Jan  1  1970 kernel
+drwxr-xr-x   2 root     root            0 Jan  1  1970 kernel/x86/microcode
+-rw-r--r--   1 root     root       112640 Jan  1  1970 kernel/x86/microcode/GenuineIntel.bin
+========================================================================
+Version: dracut-060-2.fc40
+
+Arguments: -f
+
+dracut modules:
+systemd
+systemd-initrd
+dracut-systemd
+lvm
+...
+```
+
+22. Probá que el initramfs lleva los controladores de almacenamiento que el kernel no puede tener incorporados:
+
+```bash
+sudo lsinitrd /boot/initramfs-$(uname -r).img | grep -E 'virtio_blk|dm-mod|xfs|crypto' | head
+sudo lsinitrd -f /usr/lib/dracut/hooks/pre-pivot/*.sh /boot/initramfs-$(uname -r).img 2>/dev/null | head -5
+```
+
+23. Desempaquetalo a mano — este es el paso mecánicamente importante, porque muestra que el initramfs es *solo un archivo cpio que el kernel extrae en un tmpfs*:
+
+```bash
+mkdir -p /tmp/initrd && cd /tmp/initrd
+sudo /usr/lib/dracut/skipcpio /boot/initramfs-$(uname -r).img | zstd -d | cpio -id --quiet
+ls
+file init
+```
+
+```
+bin  dev  etc  init  lib  lib64  proc  root  run  sbin  shutdown  sys  sysroot  tmp  usr  var
+init: symbolic link to usr/lib/systemd/systemd
+```
+
+Equivalente Debian/Ubuntu: `lsinitramfs /boot/initrd.img-$(uname -r)`, y `unmkinitramfs /boot/initrd.img-$(uname -r) /tmp/initrd`.
+
+24. Reconstruilo (seguro, idempotente — pero conservá el snapshot):
+
+```bash
+sudo cp /boot/initramfs-$(uname -r).img /root/initramfs-$(uname -r).img.bak
+sudo dracut --force --verbose /boot/initramfs-$(uname -r).img $(uname -r) 2>&1 | tail -3
+```
+
+```
+dracut: *** Creating image file '/boot/initramfs-6.9.7-200.fc40.x86_64.img' ***
+dracut: *** Creating initramfs image file '/boot/initramfs-6.9.7-200.fc40.x86_64.img' done ***
+```
+
+Debian/Ubuntu: `sudo update-initramfs -u -k $(uname -r)` (o `-k all`).
+
+25. Entrá deliberadamente al initramfs. Reiniciá, presioná `e`, agregá `rd.break rd.udev.log_level=debug`, arrancá:
+
+```
+Entering emergency mode. Exit the shell to continue.
+Generating "/run/initramfs/rdsosreport.txt"
+
+switch_root:/#
+```
+
+```bash
+switch_root:/# findmnt -no SOURCE,OPTIONS /sysroot
+/dev/mapper/fedora-root ro,relatime,...
+switch_root:/# mount -o remount,rw /sysroot
+switch_root:/# chroot /sysroot
+sh-5.2# passwd root
+sh-5.2# touch /.autorelabel        # SELinux systems only
+sh-5.2# exit
+switch_root:/# exit                 # continues the boot: switch_root into /sysroot
+```
+
+**Verificación de comprensión — Bloque 4**
+
+- **P4.1** — Nombrá tres configuraciones del sistema de archivos raíz que vuelven *obligatorio* un initramfs, y una configuración en la que un kernel puede arrancar sin ningún initramfs.
+- **P4.2** — En el paso 23 el archivo contiene `init -> usr/lib/systemd/systemd`. ¿Qué ejecuta el kernel después de desempaquetar, y cuál es el nombre de la operación que reemplaza la raíz del initramfs por la raíz real?
+- **P4.3** — El paso 21 muestra una "Early CPIO image" que contiene `kernel/x86/microcode/GenuineIntel.bin`, sin comprimir, al principio del archivo. ¿Por qué esa sección no está comprimida junto con el resto?
+- **P4.4** — Agregaste un nuevo grupo de volúmenes LVM y moviste `/` a él, editando `/boot/loader/entries/*.conf` correctamente, pero el arranque se detiene en `dracut-initqueue timeout`. ¿Qué olvidaste, y qué comando lo arregla?
+- **P4.5** — En el prompt `switch_root:/#`, ¿por qué tenés que hacer `mount -o remount,rw /sysroot` antes de `chroot`, y por qué se necesita `touch /.autorelabel` en RHEL/Fedora?
+- **P4.6** — Distinguí `rd.break` de `rd.break=pre-mount`. ¿En cuál de los dos ya está poblado `/sysroot`?
+
+---
+
+## Bloque 5 — PID 1: systemd, SysVinit, y conocimiento de Upstart
+
+26. Identificá el sistema de init empíricamente, de tres formas independientes:
+
+```bash
+ps -p 1 -o pid,comm=,args=
+readlink -f /sbin/init
+sudo stat -c '%N' /proc/1/exe
+```
+
+```
+    1 systemd         /usr/lib/systemd/systemd --switched-root --system --deserialize 31
+/usr/lib/systemd/systemd
+'/proc/1/exe' -> '/usr/lib/systemd/systemd'
+```
+
+27. Mapeá los runlevels a targets — la capa de compatibilidad que el examen espera que conozcas:
+
+```bash
+systemctl get-default
+ls -l /usr/lib/systemd/system/runlevel?.target /usr/lib/systemd/system/default.target
+```
+
+```
+multi-user.target
+lrwxrwxrwx. 1 root root 15 Jul  9 00:00 /usr/lib/systemd/system/runlevel0.target -> poweroff.target
+lrwxrwxrwx. 1 root root 13 Jul  9 00:00 /usr/lib/systemd/system/runlevel1.target -> rescue.target
+lrwxrwxrwx. 1 root root 17 Jul  9 00:00 /usr/lib/systemd/system/runlevel2.target -> multi-user.target
+lrwxrwxrwx. 1 root root 17 Jul  9 00:00 /usr/lib/systemd/system/runlevel3.target -> multi-user.target
+lrwxrwxrwx. 1 root root 17 Jul  9 00:00 /usr/lib/systemd/system/runlevel4.target -> multi-user.target
+lrwxrwxrwx. 1 root root 16 Jul  9 00:00 /usr/lib/systemd/system/runlevel5.target -> graphical.target
+lrwxrwxrwx. 1 root root 16 Jul  9 00:00 /usr/lib/systemd/system/runlevel6.target -> reboot.target
+lrwxrwxrwx. 1 root root 16 Jul  9 00:00 /etc/systemd/system/default.target -> /usr/lib/systemd/system/multi-user.target
+```
+
+28. Usá las herramientas de la era SysV que todavía funcionan, y mirá lo que informan:
+
+```bash
+runlevel
+who -r
+sudo systemctl set-default graphical.target
+systemctl get-default
+sudo systemctl set-default multi-user.target
+```
+
+```
+N 3
+         run-level 3  2026-08-25 09:58
+Removed /etc/systemd/system/default.target.
+Created symlink /etc/systemd/system/default.target → /usr/lib/systemd/system/graphical.target.
+graphical.target
+```
+
+29. Rastreá la cadena de dependencias del arranque y su costo:
+
+```bash
+systemd-analyze
+systemd-analyze blame | head -6
+systemd-analyze critical-chain
+```
+
+```
+Startup finished in 1.201s (kernel) + 3.884s (initrd) + 9.117s (userspace) = 14.203s
+graphical.target reached after 9.102s in userspace.
+```
+```
+5.412s NetworkManager-wait-online.service
+1.883s dracut-initqueue.service
+ 902ms systemd-udev-settle.service
+ 611ms firewalld.service
+ 340ms systemd-journal-flush.service
+ 118ms lvm2-monitor.service
+```
+```
+The time when unit became active or started is printed after the "@" character.
+The time the unit took to start is printed after the "+" character.
+
+graphical.target @9.102s
+└─multi-user.target @9.100s
+  └─sshd.service @8.971s +127ms
+    └─network.target @8.965s
+      └─NetworkManager.service @8.401s +561ms
+        └─dbus-broker.service @8.377s
+          └─basic.target @8.301s
+```
+
+30. Examiná un sistema **SysVinit** para contrastar (Devuan, un CentOS 6 viejo, o una imagen de contenedor). Los hechos equivalentes viven en archivos planos:
+
+```bash
+cat /etc/inittab
+```
+
+```
+id:3:initdefault:
+si::sysinit:/etc/rc.d/rc.sysinit
+l0:0:wait:/etc/rc.d/rc 0
+l3:3:wait:/etc/rc.d/rc 3
+l5:5:wait:/etc/rc.d/rc 5
+l6:6:wait:/etc/rc.d/rc 6
+ca::ctrlaltdel:/sbin/shutdown -t3 -r now
+1:2345:respawn:/sbin/mingetty tty1
+```
+
+```bash
+ls -l /etc/rc.d/rc3.d/ | head -6
+```
+
+```
+lrwxrwxrwx. 1 root root 15 Mar  2  2019 K01certmonger -> ../init.d/certmonger
+lrwxrwxrwx. 1 root root 17 Mar  2  2019 K10psacct -> ../init.d/psacct
+lrwxrwxrwx. 1 root root 15 Mar  2  2019 S10network -> ../init.d/network
+lrwxrwxrwx. 1 root root 16 Mar  2  2019 S12rsyslog -> ../init.d/rsyslog
+lrwxrwxrwx. 1 root root 14 Mar  2  2019 S55sshd -> ../init.d/sshd
+```
+
+```bash
+telinit 5          # switch runlevel now
+telinit q          # re-read /etc/inittab without rebooting
+chkconfig --list sshd
+service sshd status
+```
+
+31. **Conocimiento de Upstart** (Ubuntu 6.10–14.10, RHEL 6). Sus trabajos son archivos `.conf` orientados a eventos, no enlaces simbólicos de runlevel:
+
+```bash
+cat /etc/init/ssh.conf
+initctl list | head -4
+```
+
+```
+description "OpenSSH server"
+start on runlevel [2345]
+stop on runlevel [!2345]
+respawn
+exec /usr/sbin/sshd -D
+```
+```
+mountall-net stop/waiting
+rsyslog start/running, process 812
+tty1 start/running, process 1043
+ssh start/running, process 998
+```
+
+**Verificación de comprensión — Bloque 5**
+
+- **P5.1** — `ps -p 1` muestra `systemd --switched-root --system --deserialize 31`. ¿Qué te dice cada uno de los tres flags sobre cómo llegó a existir este PID 1?
+- **P5.2** — `runlevel` imprime `N 3` en un host systemd que no tiene runlevels. ¿De dónde saca systemd el `3`, y qué significa `N`?
+- **P5.3** — En `/etc/rc.d/rc3.d/`, explicá `K01certmonger` vs `S55sshd`: la letra, el número, y el orden en que `/etc/rc.d/rc 3` los invoca y con qué argumento.
+- **P5.4** — `systemd-analyze blame` muestra `NetworkManager-wait-online.service` en 5.412s. ¿Por qué quitarlo del primer puesto de `blame` a menudo *no* reduce el tiempo total de arranque, y qué subcomando responde correctamente a esa pregunta?
+- **P5.5** — Dá las tres diferencias estructurales entre un script SysVinit `/etc/init.d/foo` y una unidad systemd `foo.service` que explican por qué systemd puede paralelizar el arranque y SysVinit no.
+- **P5.6** — En el trabajo de Upstart de arriba, `start on runlevel [2345]`. ¿Qué reemplazó al ordenamiento basado en runlevels en systemd, y cuál es el equivalente de `initctl list`?
+- **P5.7** — `systemd-analyze` imprimió solo `kernel + initrd + userspace`, sin cifras de `firmware` ni de `loader`. ¿Qué provee esos dos números cuando sí aparecen?
+
+---
+
+## Bloque 6 — Registros de arranque: dmesg, journalctl, y los archivos bajo /var/log *(solo lectura)*
+
+32. Leé el búfer circular del kernel, primero crudo, después filtrado por severidad:
+
+```bash
+sudo dmesg | head -3
+sudo dmesg --level=err,warn --human | head -8
+```
+
+```
+[    0.000000] Linux version 6.9.7-200.fc40.x86_64 (mockbuild@...) (gcc 14.1.1) #1 SMP PREEMPT_DYNAMIC Tue Jul  9 00:00:00 UTC 2026
+[    0.000000] Command line: BOOT_IMAGE=(hd0,gpt2)/vmlinuz-6.9.7-200.fc40.x86_64 root=/dev/mapper/fedora-root ro rd.lvm.lv=fedora/root rhgb quiet
+[    0.000000] BIOS-provided physical RAM map:
+```
+```
+kern  :warn  : [Mon Aug 25 09:58:01 2026] i8042: Warning: Keylock active
+kern  :err   : [Mon Aug 25 09:58:04 2026] EDAC MC0: 1 CE memory read error
+```
+
+33. Entendé por qué `dmesg` puede necesitar privilegios, y por qué las marcas de tiempo pueden mentir:
+
+```bash
+sysctl kernel.dmesg_restrict
+sudo dmesg -T | tail -2
+sudo dmesg --time-format=iso | tail -2
+```
+
+```
+kernel.dmesg_restrict = 1
+```
+
+34. Consultá el journal por arranque — la habilidad central de este objetivo:
+
+```bash
+journalctl --list-boots
+```
+
+```
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+ -2 6f9e1a72c4d84e0b9c3a5f7d1b204e88 Sat 2026-08-23 08:11:02 -03 Sat 2026-08-23 19:42:55 -03
+ -1 b2d0447e19f34cc8a5e6d7183c9f0a5b Sun 2026-08-24 09:03:19 -03 Sun 2026-08-24 22:07:41 -03
+  0 3c7a5be82f1d4a6f81c94e0d5a6b7f21 Mon 2026-08-25 09:58:01 -03 Mon 2026-08-25 10:22:13 -03
+```
+
+```bash
+journalctl -b            # current boot, everything
+journalctl -b -1         # previous boot
+journalctl -b -1 -p err  # previous boot, priority err and above
+journalctl -k -b         # kernel messages only, current boot (dmesg equivalent, with metadata)
+journalctl -b -u sshd.service
+journalctl -b --since "09:58" --until "10:00" -o short-precise
+journalctl -b _PID=1     # everything PID 1 itself emitted
+```
+
+```
+Aug 25 09:58:03 lab01 kernel: Linux version 6.9.7-200.fc40.x86_64 ...
+Aug 25 09:58:04 lab01 systemd[1]: Queued start job for default target Multi-User System.
+Aug 25 09:58:06 lab01 systemd[1]: Reached target Basic System.
+Aug 25 09:58:11 lab01 sshd[998]: Server listening on 0.0.0.0 port 22.
+```
+
+35. Determiná si el journal es persistente — la razón por la que `-b -1` a veces no devuelve nada:
+
+```bash
+ls -ld /var/log/journal /run/log/journal 2>&1
+grep -E '^#?Storage=' /etc/systemd/journald.conf
+journalctl --disk-usage
+```
+
+```
+ls: cannot access '/var/log/journal': No such file or directory
+drwxr-sr-x+ 3 root systemd-journal 60 Aug 25 09:58 /run/log/journal
+#Storage=auto
+Archived and active journals take up 8.0M in the file system.
+```
+
+Hacelo persistente:
+
+```bash
+sudo mkdir -p /var/log/journal
+sudo systemd-tmpfiles --create --prefix /var/log/journal
+sudo systemctl restart systemd-journald
+journalctl --list-boots | wc -l
+```
+
+36. Leé los registros de texto clásicos que coexisten con el journal:
+
+```bash
+ls -l /var/log/boot.log /var/log/messages /var/log/dmesg 2>/dev/null   # RHEL family
+ls -l /var/log/syslog /var/log/kern.log /var/log/boot.log 2>/dev/null  # Debian family
+sudo grep -iE 'error|failed' /var/log/boot.log | head -5
+```
+
+```
+-rw-------. 1 root root  32K Aug 25 09:58 /var/log/boot.log
+-rw-------. 1 root root 1.2M Aug 25 10:22 /var/log/messages
+```
+```
+[FAILED] Failed to start Network Manager Wait Online.
+See 'systemctl status NetworkManager-wait-online.service' for details.
+```
+
+37. Correlacioná un fallo entre ambos mundos:
+
+```bash
+systemctl --failed
+systemctl status NetworkManager-wait-online.service --no-pager -l
+journalctl -b -u NetworkManager-wait-online.service --no-pager
+```
+
+```
+  UNIT                              LOAD   ACTIVE SUB    DESCRIPTION
+● NetworkManager-wait-online.service loaded failed failed Network Manager Wait Online
+1 loaded units listed.
+```
+
+**Verificación de comprensión — Bloque 6**
+
+- **P6.1** — `dmesg` y `journalctl -k` muestran datos que se solapan. Nombrá dos cosas que el journal tiene y que el búfer circular del kernel estructuralmente no puede tener, y una cosa que `dmesg` te dá y que sobrevive cuando journald no está en ejecución.
+- **P6.2** — Las marcas de tiempo de `dmesg` son segundos monótonos con formato `[    0.000000]`. ¿Por qué `dmesg -T` está documentado explícitamente como inexacto, y qué flag o herramienta evita el problema?
+- **P6.3** — `journalctl --list-boots` en una instalación nueva muestra solo el índice `0`. Explicá la causa usando la distinción entre `/run/log/journal` y `/var/log/journal` y el valor por defecto `Storage=auto`.
+- **P6.4** — Escribí la única invocación de `journalctl` que responde: *"mostrame solo los mensajes del kernel de prioridad advertencia-o-peor del penúltimo arranque, con marcas de tiempo en microsegundos."*
+- **P6.5** — `kernel.dmesg_restrict = 1`. ¿Qué cambia eso para un usuario sin privilegios, y qué capacidad le permite a un proceso leer el búfer de todos modos?
+- **P6.6** — Un servicio falló durante el arranque pero `systemctl --failed` está vacío cuando lo revisás una hora más tarde. Dá dos razones plausibles y el comando que lo dirime.
+
+---
+
+## Bloque 7 — Escenario de diagnóstico: tres fallos de arranque deliberados y su recuperación
+
+> **Tomá el snapshot de la VM ahora.** Cada escenario está diseñado para detener el arranque.
+
+### 7A — Una entrada defectuosa en `/etc/fstab`
+
+38. Rompelo:
+
+```bash
+sudo cp /etc/fstab /root/fstab.good
+echo 'UUID=00000000-dead-beef-0000-000000000000 /data xfs defaults 0 0' | sudo tee -a /etc/fstab
+sudo systemctl daemon-reload
+sudo reboot
+```
+
+39. Observá el estancamiento del arranque, y después la caída al modo de emergencia:
+
+```
+[  *** ] A start job is running for /dev/disk/by-uuid/00000000-dead-beef-... (1min 30s / 1min 30s)
+[DEPEND] Dependency failed for /data.
+[DEPEND] Dependency failed for Local File Systems.
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, or "exit" to continue bootup.
+
+Give root password for maintenance
+(or press Control-D to continue):
+```
+
+40. Diagnosticá y reparalo desde la shell de emergencia:
+
+```bash
+journalctl -xb -p err --no-pager | tail
+systemctl list-jobs
+mount -o remount,rw /
+cp /root/fstab.good /etc/fstab
+systemctl daemon-reload
+systemctl default
+```
+
+41. Hacé que la entrada sea sobrevivible en lugar de fatal, y volvé a probar:
+
+```bash
+echo 'UUID=00000000-dead-beef-0000-000000000000 /data xfs nofail,x-systemd.device-timeout=5s 0 0' \
+  | sudo tee -a /etc/fstab
+sudo systemd-analyze verify /etc/fstab 2>&1 | head
+sudo systemctl daemon-reload && sudo systemctl reboot
+```
+
+### 7B — Un initramfs faltante o corrupto
+
+42. Rompelo y recuperá desde GRUB, sin medios externos:
+
+```bash
+sudo mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.hidden
+sudo reboot
+```
+
+```
+error: file `/initramfs-6.9.7-200.fc40.x86_64.img' not found.
+Press any key to continue...
+...
+[    2.884219] VFS: Cannot open root device "mapper/fedora-root" or unknown-block(0,0): error -6
+[    2.884901] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+```
+
+Recuperación: reiniciá, seleccioná la entrada BLS `0-rescue` (su initramfs es una imagen `--no-hostonly` que contiene todos los controladores), y después:
+
+```bash
+sudo mv /boot/initramfs-$(uname -r).img.hidden /boot/initramfs-$(uname -r).img
+# or rebuild from scratch:
+sudo dracut --force /boot/initramfs-$(uname -r).img $(uname -r)
+```
+
+### 7C — Un `root=` incorrecto en la línea de comandos
+
+43. Rompelo solo en el menú (sin daño persistente): presioná `e`, cambiá `root=/dev/mapper/fedora-root` por `root=/dev/mapper/fedora-rooot`, arrancá.
+
+```
+dracut-initqueue[612]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
+dracut-initqueue[612]: Warning: /lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fmapper\x2ffedora-rooot.sh
+Warning: /dev/mapper/fedora-rooot does not exist
+
+Generating "/run/initramfs/rdsosreport.txt"
+
+Entering emergency mode. Exit the shell to continue.
+dracut:/#
+```
+
+44. Diagnosticá desde dentro de la shell de emergencia del initramfs:
+
+```bash
+dracut:/# cat /proc/cmdline
+dracut:/# lvm vgscan
+dracut:/# lvm lvs
+dracut:/# lvm vgchange -ay
+dracut:/# ls -l /dev/mapper/
+dracut:/# less /run/initramfs/rdsosreport.txt
+dracut:/# reboot        # then fix the typo at the GRUB menu
+```
+
+```
+  Found volume group "fedora" using metadata type lvm2
+  LV   VG     Attr       LSize
+  root fedora -wi-a----- 34.00g
+  swap fedora -wi-a-----  4.00g
+```
+
+**Verificación de comprensión — Bloque 7**
+
+- **P7.1** — En 7A, ¿por qué un montaje fallido de `/data` tumbó a `local-fs.target` y por lo tanto a todo el arranque, cuando `/data` no lo usa nada? Nombrá las dos opciones de montaje que lo desacoplan y decí con precisión qué hace cada una.
+- **P7.2** — En el prompt `Give root password for maintenance`, la cuenta root está bloqueada (`!` en `/etc/shadow`). Describí qué pasa realmente, y cuál es tu vía de recuperación restante.
+- **P7.3** — En 7A paso 40, ¿por qué se requiere `systemctl daemon-reload` después de editar `/etc/fstab`, y qué generador se vuelve a ejecutar?
+- **P7.4** — 7B produjo `Kernel panic - not syncing: VFS: Unable to mount root fs`. El kernel *sí* se cargó y se ejecutó. Explicá exactamente qué paso falló y por qué la entrada `0-rescue` sobrevive al mismo fallo.
+- **P7.5** — En 7C el prompt de la shell es `dracut:/#`, mientras que en el Bloque 4 paso 25 era `switch_root:/#`. ¿Qué te dice la diferencia de prompt sobre hasta dónde llegó el arranque?
+- **P7.6** — Ordená estos cuatro prompts según cuán temprano ocurren en el arranque, y decí cuál es el sistema de archivos raíz en cada uno: `grub>`, `dracut:/#`, `switch_root:/#`, `emergency mode` (systemd).
+
+---
+
+## Bloque 8 — Consolidación: reconstruir la cadena de arranque a partir de la evidencia *(solo lectura)*
+
+45. Producí una narrativa única del último arranque de esta máquina usando solo comandos:
+
+```bash
+[ -d /sys/firmware/efi ] && echo "1. Firmware: UEFI" || echo "1. Firmware: BIOS"
+sudo efibootmgr | grep BootCurrent
+echo "2. Loader entry:"; sudo grubby --info=DEFAULT | grep -E '^(kernel|initrd|args)'
+echo "3. Kernel cmdline:"; cat /proc/cmdline
+echo "4. initramfs modules:"; sudo lsinitrd /boot/initramfs-$(uname -r).img 2>/dev/null | sed -n '/dracut modules/,/^$/p' | head
+echo "5. PID 1:"; ps -p 1 -o comm=
+echo "6. Default target:"; systemctl get-default
+echo "7. Timing:"; systemd-analyze
+echo "8. Failures:"; systemctl --failed --no-legend
+echo "9. Boot ID:"; journalctl -b -n0 -o json --output-fields=_BOOT_ID 2>/dev/null; cat /proc/sys/kernel/random/boot_id
+```
+
+46. Renderizá el arranque como un gráfico y leé el traspaso del initramfs al espacio de usuario:
+
+```bash
+systemd-analyze plot > /tmp/boot.svg
+systemd-analyze critical-chain multi-user.target
+systemd-analyze dump --no-pager | grep -A3 '^-> Unit initrd-switch-root.service'
+```
+
+**Verificación de comprensión — Bloque 8**
+
+- **P8.1** — Poné lo siguiente en orden cronológico estricto y nombrá el componente responsable de cada uno: `switch_root`, POST, `initrd-parse-etc.service`, lectura del MBR/ESP, `default.target` alcanzado, descompresión del kernel, `basic.target` alcanzado, comando `boot` de GRUB, coldplug de udev.
+- **P8.2** — ¿Qué único archivo leerías para responder "qué kernel y qué parámetros pretendía usar GRUB", y qué único archivo responde "qué kernel y qué parámetros se usaron realmente"? ¿Por qué pueden discrepar los dos?
+- **P8.3** — Un colega dice "el arranque tarda 14 segundos; `systemd-analyze blame` dice que NetworkManager-wait-online se lleva 5.4 de ellos, así que vamos a ahorrar 5.4 segundos enmascarándolo". Refutalo o confirmalo, citando la herramienta correcta.
+
+---
+
+<details>
+<summary><strong>Respuestas — clic para expandir</strong></summary>
+
+### Bloque 1 — Ruta del firmware
+
+**R1.1** — La ausencia de `/sys/firmware/efi` prueba únicamente que **el kernel actualmente en ejecución no fue arrancado a través de los servicios de arranque UEFI**; el kernel puebla ese directorio a partir de la tabla de sistema EFI que recibe en el traspaso. **No** prueba que el hardware carezca de UEFI. La causa habitual es una placa con capacidad UEFI arrancando a través de su Módulo de Soporte de Compatibilidad (CSM/legacy), o una distro instalada en modo legacy sobre un disco GPT. El firmware moderno a menudo tampoco tiene CSM en absoluto, en cuyo caso el arranque legacy es genuinamente imposible — pero eso lo aprendés desde la configuración del firmware, no desde `/sys`.
+
+**R1.2** — La cadena vive en la **NVRAM de la placa madre**, como una variable de arranque UEFI (`Boot0002` bajo `EFI_GLOBAL_VARIABLE`), no en el disco. Consecuencias de restaurar una imagen de disco sin tocar la NVRAM: la ruta de dispositivo de la entrada contiene el **GUID de partición** de la ESP (`4c1f2b7a-...`); si la imagen restaurada tiene un GUID de partición distinto, el firmware no puede resolver la ruta y recae en los sucesores de `BootOrder` — típicamente `Boot2001 EFI Hard Drive`, que busca el respaldo para medios removibles `\EFI\BOOT\BOOTX64.EFI`. Si ese archivo existe (el paso 4 muestra que sí), el arranque tiene éxito de todos modos; si no existe, terminás en la shell del firmware. Reparalo con `efibootmgr -c -d /dev/vda -p 1 -L Fedora -l '\EFI\fedora\shimx64.EFI'`.
+
+**R1.3** — La especificación UEFI obliga a que el firmware implemente un controlador de sistema de archivos basado en FAT para la ESP (FAT12/16/32; FAT32 en la práctica para discos fijos). El firmware no lleva controlador de ext4/XFS/Btrfs, así que la ESP es el único sistema de archivos que tiene garantizado poder leer. Esa es toda la razón por la que `/boot/efi` es una partición separada, pequeña y `vfat` en lugar de formar parte de `/boot`.
+
+**R1.4** — En **GPT + BIOS**, no hay un "hueco" posterior al MBR con el que puedas contar, porque la cabecera primaria GPT y el arreglo de particiones ocupan los LBA 1–33. La partición `bios_grub` (tipo GUID `21686148-6449-6E6F-744E-656564454649`, `EF02` en gdisk) es espacio sin formatear reservado para la **imagen core** de GRUB (`core.img`, antiguamente "stage 1.5"). En discos **MBR/DOS**, GRUB escribía en cambio `core.img` en los sectores no particionados entre el LBA 1 y la primera partición — el "hueco del MBR", históricamente 62 sectores, hoy típicamente 2047.
+
+**R1.5** — 512 − 64 (tabla de particiones) − 2 (firma `0x55AA`) = **446 bytes** de código de arranque. Un controlador de sistema de archivos, soporte de LVM/RAID y un menú no caben en 446 bytes, así que el `boot.img` de GRUB en el MBR hace exactamente una cosa: cargar el primer sector de `core.img` desde un LBA fijo y saltar a él. `core.img` contiene entonces los controladores de sistema de archivos necesarios para leer `/boot/grub2/` como archivos normales. Esa es toda la justificación de los cargadores de arranque multietapa.
+
+---
+
+### Bloque 2 — Configuración del bootloader
+
+**R2.1** — `/etc/default/grub` es una **entrada para un generador**, no una configuración de tiempo de ejecución. Nada lo lee en el arranque. En un sistema BLS, deben pasar dos cosas: (1) `grub2-mkconfig -o /boot/grub2/grub.cfg` regenera el script de GRUB, y (2) la línea `options` de cada kernel en `/boot/loader/entries/*.conf` debe actualizarse — cosa que `grub2-mkconfig` **no** hace para las entradas existentes. El comando que actualiza las entradas existentes es `grubby --update-kernel=ALL --args="nosmt"`. En Debian/Ubuntu (sin BLS) basta con un solo `update-grub` después de editar `GRUB_CMDLINE_LINUX_DEFAULT`.
+
+**R2.2** — Editar con `e` es **de un solo uso y volátil**: GRUB copia la entrada a memoria, vos editás la copia, `Ctrl-X` la arranca, y no se escribe nada en disco. Editar `/boot/loader/entries/*.conf` es **persistente** y sobrevive a un reinicio — pero es por kernel, así que una actualización de kernel instala un *nuevo* archivo `.conf` generado a partir de `/etc/kernel/cmdline` (o de los args del default actual) y tu edición no se propaga. Solo `/etc/default/grub` + `grubby --update-kernel=ALL`, o `/etc/kernel/cmdline`, sobreviven a ambos.
+
+**R2.3** — Las rutas de GRUB son relativas a la **raíz del sistema de archivos que estableció como `$root`**, que acá es la partición `/boot` separada (`hd0,gpt2`). Dentro de ese sistema de archivos el kernel está en `/vmlinuz-...`. Una vez que Linux está en ejecución, ese mismo sistema de archivos está montado en `/boot`, así que la ruta adquiere el prefijo. Si `/boot` *no* fuera una partición separada, `$root` sería el sistema de archivos raíz y la línea de GRUB diría `/boot/vmlinuz-...`.
+
+**R2.4** — En el **bloque de entorno de GRUB**, `/boot/grub2/grubenv` — un archivo de 1024 bytes de tamaño fijo que GRUB puede reescribir en el lugar sin necesitar un controlador de sistema de archivos capaz de asignar espacio. Leelo con `grub2-editenv list`, escribilo con `grub2-editenv - set saved_entry=...`, o desde un sistema en ejecución con `grub2-set-default <index-or-id>` / `grubby --set-default=/boot/vmlinuz-...`. `grub2-reboot <entry>` establece `next_entry` para exactamente un arranque.
+
+**R2.5** — La enumeración de discos no es estable. Agregá un segundo disco, cambiá el puerto SATA/NVMe, arrancá la misma imagen en hardware distinto, o hacé que el firmware presente el instalador USB como `hd0` — y `(hd0,gpt2)` ahora apunta a la partición equivocada, dando `error: file '/vmlinuz-...' not found`. `search --fs-uuid` escanea todos los sistemas de archivos visibles buscando el UUID registrado y establece `$root` al dispositivo que lo contenga, haciendo que la entrada sea independiente del orden de enumeración.
+
+**R2.6** — En UEFI no incrustás nada en un sector de arranque; instalás binarios `.efi` en la ESP y registrás una entrada en NVRAM. El procedimiento correcto es `dnf reinstall grub2-efi-x64 shim-x64` (o `grub2-install --target=x86_64-efi --efi-directory=/boot/efi` en distros que todavía lo soportan) más `efibootmgr -c ...`. `grub2-install` se desaconseja bajo Secure Boot porque escribiría un `grubx64.efi` **sin firmar** compilado en la máquina local; el firmware lo rechazará. La cadena firmada es `shimx64.efi` (firmado por Microsoft) → `grubx64.efi` (firmado por la distro, verificado por shim contra su certificado incrustado) → kernel (verificado por GRUB). Regenerar GRUB localmente rompe esa cadena. En RHEL/Fedora, `grub2-install` en un sistema UEFI sale con un error explícito por esta razón.
+
+---
+
+### Bloque 3 — Línea de comandos del kernel
+
+**R3.1** — El **initramfs monta la raíz real en modo solo lectura** (`ro`) para que un sistema de archivos que puede necesitar reparación no sea escrito antes de que `fsck` tenga la oportunidad de ejecutarse. Después de `switch_root`, el `systemd-remount-fs.service` de systemd (ordenado antes de `local-fs.target`) lee `/etc/fstab` y remonta `/` con las opciones allí registradas — normalmente `defaults`, de ahí `rw`. Borrar ese servicio o arrancar con una entrada raíz en `fstab` marcada como `ro` deja la raíz en solo lectura.
+
+**R3.2** — No es un error; es informativo. El kernel divide su línea de comandos de tres formas, y este mensaje informa los tokens que **él** no reclamó:
+1. Los tokens que coinciden con un parámetro de kernel registrado (`root=`, `ro`, `quiet`, `nosmt`) son consumidos por el kernel.
+2. Los tokens restantes con la forma `KEY=VALUE` se colocan en el **entorno de init**.
+3. Los tokens restantes **sin** `=` se pasan como **argv a init** (así es como `single` y `3` llegaban históricamente al init de SysV, y cómo systemd todavía los acepta).
+`BOOT_IMAGE` lo establece GRUB para uso informativo; `rhgb` ("Red Hat Graphical Boot") lo consume Plymouth en el espacio de usuario. Ambos caen correctamente hacia el espacio de usuario.
+
+**R3.3** —
+
+| | `rescue.target` | `emergency.target` |
+|---|---|---|
+| Sistemas de archivos | Todos los de `/etc/fstab` montados (`local-fs.target` alcanzado) | Solo `/`, y en **solo lectura** |
+| `sysinit.target` | Se ejecutó (udev, tmpfiles, journal, LVM/crypt) | **No** se ejecutó |
+| Servicios | Ninguno más allá de sysinit; una única shell de root | Ninguno en absoluto |
+| Alias | `runlevel1.target`, `single`, `1`, `s` | `-b` / `emergency` |
+
+Para un **`/etc/fstab` defectuoso**, usá `emergency.target`: `rescue.target` depende de `local-fs.target`, que es exactamente lo que rompe la entrada defectuosa, así que el modo rescate fallará igual que falló el arranque normal.
+
+**R3.4** —
+```bash
+mount -o remount,rw /
+mount -t proc  proc  /proc
+mount -t sysfs sys   /sys
+mount -t devtmpfs dev /dev      # only if /dev is empty
+passwd root
+touch /.autorelabel             # SELinux systems
+sync
+mount -o remount,ro /
+exec /usr/lib/systemd/systemd   # or: exec /sbin/init
+```
+`exec` es esencial: systemd debe convertirse en **PID 1**, y `exec` reemplaza la imagen de proceso de la shell en lugar de bifurcar un hijo. Sin `/proc` montado, `passwd` y la mayoría de las utilidades se comportan mal. `sync` + remontar en ro antes de ceder el control protege contra perder la escritura.
+
+**R3.5** — `systemctl isolate rescue.target` se ejecuta **inmediatamente sobre el sistema en ejecución**: detiene toda unidad que no sea requerida por el modo rescate, incluidos `sshd.service` y tu propia sesión de login, así que te desconectás a vos mismo a mitad del comando sin acceso a consola. `systemd.unit=rescue.target` solo surte efecto **en el siguiente arranque**, es de un solo uso (no se persiste en ningún lado), y requiere que ya tengas acceso físico o fuera de banda a la consola para usarlo — que es precisamente el acceso que necesitás para el modo rescate de todos modos. También falla de forma segura: si no podés llegar a la consola, simplemente reiniciás normalmente.
+
+**R3.6** — De más a menos robusto:
+1. **`root=UUID=8f2c...`** — el identificador está almacenado dentro del superbloque del sistema de archivos y viaja con los datos a través de clonaciones, reparticionados y cambios de controladora. (`root=LABEL=` y `root=PARTUUID=` son comparables; `PARTUUID` vive en la tabla de particiones, así que sobrevive a un `mkfs` pero no a un reparticionado.)
+2. **`root=/dev/mapper/fedora-root`** — un nombre de device-mapper, estable mientras los nombres de VG/LV sean estables, pero depende de que el initramfs ensamble LVM primero (`rd.lvm.lv=`) y colisiona si conectás otro disco cuyo VG también se llame `fedora`.
+3. **`root=/dev/sda2`** — los nombres de dispositivo del kernel se asignan en **orden de sondeo**, que es asíncrono y no está garantizado como estable. Fallo concreto: agregás un segundo disco SATA (o el HBA SAS enumera más rápido en un arranque en frío que en uno en caliente), el viejo `/dev/sda` pasa a ser `/dev/sdb`, y el kernel entra en pánico con `VFS: Unable to mount root fs on unknown-block(8,2)` — o, mucho peor, monta un sistema de archivos *distinto* que casualmente está en `sda2` en el disco nuevo.
+
+---
+
+### Bloque 4 — initramfs
+
+**R4.1** — Obligatorio cuando el sistema de archivos raíz no puede alcanzarse solo con el código incorporado del kernel:
+- Raíz sobre **LVM** (necesita `lvm vgchange -ay` en el espacio de usuario antes de que exista el nodo de dispositivo).
+- Raíz sobre **RAID por software** (`mdadm --assemble`) o **LUKS** (`cryptsetup luksOpen`, más el pedido de frase de paso).
+- Raíz sobre **almacenamiento en red** — NFS, iSCSI, FCoE, NBD — que requiere una pila de red configurada.
+- El controlador del sistema de archivos raíz o el de la controladora de almacenamiento compilado como **módulo** (`=m`) en lugar de incorporado (`=y`) — el caso abrumadoramente común en los kernels de distribución, que es por lo que toda distro incluye un initramfs.
+- Raíz que necesita un ayudante en espacio de usuario antes del montaje: escaneo multidispositivo de Btrfs, importación de pool ZFS, `systemd-fsck` sobre una raíz sucia.
+
+No hace falta cuando: un kernel monolítico a medida con la controladora de disco y el sistema de archivos compilados adentro (`=y`), raíz en una partición simple, `root=/dev/sda2` — por ejemplo, compilaciones embebidas y de appliances. Esto es lo que hacen las compilaciones con `CONFIG_BLK_DEV_INITRD=n`.
+
+**R4.2** — Después de descomprimir y extraer el archivo cpio en un **tmpfs que se convierte en el rootfs inicial**, el kernel ejecuta **`/init`** (configurable con `rd.init=` / históricamente `init=` para initrd). Acá `/init` es un enlace simbólico a systemd, así que systemd corre en "modo initrd" (`systemd --system` con `initrd.target` como default). Una vez que la raíz real está montada en `/sysroot`, la transición es **`switch_root`** — una operación de `pivot_root` más limpieza implementada por `systemd-shutdown`/`initrd-switch-root.service`: mueve `/proc`, `/sys`, `/dev`, `/run` dentro de `/sysroot`, hace de `/sysroot` la nueva `/`, borra el contenido del viejo rootfs para liberar la RAM del tmpfs, y hace `exec` del `/sbin/init` real — conservando el **PID 1**. (Notá la distinción terminológica: `initrd` era una imagen de *dispositivo de bloques* que requería `pivot_root`; `initramfs` es un *cpio dentro de tmpfs* que usa `switch_root`. Los nombres de archivo siguen diciendo "initrd" por razones históricas.)
+
+**R4.3** — El **microcódigo** de CPU debe ser aplicado por el kernel muy temprano — antes del arranque de SMP y antes de que el código de descompresión del archivo principal haya sido necesariamente ejercitado, y críticamente antes de que se usen instrucciones afectadas por erratas. Por eso el kernel busca un **archivo cpio sin comprimir concatenado al frente** del archivo initramfs, con el microcódigo en la ruta fija `kernel/x86/microcode/GenuineIntel.bin` (o `AuthenticAMD.bin`). Mantenerlo sin comprimir y primero significa que el código de arranque temprano puede encontrarlo y cargarlo con un recorrido cpio trivial, sin ningún descompresor involucrado. `skipcpio` (paso 23) existe precisamente para saltear esta sección y así poder descomprimir el archivo real que hay detrás.
+
+**R4.4** — El initramfs se construyó **solo para este host** (`hostonly=yes`, el default de la distro): contiene únicamente los controladores y la configuración para la disposición de almacenamiento que existía al momento de construirlo, incluido el conjunto específico de `rd.lvm.lv=`. No sabe nada del nuevo VG, así que `dracut-initqueue` espera un dispositivo que nunca aparece y agota el tiempo tras 180 s. Solución: reconstruirlo — `sudo dracut --force /boot/initramfs-$(uname -r).img $(uname -r)` — y asegurarte de que la línea `options` lleve `rd.lvm.lv=<newvg>/<newlv>`. Mientras tanto, recuperá arrancando la entrada `0-rescue`, cuya imagen está construida con `--no-hostonly` y contiene todo. Debian/Ubuntu: `update-initramfs -u -k all`.
+
+**R4.5** — `chroot` en sí no necesita `rw`, pero todo lo que querés *hacer* dentro sí: `passwd` reescribe `/etc/shadow`, y sobre un montaje de solo lectura falla con `Authentication token manipulation error`. `/sysroot` está en solo lectura porque el initramfs monta deliberadamente la raíz real como `ro` (ver R3.1) y `rd.break` se detiene antes de que el remontaje siquiera ocurra.
+
+`touch /.autorelabel` hace falta porque en sistemas con SELinux un archivo creado o reemplazado desde dentro del chroot del initramfs puede recibir un **contexto de seguridad equivocado o faltante** — el estado de política del chroot no es el del sistema destino. Un `/etc/shadow` con la etiqueta equivocada hace que `login`/`sshd` no puedan leerlo, y el sistema queda sin poder iniciar sesión después de haber restablecido "exitosamente" la contraseña. El archivo bandera dispara un reetiquetado completo del sistema de archivos en el siguiente arranque (lento, pero correcto). La alternativa quirúrgica es `restorecon -v /etc/shadow` desde dentro del chroot, si las herramientas de política están disponibles.
+
+**R4.6** — `rd.break` a secas equivale a `rd.break=pre-pivot`: se detiene **después** de que la raíz real fue montada en `/sysroot` y después de los hooks de limpieza, inmediatamente antes de `switch_root`. `rd.break=pre-mount` se detiene **antes** de que la raíz sea montada — `/sysroot` existe pero está vacío. Así que `/sysroot` está poblado solo en el caso de `rd.break` a secas; por eso los procedimientos de restablecimiento de contraseña usan `rd.break` a secas. `pre-mount` es el punto de corte adecuado para depurar el ensamblado de dispositivos (LVM que no se activa, LUKS que no se abre), donde querés ejecutar `lvm vgchange -ay` o `cryptsetup` a mano. Otras etapas: `cmdline`, `pre-udev`, `pre-trigger`, `initqueue`, `mount`, `cleanup`.
+
+---
+
+### Bloque 5 — PID 1
+
+**R5.1** —
+- `--switched-root`: esta instancia de systemd **no** arrancó directamente desde el kernel; fue ejecutada con `exec` después del `switch_root` desde un systemd anterior corriendo en el initramfs. Su ausencia significaría o bien que no hay initramfs o bien que hay un initramfs sin systemd.
+- `--system`: es el gestor del **sistema** (PID 1, gestionando unidades del sistema), no una instancia `--user` por usuario.
+- `--deserialize 31`: el estado fue **serializado al descriptor de archivo 31** por la instancia del initramfs y restaurado por esta. Así es como systemd transporta el estado de las unidades, los sockets abiertos y las colas de trabajos a través de la transición de raíz sin perderlos — el mismo mecanismo que usa `systemctl daemon-reexec`.
+
+**R5.2** — Del **target que está actualmente activo**, mapeado hacia atrás a través de los enlaces simbólicos alias `runlevelN.target`: `multi-user.target` ⇒ `3`, `graphical.target` ⇒ `5`, `rescue.target` ⇒ `1`. systemd además mantiene registros en `/run/utmp` para que `runlevel`, `who -r` y `telinit` sigan funcionando. La **`N`** de la primera columna significa que el runlevel **anterior** es `N` = *None* (ninguno) — el sistema no cambió de runlevel desde el arranque. Después de un `telinit 5` verías `3 5`.
+
+**R5.3** —
+- **`S`** = *Start* (arrancar): `/etc/rc.d/rc 3` invoca el script como `/etc/init.d/sshd **start**`.
+- **`K`** = *Kill* (matar): invocado como `/etc/init.d/certmonger **stop**`.
+- Los **dos dígitos** son una clave de ordenamiento. `rc` ejecuta primero todos los scripts `K??*`, en orden numérico ascendente, y después todos los `S??*`, en orden numérico ascendente — un simple ordenamiento `LC_ALL=C` de los nombres de archivo. Así que `S10network` arranca antes que `S12rsyslog`, que arranca antes que `S55sshd`. Los números *son* todo el sistema de dependencias: no hay grafo de dependencias declarado, solo un orden total mantenido a mano. Por eso agregar un servicio correctamente requiere saber qué numeración tiene todo lo demás — y por eso `chkconfig` lee el comentario de cabecera `# chkconfig: 2345 55 25` del script para elegir los números.
+
+**R5.4** — `blame` informa la **duración individual** de cada unidad, ordenada de forma descendente, sin ninguna consideración de si la unidad estaba en la **ruta crítica**. Una unidad puede tardar 5.4 s corriendo en paralelo con el resto del arranque, sin contribuir nada al tiempo de reloj; a la inversa, una unidad de 120 ms que todo lo demás espera es el verdadero cuello de botella. La herramienta correcta es **`systemd-analyze critical-chain`**, que recorre la cadena real de `After=`/`Requires=` desde el target por defecto e imprime `@` (momento en que la unidad se volvió activa) y `+` (lo que tardó). `systemd-analyze plot > boot.svg` muestra la misma información gráficamente, incluido el solapamiento. En la práctica `NetworkManager-wait-online.service` *sí* suele estar en la ruta crítica (`network-online.target` está ordenado antes de `multi-user.target` cuando algo lo arrastra), así que este caso en particular bien puede ser real — pero `blame` por sí solo no lo establece.
+
+**R5.5** —
+1. **Dependencias declarativas vs ordenamiento implícito.** Una unidad declara `After=`, `Requires=`, `Wants=`, `Before=`; systemd construye un *grafo* de dependencias y puede ejecutar concurrentemente cada rama independiente. SysV codifica el ordenamiento únicamente como prefijos de nombre de archivo `S10`/`S55` — un orden total, que por definición no permite paralelismo.
+2. **Protocolo de disponibilidad.** Una unidad declara `Type=notify` / `Type=forking` / `Type=dbus`, así que systemd sabe *cuándo* el servicio está genuinamente listo y puede liberar a los dependientes en ese momento exacto. Un script SysV retorna de `start` y el siguiente script se ejecuta; no hay señal de disponibilidad, así que los scripts insertan `sleep`s y bucles de sondeo.
+3. **Activación por socket / por bus e inicio perezoso.** systemd puede crear el socket de escucha en `sockets.target` y arrancar el demonio solo cuando llega la primera conexión, lo que elimina la restricción de ordenamiento por completo — un cliente puede conectarse antes de que el servidor exista y simplemente bloquearse sobre el socket. SysV no tiene equivalente; un cliente debe ordenarse después de su servidor.
+(Una cuarta, estructuralmente importante: las unidades son *datos* que PID 1 parsea, no scripts de shell que bifurca, así que systemd puede razonar sobre ellas — `systemd-analyze verify`, consultas de dependencias, límites de recursos, seguimiento de procesos basado en cgroups.)
+
+**R5.6** — El ordenamiento basado en runlevels se reemplaza por **targets** (`multi-user.target`, `graphical.target`) combinados con `WantedBy=`/`After=` declarativos en las secciones `[Install]` y `[Unit]`; los arranques orientados a eventos se cubren con unidades de **activación por socket, path, device, timer y D-Bus**. El equivalente de `initctl list` es **`systemctl list-units`** (agregá `--type=service --all` para la correspondencia más cercana); `initctl start/stop/status foo` se mapea a `systemctl start/stop/status foo.service`.
+
+**R5.7** — Las cifras de `firmware` y `loader` provienen de **variables UEFI** escritas por un cargador de arranque que implementa la Boot Loader Interface de systemd: `LoaderTimeInitUSec`, `LoaderTimeExecUSec` y `LoaderTimeMenuUSec` en el espacio de nombres de proveedor `4a67b082-0a4c-41cf-b6c7-440b29bb8c4f`. **`systemd-boot`** las establece; **GRUB no**, y el BIOS legacy no tiene mecanismo para hacerlo. Así que en un sistema con GRUB o con BIOS, `systemd-analyze` informa legítimamente solo `kernel + initrd + userspace`, y el tiempo total de arranque medido desde el botón de encendido es mayor que el número impreso.
+
+---
+
+### Bloque 6 — Registros de arranque
+
+**R6.1** — El journal tiene, estructuralmente, lo que el búfer circular no puede tener:
+- **Persistencia entre reinicios** (`/var/log/journal`), que te permite leer `-b -1`. El búfer circular es memoria volátil del kernel, borrada en cada arranque, y sobrescrita en el lugar una vez lleno (`dmesg -c` / `--read-clear` incluso lo vacía deliberadamente).
+- **Metadatos estructurados y fuentes no pertenecientes al kernel.** Las entradas del journal llevan `_PID`, `_UID`, `_SYSTEMD_UNIT`, `_BOOT_ID`, `_COMM`, `_SELINUX_CONTEXT`, `_TRANSPORT`, y cubren servicios de espacio de usuario, no solo el kernel. `dmesg` tiene severidad + facilidad + marca de tiempo y nada más.
+(También: sellado criptográfico con `journalctl --setup-keys`, y política de limitación de tasa y de vaciado.)
+
+Lo que `dmesg` te dá pase lo que pase: lee `/dev/kmsg` (o la llamada al sistema `klogctl`) **directamente del kernel**, así que funciona cuando journald se cayó, no está instalado (sistemas SysVinit, contenedores, initramfs mínimos), o antes de que journald arranque. En las shells de emergencia `dracut:/#`, `dmesg` funciona y `journalctl` puede que no.
+
+**R6.2** — Las marcas de tiempo del búfer circular son **monótonas** — nanosegundos desde el arranque del kernel, tomados de un reloj que no sigue los ajustes de reloj de pared y que **se suspende durante suspensión/reanudación**. `dmesg -T` las convierte restando el desfase monótono del tiempo de reloj de pared *actual*. Si el reloj del sistema fue ajustado a saltos desde el arranque (NTP sincronizando después del arranque, un RTC en la zona horaria equivocada, una VM reanudada desde un snapshot) o si la máquina se suspendió, cada marca de tiempo convertida está equivocada por esa deriva — la página del manual lo documenta como "inaccurate" (inexacto). Evitalo leyendo el journal en cambio: `journalctl -k -o short-precise` registra tanto el reloj monótono *como* el de tiempo real por entrada, así que la correlación se almacena en el momento de la escritura en lugar de reconstruirse después del hecho.
+
+**R6.3** — Con `Storage=auto` (el default), journald escribe a disco **solo si `/var/log/journal` ya existe**; de lo contrario escribe en `/run/log/journal`, que es un **tmpfs** y se destruye en cada reinicio. Así que una instalación nueva sin el directorio `/var/log/journal` retiene solo el arranque actual, y `--list-boots` muestra exactamente el índice `0`. Solucionalo creando el directorio (`mkdir -p /var/log/journal; systemd-tmpfiles --create --prefix /var/log/journal; systemctl restart systemd-journald`) o estableciendo `Storage=persistent` en `/etc/systemd/journald.conf`, lo que hace que journald cree el directorio por sí mismo. Notá que Debian/Ubuntu vienen con `/var/log/journal` presente por defecto, y Fedora/RHEL también desde F30 — pero las imágenes mínimas y de contenedor frecuentemente no.
+
+**R6.4** —
+```bash
+journalctl -k -b -2 -p warning -o short-precise
+```
+`-k` restringe a mensajes del kernel (`_TRANSPORT=kernel`), `-b -2` selecciona el arranque dos antes del actual, `-p warning` coincide con prioridad ≤ 4, es decir warning **y todo lo más severo** (err, crit, alert, emerg), y `-o short-precise` imprime marcas de tiempo con resolución de microsegundos. (`-p warning..emerg` sería un rango equivalente explícito.)
+
+**R6.5** — Con `kernel.dmesg_restrict = 1`, las operaciones de lectura de `klogctl`//`dev/kmsg` se le deniegan a los usuarios sin privilegios, así que `dmesg` como usuario normal falla con `dmesg: read kernel buffer failed: Operation not permitted`. La justificación es que el búfer circular filtra direcciones del kernel, topología de hardware y temporizaciones útiles para explotación. La capacidad que lo anula es **`CAP_SYSLOG`** (históricamente `CAP_SYS_ADMIN`, todavía aceptada con una advertencia de obsolescencia). Otorgala de forma acotada con `setcap cap_syslog+ep /usr/bin/dmesg` en vez de poner el sysctl en 0. Notá que `journalctl -k` para un usuario normal se rige por separado — por la pertenencia a los grupos `systemd-journal`, `adm` o `wheel` mediante las ACL sobre `/var/log/journal`.
+
+**R6.6** — Dos razones plausibles:
+1. La unidad fue **reiniciada exitosamente** mientras tanto — por `Restart=on-failure` con un retardo `RestartSec=`, por un `.timer`, o por una unidad dependiente — y `systemctl reset-failed` es implícito en un arranque exitoso, así que salió de la lista de fallidas.
+2. Alguien (o un `systemctl daemon-reload` + `reset-failed`, o una corrida de gestión de configuración) la limpió explícitamente, o la unidad fue detenida/deshabilitada y ahora está `inactive (dead)` en lugar de `failed`.
+
+El comando que lo dirime, porque el journal es el registro durable:
+```bash
+journalctl -b -u <unit> --no-pager
+```
+y de forma más amplia `journalctl -b -p err` para todo el arranque, o `journalctl -b _SYSTEMD_UNIT=<unit>` para capturar los mensajes que emitieron los propios procesos de la unidad. `systemctl show <unit> -p NRestarts,ExecMainStartTimestamp,Result` confirma directamente la hipótesis del reinicio.
+
+---
+
+### Bloque 7 — Diagnósticos
+
+**R7.1** — El **`fstab-generator`** de systemd convierte cada línea de `/etc/fstab` en una unidad `.mount` y, por defecto, agrega `RequiredBy=local-fs.target`. `local-fs.target` es requerido con `Requires=` por `sysinit.target`, después del cual todo lo demás está ordenado — así que un montaje fallido hace fallar a `local-fs.target`, lo que hace fallar la transacción, y systemd recae en `emergency.target`. Que algo *use* `/data` es irrelevante; la dependencia es sobre que el montaje tenga éxito, no sobre los datos.
+
+Las dos opciones:
+- **`nofail`** — el generador emite `WantedBy=` en lugar de `RequiredBy=`. El montaje igual se intenta, pero su fallo no se propaga: el arranque continúa con `/data` sin montar. Esto atiende el *fallo*.
+- **`x-systemd.device-timeout=5s`** — limita cuánto espera systemd a que aparezca el **dispositivo subyacente** antes de rendirse (por defecto 90 s). Esto atiende el *estancamiento de 90 segundos*, que `nofail` por sí solo no resuelve: sin esto, `nofail` igual espera el tiempo de espera completo por defecto antes de decidir rendirse.
+
+Ambas hacen falta para el síntoma observado. Relacionadas: `noauto` (no montar en el arranque en absoluto) y `x-systemd.automount` (montar de forma perezosa al primer acceso).
+
+**R7.2** — `sulogin` (que es lo que `emergency.service`/`rescue.service` ejecutan como su `ExecStart`) lee `/etc/shadow` en busca de root. El comportamiento depende de la compilación y la configuración:
+- Si el campo de hash de root es `!` o `!!` (**bloqueado**, el default de Ubuntu y de las imágenes cloud), el `sulogin` estándar rechaza el login e imprime `Cannot open access to console, the root account is locked.` seguido de un bucle de reinicio o de una salida inmediata — no podés conseguir una shell.
+- Si el campo es `*` o está vacío, el comportamiento varía; `sulogin --force` (usado por systemd cuando se establece `SYSTEMD_SULOGIN_FORCE=1`) otorga una shell de root **sin ninguna contraseña**, que es por lo que esa variable es una configuración relevante para la seguridad en máquinas físicamente accesibles.
+
+Vías de recuperación restantes, en orden de preferencia:
+1. Reiniciar, editar la entrada de GRUB, agregar **`rd.break`** (Bloque 4 paso 25) o **`init=/bin/bash`** (R3.4) — ambas saltean `sulogin` por completo porque actúan antes o en lugar del espacio de usuario de systemd.
+2. Si el propio GRUB está protegido con contraseña (`superusers` en `/etc/grub.d/01_users`), arrancar desde **medios externos** (ISO live de la distro / modo rescate del instalador), después montar el sistema de archivos raíz con `mount`, hacer `chroot` a él, y reparar.
+3. En una VM, conectar el disco a otra instancia y repararlo fuera de banda.
+
+La lección general: el rechazo de `sulogin` por root bloqueado no es un límite de seguridad contra alguien con acceso a la consola — contraseña de GRUB + contraseña de firmware + cifrado de disco sí lo son. Solo detiene la vía trivialmente perezosa.
+
+**R7.3** — Porque `/etc/fstab` **no es leído en tiempo de ejecución por systemd**; se compila en unidades `.mount` en cada recarga por `systemd-fstab-generator`, uno de los generadores bajo `/usr/lib/systemd/system-generators/`. Hasta que no corre `daemon-reload`, el conjunto de unidades en memoria sigue reflejando el archivo viejo — así que `systemctl start data.mount` usaría la definición obsoleta, y `mount -a` usaría el archivo nuevo, dándote dos visiones divergentes. `systemctl daemon-reload` vuelve a ejecutar **todos** los generadores y re-parsea todas las unidades. (`systemd-analyze verify /etc/fstab` también señalará problemas de sintaxis antes de que te comprometas a un reinicio.)
+
+**R7.4** — El kernel se cargó e inicializó bien — el `error: file not found` de GRUB aplicaba solo a la línea del **initrd**, y GRUB procedió a arrancar el kernel sin uno. Sin initramfs, el kernel no tenía ningún `/init` que ejecutar ni espacio de usuario que activara LVM, así que `/dev/mapper/fedora-root` nunca llegó a existir. `root=` no pudo resolverse, el kernel no tenía raíz que montar, y sin nada más que hacer entró en pánico: `VFS: Unable to mount root fs on unknown-block(0,0)` — siendo `(0,0)` el major:minor nulo, es decir "ningún dispositivo en absoluto".
+
+La entrada `0-rescue` sobrevive porque su initramfs es un archivo separado (`initramfs-0-rescue-<machine-id>.img`) construido con **`--no-hostonly`**: contiene todos los módulos de almacenamiento y de sistemas de archivos, no solo los que este host necesitó al momento de la instalación, y se regenera únicamente en la instalación — así que no lo toca lo que sea que haya roto la imagen normal. Ese es todo su propósito.
+
+**R7.5** — El prompt nombra al proceso que es dueño del sistema de archivos raíz de la shell:
+- **`dracut:/#`** — todavía estás **dentro del initramfs**, sobre el rootfs tmpfs, *antes* de que la raíz real fuera montada. `/sysroot` está vacío. Se llega ahí porque falló el ensamblado de dispositivos (7C: no existe ese LV).
+- **`switch_root:/#`** — todavía estás dentro del initramfs, pero **después** de que `/sysroot` fue montado exitosamente, en el punto de corte `pre-pivot` justo antes de que se ejecute `switch_root`. La raíz real está disponible bajo `/sysroot`.
+
+Así que 7C falló estrictamente antes que el punto de corte deliberado del Bloque 4: en 7C el dispositivo raíz nunca fue encontrado; en el Bloque 4 fue encontrado, montado, y simplemente elegimos pausar.
+
+**R7.6** — De más temprano a más tarde:
+
+| # | Prompt | Sistema de archivos raíz en ese momento | Componente |
+|---|---|---|---|
+| 1 | `grub>` | Ninguno — no hay ningún kernel Linux en ejecución. GRUB lee `/boot` a través de su propio controlador de sistema de archivos. | GRUB 2 |
+| 2 | `dracut:/#` | El **tmpfs del initramfs**; raíz real no montada, `/sysroot` vacío. | hook de emergencia de dracut, dentro del initramfs |
+| 3 | `switch_root:/#` | Todavía el **tmpfs del initramfs**, pero la raíz real está montada en solo lectura en `/sysroot`. | punto de corte `pre-pivot` de dracut |
+| 4 | `emergency mode` (systemd) | La **raíz real**, montada en solo lectura, después de `switch_root`. PID 1 es el systemd real. | `emergency.target` de systemd |
+
+El uso práctico de la tabla: el prompt te dice qué capa depurar. `grub>` ⇒ problema de bootloader/particiones. `dracut:/#` ⇒ ensamblado de almacenamiento (LVM/RAID/LUKS/controlador) o un `root=` equivocado. `switch_root:/#` ⇒ llegaste ahí a propósito, o el pivote en sí falló. Emergencia de systemd ⇒ el problema está en `/etc/fstab` o en una unidad de espacio de usuario, y el sistema de archivos raíz está bien.
+
+---
+
+### Bloque 8 — Consolidación
+
+**R8.1** —
+
+| Orden | Evento | Componente responsable |
+|---|---|---|
+| 1 | **POST** | Firmware (BIOS/UEFI) — autodiagnóstico de hardware, enumeración de dispositivos |
+| 2 | **Lectura del MBR/ESP** | Firmware — lee el sector 0 del MBR (BIOS) o `\EFI\...\shimx64.efi` desde la ESP FAT según el `BootOrder` de la NVRAM (UEFI) |
+| 3 | **Comando `boot` de GRUB** | GRUB 2 — después de cargar `vmlinuz` e `initramfs` en memoria y de preparar las estructuras del protocolo de arranque |
+| 4 | **Descompresión del kernel** | El propio stub autoextraíble del kernel, y después la inicialización temprana: mapa de memoria, `Command line:`, arranque de las CPU, extracción del cpio del initramfs en tmpfs |
+| 5 | **Coldplug de udev** | `systemd-udevd` corriendo **dentro del initramfs**; `udevadm trigger` reproduce los eventos de dispositivo, carga módulos, ensambla LVM/MD/LUKS |
+| 6 | **`initrd-parse-etc.service`** | systemd (instancia initrd) — lee `/sysroot/etc/fstab` y monta todo lo marcado con `x-initrd.mount` (por ejemplo, un `/usr` separado) antes del pivote |
+| 7 | **`switch_root`** | `initrd-switch-root.service` — la raíz real pasa a ser `/`, se libera el tmpfs del initramfs, y se hace `exec` del `/sbin/init` real como PID 1 |
+| 8 | **`basic.target` alcanzado** | systemd (instancia de sistema) — después de `sysinit.target` (udev, tmpfiles, journal, fsck, local-fs, swap) y de `sockets.target` |
+| 9 | **`default.target` alcanzado** | systemd — `multi-user.target` o `graphical.target`; el arranque está completo, `systemd-analyze` imprime su total |
+
+Notá que los ítems 5 y 6 ocurren ambos *dentro* del initramfs, y que udev corre **dos veces** — una en el initramfs (5) y otra después del pivote, como parte de `sysinit.target`.
+
+**R8.2** —
+- **Pretendido**: `/boot/loader/entries/<machine-id>-<version>.conf` en un sistema BLS (su línea `options`), o el bloque `menuentry` correspondiente en `/boot/grub2/grub.cfg` en un sistema sin BLS. `grubby --info=DEFAULT` lo lee por vos.
+- **Real**: **`/proc/cmdline`** — lo que el kernel genuinamente recibió, directo de la estructura del protocolo de arranque. (`dmesg | grep 'Command line'` es la misma cadena, registrada.)
+
+Discrepan siempre que la configuración en disco no fue lo que se ejecutó:
+- Alguien editó la entrada con `e` en el menú (de un solo uso, nunca escrito a disco).
+- Arrancó una entrada distinta de la predeterminada — `grub2-reboot` estableció `next_entry`, o el usuario eligió otra, o `boot_success=0` disparó la lógica de respaldo.
+- La configuración fue editada **después** del arranque pero antes de que la miraras.
+- GRUB agregó cosas que el archivo no contiene — `BOOT_IMAGE=` siempre lo inyecta el propio GRUB.
+- Existen dos configuraciones y se está leyendo una obsoleta (la trampa clásica de UEFI: editar `/boot/grub2/grub.cfg` mientras el firmware carga `/boot/efi/EFI/<distro>/grub.cfg`).
+
+Leer `/proc/cmdline` primero, siempre, es el hábito que evita una hora depurando un archivo que nada está usando.
+
+**R8.3** — **No está establecido, y probablemente no sean 5.4 segundos.** `systemd-analyze blame` ordena por el tiempo de ejecución propio de cada unidad, ignorando la concurrencia; una unidad que corre enteramente en paralelo con el resto del arranque puede encabezar `blame` y no contribuir nada al tiempo de reloj. La herramienta que responde la pregunta es:
+
+```bash
+systemd-analyze critical-chain
+systemd-analyze critical-chain multi-user.target
+```
+
+Si `NetworkManager-wait-online.service` aparece en esa cadena con un valor `+` grande, el ahorro es real; si no aparece, enmascararlo no ahorra nada medible. (`systemd-analyze plot > boot.svg` visualiza el solapamiento y es el artefacto más persuasivo para este argumento.)
+
+Dos advertencias adicionales que vale la pena plantear antes de que alguien lo enmascare:
+1. `NetworkManager-wait-online.service` existe para que `network-online.target` tenga significado. Enmascararlo no elimina la dependencia — hace que `network-online.target` sea alcanzable **inmediatamente**, así que las unidades que legítimamente necesitan una red configurada (montajes NFS, `rsyslog` con destino remoto, una aplicación que se enlaza a una dirección específica) ahora arrancan antes de que exista y fallan de forma intermitente. Convertís un retraso determinista de 5.4 s en una condición de carrera no determinista.
+2. El arreglo honesto suele ser hacerlo más rápido en vez de hacerlo desaparecer: la semántica de `nm-online -x` vía `NM_ONLINE_TIMEOUT`, `systemctl edit NetworkManager-wait-online.service` para bajar el tiempo de espera, deshabilitar DHCP en interfaces que no lo tienen, o quitar `network-online.target` de las unidades que en realidad no lo necesitan.
+
+</details>
+
+---
+
+## Fuentes
+
+- LPI, *Exam 101 Objectives (LPIC-1, version 5.0)*, objetivo 101.2 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- Documentación del kernel de Linux, *The kernel's command-line parameters* — <https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html>
+- Documentación del kernel de Linux, *initrd and initramfs* — <https://www.kernel.org/doc/html/latest/admin-guide/initrd.html>
+- GNU GRUB Manual 2.12 — <https://www.gnu.org/software/grub/manual/grub/grub.html>
+- freedesktop.org, *Boot Loader Specification* — <https://uapi-group.org/specifications/specs/boot_loader_specification/>
+- freedesktop.org, *systemd(1)* (opciones de la línea de comandos del kernel, `systemd.unit=`) — <https://www.freedesktop.org/software/systemd/man/latest/systemd.html>
+- freedesktop.org, *bootup(7)* — la secuencia de arranque completa — <https://www.freedesktop.org/software/systemd/man/latest/bootup.html>
+- freedesktop.org, *systemd-fstab-generator(8)* — <https://www.freedesktop.org/software/systemd/man/latest/systemd-fstab-generator.html>
+- freedesktop.org, *journalctl(1)* y *journald.conf(5)* — <https://www.freedesktop.org/software/systemd/man/latest/journalctl.html>
+- freedesktop.org, *systemd-analyze(1)* — <https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html>
+- documentación de dracut, *dracut.cmdline(7)* (`rd.break`, `rd.lvm.lv`, `rd.debug`) — <https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html>
+- util-linux, *dmesg(1)* — <https://man7.org/linux/man-pages/man1/dmesg.1.html>
+- Debian, *initramfs-tools(8)* / `update-initramfs(8)` — <https://manpages.debian.org/stable/initramfs-tools-core/update-initramfs.8.en.html>
+- UEFI Forum, *UEFI Specification* (ESP, variables de arranque, gestor de arranque) — <https://uefi.org/specifications>
+- Upstart, *Cookbook* (configuración de trabajos, `initctl`) — <https://upstart.ubuntu.com/cookbook/>

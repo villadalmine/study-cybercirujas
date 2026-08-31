@@ -1,0 +1,12 @@
+cert: lpic-1
+topic: '104.1'
+title: Create partitions and filesystems
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
