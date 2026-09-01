@@ -8,35 +8,35 @@ topics:
 - id: '1.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
-  status: pending
+  status: generated
   title: Cilium Fundamentals
   topic: 1 - Cilium Fundamentals
   weight: 20.0
 - id: '2.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
-  status: pending
+  status: generated
   title: Cilium Architecture & Components
   topic: 2 - Cilium Architecture & Components
   weight: 20.0
 - id: '3.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
-  status: pending
+  status: generated
   title: Kubernetes Networking with Cilium
   topic: 3 - Kubernetes Networking with Cilium
   weight: 20.0
 - id: '4.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
-  status: pending
+  status: generated
   title: Observability with Cilium
   topic: 4 - Observability with Cilium
   weight: 20.0
 - id: '5.1'
   sources:
   - https://raw.githubusercontent.com/cncf/curriculum/master/cca/README.md
-  status: pending
+  status: generated
   title: Securing Workloads with Cilium
   topic: 5 - Securing Workloads with Cilium
   weight: 20.0
