@@ -1,0 +1,42 @@
+cert: cca
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: El examen que valida tu Cilium
+    voiceover: Cilium se volvió la capa de red de medio mundo cloud-native, y saber
+      configurarlo a ojo ya no alcanza. El Cilium Certified Associate, el CCA, es
+      el examen que pone eso por escrito. Nivel associate, válido por tres años.
+  audience:
+    title: Para quién es
+    voiceover: Es una certificación de entrada, pero de entrada seria. Sus cinco dominios
+      pesan exactamente lo mismo, 20% cada uno, así que no hay un tema estrella que
+      te salve el examen. Fundamentos, arquitectura y componentes, networking en Kubernetes,
+      observabilidad y seguridad de workloads.
+    bullets:
+    - Administradores de Kubernetes que hoy conviven con Cilium sin haberlo estudiado
+      a fondo
+    - Gente de plataforma y SRE que necesita observar y depurar el tráfico del clúster
+    - Perfiles de seguridad cloud-native que quieren aplicar políticas de red sobre
+      workloads reales
+  cta:
+    title: Arrancá por los fundamentos
+    voiceover: En Cert Landscape tenés los cinco dominios del CCA desarrollados uno
+      por uno, con ejercicios y laboratorios. Elegí el primero y empezá hoy.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Cilium Fundamentals con 20.0%, Cilium Architecture
+      & Components con 20.0%, Kubernetes Networking with Cilium con 20.0%, Observability
+      with Cilium con 20.0%, Securing Workloads with Cilium con 20.0%.
+    domains:
+    - name: Cilium Fundamentals
+      weight: 20.0
+    - name: Cilium Architecture & Components
+      weight: 20.0
+    - name: Kubernetes Networking with Cilium
+      weight: 20.0
+    - name: Observability with Cilium
+      weight: 20.0
+    - name: Securing Workloads with Cilium
+      weight: 20.0

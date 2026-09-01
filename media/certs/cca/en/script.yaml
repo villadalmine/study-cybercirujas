@@ -1,0 +1,44 @@
+cert: cca
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Five Domains, One Even Split
+    voiceover: 'The Cilium Certified Associate is unusual: five exam domains, each
+      worth exactly twenty percent. There''s no shortcut section you can lean on and
+      no corner you can skip. It''s an associate-level, cloud-native exam that checks
+      whether you actually understand how eBPF-based networking works in Kubernetes
+      — not just that you''ve heard of it.'
+  audience:
+    title: Who it's for
+    voiceover: This one is for people who already live near Kubernetes networking
+      and want that knowledge made explicit. You'll work through Cilium fundamentals,
+      its architecture and components, Kubernetes networking, observability, and securing
+      workloads — the same five pillars the exam weighs equally. Pass it, and the
+      certification stays valid for three years.
+    bullets:
+    - Kubernetes admins who want to go deeper than the default CNI
+    - Platform and SRE engineers running or evaluating Cilium in production
+    - Cloud-native and network engineers moving from iptables to eBPF
+  cta:
+    title: Start with domain one
+    voiceover: The full CCA syllabus is on Cert Landscape, broken down domain by domain
+      with exercises and labs. Open Cilium Fundamentals and take the first twenty
+      percent today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Cilium Fundamentals at 20.0%, Cilium Architecture &
+      Components at 20.0%, Kubernetes Networking with Cilium at 20.0%, Observability
+      with Cilium at 20.0%, Securing Workloads with Cilium at 20.0%.
+    domains:
+    - name: Cilium Fundamentals
+      weight: 20.0
+    - name: Cilium Architecture & Components
+      weight: 20.0
+    - name: Kubernetes Networking with Cilium
+      weight: 20.0
+    - name: Observability with Cilium
+      weight: 20.0
+    - name: Securing Workloads with Cilium
+      weight: 20.0
