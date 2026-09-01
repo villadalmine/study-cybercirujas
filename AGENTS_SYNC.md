@@ -434,6 +434,16 @@ document instead; the numbers are there and the reasoning with them.
 
 ## Open — worth someone's time
 
+- **check_claims counts quota errors as negative findings.** A citation whose
+  judgment call returned "You've hit your session limit" is UNJUDGED, but the
+  2026-09-01 cks run reported exactly those 5 as "5 look stale or wrong" (the
+  other 236 judged citations were all clean). One classification branch fixes
+  it: treat limit/429 responses as skipped, report them separately.
+- **cks Spanish is the old independent sibling at 1/5 the depth** (579 KB vs
+  2,865 KB en; meta says `model: claude`, 2026-07-17, no translated_from).
+  Re-translating the 26 topics from the rich English (~1.5 windows) would
+  bring it to the modern standard. Owner's call — it replaces served content.
+
 - **`make image-cluster` can hang for an hour on a finished build.** Seen
   2026-08-19: kaniko built and pushed in 153 s, the pod went `Completed`,
   and `kubectl run --rm -i` never returned — publish_if_complete's 3600 s
