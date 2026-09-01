@@ -1348,7 +1348,7 @@ Preferred over both: the **`exceptions`** block, which is checked at compile tim
   exceptions:
     - name: allowed_builder_images
       fields: [container.image.repository, proc.name]
-      comps: [=, in]
+      comps: ["=", in]
       values:
         - [registry.internal.corp/ci/builder, [apt, apt-get, dpkg]]
 ```

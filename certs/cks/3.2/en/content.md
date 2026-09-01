@@ -939,7 +939,7 @@ $ kubectl -n tenant-b exec -it legacy-batch-9f4c2-r7t8w -- sh
       https://kubernetes.default.svc/api/v1/namespaces/tenant-b/secrets | head -20
 ```
 
-```json
+```
 {
   "kind": "SecretList",
   "apiVersion": "v1",

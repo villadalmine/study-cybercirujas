@@ -1363,7 +1363,8 @@ repos:
         name: kubesec score gate
         language: system
         files: ^manifests/.*\.ya?ml$
-        entry: bash -c 'for f in "$@"; do kubesec scan --threshold 10 "$f" >/dev/null || { echo "kubesec: $f below threshold"; kubesec scan "$f" | jq -r ".[] | .scoring.critical[]? | \"  \(.points) \(.reason)\""; exit 1; }; done' --
+        entry: >-
+          bash -c 'for f in "$@"; do kubesec scan --threshold 10 "$f" >/dev/null || { echo "kubesec: $f below threshold"; kubesec scan "$f" | jq -r ".[] | .scoring.critical[]? | \"  \(.points) \(.reason)\""; exit 1; }; done' --
 ```
 
 ---
