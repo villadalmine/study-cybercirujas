@@ -1,6 +1,7 @@
-generated_at: '2026-07-17T11:50:57'
+generated_at: '2026-09-02T05:25:32'
 lang: es
+translated_from: en
 backend: claude
-model: claude
+model: claude-opus-5
 sources:
 - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf

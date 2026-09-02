@@ -1,250 +1,58 @@
-# CKS 1.34 — Tema 1.1: Network Policies para restringir el acceso a nivel de cluster
+# 1.1 Usar Network Security Policies para restringir el acceso a nivel de clúster
 
-## 1. Concepto
+## Por qué esto importa
 
-Por defecto, en un cluster de Kubernetes **todo pod puede comunicarse con cualquier otro pod**, sin restricciones, independientemente del namespace. Esto es un problema de seguridad crítico en clusters multi-tenant o cuando se ejecutan cargas de trabajo con distintos niveles de confianza (por ejemplo, un pod comprometido podría moverse lateralmente hacia el API server, hacia un namespace de otro equipo, o hacia servicios internos sensibles).
+Por defecto, la red de Kubernetes es **plana y totalmente permisiva**: cada Pod puede alcanzar a cualquier otro Pod en cualquier namespace, además de cualquier endpoint externo al que el nodo pueda enrutar. No hay segmentación incorporada. Un único Pod frontend comprometido puede, por lo tanto, alcanzar tu base de datos, el servicio interno de administración en otro namespace, el endpoint de metadatos del proveedor cloud o el kube-apiserver.
 
-Un objeto `NetworkPolicy` es un recurso de la API de Kubernetes (`networking.k8s.io/v1`) que define reglas de firewall a nivel de pod: qué tráfico de entrada (`ingress`) y de salida (`egress`) está permitido hacia/desde un conjunto de pods seleccionados por labels.
+`NetworkPolicy` es la respuesta nativa de Kubernetes: un firewall L3/L4 expresado como un objeto de API con namespace, seleccionado por labels en lugar de por IPs. En los escenarios de CKS es la herramienta principal para implementar **tráfico este-oeste con mínimo privilegio** y para bloquear las rutas de egress usadas en ataques de robo de credenciales.
 
-**Punto clave para el examen**: `NetworkPolicy` es solo la especificación (API object). La aplicación real de la regla depende de que el **CNI plugin** la implemente. Si el CNI no soporta `NetworkPolicy`, el recurso se crea sin error pero **no tiene ningún efecto** — el tráfico sigue fluyendo libremente. `kubenet` no implementa NetworkPolicy. Plugins que sí lo soportan: Calico, Cilium, Weave Net, Antrea, entre otros.
+## Requisito previo: el plugin CNI debe aplicar las políticas
 
-Verificar el CNI en uso:
+Los objetos `NetworkPolicy` son almacenados por el API server sin importar si algo los aplica o no. Si tu plugin CNI no implementa la funcionalidad, `kubectl apply` tiene éxito y **nada queda bloqueado** — una peligrosa falsa sensación de seguridad.
+
+| Plugin CNI | Soporte de NetworkPolicy |
+|---|---|
+| Calico | Sí (además de sus propios CRDs) |
+| Cilium | Sí (además de `CiliumNetworkPolicy`) |
+| Weave Net | Sí |
+| Antrea, Kube-router, OVN-Kubernetes | Sí |
+| Flannel (solo) | **No** |
+
+Verificación rápida de lo que está instalado:
 
 ```bash
 kubectl get pods -n kube-system -o wide | grep -Ei 'calico|cilium|weave|antrea|flannel'
 ```
 
 ```
-calico-node-4x9zq                        1/1     Running   0          10d
-calico-kube-controllers-7d8f...          1/1     Running   0          10d
+calico-kube-controllers-7d4b8c9f5-2xq7m   1/1     Running   0     4d
+calico-node-8fkzp                          1/1     Running   0     4d
+calico-node-lm2vd                          1/1     Running   0     4d
 ```
 
-Si aparece `flannel` solo (sin Calico encima), probablemente **no** hay enforcement de NetworkPolicy.
-
-## 2. Estructura de un NetworkPolicy
+## Anatomía de una NetworkPolicy
 
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: example-policy
-  namespace: default
+  name: api-allow-frontend
+  namespace: prod
 spec:
-  podSelector:        # a qué pods se aplica esta policy (obligatorio)
+  podSelector:                 # WHICH pods this policy protects (in this namespace)
     matchLabels:
-      app: backend
-  policyTypes:         # Ingress, Egress, o ambos
+      app: api
+  policyTypes:                 # WHICH directions this policy governs
     - Ingress
     - Egress
-  ingress:
-    - from: [...]
-      ports: [...]
-  egress:
-    - to: [...]
-      ports: [...]
-```
-
-Reglas importantes:
-
-- `podSelector: {}` (vacío) selecciona **todos** los pods del namespace.
-- Si `policyTypes` incluye `Ingress` pero el bloque `ingress` está vacío o ausente → se deniega **todo** el ingress hacia esos pods.
-- Si `policyTypes` incluye `Egress` pero el bloque `egress` está vacío o ausente → se deniega **todo** el egress desde esos pods.
-- Múltiples `NetworkPolicy` que seleccionan el mismo pod son **aditivas** (unión de reglas permitidas), nunca se evalúan en orden ni se puede tener una regla "deny" explícita — todo lo no permitido queda denegado implícitamente.
-- Dentro de `from`/`to`, cada elemento del array puede combinar `podSelector`, `namespaceSelector` e `ipBlock`. Si están en el **mismo item** del array, se combinan con AND. Si están en **items distintos**, se combinan con OR.
-
-## 3. Default deny all (patrón base recomendado)
-
-Denegar todo el ingress por defecto en un namespace:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: prod
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-```
-
-Denegar todo el egress por defecto:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-egress
-  namespace: prod
-spec:
-  podSelector: {}
-  policyTypes:
-    - Egress
-```
-
-Denegar ambos en una sola policy:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-all
-  namespace: prod
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
-```
-
-Esto se aplica como **primer paso** en un namespace y luego se agregan policies específicas que abren solo lo necesario (whitelisting explícito).
-
-## 4. Permitir tráfico entre pods (podSelector)
-
-Permitir que solo pods con label `role: frontend` accedan a pods con label `app: backend` en el puerto 8080:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-frontend-to-backend
-  namespace: prod
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  policyTypes:
-    - Ingress
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              role: frontend
+              app: frontend
       ports:
         - protocol: TCP
           port: 8080
-```
-
-## 5. Permitir tráfico desde otro namespace (namespaceSelector)
-
-Los namespaces deben tener el label correspondiente para poder ser seleccionados:
-
-```bash
-kubectl label namespace monitoring purpose=monitoring
-```
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-monitoring-scrape
-  namespace: prod
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              purpose: monitoring
-      ports:
-        - protocol: TCP
-          port: 9090
-```
-
-Combinando `namespaceSelector` + `podSelector` en el **mismo item** (AND lógico — el pod debe estar en un namespace con ese label **y** tener ese label de pod):
-
-```yaml
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              purpose: monitoring
-          podSelector:
-            matchLabels:
-              app: prometheus
-```
-
-## 6. Restringir por rango de IP (ipBlock)
-
-Útil para restringir acceso a/desde IPs externas al cluster (por ejemplo, un servicio legacy on-prem o para bloquear rangos concretos):
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-external-cidr
-  namespace: prod
-spec:
-  podSelector:
-    matchLabels:
-      app: api-gateway
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - ipBlock:
-            cidr: 10.0.0.0/16
-            except:
-              - 10.0.5.0/24
-```
-
-`ipBlock` opera sobre IPs de origen/destino "crudas", no reconoce Services de Kubernetes (no hay resolución de DNS ni ClusterIP a nivel de policy).
-
-## 7. Egress controlado (con DNS permitido)
-
-Un error común en el examen: aplicar `default-deny-egress` y no permitir DNS, lo que rompe la resolución de nombres para toda app que dependa de ella. Hay que permitir explícitamente salida al `kube-dns`/`coredns`:
-
-```bash
-kubectl get pods -n kube-system -l k8s-app=kube-dns -o wide
-kubectl get svc -n kube-system kube-dns
-```
-
-```
-NAME       TYPE        CLUSTER-IP    PORT(S)
-kube-dns   ClusterIP   10.96.0.10    53/UDP,53/TCP,9153/TCP
-```
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-dns-egress
-  namespace: prod
-spec:
-  podSelector: {}
-  policyTypes:
-    - Egress
-  egress:
-    - to:
-        - namespaceSelector: {}
-          podSelector:
-            matchLabels:
-              k8s-app: kube-dns
-      ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-```
-
-Y luego una policy adicional que permita el egress específico de la app (por ejemplo, hacia una base de datos):
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-app-to-db
-  namespace: prod
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  policyTypes:
-    - Egress
   egress:
     - to:
         - podSelector:
@@ -255,57 +63,287 @@ spec:
           port: 5432
 ```
 
-## 8. Verificación y troubleshooting
+Cuatro reglas gobiernan la semántica, y todos los errores del examen vienen de olvidar alguna de ellas:
+
+1. **Con namespace y guiada por labels.** Una política solo protege a los Pods de su propio namespace, elegidos por `spec.podSelector`. Un selector vacío (`podSelector: {}`) significa *todos los Pods de este namespace*.
+2. **Seleccionar un Pod lo cambia a denegar-por-defecto** para los `policyTypes` listados. Un Pod que no es seleccionado por ninguna política permanece totalmente abierto.
+3. **Las políticas son puramente aditivas (solo lista de permitidos).** No existe una regla `deny`. Si dos políticas seleccionan el mismo Pod, se aplica la unión de sus permisos. No podés "restar" acceso con una segunda política.
+4. **`policyTypes` se infiere si se omite:** `Ingress` siempre se incluye; `Egress` solo si existe un bloque `egress`. Escribí siempre `policyTypes` de forma explícita — una política con únicamente reglas de `ingress` **no** restringe el egress.
+
+### La trampa del selector: AND vs OR
+
+Este es el error más común de todos. Compará la indentación del YAML:
+
+```yaml
+# OR — pods labelled app=frontend in ANY namespace,
+#      OR any pod in a namespace labelled env=trusted
+ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            app: frontend
+      - namespaceSelector:
+          matchLabels:
+            env: trusted
+```
+
+```yaml
+# AND — ONLY pods labelled app=frontend that live
+#       in a namespace labelled env=trusted
+ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            app: frontend
+        namespaceSelector:
+          matchLabels:
+            env: trusted
+```
+
+Dos elementos de lista (`-`) = OR. Dos claves dentro de un mismo elemento de lista = AND. Notá también: un `podSelector` a secas dentro de `from`/`to` significa *el propio namespace de la política*; para permitir un Pod de otro namespace **tenés que** agregar un `namespaceSelector`.
+
+Kubernetes etiqueta automáticamente cada namespace con `kubernetes.io/metadata.name: <namespace>`, así que podés apuntar a un namespace por nombre sin editarlo:
+
+```yaml
+- namespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: monitoring
+```
+
+## Bases de denegación por defecto
+
+Empezá cada namespace endurecido desde una postura de denegar todo, y después abrí agujeros precisos.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: prod
+spec:
+  podSelector: {}              # every pod in the namespace
+  policyTypes:
+    - Ingress
+    - Egress
+  # no ingress/egress blocks at all => deny everything both ways
+```
+
+Variantes que deberías poder escribir de memoria:
+
+```yaml
+# Deny all ingress only
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+```
+
+```yaml
+# Allow all egress (explicit permit — useful to override a broad deny in a legacy setup)
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - {}
+```
+
+### Volvé a permitir siempre el DNS
+
+Una política de denegar-todo-el-egress rompe la resolución de nombres, y el síntoma parece una falla total de red. Todo servicio que deba resolver nombres necesita egress hacia CoreDNS en el puerto 53 (tanto UDP como TCP — TCP se usa para respuestas grandes):
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: prod
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+```
+
+## Restringir el acceso a nivel de clúster
+
+### Aislar un namespace de todos los demás
+
+Permitir el tráfico dentro del namespace mientras se rechaza todo lo que venga de afuera:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace-only
+  namespace: payments
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector: {}      # every pod in namespace "payments"
+```
+
+### Bloquear el endpoint de metadatos del cloud
+
+`169.254.169.254` sirve credenciales de instancia en AWS/GCP/Azure. Alcanzarlo desde un Pod comprometido es una ruta clásica de escalada de privilegios (SSRF → rol IAM del nodo). Denegalo con una cláusula `except` manteniendo el egress general a internet:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-cloud-metadata
+  namespace: prod
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
+```
+
+`ipBlock` está pensado para CIDRs **externos al clúster**. Debido al comportamiento de SNAT/masquerading en la mayoría de los CNIs, hacer coincidir IPs de Pods con `ipBlock` no es confiable — usá `podSelector`/`namespaceSelector` para el tráfico dentro del clúster.
+
+### Restringir el egress hacia el kube-apiserver
+
+Para impedir que las cargas de trabajo hablen directamente con el control plane, denegá el egress al endpoint del API server. Primero encontrá la dirección real — el Service `kubernetes` en `default` es una ClusterIP que hace DNAT hacia la dirección del nodo/VIP:
 
 ```bash
-kubectl get networkpolicy -n prod
+kubectl get endpoints kubernetes -n default
 ```
 
 ```
-NAME                        POD-SELECTOR   AGE
-default-deny-all            <none>         2m
-allow-frontend-to-backend    app=backend    1m
-allow-dns-egress            <none>         30s
+NAME         ENDPOINTS            AGE
+kubernetes   192.168.56.10:6443   12d
 ```
+
+Después, o bien omití ese CIDR de tu lista de permitidos, o excluilo explícitamente:
+
+```yaml
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 192.168.56.10/32
+              - 169.254.169.254/32
+```
+
+Como la evaluación de la política ocurre sobre la **IP de destino Pod/host post-DNAT**, nunca escribas reglas contra ClusterIPs de Services — apuntá siempre a los Pods de respaldo o a la dirección del endpoint.
+
+### Rangos de puertos
+
+Para un rango contiguo, usá `endPort` (estable desde v1.25) en lugar de listar cada puerto:
+
+```yaml
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: gateway
+      ports:
+        - protocol: TCP
+          port: 8000
+          endPort: 8100
+```
+
+`port` también puede ser un **puerto con nombre** tomado del `containerPort.name` del contenedor destino, lo que sobrevive a una renumeración de puertos.
+
+## Verificar la aplicación
+
+Escribir la política es la mitad de la tarea; el examen espera que demuestres que funciona.
 
 ```bash
-kubectl describe networkpolicy allow-frontend-to-backend -n prod
+# Inspect what is actually applied
+kubectl get netpol -n prod
+kubectl describe netpol default-deny-all -n prod
 ```
 
 ```
-Name:         allow-frontend-to-backend
+Name:         default-deny-all
 Namespace:    prod
+Created on:   2026-07-28 10:14:02 +0000 UTC
 Spec:
-  PodSelector:     app=backend
+  PodSelector:     <none> (Allowing the specific traffic to all pods in this namespace)
   Allowing ingress traffic:
-    To Port: 8080/TCP
-    From:
-      PodSelector: role=frontend
-  Policy Types: Ingress
+    <none> (Selected pods are isolated for ingress connectivity)
+  Allowing egress traffic:
+    <none> (Selected pods are isolated for egress connectivity)
+  Policy Types: Ingress, Egress
 ```
 
-Probar conectividad efectiva desde un pod (método rápido en el examen, sin instalar herramientas extra):
+Probá la conectividad desde un Pod descartable:
 
 ```bash
-kubectl run tmp-test --rm -it --image=busybox --restart=Never -- wget -qO- --timeout=2 http://backend-svc:8080
+kubectl run probe -n prod --rm -it --restart=Never \
+  --image=busybox:1.36 -- wget -qO- --timeout=2 http://api:8080/healthz
 ```
 
-Si la policy bloquea correctamente, el comando debe colgarse hasta timeout (`wget: download timed out`). Si responde, la regla no está aplicándose (revisar CNI, labels de pods/namespaces, o si falta el `policyTypes` correcto).
+El tráfico bloqueado expira por timeout en lugar de ser rechazado (los paquetes se descartan, no se rechazan):
 
-## 9. Buenas prácticas para el examen
+```
+wget: download timed out
+pod "probe" deleted
+pod prod/probe terminated (Error)
+```
 
-- Aplicar **default-deny** (ingress y egress) en cada namespace de producción y luego permitir explícitamente solo lo necesario — modelo *whitelist*.
-- Verificar labels reales de pods/namespaces con `kubectl get pods --show-labels` / `kubectl get ns --show-labels` antes de escribir selectors — un typo en el label deja la policy sin efecto silenciosamente.
-- Recordar que `ingress` y `egress` son independientes: una policy que solo restringe `Ingress` no toca el `Egress` del pod (y viceversa), a menos que `policyTypes` incluya ambos.
-- `NetworkPolicy` no soporta lógica de "deny" explícita ni prioridades entre policies — solo unión de reglas *allow*.
-- No confundir con `CiliumNetworkPolicy`/`GlobalNetworkPolicy` (CRDs propios de Cilium/Calico) que agregan capacidades extra (L7, FQDN-based egress, deny explícito) pero no son parte del currículum base de la API estándar — el examen se centra en el recurso `networking.k8s.io/v1`.
-- Confirmar siempre que el CNI soporta enforcement antes de asumir que una policy protege algo.
+El tráfico permitido responde de inmediato:
+
+```
+ok
+pod "probe" deleted
+```
+
+Probá desde un Pod *con labels* para validar la coincidencia de selectores, y desde otro namespace para validar el aislamiento:
+
+```bash
+kubectl run probe -n prod --labels=app=frontend --rm -it --restart=Never \
+  --image=busybox:1.36 -- nc -zv -w 2 api 8080
+kubectl run probe -n staging --rm -it --restart=Never \
+  --image=busybox:1.36 -- nc -zv -w 2 api.prod.svc.cluster.local 8080
+```
+
+## Lista de verificación para troubleshooting
+
+| Síntoma | Causa probable |
+|---|---|
+| La política se aplicó, nada se bloquea | El CNI no aplica NetworkPolicy |
+| Todo se rompe después del default-deny | Falta la regla de egress de DNS (puerto 53 UDP **y** TCP) |
+| El tráfico entre namespaces sigue denegado | Solo se usó `podSelector` — también hace falta `namespaceSelector` |
+| Se permite tráfico inesperado | Otra política selecciona los mismos Pods; los efectos son aditivos |
+| La regla de egress hacia un Service no funciona | La regla apunta a la ClusterIP; debe apuntar a los Pods de respaldo post-DNAT |
+| El ingress desde un Pod no queda restringido | El Pod origen usa `hostNetwork: true`, o el tráfico se origina en el nodo (health probes) |
+| La política se ignora por completo | Namespace equivocado, o `policyTypes` omitió la dirección que pretendías |
+
+## Consejos para el examen
+
+- Creá siempre la política de **default-deny** más un **allow de DNS** explícito como tu par de base.
+- Revisá los labels del namespace (`kubectl get ns --show-labels`) antes de escribir un `namespaceSelector`; agregá uno con `kubectl label ns staging env=trusted` si hace falta.
+- Nunca memorices YAML desde cero bajo presión de tiempo — copiá el ejemplo canónico de la documentación de Kubernetes (página Network Policies) y editalo.
+- Confirmá tu trabajo con un Pod de prueba; una política que silenciosamente no coincide con nada vale cero.
+- Tené en cuenta que las APIs más nuevas con alcance de clúster `AdminNetworkPolicy` / `BaselineAdminNetworkPolicy` (grupo `policy.networking.k8s.io`, implementadas por Calico, Cilium y OVN-Kubernetes) agregan acciones reales de `Deny` y `Pass` y se evalúan *antes* que las `NetworkPolicy` con namespace. Son una extensión fuera del árbol principal, así que el estándar `networking.k8s.io/v1` sigue siendo el objetivo del examen.
 
 ## Referencias
 
-- CNCF CKS Curriculum v1.34: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
-- Kubernetes docs — Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-- Kubernetes docs — Declare Network Policy (tutorial): https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
-- Kubernetes API reference — NetworkPolicy: https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
-- Calico docs — Network Policy: https://docs.tigera.io/calico/latest/network-policy/
-- Cilium docs — Network Policy: https://docs.cilium.io/en/stable/security/policy/
+- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- Kubernetes — Network Policies — https://kubernetes.io/docs/concepts/services-networking/network-policies/
+- Kubernetes API Reference — NetworkPolicy v1 — https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
+- Kubernetes — Cluster Networking — https://kubernetes.io/docs/concepts/cluster-administration/networking/
+- Kubernetes — Automatic labelling of namespaces — https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/#automatic-labelling
+- Kubernetes — Network Policy targeting a range of ports — https://kubernetes.io/docs/concepts/services-networking/network-policies/#targeting-a-range-of-ports
+- Kubernetes — Admin Network Policy (SIG Network Policy API) — https://network-policy-api.sigs.k8s.io/
+- Calico — Network Policy — https://docs.tigera.io/calico/latest/network-policy/
+- Cilium — Network Policy — https://docs.cilium.io/en/stable/security/policy/
