@@ -405,6 +405,17 @@ scripts/usage_report.py             # what has actually been spent, per model
 
 ## Settled — do not re-investigate or re-litigate these
 
+- **Completion context size predicts rejection, measured 2026-09-03.** Owner's
+  hypothesis (papers: models degrade past ~150-180k context), tested against
+  976 authored completions: retry-need climbs 13.3% (<100k) → 19.4%
+  (100-150k) → 28% (150-180k) → **71.4% (>180k)**; the [1m] variant (giant
+  context by design) sat at 88.2%. In retry groups the final passing attempt
+  was the smallest one 42/80 times. Caveat: topic difficulty confounds size.
+  Architecture already matches the remedy — every file is a fresh one-shot
+  completion; median 66k, p90 123k, so 95%+ of the corpus lives in the good
+  zone. If a future cert produces steady >150k single-file outputs, split
+  generation into sections THEN — do not restructure preemptively.
+
 Measured, written down, closed. If you are about to redo one of these, read the
 document instead; the numbers are there and the reasoning with them.
 
