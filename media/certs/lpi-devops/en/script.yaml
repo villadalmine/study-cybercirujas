@@ -1,0 +1,43 @@
+cert: lpi-devops
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: One Exam For The Whole DevOps Toolchain
+    voiceover: 'LPI DevOps Tools Engineer, exam 701-100, is not a Linux admin test
+      with a container chapter bolted on. It asks whether you can take code from a
+      Git branch to a running, observable service: software engineering practice at
+      33.3% of the exam, application containers at 21.7%, Kubernetes at 21.7%, and
+      security and observability at 23.3%. Four domains, nearly evenly weighted, because
+      that is how the work actually arrives.'
+  audience:
+    title: Who this exam is for
+    voiceover: This is a specialty-level certification, so it assumes you already
+      live on Linux and now want the toolchain around it certified. If your day involves
+      a pipeline, an image, a cluster and a dashboard, the blueprint will look familiar.
+      And it stays valid for five years, which is a fair horizon for tools that move
+      this fast.
+    bullets:
+    - Linux sysadmins moving into platform or DevOps roles
+    - Developers who own their build, container image and deployment
+    - SREs and infra engineers who want a vendor-neutral credential for the toolchain
+      they already use
+  cta:
+    title: Start with the blueprint
+    voiceover: On Cert Landscape you can work through 701-100 domain by domain, in
+      the same proportions the exam weights them. Pick the one you are weakest in
+      and start there.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Software Engineering at 33.3%, Application Container
+      at 21.7%, Kubernetes at 21.7%, Security and Observability at 23.3%.
+    domains:
+    - name: Software Engineering
+      weight: 33.3
+    - name: Application Container
+      weight: 21.7
+    - name: Kubernetes
+      weight: 21.7
+    - name: Security and Observability
+      weight: 23.3
