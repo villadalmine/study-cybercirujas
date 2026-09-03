@@ -192,9 +192,9 @@ quality:
 #     scripts/steer.py milestone lpic-3-305 en es
 #     scripts/steer.py milestone --clear        # timer idles
 milestone:
-  name: lpi-devops in en, es
+  name: aws-clf in en, es
   targets:
-    lpi-devops: [en, es]
+    aws-clf: [en, es]
 certs:
   lpic-1:
     active: true
