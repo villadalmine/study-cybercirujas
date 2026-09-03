@@ -122,6 +122,18 @@ quality: ## quality report for the material (generates nothing)
 metrics: ## real spend per stage/day/window from usage.jsonl + quota-history (free)
 	$(VENV)/bin/python3 scripts/metrics_report.py
 
+check-updates: ## refresh upstream curriculum facts and report drift (spends a few completions)
+	@# Chain: sync scrapes what each vendor CURRENTLY publishes (AI-assisted,
+	@# writes catalog.yaml upstream fields only) -> the matrix regenerates the
+	@# "Exam versions" table in STATUS.md -> check_versions prints the verdict
+	@# per cert. Found in practice 2026-09-03: lpi-devops was assumed "one
+	@# objective behind" and upstream had shipped a full v2.0 overhaul.
+	@# --backend claude explicitly: without it the sync falls to the litellm
+	@# default and dies on whatever .env holds (a 401 on the first run).
+	$(TEACH) tracker sync --backend claude
+	$(VENV)/bin/python3 scripts/status_matrix.py
+	$(VENV)/bin/python3 scripts/check_versions.py
+
 graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
