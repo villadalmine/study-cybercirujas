@@ -468,6 +468,48 @@ certs:
     sources:
       objectives: https://training.linuxfoundation.org/certification/certified-it-associate/
     vendor: Linux Foundation
+  aws-clf:
+    name: AWS Certified Cloud Practitioner (CLF-C02)
+    exam: CLF-C02
+    category: cloud
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-03'
+    file: certs/aws-clf.md
+    sources:
+      objectives: https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf
+    vendor: AWS
+    level: essentials
+    validity: 3 años
+    requires: []
+  az-900:
+    name: Microsoft Azure Fundamentals (AZ-900)
+    exam: AZ-900
+    category: cloud
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-03'
+    file: certs/az-900.md
+    sources:
+      objectives: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900
+    vendor: Microsoft
+    level: essentials
+    validity: lifetime
+    requires: []
+  gcp-cdl:
+    name: Google Cloud Digital Leader
+    exam: Cloud Digital Leader
+    category: cloud
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-03'
+    file: certs/gcp-cdl.md
+    sources:
+      objectives: https://services.google.com/fh/files/misc/cloud_digital_leader_exam_guide_english.pdf
+    vendor: Google
+    level: essentials
+    validity: 3 años
+    requires: []
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
@@ -964,3 +1006,26 @@ paths:
         name: Linux Foundation トラック (LFCA → LFCS)
         description: Linux Foundation の Linux 認定トラック(LPI とは別):LFCA(IT基礎)と LFCS(sysadmin、実技試験)。LFCS
           は Golden Kubestronaut の要件でもあります。LFCE と LFCT は廃止されました(2022年・2025年)。
+  aws-cloud:
+    name: Carrera AWS
+    description: 'La carrera de certificaciones de AWS desde el nivel más básico:
+      fundamentos de la nube, facturación y servicios core. Crece hacia Associate
+      y Professional.'
+    steps:
+    - - aws-clf
+    edited: true
+  azure-cloud:
+    name: Carrera Microsoft Azure
+    description: 'La carrera de certificaciones de Azure desde AZ-900: conceptos de
+      nube, arquitectura y gobernanza. Crece hacia los niveles Associate y Expert.'
+    steps:
+    - - az-900
+    edited: true
+  gcp-cloud:
+    name: Carrera Google Cloud
+    description: 'La carrera de certificaciones de Google Cloud desde Cloud Digital
+      Leader: capacidades de la nube y transformación digital. Crece hacia Associate
+      y Professional.'
+    steps:
+    - - gcp-cdl
+    edited: true

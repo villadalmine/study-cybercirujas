@@ -95,6 +95,11 @@ projects:
   sourceware:   {domains: [sourceware.org], docs: https://sourceware.org/, versioned: false}
   libreoffice:  {domains: [documentation.libreoffice.org, www.libreoffice.org], docs: https://documentation.libreoffice.org/, versioned: true}
 
+  # --- Public clouds (practitioner tier added 2026-09-03) ---------------------
+  aws:          {domains: [docs.aws.amazon.com, aws.amazon.com, d1.awsstatic.com], docs: https://docs.aws.amazon.com/, versioned: false}
+  azure:        {domains: [learn.microsoft.com, azure.microsoft.com],              docs: https://learn.microsoft.com/en-us/azure/, versioned: false}
+  google-cloud: {domains: [cloud.google.com, services.google.com],                 docs: https://cloud.google.com/docs/, versioned: false}
+
 # Hosts that are legitimate to cite but belong to no single project, so they are
 # not "unrecognised" — they just cannot be attributed. github.com is the big one:
 # a project's own repository is a primary source, but the host says nothing about

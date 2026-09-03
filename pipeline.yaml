@@ -324,6 +324,21 @@ certs:
     video: [en, es]
     owner: claude
     active: true
+  # Public-cloud practitioner tier, added 2026-09-03 (owner's request): the
+  # entry certs of the AWS/Azure/GCP career paths, snapshotted from each
+  # vendor's official exam guide and verified against the published domains.
+  aws-clf:
+    video: [en, es]
+    owner: claude
+    active: true
+  az-900:
+    video: [en, es]
+    owner: claude
+    active: true
+  gcp-cdl:
+    video: [en, es]
+    owner: claude
+    active: true
 # Career path videos, rendered from catalog.yaml rather than from a syllabus.
 paths:
   video_languages: [es, en, de]
