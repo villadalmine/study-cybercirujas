@@ -12,6 +12,10 @@ RUN pip install --no-cache-dir .
 COPY catalog.yaml ./
 COPY certs/ certs/
 COPY media/ media/
+# /api/status imports check_versions.survey() — the same function that renders
+# STATUS.md's table, on purpose (one implementation, two projections). The
+# cleaner home for it is teach/core; until that refactor, ship the scripts.
+COPY scripts/ scripts/
 
 EXPOSE 8000
 # TEACH_SECRET/LITELLM_* llegan por env desde el chart (Secret)
