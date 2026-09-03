@@ -10,6 +10,7 @@ Interactive docs at /docs (OpenAPI).
 
 import os
 import secrets
+from functools import lru_cache
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -139,6 +140,69 @@ def _valid_lang(lang: str) -> str:
 @app.get("/api/langs")
 def get_langs() -> dict:
     return {"langs": certs.LANGS, "default": certs.DEFAULT_LANG}
+
+
+@app.get("/api/status")
+def get_status() -> list:
+    """Per-certification overview: exam versions, coverage, videos, freshness.
+
+    The tree is the single source of truth; this endpoint and STATUS.md are
+    two projections of the SAME functions, so they cannot disagree on
+    definitions — only on timing, which the dates in each row make visible:
+    versions come from `check_versions.survey()` (the function that renders
+    STATUS.md's "Exam versions" table), and a language counts only when every
+    topic's content passes the same quality floor STATUS.md counts with.
+    Cached after the first request: the tree inside a deployed image is
+    immutable, so recomputing would only re-prove the same answer.
+    """
+    return _status_snapshot()
+
+
+@lru_cache(maxsize=1)
+def _status_snapshot() -> list:
+    import sys
+    scripts_dir = str(catalog.root() / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from check_versions import survey
+    from teach.core import quality
+    versions = {row["cert"]: row for row in survey()}
+    out = []
+    for cert_id, cert in catalog.list_certs().items():
+        try:
+            topic_list = certs.topics(cert_id)
+        except Exception:
+            topic_list = []
+        ids = {str(t["id"]) for t in topic_list}
+        cert_dir = catalog.root() / "certs" / cert_id
+        langs = []
+        if ids:
+            for lang in certs.LANGS:
+                files = [cert_dir / tid / lang / "content.md" for tid in ids]
+                if all(f.exists() and not quality.check_file(f) for f in files):
+                    langs.append(lang)
+        video_dir = MEDIA_DIR / "certs" / cert_id
+        videos = sorted(p.parent.name for p in video_dir.glob("*/video.mp4"))
+        v = versions.get(cert_id, {})
+        out.append({
+            "id": cert_id,
+            "name": cert.get("name"),
+            "exam": cert.get("exam"),
+            "vendor": cert.get("vendor"),
+            "level": cert.get("level"),
+            "validity": cert.get("validity"),
+            "topics": len(ids),
+            "generated": sum(1 for t in topic_list if t.get("status") == "generated"),
+            "langs": langs,
+            "videos": videos,
+            "built_on": v.get("version"),
+            "snapshot": v.get("snapshot"),
+            "upstream": v.get("upstream_version"),
+            "upstream_changed": v.get("upstream_changed"),
+            "checked": v.get("last_checked"),
+            "state": v.get("state"),
+        })
+    return out
 
 
 @app.get("/api/certs/{cert_id}")

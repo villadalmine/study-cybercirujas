@@ -108,6 +108,8 @@
   .panel input { border: 1px solid var(--line); border-radius: 10px; background: Canvas; }
   .error { color: #c34; }
   .back { display: inline-block; margin-bottom: .6rem; opacity: .8; font-size: .9rem; }
+  table.status { border-collapse: collapse; min-width: 640px; }
+  table.status td, table.status th { padding: .45rem .7rem; border-bottom: 1px solid var(--line); text-align: left; font-size: .9rem; vertical-align: top; }
   footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 1.3rem;
            font-size: .8rem; opacity: .65; text-align: center; }
 </style>
@@ -117,6 +119,7 @@
   <span class="brand" onclick="go(showLanding)">📚 Cert Landscape</span>
   <a data-nav="certs" onclick="go(showLanding)"></a>
   <a data-nav="paths" onclick="go(showPaths)"></a>
+  <a data-nav="status" onclick="go(showStatus)"></a>
   <select id="langSel" onchange="setLang(this.value)"></select>
 
 </header>
@@ -156,6 +159,7 @@ const STR = {
     fallback: 'Este tema todavía no está traducido a este idioma — se muestra en español.',
     foot: 'Temarios de fuentes oficiales: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — El contenido de estudio es original, generado con AI y con atribución de fuentes.',
     aiGen: 'Contenido generado con IA por', aiTrans: 'traducido del',
+    status: 'Estado', stTitle: 'Estado del material', stIntro: 'Versión del examen (congelada vs publicada por el vendor), cobertura por idioma —solo material que pasa el control de calidad— y videos. Derivado del contenido servido, nunca editado a mano.', stTopics: 'Temas', stLangs: 'Idiomas', stVideos: 'Videos', stVersion: 'Versión', stState: 'Estado', stChecked: 'Verificado', stCurrent: 'al día', stOutdated: 'desactualizada', stUnknown: 'sin medir',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Otras' },
   en: { certs: 'Certifications', paths: 'Career paths', login: 'Sign in', logout: 'Sign out',
     heroTitle: 'The IT certification landscape',
@@ -175,6 +179,7 @@ const STR = {
     fallback: 'This topic is not translated to this language yet — showing Spanish.',
     foot: 'Syllabi from official sources: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Study content is original, AI-generated, with source attribution.',
     aiGen: 'AI-generated content by', aiTrans: 'translated from',
+    status: 'Status', stTitle: 'Material status', stIntro: 'Exam version (frozen vs vendor-published), per-language coverage —only material passing the quality floor— and videos. Derived from the served content, never hand-edited.', stTopics: 'Topics', stLangs: 'Languages', stVideos: 'Videos', stVersion: 'Version', stState: 'State', stChecked: 'Checked', stCurrent: 'current', stOutdated: 'outdated', stUnknown: 'unmeasured',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Other' },
   fr: { certs: 'Certifications', paths: 'Parcours de carrière', login: 'Connexion', logout: 'Déconnexion',
     heroTitle: 'La carte des certifications IT',
@@ -194,6 +199,7 @@ const STR = {
     fallback: 'Ce sujet n\'est pas encore traduit — affiché en espagnol.',
     foot: 'Programmes des sources officielles : lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Contenu original généré par IA, avec attribution des sources.',
     aiGen: 'Contenu généré par IA par', aiTrans: 'traduit depuis',
+    status: 'État', stTitle: 'État du matériel', stIntro: "Version de l'examen (gelée vs publiée), couverture par langue — seul le matériel passant le seuil de qualité — et vidéos. Dérivé du contenu servi.", stTopics: 'Thèmes', stLangs: 'Langues', stVideos: 'Vidéos', stVersion: 'Version', stState: 'État', stChecked: 'Vérifié', stCurrent: 'à jour', stOutdated: 'obsolète', stUnknown: 'non mesuré',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Autres' },
   de: { certs: 'Zertifizierungen', paths: 'Karrierepfade', login: 'Anmelden', logout: 'Abmelden',
     heroTitle: 'Die IT-Zertifizierungslandkarte',
@@ -213,6 +219,7 @@ const STR = {
     fallback: 'Dieses Thema ist noch nicht übersetzt — Anzeige auf Spanisch.',
     foot: 'Lehrpläne aus offiziellen Quellen: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — Lerninhalte sind original, KI-generiert, mit Quellenangabe.',
     aiGen: 'KI-generierter Inhalt von', aiTrans: 'übersetzt aus',
+    status: 'Status', stTitle: 'Materialstatus', stIntro: 'Prüfungsversion (eingefroren vs. veröffentlicht), Abdeckung pro Sprache — nur Material über der Qualitätsschwelle — und Videos. Aus dem bereitgestellten Inhalt abgeleitet.', stTopics: 'Themen', stLangs: 'Sprachen', stVideos: 'Videos', stVersion: 'Version', stState: 'Status', stChecked: 'Geprüft', stCurrent: 'aktuell', stOutdated: 'veraltet', stUnknown: 'ungemessen',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Weitere' },
   zh: { certs: '认证', paths: '职业路径', login: '登录', logout: '退出',
     heroTitle: 'IT 认证全景图',
@@ -232,6 +239,7 @@ const STR = {
     fallback: '该主题尚未翻译成此语言——显示西班牙语版本。',
     foot: '考纲来自官方来源：lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学习内容为 AI 生成的原创内容，并注明来源。',
     aiGen: 'AI 生成内容，模型：', aiTrans: '译自',
+    status: '状态', stTitle: '教材状态', stIntro: '考试版本（冻结 vs 官方发布）、各语言覆盖（仅计入通过质量门槛的材料）与视频。全部由所服务的内容推导，绝不手工编辑。', stTopics: '主题', stLangs: '语言', stVideos: '视频', stVersion: '版本', stState: '状态', stChecked: '检查于', stCurrent: '最新', stOutdated: '过时', stUnknown: '未测',
     linux: '🐧 Linux', cn: '☸️ 云原生 (CNCF)', other: '其他' },
   ja: { certs: '認定資格', paths: 'キャリアパス', login: 'ログイン', logout: 'ログアウト',
     heroTitle: 'IT認定資格の全体マップ',
@@ -251,6 +259,7 @@ const STR = {
     fallback: 'このトピックはまだ翻訳されていません——スペイン語で表示します。',
     foot: 'シラバスは公式ソースから: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — 学習コンテンツはAI生成のオリジナルで、出典を明記。',
     aiGen: 'AI生成コンテンツ（モデル）:', aiTrans: '翻訳元:',
+    status: 'ステータス', stTitle: '教材ステータス', stIntro: '試験バージョン（凍結 vs 公式公開）、言語ごとのカバレッジ（品質基準を満たす教材のみ）、動画。配信中のコンテンツから導出され、手作業では編集されません。', stTopics: 'トピック', stLangs: '言語', stVideos: '動画', stVersion: 'バージョン', stState: '状態', stChecked: '確認日', stCurrent: '最新', stOutdated: '旧版', stUnknown: '未測定',
     linux: '🐧 Linux', cn: '☸️ クラウドネイティブ (CNCF)', other: 'その他' },
   pt: { certs: 'Certificações', paths: 'Trilhas de carreira', login: 'Entrar', logout: 'Sair',
     heroTitle: 'O mapa das certificações de TI',
@@ -270,6 +279,7 @@ const STR = {
     fallback: 'Este tema ainda não foi traduzido — exibindo em espanhol.',
     foot: 'Conteúdos de fontes oficiais: lpi.org · github.com/cncf/curriculum (CC-BY 4.0) · training.linuxfoundation.org — O material de estudo é original, gerado com IA e com atribuição de fontes.',
     aiGen: 'Conteúdo gerado com IA por', aiTrans: 'traduzido do',
+    status: 'Estado', stTitle: 'Estado do material', stIntro: 'Versão do exame (congelada vs publicada), cobertura por idioma — só material acima do piso de qualidade — e vídeos. Derivado do conteúdo servido, nunca editado à mão.', stTopics: 'Temas', stLangs: 'Idiomas', stVideos: 'Vídeos', stVersion: 'Versão', stState: 'Estado', stChecked: 'Verificado', stCurrent: 'em dia', stOutdated: 'desatualizada', stUnknown: 'não medido',
     linux: '🐧 Linux', cn: '☸️ Cloud Native (CNCF)', other: 'Outras' },
 };
 let LANG = localStorage.getItem('teach_lang')
@@ -289,6 +299,7 @@ function setLang(lang) {
 function renderChrome() {
   document.querySelector('[data-nav="certs"]').textContent = t('certs');
   document.querySelector('[data-nav="paths"]').textContent = t('paths');
+  document.querySelector('[data-nav="status"]').textContent = t('status');
   // innerHTML on purpose: the strings are our own constants (escaped anyway)
   // and the EU AI Act Art. 50 disclosure needs a real link to the provenance
   // (the repo carries meta.yaml per topic, MODELS.md, and the full pipeline).
@@ -494,6 +505,28 @@ async function showCert(certId) {
            ? `<a class="study" onclick="go(showTopic,'${certId}','${topic.id}')">${t('view')}</a>`
            : `<span class="study" style="opacity:.5">${t('soon')}</span>`}
        </div>`).join('');
+  window.scrollTo(0, 0);
+}
+
+async function showStatus() {
+  const rows = await api('/api/status');
+  const badge = (s) => s === 'current' ? `<span style="color:#2e7d32">\u2705 ${t('stCurrent')}</span>`
+    : s === 'outdated' ? `<span style="color:#c62828">\u26a0\ufe0f ${t('stOutdated')}</span>`
+    : `<span style="opacity:.6">\u2013 ${t('stUnknown')}</span>`;
+  $('content').innerHTML = `
+    <h2>${t('stTitle')}</h2>
+    <p class="note">${t('stIntro')}</p>
+    <div style="overflow-x:auto"><table class="status">
+      <tr><th></th><th>${t('stTopics')}</th><th>${t('stLangs')}</th><th>${t('stVideos')}</th><th>${t('stVersion')}</th><th>${t('stState')}</th><th>${t('stChecked')}</th></tr>
+      ${rows.map((r) => `<tr>
+        <td><b>${esc(r.name || r.id)}</b><br><span class="note">${esc(r.exam || '')}${r.vendor ? ' \u00b7 ' + esc(r.vendor) : ''}</span></td>
+        <td>${r.generated}/${r.topics}</td>
+        <td>${r.langs.map((l) => l.toUpperCase()).join(' ') || '\u2013'}</td>
+        <td>${r.videos.map((l) => l.toUpperCase()).join(' ') || '\u2013'}</td>
+        <td>${esc(r.built_on || '\u2013')}${r.upstream && r.upstream !== r.built_on ? ` \u2192 ${esc(r.upstream)}` : ''}</td>
+        <td>${badge(r.state)}</td>
+        <td>${esc(r.checked || '\u2013')}</td></tr>`).join('')}
+    </table></div>`;
   window.scrollTo(0, 0);
 }
 
