@@ -195,6 +195,57 @@ def sync_cncf() -> list[str]:
     return changes or ["cncf: no upstream changes"]
 
 
+# ---------------------------------------------------------------- Public clouds
+
+def sync_clouds(backend: str | None = None) -> list[str]:
+    """Upstream facts for the vendor-cloud certs (category: cloud).
+
+    AWS, Microsoft and Google publish no machine-readable version feed, so the
+    official exam-guide document itself is fetched and the AI extracts only
+    what the document states about itself: a printed version string and a
+    printed last-updated date. "unknown" is a correct answer — before this
+    existed the status table showed the cloud rows as unmeasured forever,
+    because no sync path knew these vendors (found 2026-09-04, aws-clf's
+    first day on the site). Writes catalog upstream fields only; the frozen
+    syllabus is never touched, same separation as every other sync.
+    """
+    data = catalog.load()
+    changes = []
+    today = datetime.date.today().isoformat()
+    for cert_id, cert in data["certs"].items():
+        if cert.get("category") != "cloud":
+            continue
+        url = (cert.get("sources") or {}).get("objectives") or ""
+        if not url:
+            continue
+        text = fetch_text(url)
+        result = _ai_yaml(
+            backend,
+            usage={"op": "catalog-sync", "kind": "cloud", "cert": cert_id},
+            prompt=f"Documento oficial del examen {cert.get('exam')} "
+            f"({cert.get('name')}), texto plano:\n{text}\n\n"
+            "Devolvé YAML con esta forma exacta:\n"
+            "version: <la REVISIÓN que el documento imprime sobre sí mismo "
+            "(p.ej. 'Version 1.0' -> '1.0'), NUNCA el código de examen tipo "
+            "CLF-C02/AZ-900 que ya conocemos; si no imprime revisión, 'unknown'>\n"
+            "updated: <fecha de última actualización SI EL DOCUMENTO LA "
+            "IMPRIME, formato YYYY-MM-DD, si no 'unknown'>\n"
+            "No inventes nada: 'unknown' es una respuesta correcta.",
+        )
+        cert["last_checked"] = today
+        version = str(result.get("version") or "unknown")
+        updated = str(result.get("updated") or "unknown")
+        if version != "unknown" and cert.get("tracked_version") != version:
+            cert["tracked_version"] = version
+            changes.append(f"{cert_id}: upstream version -> {version}")
+        if (updated != "unknown" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", updated)
+                and cert.get("curriculum_updated") != updated):
+            cert["curriculum_updated"] = updated
+            changes.append(f"{cert_id}: curriculum updated -> {updated}")
+        catalog.save(data)  # incremental: a later fetch failing loses nothing
+    return changes or ["clouds: no upstream changes"]
+
+
 # ---------------------------------------------------------------- LPI
 
 LPI_SUMMARY = "https://www.lpi.org/our-certifications/summary-of-lpi-certifications/"

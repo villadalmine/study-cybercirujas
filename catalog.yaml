@@ -472,9 +472,9 @@ certs:
     name: AWS Certified Cloud Practitioner (CLF-C02)
     exam: CLF-C02
     category: cloud
-    tracked_version: unknown
+    tracked_version: '1.0'
     upstream_status: current
-    last_checked: '2026-09-03'
+    last_checked: '2026-09-04'
     file: certs/aws-clf.md
     sources:
       objectives: https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf
@@ -486,9 +486,9 @@ certs:
     name: Microsoft Azure Fundamentals (AZ-900)
     exam: AZ-900
     category: cloud
-    tracked_version: unknown
+    tracked_version: AZ-900
     upstream_status: current
-    last_checked: '2026-09-03'
+    last_checked: '2026-09-04'
     file: certs/az-900.md
     sources:
       objectives: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900
@@ -496,13 +496,14 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    curriculum_updated: '2026-06-22'
   gcp-cdl:
     name: Google Cloud Digital Leader
     exam: Cloud Digital Leader
     category: cloud
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-03'
+    last_checked: '2026-09-04'
     file: certs/gcp-cdl.md
     sources:
       objectives: https://services.google.com/fh/files/misc/cloud_digital_leader_exam_guide_english.pdf
@@ -510,6 +511,7 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
+    curriculum_updated: '2026-08-12'
 paths:
   kubernetes:
     name: Ingeniero Kubernetes

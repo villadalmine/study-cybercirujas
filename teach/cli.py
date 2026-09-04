@@ -120,7 +120,7 @@ def lab_status(cert_id: str, topic_id: str) -> None:
 
 @tracker_app.command("sync")
 def tracker_sync(
-    provider: str = typer.Option("all", "--provider", help="all | cncf | lpi"),
+    provider: str = typer.Option("all", "--provider", help="all | cncf | lpi | clouds"),
     backend: str = typer.Option(None, "--backend", help="AI backend used to parse pages"),
 ) -> None:
     """Scrape the official sources and update the catalog."""
@@ -132,6 +132,8 @@ def tracker_sync(
             changes += tracker.sync_cncf()
         if provider in ("all", "lpi"):
             changes += tracker.sync_lpi(backend=backend)
+        if provider in ("all", "clouds"):
+            changes += tracker.sync_clouds(backend=backend)
     except Exception as error:
         typer.echo(f"Error: {error}", err=True)
         raise typer.Exit(1)
