@@ -1,0 +1,45 @@
+cert: aws-clf
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Tu primer paso serio en la nube
+    voiceover: 'AWS Certified Cloud Practitioner no te pide programar ni administrar
+      servidores: te pide entender la nube y hablarla con propiedad. El examen CLF-C02
+      valida que sabés qué es AWS, cómo se factura, cómo se asegura y qué servicio
+      resuelve cada problema. Es la puerta de entrada del ecosistema, y es la que
+      abre todas las demás.'
+  audience:
+    title: Para quién es
+    voiceover: Es una certificación de nivel esencial, pensada para quien necesita
+      entender la nube aunque no la opere todos los días. Si trabajás cerca de un
+      equipo cloud y querés dejar de asentir sin entender, este es tu examen. También
+      es el arranque natural si venís de cero y querés una base ordenada antes de
+      las certificaciones técnicas.
+    bullets:
+    - Perfiles técnicos que empiezan en la nube y necesitan una base sólida
+    - 'Roles de negocio: ventas, compras, finanzas y gestión de proyectos con AWS
+      de por medio'
+    - Estudiantes y personas en reconversión que buscan su primera certificación reconocida
+  cta:
+    title: Empezá hoy en Cert Landscape
+    voiceover: 'En Cert Landscape tenés el CLF-C02 desglosado por dominios: Cloud
+      Technology and Services con 34%, Security and Compliance con 30%, Cloud Concepts
+      con 24% y Billing, Pricing, and Support con 12%, con teoría, ejercicios y laboratorios.
+      Entrá, elegí el primer dominio y arrancá: la certificación vale tres años, y
+      el conocimiento mucho más.'
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Cloud Concepts con 24.0%, Security and Compliance
+      con 30.0%, Cloud Technology and Services con 34.0%, Billing, Pricing, and Support
+      con 12.0%.
+    domains:
+    - name: Cloud Concepts
+      weight: 24.0
+    - name: Security and Compliance
+      weight: 30.0
+    - name: Cloud Technology and Services
+      weight: 34.0
+    - name: Billing, Pricing, and Support
+      weight: 12.0

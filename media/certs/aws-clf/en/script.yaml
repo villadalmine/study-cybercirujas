@@ -1,0 +1,41 @@
+cert: aws-clf
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Your first real AWS credential
+    voiceover: Everyone talks about the cloud, but can you actually explain what it
+      is, what it costs, and who is responsible when something breaks? That is exactly
+      what AWS Certified Cloud Practitioner asks. CLF-C02 is the exam that turns "I
+      have heard of AWS" into something you can put on paper.
+  audience:
+    title: Who it is for
+    voiceover: 'This is an essentials-level certification, so you do not need years
+      of hands-on engineering to sit it. Two thirds of the exam is Security and Compliance
+      at thirty percent plus Cloud Technology and Services at thirty-four, with Cloud
+      Concepts at twenty-four and Billing, Pricing and Support at twelve. That mix
+      is deliberate: it covers the whole picture, not just the console.'
+    bullets:
+    - Career changers taking their first step into cloud
+    - Sales, finance and project people who need to speak AWS with credibility
+    - IT professionals building a base before the associate-level exams
+  cta:
+    title: Start with the essentials
+    voiceover: On Cert Landscape you get the CLF-C02 material broken down domain by
+      domain, weighted the way the real exam is. Start studying it today, and your
+      certification stays valid for three years.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Cloud Concepts at 24.0%, Security and Compliance at
+      30.0%, Cloud Technology and Services at 34.0%, Billing, Pricing, and Support
+      at 12.0%.
+    domains:
+    - name: Cloud Concepts
+      weight: 24.0
+    - name: Security and Compliance
+      weight: 30.0
+    - name: Cloud Technology and Services
+      weight: 34.0
+    - name: Billing, Pricing, and Support
+      weight: 12.0
