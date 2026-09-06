@@ -1,0 +1,40 @@
+cert: az-900
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Your First Real Step Into Azure
+    voiceover: Azure runs somewhere behind a huge share of the software people use
+      every day, and most of us learn it in scattered pieces. AZ-900 is the exam that
+      turns those pieces into one clear picture. It validates that you can describe
+      cloud concepts, Azure's core architecture and services, and how Azure is managed
+      and governed.
+  audience:
+    title: Who it's for
+    voiceover: This is an essentials-level certification, so no prior Azure experience
+      is assumed. It's built for people who need to speak the language of the cloud
+      with confidence, whether or not they write code. And because it doesn't expire,
+      what you earn here stays earned.
+    bullets:
+    - Newcomers to IT who want a credible starting point in cloud
+    - Sysadmins and developers moving workloads to Azure for the first time
+    - Sales, project and finance roles that need to understand Azure services, cost
+      and governance
+  cta:
+    title: Start with the exam blueprint
+    voiceover: On Cert Landscape you'll find AZ-900 broken down by its three official
+      domains — cloud concepts at 28.2%, Azure architecture and services at 38.5%,
+      and Azure management and governance at 33.3% — so your study time follows the
+      exam's real weight. Open the AZ-900 track and take the first topic today.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Describe cloud concepts at 28.2%, Describe Azure architecture
+      and services at 38.5%, Describe Azure management and governance at 33.3%.
+    domains:
+    - name: Describe cloud concepts
+      weight: 28.2
+    - name: Describe Azure architecture and services
+      weight: 38.5
+    - name: Describe Azure management and governance
+      weight: 33.3

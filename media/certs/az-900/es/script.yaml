@@ -1,0 +1,39 @@
+cert: az-900
+lang: es
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: Azure explicado antes de tocar nada
+    voiceover: 'AZ-900 no te convierte en arquitecto de la nube, y justamente por
+      eso sirve: valida que entendés cómo funciona Azure antes de levantar tu primer
+      recurso. El examen se reparte en tres bloques bastante parejos: conceptos de
+      nube, 28,2%; arquitectura y servicios de Azure, 38,5%; y gestión y gobernanza,
+      33,3%. Es la base sobre la que después se apoya todo lo demás.'
+  audience:
+    title: Para quién es
+    voiceover: 'Es una certificación de nivel essentials, así que no pide experiencia
+      previa administrando infraestructura. Y tiene un detalle que no es menor: la
+      credencial es de por vida, no vence ni hay que recertificar. Si nunca trabajaste
+      con nube, este es el punto de entrada.'
+    bullets:
+    - Quien arranca en IT y quiere entender la nube desde cero
+    - Perfiles técnicos de otras áreas que necesitan hablar Azure con fundamento
+    - 'Roles no técnicos: ventas, compras, gestión de proyectos sobre Azure'
+  cta:
+    title: Empezá por los fundamentos
+    voiceover: En Cert Landscape tenés AZ-900 desglosada dominio por dominio, con
+      el peso real de cada uno para que sepas dónde poner las horas. Entrá y empezá
+      por el primer tema.
+  domains:
+    title: Dominios del examen
+    voiceover: El examen se reparte en Describe cloud concepts con 28.2%, Describe
+      Azure architecture and services con 38.5%, Describe Azure management and governance
+      con 33.3%.
+    domains:
+    - name: Describe cloud concepts
+      weight: 28.2
+    - name: Describe Azure architecture and services
+      weight: 38.5
+    - name: Describe Azure management and governance
+      weight: 33.3
