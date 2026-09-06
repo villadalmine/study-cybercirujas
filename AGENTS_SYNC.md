@@ -445,6 +445,18 @@ document instead; the numbers are there and the reasoning with them.
 
 ## Open — worth someone's time
 
+- **The floor's `starts_with: "#"` accepts a bash comment as a title.**
+  az-900/2.4-en landed DECAPITATED — the file begins mid-script at
+  `# 4. Every Key Vault...` (a shell comment), having lost its heading,
+  intro and the script's first sections — and passed the floor because a
+  bash comment satisfies the heading check. Chain of consequences found
+  2026-09-06: the headless file has an odd fence count, which desyncs
+  _verify_translation's fence pairing, which then compares PROSE as CODE
+  and rejects a CORRECT translation four times. Topic re-authored; the
+  floor refinement (first line should look like a real title, e.g.
+  `^# \S.*[^.]$` or require the intro structure) is a quality-floor
+  change → propose-and-test, not hot-patch.
+
 - **check_claims counts quota errors as negative findings.** A citation whose
   judgment call returned "You've hit your session limit" is UNJUDGED, but the
   2026-09-01 cks run reported exactly those 5 as "5 look stale or wrong" (the
