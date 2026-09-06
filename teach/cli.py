@@ -210,6 +210,14 @@ def cert_translate(
             typer.echo(f"  {topic_id}: {error}", err=True)
             failed.append(topic_id)
             continue
+        except Exception as error:  # noqa: BLE001
+            # An unexpected exception in ONE topic must not abort the rest:
+            # az-900/3.4's oversized prompt raised OSError and took the whole
+            # translate command down with it, stranding every later topic.
+            typer.echo(f"  {topic_id}: unexpected {type(error).__name__}: {error}",
+                       err=True)
+            failed.append(topic_id)
+            continue
         if "skipped" in result:
             typer.echo(f"  {topic_id}: skipped — {result['skipped']}")
         else:

@@ -386,13 +386,27 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
         # live process and keeps skipping.
         timeout = pipeline.budget().get("completion_timeout_seconds") or None
         started = time.monotonic()
+        prompt = f"{system}\n\n{user}"
+        # Linux caps a SINGLE argv element at MAX_ARG_STRLEN (~128 KB).
+        # az-900/3.4's content (136 KB) was the first source to cross it:
+        # execve refused with "Argument list too long" and the whole translate
+        # command crashed. Large prompts travel on stdin instead — `claude -p`
+        # reads a piped prompt exactly like an argument one. Small prompts keep
+        # the argv path with stdin closed, because agent CLIs stall waiting on
+        # an open stdin that never delivers.
+        if len(prompt.encode()) > 100_000:
+            run_command = command[:-1] if command[-1] == "--" else list(command)
+            stdin_kwargs = {"input": prompt}
+        else:
+            run_command = [*command, prompt]
+            stdin_kwargs = {"stdin": subprocess.DEVNULL}
         try:
             result = subprocess.run(
-                [*command, f"{system}\n\n{user}"],
+                run_command,
                 capture_output=True,
                 text=True,
-                stdin=subprocess.DEVNULL,
                 timeout=timeout,
+                **stdin_kwargs,
             )
         except subprocess.TimeoutExpired:
             raise GeneratorConfigError(
