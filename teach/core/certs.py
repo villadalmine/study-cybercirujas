@@ -185,6 +185,12 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
             raw = yaml.safe_load(meta_file.read_text()) or {}
             generated_by = {key: raw.get(key) for key in
                             ("model", "backend", "generated_at", "translated_from")}
+            # The official syllabus this topic was written from. Recorded per
+            # topic since the beginning but never surfaced: a student reading
+            # AI-generated material should be able to reach the vendor
+            # document it derives from, not just be told a model wrote it.
+            generated_by["sources"] = [s for s in (raw.get("sources") or [])
+                                       if isinstance(s, str) and s.startswith("http")]
         except yaml.YAMLError:
             generated_by = None
     return {

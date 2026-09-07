@@ -512,6 +512,51 @@ certs:
     validity: 3 años
     requires: []
     curriculum_updated: '2026-08-12'
+  aws-aif:
+    name: AWS Certified AI Practitioner (AIF-C01)
+    exam: AIF-C01
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-06'
+    file: certs/aws-aif.md
+    sources:
+      objectives: https://d1.awsstatic.com/training-and-certification/docs-ai-practitioner/AWS-Certified-AI-Practitioner_Exam-Guide.pdf
+      overview: https://aws.amazon.com/certification/certified-ai-practitioner/
+    vendor: AWS
+    level: essentials
+    validity: 3 años
+    requires: []
+  ai-901:
+    name: Microsoft Azure AI Fundamentals (AI-901)
+    exam: AI-901
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-06'
+    file: certs/ai-901.md
+    sources:
+      objectives: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ai-901
+      overview: https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/
+    vendor: Microsoft
+    level: essentials
+    validity: lifetime
+    requires: []
+  gcp-gail:
+    name: Google Cloud Generative AI Leader
+    exam: Generative AI Leader
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-06'
+    file: certs/gcp-gail.md
+    sources:
+      objectives: https://services.google.com/fh/files/misc/generative_ai_leader_exam_guide_english.pdf
+      overview: https://cloud.google.com/learn/certification/generative-ai-leader
+    vendor: Google
+    level: essentials
+    validity: 3 años
+    requires: []
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
@@ -1015,6 +1060,7 @@ paths:
       y Professional.'
     steps:
     - - aws-clf
+    - - aws-aif
     edited: true
   azure-cloud:
     name: Carrera Microsoft Azure
@@ -1022,6 +1068,7 @@ paths:
       nube, arquitectura y gobernanza. Crece hacia los niveles Associate y Expert.'
     steps:
     - - az-900
+    - - ai-901
     edited: true
   gcp-cloud:
     name: Carrera Google Cloud
@@ -1030,4 +1077,5 @@ paths:
       y Professional.'
     steps:
     - - gcp-cdl
+    - - gcp-gail
     edited: true
