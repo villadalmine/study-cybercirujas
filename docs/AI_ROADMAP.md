@@ -56,16 +56,24 @@ sections — see the context finding in AGENTS_SYNC.
 
 ## NVIDIA career track (researched 2026-09-09, owner's request)
 
-NVIDIA turns out to be the **best-shaped vendor track after the three public
-clouds**: nine certifications in two coherent branches, one associate rung
-feeding each, and — the part that decides it — **machine-readable exam
-outlines**. The certification pages themselves link no PDF, but every exam
-publishes one under a stable pattern:
+NVIDIA has the **best-shaped catalogue after the three public clouds** —
+nine certifications, two coherent branches, an associate rung feeding each —
+but **filter 2 is unresolved**: no machine-readable objectives document has
+been found yet.
 
-    https://academy.nvidia.com/en/wp-content/uploads/2026/01/<Exam-Name>-Outline-2026.pdf
+**Correction, same session:** the outline URLs indexed by search engines
+(`academy.nvidia.com/.../<Exam-Name>-Outline-2026.pdf`) all **301-redirect
+to the training landing page** and serve HTML. They read as HTTP 200 only
+because the probe followed redirects — the mistake this file exists to
+prevent, made and caught inside one session. `fetch_text` confirmed it:
+`invalid pdf header: b'\n<!DO'`. The academy site was reorganised and the
+PDFs moved or went behind the login.
 
-Probed live, all HTTP 200: AI Infrastructure and Operations, AI Operations,
-AI Infrastructure, Generative AI LLMs, Agentic AI.
+Before cataloguing anything NVIDIA, someone has to find where the outlines
+live now — check the individual exam pages under
+`nvidia.com/en-us/learn/certification/<exam>/`, or whether Certiverse (the
+exam delivery platform) publishes the domain breakdown. **Probe without
+`-L` and confirm the body is a real PDF**, not just a 200.
 
 | Cert | Code | Level | Price | Branch |
 |---|---|---|---|---|
