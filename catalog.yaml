@@ -557,6 +557,52 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
+  nca-aiio:
+    name: 'NVIDIA-Certified Associate: AI Infrastructure and Operations'
+    exam: NCA-AIIO
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-09'
+    file: certs/nca-aiio.md
+    sources:
+      objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
+      overview: https://www.nvidia.com/en-us/learn/certification/ai-infrastructure-operations-associate/
+    vendor: NVIDIA
+    level: essentials
+    validity: 2 años
+    requires: []
+  nca-genl:
+    name: 'NVIDIA-Certified Associate: Generative AI LLM'
+    exam: NCA-GENL
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-09'
+    file: certs/nca-genl.md
+    sources:
+      objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/ik3amm6oy7871nv371600i4h7drvex5m.pdf
+      overview: https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/
+    vendor: NVIDIA
+    level: essentials
+    validity: 2 años
+    requires: []
+  ncp-aii:
+    name: 'NVIDIA-Certified Professional: AI Infrastructure'
+    exam: NCP-AII
+    category: ai
+    tracked_version: unknown
+    upstream_status: current
+    last_checked: '2026-09-09'
+    file: certs/ncp-aii.md
+    sources:
+      objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
+      overview: https://www.nvidia.com/en-us/learn/certification/ai-infrastructure-professional/
+    vendor: NVIDIA
+    level: professional
+    validity: 2 años
+    requires:
+    - nca-aiio
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
@@ -1078,4 +1124,14 @@ paths:
     steps:
     - - gcp-cdl
     - - gcp-gail
+    edited: true
+  nvidia-ai:
+    name: Carrera NVIDIA AI
+    description: 'La carrera de certificaciones NVIDIA: arranca en el nivel associate
+      (infraestructura de IA o IA generativa) y sigue al nivel professional. La rama
+      de infraestructura es la continuación natural del track de Kubernetes.'
+    steps:
+    - - nca-aiio
+      - nca-genl
+    - - ncp-aii
     edited: true

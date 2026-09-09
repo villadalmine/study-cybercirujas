@@ -119,11 +119,26 @@ the fallback, and it needs a human to read the result before freezing.
 
 Re-check with `make check-updates` reasoning, not by memory:
 
-- **Anthropic Claude Certified** (Architect Foundations + 4 exams, Pearson
-  VUE) — gated to the Claude Partner Network. Fails filter 3. Revisit if it
-  opens to the public.
-- **OpenAI AI Foundations** (ETS psychometrics) — employer/university pilots
-  only, no public proctored exam. Fails filter 3.
+- **Anthropic Claude Certified** (Architect Foundations + 4 exams covering
+  Associate/Developer/Architect, Pearson VUE) — **owner wants this one**
+  (2026-09-09): it is the model provider this platform itself runs on, so
+  the material would be unusually well-grounded. Blocked on filter 3 today:
+  access runs through the Claude Partner Network rather than open
+  enrolment. **Action**: re-check quarterly whether exam objectives are
+  published publicly and whether individuals can register; catalogue the
+  day either opens. Watch anthropic.com/partners and the Pearson VUE
+  catalogue.
+- **OpenAI AI Foundations** (ETS psychometrics) — **owner wants this one
+  too**. Employer/university pilots only (Walmart, Accenture), no public
+  proctored exam and no published objectives document. Fails filters 2 and
+  3. **Action**: same quarterly re-check; the ETS partnership suggests a
+  public rollout is intended, and the moment an objectives document exists
+  this becomes a Phase-1-shaped candidate.
+
+  Both are the first certifications from *model providers* rather than
+  cloud/infra vendors, which is why they matter beyond their size: they
+  define what the market will consider "certified" for LLM work. Being
+  early on them is worth more than being complete on a fourth Linux track.
 - **AWS AI Business Strategist** — entered beta 2026-09-01. Objectives can
   still move in beta; snapshot at GA, not before.
 - **Azure AB-100 / AB-730** (agentic business architect tiers) — confirm
