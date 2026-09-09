@@ -92,6 +92,47 @@ tracking, the anonymous `X-Session-ID` variant already proposed in
 BACKLOG.md is the route, and it needs the persistence decision settled
 first. Deliberately out of scope here.
 
+## Tools / function calling — evaluated 2026-09-09
+
+Owner asked whether giving the bot tools (and whether writing a harness
+skill) is worth it. Three different questions, three different answers.
+
+**A harness skill to build this: no.** Skills earn their keep on
+*recurring* procedures — `check-updates` runs quarterly and has steps
+people forget. Building the bot happens once; a skill for it is
+documentation with extra ceremony. This design document already does that
+job better.
+
+**Tools for the bot: yes, but they ARE phase 2 — not a separate feature.**
+Measured 2026-09-09: **364 of 431 OpenRouter models (84%)** advertise
+`tools` in `supported_parameters`.
+
+- In phase 1 tools add nothing: the student already chose the topic and the
+  whole file is in context. A `get_topic` tool for a topic already loaded
+  is pure complexity.
+- In phase 2 tool calling is simply the better shape of the two-round-trip
+  design above — the model calls `get_topic(cert, id)` as often as it needs
+  instead of the page orchestrating it by hand.
+- Real cost: the 16% without tool support needs a fallback path, and the
+  tool loop runs in the browser (the page executes the call and returns the
+  result). Two code paths where phase 1 has one.
+
+**What is actually worth building, and was missing from this plan: expose
+the corpus over MCP.** Today the material is reachable only from our own
+page. An MCP server (`list_certs`, `get_syllabus`, `get_topic`,
+`search_topics`) would let *any* agent — someone else's Claude Code,
+Cursor, a custom bot — study against this corpus directly. The repo already
+runs one MCP server (graphify, in `.mcp.json`), so the pattern is proven
+here.
+
+The leverage: **the bot's tools and the MCP tools are the same contract.**
+Define those four functions once and they serve the browser tool loop and
+the MCP server both. Design them together, ship them separately.
+
+Order: phase 1 with no tools (immediate value, one code path) → phase 2
+with tool calling if cross-certification questions are actually asked →
+MCP as its own piece reusing the same contract.
+
 ## Alternatives considered
 
 - **Server-side inference with our key** — rejected: reintroduces the
