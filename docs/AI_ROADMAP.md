@@ -54,6 +54,47 @@ Professional-tier topics run deep (LPIC-3 class). Watch per-completion size:
 if single files pass ~150k tokens consistently, split generation into
 sections — see the context finding in AGENTS_SYNC.
 
+## NVIDIA career track (researched 2026-09-09, owner's request)
+
+NVIDIA turns out to be the **best-shaped vendor track after the three public
+clouds**: nine certifications in two coherent branches, one associate rung
+feeding each, and — the part that decides it — **machine-readable exam
+outlines**. The certification pages themselves link no PDF, but every exam
+publishes one under a stable pattern:
+
+    https://academy.nvidia.com/en/wp-content/uploads/2026/01/<Exam-Name>-Outline-2026.pdf
+
+Probed live, all HTTP 200: AI Infrastructure and Operations, AI Operations,
+AI Infrastructure, Generative AI LLMs, Agentic AI.
+
+| Cert | Code | Level | Price | Branch |
+|---|---|---|---|---|
+| AI Infrastructure and Operations | NCA-AIIO | Associate | $125 | infra (entry) |
+| AI Infrastructure | NCP-AII | Professional | $400 | infra |
+| AI Operations | NCP-AIO | Professional | $500 | infra |
+| AI Networking | NCP-AIN | Professional | $400 | infra |
+| AI Rack and Interconnect | NCP-ARI | Professional | $400 | infra |
+| Generative AI LLM | NCA-GENL | Associate | $125 | genai (entry) |
+| Generative AI Multimodal | NCA-GENM | Associate | $125 | genai |
+| Generative AI LLMs | NCP-GENL | Professional | $200 | genai |
+| Agentic AI | NCP-AAI | Professional | $200 | genai |
+
+Proposed path shape — two entry points, then specialise:
+
+    NCA-AIIO ──> NCP-AII ──> NCP-AIO / NCP-AIN / NCP-ARI     (infrastructure)
+    NCA-GENL ──> NCP-GENL ──> NCP-AAI                        (generative/agentic)
+                 NCA-GENM
+
+Why it fits this catalogue: the infra branch is the natural continuation of
+the Kubernetes corpus (GPU scheduling, cluster networking, workload ops),
+and the agentic branch matches where the market is moving. Suggested start:
+**NCA-AIIO** alone — one associate cert, cheapest to produce, proves the
+outline-PDF extraction works before committing to eight more.
+
+Caveat to check at snapshot time: these outlines are slide-style PDFs and
+may carry the CAPA disease (unextractable fonts). `scripts/ocr_pdf.py` is
+the fallback, and it needs a human to read the result before freezing.
+
 ## Phase 3 — specialists (need a verification pass before cataloguing)
 
 - **Databricks GenAI Engineer Associate** ($200) — official and open, but the
