@@ -445,6 +445,19 @@ document instead; the numbers are there and the reasoning with them.
 
 ## Open — worth someone's time
 
+- **The unattended pass CANNOT publish images, and never could.** The timer
+  runs on the host; the host has `git` but **no `make`, no `kubectl`, no
+  `helm`** (they live in the toolbox container, which is why every manual
+  publish worked). `publish_if_complete` therefore dies at the image stage
+  with `[Errno 2] No such file or directory: 'make'` — content is safe and
+  the message is honest, but the "publish chain" only ever ran because a
+  human (or an agent in the toolbox) launched it. Same class as the
+  openh264 finding: a capability present interactively and absent
+  unattended. Fix options, owner's call: install the three tools on the
+  host, have the pass invoke them through `toolbox run`, or accept that
+  publishing is a manual step and drop the stage from the unattended pass
+  so it stops reporting a failure it cannot fix.
+
 - **The floor's `starts_with: "#"` accepts a bash comment as a title.**
   az-900/2.4-en landed DECAPITATED — the file begins mid-script at
   `# 4. Every Key Vault...` (a shell comment), having lost its heading,
