@@ -1,0 +1,47 @@
+cert: gcp-cdl
+lang: en
+backend: claude
+model: claude-opus-5
+scenes:
+  hook:
+    title: The Google Cloud Exam Without Code
+    voiceover: 'Cloud Digital Leader is Google Cloud''s entry-level certification,
+      and it doesn''t ask you to deploy a single resource. It validates that you understand
+      what Google Cloud does for a business: transformation, data, AI, infrastructure,
+      security and operations. If you''ve ever sat in a cloud meeting and nodded without
+      following, this is the exam that fixes that.'
+  audience:
+    title: Who it's for
+    voiceover: This one is built for people who work around the cloud rather than
+      inside the terminal. Five of the six exam domains carry the same weight, eighteen
+      percent each, so the exam expects breadth across the whole picture, not depth
+      in one corner. Scaling with Google Cloud Operations closes it out at ten percent.
+    bullets:
+    - Sales, marketing and pre-sales teams who need to speak Google Cloud credibly
+    - Project managers, analysts and decision-makers evaluating a cloud migration
+    - Career changers who want a first, non-technical foothold in cloud
+  cta:
+    title: Start with the syllabus
+    voiceover: The full breakdown of all six domains is already on Cert Landscape,
+      weight by weight, with study material for each one. It's valid for three years
+      once you pass, so open it up and start with the domain you know least.
+  domains:
+    title: Exam domains
+    voiceover: The exam covers Digital Transformation with Google Cloud at 18.0%,
+      Exploring Data Transformation with Google Cloud at 18.0%, Innovating with Google
+      Cloud Artificial Intelligence at 18.0%, Modernize Infrastructure and Applications
+      with Google Cloud at 18.0%, Trust and Security with Google Cloud at 18.0%, Scaling
+      with Google Cloud Operations at 10.0%.
+    domains:
+    - name: Digital Transformation with Google Cloud
+      weight: 18.0
+    - name: Exploring Data Transformation with Google Cloud
+      weight: 18.0
+    - name: Innovating with Google Cloud Artificial Intelligence
+      weight: 18.0
+    - name: Modernize Infrastructure and Applications with Google Cloud
+      weight: 18.0
+    - name: Trust and Security with Google Cloud
+      weight: 18.0
+    - name: Scaling with Google Cloud Operations
+      weight: 10.0
