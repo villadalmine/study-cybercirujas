@@ -70,6 +70,52 @@ All four must refuse to go beyond the loaded material and say so.
 **Cost**: platform zero, student pays their own inference. One code path,
 no tool calling, no backend change, no new service.
 
+### Phase 1 — SHIPPED 2026-09-09
+
+Implemented in `teach/web/index.html` as the **Bot** section. What a student
+sees, and exactly where their tokens go:
+
+**The request.** One call to `openrouter.ai/api/v1/chat/completions`,
+straight from the browser. Nothing is proxied through this server, so the
+platform spends nothing and the student's key is never seen by us. The
+message that goes out is:
+
+    system  = task-harness prompt (see below)
+            + the loaded material  ← the big part
+    history = last 6 turns, ONLY if "remember the conversation" is on
+    user    = the question
+
+**Where the tokens go, and every lever to spend fewer:**
+
+| Lever | Effect |
+|---|---|
+| **Material to send** — theory / theory+exercises / none | The dominant cost. A topic runs ~3–35k tokens; "none" sends the question alone, for follow-ups that need no material |
+| **Remember the conversation** — off by default | When off, every question is independent: no history is resent, so cost stays flat instead of growing each turn |
+| **Model selector** | Haiku/Flash-class models cost a fraction of the frontier ones for the same explanation |
+| **`max_tokens: 2000`** | Caps the answer, so a runaway reply cannot drain a key |
+| **Estimate before sending** | The exact material size is shown as tokens the moment a topic is picked — nothing is spent to find out |
+| **Session counter** | Real `usage` figures from OpenRouter's response, accumulated per session |
+
+Material is fetched once per topic and cached client-side, so switching
+between intents on the same topic re-sends the same context without
+re-fetching it.
+
+**The task harness** — four intents, four specialised prompts, each one
+knowing something about this corpus: the exercise writer follows the
+`<details>` solution convention, the quiz weighs questions by what the
+syllabus emphasises, the explainer may cite only references already in the
+material, and all of them are told to say "that is not in the material"
+instead of improvising.
+
+**Disclosure**: every answer is labelled with the model that produced it
+and links the topic's official exam guide, plus a standing notice that the
+answer is AI-generated and unverified — same standard as the authored
+pages, since a bot answer is exactly the kind of confident-and-possibly-
+wrong output `AUDITOR_DESIGN.md` warns about.
+
+**Not implemented on purpose**: no streaming (one response, simpler and
+identical in cost), no tool calling (phase 2), no server state (phase 4).
+
 ### Phase 2 — questions across one certification
 
 **Entry**: students actually ask questions that span topics ("where does X
