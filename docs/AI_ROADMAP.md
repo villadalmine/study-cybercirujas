@@ -119,26 +119,63 @@ the fallback, and it needs a human to read the result before freezing.
 
 Re-check with `make check-updates` reasoning, not by memory:
 
-- **Anthropic Claude Certified** (Architect Foundations + 4 exams covering
-  Associate/Developer/Architect, Pearson VUE) — **owner wants this one**
-  (2026-09-09): it is the model provider this platform itself runs on, so
-  the material would be unusually well-grounded. Blocked on filter 3 today:
-  access runs through the Claude Partner Network rather than open
-  enrolment. **Action**: re-check quarterly whether exam objectives are
-  published publicly and whether individuals can register; catalogue the
-  day either opens. Watch anthropic.com/partners and the Pearson VUE
-  catalogue.
-- **OpenAI AI Foundations** (ETS psychometrics) — **owner wants this one
-  too**. Employer/university pilots only (Walmart, Accenture), no public
-  proctored exam and no published objectives document. Fails filters 2 and
-  3. **Action**: same quarterly re-check; the ETS partnership suggests a
-  public rollout is intended, and the moment an objectives document exists
-  this becomes a Phase-1-shaped candidate.
+### Model-provider certifications — researched in depth 2026-09-09
 
-  Both are the first certifications from *model providers* rather than
-  cloud/infra vendors, which is why they matter beyond their size: they
-  define what the market will consider "certified" for LLM work. Being
-  early on them is worth more than being complete on a fourth Linux track.
+Owner asked for a proper analysis of both. They are the first credentials
+issued by *model providers* rather than cloud/infra vendors, which is why
+they matter beyond their size: they define what the market will call
+"certified" for LLM work. Verdict: **real, growing, and not catalogable
+yet** — but for different reasons, and only one of them is close.
+
+**Anthropic — Claude Certified.** Four role-based exams live since
+2026-07-23, delivered by Pearson VUE (online-proctored or test centre),
+120 minutes, multiple-choice/multiple-response, pass at 720 on a 100–1000
+scale, **12-month validity**:
+
+| Exam | Domains | Note |
+|---|---|---|
+| Associate (Foundations) | 7 | $99, least technical — consultants, sellers, delivery leads |
+| Developer (Foundations) | 8 | — |
+| Architect (Foundations) | 5 | Agentic Architecture 27% · Claude Code Workflows 20% · Prompt Engineering 20% · Tool Design & MCP 18% · Context Management 15% |
+| Architect (Professional) | 7 | — |
+
+What blocks it, checked directly: `anthropic.com/certifications` → **404**;
+the public Anthropic Academy (anthropic.skilljar.com) lists courses and
+**no certification section at all**; registration runs through the Partner
+Academy, open to partner *organisations* (free to join for firms taking
+Claude to market, but not a route for an individual student). Every domain
+breakdown circulating — including the Architect weights above — comes from
+community write-ups that state they are **not affiliated with Anthropic**.
+So filter 2 fails on provenance, not on difficulty: building material from
+third-party guesses at an official syllabus is exactly what this project
+refuses to do.
+
+**OpenAI — AI Foundations.** Different shape entirely: launched 2025-12,
+assessed through **scenario-based tasks performed inside ChatGPT**, backed
+by ETS psychometrics with Credly badges. Since 2026-06 three certificate
+courses are **open to the public** (no employer, no waitlist, no payment).
+The full proctored OpenAI Certification — the ETS/Pearson exam — had still
+not launched publicly as of this research. `openai.com/certifications`
+returns 403 to us; OpenAI Academy is public but course-shaped.
+
+The deeper mismatch is pedagogical: a competency assessed by doing tasks
+inside a product has no domain-and-weight syllabus to freeze, and our whole
+pipeline is built on one. Even when it opens, OpenAI may never publish the
+document our snapshot needs.
+
+**Actions, concrete:**
+1. Re-check quarterly (next: 2026-12) via `/check-updates` reasoning —
+   specifically whether `anthropic.com` publishes an exam guide outside the
+   Partner Academy, and whether OpenAI's proctored exam ships with an
+   objectives document.
+2. **Anthropic is the one to watch**: it already has the right shape
+   (domains, weights, proctored exam, fixed syllabus). The single blocker
+   is publication. If Anthropic ever posts an official exam guide, it goes
+   straight to Phase 1 priority — the platform runs on Claude, so the
+   material would be unusually well-grounded.
+3. Do NOT catalogue either from community-sourced domain lists, however
+   detailed they look. A syllabus nobody official published is the same
+   defect as a syllabus scraped from the wrong page.
 - **AWS AI Business Strategist** — entered beta 2026-09-01. Objectives can
   still move in beta; snapshot at GA, not before.
 - **Azure AB-100 / AB-730** (agentic business architect tiers) — confirm
