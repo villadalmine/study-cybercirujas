@@ -133,6 +133,16 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   rate below ten new topics — the next certification produces that sample for
   free.
 
+- **The 55 orphaned topic directories are gone** — 6.1 MB, 446 files, every
+  one committed so git keeps them retrievable. They were left when LPI syllabi
+  were re-snapshotted from chapter headings to real objectives and the ids
+  changed (`1.1` → `101.1`). Nothing read them: not the site, not the audits,
+  and not the generator, which authors from the syllabus and never from old
+  material — so they were not even usable as input. 32 belonged to
+  certifications since regenerated; the rest covered whole chapters that the
+  new syllabi split into several objectives, so there was no 1:1 salvage
+  available. `make verify` stayed green through the removal.
+
 - **Citation attribution: 80% → 91%**, in one batch of bookkeeping with no
   quota. 70 domains catalogued (53 → 110 projects): BSD and Debian manuals,
   Ansible, HashiCorp, Flux, cloud-init, Ceph, OpenSSL, systemd, OCI, SPIFFE,
