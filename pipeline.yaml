@@ -192,9 +192,8 @@ quality:
 #     scripts/steer.py milestone lpic-3-305 en es
 #     scripts/steer.py milestone --clear        # timer idles
 milestone:
-  name: gcp-cdl in en, es
-  targets:
-    gcp-cdl: [en, es]
+  name: none
+  targets: {}
 certs:
   lpic-1:
     active: true

@@ -28,11 +28,24 @@ key, ask. Zero platform cost.
 
 **`make verify` is green** and runs in CI on every push and pull request.
 
+## Current focus — set 2026-09-11
+
+**Collect feedback on the study bot. Generate no content until there is some.**
+
+The bot is the first thing on this site that is not study material, it went
+public days ago, and every phase after it is speculative until a real student
+asks something phase 1 cannot answer. Building phase 2 now would be guessing
+at a problem nobody has reported.
+
+Nothing is running and nothing is spending: no milestone is declared, so the
+timer wakes, finds nothing to do, and sleeps. To resume content work later,
+pick an item below and declare it — the machinery needs no other setup.
+
 ## What is next
 
 Ordered by what each one buys, not by size.
 
-1. **Feedback on the bot.** It is the only thing on the site that is not
+1. **Feedback on the bot** ← *current focus*. It is the only thing on the site that is not
    content and it just went public. Phase 2 is speculative until someone asks
    a question phase 1 cannot answer — collect first, build second.
 
