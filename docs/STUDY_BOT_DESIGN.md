@@ -91,7 +91,8 @@ message that goes out is:
 |---|---|
 | **Material to send** — theory / theory+exercises / none | The dominant cost. A topic runs ~3–35k tokens; "none" sends the question alone, for follow-ups that need no material |
 | **Remember the conversation** — off by default | When off, every question is independent: no history is resent, so cost stays flat instead of growing each turn |
-| **Model selector** | Haiku/Flash-class models cost a fraction of the frontier ones for the same explanation |
+| **Model selector, three tiers** | Ids and prices read from `openrouter.ai/api/v1/models` on 2026-09-09, never from memory — an earlier draft shipped invented ids, caught by the owner. Top (Opus 5 $5/$25, GPT-6 Astra $10/$50, Kimi K3 $3/$15) · Mid (Sonnet 5, GPT-5.6 Sol, Qwen3.7 Max, DeepSeek V4 Pro, Kimi K2.5) · Low (Haiku 4.5, GPT-5 Mini **default**, GPT-5 Nano $0.05/$0.40, DeepSeek V4 Flash, Qwen3.7 Flash $0.03/$0.13). Two orders of magnitude between tiers for the same explanation |
+| **Reasoning effort** — off by default | OpenRouter exposes a unified `reasoning: {effort}` control and 304 of 435 models support it. Thinking tokens bill as output, so it is opt-in: worth it for "what would the exam ask", wasteful for a definition lookup |
 | **`max_tokens: 2000`** | Caps the answer, so a runaway reply cannot drain a key |
 | **Estimate before sending** | The exact material size is shown as tokens the moment a topic is picked — nothing is spent to find out |
 | **Session counter** | Real `usage` figures from OpenRouter's response, accumulated per session |
