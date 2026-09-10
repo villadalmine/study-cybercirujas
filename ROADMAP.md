@@ -99,22 +99,29 @@ correct all along.
 
 - ✅ **CloudFormation tags** (`!Ref`, `!Sub`, `!GetAtt`, `!Equals`) now parse.
   144 → 80.
-- **Next: `json` fences holding console output.** ~14 of the remainder are
-  blocks tagged `json` whose content starts with a sentence
-  (`Successfully loaded configuration:` followed by the object). The material
-  is right, the fence label is wrong — the same repair already done by hand in
-  `pca` and `cks`. Mechanical rule: a `json` block that does not start with
-  `{` or `[` is console output; retag it as a plain fence. Worth doing as a
-  script that prints its diff rather than a blind rewrite.
+- ✅ **Mislabelled `json` fences** — 35 blocks holding console output, JSON
+  with `//` comments, or JSON Lines. `scripts/fix_fences.py` applies two
+  narrow rules, shows its diff by default, needs `--apply` to write.
+  80 → **58**.
 
 ### Step 2 — repair what is genuinely broken · *free, needs eyes*
 
-The ~50 that remain are real: unquoted `: ` inside YAML values, a block scalar
-whose indentation ends the scalar early, an alias that never resolves. Each
-needs looking at, but they cluster by cert (`lpi-050-100` 24, `kcsa` 12), so a
-pass per certification is efficient. **The `pca` repair is the template**: two
-of its three were errors that broke the real tool, not just our parser — the
-fix improved the material, not only the report.
+**58 findings, but far less work than that number suggests** (measured
+2026-09-10):
+
+- **52 are in served material, 6 are in orphaned topics** nobody can reach
+  (`lpi-020-100/2.1`, `lpi-devops/5.1`, `lpic-3-303/6.1`). Do not repair the
+  orphans — they are waiting on the salvage-or-delete decision below.
+- **They come in en/es pairs.** Translations preserve code blocks byte for
+  byte, so one broken block produces two findings: **≈26 real problems**.
+  Repair both languages with the same edit — re-translating would cost quota
+  to fix something the translation copied faithfully.
+
+What is left is genuine: unquoted `: ` inside YAML values, block scalars whose
+indentation ends the scalar early, an alias that never resolves. **The `pca`
+repair is the template**: two of its three were errors that broke the real
+tool, not just our parser — the fix improved the material, not only the
+report.
 
 ### Step 3 — stop producing them · *the only step that ends the debt*
 
