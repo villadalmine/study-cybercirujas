@@ -1020,7 +1020,7 @@ d7f3a91c4e28   api    43.17%   211.4MiB / 512MiB     41.29%   38.4MB / 12.1MB  0
 
 Set rotation globally — this single omission is a recurring cause of full disks:
 
-```json
+```
 // /etc/docker/daemon.json
 {
   "log-driver": "local",

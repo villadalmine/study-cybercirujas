@@ -169,7 +169,7 @@ $ networkctl status bond0
 
 Network *teaming* implements the same idea in userspace (`teamd`) with a JSON config and pluggable "runners":
 
-```json
+```
 // /etc/systemd/network is not used; via NM keyfile team.config or teamd -f
 {
   "device": "team0",

@@ -18,7 +18,7 @@ kubectl version -o json | grep -A3 serverVersion
 
 Salida esperada (los valores exactos varían):
 
-```json
+```
   "serverVersion": {
     "major": "1",
     "minor": "29",

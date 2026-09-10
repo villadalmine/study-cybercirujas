@@ -522,7 +522,7 @@ app_config_run
 ```
 
 **Expected Output:**
-```json
+```
 Successfully loaded platform configuration:
 {
   "env": "development",
@@ -538,7 +538,7 @@ NODE_ENV=production DB_HOST=prod-db-cluster.internal DB_PORT=5432 MAX_CONN=500 n
 ```
 
 **Expected Output:**
-```json
+```
 Successfully loaded platform configuration:
 {
   "env": "production",

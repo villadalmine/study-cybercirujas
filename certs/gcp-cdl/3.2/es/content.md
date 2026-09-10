@@ -476,7 +476,7 @@ $ curl -sS -H "Authorization: Bearer ${TOKEN}" \
 
 ### 4.4 Petición de generación fundamentada — el contrato de inferencia real
 
-```json
+```
 // prompts/classify_and_draft.request.json
 {
   "contents": [{

@@ -987,7 +987,7 @@ aws outposts list-sites --region "$LAB_REGION" --output json
 aws outposts list-outposts --region "$LAB_REGION" --output json
 ```
 
-```json
+```
 { "Sites": [] }
 { "Outposts": [] }
 ```

@@ -477,7 +477,7 @@ aws iam list-groups-for-user --user-name lab-analyst --query 'Groups[].GroupName
 
 Salida esperada:
 
-```json
+```
 { "AttachedPolicies": [] }
 { "PolicyNames": [] }
 [ "DataAnalysts" ]

@@ -212,7 +212,7 @@ docker logs -f orders-service-container
 ```
 
 Salida esperada en los logs del contenedor:
-```json
+```
 {"timestamp":"2026-08-07 04:41:12,102", "level":"WARNING", "service":"orders-api", "message":"Received kernel signal SIGTERM. Initiating 12-Factor graceful shutdown..."}
 {"timestamp":"2026-08-07 04:41:12,103", "level":"INFO", "service":"orders-api", "message":"Draining inflight HTTP requests (simulated 3-second grace period)..."}
 {"timestamp":"2026-08-07 04:41:15,106", "level":"INFO", "service":"orders-api", "message":"Database connection pools closed cleanly. Process exiting with code 0."}

@@ -1020,7 +1020,7 @@ d7f3a91c4e28   api    43.17%   211.4MiB / 512MiB     41.29%   38.4MB / 12.1MB  0
 
 Configurá la rotación globalmente — esta única omisión es una causa recurrente de discos llenos:
 
-```json
+```
 // /etc/docker/daemon.json
 {
   "log-driver": "local",

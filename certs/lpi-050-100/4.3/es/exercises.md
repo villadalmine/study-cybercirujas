@@ -346,7 +346,7 @@ cosign verify --key cosign.pub $IMAGE_DIGEST
 ```
 
 *Salida esperada:*
-```json
+```
 Verification for microservice@sha256:e3b0c442... --
 The following checks were performed on each of these signatures:
   - The cosign claims were validated

@@ -330,7 +330,7 @@ $ qemu-img info box.img | grep 'virtual size'
 virtual size: 40 GiB (42949672960 bytes)
 ```
 
-```json
+```
 // metadata.json for a libvirt box
 {
   "provider": "libvirt",

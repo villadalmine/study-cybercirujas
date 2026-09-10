@@ -348,7 +348,7 @@ crictl inspect <CONTAINER_ID> | grep -A 15 "security_context"
 ```
 
 Expected output snippet:
-```json
+```
         "security_context": {
           "privileged": false,
           "readonly_rootfs": true,

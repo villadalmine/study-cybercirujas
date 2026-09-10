@@ -276,7 +276,7 @@ cosign verify --key cosign.pub localhost:5000/localapp:v1.0.0
 ```
 
 Fragmento de salida esperada:
-```json
+```
 Verification for localhost:5000/localapp:v1.0.0 --
 The following checks were performed on each of these signatures:
   - The checks were verified against the specified public key

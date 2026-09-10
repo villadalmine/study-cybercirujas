@@ -136,7 +136,7 @@ aws pricing describe-services --service-code AmazonEC2 \
   --query 'Services[0].AttributeNames' --output json | jq 'length, .[0:12]'
 ```
 
-```json
+```
 64
 [
   "volumeType", "maxIopsvolume", "instanceCapacity10xlarge", "locationType",

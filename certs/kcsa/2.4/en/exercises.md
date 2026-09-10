@@ -486,7 +486,7 @@ sudo crictl --runtime-endpoint unix:///run/containerd/containerd.sock info | gre
 ```
 
 **Expected Output:**
-```json
+```
     "containerd": {
       "version": "1.7.13",
       "revision": "7cbf65a396706173223f9583a2d591a27e0b9040",

@@ -331,7 +331,7 @@ kubectl logs -n falco -l app.kubernetes.io/name=falco --tail=100 | grep -E "CRIT
 ```
 
 Expected output:
-```json
+```
 {"severity":"Warning","time":"2026-08-07T20:22:04.182948123Z","rule":"Terminal Shell Spawned in Container","output":"20:22:04.182948123: WARNING ALERT Malicious Terminal Executed (user=root user_id=0 container_id=a3f89d12c4b1 container_name=monitored-app-pod image=nginx process=sh cmdline=sh -c apk add --no-cache curl parent=containerd)","output_fields":{"container.id":"a3f89d12c4b1","container.image.repository":"nginx","container.name":"monitored-app-pod","proc.cmdline":"sh -c apk add --no-cache curl","proc.name":"sh","proc.pname":"containerd","user.name":"root","user.uid":0}}
 {"severity":"Critical","time":"2026-08-07T20:22:04.210481902Z","rule":"Package Management Executed in Container","output":"20:22:04.210481902: CRITICAL Package Manager Triggered in Container (user=root container_name=monitored-app-pod image=nginx cmdline=apk add --no-cache curl)","output_fields":{"container.image.repository":"nginx","container.name":"monitored-app-pod","proc.cmdline":"apk add --no-cache curl","proc.name":"apk","user.name":"root"}}
 ```

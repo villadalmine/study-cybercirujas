@@ -571,7 +571,7 @@ $ jq '.categories.performance.score * 100, .audits["render-blocking-resources"].
 ```
 
 **Terminal Output:**
-```json
+```
 100
 [
   {

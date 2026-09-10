@@ -476,7 +476,7 @@ $ curl -sS -H "Authorization: Bearer ${TOKEN}" \
 
 ### 4.4 Grounded generation request — the actual inference contract
 
-```json
+```
 // prompts/classify_and_draft.request.json
 {
   "contents": [{

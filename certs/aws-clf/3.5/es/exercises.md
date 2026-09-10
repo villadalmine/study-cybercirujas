@@ -1237,7 +1237,7 @@ aws ec2 describe-vpcs --filters Name=tag:Name,Values=clf35-* --query 'Vpcs[].Vpc
 aws ec2 describe-addresses --query 'Addresses[].PublicIp'
 ```
 
-```json
+```
 []
 []
 ```

@@ -571,7 +571,7 @@ $ jq '.categories.performance.score * 100, .audits["render-blocking-resources"].
 ```
 
 **Salida de Terminal:**
-```json
+```
 100
 [
   {
