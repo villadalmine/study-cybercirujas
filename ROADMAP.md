@@ -136,7 +136,7 @@ because they describe the workstation, not the commit.
 
 | Debt | Size | Plan |
 |---|---|---|
-| **Unattributed citations** | 4,498 of 22,860 (20%) | `scripts/check_sources.py --unknown-only` lists the domains; adding the legitimate ones to `docs/sources.yaml` is bookkeeping with no quota. Do it in batches by frequency — the top 20 domains cover most of the tail |
+| ~~Unattributed citations~~ ✅ **80% → 91% (2026-09-11)** | 1,983 left of 22,860 | 70 domains catalogued in one batch, 53 → 110 projects. Every one was a project's own documentation; nothing was a blog. The remaining 9% is a long tail of one-off domains — `scripts/check_sources.py --unknown-only` still lists them |
 | **Orphaned topic directories** | 55 | A decision, not maintenance: salvage into current ids, archive, or delete. They hold real material from before a re-snapshot renumbered the syllabus. Listing script in [docs/CLEANUP.md](docs/CLEANUP.md) |
 | **`.rejected/` backlog** | 73 files | Skim before clearing: a repeated pattern there is a bug nobody has noticed. That is exactly how the placeholder-URL and decapitated-topic bugs were found |
 | **Registry retention** | — | `make clean-registry KEEP=N` covering steps 1–3 of CLEANUP.md, refusing to prune a deployed tag. Ends the 98 GB incident recurring |

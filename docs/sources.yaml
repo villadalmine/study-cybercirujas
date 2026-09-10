@@ -55,9 +55,9 @@ projects:
   linux-man:    {domains: [man7.org],               docs: https://man7.org/linux/man-pages/, versioned: false}
   gnu:          {domains: [www.gnu.org, gnu.org],   docs: https://www.gnu.org/software/,  versioned: false}
   kernel:       {domains: [www.kernel.org, kernel.org, docs.kernel.org], docs: https://docs.kernel.org/, versioned: true}
-  systemd:      {domains: [www.freedesktop.org, freedesktop.org], docs: https://www.freedesktop.org/software/systemd/man/, versioned: true}
+  systemd:      {domains: [systemd.io, uapi-group.org, www.freedesktop.org, freedesktop.org], docs: https://systemd.io/, versioned: false}
   lpi:          {domains: [www.lpi.org, lpi.org, learning.lpi.org, wiki.lpi.org], docs: https://www.lpi.org/our-certifications/, versioned: true}
-  debian:       {domains: [www.debian.org, debian.org, wiki.debian.org], docs: https://www.debian.org/doc/, versioned: true}
+  debian:       {domains: [manpages.debian.org, www.debian.org, debian.org, wiki.debian.org], docs: https://www.debian.org/doc/, versioned: true}
   redhat:       {domains: [access.redhat.com, docs.redhat.com], docs: https://access.redhat.com/documentation/, versioned: true}
   samba:        {domains: [www.samba.org, samba.org, wiki.samba.org], docs: https://www.samba.org/samba/docs/, versioned: false}
   linuxfoundation: {domains: [refspecs.linuxfoundation.org, www.linuxfoundation.org, training.linuxfoundation.org], docs: https://refspecs.linuxfoundation.org/, versioned: false}
@@ -70,9 +70,9 @@ projects:
   owasp:        {domains: [owasp.org, cheatsheetseries.owasp.org], docs: https://owasp.org/, versioned: false}
 
   # --- Cloud providers -------------------------------------------------------
-  aws:          {domains: [docs.aws.amazon.com, aws.github.io], docs: https://docs.aws.amazon.com/, versioned: false}
+  aws:          {domains: [docs.aws.amazon.com, aws.amazon.com, d1.awsstatic.com, aws.github.io], docs: https://docs.aws.amazon.com/, versioned: false}
   gcp:          {domains: [cloud.google.com],       docs: https://cloud.google.com/docs, versioned: false}
-  azure:        {domains: [learn.microsoft.com, docs.microsoft.com], docs: https://learn.microsoft.com/azure/, versioned: false}
+  azure:        {domains: [learn.microsoft.com, docs.microsoft.com, azure.microsoft.com], docs: https://learn.microsoft.com/azure/, versioned: false}
 
   # --- added 2026-08-06 from the uncatalogued list; each was already the top
   # --- primary source for its subject, so this records reality rather than policy
@@ -87,7 +87,7 @@ projects:
   tetragon:     {domains: [tetragon.io], docs: https://tetragon.io/docs/, versioned: true}
   grafana:      {domains: [grafana.com], docs: https://grafana.com/docs/, versioned: true}
   spdx:         {domains: [spdx.org, spdx.dev], docs: https://spdx.dev/use/specifications/, versioned: true}
-  ubuntu:       {domains: [ubuntu.com, help.ubuntu.com, manpages.ubuntu.com], docs: https://ubuntu.com/server/docs, versioned: true}
+  ubuntu:       {domains: [documentation.ubuntu.com, ubuntu.com, help.ubuntu.com, manpages.ubuntu.com], docs: https://documentation.ubuntu.com/, versioned: true}
   archlinux:    {domains: [wiki.archlinux.org, archlinux.org], docs: https://wiki.archlinux.org/, versioned: false}
   nftables:     {domains: [wiki.nftables.org, netfilter.org, www.netfilter.org], docs: https://wiki.nftables.org/, versioned: false}
   sre-google:   {domains: [sre.google], docs: https://sre.google/books/, versioned: false}
@@ -96,9 +96,68 @@ projects:
   libreoffice:  {domains: [documentation.libreoffice.org, www.libreoffice.org], docs: https://documentation.libreoffice.org/, versioned: true}
 
   # --- Public clouds (practitioner tier added 2026-09-03) ---------------------
-  aws:          {domains: [docs.aws.amazon.com, aws.amazon.com, d1.awsstatic.com], docs: https://docs.aws.amazon.com/, versioned: false}
-  azure:        {domains: [learn.microsoft.com, azure.microsoft.com],              docs: https://learn.microsoft.com/en-us/azure/, versioned: false}
   google-cloud: {domains: [cloud.google.com, services.google.com],                 docs: https://cloud.google.com/docs/, versioned: false}
+
+  # --- Batch catalogued 2026-09-11: the 70 most-cited uncatalogued domains,
+  # 2,627 of 4,735 unattributed citations. Every one is a project's own
+  # documentation or manual; nothing here is a blog or an aggregator.
+  freebsd:      {domains: [man.freebsd.org, docs.freebsd.org, www.freebsd.org], docs: https://docs.freebsd.org/, versioned: true}
+  openbsd:      {domains: [man.openbsd.org, www.openbsd.org],       docs: https://man.openbsd.org/, versioned: true}
+  fedora:       {domains: [docs.fedoraproject.org],                 docs: https://docs.fedoraproject.org/, versioned: true}
+  suse:         {domains: [documentation.suse.com],                 docs: https://documentation.suse.com/, versioned: true}
+  flux:         {domains: [fluxcd.io],                              docs: https://fluxcd.io/flux/, versioned: true}
+  cloud-init:   {domains: [cloudinit.readthedocs.io],               docs: https://cloudinit.readthedocs.io/, versioned: true}
+  posix:        {domains: [pubs.opengroup.org, www.opengroup.org],  docs: https://pubs.opengroup.org/onlinepubs/9699919799/, versioned: true}
+  ansible:      {domains: [docs.ansible.com],                       docs: https://docs.ansible.com/, versioned: true}
+  hashicorp:    {domains: [developer.hashicorp.com, registry.terraform.io], docs: https://developer.hashicorp.com/, versioned: true}
+  w3c:          {domains: [www.w3.org],                             docs: https://www.w3.org/TR/, versioned: false}
+  mdn:          {domains: [developer.mozilla.org],                  docs: https://developer.mozilla.org/, versioned: false}
+  prometheus-operator: {domains: [prometheus-operator.dev],         docs: https://prometheus-operator.dev/docs/, versioned: true}
+  libvirt:      {domains: [libvirt.org, www.libvirt.org],           docs: https://libvirt.org/docs.html, versioned: true}
+  slsa:         {domains: [slsa.dev],                               docs: https://slsa.dev/spec/, versioned: true}
+  xorg:         {domains: [www.x.org],                              docs: https://www.x.org/wiki/Documentation/, versioned: false}
+  envoy:        {domains: [www.envoyproxy.io],                      docs: https://www.envoyproxy.io/docs/, versioned: true}
+  backstage:    {domains: [backstage.io]}
+  sudo:         {domains: [www.sudo.ws],                            docs: https://www.sudo.ws/docs/, versioned: true}
+  openssl:      {domains: [docs.openssl.org, www.openssl.org],      docs: https://docs.openssl.org/, versioned: true}
+  ceph:         {domains: [docs.ceph.com],                          docs: https://docs.ceph.com/, versioned: true}
+  argo-rollouts: {domains: [argo-rollouts.readthedocs.io, argo-workflows.readthedocs.io], docs: https://argo-rollouts.readthedocs.io/, versioned: true}
+  qemu:         {domains: [www.qemu.org, qemu.org],                 docs: https://www.qemu.org/docs/master/, versioned: true}
+  nmap:         {domains: [nmap.org],                               docs: https://nmap.org/book/, versioned: false}
+  cert-manager: {domains: [cert-manager.io],                        docs: https://cert-manager.io/docs/, versioned: true}
+  cyclonedx:    {domains: [cyclonedx.org],                          docs: https://cyclonedx.org/specification/overview/, versioned: true}
+  iana:         {domains: [www.iana.org],                           docs: https://www.iana.org/protocols, versioned: false}
+  gluster:      {domains: [docs.gluster.org],                       docs: https://docs.gluster.org/, versioned: true}
+  cups:         {domains: [openprinting.github.io],                 docs: https://openprinting.github.io/cups/, versioned: true}
+  podman:       {domains: [docs.podman.io],                         docs: https://docs.podman.io/, versioned: true}
+  bind:         {domains: [bind9.readthedocs.io],                   docs: https://bind9.readthedocs.io/, versioned: true}
+  xen:          {domains: [wiki.xenproject.org, xenproject.org],    docs: https://wiki.xenproject.org/, versioned: false}
+  drbd:         {domains: [linbit.com],                             docs: https://linbit.com/drbd-user-guide/, versioned: true}
+  first-cvss:   {domains: [www.first.org],                          docs: https://www.first.org/cvss/, versioned: true}
+  clusterlabs:  {domains: [clusterlabs.org, www.clusterlabs.org],   docs: https://clusterlabs.org/pacemaker/doc/, versioned: true}
+  gnupg:        {domains: [gnupg.org, www.gnupg.org],               docs: https://gnupg.org/documentation/, versioned: true}
+  tekton:       {domains: [tekton.dev],                             docs: https://tekton.dev/docs/, versioned: true}
+  openstack:    {domains: [docs.openstack.org],                     docs: https://docs.openstack.org/, versioned: true}
+  libguestfs:   {domains: [libguestfs.org],                         docs: https://libguestfs.org/, versioned: false}
+  nodejs:       {domains: [nodejs.org, v8.dev],                     docs: https://nodejs.org/docs/, versioned: true}
+  reuse:        {domains: [reuse.software],                         docs: https://reuse.software/spec/, versioned: true}
+  calico:       {domains: [docs.tigera.io],                         docs: https://docs.tigera.io/calico/, versioned: true}
+  github-docs:  {domains: [docs.github.com],                        docs: https://docs.github.com/, versioned: false}
+  spiffe:       {domains: [spiffe.io],                              docs: https://spiffe.io/docs/, versioned: true}
+  wireguard:    {domains: [www.wireguard.com],                      docs: https://www.wireguard.com/, versioned: false}
+  tcpdump:      {domains: [www.tcpdump.org],                        docs: https://www.tcpdump.org/manpages/, versioned: true}
+  networkmanager: {domains: [networkmanager.dev],                   docs: https://networkmanager.dev/docs/, versioned: true}
+  karpenter:    {domains: [karpenter.sh],                           docs: https://karpenter.sh/docs/, versioned: true}
+  external-secrets: {domains: [external-secrets.io],                docs: https://external-secrets.io/, versioned: true}
+  lxc:          {domains: [linuxcontainers.org],                    docs: https://linuxcontainers.org/lxc/documentation/, versioned: true}
+  oci:          {domains: [opencontainers.org, specs.opencontainers.org], docs: https://opencontainers.org/, versioned: true}
+  git:          {domains: [git-scm.com],                            docs: https://git-scm.com/docs, versioned: true}
+  suricata:     {domains: [docs.suricata.io, suricata.io],          docs: https://docs.suricata.io/, versioned: true}
+  microsoft:    {domains: [www.microsoft.com],                      docs: https://learn.microsoft.com/, versioned: false}
+  uefi:         {domains: [uefi.org],                               docs: https://uefi.org/specifications, versioned: true}
+  keepalived:   {domains: [www.keepalived.org],                     docs: https://www.keepalived.org/manpage.html, versioned: false}
+  rsyslog:      {domains: [www.rsyslog.com],                        docs: https://www.rsyslog.com/doc/, versioned: true}
+  artifacthub:  {domains: [artifacthub.io],                         docs: https://artifacthub.io/docs/, versioned: false}
 
 # Hosts that are legitimate to cite but belong to no single project, so they are
 # not "unrecognised" — they just cannot be attributed. github.com is the big one:
@@ -112,3 +171,9 @@ neutral_domains:
   - creativecommons.org
   - www.iso.org
   - pkg.go.dev
+  # Government and standards bodies: legitimate primary sources, but they
+  # publish for many projects at once, so attributing them to one would lie.
+  - media.defense.gov
+  - www.cisa.gov
+  - linux.die.net
+  - teamtopologies.com

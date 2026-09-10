@@ -133,6 +133,21 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   rate below ten new topics — the next certification produces that sample for
   free.
 
+- **Citation attribution: 80% → 91%**, in one batch of bookkeeping with no
+  quota. 70 domains catalogued (53 → 110 projects): BSD and Debian manuals,
+  Ansible, HashiCorp, Flux, cloud-init, Ceph, OpenSSL, systemd, OCI, SPIFFE,
+  Suricata and the rest — every one a project's own documentation, none a blog
+  or an aggregator, which is what the 2026-08-06 survey predicted. Government
+  and standards bodies went to `neutral_domains` instead: they are primary
+  sources but publish for many projects, so attributing them to one would lie.
+
+  **A bug this exposed, now checked**: adding a project key that already
+  existed made YAML keep the last and silently discard the first, taking its
+  domains with it (`debian`, `systemd`, `ubuntu`, `aws`, `azure` were all
+  duplicated). `check_sources.py` now refuses to report any number until
+  duplicates are merged — a catalogue that loses entries as it grows is worse
+  than one that refuses to grow.
+
 - **CI runs the free verification on every push and pull request**
   (`.github/workflows/verify.yml`): nine checks plus a word-anchored secret
   scan, no quota, no cluster. Its first run failed correctly —

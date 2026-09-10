@@ -64,6 +64,20 @@ def cited_domains(path: Path) -> list[str]:
             for url in URL_RE.findall(text[match.end():])]
 
 
+def duplicate_keys(path: Path) -> list[str]:
+    """Project keys that appear twice — YAML keeps the last and drops the first.
+
+    Silently. Adding `debian:` a second time on 2026-09-11 discarded the
+    domains the original entry listed, and the only symptom was an attribution
+    percentage that moved less than it should have. A catalogue that loses
+    entries when it grows is worse than one that refuses to.
+    """
+    import re
+    from collections import Counter
+    keys = re.findall(r"^  ([a-z0-9-]+):", path.read_text(), re.M)
+    return sorted(k for k, n in Counter(keys).items() if n > 1)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -91,6 +105,13 @@ def main() -> int:
             else:
                 unknown[domain] += 1
                 unknown_where[domain].add(str(path.parent.parent.parent.name))
+
+    dupes = duplicate_keys(REPO / "docs" / "sources.yaml")
+    if dupes:
+        print(f"docs/sources.yaml defines these projects twice, so the first "
+              f"definition (and its domains) is silently discarded: "
+              f"{', '.join(dupes)}\nMerge them before trusting any number below.")
+        return 1
 
     if not total:
         print("No citations found in those paths.")
