@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics graph graph-setup wiki
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry graph graph-setup wiki
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -118,6 +118,11 @@ clean: ## remove the venv
 
 quality: ## quality report for the material (generates nothing)
 	$(VENV)/bin/python3 scripts/quality_report.py $(CERT)
+
+clean-registry: ## prune old image tags and reclaim registry space (KEEP=3, APPLY=1)
+	@# Dry run unless APPLY=1. Never prunes a tag any deployment is using, and
+	@# aborts rather than guess if it cannot read what is deployed.
+	$(VENV)/bin/python3 scripts/clean_registry.py --keep $(if $(KEEP),$(KEEP),3) $(if $(APPLY),--apply,)
 
 metrics: ## real spend per stage/day/window from usage.jsonl + quota-history (free)
 	$(VENV)/bin/python3 scripts/metrics_report.py

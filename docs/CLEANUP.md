@@ -79,12 +79,32 @@ Both need someone to look. Orphaned topic directories hold real material that
 might be salvaged into new ids; scratch files are usually junk but `chart/` is
 not. The listing script is in section 3 below.
 
-### What automating this would look like
+### Steps 1–3, automated · `make clean-registry`
 
-A `make clean-registry` target covering steps 1–3 with `KEEP=N`, refusing to
-run when a tag is deployed, and printing the before/after usage. Steps 4–5 stay
-manual because both destroy evidence: `.rejected/` explains repeated failures,
-and orphaned topics are unfinished salvage, not garbage.
+Written 2026-09-11; steps 1–3 above are now one command.
+
+```bash
+make clean-registry                  # the plan, nothing written
+make clean-registry APPLY=1          # prune, clear uploads, garbage-collect
+make clean-registry KEEP=5 APPLY=1   # keep more per repository
+```
+
+Three safeties, in this order:
+
+1. **Dry run by default.** `APPLY=1` is required to delete anything.
+2. **A deployed tag is never pruned.** Every deployment, statefulset and
+   daemonset in every namespace is read first and its tags are kept
+   regardless of age. If that list cannot be read the run **aborts** rather
+   than guessing — pruning blind would delete a tag in use and the next pod
+   start would fail.
+3. **Keep-N on top**, newest first, so a rollback target always survives.
+
+It then does what the manual steps did, in the order that works: prune tag
+manifests, clear orphaned uploads, garbage-collect, and print usage before and
+after. First real run pruned 11 tags across three repositories.
+
+Steps 4–5 stay manual because both destroy evidence: `.rejected/` explains
+repeated failures, and orphaned topics are unfinished salvage, not garbage.
 
 ## 1. The container registry (the one that actually fills)
 
