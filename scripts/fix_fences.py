@@ -15,6 +15,9 @@ Two rules, both mechanical and both narrow:
   jsonl     a `json` block where every non-blank line parses on its own but
             the block does not parse as one document is JSON Lines. Retagged
             to a plain fence, because ```jsonl renders as nothing useful.
+  multidoc  several pretty-printed JSON documents in one block — what
+            `kubectl get -o json` prints for more than one object. Each parses;
+            the block is not one document, which is all json.loads can check.
 
 Anything else is left alone: this script never edits inside a block, and never
 touches YAML. Real breakage stays reported.
@@ -55,8 +58,22 @@ def classify(body: str) -> str | None:
                 json.loads(line)
             return "jsonl"
         except json.JSONDecodeError:
+            pass
+    # Several pretty-printed documents in one block — what `kubectl get -o json`
+    # prints for more than one object, or an API response shown next to the
+    # request that produced it. Each document is valid; the block is not one
+    # document, which is all `json.loads` can check.
+    decoder, index, docs = json.JSONDecoder(), 0, 0
+    while index < len(stripped):
+        try:
+            _, end = decoder.raw_decode(stripped, index)
+        except json.JSONDecodeError:
             return None
-    return None
+        docs += 1
+        index = end
+        while index < len(stripped) and stripped[index] in " \t\r\n":
+            index += 1
+    return "multidoc" if docs > 1 else None
 
 
 def main() -> int:
@@ -67,7 +84,7 @@ def main() -> int:
     args = parser.parse_args()
 
     changed_files = 0
-    changed_blocks = {"console": 0, "jsonl": 0}
+    changed_blocks = {"console": 0, "jsonl": 0, "multidoc": 0}
     for base in args.paths or ["certs"]:
         for path in sorted(Path(base).glob("**/*.md")):
             text = path.read_text(errors="replace")
@@ -95,7 +112,8 @@ def main() -> int:
         print("No mislabelled json fences found.")
         return 0
     print(f"\n{total} block(s) in {changed_files} file(s): "
-          f"{changed_blocks['console']} console output, {changed_blocks['jsonl']} JSON Lines.")
+          f"{changed_blocks['console']} console output, {changed_blocks['jsonl']} JSON Lines, "
+          f"{changed_blocks['multidoc']} multi-document.")
     if not args.apply:
         print("Nothing written. Re-run with --apply to make these changes.")
     return 0

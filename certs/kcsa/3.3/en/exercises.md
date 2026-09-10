@@ -364,7 +364,7 @@ kubectl get --raw /openid/v1/jwks | jq .
 ```
 
 **Expected Output (Truncated):**
-```json
+```
 {
   "issuer": "https://kubernetes.default.svc.cluster.local",
   "jwks_uri": "https://10.96.0.1:443/openid/v1/jwks",

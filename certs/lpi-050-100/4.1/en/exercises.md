@@ -81,7 +81,7 @@ jq '.components[] | select(.commercial_model == "Dual-Licensing" or .commercial_
 ```
 
 *Expected Output:*
-```json
+```
 {
   "name": "DB-Engine-Core",
   "license_community": "GPL-2.0-only",

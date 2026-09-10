@@ -212,7 +212,7 @@ curl -s http://localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job:
 ```
 
 Expected Output:
-```json
+```
 {
   "job": "prometheus",
   "health": "up",

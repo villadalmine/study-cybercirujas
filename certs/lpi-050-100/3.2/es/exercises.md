@@ -64,7 +64,7 @@ jq '.licenses[] | select(.licenseId | startswith("CC-")) | {licenseId, name, isO
 ```
 
 **Expected CLI Output:**
-```json
+```
 {
   "licenseId": "CC-BY-4.0",
   "name": "Creative Commons Attribution 4.0 International",
@@ -128,7 +128,7 @@ jq '.licenses[] | select(.licenseId == "CC0-1.0" or .licenseId == "CC-BY-4.0") |
 ```
 
 **Expected CLI Output:**
-```json
+```
 {
   "licenseId": "CC-BY-4.0",
   "isFsfLibre": true

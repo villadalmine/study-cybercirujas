@@ -270,7 +270,7 @@ $ kubectl exec -n security-tools secure-vault-agent -- cat /var/run/secrets/toke
 $ jq -R 'split(".") | .[0,1] | @base64d | fromjson' sa_token.jwt
 ```
 **Output:**
-```json
+```
 {
   "alg": "RS256",
   "kid": "k8s-sa-key-1"

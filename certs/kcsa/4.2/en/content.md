@@ -304,7 +304,7 @@ $ grep -E '"verb":"(create|update)"' /var/log/kubernetes/audit/audit.log | grep 
 
 **Expected Output:**
 
-```json
+```
 {
   "time": "2026-08-07T19:42:11Z",
   "user": "system:serviceaccount:default:compromised-sa",

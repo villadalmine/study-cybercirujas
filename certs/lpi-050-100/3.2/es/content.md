@@ -263,7 +263,7 @@ $ syft quay.io/enterprise/platform-docs-portal:v2.1.0 -o json | jq '.artifacts[]
 
 **Expected Terminal Output:**
 
-```json
+```
 {
   "name": "hugo-theme-docdock",
   "version": "1.2.0",

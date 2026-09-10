@@ -83,7 +83,7 @@ jq '.dependencies | to_entries[] | select(.value.hostingRestricted == true or .v
 ```
 
 Expected Output:
-```json
+```
 {
   "package": "enterprise-rbac-module",
   "license": "BSL-1.1",

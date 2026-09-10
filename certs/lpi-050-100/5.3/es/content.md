@@ -291,7 +291,7 @@ $ scorecard --repo=github.com/cncf/platform-engine --format=json | jq '.checks[]
 ```
 
 Salida:
-```json
+```
 {
   "name": "Binary-Artifacts",
   "score": 10,

@@ -138,7 +138,7 @@ Execute a command where the client fetches raw structured JSON from the API and 
 curl -s http://127.0.0.1:8080/api/v1/metrics | jq '.[] | select(.cpu_usage > 85.0) | {node: .name, load: .cpu_usage}'
 ```
 *Expected Output:*
-```json
+```
 {
   "node": "web-node-01",
   "load": 88.5

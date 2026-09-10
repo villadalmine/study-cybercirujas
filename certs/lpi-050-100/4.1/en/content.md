@@ -192,7 +192,7 @@ $ syft quay.io/keycloak/keycloak:24.0.2 -o json | jq '.artifacts[] | {name: .nam
 ```
 
 **Expected Real Output:**
-```json
+```
 {
   "name": "microprofile-openapi-api",
   "version": "3.1.1",

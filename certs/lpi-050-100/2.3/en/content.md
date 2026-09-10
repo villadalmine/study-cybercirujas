@@ -241,7 +241,7 @@ $ syft alpine:3.19 -o json | jq '.artifacts[] | {name: .name, version: .version,
 ```
 
 **Expected Terminal Output:**
-```json
+```
 {
   "name": "alpine-baselayout",
   "version": "3.4.3-r2",

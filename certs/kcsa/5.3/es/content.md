@@ -366,7 +366,7 @@ Consulte los audit logs JSON del API server en el nodo del control plane usando 
 ```bash
 $ sudo tail -n 5000 /var/log/kubernetes/audit/audit.log | jq -r 'select(.objectRef.subresource=="exec") | {timestamp: .stageTimestamp, user: .user.username, ip: .sourceIPs[0], namespace: .objectRef.namespace, pod: .objectRef.name, container: .objectRef.subresourceParam}'
 ```
-```json
+```
 {
   "timestamp": "2026-08-07T19:42:10.812345Z",
   "user": "kubernetes-admin",

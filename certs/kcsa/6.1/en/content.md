@@ -304,7 +304,7 @@ Extract access audit records filtered for sensitive resource operations (Secret 
 ```bash
 $ tail -n 100 /var/log/kubernetes/audit/audit.log | jq 'select(.objectRef.resource=="secrets" and .verb=="get") | {time: .stageTimestamp, user: .user.username, namespace: .objectRef.namespace, secret: .objectRef.name, decision: .annotations["authorization.k8s.io/decision"]}'
 ```
-```json
+```
 {
   "time": "2026-08-07T20:15:32.410912Z",
   "user": "system:serviceaccount:payment-cde:payment-processor-sa",

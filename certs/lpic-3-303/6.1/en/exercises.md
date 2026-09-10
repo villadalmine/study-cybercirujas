@@ -481,7 +481,7 @@ cat /var/log/cowrie/cowrie.json | jq -r '{timestamp: .timestamp, src_ip: .src_ip
 ```
 
 **Expected Command Output:**
-```json
+```
 {
   "timestamp": "2026-08-06T14:35:10.123456Z",
   "src_ip": "192.168.56.10",

@@ -129,7 +129,7 @@ kubectl logs job/kube-bench-master | jq '.tests[] | .results[] | select(.status=
 
 **Salida de Terminal Esperada:**
 
-```json
+```
 {
   "test_number": "1.1.12",
   "test_desc": "Ensure that the --anonymous-auth argument is set to false (Automated)",

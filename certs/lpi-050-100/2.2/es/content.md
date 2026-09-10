@@ -290,7 +290,7 @@ $ jq '.packages[] | select(.licenseConcluded | test("GPL|AGPL")) | {name: .name,
 ```
 
 **Expected Output:**
-```json
+```
 {
   "name": "github.com/mewmew/goplugin",
   "versionInfo": "v1.2.0",

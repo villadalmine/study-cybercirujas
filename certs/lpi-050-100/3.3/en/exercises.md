@@ -268,7 +268,7 @@ curl -s https://raw.githubusercontent.com/spdx/license-list-data/main/json/licen
 ```
 
 **Expected Output:**
-```json
+```
 {
   "licenseId": "ODbL-1.0",
   "name": "Open Data Commons Open Database License v1.0",
