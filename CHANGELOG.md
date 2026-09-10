@@ -133,6 +133,26 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   rate below ten new topics — the next certification produces that sample for
   free.
 
+- **Reviewed `.rejected/`, and it paid for itself again.** Of the seven
+  rejected translations kept there, **five were false positives** — correct
+  translations refused over presentation:
+  a legend label (`● = customer` → `● = cliente`), **one space** of re-padding
+  in a plain-text table, and **trailing whitespace** in a diagram. Two fixes,
+  both narrow: legend markers (`●◐○→✓…`) now count as diagram glyphs so their
+  labels are compared as prose, and off-diagram runs of internal spaces
+  collapse — the leading indent is untouched because in YAML it is structure,
+  and lines that *are* diagrams keep exact columns.
+
+  That last constraint came from a test, not from care: collapsing spaces
+  everywhere made `test_diagram_that_breaks_alignment` pass a diagram whose
+  borders no longer lined up. The fix is surgical because the test refused the
+  blunt one.
+
+  Two of the seven stay rejected on purpose: explanatory prose inside code
+  blocks with no comment marker (`j j j (down to line 4)`). Loosening further
+  would risk letting a translated command through, and the retry policy
+  already handles them — both topics are complete today.
+
 - **The 55 orphaned topic directories are gone** — 6.1 MB, 446 files, every
   one committed so git keeps them retrievable. They were left when LPI syllabi
   were re-snapshotted from chapter headings to real objectives and the ids

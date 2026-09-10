@@ -138,7 +138,7 @@ because they describe the workstation, not the commit.
 |---|---|---|
 | ~~Unattributed citations~~ ✅ **80% → 91% (2026-09-11)** | 1,983 left of 22,860 | 70 domains catalogued in one batch, 53 → 110 projects. Every one was a project's own documentation; nothing was a blog. The remaining 9% is a long tail of one-off domains — `scripts/check_sources.py --unknown-only` still lists them |
 | ~~Orphaned topic directories~~ ✅ **Deleted 2026-09-11** | 0 | 55 directories, 6.1 MB, 446 files — all committed, so git keeps them. Nothing read them: not the site, not the audits, and not the generator, which authors from the syllabus and never from old material. 32 belonged to certifications already regenerated; the rest covered whole chapters the new syllabi split into objectives, so there was no salvage to do |
-| **`.rejected/` backlog** | 73 files | Skim before clearing: a repeated pattern there is a bug nobody has noticed. That is exactly how the placeholder-URL and decapitated-topic bugs were found |
+| ~~`.rejected/` backlog~~ ✅ **Reviewed 2026-09-11** | 73 files | Five of seven rejected translations were false positives — presentation differences, not broken material. Fixed in `_comparable_code`; two ambiguous cases left rejected on purpose. Safe to clear now: `rm -rf .rejected/*` |
 | ~~Registry retention~~ ✅ **Done 2026-09-11** | — | `make clean-registry` (dry run by default, `APPLY=1` to write) never prunes a deployed tag and aborts if it cannot read what is deployed. Still worth wiring into publishing so it runs without being remembered |
 | **Unattended publishing** | — | The host lacks make/kubectl/helm. Three options in AGENTS_SYNC.md; none chosen. Lowest urgency — publishing by hand works |
 

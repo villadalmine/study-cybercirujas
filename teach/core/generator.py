@@ -753,7 +753,12 @@ HEADING = re.compile(r"^#+ ", re.MULTILINE)
 COMMENT = re.compile(r"#[^\n]*")
 # Unicode box-drawing block. Deliberately excludes '+', '-' and '|', which are
 # everywhere in ordinary commands and would misclassify them as diagrams.
-BOX = re.compile(r"[─-╿]")
+# Box-drawing glyphs, plus the bullets and arrows used as legend markers next
+# to them (`● = customer`, `→ egress`). Adding the markers matters because a
+# legend line carries no box character of its own, so it was compared as code
+# and a correctly translated label ("customer" -> "cliente") failed the check —
+# three such rejections on 2026-09-11, all of them correct translations.
+BOX = re.compile(r"[─-╿●◐○◆◇■□▪▫•▸▶►→←↔⇄⇅✓✗]")
 
 
 def _comparable_code(block: str) -> str:
@@ -786,10 +791,21 @@ def _comparable_code(block: str) -> str:
     lines = []
     for line in block.splitlines():
         if BOX.search(line):
-            # Keep the drawing, drop the words, preserve every column.
-            lines.append("".join(c if BOX.match(c) else " " for c in line))
-        else:
-            lines.append(COMMENT.sub("#", line))
+            # Keep the drawing, drop the words, preserve every column — column
+            # positions are the whole point here, so spacing stays exact. Only
+            # trailing spaces go: they change nothing a reader can see, and
+            # they rejected a correct cca/5.1 translation on 2026-09-11.
+            lines.append("".join(c if BOX.match(c) else " " for c in line).rstrip())
+            continue
+        line = COMMENT.sub("#", line)
+        # Off the diagram, horizontal padding is presentation. A translated
+        # label has a different width, so a plain-text table stays aligned only
+        # by re-padding, and rejecting that would demand the translator leave
+        # it crooked (gcp-cdl/3.1 failed over one space). Runs of two or more
+        # INTERNAL spaces collapse; the leading indent is untouched, because in
+        # YAML that is structure.
+        indent = line[: len(line) - len(line.lstrip(" "))]
+        lines.append(indent + re.sub(r" {2,}", " ", line.strip()))
     return "\n".join(lines)
 
 
