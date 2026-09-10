@@ -638,7 +638,7 @@ checks:
           name: bad-pod
     assert:
       result: fail
-      message: "(contains(@, 'team'))": true
+      message: "expected (contains(@, 'team')) to be true"
 ```
 
 Treat this as additive: `results` remains the primary, exam‑relevant mechanism, and `checks` availability varies by CLI minor version. Verify with `kyverno test --help` on the image in front of you before relying on it.

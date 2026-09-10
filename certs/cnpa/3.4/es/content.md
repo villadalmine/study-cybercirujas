@@ -499,7 +499,7 @@ profiles:
       - name: LowNodeUtilization
         args:
           thresholds:      { cpu: 20, memory: 20, pods: 20 }
-          targetThresholds:{ cpu: 50, memory: 50, pods: 50 }
+          targetThresholds: { cpu: 50, memory: 50, pods: 50 }
     plugins:
       deschedule:
         enabled: [RemovePodsHavingTooManyRestarts]

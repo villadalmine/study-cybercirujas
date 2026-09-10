@@ -1842,12 +1842,12 @@ Pegá un bloque YAML anidado en `vi` con `autoindent` activo y sin bracketed pas
 spec:
   containers:
     - name: web
-        image: nginx:1.27
-          ports:
-            - containerPort: 80
-              resources:
-                  limits:
-                        cpu: 500m
+      image: nginx:1.27
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          cpu: 500m
 ```
 
 ```

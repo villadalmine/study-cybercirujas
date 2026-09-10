@@ -1056,20 +1056,20 @@ groups:
       - record: job:slo_errors:ratio_rate5m
         expr: |
              sum by (job) (rate(http_requests_total{status=~"5.."}[5m]))
-           /
+             /
              sum by (job) (rate(http_requests_total[5m]))
 
       # Multi-window burn rates for a 99.9% SLO
       - record: job:slo_errors:ratio_rate1h
         expr: |
              sum by (job) (rate(http_requests_total{status=~"5.."}[1h]))
-           /
+             /
              sum by (job) (rate(http_requests_total{status=~"5.."}[1h]) + rate(http_requests_total{status!~"5.."}[1h]))
 
       - record: job:slo_errors:ratio_rate6h
         expr: |
              sum by (job) (rate(http_requests_total{status=~"5.."}[6h]))
-           /
+             /
              sum by (job) (rate(http_requests_total[6h]))
 ```
 

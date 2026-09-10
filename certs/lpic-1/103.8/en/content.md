@@ -1842,12 +1842,12 @@ Paste a nested YAML block into `vi` with `autoindent` on and no bracketed paste,
 spec:
   containers:
     - name: web
-        image: nginx:1.27
-          ports:
-            - containerPort: 80
-              resources:
-                  limits:
-                        cpu: 500m
+      image: nginx:1.27
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          cpu: 500m
 ```
 
 ```

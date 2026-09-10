@@ -430,7 +430,7 @@ Extracto del `config.json` generado (el objeto runtime-spec) mostrando las primi
       "memory": { "limit": 536870912 },
       "cpu": { "quota": 50000, "period": 100000 }
     },
-    "seccomp": { "defaultAction": "SCMP_ACT_ERRNO", "syscalls": [ /* … */ ] }
+    "seccomp": { "defaultAction": "SCMP_ACT_ERRNO", "syscalls": ["…"] }
   }
 }
 ```
