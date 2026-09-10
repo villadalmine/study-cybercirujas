@@ -89,10 +89,12 @@ starts when its **entry condition** is met, not when the previous one finishes.
 
 ## Housekeeping that is open
 
-- **The cluster registry is full** (98 GB, 100%). Not this project: `teach-plat`
-  holds 3 tags after cleanup, while `online-game` has 229 and
-  `online-game-test` 124. Garbage collection frees nothing until those are
-  pruned — every remaining blob is referenced by a live tag.
+- ~~The cluster registry is full~~ **Resolved 2026-09-10: 100% → 15%, 83 GB
+  reclaimed** by pruning `online-game` (229 tags) and `online-game-test` (124)
+  and running garbage collection. The lesson is in
+  [docs/CLEANUP.md](docs/CLEANUP.md): prune where the tags actually are —
+  cleaning `teach-plat` first freed exactly zero bytes. **Still open**: the
+  registry has no retention policy, so this recurs.
 - **~60 embedded manifests in the older LPI corpus do not parse**, keeping
   `make verify` red. Mechanical to repair, no model needed — the `pca` and
   `cks` repairs are the pattern.
