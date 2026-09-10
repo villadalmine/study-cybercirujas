@@ -2,6 +2,81 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-10
+
+- **Study bot, phase 1 — the platform's first feature that is not content.** A
+  Bot section where the student picks career → certification → topic, pastes
+  their **own OpenRouter key**, and asks questions against that material. The
+  key lives in `localStorage` and goes straight to openrouter.ai: no proxy, no
+  account, no server state, and therefore **zero platform inference cost** —
+  which is what makes it safe to offer on a public site after this project hit
+  its monthly spend limit twice in three days. Design, phases and full token
+  accounting in [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+
+  Two design calls worth recording. **Explicit selection replaces retrieval**:
+  because the student names the topic, the exact file is known, so it is sent
+  whole (15–35k tokens, fits any modern model) instead of approximated by
+  embeddings — no pgvector, no embedder, no new pods, and better accuracy than
+  chunked search. And **the task harness ships in phase 1**: four intents with
+  specialised prompts that know this corpus' conventions (the exercise writer
+  follows the `<details>` solution format, the examiner weighs questions by
+  syllabus domain weight, the explainer may cite only references already in the
+  material). Without them the model improvises formats the corpus already
+  defines — which is what "dumping raw material at the model" actually looks
+  like.
+
+- **The model catalogue became data.** `models.yaml` freezes the ids and prices
+  the UI shows (top / mid / low / **free** tiers across Claude, OpenAI,
+  DeepSeek, Qwen, Kimi, MiniMax and Gemma), `/api/models` serves it, and the
+  page builds its selector from that — nothing about models is typed into
+  JavaScript any more. The first draft had **invented model ids**, caught by
+  the owner; the second had a free tier picked by context length alone, which
+  included two **domain-tuned** models (finance and health) that would have
+  answered IT questions from the wrong prior. The selection criteria now live
+  inside the file so the next replacement is made against a standard.
+
+- **`scripts/check_models.py`** compares that catalogue against OpenRouter's
+  live API and reports models that vanished, prices that moved, `:free` models
+  that started charging, and models that dropped `reasoning` support. It runs
+  inside `make check-updates` **and** as a weekly CronJob in the cluster — the
+  one part of the pipeline that belongs there, because it needs the network and
+  neither quota nor the owner's subscription.
+
+- **`make check-updates` + the `check-updates` skill**: one trigger that
+  refreshes every frozen syllabus against what its vendor publishes today and
+  rewrites the **Exam versions** table in STATUS.md. First run found lpi-devops
+  sitting on v1.0 while LPI had shipped a v2.0 overhaul.
+
+- **The site tells its own truth.** `/api/status` projects the *same functions*
+  STATUS.md renders from — versions via `check_versions.survey()`, language
+  coverage via the quality floor — so the public page and the repository cannot
+  disagree on definitions, only on timing, and every row carries its dates. The
+  **Status** section renders it in all seven languages.
+
+- **EU AI Act Article 50 disclosure reached the student.** Every topic page
+  names the model that produced what is being served, the date, whether it is a
+  translation, and links the vendor exam guide it derives from; the footer
+  links the repository. Certification pages link their official sources.
+
+- **Certifications**: cgoa, lpic-3-303, lpic-1 (42 objectives, replacing the
+  pre-resnapshot corpus), cca, lpi-devops v2.0 (re-snapshotted to the real 15
+  objectives), aws-clf, az-900 and gcp-cdl completed and published — the three
+  public-cloud careers now exist end to end. cks' Spanish was rebuilt from the
+  rich English (579 KB → 2.9 MB, parity 0.98x) after the review found it was
+  the old independently-authored sibling.
+
+- **Nine bugs found and fixed, each with its cost measured**: the CLI exiting 0
+  on failed translations (19 re-paid attempts on one topic), systemd killing
+  passes at a 40-minute ceiling (12 discarded translation cycles), the video
+  encoder present in the toolbox and absent on the host (136 silent render
+  failures), a placeholder pseudo-URL failing the translation verifier (20+
+  rejections of a correct translation), a bash comment satisfying the quality
+  floor's `starts_with: "#"` (a decapitated topic), prompts over ~128 KB
+  breaking `execve`, non-authoring languages being authored directly, the
+  secret scanner flagging `sk-ssh-` key types and substrings inside words, and
+  three API endpoints shipping broken because the container lacked data files
+  the toolbox had.
+
 ## 2026-08-20
 
 - **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
