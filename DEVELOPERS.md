@@ -232,10 +232,18 @@ so anything built on it can carry the disclosure forward.
 | **Change failure rate** | `make verify` before publishing, the pre-commit hook, and the fact that nothing partial can reach `published.json` — completeness is derived from the tree | Failures that do occur are caught at build or verify, not by students |
 | **Time to restore** | `make deploy-local TAG=<previous>` — every image is a tag, rollback is one command | Minutes |
 
+**Contributing**: every push and pull request runs the free half of
+`make verify` in GitHub Actions (`.github/workflows/verify.yml`) — quality
+floor, manifests, Kubernetes APIs, provenance, sources, syllabus coverage,
+the STATUS.md and API-reference freshness checks, the tests, and a secret
+scan. No quota is spent, so a stranger's pull request gets the same verdict
+the owner gets. Two checks are excluded because they describe the
+workstation rather than the commit: `check_units` reads installed systemd
+units, `check_config` compares against local usage records.
+
 Where the loop is honest about its gaps: publishing is a manual step (the
-workstation running the unattended pass has no `make`/`kubectl`/`helm`), there
-is no CI running `make verify` on push yet, and the registry has no retention
-policy. All three are in [ROADMAP.md](ROADMAP.md).
+workstation running the unattended pass has no `make`/`kubectl`/`helm`) and
+the registry has no retention policy. Both are in [ROADMAP.md](ROADMAP.md).
 
 ## Keeping this page true
 

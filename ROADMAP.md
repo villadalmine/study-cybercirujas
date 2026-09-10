@@ -117,13 +117,11 @@ One paragraph there prevents the next hundred. **A prompt change applies to
 every future topic and its effect cannot be seen in one file, so it is
 propose-and-measure, not hot-patch.**
 
-### Step 3b — CI is the gap the DevOps loop still has
+### Step 3b — ✅ DONE 2026-09-11: CI runs the free checks on every push
 
-`make verify` is green and free, but nothing runs it on push: it runs when
-someone remembers. A GitHub Action doing `make setup && make verify` on every
-pull request would close the change-failure-rate side of DORA properly. Small,
-no quota, and it makes the fork story in [DEVELOPERS.md](DEVELOPERS.md) real
-for contributors.
+`.github/workflows/verify.yml` runs ten checks plus a secret scan on push and
+pull request, spending no quota. `check_units` and `check_config` stay out
+because they describe the workstation, not the commit.
 
 ### Step 4 — the rest, in order of what it buys
 

@@ -1,0 +1,75 @@
+name: Verify
+
+# The checks that cost no API budget, run on every push and pull request.
+#
+# `make verify` was green and free from the start, but nothing ran it: it
+# happened when someone remembered. That is the change-failure-rate side of
+# DORA left to goodwill, and it makes the contribution story in DEVELOPERS.md
+# untrue for anyone who is not the owner — a stranger's pull request had no way
+# to be told it broke something.
+#
+# Deliberately NOT here: anything that spends quota (no generation, no
+# translation, no check_claims), anything needing the cluster (no image build —
+# docker.yml does that), and the network checks (check_citations,
+# check_api_facts), which are honest to run but flaky against third-party sites
+# and would train people to ignore a red build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # A newer push makes the older run irrelevant; cancel it rather than queue.
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -q -e .
+
+      - name: Verify
+        # `make verify` minus the two checks that cannot hold in CI:
+        #   check_units    reads ~/.config/systemd — the workstation's units
+        #   check_config   compares against usage.jsonl, which is local state
+        # Both are real checks about THIS machine, not about the commit.
+        run: |
+          .venv/bin/python3 scripts/quality_report.py
+          .venv/bin/python3 scripts/check_manifests.py
+          .venv/bin/python3 scripts/check_k8s_apis.py
+          .venv/bin/python3 scripts/check_provenance.py
+          .venv/bin/python3 scripts/check_sources.py
+          .venv/bin/python3 scripts/check_versions.py
+          .venv/bin/python3 scripts/check_syllabus.py
+          .venv/bin/python3 scripts/status_matrix.py --check
+          .venv/bin/python3 scripts/gen_api_docs.py --check
+          .venv/bin/python3 -m unittest discover tests
+
+      - name: Secrets
+        # The same shapes the pre-commit hook refuses, in case a clone never
+        # ran `git config core.hooksPath .githooks`. Word-anchored: an AWS
+        # example id containing "task-VZ7X" is not a key, and neither is the
+        # OpenSSH `sk-ssh-ed25519` key TYPE.
+        run: |
+          if git grep -nE '\b(sk-[A-Za-z0-9_-]{20,}|sk-or-v1-[A-Za-z0-9]{32,}|AIza[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})' \
+               -- . ':!*.lock' | grep -v 'sk-ssh-'; then
+            echo "::error::Something matching an API key shape is committed. Rotate it if it was ever pushed."
+            exit 1
+          fi
+          echo "No key-shaped strings found."
