@@ -95,42 +95,27 @@ it turned 144 "broken manifests" into 80 in one commit — 64 were CloudFormatio
 tags that `yaml.safe_load` refuses by design, against material that was
 correct all along.
 
-### Step 1 — separate false positives from real ones · *free, mostly done*
+### Steps 1–2 — ✅ DONE 2026-09-11: 144 → 0, `make verify` green
 
-- ✅ **CloudFormation tags** (`!Ref`, `!Sub`, `!GetAtt`, `!Equals`) now parse.
-  144 → 80.
-- ✅ **Mislabelled `json` fences** — 35 blocks holding console output, JSON
-  with `//` comments, or JSON Lines. `scripts/fix_fences.py` applies two
-  narrow rules, shows its diff by default, needs `--apply` to write.
-  80 → **58**.
+**116 of the 144 were false positives**, fixed in the checker rather than in
+the content: CloudFormation intrinsic tags, systemd units and Terraform HCL
+tagged `yaml`, `${...}` templating, and `json` fences holding console output,
+JSON Lines or multiple documents (`scripts/fix_fences.py` encodes the retag
+rules — diff by default, `--apply` to write).
 
-### Step 2 — repair what is genuinely broken · *free, needs eyes*
-
-**58 findings, but far less work than that number suggests** (measured
-2026-09-10):
-
-- **52 are in served material, 6 are in orphaned topics** nobody can reach
-  (`lpi-020-100/2.1`, `lpi-devops/5.1`, `lpic-3-303/6.1`). Do not repair the
-  orphans — they are waiting on the salvage-or-delete decision below.
-- **They come in en/es pairs.** Translations preserve code blocks byte for
-  byte, so one broken block produces two findings: **≈26 real problems**.
-  Repair both languages with the same edit — re-translating would cost quota
-  to fix something the translation copied faithfully.
-
-What is left is genuine: unquoted `: ` inside YAML values, block scalars whose
-indentation ends the scalar early, an alias that never resolves. **The `pca`
-repair is the template**: two of its three were errors that broke the real
-tool, not just our parser — the fix improved the material, not only the
-report.
+**28 were real** and are repaired. Each broke the actual tool, not just our
+parser. `scripts/check_config.py` also stopped flagging translation's
+deliberate default effort as drift.
 
 ### Step 3 — stop producing them · *the only step that ends the debt*
 
-Every repair above is retroactive. The generation prompt in `generator.py`
-never states the conventions these violate: console output is not `json`,
-values containing `: ` need quoting, block scalars must keep their indent. One
-paragraph there prevents the next hundred. **This is a prompt change, so it is
-propose-and-measure, not hot-patch** — it applies to every future topic and its
-effect cannot be seen in one file.
+Still open, and now the whole of it. Every repair above was retroactive: the
+generation prompt in `generator.py` never states the conventions these
+violated — console output is not `json`, values containing `: ` need quoting,
+block scalars must keep their indent, a `*` starting a scalar needs quotes.
+One paragraph there prevents the next hundred. **A prompt change applies to
+every future topic and its effect cannot be seen in one file, so it is
+propose-and-measure, not hot-patch.**
 
 ### Step 4 — the rest, in order of what it buys
 

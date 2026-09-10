@@ -81,7 +81,11 @@ def recent(limit: int) -> list[dict]:
             row = json.loads(line)
         except json.JSONDecodeError:
             continue
-        if row.get("op") in ("author", "translate"):
+        # Authoring only. Translation deliberately runs at the CLI default
+        # effort (2026-08-24: restatement should not inherit the authoring
+        # pin), so including it reports a designed decision as drift — and a
+        # check that cries about intended behaviour stops being read.
+        if row.get("op") == "author":
             rows.append(row)
     return rows[-limit:]
 

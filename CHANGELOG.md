@@ -77,6 +77,30 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   three API endpoints shipping broken because the container lacked data files
   the toolbox had.
 
+## 2026-09-11
+
+- **`make verify` is green for the first time: 144 broken manifests → 0.** The
+  method, which is the point: **when a check fires en masse, verify the check
+  before repairing the content.** Of the 144, **116 were false positives** and
+  the checker was what needed fixing — CloudFormation intrinsic tags
+  (`!Ref`, `!Sub`, `!Equals`) that `safe_load` refuses by design, systemd unit
+  files and Terraform HCL tagged as `yaml`, `${...}` templating, and blocks
+  labelled `json` that held console output, JSON Lines, or several documents.
+  Two scripts now encode those rules: the vendor-tag loader in
+  `check_manifests.py`, and `scripts/fix_fences.py` (two narrow retag rules,
+  diff by default, `--apply` to write).
+
+  **28 were real**, and every one of them broke the actual tool rather than
+  just our parser: a missing space after a key, an unquoted `*.host` that YAML
+  reads as an alias, two mappings joined by a semicolon, a JMESPath expression
+  used as a mapping key, container indentation one level too deep, a JSON
+  comment inside a JSON document, and block scalars whose PromQL division sat
+  left of the scalar indent — the `pca` defect, found in four more places.
+
+- **`check_config.py` stopped reporting a designed decision as drift.** It
+  sampled translations, which deliberately run at the CLI default effort since
+  2026-08-24, and flagged them against the authoring pin. Authoring only now.
+
 ## 2026-08-20
 
 - **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
