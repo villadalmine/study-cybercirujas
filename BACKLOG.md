@@ -176,5 +176,14 @@ Keep `chart/` untracked until at least items 1–4 above are fixed; a chart that
 
 ## Repo Hygiene
 
-- `hola` is a one-line scratch note (a `claude --resume` command), untracked. Harmless, delete when no longer needed.
+- ~~`hola` scratch note~~ **Deleted 2026-09-10**, along with `seguir` (pasted
+  terminal noise), `lpic-1-text.txt` (empty) and `test_agy.py` (one-off probe).
+  `chart/` stays untracked by the earlier decision in the RAG-bot audit above.
+- **The registry filled up (2026-09-10).** `registry.registry:5000` hit 100% of
+  its 98 GB volume and image pushes now fail with `Err:28`; blobs account for
+  97.7 GB across 11 repositories. `teach-plat` alone had 55 tags. Cleanup is
+  two steps — delete old tag manifests, then `registry garbage-collect
+  --delete-untagged` — and it needs cluster access the agent does not have.
+  Worth adding a retention policy afterwards: this repository publishes one
+  image per finished certification and never prunes.
 - Source comments and docstrings under `teach/` and `scripts/` are still largely in Spanish, which contradicts the English-only rule in `CLAUDE.md`. Mechanical to fix, but it is a wide diff — worth doing in one dedicated pass rather than drip-feeding it into feature commits.

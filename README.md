@@ -10,6 +10,9 @@ See the disclosure below.
 - **[PLAN.md](PLAN.md)** — full design
 - **[BACKLOG.md](BACKLOG.md)** — what is pending
 - **[CHANGELOG.md](CHANGELOG.md)** — what has been delivered
+- **[docs/AI_ROADMAP.md](docs/AI_ROADMAP.md)** — which AI certifications are coming, and why the rest are not
+- **[docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md)** — the study bot: phases, token costs, design rules
+- **[docs/DEVTOOLS.md](docs/DEVTOOLS.md)** — code graph, spend metrics, developer tooling
 
 ## AI-generated content — disclosure
 
@@ -331,6 +334,51 @@ correct: the floor catches stubs and missing structure, the citation check
 catches invented sources. [WORKFLOW.md](WORKFLOW.md) explains what each check
 proves, what it does not, and what real correctness verification would take.
 
+## Study bot (bring your own key)
+
+The site has a **Bot** section where a student picks a certification and a
+topic, pastes their own [OpenRouter](https://openrouter.ai/keys) key, and asks
+questions against that material — "give me an exercise", "quiz me", "what
+would the exam ask".
+
+- **The key is stored in the browser only** and sent straight to
+  openrouter.ai. It never reaches this server: there is no proxy, no session,
+  no account, and therefore nothing of the student's to leak.
+- **Platform inference cost is zero.** The student pays for their own tokens,
+  which is what makes the feature safe to offer publicly.
+- **Every token lever is exposed**: how much material to send (theory /
+  theory+exercises / none), whether to resend conversation history (off by
+  default), model tier (`top` / `mid` / `low` / `free`, prices shown),
+  reasoning effort (off by default — thinking tokens bill as output), a
+  2000-token answer cap, an estimate before sending and a live session
+  counter.
+- **The model catalogue is data, not code**: `models.yaml` holds the ids and
+  prices we froze, `/api/models` serves them, and `scripts/check_models.py`
+  compares them against OpenRouter's live API — reporting models that
+  vanished, prices that moved and `:free` models that started charging. It
+  runs inside `make check-updates`.
+
+Design, phases and the full token accounting:
+[docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+
+## Keeping it honest over time
+
+Nothing here degrades silently, because each moving part has a check that
+costs no quota:
+
+```bash
+make check-updates      # exam syllabi vs what each vendor publishes today,
+                        # plus the bot's model catalogue vs OpenRouter
+make verify             # quality floor, manifests, k8s APIs, provenance, graph, tests
+make metrics            # tokens and quota windows spent, per stage and per day
+```
+
+`make check-updates` is the quarterly habit: it refreshes the **Exam versions**
+table in STATUS.md and prints what drifted. The same information is served at
+`/api/status` and rendered in the site's **Status** section, so the public page
+and the repository cannot disagree — they are two projections of the same
+functions over the same tree.
+
 ## Deploying to Kubernetes
 
 Content is baked into the image — publishing means rebuild + upgrade.
@@ -374,6 +422,24 @@ cert-manager with a ClusterIssuer for TLS.
 A systemd timer (`teach-resume.timer`) runs `scripts/resume-generation.sh` every
 20 minutes to generate content unattended. It probes the quota first and skips
 the pass when there is none, and it is idempotent — it skips what is already done.
+
+**It runs on the workstation, not in the cluster, and that is deliberate**: it
+authenticates as the owner's Claude subscription through the local CLI, which
+has no equivalent inside a pod. There is no CronJob in the `teach-plat`
+namespace and adding one would not help generation.
+
+**What the unattended pass can and cannot do** (measured 2026-09-09):
+
+| Stage | Unattended | Why |
+|---|---|---|
+| author · translate · render video | ✅ | pure Python plus ffmpeg, all available |
+| commit to git | ✅ | `git` is on the host |
+| **build image · deploy** | ❌ | the host has no `make`, `kubectl` or `helm` — those live in the toolbox container, so `publish_if_complete` reports the failure honestly and the content waits. Publishing is a manual step today: run `make publish-complete` from an environment that has them |
+
+What *would* fit a cluster CronJob is the checking side, which needs network
+but no quota and no subscription: `make check-updates` (exam versions plus the
+study bot's model catalogue). Nothing depends on it running there — it is a
+convenience, not a gap.
 
 > **It spends API quota on its own.** Do not enable it without the owner's
 > explicit approval, and check `quota-history.jsonl` afterwards to see what it
