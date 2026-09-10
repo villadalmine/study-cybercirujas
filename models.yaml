@@ -1,0 +1,120 @@
+# Models offered by the study bot — the catalogue the UI is built from.
+#
+# Frozen on purpose: prices and ids are copied from openrouter.ai/api/v1/models
+# at the date below, so `scripts/check_models.py` can compare them against the
+# live API and report what moved. Same separation as the certification syllabi:
+# what we froze lives here, what upstream publishes is fetched, and neither
+# overwrites the other.
+#
+# Tiers describe what the bot does — read given material and teach from it —
+# not raw benchmark rank. `free` models cost the student nothing but are rate
+# limited by OpenRouter and change often; they are offered last on purpose.
+checked: '2026-09-10'
+source: https://openrouter.ai/api/v1/models
+tiers:
+  top:
+    - id: anthropic/claude-opus-5
+      name: Claude Opus 5
+      in: 5
+      out: 25
+      ctx: 1000
+      reasoning: true
+    - id: openai/gpt-6-astra
+      name: GPT-6 Astra
+      in: 10
+      out: 50
+      ctx: 1050
+      reasoning: true
+    - id: moonshotai/kimi-k3
+      name: Kimi K3
+      in: 3
+      out: 15
+      ctx: 1048
+      reasoning: true
+  mid:
+    - id: anthropic/claude-sonnet-5
+      name: Claude Sonnet 5
+      in: 2
+      out: 10
+      ctx: 1000
+      reasoning: true
+    - id: openai/gpt-5.6-sol
+      name: GPT-5.6 Sol
+      in: 2
+      out: 10
+      ctx: 1050
+      reasoning: true
+    - id: qwen/qwen3.7-max
+      name: Qwen3.7 Max
+      in: 1.475
+      out: 4.425
+      ctx: 1000
+      reasoning: true
+    - id: deepseek/deepseek-v4-pro
+      name: DeepSeek V4 Pro
+      in: 0.9553
+      out: 1.911
+      ctx: 1048
+      reasoning: true
+    - id: moonshotai/kimi-k2.5
+      name: Kimi K2.5
+      in: 0.45
+      out: 2.25
+      ctx: 262
+      reasoning: true
+  low:
+    - id: anthropic/claude-haiku-4.5
+      name: Claude Haiku 4.5
+      in: 1
+      out: 5
+      ctx: 200
+      reasoning: true
+    - id: openai/gpt-5-mini
+      name: GPT-5 Mini
+      in: 0.25
+      out: 2
+      ctx: 400
+      reasoning: true
+    - id: openai/gpt-5-nano
+      name: GPT-5 Nano
+      in: 0.05
+      out: 0.4
+      ctx: 400
+      reasoning: true
+    - id: deepseek/deepseek-v4-flash
+      name: DeepSeek V4 Flash
+      in: 0.08861
+      out: 0.1772
+      ctx: 1048
+      reasoning: true
+    - id: qwen/qwen3.7-flash
+      name: Qwen3.7 Flash
+      in: 0.03
+      out: 0.13
+      ctx: 1000
+      reasoning: true
+  free:
+    - id: nvidia/nemotron-3.5-lightning:free
+      name: Nemotron 3.5 Lightning
+      in: 0
+      out: 0
+      ctx: 1000
+      reasoning: true
+    - id: thinkingmachines/inkling:free
+      name: Inkling
+      in: 0
+      out: 0
+      ctx: 1048
+      reasoning: true
+    - id: nex-agi/nex-n2.5-pro:free
+      name: Nex N2.5 Pro
+      in: 0
+      out: 0
+      ctx: 262
+      reasoning: true
+    - id: inclusionai/ling-3.0-flash-fin:free
+      name: Ling 3.0 Flash
+      in: 0
+      out: 0
+      ctx: 262
+      reasoning: true

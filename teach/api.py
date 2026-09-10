@@ -142,6 +142,22 @@ def get_langs() -> dict:
     return {"langs": certs.LANGS, "default": certs.DEFAULT_LANG}
 
 
+@app.get("/api/models")
+def get_models() -> dict:
+    """The study bot's model catalogue, from `models.yaml`.
+
+    Served rather than hardcoded in the page so there is one list, versioned
+    with the code, checkable by `scripts/check_models.py` against OpenRouter's
+    live API. The first draft of the bot had invented model ids in JavaScript;
+    a catalogue nobody can verify is how that happens twice.
+    """
+    import yaml
+    path = catalog.root() / "models.yaml"
+    if not path.exists():
+        return {"checked": None, "tiers": {}}
+    return yaml.safe_load(path.read_text()) or {"checked": None, "tiers": {}}
+
+
 @app.get("/api/status")
 def get_status() -> list:
     """Per-certification overview: exam versions, coverage, videos, freshness.

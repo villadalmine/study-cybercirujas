@@ -24,6 +24,13 @@ the vendor currently publishes?** Two facts, recorded separately on purpose
    upstream version, when upstream changed, last checked, and the verdict
    (✅ current · ⚠️ outdated · – unknown).
 
+The same command also checks the **study bot's model catalogue**
+   (`models.yaml`) against OpenRouter's live API — models that vanished,
+   prices that moved, `:free` models that started charging, and models
+   that dropped `reasoning` support. That output is advisory (the target
+   does not fail on it) but a GONE or PAID line means the bot is showing
+   students something untrue.
+
 3. Report to the user, most severe first:
    - **outdated** certs: name the version gap, and estimate the re-snapshot
      blast radius honestly — a version bump can be a renumbering or a full
