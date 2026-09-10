@@ -95,8 +95,20 @@ starts when its **entry condition** is met, not when the previous one finishes.
   [docs/CLEANUP.md](docs/CLEANUP.md): prune where the tags actually are —
   cleaning `teach-plat` first freed exactly zero bytes. **Still open**: the
   registry has no retention policy, so this recurs.
-- **~60 embedded manifests in the older LPI corpus do not parse**, keeping
-  `make verify` red. Mechanical to repair, no model needed — the `pca` and
-  `cks` repairs are the pattern.
-- **~188 orphaned topic directories** from the pre-resnapshot ids are still on
-  disk, counted by nothing and served to nobody. Decide: archive or delete.
+- **144 embedded manifests do not parse** (measured 2026-09-10, up from ~60 as
+  the corpus grew), keeping `make verify` red. Mechanical to repair, no model
+  needed — the `pca` and `cks` repairs are the pattern: usually a `json` fence
+  around console output, or a `: ` inside an unquoted YAML value. Worth a
+  dedicated pass rather than drip-feeding, and worth asking whether the
+  generation prompt should teach the convention so new topics stop producing
+  them.
+- **55 orphaned topic directories** from pre-resnapshot ids (down from ~188;
+  regeneration absorbed the rest). Not served, not counted, not audited.
+  Decide: salvage into current ids, archive, or delete —
+  [docs/CLEANUP.md](docs/CLEANUP.md) has the listing script.
+- **20% of citations are unattributed** — 4,498 of 22,860, from domains not in
+  `docs/sources.yaml`. Adding the legitimate ones is bookkeeping with no quota
+  cost: `scripts/check_sources.py --unknown-only` lists them.
+- **`.rejected/` holds 73 files.** Each is evidence of a diagnosed failure;
+  clearing them is safe once read, but worth a skim first — a repeated pattern
+  there is a bug nobody has noticed yet.
