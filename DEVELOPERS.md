@@ -237,9 +237,11 @@ so anything built on it can carry the disclosure forward.
 floor, manifests, Kubernetes APIs, provenance, sources, syllabus coverage,
 the STATUS.md and API-reference freshness checks, the tests, and a secret
 scan. No quota is spent, so a stranger's pull request gets the same verdict
-the owner gets. Two checks are excluded because they describe the
+the owner gets. Three checks are excluded because they describe the
 workstation rather than the commit: `check_units` reads installed systemd
-units, `check_config` compares against local usage records.
+units, `check_config` compares against local usage records, and
+`status_matrix --check` counts rendered videos, which are gitignored for
+size and therefore absent from any clean checkout.
 
 Where the loop is honest about its gaps: publishing is a manual step (the
 workstation running the unattended pass has no `make`/`kubectl`/`helm`) and
