@@ -107,15 +107,24 @@ rules — diff by default, `--apply` to write).
 parser. `scripts/check_config.py` also stopped flagging translation's
 deliberate default effort as drift.
 
-### Step 3 — stop producing them · *the only step that ends the debt*
+### Step 3 — ✅ SHIPPED 2026-09-11, measurement pending by design
 
-Still open, and now the whole of it. Every repair above was retroactive: the
-generation prompt in `generator.py` never states the conventions these
-violated — console output is not `json`, values containing `: ` need quoting,
-block scalars must keep their indent, a `*` starting a scalar needs quotes.
-One paragraph there prevents the next hundred. **A prompt change applies to
-every future topic and its effect cannot be seen in one file, so it is
-propose-and-measure, not hot-patch.**
+The generation prompt now states the conventions the 28 real defects violated:
+quote values containing `: `, quote a leading `*` (YAML reads it as an alias),
+keep every line of a block scalar at the same indent, one JSON document per
+```json fence and a plain fence for console output, and never label systemd or
+HCL as yaml. Each rule cites a defect that actually happened, not a
+precaution. Cost: ~250 tokens of system prompt per completion, paid once
+against topics that would otherwise be regenerated.
+
+**Not yet measured, and that is deliberate.** A prompt change applies to every
+future topic, so the honest test is whether NEW topics arrive broken.
+`scripts/manifest_rate.py` answers exactly that, comparing against the rate
+recorded at repair time (**14 of 1,225 topics, 1.1%**) rather than against the
+repaired corpus, which now reads 0% and would flatter the change. It refuses
+to report a rate below 10 new topics. **The next certification generated
+produces that sample at no extra cost** — run it then, and read the result
+before defending the prompt.
 
 ### Step 3b — ✅ DONE 2026-09-11: CI runs the free checks on every push
 

@@ -547,6 +547,29 @@ def _system(lang: str) -> str:
         "explica la mecánica interna, arquitectura, trade-offs, manifiestos completos sintácticamente "
         "válidos, comandos CLI reales con sus salidas esperadas, y técnicas avanzadas de diagnóstico. "
         "El contenido es original: citás fuentes oficiales con sus URLs. "
+        # Cada regla de acá corresponde a un defecto REAL encontrado en el
+        # corpus el 2026-09-11 (28 casos), no a una precaución teórica. El
+        # estudiante copia el bloque y falla; el checker solo lo ve después.
+        # Ver CHANGELOG 2026-09-11 y scripts/check_manifests.py.
+        "\n\nCONVENCIONES DE BLOQUES DE CÓDIGO (un bloque mal formado hace que "
+        "el estudiante copie algo que no funciona):\n"
+        "- Un bloque ```yaml TIENE que parsear como YAML. En particular: un "
+        "valor que contiene `: ` va entre comillas; un valor que empieza con "
+        "`*` va entre comillas (YAML lo lee como alias: `- \"*.midominio.com\"`); "
+        "después de cada clave va un espacio (`secret: valor`, nunca "
+        "`secret:valor`); no unas dos claves en una línea con `;` ni las "
+        "escribas seguidas.\n"
+        "- En un escalar de bloque (`expr: |`) TODAS las líneas llevan la misma "
+        "sangría, incluidos los operadores sueltos como `/` de PromQL. Una "
+        "línea menos indentada cierra el escalar y rompe el documento.\n"
+        "- Un bloque ```json TIENE que ser UN único documento JSON: sin "
+        "comentarios (`//`, `/* */`), sin texto antes del `{`, sin varios "
+        "objetos seguidos. Si vas a mostrar salida de un comando, elisiones, "
+        "JSON Lines o varios documentos, usá un bloque sin etiqueta (```), "
+        "que es lo correcto y además no promete lo que no es.\n"
+        "- Si el bloque no es YAML ni JSON (unidad systemd, HCL de Terraform, "
+        "INI), etiquetalo con su lenguaje o dejalo sin etiqueta; no lo marques "
+        "como yaml.\n"
         "Respondé SOLO con el material pedido, sin comentarios sobre el proceso."
     )
 

@@ -118,6 +118,29 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   endpoints with no docstring and one documented in Spanish — fixed at the
   source, which is the point of generating rather than writing.
 
+- **The generation prompt learned the conventions the corpus kept violating.**
+  Every repair before this was retroactive; this is the only change that stops
+  the class being produced. Five rules, each citing a defect that actually
+  happened rather than a precaution: quote values containing `: `, quote a
+  leading `*` (YAML reads it as an alias), keep block-scalar lines at one
+  indent, one JSON document per ```json fence with console output in a plain
+  fence, and never label systemd units or Terraform HCL as yaml.
+
+  **Deliberately unmeasured for now.** `scripts/manifest_rate.py` will answer
+  whether new topics arrive broken, comparing against the rate recorded at
+  repair time (14 of 1,225 topics, 1.1%) rather than against the repaired
+  corpus, which reads 0% and would flatter the change. It refuses to report a
+  rate below ten new topics — the next certification produces that sample for
+  free.
+
+- **CI runs the free verification on every push and pull request**
+  (`.github/workflows/verify.yml`): nine checks plus a word-anchored secret
+  scan, no quota, no cluster. Its first run failed correctly —
+  `status_matrix --check` counts rendered videos and `media/**/*.mp4` is
+  gitignored for size, so a clean checkout has none. That check describes the
+  machine holding the media, like `check_units` and `check_config` describe the
+  workstation; all three are excluded with the reason written in the workflow.
+
 ## 2026-08-20
 
 - **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
