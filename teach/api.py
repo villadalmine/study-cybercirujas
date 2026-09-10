@@ -77,12 +77,13 @@ def me(user: str = Depends(require_user)) -> dict:
 
 @app.get("/api/catalog")
 def get_catalog() -> dict:
+    """Every certification: name, exam, vendor, level, validity and official sources."""
     return catalog.list_certs()
 
 
 @app.get("/api/paths")
 def get_paths(lang: str = certs.DEFAULT_LANG) -> dict:
-    """Paths con textos en el idioma pedido (i18n mergeado; fallback al default)."""
+    """Career paths with their steps, in the requested language (falls back to the default)."""
     _valid_lang(lang)
     paths = catalog.load().get("paths", {})
     if lang == certs.DEFAULT_LANG:
@@ -139,6 +140,7 @@ def _valid_lang(lang: str) -> str:
 
 @app.get("/api/langs")
 def get_langs() -> dict:
+    """Languages the platform supports, and which one material is authored in."""
     return {"langs": certs.LANGS, "default": certs.DEFAULT_LANG}
 
 
@@ -223,6 +225,7 @@ def _status_snapshot() -> list:
 
 @app.get("/api/certs/{cert_id}")
 def get_cert(cert_id: str) -> dict:
+    """One certification: catalogue entry, syllabus and which topics have material."""
     try:
         entry = catalog.get_cert(cert_id)
         topic_list = certs.topics(cert_id)
@@ -279,6 +282,7 @@ def get_topic(
     topic_id: str,
     lang: str = certs.DEFAULT_LANG,
 ) -> dict:
+    """A topic's material: content, exercises, lab, and the provenance of what is served."""
     _valid_lang(lang)
     try:
         topic = certs.get_topic(cert_id, topic_id)

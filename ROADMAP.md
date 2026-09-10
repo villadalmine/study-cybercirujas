@@ -117,6 +117,14 @@ One paragraph there prevents the next hundred. **A prompt change applies to
 every future topic and its effect cannot be seen in one file, so it is
 propose-and-measure, not hot-patch.**
 
+### Step 3b — CI is the gap the DevOps loop still has
+
+`make verify` is green and free, but nothing runs it on push: it runs when
+someone remembers. A GitHub Action doing `make setup && make verify` on every
+pull request would close the change-failure-rate side of DORA properly. Small,
+no quota, and it makes the fork story in [DEVELOPERS.md](DEVELOPERS.md) real
+for contributors.
+
 ### Step 4 — the rest, in order of what it buys
 
 | Debt | Size | Plan |

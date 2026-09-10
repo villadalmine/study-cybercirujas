@@ -101,6 +101,23 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   sampled translations, which deliberately run at the CLI default effort since
   2026-08-24, and flagged them against the authoring pin. Authoring only now.
 
+- **DEVELOPERS.md — the platform is now usable by other people.** Two honest
+  disclaimers first (a beta API on a home cluster with no uptime guarantee, and
+  AI-generated content whose risk and Article 50 disclosure obligation travel
+  with anyone who redistributes it), then the licence split (Apache 2.0 for
+  code and material; the vendors' terms for the syllabi they derive from), how
+  to query the hosted API, how to run the whole platform or just the API or
+  just take the markdown, how to keep a fork in sync, how to build features on
+  it, and how the DevOps loop is measured — CALMS mapped to the commands that
+  implement it, and DORA mapped to where each metric is actually visible,
+  including where the loop is honest about its gaps.
+
+  **The endpoint table is generated from the running application**
+  (`scripts/gen_api_docs.py`, `--check` wired into `make verify`), because a
+  hand-written API table rots and gets believed anyway. Writing it exposed five
+  endpoints with no docstring and one documented in Spanish — fixed at the
+  source, which is the point of generating rather than writing.
+
 ## 2026-08-20
 
 - **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
