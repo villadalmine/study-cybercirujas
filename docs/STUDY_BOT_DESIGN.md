@@ -157,6 +157,56 @@ exercise".
 table in a Postgres that does not exist yet, not a chart of four
 subsystems.
 
+### Phase 1.5 — closing the loop: checks that improve the page
+
+**Entry**: the `check-models` CronJob exists and reports, but its findings only
+reach a pod log nobody reads. This phase turns that information into something
+the page acts on.
+
+**The distinction that decides the design**: there are two needs here, and
+only one of them should ever be automatic.
+
+| Need | Automate? | Why |
+|---|---|---|
+| **Protect the student in the moment** — do not offer a model that 404s, do not label as "free" one that started charging | **Yes** | There is no judgement involved. Showing a broken option is simply wrong, and a human in the loop just means the student hits the error first |
+| **Fix the catalogue** — choose which model replaces the one that vanished | **No** | This is a judgement call against the criteria written in `models.yaml`, and getting it wrong is how a finance-tuned model ends up teaching Kubernetes |
+
+So: automate the *guard*, never the *decision*.
+
+**Mechanism — three options, with what each really costs:**
+
+**A · The API validates and caches (recommended).** `/api/models` checks the
+catalogue against `openrouter.ai/api/v1/models` at most once every few hours,
+caches the result in memory, and annotates each entry with `available` and the
+live price. The page greys out or hides anything unavailable and shows a note
+when a price no longer matches. If OpenRouter is unreachable the catalogue is
+served as-is — degraded to today's behaviour, never blank.
+
+- No RBAC, no secrets, no persistent storage, no new moving parts.
+- The pod makes one outbound call every few hours; the student's request path
+  stays as fast as it is now because the check is out-of-band.
+- Survives pod restarts by simply re-checking. Nothing to lose.
+
+**B · The CronJob writes a ConfigMap the API reads.** Keeps the check where it
+is and gives the result a home in cluster state. Costs a ServiceAccount, a Role
+and a RoleBinding, plus a Kubernetes client inside the image — real surface for
+a single boolean per model.
+
+**C · The CronJob opens a pull request.** `check_models.py --update` already
+rewrites prices; wrapping it in a commit and a PR would make every catalogue
+change reviewable and versioned, which fits this repository's habits better
+than anything else. Costs a GitHub token in the cluster, and it only serves the
+*decision* half — the student is still unprotected until someone merges.
+
+**Recommendation**: build A now, keep the CronJob as the reporter, and consider
+C later as the mechanism for the decision half. Do not build B: it is the most
+plumbing for the least benefit.
+
+**Cost**: one background task in the API, no new services, no quota. The check
+is the same function `scripts/check_models.py` already implements — it should
+move to `teach/core/` so the API and the script share one implementation rather
+than two that drift.
+
 ### Phase 4 — progress that outlives the session (out of scope for now)
 
 **Entry**: an owner decision on persistence. Everything above is ephemeral
