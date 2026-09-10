@@ -55,6 +55,33 @@ def _skip(body: str) -> bool:
     )
 
 
+class _VendorTagLoader(yaml.SafeLoader):
+    """SafeLoader that tolerates vendor YAML tags instead of failing on them.
+
+    CloudFormation writes `!Ref`, `!Sub`, `!GetAtt`, `!Equals` and friends;
+    they are valid YAML with application-defined tags, and `safe_load` refuses
+    them by design. Without this, teaching AWS at all produced a wall of
+    "could not determine a constructor" — 64 of 144 findings on 2026-09-10,
+    every one of them correct material. The check exists to catch manifests a
+    student would paste and see fail, so a construct the vendor's own parser
+    accepts must not be reported as broken.
+
+    The tag is preserved as text: this checks that the document PARSES, never
+    that the intrinsic resolves.
+    """
+
+
+def _vendor_tag(loader, suffix, node):  # noqa: ANN001
+    if isinstance(node, yaml.ScalarNode):
+        return loader.construct_scalar(node)
+    if isinstance(node, yaml.SequenceNode):
+        return loader.construct_sequence(node)
+    return loader.construct_mapping(node)
+
+
+_VendorTagLoader.add_multi_constructor("!", _vendor_tag)
+
+
 def problems(path: Path) -> list[tuple[int, str]]:
     found = []
     text = path.read_text(errors="replace")
@@ -67,7 +94,7 @@ def problems(path: Path) -> list[tuple[int, str]]:
             if tag == "json":
                 json.loads(body)
             else:
-                list(yaml.safe_load_all(body))
+                list(yaml.load_all(body, Loader=_VendorTagLoader))
         except Exception as error:
             first = str(error).splitlines()[0][:110]
             found.append((line, f"{tag}: {first}"))
