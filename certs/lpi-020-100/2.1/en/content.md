@@ -145,7 +145,7 @@ spec:
     rotationPolicy: Always
   dnsNames:
     - ingress.internal.production.net
-    - *.ingress.internal.production.net
+    - "*.ingress.internal.production.net"
   issuerRef:
     name: vault-pki-production-issuer
     kind: ClusterIssuer

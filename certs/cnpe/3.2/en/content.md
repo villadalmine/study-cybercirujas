@@ -616,7 +616,8 @@ rules:
   verbs: ["create", "update", "patch", "delete"]
   resources:
   - group: "rbac.authorization.k8s.io"
-  - group: "" ; resources: ["serviceaccounts", "secrets"]
+  - group: ""
+    resources: ["serviceaccounts", "secrets"]
 # Log every Forbidden — the silent denials become visible here.
 - level: Metadata
   omitStages: ["RequestReceived"]

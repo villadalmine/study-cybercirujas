@@ -452,7 +452,7 @@ resources:
       - aescbc:
           keys:
             - name: old-key-v0 # Restored for legacy read capability
-              secret:T2xkS2V5VmFsdWUxMjM0NTY3ODkwMTIzNDU2Nw==
+              secret: T2xkS2V5VmFsdWUxMjM0NTY3ODkwMTIzNDU2Nw==
 ```
 
 ---

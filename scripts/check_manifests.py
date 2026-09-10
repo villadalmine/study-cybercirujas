@@ -36,7 +36,22 @@ FRAGMENT = re.compile(r"\A\s*\n?[ \t]+\S")
 
 # Helm/Go and Jinja templates are deliberately NOT valid plain YAML — that is
 # the point of a template. Flagging them would turn the report into noise.
-TEMPLATED = re.compile(r"\{\{|\{%")
+# `${...}` belongs here too: kro's ResourceGraphDefinition and several
+# operators template that way, and the substitution is what makes the document
+# invalid until it is applied.
+TEMPLATED = re.compile(r"\{\{|\{%|\$\{")
+
+# Blocks tagged yaml whose content is a different language entirely. The label
+# is imprecise, the material is correct, and the student uses it as-is:
+#   systemd/INI   starts with a [Section] header, then key=value
+#   HCL/Terraform `resource "aws_x" "y" {` — not YAML by any reading
+# Reported as broken they are pure noise; the fence label is what is wrong,
+# and mislabelling is not a defect a parser should decide.
+NOT_YAML = re.compile(
+    r"\A\s*(#[^\n]*\n\s*)*\[[A-Z][A-Za-z]+\]\s*\n"          # [Unit], [Service]
+    r'|^\s*(resource|data|provider|variable|module|terraform)\s+"',  # HCL
+    re.MULTILINE,
+)
 
 # Blocks tagged `yaml` whose actual content is a shell command carrying YAML
 # inside (`cat <<'EOF' | kubectl apply -f -`). The tag is imprecise but the
@@ -51,6 +66,7 @@ def _skip(body: str) -> bool:
         ELISION.search(body)
         or TEMPLATED.search(body)
         or SHELL_START.search(body)
+        or NOT_YAML.search(body)
         or FRAGMENT.match(body)
     )
 
