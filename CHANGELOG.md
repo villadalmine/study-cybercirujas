@@ -79,6 +79,16 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-11
 
+- **`make clean-registry`** makes the 98 GB registry incident repeatable
+  instead of hand-fixed. Dry run by default; a deployed tag is never pruned
+  (deployments, statefulsets and daemonsets across all namespaces are read
+  first, and the run **aborts** if that list is unreadable rather than
+  guessing); keep-N on top so a rollback target survives. It prunes tags,
+  clears orphaned uploads, garbage-collects and reports usage before and
+  after. Also fixed reading `df`: the device name wraps onto two lines and
+  `--output` is coreutils-only, so positional parsing had reported free space
+  as used.
+
 - **`make verify` is green for the first time: 144 broken manifests → 0.** The
   method, which is the point: **when a check fires en masse, verify the check
   before repairing the content.** Of the 144, **116 were false positives** and

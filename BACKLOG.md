@@ -14,9 +14,8 @@ Standing rule for any generation run: after finishing, re-run `scripts/fix_corru
 4. **Content for `lfcs` (5 topics) and `lfca` (6 topics)** — both have a snapshotted syllabus but zero generated content in any language, so they are the cheapest way to widen the catalog (no scraping step needed).
 5. **Videos for paths without one**: `linux-devops`, `kubernetes-security`, `gitops-platform`, `observabilidad`, `service-mesh-networking`, `linux-foundation`. The `kubernetes` path is already done (es/en/de).
 6. **Study bot — BYO-key design ready to build** (owner's proposal 2026-09-09, superseding the `chart/` RAG route). The student picks career/cert/topic from a menu and asks questions against that material with **their own OpenRouter key**, held in `localStorage` and sent only to openrouter.ai. This removes rather than solves the audit's blockers: platform inference cost stays zero, there is no session state to persist, and explicit topic selection makes retrieval unnecessary — no pgvector, no embedder, no new pods. Phase 1 is frontend-only against existing endpoints. Full design, rules and alternatives: [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
-7. ~~Surface the AI-generated disclosure in the web UI~~ **Done 2026-08-20**
-   — per-topic provenance line + footer link to the repo, in all seven
-   languages. See CHANGELOG.
+7. **See [ROADMAP.md](ROADMAP.md) for what is next and why.** This file holds
+   design detail and open investigations; the ordered queue lives there.
 
 ## Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
 
@@ -176,14 +175,9 @@ Keep `chart/` untracked until at least items 1–4 above are fixed; a chart that
 
 ## Repo Hygiene
 
-- ~~`hola` scratch note~~ **Deleted 2026-09-10**, along with `seguir` (pasted
-  terminal noise), `lpic-1-text.txt` (empty) and `test_agy.py` (one-off probe).
-  `chart/` stays untracked by the earlier decision in the RAG-bot audit above.
-- **The registry filled up (2026-09-10).** `registry.registry:5000` hit 100% of
-  its 98 GB volume and image pushes now fail with `Err:28`; blobs account for
-  97.7 GB across 11 repositories. `teach-plat` alone had 55 tags. Cleanup is
-  two steps — delete old tag manifests, then `registry garbage-collect
-  --delete-untagged` — and it needs cluster access the agent does not have.
-  Worth adding a retention policy afterwards: this repository publishes one
-  image per finished certification and never prunes.
+- `chart/` stays untracked by the decision recorded in the RAG-bot audit
+  above; the study bot that superseded it is in
+  [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+- Registry housekeeping is now `make clean-registry` — see
+  [docs/CLEANUP.md](docs/CLEANUP.md) for what fills up and the procedure.
 - Source comments and docstrings under `teach/` and `scripts/` are still largely in Spanish, which contradicts the English-only rule in `CLAUDE.md`. Mechanical to fix, but it is a wide diff — worth doing in one dedicated pass rather than drip-feeding it into feature commits.
