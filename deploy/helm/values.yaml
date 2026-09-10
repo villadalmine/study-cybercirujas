@@ -50,3 +50,10 @@ llm:
   baseUrl: ""                   # ej http://litellm.litellm:4000/v1
   model: ""
   apiKey: ""
+
+# Weekly check that the study bot's models still exist at the prices the UI
+# shows. Network only — no key, no quota — which is why it fits the cluster
+# while content generation does not. Free models churn; this is what notices.
+checkModels:
+  enabled: true
+  schedule: "0 6 * * 1"   # Mondays 06:00, cluster time

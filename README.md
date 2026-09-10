@@ -436,10 +436,25 @@ namespace and adding one would not help generation.
 | commit to git | ✅ | `git` is on the host |
 | **build image · deploy** | ❌ | the host has no `make`, `kubectl` or `helm` — those live in the toolbox container, so `publish_if_complete` reports the failure honestly and the content waits. Publishing is a manual step today: run `make publish-complete` from an environment that has them |
 
-What *would* fit a cluster CronJob is the checking side, which needs network
-but no quota and no subscription: `make check-updates` (exam versions plus the
-study bot's model catalogue). Nothing depends on it running there — it is a
-convenience, not a gap.
+**The one thing that does run in the cluster** is the opposite case: a weekly
+CronJob (`{release}-check-models`, in the same namespace as the site) runs
+`scripts/check_models.py` to verify the study bot's models still exist at the
+prices the UI shows. It needs the network and nothing else — no subscription,
+no key, no quota — so a pod is the right home for it, and it uses the same
+image the site runs, meaning the catalogue it checks is byte-identical to the
+one being served.
+
+Free models are why it exists: they churn, start charging, or disappear. When
+that happens the job fails and stays visible:
+
+```bash
+kubectl get cronjob,jobs -n teach-plat            # did last week's check pass?
+kubectl logs -n teach-plat job/<failed-job>       # GONE / PRICE / PAID / PARAM
+helm upgrade ... --set checkModels.enabled=false  # turn it off
+```
+
+It changes nothing on its own. Replacing a model is a judgement call against
+the selection criteria written into `models.yaml`.
 
 > **It spends API quota on its own.** Do not enable it without the owner's
 > explicit approval, and check `quota-history.jsonl` afterwards to see what it

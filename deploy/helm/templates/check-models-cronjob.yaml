@@ -1,0 +1,52 @@
+{{- if .Values.checkModels.enabled }}
+# Are the study bot's models still there, at the price the UI shows?
+#
+# This is the one part of the pipeline that belongs in the cluster rather than
+# on the workstation: it needs the network and nothing else — no Claude
+# subscription, no API key, no quota. (Content generation stays on the
+# workstation precisely because it authenticates as the owner's subscription
+# through the local CLI, which has no equivalent in a pod.)
+#
+# It runs the same image the site runs, so `models.yaml` and
+# `scripts/check_models.py` are already inside — the catalogue being checked is
+# byte-identical to the one being served.
+#
+# Free models are why this exists: they churn. When one starts charging or
+# disappears, the job fails and the failure is visible in `kubectl get jobs`
+# with the detail in the pod log. It changes nothing on its own — replacing a
+# model is a judgement call against the criteria written in models.yaml.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-check-models
+  labels:
+    app: {{ .Release.Name }}
+    component: check-models
+spec:
+  schedule: {{ .Values.checkModels.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  # Keep more failures than successes: a failure is the only output worth
+  # reading, and it must survive until someone looks.
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 604800
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: check-models
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+              command: ["python3", "scripts/check_models.py"]
+              resources:
+                requests: {cpu: 10m, memory: 64Mi}
+                limits: {cpu: 200m, memory: 256Mi}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+{{- end }}
