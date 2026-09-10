@@ -165,6 +165,70 @@ The anonymous `X-Session-ID` route already proposed in BACKLOG.md is how it
 would work, and the deployment's lack of persistent storage is what it
 would have to solve first.
 
+## Operating it
+
+### Is it all API?
+
+Yes, and deliberately in two directions:
+
+**Inward** — the page is built from endpoints that already existed, plus one
+added for it. Nothing about the bot is hardcoded in JavaScript:
+
+| Endpoint | What the bot takes from it |
+|---|---|
+| `/api/catalog` | the certification list for the menu |
+| `/api/certs/{id}` | the topic list, filtered to those with material |
+| `/api/certs/{id}/topics/{t}?lang=` | content, exercises, and the provenance line shown under each answer |
+| `/api/models` | the model catalogue: ids, display names, prices, context, whether each supports `reasoning` |
+
+**Outward** — one POST to `openrouter.ai/api/v1/chat/completions` per question,
+from the browser. The site's own server is not in that path at all, which is
+what keeps platform cost at zero and means a student's key is never in our
+logs, our memory, or our backups.
+
+### How a student uses it
+
+1. Get a key at `openrouter.ai/keys` (their own account, their own billing).
+2. Open the **Bot** section, paste it once — it stays in `localStorage`.
+3. Pick certification → topic. The estimate updates immediately: that number
+   is what the request will cost in context tokens.
+4. Ask, or press an intent shortcut.
+
+Everything is per-browser. Clearing site data removes the key and the session
+counter; there is nothing server-side to delete because nothing was stored.
+
+### How it is maintained
+
+The only moving part is the model catalogue, because models change and free
+ones churn:
+
+```bash
+scripts/check_models.py            # GONE / PRICE / PAID / PARAM, exit 1 on drift
+scripts/check_models.py --update   # accept new prices into models.yaml
+make check-updates                 # runs it alongside the syllabus check
+```
+
+It also runs **weekly in the cluster** as the `check-models` CronJob (the same
+image the site runs, so the catalogue checked is the one served). A failing job
+is the signal; the pod log has the detail:
+
+```bash
+kubectl get cronjob,jobs -n teach-plat
+kubectl logs -n teach-plat job/<name>
+```
+
+Replacing a model is a judgement call, not a refresh: the selection criteria
+live at the top of `models.yaml` (general purpose over domain-tuned, known
+family over unknown provider, context above ~130k is not a tie-breaker). Both
+mistakes that got caught in review — invented ids, and a free tier picked by
+context length that included finance- and health-tuned models — are why those
+criteria are written down rather than remembered.
+
+Prompts are the other thing that ages. The four intent prompts live in
+`BOT_INTENTS` in `teach/web/index.html`; each encodes a convention of this
+corpus, so if the corpus conventions change (the `<details>` answer block, the
+references section) the prompts must change with them.
+
 ## Two harnesses, not one (the distinction that sets the phases)
 
 Owner's question, 2026-09-09: *shouldn't specialised skills/agents decide

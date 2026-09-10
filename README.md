@@ -13,6 +13,8 @@ See the disclosure below.
 - **[docs/AI_ROADMAP.md](docs/AI_ROADMAP.md)** — which AI certifications are coming, and why the rest are not
 - **[docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md)** — the study bot: phases, token costs, design rules
 - **[docs/DEVTOOLS.md](docs/DEVTOOLS.md)** — code graph, spend metrics, developer tooling
+- **[ROADMAP.md](ROADMAP.md)** — where the project is and what is next
+- **[docs/CLEANUP.md](docs/CLEANUP.md)** — what fills up, and the step-by-step to reclaim it
 
 ## AI-generated content — disclosure
 
