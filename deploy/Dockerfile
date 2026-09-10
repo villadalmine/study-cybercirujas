@@ -9,10 +9,13 @@ COPY pyproject.toml README.md ./
 COPY teach/ teach/
 RUN pip install --no-cache-dir .
 
-COPY catalog.yaml ./
-# quality.check_file reads the floor thresholds from here; /api/status counts
-# a language only when its material passes that floor.
-COPY pipeline.yaml ./
+# Every root-level data file the API reads, in one line. Listing them
+# individually is how three endpoints shipped broken in a row: /api/status
+# needed pipeline.yaml (the quality floor it counts with) and scripts/,
+# /api/models needed models.yaml, and each was found only in production
+# because the container silently lacked what the toolbox had. If a new
+# root .yaml becomes API input, this glob already ships it.
+COPY *.yaml ./
 COPY certs/ certs/
 COPY media/ media/
 # /api/status imports check_versions.survey() — the same function that renders
