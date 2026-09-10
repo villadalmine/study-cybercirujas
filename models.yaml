@@ -1,14 +1,30 @@
 # Models offered by the study bot — the catalogue the UI is built from.
 #
-# Frozen on purpose: prices and ids are copied from openrouter.ai/api/v1/models
+# Frozen on purpose: ids and prices are copied from openrouter.ai/api/v1/models
 # at the date below, so `scripts/check_models.py` can compare them against the
 # live API and report what moved. Same separation as the certification syllabi:
 # what we froze lives here, what upstream publishes is fetched, and neither
 # overwrites the other.
 #
-# Tiers describe what the bot does — read given material and teach from it —
-# not raw benchmark rank. `free` models cost the student nothing but are rate
-# limited by OpenRouter and change often; they are offered last on purpose.
+# SELECTION CRITERIA — this list is curated, not scraped. The bot explains
+# certification material and writes exercises from it, so a model earns a slot
+# by being a strong general instruction-follower, not by being large or cheap:
+#
+#   * general purpose only. Domain-tuned models are excluded even when free —
+#     `ling-3.0-flash-fin` (finance) and `-sante` (health) would answer IT
+#     questions from the wrong prior, `nemotron-3.5-content-safety` is a
+#     classifier, and code-only models explain theory poorly.
+#   * a known family with a track record over an unknown provider at the same
+#     price. The first draft of the free tier picked by context length alone
+#     and shipped exactly that mistake.
+#   * enough context for one topic plus the answer: 130k covers everything in
+#     this corpus, so anything above that is not a tie-breaker.
+#
+# FREE MODELS CHANGE OFTEN — that is their nature, and it is why
+# `scripts/check_models.py` runs inside `make check-updates`. When a free model
+# starts charging or disappears, replace it against these criteria rather than
+# by picking whatever is free that week.
+
 checked: '2026-09-10'
 source: https://openrouter.ai/api/v1/models
 tiers:
@@ -75,11 +91,11 @@ tiers:
       out: 2
       ctx: 400
       reasoning: true
-    - id: openai/gpt-5-nano
-      name: GPT-5 Nano
-      in: 0.05
-      out: 0.4
-      ctx: 400
+    - id: minimax/minimax-m2.7
+      name: MiniMax M2.7
+      in: 0.3
+      out: 1.2
+      ctx: 204
       reasoning: true
     - id: deepseek/deepseek-v4-flash
       name: DeepSeek V4 Flash
@@ -93,27 +109,33 @@ tiers:
       out: 0.13
       ctx: 1000
       reasoning: true
+    - id: openai/gpt-5-nano
+      name: GPT-5 Nano
+      in: 0.05
+      out: 0.4
+      ctx: 400
+      reasoning: true
   free:
-    - id: nvidia/nemotron-3.5-lightning:free
-      name: Nemotron 3.5 Lightning
-      in: 0
-      out: 0
-      ctx: 1000
-      reasoning: true
-    - id: thinkingmachines/inkling:free
-      name: Inkling
-      in: 0
-      out: 0
-      ctx: 1048
-      reasoning: true
-    - id: nex-agi/nex-n2.5-pro:free
-      name: Nex N2.5 Pro
+    - id: google/gemma-4-31b-it:free
+      name: Gemma 4 31B
       in: 0
       out: 0
       ctx: 262
       reasoning: true
-    - id: inclusionai/ling-3.0-flash-fin:free
-      name: Ling 3.0 Flash
+    - id: google/gemma-4-26b-a4b-it:free
+      name: Gemma 4 26B
+      in: 0
+      out: 0
+      ctx: 262
+      reasoning: true
+    - id: nvidia/nemotron-3-ultra-550b-a55b:free
+      name: Nemotron 3 Ultra 550B
+      in: 0
+      out: 0
+      ctx: 1000
+      reasoning: true
+    - id: nvidia/nemotron-3-super-120b-a12b:free
+      name: Nemotron 3 Super 120B
       in: 0
       out: 0
       ctx: 262
