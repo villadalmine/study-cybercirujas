@@ -1,16 +1,16 @@
 # Graph Report - teach-plat  (2026-09-10)
 
 ## Corpus Check
-- 87 files · ~126,073 words
+- 87 files · ~126,161 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1017 nodes · 1674 edges · 73 communities (65 shown, 8 thin omitted)
+- 1018 nodes · 1675 edges · 71 communities (63 shown, 8 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9d7cb07f`
+- Built from commit: `9a08abc4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,19 +33,19 @@
 - Changelog
 - Platform Architecture Plan
 - Removed K8s API Checks
-- load_env
+- core/__init__.py
 - RejectsDamagedTranslations
 - Syllabus Coverage Tests
 - certs.py
 - classify
 - README.md
 - Verifying the material is true — design notes
-- check_syllabus.py
+- fetch_text
 - Helm Chart Docs
 - Developers — use the API, run your own copy, build on it
 - clean_registry.py
 - check_sources.py
-- topics_per_run
+- ClaimTest
 - API Facts Verification
 - Citation Claim Checking
 - quality.py
@@ -57,7 +57,7 @@
 - Pre-commit Hook
 - Resume Generation Script
 - Project Root
-- Backlog
+- generate_topic
 - main
 - check_models.py
 - Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)
@@ -76,15 +76,13 @@
 - Post-commit Hook
 - datetime
 - Check curriculum updates
-- _verify_translation
+- _english
 - QualityThresholdsTest
 - _get
 - run_cert.py
 - Study bot — design
-- translate_topic
-- check_versions.py
+- root
 - teach-plat
-- next_work.py
 
 ## God Nodes (most connected - your core abstractions)
 1. `Changelog` - 21 edges
@@ -113,43 +111,43 @@
 ## Import Cycles
 - None detected.
 
-## Communities (73 total, 8 thin omitted)
+## Communities (71 total, 8 thin omitted)
 
 ### Community 0 - "status_matrix.py"
-Cohesion: 0.27
-Nodes (11): cert_topics(), check(), lab_cell(), lang_cell(), Path, Regenerate STATUS.md from disk. True if it changed. The single implementation…, [] if STATUS.md matches the filesystem; the differing lines otherwise.…, Count only material that meets the quality floor in pipeline.yaml. `wanted` is… (+3 more)
+Cohesion: 0.14
+Nodes (20): frozen(), (version, snapshot_date) as the syllabus records them — what we built on., True/False if both versions are known and comparable, else None. "3.0" and…, current | outdated | unknown. `unknown` is a real answer and is reported as…, _same_version(), state(), survey(), cert_topics() (+12 more)
 
 ### Community 1 - "The routine, start to finish"
 Cohesion: 0.12
 Nodes (17): 1. The container registry (the one that actually fills), 2. Rejected generation output (`.rejected/`), 3. Orphaned topic directories, 4. Local state (`~/.local/state/teach-plat/`), 5. Scratch files in the repository root, Check first, Cleanup — what fills up, and how to reclaim it, Delete (+9 more)
 
 ### Community 2 - "api.py"
-Cohesion: 0.10
-Nodes (28): BaseModel, Request, get_cert_video(), get_path_video(), get_paths(), get_topic(), get_topic_preview(), login() (+20 more)
+Cohesion: 0.13
+Nodes (21): BaseModel, Request, get_cert_video(), get_path_video(), login(), LoginBody, logout(), me() (+13 more)
 
 ### Community 3 - "tracker.py"
-Cohesion: 0.12
-Nodes (28): Scrape the official sources and update the catalog., tracker_sync(), _ai_yaml(), _apply_snapshot_status(), fetch_text(), generate_paths(), _get_bytes(), normalise_weights() (+20 more)
+Cohesion: 0.15
+Nodes (20): _ai_yaml(), _apply_snapshot_status(), generate_paths(), _get_bytes(), normalise_weights(), published_version(), Exception, Tracker/scraper: nothing is static — the whole catalog derives from sources. -… (+12 more)
 
 ### Community 4 - "video.py"
-Cohesion: 0.11
-Nodes (46): FreeTypeFont, Image, ImageDraw, cert_video(), paths_video(), Render a certification video (slides + Piper voice + ffmpeg)., Render the video (slides + Piper voice + ffmpeg) from script.yaml., _ask_scenes() (+38 more)
+Cohesion: 0.12
+Nodes (42): FreeTypeFont, Image, ImageDraw, _ask_scenes(), _base_slide(), _cert_domains(), cert_media_dir(), _concat() (+34 more)
 
 ### Community 5 - "Agent Synchronization & Idea Queue (AGENTS_SYNC.md)"
 Cohesion: 0.04
 Nodes (47): Agent Synchronization & Idea Queue (AGENTS_SYNC.md), Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08), Changed, do not redo, Checks that cost no quota — run them, they are free, Decisions left to the owner, not to us, Division of work — owner's call, 2026-08-07, First: install the hook. It is the only rule that does not depend on you., Found while wiring this up, not caused by it: check_manifests fails (+39 more)
 
 ### Community 6 - "claims.py"
-Cohesion: 0.06
-Nodes (31): check_cert(), main(), _topics(), main(), _md_table(), observations(), Path, The same numbers main() prints, as a dict — shared by the MODELS.md renderer. (+23 more)
+Cohesion: 0.15
+Nodes (16): check_cert(), main(), _topics(), main(), Every active certification with what it still needs, most urgent first., survey(), _topic_count(), main() (+8 more)
 
 ### Community 7 - "generator.py"
 Cohesion: 0.13
-Nodes (27): Completer, cert_generate(), Generate content with AI for pending/stale topics. This AUTHORS from the…, _agent_completer(), _antigravity_completer(), _dominant_model(), generate_cert(), generate_topic() (+19 more)
+Nodes (26): Completer, _agent_completer(), _antigravity_completer(), _comparable_code(), _dominant_model(), GeneratorConfigError, _litellm_completer(), make_completer() (+18 more)
 
 ### Community 8 - "cli.py"
-Cohesion: 0.09
-Nodes (28): command, cert_add(), cert_list(), cert_show(), cert_snapshot(), cert_video_script(), lab_down(), lab_status() (+20 more)
+Cohesion: 0.08
+Nodes (34): command, cert_add(), cert_list(), cert_show(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script() (+26 more)
 
 ### Community 9 - "ocr_pdf.py"
 Cohesion: 0.46
@@ -187,9 +185,9 @@ Nodes (18): 1. Catalog Tracker (Scraper — nothing is static), 2. Generator (AI
 Cohesion: 0.18
 Nodes (9): _deliberate(), findings(), main(), Path, Path, Detection of removed Kubernetes APIs. What is tested is the judgement, not the…, Mentioning 'removed' in another paragraph cannot give a free pass to a stale…, Istio and Tekton version independently: their v1beta1 may be current. (+1 more)
 
-### Community 18 - "load_env"
-Cohesion: 0.23
-Nodes (6): load_env(), Path, Read KEY=VALUE lines into the environment. Returns how many were set.…, EnvScopeTests, Path, `.env` may configure translation and nothing else. It exists for one purpose —…
+### Community 18 - "core/__init__.py"
+Cohesion: 0.19
+Nodes (7): load_env(), Path, Loads `.env` from the repository root, once, before anything reads a variable.…, Read KEY=VALUE lines into the environment. Returns how many were set.…, EnvScopeTests, Path, `.env` may configure translation and nothing else. It exists for one purpose —…
 
 ### Community 19 - "RejectsDamagedTranslations"
 Cohesion: 0.21
@@ -200,8 +198,8 @@ Cohesion: 0.14
 Nodes (3): A snapshot must be refused when the source document does not support it. Seven…, A snapshot must be refused when the document does not support it. Seven…, SyllabusCoverageTests
 
 ### Community 21 - "certs.py"
-Cohesion: 0.19
-Nodes (16): clear_topic_stale(), load(), md_path(), Path, Post, Read/write the per-certification MD (syllabus snapshot + status). The MD with…, Crea el MD template de una cert nueva. El temario se completa a mano (TODO:…, Contenido generado de un tema en un idioma (fallback al default). (+8 more)
+Cohesion: 0.14
+Nodes (26): get_topic(), get_topic_preview(), Public teaser: first lines of the material + what the topic includes., A topic's material: content, exercises, lab, and the provenance of what is…, _valid_lang(), clear_topic_stale(), content_dir(), get_topic() (+18 more)
 
 ### Community 22 - "classify"
 Cohesion: 0.67
@@ -209,15 +207,15 @@ Nodes (3): classify(), main(), console' | 'jsonl' | None — None means leave it
 
 ### Community 23 - "README.md"
 Cohesion: 0.05
-Nodes (40): Agent Idea Synchronization (AGENTS_SYNC.md), Commands, Content Workflow, Development Guidelines for teach-plat, Rules, Verification: what is proven, and what is only assumed, Caveats, fable-5 vs opus-5, within cgoa (2026-08-19) (+32 more)
+Nodes (41): Agent Idea Synchronization (AGENTS_SYNC.md), Commands, Content Workflow, Development Guidelines for teach-plat, Rules, Verification: what is proven, and what is only assumed, Caveats, fable-5 vs opus-5, within cgoa (2026-08-19) (+33 more)
 
 ### Community 24 - "Verifying the material is true — design notes"
 Cohesion: 0.20
 Nodes (10): A funnel, cheapest layer first, Honest limits, Layer 0 — what exists (free, deterministic), Layer 1 — a structured fact base, no RAG at all (free, deterministic), Layer 2 — retrieval over a bounded corpus (cheap, one-off indexing), Layer 3 — adversarial judging (costs quota, sample only), The design mistake to avoid, The gap, precisely (+2 more)
 
-### Community 25 - "check_syllabus.py"
-Cohesion: 0.29
-Nodes (9): load_syllabus(), main(), Path, How many objectives the official page publishes. Network, no model., Structural signs the topic list was computed rather than read. Offline.…, smells(), upstream_objectives(), objective_ids() (+1 more)
+### Community 25 - "fetch_text"
+Cohesion: 0.24
+Nodes (11): load_syllabus(), main(), Path, How many objectives the official page publishes. Network, no model., Structural signs the topic list was computed rather than read. Offline.…, smells(), upstream_objectives(), fetch_text() (+3 more)
 
 ### Community 26 - "Helm Chart Docs"
 Cohesion: 0.25
@@ -235,9 +233,9 @@ Nodes (8): RuntimeError, deployed_tags(), in_registry(), kubectl(), main(), Ever
 Cohesion: 0.36
 Nodes (8): catalogue(), cited_domains(), duplicate_keys(), main(), Path, (domain -> project, neutral domains, raw config)., Hosts cited in the references section only. URLs in the body are examples and…, Project keys that appear twice — YAML keeps the last and drops the first.…
 
-### Community 30 - "topics_per_run"
-Cohesion: 0.50
-Nodes (4): main(), pending(), Maximum topics one invocation may generate. 0 means unbounded, which is…, topics_per_run()
+### Community 30 - "ClaimTest"
+Cohesion: 0.14
+Nodes (6): ClaimTest, Per-topic claims: several agents at once, never the same topic twice. The…, Claim from a separate PROCESS: flock is per open file description, so a second…, The whole reason this is per topic and not global., A lock file checked with exists() would strand a topic forever after a crash.…, _try_claim()
 
 ### Community 31 - "API Facts Verification"
 Cohesion: 0.53
@@ -248,7 +246,7 @@ Cohesion: 0.47
 Nodes (5): ask(), main(), (label, url) from the references section only. URLs in the body are examples…, Fetch and judge. Deliberately a separate process per claim: one failure should…, references()
 
 ### Community 33 - "quality.py"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (6): check(), Quality floor for generated material, identical for every backend. A different…, Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…, Return the problems found. An empty list means the floor is met. `kind` is…, rules(), Quality floor: the same standard for every backend. Tested because a floor is…
 
 ### Community 34 - "Citation URL Checks"
@@ -267,9 +265,9 @@ Nodes (4): main(), _money(), rows(), _tokens()
 Cohesion: 0.67
 Nodes (3): evidence(), main(), (cert, topic, lang) -> model, from the most recent completion for it.
 
-### Community 44 - "Backlog"
-Cohesion: 0.17
-Nodes (12): Backlog, Content, Deploy — Technical Debt, In Progress / Next (Ordering), Labs — Execution Modes (see PLAN.md, SDD section), Labs — what an audit found, 2026-08-08 (design parked, not started), Pipeline Automation, Platform (Long-Term Roadmap, see PLAN.md) (+4 more)
+### Community 44 - "generate_topic"
+Cohesion: 0.22
+Nodes (10): cert_generate(), Generate content with AI for pending/stale topics. This AUTHORS from the…, generate_cert(), generate_topic(), Path, Provenance for one language directory: who made it, with what, when. Written…, Generate one topic's content in one language. The lab is shared., _system() (+2 more)
 
 ### Community 45 - "main"
 Cohesion: 0.23
@@ -284,60 +282,60 @@ Cohesion: 0.12
 Nodes (16): 1. The code graph (Graphify), 2. The wiki (OpenWiki), 3. Real metrics, end to end, Developer tools: code graph, wiki, and real metrics, Optional, costs completions, Reading the numbers, Semantic enrichment — documented, deliberately not run, Setup, once (+8 more)
 
 ### Community 49 - "fix_corrupted_content.py"
-Cohesion: 0.14
-Nodes (22): _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main(), _publish_if_complete(), A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…, [(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of… (+14 more)
+Cohesion: 0.13
+Nodes (23): _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main(), _publish_if_complete(), A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…, [(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of… (+15 more)
 
 ### Community 50 - "languages_for"
-Cohesion: 0.19
-Nodes (15): main(), _cert_block(), create_block(), main(), (start, end) line indices of a certification's block, so edits are surgical.…, Add a certification to pipeline.yaml that is not there yet. `activate` used to…, Set one key inside one certification. True if the file changed., set_key() (+7 more)
+Cohesion: 0.16
+Nodes (16): main(), _cert_block(), create_block(), main(), (start, end) line indices of a certification's block, so edits are surgical.…, Add a certification to pipeline.yaml that is not there yet. `activate` used to…, Set one key inside one certification. True if the file changed., set_key() (+8 more)
 
 ### Community 52 - "publish_if_complete.py"
-Cohesion: 0.29
-Nodes (10): complete_certs(), is_complete(), main(), publish(), Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…, (complete, why not). Everything the certification declares must be there.…, _record(), _save() (+2 more)
+Cohesion: 0.33
+Nodes (9): complete_certs(), is_complete(), main(), publish(), Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…, (complete, why not). Everything the certification declares must be there.…, _record(), _save() (+1 more)
 
 ### Community 53 - "generation"
 Cohesion: 0.29
 Nodes (9): dominant(), effective(), main(), (model, effort, notes) as the generator would resolve them right now. Resolved…, recent(), Append one line per completion: what it was for, and what it cost. Never…, _record_usage(), generation() (+1 more)
 
 ### Community 54 - "catalog.py"
-Cohesion: 0.21
-Nodes (16): main(), _status_snapshot(), add_cert(), catalog_path(), get_cert(), list_certs(), load(), Path (+8 more)
+Cohesion: 0.19
+Nodes (17): main(), Scrape the official sources and update the catalog., tracker_sync(), add_cert(), get_cert(), list_certs(), load(), Global certification catalog (catalog.yaml). Written by the tracker (and `cert… (+9 more)
 
 ### Community 55 - "AI certification roadmap"
 Cohesion: 0.22
 Nodes (9): AI certification roadmap, How each course cites its own syllabus, Model-provider certifications — researched in depth 2026-09-09, NVIDIA career track (researched 2026-09-09, owner's request), Phase 1 — AI fundamentals (extends the three cloud careers), Phase 2 — the technical tier, led by market demand, Phase 3 — specialists (need a verification pass before cataloguing), The five filters (+1 more)
 
 ### Community 56 - "pipeline.py"
-Cohesion: 0.18
-Nodes (17): budget(), default_languages(), in_milestone(), is_fatal(), is_retryable(), load(), milestone(), milestone_targets() (+9 more)
+Cohesion: 0.14
+Nodes (20): main(), pending(), budget(), in_milestone(), is_fatal(), is_retryable(), load(), milestone() (+12 more)
 
 ### Community 57 - "Within one certification (the only fair comparisons; authoring language `en` only)"
 Cohesion: 0.20
 Nodes (10): cgoa, cnpa, kca, kcsa, lpic-1, lpic-3-303, Model Comparison, What a quota window buys (761,850 output tokens/window, measured on this machine) (+2 more)
 
 ### Community 59 - "translation_study.py"
-Cohesion: 0.27
-Nodes (9): evaluate(), main(), master_key(), Run the pipeline's own two gates. Verdict plus the reasons it failed., Read the proxy key from the cluster rather than from a file on disk. It is only…, One completion through the proxy. Returns text plus what it cost., translate(), Backends sometimes wrap the whole response in a ```markdown ... ``` fence even… (+1 more)
+Cohesion: 0.36
+Nodes (7): evaluate(), main(), master_key(), Run the pipeline's own two gates. Verdict plus the reasons it failed., Read the proxy key from the cluster rather than from a file on disk. It is only…, One completion through the proxy. Returns text plus what it cost., translate()
 
 ### Community 62 - "datetime"
-Cohesion: 0.08
-Nodes (36): datetime, backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main() (+28 more)
+Cohesion: 0.06
+Nodes (47): datetime, backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main() (+39 more)
 
 ### Community 63 - "Check curriculum updates"
 Cohesion: 0.50
 Nodes (3): Check curriculum updates, Notes, Steps
 
-### Community 64 - "_verify_translation"
-Cohesion: 0.21
-Nodes (10): _comparable_code(), A code block reduced to the parts a translation must not touch. Code blocks are…, Structural checks a translation must satisfy but authoring cannot. This is what…, _verify_translation(), AcceptsCorrectTranslations, _english(), The structural gate that decides whether a translation is usable. Its own…, The source with its prose in English, code block untouched. (+2 more)
+### Community 64 - "_english"
+Cohesion: 0.32
+Nodes (5): AcceptsCorrectTranslations, _english(), The source with its prose in English, code block untouched., Comments are prose. The authored English material has English comments, so…, ASCII diagrams are prose too, and this one is not a retry away: `cheap`…
 
 ### Community 65 - "QualityThresholdsTest"
 Cohesion: 0.33
 Nodes (3): QualityThresholdsTest, The thresholds live in pipeline.yaml and are calibrated against material…, The floor is optional: a repo with no `quality` in the YAML must not break.…
 
 ### Community 66 - "_get"
-Cohesion: 0.12
-Nodes (16): FileResponse, Response, get_catalog(), get_cert(), get_langs(), get_models(), get_status(), healthz() (+8 more)
+Cohesion: 0.14
+Nodes (14): FileResponse, Response, get_catalog(), get_cert(), get_langs(), get_paths(), healthz(), index() (+6 more)
 
 ### Community 67 - "run_cert.py"
 Cohesion: 0.60
@@ -347,24 +345,16 @@ Nodes (4): main(), pending_topics(), # NOTE: --to, not --lang. `--lang` re-autho
 Cohesion: 0.12
 Nodes (17): Alternatives considered, Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Phase 1.5 — closing the loop: checks that improve the page, Phase 1 — SHIPPED 2026-09-09 (+9 more)
 
-### Community 69 - "translate_topic"
-Cohesion: 0.27
-Nodes (10): cert_translate(), Translate existing content instead of re-authoring it in another language.…, content_dir(), get_topic(), Idiomas en los que existe contenido de un tema., Languages whose content predates the last syllabus change. A topic goes 'stale'…, topic_langs(), topic_outdated_langs() (+2 more)
-
-### Community 70 - "check_versions.py"
-Cohesion: 0.36
-Nodes (7): frozen(), (version, snapshot_date) as the syllabus records them — what we built on., True/False if both versions are known and comparable, else None. "3.0" and…, current | outdated | unknown. `unknown` is a real answer and is reported as…, _same_version(), state(), survey()
+### Community 69 - "root"
+Cohesion: 0.25
+Nodes (9): get_models(), get_status(), The study bot's model catalogue, from `models.yaml`. Served rather than…, Per-certification overview: exam versions, coverage, videos, freshness. The…, _status_snapshot(), catalog_path(), Path, Root of the data repo. Override with TEACH_ROOT. (+1 more)
 
 ### Community 71 - "teach-plat"
-Cohesion: 0.13
-Nodes (15): AI-generated content — disclosure, Content process, Deploying to Kubernetes, Environment variables, Generation backends, Keeping it honest over time, Languages, Licence (+7 more)
-
-### Community 72 - "next_work.py"
-Cohesion: 0.60
-Nodes (4): main(), Every active certification with what it still needs, most urgent first., survey(), _topic_count()
+Cohesion: 0.07
+Nodes (27): Backlog, Content, Deploy — Technical Debt, In Progress / Next (Ordering), Labs — Execution Modes (see PLAN.md, SDD section), Labs — what an audit found, 2026-08-08 (design parked, not started), Pipeline Automation, Platform (Long-Term Roadmap, see PLAN.md) (+19 more)
 
 ## Knowledge Gaps
-- **257 isolated node(s):** `.venv/bin/python3`, `teach-plat`, `resume-generation.sh script`, `run_milestone.sh script`, `TEACH_AGENT` (+252 more)
+- **258 isolated node(s):** `.venv/bin/python3`, `teach-plat`, `resume-generation.sh script`, `run_milestone.sh script`, `TEACH_AGENT` (+253 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -376,12 +366,12 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `QualityFloorTest` connect `QualityFloorTest` to `quality.py`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **What connects `.venv/bin/python3`, `teach-plat`, `resume-generation.sh script` to the rest of the system?**
-  _257 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _258 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `status_matrix.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `The routine, start to finish` be split into smaller, more focused modules?**
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
 - **Should `api.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.10344827586206896 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13438735177865613 - nodes in this community are weakly interconnected._
 - **Should `tracker.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.11576354679802955 - nodes in this community are weakly interconnected._
-- **Should `video.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.10545790934320073 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14761904761904762 - nodes in this community are weakly interconnected._
