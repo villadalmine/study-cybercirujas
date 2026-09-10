@@ -87,28 +87,57 @@ starts when its **entry condition** is met, not when the previous one finishes.
   them is the same defect as scraping the wrong page, which cost this project
   seven certifications once.
 
-## Housekeeping that is open
+## The technical-debt plan
 
-- ~~The cluster registry is full~~ **Resolved 2026-09-10: 100% → 15%, 83 GB
-  reclaimed** by pruning `online-game` (229 tags) and `online-game-test` (124)
-  and running garbage collection. The lesson is in
-  [docs/CLEANUP.md](docs/CLEANUP.md): prune where the tags actually are —
-  cleaning `teach-plat` first freed exactly zero bytes. **Still open**: the
-  registry has no retention policy, so this recurs.
-- **144 embedded manifests do not parse** (measured 2026-09-10, up from ~60 as
-  the corpus grew), keeping `make verify` red. Mechanical to repair, no model
-  needed — the `pca` and `cks` repairs are the pattern: usually a `json` fence
-  around console output, or a `: ` inside an unquoted YAML value. Worth a
-  dedicated pass rather than drip-feeding, and worth asking whether the
-  generation prompt should teach the convention so new topics stop producing
-  them.
-- **55 orphaned topic directories** from pre-resnapshot ids (down from ~188;
-  regeneration absorbed the rest). Not served, not counted, not audited.
-  Decide: salvage into current ids, archive, or delete —
-  [docs/CLEANUP.md](docs/CLEANUP.md) has the listing script.
-- **20% of citations are unattributed** — 4,498 of 22,860, from domains not in
-  `docs/sources.yaml`. Adding the legitimate ones is bookkeeping with no quota
-  cost: `scripts/check_sources.py --unknown-only` lists them.
-- **`.rejected/` holds 73 files.** Each is evidence of a diagnosed failure;
-  clearing them is safe once read, but worth a skim first — a repeated pattern
-  there is a bug nobody has noticed yet.
+Ordered by a principle this project keeps re-learning: **when a check fires en
+masse, verify the check before repairing the content.** Applied on 2026-09-10
+it turned 144 "broken manifests" into 80 in one commit — 64 were CloudFormation
+tags that `yaml.safe_load` refuses by design, against material that was
+correct all along.
+
+### Step 1 — separate false positives from real ones · *free, mostly done*
+
+- ✅ **CloudFormation tags** (`!Ref`, `!Sub`, `!GetAtt`, `!Equals`) now parse.
+  144 → 80.
+- **Next: `json` fences holding console output.** ~14 of the remainder are
+  blocks tagged `json` whose content starts with a sentence
+  (`Successfully loaded configuration:` followed by the object). The material
+  is right, the fence label is wrong — the same repair already done by hand in
+  `pca` and `cks`. Mechanical rule: a `json` block that does not start with
+  `{` or `[` is console output; retag it as a plain fence. Worth doing as a
+  script that prints its diff rather than a blind rewrite.
+
+### Step 2 — repair what is genuinely broken · *free, needs eyes*
+
+The ~50 that remain are real: unquoted `: ` inside YAML values, a block scalar
+whose indentation ends the scalar early, an alias that never resolves. Each
+needs looking at, but they cluster by cert (`lpi-050-100` 24, `kcsa` 12), so a
+pass per certification is efficient. **The `pca` repair is the template**: two
+of its three were errors that broke the real tool, not just our parser — the
+fix improved the material, not only the report.
+
+### Step 3 — stop producing them · *the only step that ends the debt*
+
+Every repair above is retroactive. The generation prompt in `generator.py`
+never states the conventions these violate: console output is not `json`,
+values containing `: ` need quoting, block scalars must keep their indent. One
+paragraph there prevents the next hundred. **This is a prompt change, so it is
+propose-and-measure, not hot-patch** — it applies to every future topic and its
+effect cannot be seen in one file.
+
+### Step 4 — the rest, in order of what it buys
+
+| Debt | Size | Plan |
+|---|---|---|
+| **Unattributed citations** | 4,498 of 22,860 (20%) | `scripts/check_sources.py --unknown-only` lists the domains; adding the legitimate ones to `docs/sources.yaml` is bookkeeping with no quota. Do it in batches by frequency — the top 20 domains cover most of the tail |
+| **Orphaned topic directories** | 55 | A decision, not maintenance: salvage into current ids, archive, or delete. They hold real material from before a re-snapshot renumbered the syllabus. Listing script in [docs/CLEANUP.md](docs/CLEANUP.md) |
+| **`.rejected/` backlog** | 73 files | Skim before clearing: a repeated pattern there is a bug nobody has noticed. That is exactly how the placeholder-URL and decapitated-topic bugs were found |
+| **Registry retention** | — | `make clean-registry KEEP=N` covering steps 1–3 of CLEANUP.md, refusing to prune a deployed tag. Ends the 98 GB incident recurring |
+| **Unattended publishing** | — | The host lacks make/kubectl/helm. Three options in AGENTS_SYNC.md; none chosen. Lowest urgency — publishing by hand works |
+
+### Sequencing
+
+Steps 1 and 2 first: they are free and they turn `make verify` green, which is
+what makes every other check believable. Step 3 next, because without it steps
+1–2 repeat. Step 4 is opportunistic — citation bookkeeping is a good filler for
+a quota-blocked window, since it needs no model at all.
