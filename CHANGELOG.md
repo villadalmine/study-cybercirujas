@@ -40,6 +40,12 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   derives each provider's thinking budget from it. Findings table in
   [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
 
+  Built and deployed as `2026-09-11-bot-models` (helm revision 61) and verified
+  live: study.cybercirujas.club serves all eighteen models carrying a probe
+  date, two of them marked `flaky`. No model had to be replaced — every one
+  still answers; what changed is that the page no longer claims things about
+  them that were never measured.
+
 ## 2026-09-10
 
 - **Study bot, phase 1 — the platform's first feature that is not content.** A
