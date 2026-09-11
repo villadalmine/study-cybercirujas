@@ -64,11 +64,14 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   switch where the model accepts one, which is both what the page sends by
   default and most of why the pass costs cents.
 
-  Built and deployed as `2026-09-11-bot-models` (helm revision 61) and verified
-  live: study.cybercirujas.club serves all eighteen models carrying a probe
-  date, two of them marked `flaky`. No model had to be replaced — every one
-  still answers; what changed is that the page no longer claims things about
-  them that were never measured.
+  Built and deployed twice: `2026-09-11-bot-models` (helm revision 61) for the
+  liveness and reasoning verdicts, then `2026-09-11-bot-langs` (revision 62) for
+  the per-language menu. Verified live on study.cybercirujas.club: eighteen
+  models, each carrying a probe date; 18 offered in English, Portuguese and
+  Japanese, 17 in Spanish, French, German and Chinese — the missing one is a
+  Nemotron that returns nothing in that language. No model had to be replaced:
+  every one still answers, and what changed is that the page stopped claiming
+  things about them that were never measured.
 
 ## 2026-09-10
 
