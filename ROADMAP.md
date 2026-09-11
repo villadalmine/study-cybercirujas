@@ -37,6 +37,19 @@ public days ago, and every phase after it is speculative until a real student
 asks something phase 1 cannot answer. Building phase 2 now would be guessing
 at a problem nobody has reported.
 
+**The first feedback arrived on 2026-09-11 and has been acted on**: *some
+models do not work, and the reasoning control is not understandable*. Both were
+true and neither was visible to `check_models.py`, which reads OpenRouter's
+catalogue rather than calling the models. `scripts/probe_models.py`
+(`make probe-models`) now calls each one — 51 requests, $0.0077 a pass, on the
+bot's own limited key — and the page is built from what it measured: 12 of 18
+models think even when reasoning is switched off, 4 cannot be stopped at all,
+and 2 ignore the effort setting entirely. Findings and method in
+[docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+
+That closes the feedback, not the phase: phase 2 still waits for a question
+phase 1 cannot answer.
+
 Nothing is running and nothing is spending: no milestone is declared, so the
 timer wakes, finds nothing to do, and sleeps. To resume content work later,
 pick an item below and declare it — the machinery needs no other setup.
@@ -47,7 +60,21 @@ Ordered by what each one buys, not by size.
 
 1. **Feedback on the bot** ← *current focus*. It is the only thing on the site that is not
    content and it just went public. Phase 2 is speculative until someone asks
-   a question phase 1 cannot answer — collect first, build second.
+   a question phase 1 cannot answer — collect first, build second. The first
+   round (models that do not answer, an unintelligible reasoning control) is
+   fixed and deployed; what is still open from it:
+
+   - **re-probe after every catalogue change** — `make probe-models UPDATE=1`,
+     and always after changing `max_tokens` in the page, because OpenRouter
+     derives each provider's thinking budget from it and the verdicts stop
+     being true for a request nobody sends;
+   - **the two `:free` models that answered nothing** (`gemma-4-31b`,
+     `nemotron-3-ultra`) are marked `flaky` and still offered. Replacing a
+     model is a judgement call against the criteria at the top of
+     `models.yaml` — the probe reports, a human decides;
+   - **`gpt-5-mini` stays the default** even though its thinking cannot be
+     switched off: it answered every probe, and the page now says so instead
+     of promising a cheaper option that does not exist.
 
 2. **`lpic-2` — 41 objectives.** The last certification whose published
    material predates its own re-snapshot: the site serves topics built on a
@@ -80,7 +107,7 @@ starts when its **entry condition** is met, not when the previous one finishes.
 
 | Phase | Entry condition | What it adds |
 |---|---|---|
-| 1.5 | the CronJob reports drift but only to a pod log | `/api/models` validates the catalogue against OpenRouter out-of-band and marks unavailable models so the page stops offering them — automating the guard, never the choice of replacement |
+| 1.5 | the CronJob reports drift but only to a pod log | `/api/models` validates the catalogue against OpenRouter out-of-band and marks unavailable models so the page stops offering them — automating the guard, never the choice of replacement. **Partly done**: `probe_models.py --update` already writes `probe`/`thinking`/`thinking_off` into `models.yaml` and the page honours them, so the guard exists — as a manual pass, because it spends. What is left is the out-of-band half, and only for the free check |
 | 2 | students ask questions spanning topics of one certification | The topic index goes to the model, it names what it needs, the page loads those files — tool calling where supported (84% of models), two round trips as fallback. Still no vector store |
 | 3 | demand for career-level work: study plans, gap analysis | Multi-pass sub-agents, and the same four-function contract exposed over **MCP** so any external agent can study against the corpus |
 | 4 | an owner decision on persistence | Anonymous progress via `X-Session-ID`; blocked on the deployment having no storage |

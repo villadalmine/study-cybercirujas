@@ -14,6 +14,8 @@
 - **Model Comparison Dashboard**: [MODELS.md](MODELS.md) — generated, regenerates with STATUS.md; per-cert tables are the only fair model comparisons
 - **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
 - **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
+- **Check Bot Models**: `make check-models` (do the study bot's models still exist, at the price shown? — free, no key)
+- **Probe Bot Models**: `make probe-models [UPDATE=1] [TIER=free]` (do they actually answer, and does the reasoning control work? — ~$0.007 a pass on `LITELLM_API_KEY_BOT`, never the subscription)
 - **Update Wiki**: `make wiki` (OpenWiki — COSTS API credits, manual only)
 
 ## Content Workflow

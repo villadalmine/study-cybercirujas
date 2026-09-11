@@ -2,6 +2,44 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-11
+
+- **The study bot's models are now verified by calling them, not by reading the
+  catalogue.** Phase 1 feedback was that some models do not work and that the
+  reasoning control is not understandable. Both were true, and `check_models.py`
+  could not see either: it compares `models.yaml` against what OpenRouter
+  *publishes*, and all eighteen models publish `reasoning: true`.
+  `scripts/probe_models.py` (`make probe-models`) sends each one a fixed
+  one-word question through the same endpoint, headers and `max_tokens` the
+  browser uses, and grades the reply mechanically — `temperature: 0`, a seed,
+  one substring, no model judging anything. **A full pass is ~51 calls and cost
+  $0.0077**, on `LITELLM_API_KEY_BOT`: a second OpenRouter key with its own
+  limit, so a probe can never reach the translation budget. `--dry-run` prints
+  the worst case and sends nothing; a `--budget` stop (default $0.25) holds even
+  if a provider starts thinking for the whole cap.
+
+  What it found: 16 of 18 answered; two free models returned nothing on that run
+  and are marked `flaky` rather than dropped. **Twelve models think when
+  reasoning is switched off** — including `gpt-5-mini`, the bot's default, which
+  spent 64 thinking tokens on a request that never mentioned reasoning, under a
+  control labelled "No reasoning (cheapest)". Twelve stop when sent
+  `reasoning: {enabled: false}`; four cannot be stopped at all ("Reasoning is
+  mandatory for this endpoint and cannot be disabled"); and two — `sonnet-5`,
+  `gpt-5.6-sol` — ignore the effort setting at every level including `high`.
+  Two models classified differently on two runs, which is itself the finding:
+  they decide per question whether to think, so `always` is the conservative
+  verdict and the page sends the explicit off switch rather than trusting a
+  default.
+
+  The page now builds its menu and its effort selector from those verdicts:
+  broken models are not offered, "no reasoning" sends the explicit off switch
+  where that was proven to work, and where the setting does nothing the control
+  is disabled with a line saying so — in all seven languages. The catalogue
+  carries `probe`, `thinking`, `thinking_off` and `probed` per model, written by
+  `--update`; `max_tokens` is probed at the page's own value because OpenRouter
+  derives each provider's thinking budget from it. Findings table in
+  [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+
 ## 2026-09-10
 
 - **Study bot, phase 1 — the platform's first feature that is not content.** A

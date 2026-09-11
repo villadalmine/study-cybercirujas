@@ -18,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from teach.core import TRANSLATION_ONLY, load_env  # noqa: E402
+from teach.core import ALLOWED, PROBE_ONLY, TRANSLATION_ONLY, load_env  # noqa: E402
 
 
 class EnvScopeTests(unittest.TestCase):
@@ -28,7 +28,8 @@ class EnvScopeTests(unittest.TestCase):
         return tmp
 
     def tearDown(self):
-        for key in ("LITELLM_MODEL", "TEACH_BACKEND", "TEACH_TRANSLATE_BACKEND"):
+        for key in ("LITELLM_MODEL", "TEACH_BACKEND", "TEACH_TRANSLATE_BACKEND",
+                    "LITELLM_API_KEY_BOT"):
             os.environ.pop(key, None)
 
     def test_loads_translation_variables(self):
@@ -44,6 +45,21 @@ class EnvScopeTests(unittest.TestCase):
         self.assertNotIn("TEACH_BACKEND", TRANSLATION_ONLY)
         self.assertNotIn("TEACH_CLAUDE_MODEL", TRANSLATION_ONLY)
         self.assertIn("TEACH_TRANSLATE_BACKEND", TRANSLATION_ONLY)
+
+    def test_loads_the_bot_probe_key(self):
+        # The study bot's own OpenRouter key. Allowed here for the same reason
+        # translation is: it buys nothing but a bounded, mechanical check, and
+        # no authoring path reads it.
+        loaded = load_env(self._write("LITELLM_API_KEY_BOT=sk-or-v1-probe\n"))
+        self.assertEqual(loaded, 1)
+        self.assertEqual(os.environ["LITELLM_API_KEY_BOT"], "sk-or-v1-probe")
+
+    def test_the_probe_key_is_separate_from_the_working_key(self):
+        # Two credentials, so a probe can never spend the translation budget.
+        # Merging them would make that guarantee a matter of discipline.
+        self.assertNotIn("LITELLM_API_KEY_BOT", TRANSLATION_ONLY)
+        self.assertNotIn("LITELLM_API_KEY", PROBE_ONLY)
+        self.assertEqual(ALLOWED, TRANSLATION_ONLY | PROBE_ONLY)
 
     def test_the_real_environment_wins(self):
         os.environ["LITELLM_MODEL"] = "chosen-explicitly"

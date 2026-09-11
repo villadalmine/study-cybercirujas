@@ -153,11 +153,7 @@ def get_models() -> dict:
     live API. The first draft of the bot had invented model ids in JavaScript;
     a catalogue nobody can verify is how that happens twice.
     """
-    import yaml
-    path = catalog.root() / "models.yaml"
-    if not path.exists():
-        return {"checked": None, "tiers": {}}
-    return yaml.safe_load(path.read_text()) or {"checked": None, "tiers": {}}
+    return catalog.load_models()
 
 
 @app.get("/api/status")

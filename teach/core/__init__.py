@@ -18,8 +18,9 @@ import os
 import sys
 from pathlib import Path
 
-# `.env` exists for ONE purpose: translating without spending the subscription.
-# It may set these and nothing else.
+# `.env` exists to keep two cheap, bounded jobs off the subscription:
+# translating (below) and probing the study bot's models (PROBE_ONLY, further
+# down). It may set those variables and nothing else.
 #
 # The restriction is the logic, not a convention. `TEACH_BACKEND=litellm` in this
 # file would silently move AUTHORING to a cheap model — the one substitution this
@@ -35,6 +36,21 @@ TRANSLATION_ONLY = {
     "TEACH_TRANSLATE_BACKEND",  # the switch itself
     "OPENAI_TIMEOUT",       # long documents need more than the default
 }
+
+# The study bot's own OpenRouter key, used by `scripts/probe_models.py` to ask
+# each model in models.yaml whether it still answers. It is a SECOND credential
+# on purpose: the probe must not be able to spend the translation budget, and
+# the translator must not be able to spend the bot's. Neither reads the other's
+# variable — see the credential note in that script.
+#
+# It buys nothing but probes: no authoring path reads it, so allowing it here
+# cannot move a single topic onto a cheap model, which is the property
+# TRANSLATION_ONLY exists to protect.
+PROBE_ONLY = {
+    "LITELLM_API_KEY_BOT",  # the bot's key, limited, probes only
+}
+
+ALLOWED = TRANSLATION_ONLY | PROBE_ONLY
 
 
 def load_env(path: Path | None = None) -> int:
@@ -65,12 +81,13 @@ def load_env(path: Path | None = None) -> int:
         value = value.strip().strip('"').strip("'")
         if not key:
             continue
-        if key not in TRANSLATION_ONLY:
+        if key not in ALLOWED:
             # Refused, not ignored quietly: someone put it there on purpose and
             # is entitled to know it did nothing. Loudest for the one that would
             # have changed what authoring runs on.
             print(f"{env_file.name}: ignoring {key} — this file may only "
-                  f"configure translation ({', '.join(sorted(TRANSLATION_ONLY))}). "
+                  f"configure translation and the bot probe "
+                  f"({', '.join(sorted(ALLOWED))}). "
                   f"Authoring backends are chosen with --backend or TEACH_BACKEND "
                   f"in the environment, never here.", file=sys.stderr)
             continue

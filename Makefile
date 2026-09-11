@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry graph graph-setup wiki
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models graph graph-setup wiki
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -139,6 +139,17 @@ check-updates: ## refresh upstream curriculum facts and report drift (spends a f
 	$(VENV)/bin/python3 scripts/status_matrix.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 
+check-models: ## do the bot's models still exist, at the price shown? (free, no key)
+	$(VENV)/bin/python3 scripts/check_models.py
+
+probe-models: ## do the bot's models actually ANSWER, and does the effort selector work?
+	@# Spends the bot's own OpenRouter key (LITELLM_API_KEY_BOT in .env), never
+	@# the subscription and never the translation key. A full pass is ~50 calls
+	@# and lands around $0.007; --dry-run prints the worst case and sends
+	@# nothing. --update writes what it found into models.yaml, which is what
+	@# the UI builds its model menu and effort selector from.
+	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),)
+
 graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
@@ -170,8 +181,11 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	@echo "Network, run separately (still no API quota):"
 	@echo "  scripts/check_citations.py     do the cited URLs resolve?"
 	@echo "  scripts/check_api_facts.py     do manifests use APIs the tracked release serves?"
+	@echo "  scripts/check_models.py        do the study bot's models still exist, at that price?"
 	@echo "Costs quota, sample only:"
 	@echo "  scripts/check_claims.py        does the cited page SAY what we claim?"
+	@echo "Costs the bot key (~\$$0.007), never the subscription:"
+	@echo "  scripts/probe_models.py        do those models ANSWER, and does the effort selector work?"
 
 # ---------------------------------------------------------------------------
 # The paved path. Everything below is one command that does the whole thing in

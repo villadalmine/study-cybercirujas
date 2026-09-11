@@ -117,6 +117,81 @@ wrong output `AUDITOR_DESIGN.md` warns about.
 **Not implemented on purpose**: no streaming (one response, simpler and
 identical in cost), no tool calling (phase 2), no server state (phase 4).
 
+### Phase 1 — feedback, and the probe that answers it (2026-09-11)
+
+Two things came back from students using phase 1: **some models do not work**,
+and **the reasoning control is not understandable** — it is not clear when it
+applies or what it does.
+
+Both were true, and neither was visible to the check that existed.
+`check_models.py` asks OpenRouter's public catalogue whether an id still exists
+at the price shown. It is free and it is honest, but it reads what the
+catalogue *claims*. A model can be listed, priced, and advertised as supporting
+`reasoning` and still hand the browser an empty answer, or bill thinking tokens
+on a request that switched thinking off. All eighteen models in `models.yaml`
+advertise `reasoning: true`. Thirteen of them do something else.
+
+**`scripts/probe_models.py` (`make probe-models`) asks each model directly.**
+Same endpoint the browser uses, same headers, same `max_tokens: 2000` — the cap
+matters, because OpenRouter derives each provider's thinking budget from it, so
+a probe at a different cap answers a question nobody asked. One fixed prompt
+("Answer with one word and nothing else." / "What is the capital of France?"),
+`temperature: 0`, a fixed seed, one graded substring. Nothing is judged by a
+model; two runs differ only where a provider changed.
+
+Three calls per model — reasoning omitted, `effort: low`, and
+`reasoning: {enabled: false}` — and every response carries its own real cost,
+so the script reports what it spent rather than what it estimated. **A full pass
+is ~51 calls and cost $0.0077.** It stops at `--budget` (default $0.25) of real
+spend, and `--dry-run` prints the worst case without sending anything. It uses
+`LITELLM_API_KEY_BOT`, a second OpenRouter key with its own limit, so a probe
+can never reach the translation budget.
+
+**What it found, 2026-09-11** — full report with `--json`; the verdicts are
+written back into `models.yaml` by `--update`:
+
+| What | Models |
+|---|---|
+| Answered correctly | 16 of 18 |
+| Answered nothing on that run | `gemma-4-31b:free` (rate-limited upstream), `nemotron-3-ultra:free` (HTTP 200, no content). Both answered on other runs, so they are marked `flaky` and kept, not dropped |
+| **Think even when reasoning is switched off** | 12, including **`gpt-5-mini`, the bot's default** — 64 thinking tokens on a request that never mentioned reasoning, under a control labelled "No reasoning (cheapest)" |
+| Thinking can be switched off explicitly | 12 models accept `reasoning: {enabled: false}` and stop |
+| Thinking **cannot** be switched off at all | `gpt-5-mini`, `gpt-5-nano`, `gpt-6-astra`, `minimax-m2.7` — the endpoint answers *"Reasoning is mandatory for this endpoint and cannot be disabled"* |
+| Ignore the effort setting entirely | `claude-sonnet-5`, `gpt-5.6-sol` — zero thinking tokens at every effort, `high` included. The selector spends nothing and changes nothing |
+| Honour it as advertised | `claude-haiku-4.5`, `gemma-4-26b:free` — 0 thinking tokens off, 43–56 on `low` |
+
+The thinking that is billed is not always thinking the student can see: OpenAI
+returns it encrypted (`reasoning_details`), paid for and invisible. That is
+recorded too.
+
+**Two models classified differently between runs** (`deepseek-v4-pro`,
+`deepseek-v4-flash`: `effort` on one pass, `always` on the next). That is not
+noise in the probe — it is the finding. Some models decide per question whether
+to think, and OpenRouter may route two identical requests to different upstream
+providers. So `always` is deliberately the conservative verdict, and the page
+does not rely on the classification for the thing that costs money: when the
+student picks "no reasoning" it sends the explicit off switch to every model
+that accepts one, rather than omitting the field and hoping the default holds.
+
+**What changed in the page.** The menu and the effort selector are now built on
+what was measured, not on what is advertised:
+
+- a model probed `broken` is not offered; one probed `flaky` is offered and
+  labelled as such, because a `:free` model saturated for six seconds is not a
+  dead model and dropping it would be the worse error;
+- choosing "no reasoning" sends `reasoning: {enabled: false}` to the models
+  where that was proven to stop the thinking, instead of omitting the field and
+  hoping;
+- the selector is disabled, with a line saying why, for the models that ignore
+  or refuse it;
+- for the models that cannot stop thinking, the page says so plainly rather
+  than offering a cheaper option that does not exist.
+
+**What is still assumed**: that a model which answered "Paris" gives *good*
+study answers. Liveness and instruction-following are mechanical; quality is
+not, and this probe does not claim it — the same gap
+[AUDITOR_DESIGN.md](AUDITOR_DESIGN.md) describes for the material itself.
+
 ### Phase 2 — questions across one certification
 
 **Entry**: students actually ask questions that span topics ("where does X
@@ -256,7 +331,20 @@ ones churn:
 scripts/check_models.py            # GONE / PRICE / PAID / PARAM, exit 1 on drift
 scripts/check_models.py --update   # accept new prices into models.yaml
 make check-updates                 # runs it alongside the syllabus check
+
+make probe-models                  # does each model ANSWER, and what does the
+                                   # effort selector really do (~$0.007 a pass)
+make probe-models UPDATE=1         # write those verdicts into models.yaml
+scripts/probe_models.py --dry-run  # the worst-case cost, sending nothing
 ```
+
+The two are not the same question and neither replaces the other: the first
+reads what OpenRouter publishes and costs nothing, which is why it runs weekly
+in the cluster; the second calls the models and costs about three quarters of a
+cent, which is why it stays **manual** — this project does not spend money on a
+timer, and the probe would have to carry the bot key into the cluster to do so. Run the probe after any change to the
+catalogue, and after any change to `max_tokens` in the page — the reasoning
+verdicts are only true for the request the page actually sends.
 
 It also runs **weekly in the cluster** as the `check-models` CronJob (the same
 image the site runs, so the catalogue checked is the one served). A failing job

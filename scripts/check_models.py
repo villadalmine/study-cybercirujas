@@ -17,6 +17,11 @@ What it reports, per model:
     scripts/check_models.py --update     # rewrite models.yaml prices in place
 
 Network only, no API key, no quota: the models endpoint is public.
+
+What it CANNOT see is whether a listed model answers: the catalogue is upstream's
+claim about itself. `scripts/probe_models.py` calls each one and grades the
+reply — that costs a fraction of a cent and the bot's own key, which is why the
+two are separate scripts rather than two flags of one.
 """
 from __future__ import annotations
 
@@ -25,9 +30,11 @@ import sys
 from pathlib import Path
 
 import httpx
-import yaml
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
+from teach.core import catalog  # noqa: E402
+
 CATALOGUE = REPO / "models.yaml"
 API = "https://openrouter.ai/api/v1/models"
 # Below this relative move a price change is noise (providers wobble in the
@@ -47,7 +54,7 @@ def main() -> int:
                         help="rewrite models.yaml with current prices")
     args = parser.parse_args()
 
-    frozen = yaml.safe_load(CATALOGUE.read_text())
+    frozen = catalog.load_models(CATALOGUE)
     try:
         upstream = live()
     except Exception as error:  # noqa: BLE001
@@ -76,18 +83,20 @@ def main() -> int:
             if entry.get("reasoning") and "reasoning" not in (m.get("supported_parameters") or []):
                 problems.append(f"PARAM  {mid} — no longer advertises `reasoning`")
             if args.update:
-                entry["in"], entry["out"] = round(pin, 4), round(pout, 4)
+                # `5` rather than `5.0`: the price is the same number either
+                # way, and a rewrite that flips every integer to a float turns
+                # a one-line price change into an eighteen-line diff.
+                tidy = lambda x: int(x) if float(x).is_integer() else round(x, 4)
+                entry["in"], entry["out"] = tidy(pin), tidy(pout)
                 entry["ctx"] = (m.get("context_length") or 0) // 1000
                 entry["reasoning"] = "reasoning" in (m.get("supported_parameters") or [])
 
     if args.update:
         import datetime
         frozen["checked"] = datetime.date.today().isoformat()
-        # Preserve the header comments: they explain why this file is frozen.
-        head = "\n".join(l for l in CATALOGUE.read_text().splitlines()
-                         if l.startswith("#"))
-        CATALOGUE.write_text(head + "\n" + yaml.safe_dump(frozen, sort_keys=False,
-                                                          allow_unicode=True))
+        # The writer keeps the header comments, which explain why this file is
+        # frozen, and the indentation, so the diff is the change and nothing else.
+        catalog.save_models(frozen, CATALOGUE)
         print(f"models.yaml updated ({checked} models).")
         return 0
 
