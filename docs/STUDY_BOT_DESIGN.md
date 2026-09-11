@@ -152,7 +152,7 @@ written back into `models.yaml` by `--update`:
 
 | What | Models |
 |---|---|
-| Answered correctly | 16 of 18 |
+| Answered correctly | 16 of 18 (and see the comprehension pass below) |
 | Answered nothing on that run | `gemma-4-31b:free` (rate-limited upstream), `nemotron-3-ultra:free` (HTTP 200, no content). Both answered on other runs, so they are marked `flaky` and kept, not dropped |
 | **Think even when reasoning is switched off** | 12, including **`gpt-5-mini`, the bot's default** — 64 thinking tokens on a request that never mentioned reasoning, under a control labelled "No reasoning (cheapest)" |
 | Thinking can be switched off explicitly | 12 models accept `reasoning: {enabled: false}` and stop |
@@ -163,6 +163,48 @@ written back into `models.yaml` by `--update`:
 The thinking that is billed is not always thinking the student can see: OpenAI
 returns it encrypted (`reasoning_details`), paid for and invisible. That is
 recorded too.
+
+### Can it read what we send it? (2026-09-11, second pass)
+
+Answering is not being useful. "Paris" proves a model is alive; it proves
+nothing about the thing the bot actually does, which is answer from a topic of
+this corpus — and the same for the seven languages the site offers, where a
+model can be perfectly capable and still reply in the wrong one.
+
+So the probe has a second pass. For each model, for each language, it sends an
+excerpt of a **real topic** (`lpi-010-160/5.2`, "Creating Users and Groups"),
+with the page's own system prompt — *use ONLY the material below* — and asks, in
+that language, a question the excerpt answers. The expected answer is
+`/etc/passwd`: a filesystem path, identical in all seven translations, so **one
+substring grades every language**. No second model, no judgement.
+
+Three properties make it honest rather than convenient:
+
+- **The excerpt is read from the tree at probe time**, never frozen into the
+  fixture, so the probe always asks about the material the site serves. If the
+  topic is regenerated and stops containing the answer, the run says `DRIFT` and
+  refuses to grade — and `make verify` catches it for free before that, in
+  `tests/test_model_probe.py`.
+- **Language is decided by a fixed rule**: kana for Japanese, Han without kana
+  for Chinese, marker counts for the Latin-script five. A reply too short to
+  classify counts as passing — a model is excluded from a language only on
+  evidence (wrong answer, or measurably the wrong language), never on the
+  absence of it.
+- **The request is what the page sends**, including the reasoning off switch for
+  the models that accept one. That is both faithful and cheaper: the thinking
+  those models would otherwise bill is most of the cost.
+
+**Result, 164 calls and $0.27:** all fourteen paid models answered from the
+material, in all seven languages. The free tier is where it bites — the two
+Nemotrons return HTTP 200 with no content in some languages (`ultra`: es, de,
+zh; `super`: fr), and the two Gemmas were rate-limited before they could be
+asked at all, so they carry no language verdict and stay offered everywhere.
+
+`models.yaml` now carries `langs:` per model and the page filters the menu by
+the interface language, with a line saying how many models that hid. If a
+language ever has no proven model, the page falls back to offering everything
+that answers rather than an empty menu, and says nothing was hidden — the
+guarantee is "never claim what was not measured", in both directions.
 
 **Two models classified differently between runs** (`deepseek-v4-pro`,
 `deepseek-v4-flash`: `effort` on one pass, `always` on the next). That is not
@@ -187,10 +229,13 @@ what was measured, not on what is advertised:
 - for the models that cannot stop thinking, the page says so plainly rather
   than offering a cheaper option that does not exist.
 
-**What is still assumed**: that a model which answered "Paris" gives *good*
-study answers. Liveness and instruction-following are mechanical; quality is
-not, and this probe does not claim it — the same gap
-[AUDITOR_DESIGN.md](AUDITOR_DESIGN.md) describes for the material itself.
+**What is still assumed**: that a model which finds `/etc/passwd` in the
+material and writes one correct sentence about it also gives *good* study
+answers — full explanations, sound exercises, exam questions worth the student's
+time. Liveness, comprehension and language are mechanical; quality is not, and
+this probe does not claim it. Same gap
+[AUDITOR_DESIGN.md](AUDITOR_DESIGN.md) describes for the material itself, and
+the same reason every answer carries the "unverified" notice.
 
 ### Phase 2 — questions across one certification
 
@@ -332,11 +377,19 @@ scripts/check_models.py            # GONE / PRICE / PAID / PARAM, exit 1 on drif
 scripts/check_models.py --update   # accept new prices into models.yaml
 make check-updates                 # runs it alongside the syllabus check
 
-make probe-models                  # does each model ANSWER, and what does the
-                                   # effort selector really do (~$0.007 a pass)
+make probe-models                  # call every model: does it answer, does the
+                                   # effort selector do anything, and can it
+                                   # read our material in each language
 make probe-models UPDATE=1         # write those verdicts into models.yaml
+make probe-models LANGS=""         # liveness + reasoning only, ~$0.008
+make probe-models LANGS=ja,zh      # re-check the two that fail most often
 scripts/probe_models.py --dry-run  # the worst-case cost, sending nothing
 ```
+
+**The order, when a model changes:** `check_models.py` first (free — is it still
+there, at that price), then `probe-models UPDATE=1` (does it still work), then
+commit `models.yaml`, then build and deploy. The page reads the catalogue from
+the image, so a verdict that is not deployed protects nobody.
 
 The two are not the same question and neither replaces the other: the first
 reads what OpenRouter publishes and costs nothing, which is why it runs weekly

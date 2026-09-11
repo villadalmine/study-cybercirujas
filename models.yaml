@@ -34,7 +34,12 @@
 #                 can do — and on gpt-5-mini, gpt-5-nano, gpt-6-astra and
 #                 minimax-m2.7 the endpoint answers "Reasoning is mandatory for
 #                 this endpoint and cannot be disabled".
-#   probed:       the date those three were last true.
+#   langs:        the languages the model may be offered in — those where it
+#                 answered a question about a REAL topic of this corpus
+#                 (lpi-010-160/5.2) IN that language. A model is excluded from a
+#                 language only on evidence: a wrong answer, or a reply
+#                 measurably in another language.
+#   probed:       the date those four were last true.
 #
 # FREE MODELS CHANGE OFTEN — that is their nature, and it is why
 # `scripts/check_models.py` runs inside `make check-updates`. When a free model
@@ -54,6 +59,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: openai/gpt-6-astra
       name: GPT-6 Astra
@@ -63,6 +76,14 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: moonshotai/kimi-k3
       name: Kimi K3
@@ -73,6 +94,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
   mid:
     - id: anthropic/claude-sonnet-5
@@ -84,6 +113,14 @@ tiers:
       probe: ok
       thinking: ignored
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: openai/gpt-5.6-sol
       name: GPT-5.6 Sol
@@ -94,6 +131,14 @@ tiers:
       probe: ok
       thinking: ignored
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: qwen/qwen3.7-max
       name: Qwen3.7 Max
@@ -104,6 +149,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: deepseek/deepseek-v4-pro
       name: DeepSeek V4 Pro
@@ -114,6 +167,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: moonshotai/kimi-k2.5
       name: Kimi K2.5
@@ -124,6 +185,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
   low:
     - id: anthropic/claude-haiku-4.5
@@ -135,6 +204,14 @@ tiers:
       probe: ok
       thinking: effort
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: openai/gpt-5-mini
       name: GPT-5 Mini
@@ -144,6 +221,14 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: minimax/minimax-m2.7
       name: MiniMax M2.7
@@ -153,6 +238,14 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: deepseek/deepseek-v4-flash
       name: DeepSeek V4 Flash
@@ -161,8 +254,16 @@ tiers:
       ctx: 1048
       reasoning: true
       probe: ok
-      thinking: always
+      thinking: effort
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: qwen/qwen3.7-flash
       name: Qwen3.7 Flash
@@ -173,6 +274,14 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
     - id: openai/gpt-5-nano
       name: GPT-5 Nano
@@ -182,6 +291,14 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      langs:
+        - en
+        - es
+        - pt
+        - fr
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'
   free:
     - id: google/gemma-4-31b-it:free
@@ -199,9 +316,8 @@ tiers:
       out: 0
       ctx: 262
       reasoning: true
-      probe: ok
-      thinking: effort
-      thinking_off: enabled:false
+      probe: flaky
+      thinking: unknown
       probed: '2026-09-11'
     - id: nvidia/nemotron-3-ultra-550b-a55b:free
       name: Nemotron 3 Ultra 550B
@@ -209,8 +325,14 @@ tiers:
       out: 0
       ctx: 1000
       reasoning: true
-      probe: flaky
-      thinking: unknown
+      probe: ok
+      thinking: always
+      thinking_off: enabled:false
+      langs:
+        - en
+        - pt
+        - fr
+        - ja
       probed: '2026-09-11'
     - id: nvidia/nemotron-3-super-120b-a12b:free
       name: Nemotron 3 Super 120B
@@ -221,4 +343,11 @@ tiers:
       probe: ok
       thinking: always
       thinking_off: enabled:false
+      langs:
+        - en
+        - es
+        - pt
+        - de
+        - zh
+        - ja
       probed: '2026-09-11'

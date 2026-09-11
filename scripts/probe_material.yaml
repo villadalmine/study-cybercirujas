@@ -1,0 +1,35 @@
+# The comprehension probe: real material, one question, one checkable answer.
+#
+# `probe_models.py --langs` sends a model an excerpt of an ACTUAL topic from this
+# corpus — the same system prompt the study bot uses, the same "use only the
+# material" instruction — and asks a question whose answer is in that excerpt.
+# That is the thing the bot is for, and it is what a liveness probe cannot see:
+# a model can answer "Paris" from its own memory and still ignore the material
+# it was handed.
+#
+# Why this topic: lpi-010-160/5.2 exists in all seven languages the site offers,
+# and its answer is a filesystem path — identical in every language, so ONE
+# expected string grades every translation. No judgement, no second model.
+#
+# The excerpt is read from the corpus at probe time, never copied here: material
+# that is regenerated must not leave a frozen copy behind pretending to be it.
+# If `expect` stops appearing in the excerpt, the probe says so and skips the
+# language rather than reporting a failure the model did not cause.
+#
+# The questions below are in the student's language BY NECESSITY — they are
+# model input, not documentation (same exception as the prompts in tracker.py).
+cert: lpi-010-160
+topic: '5.2'
+# Characters of content.md to send, cut at a line boundary. ~800 tokens: enough
+# to carry the answer in all seven translations (verified at 2500), small enough
+# that a full pass over eighteen models stays in cents.
+excerpt_chars: 3000
+expect: /etc/passwd
+questions:
+  en: "According to the material, which file stores the local user accounts? Reply with the path, then one sentence in English explaining what that file contains."
+  es: "Según el material, ¿en qué archivo se guardan las cuentas de usuario locales? Respondé con la ruta y después una frase en español explicando qué contiene ese archivo."
+  pt: "De acordo com o material, em qual arquivo ficam as contas de usuário locais? Responda com o caminho e depois uma frase em português explicando o que esse arquivo contém."
+  fr: "D'après le matériel, quel fichier contient les comptes utilisateurs locaux ? Répondez avec le chemin, puis une phrase en français expliquant ce que contient ce fichier."
+  de: "Laut dem Material: In welcher Datei werden die lokalen Benutzerkonten gespeichert? Antworte mit dem Pfad und danach einem Satz auf Deutsch, der erklärt, was diese Datei enthält."
+  zh: "根据材料，本地用户账户保存在哪个文件中？先回答路径，然后用中文写一句话说明该文件包含什么。"
+  ja: "教材によると、ローカルのユーザーアカウントはどのファイルに保存されますか。まずパスを答え、そのあとに日本語で1文、そのファイルに何が含まれるかを説明してください。"

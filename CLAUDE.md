@@ -15,7 +15,7 @@
 - **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
 - **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
 - **Check Bot Models**: `make check-models` (do the study bot's models still exist, at the price shown? — free, no key)
-- **Probe Bot Models**: `make probe-models [UPDATE=1] [TIER=free]` (do they actually answer, and does the reasoning control work? — ~$0.007 a pass on `LITELLM_API_KEY_BOT`, never the subscription)
+- **Probe Bot Models**: `make probe-models [UPDATE=1] [TIER=free] [LANGS=en,es]` (do they answer, read the material we send them, and reply in each language? — $0.27 measured for a full pass on `LITELLM_API_KEY_BOT`, `LANGS=""` for the ~$0.008 liveness-only pass, never the subscription)
 - **Update Wiki**: `make wiki` (OpenWiki — COSTS API credits, manual only)
 
 ## Content Workflow

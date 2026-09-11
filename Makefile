@@ -142,13 +142,15 @@ check-updates: ## refresh upstream curriculum facts and report drift (spends a f
 check-models: ## do the bot's models still exist, at the price shown? (free, no key)
 	$(VENV)/bin/python3 scripts/check_models.py
 
-probe-models: ## do the bot's models actually ANSWER, and does the effort selector work?
+probe-models: ## do the bot's models ANSWER, read the material, and speak each language?
 	@# Spends the bot's own OpenRouter key (LITELLM_API_KEY_BOT in .env), never
-	@# the subscription and never the translation key. A full pass is ~50 calls
-	@# and lands around $0.007; --dry-run prints the worst case and sends
-	@# nothing. --update writes what it found into models.yaml, which is what
-	@# the UI builds its model menu and effort selector from.
-	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),)
+	@# the subscription and never the translation key. Three liveness/reasoning
+	@# calls per model plus one per language, against a real topic of this
+	@# corpus: $0.27 measured for the full pass, $0.008 with LANGS="".
+	@# --dry-run prints the worst case and sends nothing. UPDATE=1 writes what
+	@# it found into models.yaml, which is what the page builds its model menu,
+	@# its effort selector and its per-language filtering from.
+	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),) $(if $(LANGS),--langs "$(LANGS)",)
 
 graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }

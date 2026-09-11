@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Do the models the study bot offers actually answer — and does thinking apply?
+"""Do the bot's models answer, read the material, and speak each language?
 
 `check_models.py` asks OpenRouter's public catalogue whether an id still exists
 at the price the UI shows. That is free, and it is not the same question a
@@ -9,9 +9,10 @@ policy"), an empty string, or a bill for thinking tokens the student switched
 off. Phase 1 feedback was exactly that: *not all of the models work, and the
 thinking control is not understandable*.
 
-So this script calls each model, once, through the SAME path the browser takes
-(openrouter.ai/api/v1/chat/completions, same headers), and grades the answer
-mechanically:
+So this script calls each model through the SAME path the browser takes
+(openrouter.ai/api/v1/chat/completions, same headers, same `max_tokens`) and
+grades the answers mechanically. First, is it alive and does it follow a
+one-line instruction:
 
   ok        replied, and the reply contains the expected word
   answers   replied something else — alive, but ignored a one-word instruction
@@ -32,16 +33,21 @@ DETERMINISTIC BY CONSTRUCTION: one fixed prompt, `temperature: 0`, a fixed seed,
 a fixed token cap, one graded substring. Two runs of this script differ only
 where the provider changed. Nothing here is judged by a model.
 
-CHEAP BY CONSTRUCTION: the prompt is ~25 tokens and the answer is capped at 48
-(the retry at 400, and only for models that spend the first cap on thinking). The worst case for the whole catalogue is printed BEFORE the first
-request and is a few cents; `--dry-run` prints it and stops.
+CHEAP BY CONSTRUCTION: the liveness prompt is ~25 tokens, the comprehension one
+~850, and both cap the answer where the page caps it. The worst case for the
+whole catalogue is printed BEFORE the first request; `--dry-run` prints it and
+stops; `--budget` stops the run on REAL spend, counted from the cost OpenRouter
+returns with every response. Measured: $0.27 for eighteen models × 164 calls — every
+model, every language — and $0.008 for liveness and reasoning alone.
 
-    scripts/probe_models.py                 # probe every model, report
-    scripts/probe_models.py --dry-run       # what it would cost, no requests
-    scripts/probe_models.py --tier free     # one tier
+    scripts/probe_models.py                  # every model, every language
+    scripts/probe_models.py --dry-run        # what it would cost, no requests
+    scripts/probe_models.py --langs ''       # liveness + reasoning only (~$0.008)
+    scripts/probe_models.py --langs ja,zh    # just the ones in doubt
+    scripts/probe_models.py --tier free      # one tier
     scripts/probe_models.py --model openai/gpt-5-mini
-    scripts/probe_models.py --update        # write the verdicts into models.yaml
-    scripts/probe_models.py --json out.json # machine-readable report
+    scripts/probe_models.py --update         # write the verdicts into models.yaml
+    scripts/probe_models.py --json out.json  # machine-readable report
 
 Credential: LITELLM_API_KEY_BOT, and deliberately not LITELLM_API_KEY. The bot
 key is a separate OpenRouter key with its own limit, so a probe can never eat
@@ -58,12 +64,14 @@ import time
 from pathlib import Path
 
 import httpx
+import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 from teach.core import catalog, generator  # noqa: E402  (also loads .env)
 
 CATALOGUE = REPO / "models.yaml"
+MATERIAL = REPO / "scripts" / "probe_material.yaml"
 API = "https://openrouter.ai/api/v1/chat/completions"
 
 # The probe itself. One word in, one word out, graded by substring — the point
@@ -87,7 +95,7 @@ TIMEOUT = 120
 # Hard stop. Real cost comes back on every response, so the script can count
 # what it has spent and refuse to continue — a ceiling that holds even if a
 # provider starts thinking for the full cap on a one-word question.
-DEFAULT_BUDGET = 0.25
+DEFAULT_BUDGET = 0.60
 # A `:free` model that is rate-limited upstream right now is not a broken model,
 # and reporting it as one makes the report differ between two identical runs.
 # One retry, one fixed pause: enough to settle the common case, bounded enough
@@ -95,26 +103,111 @@ DEFAULT_BUDGET = 0.25
 RATE_RETRY_DELAY = 6
 
 
+# ---------------------------------------------------------------- comprehension
+# The bot's own system prompt, trimmed to the part that decides the answer. The
+# probe has to send what the page sends, or it grades a request nobody makes.
+STUDY_SYSTEM = (
+    "You are a study assistant for IT certifications. Answer in the language of "
+    "the question.\n\nUse ONLY the material below. If the answer is not in it, "
+    "say so plainly instead of improvising.\n\n--- MATERIAL ---\n"
+)
+# The page's own cap, for the same reason the liveness probe uses it: a smaller
+# one grades the cap instead of the model. Measured on the way here — at 250
+# gpt-5-nano spent the whole allowance reasoning and returned nothing in all
+# seven languages; at 800 it still ran out in Japanese, where thinking costs
+# more tokens. A ceiling is not a charge: a model that answers in forty tokens
+# is billed for forty.
+ANSWER_CAP = CAP
+
+# Which language did the model actually reply in? Fixed word lists and a fixed
+# rule, so the answer is the same on every run — not a language model's opinion
+# of a language model. Deliberately coarse: it exists to catch "asked in
+# Japanese, answered in English", which is the failure students hit, not to
+# score fluency.
+MARKERS = {
+    "en": (" the ", " and ", " is ", " file", " user", " stores", " contains"),
+    "es": (" el ", " la ", " los ", " que ", " archivo", " usuario", " contiene",
+           " cuentas"),
+    "pt": (" o ", " os ", " que ", " arquivo", " usuário", " contém", " não",
+           " contas"),
+    "fr": (" le ", " les ", " fichier", " utilisateur", " contient", " l'",
+           " comptes"),
+    "de": (" der ", " die ", " das ", " datei", " benutzer", " enthält",
+           " konten"),
+}
+
+
+def detect_language(text: str) -> str:
+    """Best-effort language of a reply: one of MARKERS, 'zh', 'ja', or 'unclear'.
+
+    Kana settles Japanese against Chinese; Han without kana is Chinese. For the
+    Latin-script languages it is a marker count, and a tie is reported as
+    'unclear' rather than guessed — the caller treats 'unclear' as "not proven
+    wrong", because excluding a model on a coin flip is the worse error.
+    """
+    if any("\u3040" <= ch <= "\u30ff" for ch in text):
+        return "ja"
+    if any("\u4e00" <= ch <= "\u9fff" for ch in text):
+        return "zh"
+    padded = f" {text.lower()} ".replace("\n", " ")
+    scores = {lang: sum(padded.count(m) for m in markers)
+              for lang, markers in MARKERS.items()}
+    best = max(scores, key=lambda lang: scores[lang])
+    ranked = sorted(scores.values(), reverse=True)
+    if not ranked[0] or (len(ranked) > 1 and ranked[0] == ranked[1]):
+        return "unclear"
+    return best
+
+
+def material(lang: str, fixture: dict) -> str:
+    """The excerpt sent to the model: real corpus text, cut deterministically.
+
+    Read from the tree at probe time rather than frozen into the fixture, so the
+    probe always asks about the material the site actually serves.
+    """
+    path = (REPO / "certs" / fixture["cert"] / str(fixture["topic"]) / lang
+            / "content.md")
+    if not path.exists():
+        return ""
+    text = path.read_text()[:int(fixture["excerpt_chars"])]
+    cut = text[:text.rfind("\n")] if "\n" in text else text
+    return cut.rstrip()
+
+
+def graded(answer: str, fixture: dict) -> tuple[bool, str]:
+    """(did it find the answer in the material, which language it replied in).
+
+    Both halves matter and they fail separately: a model can quote the right
+    path in the wrong language, or write beautiful Japanese about the wrong
+    file. Only a model that does both is offered in that language.
+    """
+    return fixture["expect"].lower() in answer.lower(), detect_language(answer)
+
+
 def _price(entry: dict) -> tuple[float, float]:
     return float(entry.get("in") or 0), float(entry.get("out") or 0)
 
 
-def worst_case(entries: list[dict], deep: bool) -> float:
+def worst_case(entries: list[dict], deep: bool, langs: list[str]) -> float:
     """Upper bound in USD, assuming every model burns every cap it is offered.
 
     Printed before anything is sent. An estimate that arrives after the spend
     is not a budget, it is a receipt.
     """
     total = 0.0
-    calls = 3 if deep else 2          # reasoning off, low, (high)
+    calls = 4 if deep else 3          # reasoning off, low, enabled:false, (high)
     for entry in entries:
         pin, pout = _price(entry)
         total += calls * (40 * pin / 1e6 + CAP * pout / 1e6)
+        # One comprehension call per language: ~800 tokens of material in, a
+        # path and a sentence out.
+        total += len(langs) * (850 * pin / 1e6 + ANSWER_CAP * pout / 1e6)
     return total
 
 
 def ask(client: httpx.Client, key: str, model: str, effort: str | None,
-        cap: int, reasoning: dict | None = None) -> dict:
+        cap: int, reasoning: dict | None = None,
+        system: str | None = None, user: str | None = None) -> dict:
     """One completion. Returns a plain dict; never raises for an HTTP error.
 
     `usage.include` asks OpenRouter for the real cost of this call, so the
@@ -123,8 +216,8 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
     """
     body = {
         "model": model,
-        "messages": [{"role": "system", "content": SYSTEM},
-                     {"role": "user", "content": USER}],
+        "messages": [{"role": "system", "content": system or SYSTEM},
+                     {"role": "user", "content": user or USER}],
         "max_tokens": cap,
         "temperature": 0,
         "seed": SEED,
@@ -189,7 +282,8 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
 
 
 def ask_retrying(client: httpx.Client, key: str, model: str, effort: str | None,
-                 cap: int, reasoning: dict | None = None) -> tuple[dict, int]:
+                 cap: int, reasoning: dict | None = None,
+                 system: str | None = None, user: str | None = None) -> tuple[dict, int]:
     """`ask` plus one retry for a rate limit. Returns (response, calls made).
 
     A `:free` model that is saturated right now is not a broken model, and
@@ -198,11 +292,11 @@ def ask_retrying(client: httpx.Client, key: str, model: str, effort: str | None,
     One retry, one fixed pause; a genuinely saturated provider still shows up
     as RATE.
     """
-    probe = ask(client, key, model, effort, cap, reasoning)
+    probe = ask(client, key, model, effort, cap, reasoning, system, user)
     if verdict(probe) != "rate":
         return probe, 1
     time.sleep(RATE_RETRY_DELAY)
-    return ask(client, key, model, effort, cap, reasoning), 2
+    return ask(client, key, model, effort, cap, reasoning, system, user), 2
 
 
 def verdict(probe: dict) -> str:
@@ -316,7 +410,8 @@ def tally(row: dict, probe: dict) -> None:
     row["out"] += probe.get("out") or 0
 
 
-def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool) -> dict:
+def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool,
+              fixture: dict | None = None, langs: list[str] | None = None) -> dict:
     """Three calls for a model that answers, one for a model that does not.
 
     Order matters: liveness first, and the reasoning questions only for a model
@@ -377,6 +472,23 @@ def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool) -> dict:
         row["thinking"] = "always"
         row["off_switch_message"] = (killed.get("message") or "")[:120]
 
+    if fixture and langs:
+        # The question the bot exists to answer: can this model read the
+        # material we hand it, and reply in the student's language?
+        #
+        # Sent exactly as the page sends it with the effort selector at its
+        # default "no reasoning" — which for most models means the explicit off
+        # switch, not an omitted field. Faithful and cheaper at once: the
+        # thinking these models would otherwise bill is the bulk of the cost.
+        found = probe_languages(
+            client, key, model, fixture, langs,
+            reasoning={"enabled": False} if row["off_switch"] == "enabled:false"
+            else None)
+        row["calls"] += found["calls"]
+        row["cost"] += found["cost"]
+        row["langs"] = found["langs"]
+        row["lang_detail"] = found["detail"]
+
     if deep and row["thinking"] == "effort":
         high, made = ask_retrying(client, key, model, "high", CAP)
         row["calls"] += made
@@ -388,6 +500,44 @@ def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool) -> dict:
             # for "high" and gets the thinking of "low".
             row["thinking"] = "flat"
     return row
+
+
+def probe_languages(client: httpx.Client, key: str, model: str, fixture: dict,
+                    langs: list[str], reasoning: dict | None = None) -> dict:
+    """Ask the model, in each language, a question answered by real material.
+
+    Returns the languages the model may be offered in. A language is EXCLUDED
+    only on evidence — it missed the answer, or it replied in a language that
+    was measurably not the one asked. A reply too short to classify counts as
+    passing: absence of proof is not proof, and dropping a working model from a
+    language's menu is worse than leaving a doubtful one in it.
+    """
+    out = {"langs": [], "detail": {}, "cost": 0.0, "calls": 0}
+    for lang in langs:
+        excerpt = material(lang, fixture)
+        if not excerpt or fixture["expect"] not in excerpt:
+            # The fixture no longer matches the corpus. Say so; do not grade a
+            # model on a question its material cannot answer.
+            out["detail"][lang] = "fixture-drift"
+            continue
+        probe, made = ask_retrying(
+            client, key, model, None, ANSWER_CAP, reasoning=reasoning,
+            system=STUDY_SYSTEM + excerpt, user=fixture["questions"][lang])
+        out["calls"] += made
+        out["cost"] += probe.get("cost", 0.0)
+        if verdict(probe) in ("dead", "auth", "error", "rate", "empty"):
+            out["detail"][lang] = verdict(probe)
+            continue
+        found, replied = graded(probe.get("content", ""), fixture)
+        if not found:
+            out["detail"][lang] = "missed"
+            continue
+        if replied not in (lang, "unclear"):
+            out["detail"][lang] = f"answered in {replied}"
+            continue
+        out["detail"][lang] = "ok" if replied == lang else "ok (short reply)"
+        out["langs"].append(lang)
+    return out
 
 
 MARK = {"ok": "OK    ", "answers": "ANSWER", "empty": "EMPTY ", "dead": "DEAD  ",
@@ -408,6 +558,10 @@ def main() -> int:
     parser.add_argument("--tier", help="probe one tier only (top|mid|low|free)")
     parser.add_argument("--model", action="append", default=[],
                         help="probe one id (repeatable)")
+    parser.add_argument("--langs", default="en,es,pt,fr,de,zh,ja",
+                        help="languages to prove comprehension in, comma "
+                             "separated (default: every language the site "
+                             "offers); empty string skips the pass")
     parser.add_argument("--deep", action="store_true",
                         help="also send effort=high, to check the dial actually moves")
     parser.add_argument("--dry-run", action="store_true",
@@ -423,6 +577,14 @@ def main() -> int:
 
     frozen = catalog.load_models(CATALOGUE)
     tiers = frozen.get("tiers") or {}
+    langs = [x for x in args.langs.split(",") if x]
+    fixture = yaml.safe_load(MATERIAL.read_text()) if langs else None
+    if fixture:
+        missing = [x for x in langs if x not in fixture["questions"]]
+        if missing:
+            print(f"No probe question for: {', '.join(missing)}. Add one to "
+                  f"{MATERIAL.name} or drop it from --langs.", file=sys.stderr)
+            return 2
     selected: list[tuple[str, dict]] = []
     for tier, models in tiers.items():
         if args.tier and tier != args.tier:
@@ -435,11 +597,11 @@ def main() -> int:
         print("Nothing selected. --tier top|mid|low|free, or --model <id>.")
         return 2
 
-    ceiling = worst_case([e for _, e in selected], args.deep)
-    print(f"{len(selected)} model(s) · worst case ${ceiling:.4f} if every model "
-          f"burned the whole {CAP}-token cap on a one-word question\n"
-          f"stops at ${args.budget:.2f} of real spend · measured runs land "
-          f"around $0.02\n")
+    ceiling = worst_case([e for _, e in selected], args.deep, langs)
+    print(f"{len(selected)} model(s) × {len(langs) + 3} call(s) · worst case "
+          f"${ceiling:.4f} if every one burned its whole cap\n"
+          f"stops at ${args.budget:.2f} of real spend · measured: $0.27 with "
+          f"all seven languages, $0.008 with --langs ''\n")
     if args.dry_run:
         for tier, entry in selected:
             print(f"  {tier:5} {entry['id']}")
@@ -460,7 +622,7 @@ def main() -> int:
     rows, spent, calls = [], 0.0, 0
     with httpx.Client(follow_redirects=True) as client:
         for tier, entry in selected:
-            row = probe_one(client, key, entry, args.deep)
+            row = probe_one(client, key, entry, args.deep, fixture, langs)
             row["tier"] = tier
             row["name"] = entry.get("name", entry["id"])
             rows.append(row)
@@ -471,8 +633,14 @@ def main() -> int:
                 input_tokens=row["in"] or None, output_tokens=row["out"] or None,
                 duration_ms=row.get("ms"))
             mark = MARK.get(row["verdict"], row["verdict"])
+            lang_note = ""
+            if "langs" in row:
+                lost = [f"{k}:{v}" for k, v in row["lang_detail"].items()
+                        if not v.startswith("ok")]
+                lang_note = (f" langs={'+'.join(row['langs']) or 'none'}"
+                             + (f" ({', '.join(lost)})" if lost else ""))
             print(f"  {mark} {row['id']:42} {tier:5} "
-                  f"thinking={row['thinking']:8} ${row['cost']:.5f}"
+                  f"thinking={row['thinking']:8} ${row['cost']:.5f}{lang_note}"
                   + (f"  {row['message']}" if row.get("message") else ""))
             if row["verdict"] == "answers":
                 print(f"         replied {row['reply']!r} instead of '{EXPECTED}'")
@@ -523,6 +691,32 @@ def main() -> int:
                          r.get("off_switch"), "")
             print(f"  {r['thinking'].upper():8} {r['id']} — "
                   f"{THINK_NOTE[r['thinking']]}{extra}")
+    if langs:
+        print(f"\nComprehension on real material "
+              f"({fixture['cert']}/{fixture['topic']}, "
+              f"expecting `{fixture['expect']}`):")
+        for lang in langs:
+            usable = [r for r in rows if lang in (r.get("langs") or [])]
+            asked = [r for r in rows if lang in (r.get("lang_detail") or {})]
+            print(f"  {lang}: {len(usable)}/{len(asked)} model(s) answered from "
+                  f"the material, in {lang}")
+        drifted = sorted({lang for r in rows
+                          for lang, why in (r.get("lang_detail") or {}).items()
+                          if why == "fixture-drift"})
+        if drifted:
+            # Our fault, not the models'. Said loudly because the consequence
+            # looks like a model failure: every model would lose that language.
+            print(f"  DRIFT  {', '.join(drifted)}: "
+                  f"{fixture['cert']}/{fixture['topic']} no longer contains "
+                  f"`{fixture['expect']}` in that language. Nothing was asked, "
+                  f"so nothing was proven — fix the fixture before trusting "
+                  f"`langs` for it.")
+        orphans = [r for r in rows
+                   if "langs" in r and not r["langs"]]
+        for r in orphans:
+            print(f"  NONE   {r['id']} answered in no language — it will not be "
+                  f"offered anywhere")
+
     if not broken and not flaky and not lying:
         print("\nEvery model answered, and every effort selector does what it says.")
 
@@ -531,6 +725,9 @@ def main() -> int:
             {"at": datetime.datetime.now().isoformat(timespec="seconds"),
              "prompt": {"system": SYSTEM, "user": USER, "expected": EXPECTED,
                         "cap": CAP, "seed": SEED},
+             "comprehension": ({"cert": fixture["cert"], "topic": fixture["topic"],
+                                "expect": fixture["expect"], "langs": langs}
+                               if fixture else None),
              "spent_usd": round(spent, 6), "calls": calls, "models": rows},
             indent=2) + "\n")
         print(f"\nreport → {args.json}")
@@ -549,8 +746,14 @@ def main() -> int:
                 # drop a working model from the menu on the strength of one
                 # unlucky second.
                 # Rewritten in a fixed order, so a re-probe changes values and
-                # not the shape of the file.
-                for key in ("probe", "thinking", "thinking_off", "probed"):
+                # not the shape of the file. What a run could not measure keeps
+                # the previous answer rather than losing it: a model that was
+                # rate-limited today never reached the language pass, and
+                # deleting yesterday's evidence would drop it from every menu
+                # for a reason that has nothing to do with the model.
+                previous = entry.get("langs")
+                for key in ("probe", "thinking", "thinking_off", "langs",
+                            "probed"):
                     entry.pop(key, None)
                 entry["probe"] = {"ok": "ok", "answers": "ok",
                                   "rate": "flaky", "empty": "flaky"}.get(
@@ -561,6 +764,10 @@ def main() -> int:
                 # few, sending it breaks the request.
                 if row.get("off_switch") == "enabled:false":
                     entry["thinking_off"] = "enabled:false"
+                if row.get("langs") is not None:
+                    entry["langs"] = row["langs"]
+                elif previous is not None:
+                    entry["langs"] = previous
                 entry["probed"] = datetime.date.today().isoformat()
         catalog.save_models(frozen, CATALOGUE)
         print(f"models.yaml updated ({len(by_id)} entries carry a probe verdict).")

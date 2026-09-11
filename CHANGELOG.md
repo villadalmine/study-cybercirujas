@@ -40,6 +40,30 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   derives each provider's thinking budget from it. Findings table in
   [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
 
+- **Second pass: can the model read the material, and in which languages?** The
+  first probe proved the models are alive. "Paris" says nothing about the thing
+  the bot actually does, so the probe now sends each model an excerpt of a REAL
+  topic of this corpus (`lpi-010-160/5.2`) with the page's own *use ONLY the
+  material* prompt, and asks — in each of the seven languages the site offers —
+  a question the excerpt answers. The expected answer is `/etc/passwd`: a path,
+  identical in every translation, so one substring grades all seven and nothing
+  is judged by a second model. The excerpt is read from the tree at probe time
+  rather than frozen into the fixture, so it always asks about the material the
+  site serves; `make verify` fails for free if that topic stops containing the
+  answer.
+
+  **164 calls, $0.27**: all fourteen paid models answered from the material in
+  all seven languages. The free tier is where it shows — `nemotron-3-ultra`
+  returns HTTP 200 with no content in Spanish, German and Chinese, `-super` in
+  French, and both Gemmas were rate-limited before they could be asked. So
+  `models.yaml` carries `langs:` per model and **the page offers a model only in
+  the languages where it was proven**, with a line saying how many were hidden.
+  A language with no proven model falls back to offering everything that answers
+  rather than an empty menu — the rule is never to claim what was not measured,
+  in either direction. The comprehension request also carries the reasoning off
+  switch where the model accepts one, which is both what the page sends by
+  default and most of why the pass costs cents.
+
   Built and deployed as `2026-09-11-bot-models` (helm revision 61) and verified
   live: study.cybercirujas.club serves all eighteen models carrying a probe
   date, two of them marked `flaky`. No model had to be replaced — every one

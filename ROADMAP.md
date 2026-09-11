@@ -41,11 +41,13 @@ at a problem nobody has reported.
 models do not work, and the reasoning control is not understandable*. Both were
 true and neither was visible to `check_models.py`, which reads OpenRouter's
 catalogue rather than calling the models. `scripts/probe_models.py`
-(`make probe-models`) now calls each one — 51 requests, $0.0077 a pass, on the
-bot's own limited key — and the page is built from what it measured: 12 of 18
-models think even when reasoning is switched off, 4 cannot be stopped at all,
-and 2 ignore the effort setting entirely. Findings and method in
-[docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+(`make probe-models`) now calls each one — 164 requests, $0.27 a full pass, on
+the bot's own limited key — and the page is built from what it measured: 12 of
+18 models think even when reasoning is switched off, 4 cannot be stopped at all,
+and 2 ignore the effort setting entirely. A second pass sends each model a real
+topic of this corpus and asks about it in all seven languages; a model is now
+offered only where it answered from that material, in that language. Findings
+and method in [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
 
 That closes the feedback, not the phase: phase 2 still waits for a question
 phase 1 cannot answer.
@@ -67,7 +69,12 @@ Ordered by what each one buys, not by size.
    - **re-probe after every catalogue change** — `make probe-models UPDATE=1`,
      and always after changing `max_tokens` in the page, because OpenRouter
      derives each provider's thinking budget from it and the verdicts stop
-     being true for a request nobody sends;
+     being true for a request nobody sends. `LANGS=""` is the cent-priced
+     liveness pass; the full one fills `langs:`;
+   - **the comprehension fixture is one topic** (`lpi-010-160/5.2`,
+     `/etc/passwd`). It proves a model reads what we send it; it does not prove
+     the answer is any good, which is still the honest gap —
+     [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md);
    - **the two `:free` models that answered nothing** (`gemma-4-31b`,
      `nemotron-3-ultra`) are marked `flaky` and still offered. Replacing a
      model is a judgement call against the criteria at the top of

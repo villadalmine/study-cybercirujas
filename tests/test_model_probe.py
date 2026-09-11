@@ -136,6 +136,105 @@ class OffSwitchTests(unittest.TestCase):
             {"status": 400, "message": "context length exceeded"}))
 
 
+class LanguageTests(unittest.TestCase):
+    """Which language did the model reply in? Fixed lists, fixed rule.
+
+    Coarse on purpose: it exists to catch "asked in Japanese, answered in
+    English" — the failure a student sees — not to score fluency. The samples
+    are the shape the probe asks for: a path, then one sentence.
+    """
+
+    SAMPLES = {
+        "en": "/etc/passwd. The file stores the local user accounts and their UID.",
+        "es": "/etc/passwd. Ese archivo contiene las cuentas de usuario locales.",
+        "pt": "/etc/passwd. Esse arquivo contém as contas de usuário locais.",
+        "fr": "/etc/passwd. Ce fichier contient les comptes utilisateurs locaux.",
+        "de": "/etc/passwd. Die Datei enthält die lokalen Benutzerkonten.",
+        "zh": "/etc/passwd 该文件包含本地用户账户的信息。",
+        "ja": "/etc/passwd このファイルにはユーザーアカウントが含まれます。",
+    }
+
+    def test_every_language_is_recognised_from_its_own_answer(self):
+        for lang, text in self.SAMPLES.items():
+            with self.subTest(lang=lang):
+                self.assertEqual(probe.detect_language(text), lang)
+
+    def test_kana_separates_japanese_from_chinese(self):
+        # Both use Han characters; only Japanese uses kana, so that is the test
+        # rather than a guess about which ideographs belong to whom.
+        self.assertEqual(probe.detect_language("这个文件包含用户账户"), "zh")
+        self.assertEqual(probe.detect_language("このファイルにはアカウント"), "ja")
+
+    def test_an_answer_with_no_prose_is_unclear_not_wrong(self):
+        # The caller treats 'unclear' as "not proven wrong" and keeps the model:
+        # dropping one from a language's menu on a coin flip is the worse error.
+        self.assertEqual(probe.detect_language("/etc/passwd"), "unclear")
+
+    def test_the_failure_it_exists_to_catch(self):
+        # Asked in Japanese, answered in English.
+        self.assertEqual(probe.detect_language(self.SAMPLES["en"]), "en")
+
+
+class ComprehensionTests(unittest.TestCase):
+    """The probe that sends real material and grades one fact from it."""
+
+    FIXTURE = {"expect": "/etc/passwd"}
+
+    def test_the_fact_is_graded_by_substring_not_by_a_model(self):
+        found, _ = probe.graded("It is /etc/passwd.", self.FIXTURE)
+        self.assertTrue(found)
+        found, _ = probe.graded("/ETC/PASSWD", self.FIXTURE)
+        self.assertTrue(found)
+
+    def test_the_wrong_file_is_a_miss(self):
+        found, _ = probe.graded("/etc/shadow, it holds the hashes.",
+                                self.FIXTURE)
+        self.assertFalse(found)
+
+    def test_it_reports_the_language_alongside_the_fact(self):
+        found, lang = probe.graded("/etc/passwd. Ese archivo contiene las "
+                                   "cuentas de usuario locales.",
+                                   self.FIXTURE)
+        self.assertTrue(found)
+        self.assertEqual(lang, "es")
+
+
+class FixtureTests(unittest.TestCase):
+    """The comprehension fixture has to keep matching the corpus.
+
+    The excerpt is read from the tree at probe time, so regenerating that topic
+    can silently make the question unanswerable — and every model would then be
+    reported as failing a question the material no longer contains. This test
+    costs nothing and catches it in `make verify`.
+    """
+
+    def setUp(self):
+        import yaml
+        self.fixture = yaml.safe_load(probe.MATERIAL.read_text())
+
+    def test_every_language_asked_about_has_material_that_answers_it(self):
+        for lang in self.fixture["questions"]:
+            with self.subTest(lang=lang):
+                excerpt = probe.material(lang, self.fixture)
+                self.assertTrue(excerpt, f"no material for {lang}")
+                self.assertIn(self.fixture["expect"], excerpt,
+                              f"{self.fixture['cert']}/{self.fixture['topic']}/"
+                              f"{lang} no longer contains the expected answer — "
+                              f"pick another topic or another fact")
+
+    def test_the_excerpt_is_cut_at_a_line_boundary(self):
+        excerpt = probe.material("en", self.fixture)
+        self.assertLessEqual(len(excerpt), self.fixture["excerpt_chars"])
+        self.assertFalse(excerpt.endswith("\n"))
+
+    def test_the_probe_sends_the_pages_own_system_prompt(self):
+        # If these drift apart the probe grades a request the page never makes.
+        page = (Path(__file__).resolve().parents[1] / "teach" / "web"
+                / "index.html").read_text()
+        self.assertIn("Use ONLY the material below.", page)
+        self.assertIn("Use ONLY the material below.", probe.STUDY_SYSTEM)
+
+
 class CatalogueWriterTests(unittest.TestCase):
     """models.yaml is rewritten by two scripts; both must leave it readable."""
 
