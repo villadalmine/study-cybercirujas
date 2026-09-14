@@ -21,6 +21,18 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   a blank page, with a test that holds it. Nothing edits `models.yaml`: choosing
   a replacement is the judgement half and stays with a human.
 
+- **Four defects in the Models page, found by rendering it.** It had shipped
+  without anyone seeing it draw. Running the page's own script against the
+  deployed payloads showed: with every usage count at zero — the normal state
+  for a long time — sorting by "times chosen" fell through to alphabetical by
+  id, replacing the catalogue's curated tier order with noise shaped like a
+  ranking; the tier itself was nowhere on the page, so the grouping had no
+  visible reason; a model upstream had dropped still showed "✅ answers", which
+  is a true fact about the past presented as a claim about the present; and its
+  row said "no longer offered" twice. The table now keeps catalogue order until
+  there is something to rank by, names the tier, and lets `gone` outrank the
+  probe verdict.
+
 - **The share notice moved above the fold.** It sat under the answer area, so a
   student's first question could be counted before they had read what gets sent.
   It now renders directly beneath the checkbox that controls it.

@@ -804,14 +804,23 @@ async function showModels() {
   const [cat, stats] = await Promise.all([api('/api/models'), api('/api/bot/stats')]);
   BOT_MODELS = cat;
   const used = stats.models || {};
-  const rows = botAll().map((m) => Object.assign({ used: (used[m.id] || {}).count || 0 }, m))
-    .sort((a, b) => b.used - a.used || a.id.localeCompare(b.id));
+  // Catalogue order is curated — tiers in order, and a deliberate choice within
+  // each — so it is the right default. Sorting by "times chosen" while every
+  // count is zero replaces that with alphabetical-by-id, which is noise
+  // wearing the shape of a ranking. Reorder only once there is something to
+  // rank by.
+  const rows = botAll().map((m) => Object.assign({ used: (used[m.id] || {}).count || 0 }, m));
+  if (rows.some((m) => m.used)) rows.sort((a, b) => b.used - a.used);
   const most = Math.max(1, ...rows.map((r) => r.used));
   const think = (m) => m.thinking === 'effort' ? t('botThinkOn')
     : m.thinking === 'always' ? (m.thinking_off ? t('botThinkAlways') : t('botThinkStuck'))
     : (m.thinking === 'ignored' || m.thinking === 'none') ? t('botThinkIgnored')
     : t('botThinkUnknown');
-  const state = (m) => m.probe === 'ok' ? '✅'
+  // `gone` outranks the probe verdict: the model answered when we measured it
+  // and does not exist now, so "✅ answers" would be a true fact about the past
+  // presented as a claim about the present.
+  const state = (m) => m.gone ? `❌ ${esc(t('mdGone'))}`
+    : m.probe === 'ok' ? '✅'
     : m.probe === 'rate' ? `— ${esc(t('botRate'))}`
     : m.probe === 'empty' ? `⚠️ ${esc(t('botEmpty'))}` : '❌';
   $('content').innerHTML = `
@@ -821,8 +830,8 @@ async function showModels() {
       <tr><th>${t('botModel')}</th><th>${t('mdPrice')}</th><th>${t('mdState')}</th>
           <th>${t('botEffort')}</th><th>${t('mdLangs')}</th><th>${t('mdUsed')}</th></tr>
       ${rows.map((m) => `<tr>
-        <td><b>${esc(m.name || m.id)}</b><br><span class="note">${esc(m.id)}</span></td>
-        <td>${m.gone ? `<s>$${m.in}/$${m.out}</s> ${t('mdGone')}`
+        <td><b>${esc(m.name || m.id)}</b><br><span class="note">${t('botTier' + m.tier[0].toUpperCase() + m.tier.slice(1))} · ${esc(m.id)}</span></td>
+        <td>${m.gone ? `<s>$${m.in}/$${m.out}</s>`
              : m.live_in !== undefined ? `<s>$${m.in}/$${m.out}</s> <b>$${m.live_in}/$${m.live_out}</b><br><span class="note">${t('mdMoved')}</span>`
              : (m.in || m.out ? `$${m.in}/$${m.out}` : t('botFree'))}</td>
         <td>${state(m)}</td>
