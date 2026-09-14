@@ -78,6 +78,7 @@ schema — point a client generator at it).
 | `GET` | `/api/models` | The study bot's model catalogue, from `models.yaml`, plus what is live |
 | `GET` | `/api/paths` | Career paths with their steps, in the requested language (falls back to the default) |
 | `GET` | `/api/paths/{path_slug}/video` | A path's video (if it has been generated) |
+| `GET` | `/api/search` | Which topics mention this — the fourth function of the study contract |
 | `GET` | `/api/status` | Per-certification overview: exam versions, coverage, videos, freshness |
 
 <!-- API-REFERENCE:END -->

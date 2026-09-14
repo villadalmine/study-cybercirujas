@@ -19,7 +19,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict
 from starlette.middleware.sessions import SessionMiddleware
 
-from .core import auth, bot_stats, catalog, certs, labs, models_live
+from .core import auth, bot_stats, catalog, certs, corpus, labs, models_live
 
 app = FastAPI(title="teach-plat", version="0.1.0")
 app.add_middleware(
@@ -330,6 +330,23 @@ def get_topic(
         **certs.topic_content(cert_id, topic_id, lang=lang),
         "lab_status": labs.status(cert_id, topic_id),
     }
+
+
+@app.get("/api/search")
+def get_search(q: str, cert: str | None = None,
+               limit: int = corpus.DEFAULT_LIMIT) -> dict:
+    """Which topics mention this — the fourth function of the study contract.
+
+    The other three already had endpoints (`/api/catalog`, `/api/certs/{id}`,
+    `/api/certs/{id}/topics/{tid}`); this is the one that was missing, and phase
+    2 of the bot plus the MCP server of phase 3 both call it.
+
+    Keyword search over 726 syllabus entries: no embeddings, no index to build,
+    no service to run. Retrieval here is over a catalogue already keyed by
+    (cert, topic, lang), and every hit carries `why` it matched so a caller can
+    show its work instead of asserting relevance.
+    """
+    return {"query": q, "cert": cert, "hits": corpus.search_topics(q, cert, limit)}
 
 
 class BotUsage(BaseModel):
