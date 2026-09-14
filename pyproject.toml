@@ -20,6 +20,13 @@ dependencies = [
     "pillow>=10.0",
 ]
 
+# The MCP server (teach/mcp_server.py) is not part of the deployed application:
+# the pod serves HTTP and has no use for stdio tools, so the SDK would be weight
+# in an image that ships the whole corpus. Installed on a workstation with
+# `make mcp-setup`, the same shape as `make graph-setup` for graphify.
+[project.optional-dependencies]
+mcp = ["mcp>=2.0"]
+
 [project.scripts]
 teach = "teach.cli:main"
 

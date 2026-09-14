@@ -407,6 +407,43 @@ four functions — design once, ship twice.
 student's key. Defensible for a study plan; never for "give me an
 exercise".
 
+### Phase 3, MCP half — BUILT 2026-09-14
+
+`teach/mcp_server.py` exposes the four functions over stdio, as `.mcp.json`
+starts it. It is a thin wrapper over `teach/core/corpus.py` — the behaviour
+lives there, the tests live there, and this file adds a protocol and nothing
+else. Second shipping of the contract, as the design asked.
+
+**What makes it defensible to hand an agent nobody here controls** is not care,
+it is the contract: all four functions are pure reads of the published corpus,
+the same material the site serves without a login, and a test asserts the module
+cannot write, spend, or reach a path that does. Nothing here adds a capability
+the web already gives away; it makes it addressable.
+
+Three things came out of building it:
+
+- **The MCP server already declared in `.mcp.json` had never worked.** The SDK
+  was not installed, so `graphify.serve` died with `ModuleNotFoundError` on
+  startup, while CLAUDE.md claimed the code graph was "served to agents over MCP
+  via `.mcp.json`". Installing the SDK fixed the older claim and enabled this one.
+- **The SDK answers a failed lookup with `Error executing tool get_syllabus`**,
+  which cannot tell an agent a typo from an outage — so it cannot choose between
+  retrying and asking differently. The identifiers are public, so naming them
+  costs nothing: a not-found now says what was missing and which tool lists the
+  valid ones.
+- **The SDK is an optional extra, not a dependency.** The deployed pod serves
+  HTTP and has no use for stdio tools; carrying the SDK in an image that already
+  ships the whole corpus would be weight for nothing. `make mcp-setup` installs
+  it, the protocol tests skip without it, and `make verify` stays green on a
+  fresh clone.
+
+**The multi-pass half of phase 3 is NOT built**, and deliberately. Its entry
+condition is demand for career-level work — study plans, gap analysis across a
+path — and nothing has asked for it. The MCP server stands alone and is useful
+today; sub-agents that read slices and a synthesiser that assembles them are
+several paid calls per question, and the design's own rule is that they must buy
+something a single pass cannot deliver before they are built.
+
 **If a vector index ever earns its place**, it is here — and it is one
 table in a Postgres that does not exist yet, not a chart of four
 subsystems.

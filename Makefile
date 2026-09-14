@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models graph graph-setup wiki
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -156,6 +156,16 @@ graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no 
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
 	$(VENV)/bin/graphify export wiki
+
+mcp-setup: ## one-time: install the MCP SDK, for `teach` and `graphify` over MCP
+	@# Not a dependency of the deployed app — the pod serves HTTP and has no
+	@# use for stdio tools. Both servers in .mcp.json need it; without it they
+	@# fail at startup with ModuleNotFoundError and the tests skip.
+	$(VENV)/bin/pip install -q -e '.[mcp]'
+	@echo "OK — .mcp.json servers can start now: make mcp-check"
+
+mcp-check: ## drive the study MCP server over stdio and print what it answers
+	$(VENV)/bin/python3 -m unittest tests.test_mcp_server -v
 
 graph-setup: ## one-time: install graphifyy into the venv (~40 tree-sitter grammars)
 	$(VENV)/bin/pip install -q graphifyy

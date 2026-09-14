@@ -73,7 +73,11 @@ window.
 `GRAPH_REPORT.md`) is a tree-sitter code graph of `teach/`, `scripts/` and
 `tests/` — free to build, refreshed by the post-commit hook, staleness checked
 by `scripts/check_graph.py` in `make verify`, served to agents over MCP via
-`.mcp.json`. **Query it before grepping**: `.venv/bin/graphify query "..."` /
+`.mcp.json` — which needs `make mcp-setup` first, or both servers there die at
+startup with `ModuleNotFoundError`. The study corpus is served over MCP too
+(`teach/mcp_server.py`): the same four functions the study bot calls —
+`list_certs`, `get_syllabus`, `get_topic`, `search_topics`.
+**Query the graph before grepping**: `.venv/bin/graphify query "..."` /
 `explain` / `path`. Full developer guide, including OpenWiki (the wiki costs
 credits; the graph never does): [docs/DEVTOOLS.md](docs/DEVTOOLS.md).
 

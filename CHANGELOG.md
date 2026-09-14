@@ -33,6 +33,30 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   both paths, asserting the caps hold. The Models page shipped with four defects
   because it was verified by reading.
 
+- **Phase 3, MCP half: the corpus is addressable by any agent.**
+  `teach/mcp_server.py` serves `list_certs`, `get_syllabus`, `get_topic` and
+  `search_topics` over stdio — the second shipping of the same contract phase 2
+  calls, as the design asked. A thin wrapper over `teach/core/corpus.py`: the
+  behaviour and the tests live there, this adds a protocol and nothing else.
+  Driven over the real protocol in `tests/test_mcp_server.py`, subprocess and
+  all, because a server that imports cleanly and answers nothing is the failure
+  that matters.
+
+  Building it turned up that **the MCP server `.mcp.json` already declared had
+  never worked**: the SDK was not installed, so `graphify.serve` died at startup
+  while CLAUDE.md claimed the code graph was "served to agents over MCP". One
+  install fixed the older claim and enabled the new one. The SDK is an optional
+  extra (`make mcp-setup`), not a dependency — the deployed pod serves HTTP and
+  has no use for stdio tools — and the protocol tests skip without it so a fresh
+  clone stays green.
+
+  Two smaller things: the SDK answers a failed lookup with "Error executing tool
+  get_syllabus", which cannot tell an agent a typo from an outage, so a
+  not-found now names what was missing and which tool lists the valid ones. And
+  **the multi-pass half of phase 3 is deliberately not built** — its entry
+  condition is demand for career-level work, several paid calls per question
+  have to buy something a single pass cannot, and nothing has asked.
+
 - **The four-function study contract** (`teach/core/corpus.py`), built once for
   phases 2 and 3 as the design instructs: `list_certs`, `get_syllabus`,
   `get_topic`, `search_topics`. Three already had endpoints; `/api/search` was
