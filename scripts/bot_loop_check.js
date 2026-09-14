@@ -22,6 +22,7 @@
  *   node scripts/bot_loop_check.js
  *   node scripts/bot_loop_check.js --model anthropic/claude-haiku-4.5
  *   node scripts/bot_loop_check.js --fallback       # force the no-tools path
+ *   node scripts/bot_loop_check.js --path kubernetes  # phase 3, a whole career
  *   node scripts/bot_loop_check.js --api http://localhost:8899
  */
 const fs = require('fs');
@@ -37,6 +38,7 @@ const API = arg('api', 'http://localhost:8000');
 const CERT = arg('cert', 'lpi-010-160');
 const LANGUAGE = arg('lang', 'en');
 const FALLBACK = process.argv.includes('--fallback');
+const PATH_SLUG = arg('path', null);
 const QUESTION = arg('q',
   'Which topics of this certification deal with users, permissions and file ' +
   'ownership, and what is the single file that stores local user accounts?');
@@ -96,11 +98,17 @@ eval(script + `
     }
     const picked = botAll().find((m) => m.id === ${JSON.stringify(MODEL)});
     if (!picked) throw new Error('${MODEL} is not in models.yaml');
-    return { answer: await botAskSpanning(KEY, ${JSON.stringify(CERT)}, ${JSON.stringify(QUESTION)}, null),
+    const slug = ${JSON.stringify(PATH_SLUG)};
+    const answer = slug
+      ? await botAskCareer(KEY, slug, ${JSON.stringify(QUESTION)}, 'plan')
+      : await botAskSpanning(KEY, ${JSON.stringify(CERT)}, ${JSON.stringify(QUESTION)}, null);
+    return { answer,
              tools: picked.tools,
+             certs: slug ? BOT_MAX_CERTS : null,
              // the page's own caps, read from inside the eval scope where they
              // are declared, so this checks the real numbers and not a copy
-             caps: { topics: BOT_MAX_TOPICS, rounds: BOT_MAX_ROUNDS } };
+             caps: { topics: BOT_MAX_TOPICS, rounds: BOT_MAX_ROUNDS,
+                     certs: BOT_MAX_CERTS } };
   };
 `);
 
@@ -110,15 +118,18 @@ eval(script + `
   const loaded = (answer.note || '').replace(/^[^:]*:\s*/, '') || '(none)';
   const count = loaded === '(none)' ? 0 : loaded.split(',').length;
   console.log(`model     ${MODEL}  (tools=${FALLBACK ? 'forced off' : tools})`);
-  console.log(`path      ${FALLBACK || tools !== 'calls' ? 'two round trips' : 'tool calling'}`);
-  console.log(`topics    ${loaded}`);
+  console.log(`path      ${PATH_SLUG ? `career: ${PATH_SLUG}`
+                : FALLBACK || tools !== 'calls' ? 'two round trips' : 'tool calling'}`);
+  console.log(`${PATH_SLUG ? 'certs   ' : 'topics  '}  ${loaded}`);
   console.log(`tokens    ${els.bused.textContent}   ${((Date.now() - started) / 1000).toFixed(1)}s`);
   console.log(`answer    ${(answer.text || '').replace(/\n+/g, ' ').slice(0, 300)}`);
   if (!answer.text) { console.error('\nFAIL: the loop produced no answer.'); process.exit(1); }
-  if (count > caps.topics) {
-    console.error(`\nFAIL: fetched ${count} topics, cap is ${caps.topics}.`);
+  const cap = PATH_SLUG ? caps.certs : caps.topics;
+  const unit = PATH_SLUG ? 'certifications' : 'topics';
+  if (count > cap) {
+    console.error(`\nFAIL: read ${count} ${unit}, cap is ${cap}.`);
     process.exit(1);
   }
-  console.log(`\nOK: the loop answered, and the cap held (${count}/${caps.topics} topics, `
-              + `at most ${caps.rounds} rounds).`);
+  console.log(`\nOK: the loop answered, and the cap held `
+              + `(${count}/${cap} ${unit}${PATH_SLUG ? '' : `, at most ${caps.rounds} rounds`}).`);
 })().catch((e) => { console.error('FAIL:', e.message); process.exit(1); });

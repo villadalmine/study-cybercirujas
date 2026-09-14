@@ -182,7 +182,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "acceptancetests"
     },
     {
@@ -195,7 +195,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "endpointtests"
     },
     {
@@ -208,7 +208,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "storedshapetests"
     },
     {
@@ -277,6 +277,32 @@
       "norm_label": "pipelineerror"
     },
     {
+      "label": "ContractTests",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L139",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_contracttests",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "contracttests"
+    },
+    {
+      "label": "ProtocolTests",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L82",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "protocoltests"
+    },
+    {
       "label": "ThinkingTests",
       "file_type": "code",
       "source_file": "tests/test_model_probe.py",
@@ -290,19 +316,6 @@
       "norm_label": "thinkingtests"
     },
     {
-      "label": "ClaimTest",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L29",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "claimtest"
-    },
-    {
       "label": "AcceptsCorrectTranslations",
       "file_type": "code",
       "source_file": "tests/test_translation_verify.py",
@@ -314,6 +327,19 @@
       "community": 64,
       "community_name": "_verify_translation",
       "norm_label": "acceptscorrecttranslations"
+    },
+    {
+      "label": "Client",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L35",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": "client"
     },
     {
       "label": "GeneratorConfigError",
@@ -381,6 +407,19 @@
       "norm_label": "_blockdumper"
     },
     {
+      "label": "ClaimTest",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L29",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": "claimtest"
+    },
+    {
       "label": "CatalogueWriterTests",
       "file_type": "code",
       "source_file": "tests/test_model_probe.py",
@@ -392,19 +431,6 @@
       "community": 76,
       "community_name": "test_model_probe.py",
       "norm_label": "cataloguewritertests"
-    },
-    {
-      "label": "ComprehensionTests",
-      "file_type": "code",
-      "source_file": "tests/test_model_probe.py",
-      "source_location": "L220",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "tests_test_model_probe_comprehensiontests",
-      "community": 76,
-      "community_name": "test_model_probe.py",
-      "norm_label": "comprehensiontests"
     },
     {
       "label": "CatalogueStateTests",
@@ -470,6 +496,19 @@
       "community": 84,
       "community_name": "QualityThresholdsTest",
       "norm_label": "qualitythresholdstest"
+    },
+    {
+      "label": "ComprehensionTests",
+      "file_type": "code",
+      "source_file": "tests/test_model_probe.py",
+      "source_location": "L220",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_model_probe_comprehensiontests",
+      "community": 85,
+      "community_name": "ComprehensionTests",
+      "norm_label": "comprehensiontests"
     },
     {
       "label": "OffSwitchTests",
@@ -1337,18 +1376,6 @@
       "norm_label": "get_paths()"
     },
     {
-      "label": "get_search()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L336",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_search",
-      "community": 2,
-      "community_name": "api.py",
-      "norm_label": "get_search()"
-    },
-    {
       "label": "get_status()",
       "file_type": "code",
       "source_file": "teach/api.py",
@@ -1371,6 +1398,18 @@
       "community": 2,
       "community_name": "api.py",
       "norm_label": "get_topic()"
+    },
+    {
+      "label": "get_topic_preview()",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L288",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_api_get_topic_preview",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "get_topic_preview()"
     },
     {
       "label": "healthz()",
@@ -1397,16 +1436,16 @@
       "norm_label": "index()"
     },
     {
-      "label": "_status_snapshot()",
+      "label": "me()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L217",
+      "source_location": "L72",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_status_snapshot",
+      "id": "teach_api_me",
       "community": 2,
       "community_name": "api.py",
-      "norm_label": "_status_snapshot()"
+      "norm_label": "me()"
     },
     {
       "label": "_valid_lang()",
@@ -1431,18 +1470,6 @@
       "community": 2,
       "community_name": "api.py",
       "norm_label": "_video_info()"
-    },
-    {
-      "label": "list_certs()",
-      "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L81",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_catalog_list_certs",
-      "community": 2,
-      "community_name": "api.py",
-      "norm_label": "list_certs()"
     },
     {
       "label": "_get()",
@@ -1577,16 +1604,16 @@
       "norm_label": ".test_unnumbered_document_yields_nothing_rather_than_a_pass()"
     },
     {
-      "label": "get_topic_preview()",
+      "label": "get_cert()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L288",
+      "source_location": "L264",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_get_topic_preview",
+      "id": "teach_api_get_cert",
       "community": 21,
       "community_name": "certs.py",
-      "norm_label": "get_topic_preview()"
+      "norm_label": "get_cert()"
     },
     {
       "label": "clear_topic_stale()",
@@ -1697,18 +1724,6 @@
       "norm_label": "set_topic_status()"
     },
     {
-      "label": "topic_content()",
-      "file_type": "code",
-      "source_file": "teach/core/certs.py",
-      "source_location": "L162",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_certs_topic_content",
-      "community": 21,
-      "community_name": "certs.py",
-      "norm_label": "topic_content()"
-    },
-    {
       "label": "topic_langs()",
       "file_type": "code",
       "source_file": "teach/core/certs.py",
@@ -1731,6 +1746,18 @@
       "community": 21,
       "community_name": "certs.py",
       "norm_label": "topic_outdated_langs()"
+    },
+    {
+      "label": "topics()",
+      "file_type": "code",
+      "source_file": "teach/core/certs.py",
+      "source_location": "L70",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_certs_topics",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "topics()"
     },
     {
       "label": "classify()",
@@ -2137,7 +2164,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_cert_topics",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "cert_topics()"
     },
     {
@@ -2149,7 +2176,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_check",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "check()"
     },
     {
@@ -2161,7 +2188,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_lab_cell",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "lab_cell()"
     },
     {
@@ -2173,20 +2200,8 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_lang_cell",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "lang_cell()"
-    },
-    {
-      "label": "refresh()",
-      "file_type": "code",
-      "source_file": "scripts/status_matrix.py",
-      "source_location": "L99",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_status_matrix_refresh",
-      "community": 33,
-      "community_name": "status_matrix.py",
-      "norm_label": "refresh()"
     },
     {
       "label": "_render()",
@@ -2197,7 +2212,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_render",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "_render()"
     },
     {
@@ -2209,7 +2224,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_spend_section",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "_spend_section()"
     },
     {
@@ -2221,8 +2236,44 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_write",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "_write()"
+    },
+    {
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_check",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "check()"
+    },
+    {
+      "label": "check_file()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_check_file",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "check_file()"
+    },
+    {
+      "label": "rules()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_rules",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "rules()"
     },
     {
       "label": "citations()",
@@ -2753,6 +2804,114 @@
       "norm_label": "main()"
     },
     {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/gen_api_docs.py",
+      "source_location": "L49",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_gen_api_docs_main",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "table()",
+      "file_type": "code",
+      "source_file": "scripts/gen_api_docs.py",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_gen_api_docs_table",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "table()"
+    },
+    {
+      "label": "accepted()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L77",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_accepted",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "accepted()"
+    },
+    {
+      "label": "_blank()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L60",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_blank",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "_blank()"
+    },
+    {
+      "label": "_known_models()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L72",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_known_models",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "_known_models()"
+    },
+    {
+      "label": "load()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_load",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "load()"
+    },
+    {
+      "label": "path()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_path",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "path()"
+    },
+    {
+      "label": "record()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L101",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_record",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "record()"
+    },
+    {
+      "label": "_write()",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L131",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_write",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "_write()"
+    },
+    {
       "label": ".test_a_missing_field_is_refused()",
       "file_type": "code",
       "source_file": "tests/test_bot_stats.py",
@@ -2761,7 +2920,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests_test_a_missing_field_is_refused",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_missing_field_is_refused()"
     },
     {
@@ -2773,7 +2932,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests_test_a_model_outside_the_catalogue_is_refused",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_model_outside_the_catalogue_is_refused()"
     },
     {
@@ -2785,7 +2944,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests_test_a_well_formed_event_is_accepted",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_well_formed_event_is_accepted()"
     },
     {
@@ -2797,7 +2956,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests_test_one_bad_field_refuses_the_whole_event",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_one_bad_field_refuses_the_whole_event()"
     },
     {
@@ -2809,7 +2968,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_acceptancetests_test_the_languages_are_the_ones_the_site_serves",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_the_languages_are_the_ones_the_site_serves()"
     },
     {
@@ -2821,7 +2980,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests_setup",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".setup()"
     },
     {
@@ -2833,7 +2992,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests_teardown",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".teardown()"
     },
     {
@@ -2845,7 +3004,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests_test_a_body_carrying_anything_extra_is_refused",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_body_carrying_anything_extra_is_refused()"
     },
     {
@@ -2857,7 +3016,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests_test_a_rejected_value_answers_200_without_saying_why",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_rejected_value_answers_200_without_saying_why()"
     },
     {
@@ -2869,7 +3028,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_endpointtests_test_a_valid_event_is_counted_and_readable",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_valid_event_is_counted_and_readable()"
     },
     {
@@ -2881,7 +3040,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_setup",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".setup()"
     },
     {
@@ -2893,7 +3052,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_shape",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "._shape()"
     },
     {
@@ -2905,7 +3064,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_stored",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "._stored()"
     },
     {
@@ -2917,7 +3076,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_teardown",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".teardown()"
     },
     {
@@ -2929,7 +3088,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_a_corrupt_file_does_not_take_the_endpoint_down",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_corrupt_file_does_not_take_the_endpoint_down()"
     },
     {
@@ -2941,7 +3100,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_a_refused_event_writes_nothing_at_all",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_a_refused_event_writes_nothing_at_all()"
     },
     {
@@ -2953,7 +3112,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_an_unwritable_path_is_swallowed",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_an_unwritable_path_is_swallowed()"
     },
     {
@@ -2965,7 +3124,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_no_timestamp_is_written_per_request",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_no_timestamp_is_written_per_request()"
     },
     {
@@ -2977,7 +3136,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_since_is_the_first_day_and_never_moves",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_since_is_the_first_day_and_never_moves()"
     },
     {
@@ -2989,7 +3148,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_the_breakdown_counts_each_characteristic_independently",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_the_breakdown_counts_each_characteristic_independently()"
     },
     {
@@ -3001,7 +3160,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_storedshapetests_test_the_file_does_not_grow_with_the_number_of_answers",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": ".test_the_file_does_not_grow_with_the_number_of_answers()"
     },
     {
@@ -3125,6 +3284,18 @@
       "norm_label": "find_bad_combos()"
     },
     {
+      "label": "find_missing_videos()",
+      "file_type": "code",
+      "source_file": "scripts/fix_corrupted_content.py",
+      "source_location": "L180",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_fix_corrupted_content_find_missing_videos",
+      "community": 49,
+      "community_name": "fix_corrupted_content.py",
+      "norm_label": "find_missing_videos()"
+    },
+    {
       "label": "_finish()",
       "file_type": "code",
       "source_file": "scripts/fix_corrupted_content.py",
@@ -3221,16 +3392,28 @@
       "norm_label": "_usable_translate_backend()"
     },
     {
-      "label": "check_file()",
+      "label": "refresh()",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L64",
+      "source_file": "scripts/status_matrix.py",
+      "source_location": "L99",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_quality_check_file",
+      "id": "scripts_status_matrix_refresh",
       "community": 49,
       "community_name": "fix_corrupted_content.py",
-      "norm_label": "check_file()"
+      "norm_label": "refresh()"
+    },
+    {
+      "label": "video_languages()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L146",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_video_languages",
+      "community": 49,
+      "community_name": "fix_corrupted_content.py",
+      "norm_label": "video_languages()"
     },
     {
       "label": "main()",
@@ -3637,7 +3820,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_dominant",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "dominant()"
     },
     {
@@ -3649,7 +3832,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_effective",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "effective()"
     },
     {
@@ -3661,7 +3844,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_main",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "main()"
     },
     {
@@ -3673,20 +3856,8 @@
       "_origin": "ast",
       "id": "scripts_check_config_recent",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "recent()"
-    },
-    {
-      "label": "_agent_completer()",
-      "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L331",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_generator_agent_completer",
-      "community": 53,
-      "community_name": "_agent_completer",
-      "norm_label": "_agent_completer()"
     },
     {
       "label": "_record_usage()",
@@ -3697,7 +3868,7 @@
       "_origin": "ast",
       "id": "teach_core_generator_record_usage",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "_record_usage()"
     },
     {
@@ -3709,8 +3880,32 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_generation",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "generation()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/run_until_complete.py",
+      "source_location": "L39",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_run_until_complete_main",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "pending()",
+      "file_type": "code",
+      "source_file": "scripts/run_until_complete.py",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_run_until_complete_pending",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "pending()"
     },
     {
       "label": "budget()",
@@ -3857,6 +4052,162 @@
       "norm_label": "topics_per_run()"
     },
     {
+      "label": "_readable()",
+      "file_type": "code",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_mcp_server_readable",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "_readable()"
+    },
+    {
+      "label": "serve()",
+      "file_type": "code",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L82",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_mcp_server_serve",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "serve()"
+    },
+    {
+      "label": ".test_the_descriptions_cover_exactly_the_shared_contract()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L140",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_contracttests_test_the_descriptions_cover_exactly_the_shared_contract",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_the_descriptions_cover_exactly_the_shared_contract()"
+    },
+    {
+      "label": ".test_the_instructions_do_not_oversell_the_corpus()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L148",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_contracttests_test_the_instructions_do_not_oversell_the_corpus",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_the_instructions_do_not_oversell_the_corpus()"
+    },
+    {
+      "label": ".setUpClass()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L86",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_setupclass",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".setupclass()"
+    },
+    {
+      "label": ".tearDownClass()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L90",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_teardownclass",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".teardownclass()"
+    },
+    {
+      "label": ".test_a_bad_topic_does_not_take_the_server_down()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L133",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_a_bad_topic_does_not_take_the_server_down",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_a_bad_topic_does_not_take_the_server_down()"
+    },
+    {
+      "label": ".test_a_topic_arrives_with_its_sources()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L112",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_a_topic_arrives_with_its_sources",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_a_topic_arrives_with_its_sources()"
+    },
+    {
+      "label": ".test_an_unknown_certification_says_what_to_do_instead()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L125",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_an_unknown_certification_says_what_to_do_instead",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_an_unknown_certification_says_what_to_do_instead()"
+    },
+    {
+      "label": ".test_every_tool_is_described()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L100",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_every_tool_is_described",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_every_tool_is_described()"
+    },
+    {
+      "label": ".test_it_offers_the_contract_and_nothing_else()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L93",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_it_offers_the_contract_and_nothing_else",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_it_offers_the_contract_and_nothing_else()"
+    },
+    {
+      "label": ".test_listing_certifications_says_which_are_empty()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L107",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_listing_certifications_says_which_are_empty",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_listing_certifications_says_which_are_empty()"
+    },
+    {
+      "label": ".test_search_carries_its_reasoning()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L118",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_protocoltests_test_search_carries_its_reasoning",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": ".test_search_carries_its_reasoning()"
+    },
+    {
       "label": "response()",
       "file_type": "code",
       "source_file": "tests/test_model_probe.py",
@@ -3991,86 +4342,38 @@
     {
       "label": "main()",
       "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L246",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L75",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_model_comparison_main",
+      "id": "scripts_next_work_main",
       "community": 6,
       "community_name": "claims.py",
       "norm_label": "main()"
     },
     {
-      "label": "_md_table()",
+      "label": "survey()",
       "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L161",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L41",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_model_comparison_md_table",
+      "id": "scripts_next_work_survey",
       "community": 6,
       "community_name": "claims.py",
-      "norm_label": "_md_table()"
+      "norm_label": "survey()"
     },
     {
-      "label": "observations()",
+      "label": "_topic_count()",
       "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L79",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L66",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_model_comparison_observations",
+      "id": "scripts_next_work_topic_count",
       "community": 6,
       "community_name": "claims.py",
-      "norm_label": "observations()"
-    },
-    {
-      "label": "render_markdown()",
-      "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L172",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_model_comparison_render_markdown",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "render_markdown()"
-    },
-    {
-      "label": "_stats()",
-      "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L146",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_model_comparison_stats",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "_stats()"
-    },
-    {
-      "label": "usage_by_topic()",
-      "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L60",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_model_comparison_usage_by_topic",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "usage_by_topic()"
-    },
-    {
-      "label": "write()",
-      "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L237",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_model_comparison_write",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "write()"
+      "norm_label": "_topic_count()"
     },
     {
       "label": "main()",
@@ -4131,114 +4434,6 @@
       "community": 6,
       "community_name": "claims.py",
       "norm_label": "_path()"
-    },
-    {
-      "label": ".setUp()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L30",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_setup",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".setup()"
-    },
-    {
-      "label": ".tearDown()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L35",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_teardown",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".teardown()"
-    },
-    {
-      "label": ".test_a_claim_does_not_survive_the_process_that_held_it()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L67",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_a_claim_does_not_survive_the_process_that_held_it",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_a_claim_does_not_survive_the_process_that_held_it()"
-    },
-    {
-      "label": ".test_a_claim_is_released_when_the_block_exits()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L60",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_a_claim_is_released_when_the_block_exits",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_a_claim_is_released_when_the_block_exits()"
-    },
-    {
-      "label": ".test_a_different_topic_is_granted_at_the_same_time()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L49",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_a_different_topic_is_granted_at_the_same_time",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_a_different_topic_is_granted_at_the_same_time()"
-    },
-    {
-      "label": ".test_a_free_topic_is_granted()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L39",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_a_free_topic_is_granted",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_a_free_topic_is_granted()"
-    },
-    {
-      "label": ".test_active_lists_what_is_being_worked_on()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L79",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_active_lists_what_is_being_worked_on",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_active_lists_what_is_being_worked_on()"
-    },
-    {
-      "label": ".test_the_same_topic_is_refused_while_held()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L43",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_claimtest_test_the_same_topic_is_refused_while_held",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": ".test_the_same_topic_is_refused_while_held()"
-    },
-    {
-      "label": "_try_claim()",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L20",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_claims_try_claim",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "_try_claim()"
     },
     {
       "label": "main()",
@@ -4323,6 +4518,90 @@
       "community": 62,
       "community_name": "datetime",
       "norm_label": "session_windows()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L246",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_main",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "main()"
+    },
+    {
+      "label": "_md_table()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L161",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_md_table",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "_md_table()"
+    },
+    {
+      "label": "observations()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L79",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_observations",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "observations()"
+    },
+    {
+      "label": "render_markdown()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L172",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_render_markdown",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "render_markdown()"
+    },
+    {
+      "label": "_stats()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L146",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_stats",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "_stats()"
+    },
+    {
+      "label": "usage_by_topic()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L60",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_usage_by_topic",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "usage_by_topic()"
+    },
+    {
+      "label": "write()",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L237",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_model_comparison_write",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "write()"
     },
     {
       "label": "main()",
@@ -4601,52 +4880,16 @@
       "norm_label": "_english()"
     },
     {
-      "label": "get_cert()",
+      "label": "get_search()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L264",
+      "source_location": "L336",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_get_cert",
+      "id": "teach_api_get_search",
       "community": 65,
       "community_name": "corpus.py",
-      "norm_label": "get_cert()"
-    },
-    {
-      "label": "cert_show()",
-      "file_type": "code",
-      "source_file": "teach/cli.py",
-      "source_location": "L33",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_cli_cert_show",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "cert_show()"
-    },
-    {
-      "label": "get_cert()",
-      "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L85",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_catalog_get_cert",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "get_cert()"
-    },
-    {
-      "label": "topics()",
-      "file_type": "code",
-      "source_file": "teach/core/certs.py",
-      "source_location": "L70",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_certs_topics",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "topics()"
+      "norm_label": "get_search()"
     },
     {
       "label": "_fold()",
@@ -4671,18 +4914,6 @@
       "community": 65,
       "community_name": "corpus.py",
       "norm_label": "get_syllabus()"
-    },
-    {
-      "label": "get_topic()",
-      "file_type": "code",
-      "source_file": "teach/core/corpus.py",
-      "source_location": "L98",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_corpus_get_topic",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "get_topic()"
     },
     {
       "label": "_informative()",
@@ -4733,54 +4964,6 @@
       "norm_label": "_terms()"
     },
     {
-      "label": "find_missing_videos()",
-      "file_type": "code",
-      "source_file": "scripts/fix_corrupted_content.py",
-      "source_location": "L180",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_fix_corrupted_content_find_missing_videos",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "find_missing_videos()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L75",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_main",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "main()"
-    },
-    {
-      "label": "survey()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L41",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_survey",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "survey()"
-    },
-    {
-      "label": "_topic_count()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L66",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_topic_count",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "_topic_count()"
-    },
-    {
       "label": "main()",
       "file_type": "code",
       "source_file": "scripts/run_cert.py",
@@ -4789,7 +4972,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_main",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "main()"
     },
     {
@@ -4801,7 +4984,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_pending_topics",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "pending_topics()"
     },
     {
@@ -4813,20 +4996,8 @@
       "_origin": "ast",
       "id": "scripts_run_cert_run",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "run()"
-    },
-    {
-      "label": "video_languages()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L146",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_video_languages",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "video_languages()"
     },
     {
       "label": "ask()",
@@ -5093,6 +5264,90 @@
       "norm_label": "_record_plain_usage()"
     },
     {
+      "label": ".call()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L65",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_call",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": ".call()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L75",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_close",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": ".close()"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L38",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_init",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._notify()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_notify",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": "._notify()"
+    },
+    {
+      "label": "._request()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L56",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_request",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": "._request()"
+    },
+    {
+      "label": "._send()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L49",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_send",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": "._send()"
+    },
+    {
+      "label": ".tools()",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_client_tools",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": ".tools()"
+    },
+    {
       "label": "cert_generate()",
       "file_type": "code",
       "source_file": "teach/cli.py",
@@ -5103,6 +5358,30 @@
       "community": 7,
       "community_name": "generator.py",
       "norm_label": "cert_generate()"
+    },
+    {
+      "label": "_agent_completer()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L331",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_agent_completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "_agent_completer()"
+    },
+    {
+      "label": "_antigravity_completer()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L464",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_antigravity_completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "_antigravity_completer()"
     },
     {
       "label": "_dominant_model()",
@@ -5139,6 +5418,30 @@
       "community": 7,
       "community_name": "generator.py",
       "norm_label": "generate_topic()"
+    },
+    {
+      "label": "_litellm_completer()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L286",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_litellm_completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "_litellm_completer()"
+    },
+    {
+      "label": "make_completer()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L504",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_make_completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "make_completer()"
     },
     {
       "label": "_reject_if_recap()",
@@ -5213,160 +5516,16 @@
       "norm_label": "translate_topic()"
     },
     {
-      "label": "load_syllabus()",
+      "label": "_write_meta()",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L74",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L266",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_syllabus_load_syllabus",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "load_syllabus()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L151",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_main",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "main()"
-    },
-    {
-      "label": "smells()",
-      "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L81",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_smells",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "smells()"
-    },
-    {
-      "label": "upstream_objectives()",
-      "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L127",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_upstream_objectives",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "upstream_objectives()"
-    },
-    {
-      "label": "frozen()",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L48",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_versions_frozen",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "frozen()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L128",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_versions_main",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "main()"
-    },
-    {
-      "label": "_same_version()",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L62",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_versions_same_version",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "_same_version()"
-    },
-    {
-      "label": "state()",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L85",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_versions_state",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "state()"
-    },
-    {
-      "label": "survey()",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L108",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_check_versions_survey",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "survey()"
-    },
-    {
-      "label": "embedded_text()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_embedded_text",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "embedded_text()"
-    },
-    {
-      "label": "fetch()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L44",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_fetch",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "fetch()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L100",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_main",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "main()"
-    },
-    {
-      "label": "ocr()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L64",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_ocr",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "ocr()"
+      "id": "teach_core_generator_write_meta",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "_write_meta()"
     },
     {
       "label": "tracker_sync()",
@@ -5379,42 +5538,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "tracker_sync()"
-    },
-    {
-      "label": "add_cert()",
-      "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L92",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_catalog_add_cert",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "add_cert()"
-    },
-    {
-      "label": "load()",
-      "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L23",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_catalog_load",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "load()"
-    },
-    {
-      "label": "save()",
-      "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L32",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_catalog_save",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "save()"
     },
     {
       "label": "_ai_yaml()",
@@ -5453,18 +5576,6 @@
       "norm_label": "fetch_text()"
     },
     {
-      "label": "generate_paths()",
-      "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L653",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_tracker_generate_paths",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "generate_paths()"
-    },
-    {
       "label": "_get_bytes()",
       "file_type": "code",
       "source_file": "teach/core/tracker.py",
@@ -5487,30 +5598,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "normalise_weights()"
-    },
-    {
-      "label": "objective_ids()",
-      "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L403",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_tracker_objective_ids",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "objective_ids()"
-    },
-    {
-      "label": "published_version()",
-      "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L392",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_tracker_published_version",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "published_version()"
     },
     {
       "label": "_reject_unreadable_syllabus()",
@@ -5547,18 +5634,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "sync_clouds()"
-    },
-    {
-      "label": "sync_cncf()",
-      "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L148",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_tracker_sync_cncf",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "sync_cncf()"
     },
     {
       "label": "sync_lpi()",
@@ -5681,18 +5756,6 @@
       "norm_label": "logout()"
     },
     {
-      "label": "me()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L72",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_me",
-      "community": 73,
-      "community_name": "login",
-      "norm_label": "me()"
-    },
-    {
       "label": "post_bot_used()",
       "file_type": "code",
       "source_file": "teach/api.py",
@@ -5765,28 +5828,64 @@
       "norm_label": "main()"
     },
     {
-      "label": "main()",
+      "label": "frozen()",
       "file_type": "code",
-      "source_file": "scripts/gen_api_docs.py",
-      "source_location": "L49",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L48",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_gen_api_docs_main",
+      "id": "scripts_check_versions_frozen",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "frozen()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L128",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_main",
       "community": 74,
       "community_name": "catalog.py",
       "norm_label": "main()"
     },
     {
-      "label": "table()",
+      "label": "_same_version()",
       "file_type": "code",
-      "source_file": "scripts/gen_api_docs.py",
-      "source_location": "L32",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L62",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_gen_api_docs_table",
+      "id": "scripts_check_versions_same_version",
       "community": 74,
       "community_name": "catalog.py",
-      "norm_label": "table()"
+      "norm_label": "_same_version()"
+    },
+    {
+      "label": "state()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L85",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_state",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "state()"
+    },
+    {
+      "label": "survey()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L108",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_survey",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "survey()"
     },
     {
       "label": "get_models()",
@@ -5813,88 +5912,28 @@
       "norm_label": "_refresh_live()"
     },
     {
-      "label": "accepted()",
+      "label": "_status_snapshot()",
       "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L77",
+      "source_file": "teach/api.py",
+      "source_location": "L217",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_bot_stats_accepted",
+      "id": "teach_api_status_snapshot",
       "community": 74,
       "community_name": "catalog.py",
-      "norm_label": "accepted()"
+      "norm_label": "_status_snapshot()"
     },
     {
-      "label": "_blank()",
+      "label": "add_cert()",
       "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L60",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L92",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_bot_stats_blank",
+      "id": "teach_core_catalog_add_cert",
       "community": 74,
       "community_name": "catalog.py",
-      "norm_label": "_blank()"
-    },
-    {
-      "label": "_known_models()",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L72",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_known_models",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "_known_models()"
-    },
-    {
-      "label": "load()",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L64",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_load",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "load()"
-    },
-    {
-      "label": "path()",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_path",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "path()"
-    },
-    {
-      "label": "record()",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L101",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_record",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "record()"
-    },
-    {
-      "label": "_write()",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L131",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_write",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "_write()"
+      "norm_label": "add_cert()"
     },
     {
       "label": ".increase_indent()",
@@ -5919,6 +5958,42 @@
       "community": 74,
       "community_name": "catalog.py",
       "norm_label": "catalog_path()"
+    },
+    {
+      "label": "get_cert()",
+      "file_type": "code",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L85",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_catalog_get_cert",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "get_cert()"
+    },
+    {
+      "label": "list_certs()",
+      "file_type": "code",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L81",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_catalog_list_certs",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "list_certs()"
+    },
+    {
+      "label": "load()",
+      "file_type": "code",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_catalog_load",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "load()"
     },
     {
       "label": "load_models()",
@@ -5955,6 +6030,18 @@
       "community": 74,
       "community_name": "catalog.py",
       "norm_label": "root()"
+    },
+    {
+      "label": "save()",
+      "file_type": "code",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_catalog_save",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "save()"
     },
     {
       "label": "save_models()",
@@ -6029,52 +6116,148 @@
       "norm_label": "upstream()"
     },
     {
-      "label": "_antigravity_completer()",
+      "label": "generate_paths()",
       "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L464",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L653",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_generator_antigravity_completer",
-      "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "_antigravity_completer()"
+      "id": "teach_core_tracker_generate_paths",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "generate_paths()"
     },
     {
-      "label": "_litellm_completer()",
+      "label": "published_version()",
       "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L286",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L392",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_generator_litellm_completer",
-      "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "_litellm_completer()"
+      "id": "teach_core_tracker_published_version",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "published_version()"
     },
     {
-      "label": "make_completer()",
+      "label": "sync_cncf()",
       "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L504",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L148",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_generator_make_completer",
-      "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "make_completer()"
+      "id": "teach_core_tracker_sync_cncf",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "sync_cncf()"
     },
     {
-      "label": "_write_meta()",
+      "label": ".setUp()",
       "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L266",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L30",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_generator_write_meta",
+      "id": "tests_test_claims_claimtest_setup",
       "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "_write_meta()"
+      "community_name": "ClaimTest",
+      "norm_label": ".setup()"
+    },
+    {
+      "label": ".tearDown()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_teardown",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".teardown()"
+    },
+    {
+      "label": ".test_a_claim_does_not_survive_the_process_that_held_it()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L67",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_a_claim_does_not_survive_the_process_that_held_it",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_a_claim_does_not_survive_the_process_that_held_it()"
+    },
+    {
+      "label": ".test_a_claim_is_released_when_the_block_exits()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L60",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_a_claim_is_released_when_the_block_exits",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_a_claim_is_released_when_the_block_exits()"
+    },
+    {
+      "label": ".test_a_different_topic_is_granted_at_the_same_time()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L49",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_a_different_topic_is_granted_at_the_same_time",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_a_different_topic_is_granted_at_the_same_time()"
+    },
+    {
+      "label": ".test_a_free_topic_is_granted()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L39",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_a_free_topic_is_granted",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_a_free_topic_is_granted()"
+    },
+    {
+      "label": ".test_active_lists_what_is_being_worked_on()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L79",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_active_lists_what_is_being_worked_on",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_active_lists_what_is_being_worked_on()"
+    },
+    {
+      "label": ".test_the_same_topic_is_refused_while_held()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_claimtest_test_the_same_topic_is_refused_while_held",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": ".test_the_same_topic_is_refused_while_held()"
+    },
+    {
+      "label": "_try_claim()",
+      "file_type": "code",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L20",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_claims_try_claim",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": "_try_claim()"
     },
     {
       "label": ".test_the_header_and_the_shape_survive_a_rewrite()",
@@ -6089,64 +6272,64 @@
       "norm_label": ".test_the_header_and_the_shape_survive_a_rewrite()"
     },
     {
-      "label": ".test_it_reports_the_language_alongside_the_fact()",
+      "label": "load_syllabus()",
       "file_type": "code",
-      "source_file": "tests/test_model_probe.py",
-      "source_location": "L236",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L74",
       "_callable": true,
       "_origin": "ast",
-      "id": "tests_test_model_probe_comprehensiontests_test_it_reports_the_language_alongside_the_fact",
-      "community": 76,
-      "community_name": "test_model_probe.py",
-      "norm_label": ".test_it_reports_the_language_alongside_the_fact()"
-    },
-    {
-      "label": ".test_the_fact_is_graded_by_substring_not_by_a_model()",
-      "file_type": "code",
-      "source_file": "tests/test_model_probe.py",
-      "source_location": "L225",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_model_probe_comprehensiontests_test_the_fact_is_graded_by_substring_not_by_a_model",
-      "community": 76,
-      "community_name": "test_model_probe.py",
-      "norm_label": ".test_the_fact_is_graded_by_substring_not_by_a_model()"
-    },
-    {
-      "label": ".test_the_wrong_file_is_a_miss()",
-      "file_type": "code",
-      "source_file": "tests/test_model_probe.py",
-      "source_location": "L231",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_test_model_probe_comprehensiontests_test_the_wrong_file_is_a_miss",
-      "community": 76,
-      "community_name": "test_model_probe.py",
-      "norm_label": ".test_the_wrong_file_is_a_miss()"
+      "id": "scripts_check_syllabus_load_syllabus",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "load_syllabus()"
     },
     {
       "label": "main()",
       "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
-      "source_location": "L39",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L151",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_run_until_complete_main",
+      "id": "scripts_check_syllabus_main",
       "community": 77,
-      "community_name": "run_until_complete.py",
+      "community_name": "check_syllabus.py",
       "norm_label": "main()"
     },
     {
-      "label": "pending()",
+      "label": "smells()",
       "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
-      "source_location": "L35",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L81",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_run_until_complete_pending",
+      "id": "scripts_check_syllabus_smells",
       "community": 77,
-      "community_name": "run_until_complete.py",
-      "norm_label": "pending()"
+      "community_name": "check_syllabus.py",
+      "norm_label": "smells()"
+    },
+    {
+      "label": "upstream_objectives()",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L127",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_upstream_objectives",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "upstream_objectives()"
+    },
+    {
+      "label": "objective_ids()",
+      "file_type": "code",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L403",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_tracker_objective_ids",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "objective_ids()"
     },
     {
       "label": ".test_a_good_answer_and_a_disobedient_one_are_both_usable()",
@@ -6243,6 +6426,18 @@
       "community": 8,
       "community_name": "cli.py",
       "norm_label": "cert_list()"
+    },
+    {
+      "label": "cert_show()",
+      "file_type": "code",
+      "source_file": "teach/cli.py",
+      "source_location": "L33",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_cli_cert_show",
+      "community": 8,
+      "community_name": "cli.py",
+      "norm_label": "cert_show()"
     },
     {
       "label": "cert_snapshot()",
@@ -6413,28 +6608,52 @@
       "norm_label": "status()"
     },
     {
-      "label": "check()",
+      "label": "embedded_text()",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L30",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L54",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_quality_check",
+      "id": "scripts_ocr_pdf_embedded_text",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "check()"
+      "community_name": "ocr_pdf.py",
+      "norm_label": "embedded_text()"
     },
     {
-      "label": "rules()",
+      "label": "fetch()",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L23",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L44",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_quality_rules",
+      "id": "scripts_ocr_pdf_fetch",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "rules()"
+      "community_name": "ocr_pdf.py",
+      "norm_label": "fetch()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L100",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_main",
+      "community": 80,
+      "community_name": "ocr_pdf.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "ocr()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_ocr",
+      "community": 80,
+      "community_name": "ocr_pdf.py",
+      "norm_label": "ocr()"
     },
     {
       "label": ".setUp()",
@@ -6629,6 +6848,42 @@
       "norm_label": ".test_without_a_quality_block_everything_passes()"
     },
     {
+      "label": ".test_it_reports_the_language_alongside_the_fact()",
+      "file_type": "code",
+      "source_file": "tests/test_model_probe.py",
+      "source_location": "L236",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_model_probe_comprehensiontests_test_it_reports_the_language_alongside_the_fact",
+      "community": 85,
+      "community_name": "ComprehensionTests",
+      "norm_label": ".test_it_reports_the_language_alongside_the_fact()"
+    },
+    {
+      "label": ".test_the_fact_is_graded_by_substring_not_by_a_model()",
+      "file_type": "code",
+      "source_file": "tests/test_model_probe.py",
+      "source_location": "L225",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_model_probe_comprehensiontests_test_the_fact_is_graded_by_substring_not_by_a_model",
+      "community": 85,
+      "community_name": "ComprehensionTests",
+      "norm_label": ".test_the_fact_is_graded_by_substring_not_by_a_model()"
+    },
+    {
+      "label": ".test_the_wrong_file_is_a_miss()",
+      "file_type": "code",
+      "source_file": "tests/test_model_probe.py",
+      "source_location": "L231",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_model_probe_comprehensiontests_test_the_wrong_file_is_a_miss",
+      "community": 85,
+      "community_name": "ComprehensionTests",
+      "norm_label": ".test_the_wrong_file_is_a_miss()"
+    },
+    {
       "label": ".test_a_rate_limit_is_not_a_refusal()",
       "file_type": "code",
       "source_file": "tests/test_model_probe.py",
@@ -6675,6 +6930,30 @@
       "community": 86,
       "community_name": "OffSwitchTests",
       "norm_label": ".test_the_switch_that_works()"
+    },
+    {
+      "label": "topic_content()",
+      "file_type": "code",
+      "source_file": "teach/core/certs.py",
+      "source_location": "L162",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_certs_topic_content",
+      "community": 87,
+      "community_name": "topic_content",
+      "norm_label": "topic_content()"
+    },
+    {
+      "label": "get_topic()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L98",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_get_topic",
+      "community": 87,
+      "community_name": "topic_content",
+      "norm_label": "get_topic()"
     },
     {
       "label": "Backlog",
@@ -7672,7 +7951,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L502",
+      "source_location": "L526",
       "_origin": "ast",
       "id": "changelog_12e01a6_paths_linux_foundation",
       "community": 15,
@@ -7684,7 +7963,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L506",
+      "source_location": "L530",
       "_origin": "ast",
       "id": "changelog_1d4bd14_multilingual_deploy",
       "community": 15,
@@ -7696,7 +7975,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L481",
+      "source_location": "L505",
       "_origin": "ast",
       "id": "changelog_2026_07_11_12",
       "community": 15,
@@ -7708,7 +7987,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L473",
+      "source_location": "L497",
       "_origin": "ast",
       "id": "changelog_2026_07_16",
       "community": 15,
@@ -7720,7 +7999,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L460",
+      "source_location": "L484",
       "_origin": "ast",
       "id": "changelog_2026_07_17",
       "community": 15,
@@ -7732,7 +8011,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L450",
+      "source_location": "L474",
       "_origin": "ast",
       "id": "changelog_2026_07_19",
       "community": 15,
@@ -7744,7 +8023,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L445",
+      "source_location": "L469",
       "_origin": "ast",
       "id": "changelog_2026_07_27",
       "community": 15,
@@ -7756,7 +8035,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L439",
+      "source_location": "L463",
       "_origin": "ast",
       "id": "changelog_2026_07_28",
       "community": 15,
@@ -7768,7 +8047,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L434",
+      "source_location": "L458",
       "_origin": "ast",
       "id": "changelog_2026_07_29",
       "community": 15,
@@ -7780,7 +8059,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L428",
+      "source_location": "L452",
       "_origin": "ast",
       "id": "changelog_2026_08_03",
       "community": 15,
@@ -7792,7 +8071,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L417",
+      "source_location": "L441",
       "_origin": "ast",
       "id": "changelog_2026_08_04",
       "community": 15,
@@ -7804,7 +8083,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L413",
+      "source_location": "L437",
       "_origin": "ast",
       "id": "changelog_2026_08_20",
       "community": 15,
@@ -7816,7 +8095,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L219",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "changelog_2026_09_10",
       "community": 15,
@@ -7828,7 +8107,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L148",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "changelog_2026_09_11",
       "community": 15,
@@ -7840,9 +8119,9 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L294",
+      "source_location": "L318",
       "_origin": "ast",
-      "id": "changelog_2026_09_11_294",
+      "id": "changelog_2026_09_11_318",
       "community": 15,
       "community_name": "Changelog",
       "norm_label": "2026-09-11"
@@ -7864,7 +8143,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L518",
+      "source_location": "L542",
       "_origin": "ast",
       "id": "changelog_28314d8_teach_plat",
       "community": 15,
@@ -7876,7 +8155,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L494",
+      "source_location": "L518",
       "_origin": "ast",
       "id": "changelog_32b929f_landing_page",
       "community": 15,
@@ -7888,7 +8167,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L514",
+      "source_location": "L538",
       "_origin": "ast",
       "id": "changelog_9302677_paths_nodes_with_cert_names",
       "community": 15,
@@ -7900,7 +8179,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L490",
+      "source_location": "L514",
       "_origin": "ast",
       "id": "changelog_b7a8edb_open_web",
       "community": 15,
@@ -7924,7 +8203,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L498",
+      "source_location": "L522",
       "_origin": "ast",
       "id": "changelog_deca856_local_deploy",
       "community": 15,
@@ -7936,7 +8215,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L510",
+      "source_location": "L534",
       "_origin": "ast",
       "id": "changelog_f6559b5_tracker_scraper",
       "community": 15,
@@ -8380,17 +8659,6 @@
       "norm_label": "api.py"
     },
     {
-      "label": "core/__init__.py",
-      "file_type": "code",
-      "source_file": "teach/core/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_init",
-      "community": 2,
-      "community_name": "api.py",
-      "norm_label": "core/__init__.py"
-    },
-    {
       "label": "Platform API. Public (no login): catalog, syllabi and paths \u2014 the landing page\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
@@ -8457,6 +8725,17 @@
       "norm_label": "per-certification overview: exam versions, coverage, videos, freshness. the..."
     },
     {
+      "label": "Public teaser: first lines of the material + what the topic includes.",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L289",
+      "_origin": "ast",
+      "id": "teach_api_rationale_289",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "public teaser: first lines of the material + what the topic includes."
+    },
+    {
       "label": "A topic's material: content, exercises, lab, and the provenance of what is\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
@@ -8466,17 +8745,6 @@
       "community": 2,
       "community_name": "api.py",
       "norm_label": "a topic's material: content, exercises, lab, and the provenance of what is..."
-    },
-    {
-      "label": "Which topics mention this \u2014 the fourth function of the study contract. The\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L338",
-      "_origin": "ast",
-      "id": "teach_api_rationale_338",
-      "community": 2,
-      "community_name": "api.py",
-      "norm_label": "which topics mention this \u2014 the fourth function of the study contract. the..."
     },
     {
       "label": "The counters, as they are. Public, because the page that shows them is. Soft\u2026",
@@ -8521,17 +8789,6 @@
       "community": 2,
       "community_name": "api.py",
       "norm_label": "career paths with their steps, in the requested language (falls back to the..."
-    },
-    {
-      "label": "Loads `.env` from the repository root, once, before anything reads a variable.\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_init_rationale_1",
-      "community": 2,
-      "community_name": "api.py",
-      "norm_label": "loads `.env` from the repository root, once, before anything reads a variable...."
     },
     {
       "label": "test_tracker.py",
@@ -8600,15 +8857,15 @@
       "norm_label": "post"
     },
     {
-      "label": "Public teaser: first lines of the material + what the topic includes.",
+      "label": "One certification: catalogue entry, syllabus and which topics have material.",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L289",
+      "source_location": "L265",
       "_origin": "ast",
-      "id": "teach_api_rationale_289",
+      "id": "teach_api_rationale_265",
       "community": 21,
       "community_name": "certs.py",
-      "norm_label": "public teaser: first lines of the material + what the topic includes."
+      "norm_label": "one certification: catalogue entry, syllabus and which topics have material."
     },
     {
       "label": "Read/write the per-certification MD (syllabus snapshot + status). The MD with\u2026",
@@ -8653,17 +8910,6 @@
       "community": 21,
       "community_name": "certs.py",
       "norm_label": "languages whose content predates the last syllabus change. a topic goes 'stale'..."
-    },
-    {
-      "label": "Contenido generado de un tema en un idioma (fallback al default).",
-      "file_type": "rationale",
-      "source_file": "teach/core/certs.py",
-      "source_location": "L163",
-      "_origin": "ast",
-      "id": "teach_core_certs_rationale_163",
-      "community": 21,
-      "community_name": "certs.py",
-      "norm_label": "contenido generado de un tema en un idioma (fallback al default)."
     },
     {
       "label": "Close the cycle for a stale topic: back to 'generated' and drop the timestamp,\u2026",
@@ -9648,7 +9894,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "status_matrix.py"
     },
     {
@@ -9659,19 +9905,30 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_py_path",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "path"
     },
     {
-      "label": "Regenerate STATUS.md from disk. True if it changed. The single implementation\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/status_matrix.py",
-      "source_location": "L100",
+      "label": "quality.py",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_status_matrix_rationale_100",
+      "id": "teach_core_quality",
       "community": 33,
-      "community_name": "status_matrix.py",
-      "norm_label": "regenerate status.md from disk. true if it changed. the single implementation..."
+      "community_name": "quality.py",
+      "norm_label": "quality.py"
+    },
+    {
+      "label": "test_quality.py",
+      "file_type": "code",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_quality",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "test_quality.py"
     },
     {
       "label": "[] if STATUS.md matches the filesystem; the differing lines otherwise.\u2026",
@@ -9681,7 +9938,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_129",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "[] if status.md matches the filesystem; the differing lines otherwise...."
     },
     {
@@ -9692,7 +9949,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_286",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "the budget footer: what generation has actually consumed, from records...."
     },
     {
@@ -9703,8 +9960,63 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_48",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "count only material that meets the quality floor in pipeline.yaml. `wanted` is..."
+    },
+    {
+      "label": "Quality floor for generated material, identical for every backend. A different\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_1",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality floor for generated material, identical for every backend. a different..."
+    },
+    {
+      "label": "Rules for 'content' or 'exercises'. With no `quality` block in the YAML there\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_24",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "rules for 'content' or 'exercises'. with no `quality` block in the yaml there..."
+    },
+    {
+      "label": "Return the problems found. An empty list means the floor is met. `kind` is\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_31",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "return the problems found. an empty list means the floor is met. `kind` is..."
+    },
+    {
+      "label": "Same as `check`, resolving the kind from the filename. A file that cannot be\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_65",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "same as `check`, resolving the kind from the filename. a file that cannot be..."
+    },
+    {
+      "label": "Quality floor: the same standard for every backend. Tested because a floor is\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_quality_rationale_1",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality floor: the same standard for every backend. tested because a floor is..."
     },
     {
       "label": "check_citations.py",
@@ -10090,6 +10402,28 @@
       "norm_label": "teach/__init__.py"
     },
     {
+      "label": "gen_api_docs.py",
+      "file_type": "code",
+      "source_file": "scripts/gen_api_docs.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_gen_api_docs",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "gen_api_docs.py"
+    },
+    {
+      "label": "bot_stats.py",
+      "file_type": "code",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "bot_stats.py"
+    },
+    {
       "label": "test_bot_stats.py",
       "file_type": "code",
       "source_file": "tests/test_bot_stats.py",
@@ -10097,8 +10431,63 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "test_bot_stats.py"
+    },
+    {
+      "label": "Which models the study bot is used with \u2014 counters, never events. The bot runs\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_rationale_1",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "which models the study bot is used with \u2014 counters, never events. the bot runs..."
+    },
+    {
+      "label": "Count one answer. Returns whether it was accepted. Never raises. `today` is the\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_rationale_102",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "count one answer. returns whether it was accepted. never raises. `today` is the..."
+    },
+    {
+      "label": "Atomic replace, so a crash mid-write cannot leave a truncated file.",
+      "file_type": "rationale",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L132",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_rationale_132",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "atomic replace, so a crash mid-write cannot leave a truncated file."
+    },
+    {
+      "label": "Where the counters live. A PVC in the cluster, the repo root locally.",
+      "file_type": "rationale",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_rationale_55",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "where the counters live. a pvc in the cluster, the repo root locally."
+    },
+    {
+      "label": "The event as it will be counted, or None if any field is not ours. Whole-event\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/bot_stats.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "teach_core_bot_stats_rationale_78",
+      "community": 44,
+      "community_name": "bot_stats.py",
+      "norm_label": "the event as it will be counted, or none if any field is not ours. whole-event..."
     },
     {
       "label": "Anonymous by construction: what the counters can and cannot hold. The study bot\u2026",
@@ -10108,7 +10497,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_rationale_1",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "anonymous by construction: what the counters can and cannot hold. the study bot..."
     },
     {
@@ -10119,7 +10508,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_rationale_125",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "the http surface, including the body it must refuse outright."
     },
     {
@@ -10130,7 +10519,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_rationale_25",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "every field is a closed set. an unknown value is refused, not cleaned."
     },
     {
@@ -10141,7 +10530,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_rationale_56",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "counters, never rows \u2014 the property the whole design rests on."
     },
     {
@@ -10152,7 +10541,7 @@
       "_origin": "ast",
       "id": "tests_test_bot_stats_rationale_69",
       "community": 44,
-      "community_name": "StoredShapeTests",
+      "community_name": "bot_stats.py",
       "norm_label": "the file's structure with every count blanked \u2014 what must not grow."
     },
     {
@@ -10653,6 +11042,17 @@
       "norm_label": "a veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto..."
     },
     {
+      "label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/fix_corrupted_content.py",
+      "source_location": "L181",
+      "_origin": "ast",
+      "id": "scripts_fix_corrupted_content_rationale_181",
+      "community": 49,
+      "community_name": "fix_corrupted_content.py",
+      "norm_label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. kept out of..."
+    },
+    {
       "label": "Produce videos for certifications whose content is finished. The unattended\u2026",
       "file_type": "rationale",
       "source_file": "scripts/fix_corrupted_content.py",
@@ -10730,15 +11130,15 @@
       "norm_label": "translate_backend if it can actually answer, else claude. a misconfigured..."
     },
     {
-      "label": "Same as `check`, resolving the kind from the filename. A file that cannot be\u2026",
+      "label": "Regenerate STATUS.md from disk. True if it changed. The single implementation\u2026",
       "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L65",
+      "source_file": "scripts/status_matrix.py",
+      "source_location": "L100",
       "_origin": "ast",
-      "id": "teach_core_quality_rationale_65",
+      "id": "scripts_status_matrix_rationale_100",
       "community": 49,
       "community_name": "fix_corrupted_content.py",
-      "norm_label": "same as `check`, resolving the kind from the filename. a file that cannot be..."
+      "norm_label": "regenerate status.md from disk. true if it changed. the single implementation..."
     },
     {
       "label": "Agent Synchronization & Idea Queue (AGENTS_SYNC.md)",
@@ -11305,6 +11705,17 @@
       "norm_label": "workflow rules for agents"
     },
     {
+      "label": "quality_report.py",
+      "file_type": "code",
+      "source_file": "scripts/quality_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_quality_report",
+      "community": 50,
+      "community_name": "languages_for",
+      "norm_label": "quality_report.py"
+    },
+    {
       "label": "steer.py",
       "file_type": "code",
       "source_file": "scripts/steer.py",
@@ -11433,7 +11844,7 @@
       "_origin": "ast",
       "id": "scripts_check_config",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "check_config.py"
     },
     {
@@ -11444,7 +11855,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_rationale_53",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "(model, effort, notes) as the generator would resolve them right now. resolved..."
     },
     {
@@ -11455,7 +11866,7 @@
       "_origin": "ast",
       "id": "teach_core_generator_rationale_103",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "append one line per completion: what it was for, and what it cost. never..."
     },
     {
@@ -11466,7 +11877,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_45",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "which model authors and at what effort. declared, not left to the cli. read by..."
     },
     {
@@ -11474,7 +11885,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CLAUDE.md",
-      "source_location": "L91",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "claude_agent_idea_synchronization_agents_sync_md",
       "community": 54,
@@ -11522,7 +11933,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CLAUDE.md",
-      "source_location": "L80",
+      "source_location": "L84",
       "_origin": "ast",
       "id": "claude_rules",
       "community": 54,
@@ -11648,6 +12059,17 @@
       "community": 55,
       "community_name": "AI certification roadmap",
       "norm_label": "watchlist \u2014 official, but they fail a filter today"
+    },
+    {
+      "label": "run_until_complete.py",
+      "file_type": "code",
+      "source_file": "scripts/run_until_complete.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_run_until_complete",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "run_until_complete.py"
     },
     {
       "label": "pipeline.py",
@@ -11879,7 +12301,7 @@
       "_origin": "ast",
       "id": "mcp",
       "community": 58,
-      "community_name": "MCP Graph Config",
+      "community_name": "ProtocolTests",
       "norm_label": ".mcp.json"
     },
     {
@@ -11893,7 +12315,7 @@
       "_origin": "ast",
       "id": "mcp_command_venv_bin_python3",
       "community": 58,
-      "community_name": "MCP Graph Config",
+      "community_name": "ProtocolTests",
       "norm_label": ".venv/bin/python3"
     },
     {
@@ -11907,8 +12329,110 @@
       "_origin": "ast",
       "id": "mcp_mcp_server_graphify",
       "community": 58,
-      "community_name": "MCP Graph Config",
+      "community_name": "ProtocolTests",
       "norm_label": "graphify"
+    },
+    {
+      "label": "teach",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_server"
+      },
+      "_origin": "ast",
+      "id": "mcp_mcp_server_teach",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "teach"
+    },
+    {
+      "label": "skipUnless",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "skipunless",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "skipunless"
+    },
+    {
+      "label": "mcp_server.py",
+      "file_type": "code",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_mcp_server",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "mcp_server.py"
+    },
+    {
+      "label": "test_mcp_server.py",
+      "file_type": "code",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_mcp_server",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "test_mcp_server.py"
+    },
+    {
+      "label": "Study against this corpus from any agent \u2014 the same four functions, over MCP.\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_mcp_server_rationale_1",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "study against this corpus from any agent \u2014 the same four functions, over mcp...."
+    },
+    {
+      "label": "Turn a lookup failure into something the agent can act on. The SDK's own\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "teach_mcp_server_rationale_63",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "turn a lookup failure into something the agent can act on. the sdk's own..."
+    },
+    {
+      "label": "Run the stdio server, as `.mcp.json` starts it.",
+      "file_type": "rationale",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "teach_mcp_server_rationale_83",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "run the stdio server, as `.mcp.json` starts it."
+    },
+    {
+      "label": "The MCP server: one contract, spoken over the real protocol. Phase 3 hands\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_rationale_1",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "the mcp server: one contract, spoken over the real protocol. phase 3 hands..."
+    },
+    {
+      "label": "Started as a subprocess and driven over stdio, like a real client.",
+      "file_type": "rationale",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_rationale_83",
+      "community": 58,
+      "community_name": "ProtocolTests",
+      "norm_label": "started as a subprocess and driven over stdio, like a real client."
     },
     {
       "label": "A successful completion, overridden field by field.",
@@ -11933,26 +12457,15 @@
       "norm_label": "check_provenance.py"
     },
     {
-      "label": "model_comparison.py",
+      "label": "next_work.py",
       "file_type": "code",
-      "source_file": "scripts/model_comparison.py",
+      "source_file": "scripts/next_work.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_model_comparison",
+      "id": "scripts_next_work",
       "community": 6,
       "community_name": "claims.py",
-      "norm_label": "model_comparison.py"
-    },
-    {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "scripts_model_comparison_py_path",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "path"
+      "norm_label": "next_work.py"
     },
     {
       "label": "unstage_inflight.py",
@@ -11977,70 +12490,15 @@
       "norm_label": "claims.py"
     },
     {
-      "label": "test_claims.py",
-      "file_type": "code",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_claims",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "test_claims.py"
-    },
-    {
-      "label": "The same numbers main() prints, as a dict \u2014 shared by the MODELS.md renderer.",
+      "label": "Every active certification with what it still needs, most urgent first.",
       "file_type": "rationale",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L147",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L42",
       "_origin": "ast",
-      "id": "scripts_model_comparison_rationale_147",
+      "id": "scripts_next_work_rationale_42",
       "community": 6,
       "community_name": "claims.py",
-      "norm_label": "the same numbers main() prints, as a dict \u2014 shared by the models.md renderer."
-    },
-    {
-      "label": "MODELS.md: the model-comparison dashboard, derived and deterministic. Same\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L173",
-      "_origin": "ast",
-      "id": "scripts_model_comparison_rationale_173",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "models.md: the model-comparison dashboard, derived and deterministic. same..."
-    },
-    {
-      "label": "Write MODELS.md; True if it changed. Importable, like status_matrix.refresh.",
-      "file_type": "rationale",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L238",
-      "_origin": "ast",
-      "id": "scripts_model_comparison_rationale_238",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "write models.md; true if it changed. importable, like status_matrix.refresh."
-    },
-    {
-      "label": "(cert, topic, lang) -> tokens and minutes, from the recorded completions.",
-      "file_type": "rationale",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "scripts_model_comparison_rationale_61",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "(cert, topic, lang) -> tokens and minutes, from the recorded completions."
-    },
-    {
-      "label": "One row per generated topic/language, attributed to the model in meta.yaml.\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/model_comparison.py",
-      "source_location": "L80",
-      "_origin": "ast",
-      "id": "scripts_model_comparison_rationale_80",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "one row per generated topic/language, attributed to the model in meta.yaml...."
+      "norm_label": "every active certification with what it still needs, most urgent first."
     },
     {
       "label": "Per-topic claims, so several agents can work at once without colliding. The\u2026",
@@ -12085,50 +12543,6 @@
       "community": 6,
       "community_name": "claims.py",
       "norm_label": "what is being worked on right now, across every agent on this machine."
-    },
-    {
-      "label": "Per-topic claims: several agents at once, never the same topic twice. The\u2026",
-      "file_type": "rationale",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_claims_rationale_1",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "per-topic claims: several agents at once, never the same topic twice. the..."
-    },
-    {
-      "label": "Claim from a separate PROCESS: flock is per open file description, so a second\u2026",
-      "file_type": "rationale",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "tests_test_claims_rationale_21",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "claim from a separate process: flock is per open file description, so a second..."
-    },
-    {
-      "label": "The whole reason this is per topic and not global.",
-      "file_type": "rationale",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "tests_test_claims_rationale_50",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "the whole reason this is per topic and not global."
-    },
-    {
-      "label": "A lock file checked with exists() would strand a topic forever after a crash.\u2026",
-      "file_type": "rationale",
-      "source_file": "tests/test_claims.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "tests_test_claims_rationale_68",
-      "community": 6,
-      "community_name": "claims.py",
-      "norm_label": "a lock file checked with exists() would strand a topic forever after a crash...."
     },
     {
       "label": "post-commit",
@@ -12192,6 +12606,28 @@
       "community": 62,
       "community_name": "datetime",
       "norm_label": "metrics_report.py"
+    },
+    {
+      "label": "model_comparison.py",
+      "file_type": "code",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_model_comparison",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "model_comparison.py"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_py_path",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "path"
     },
     {
       "label": "quota.py",
@@ -12258,6 +12694,61 @@
       "community": 62,
       "community_name": "datetime",
       "norm_label": "path"
+    },
+    {
+      "label": "The same numbers main() prints, as a dict \u2014 shared by the MODELS.md renderer.",
+      "file_type": "rationale",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_rationale_147",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "the same numbers main() prints, as a dict \u2014 shared by the models.md renderer."
+    },
+    {
+      "label": "MODELS.md: the model-comparison dashboard, derived and deterministic. Same\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L173",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_rationale_173",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "models.md: the model-comparison dashboard, derived and deterministic. same..."
+    },
+    {
+      "label": "Write MODELS.md; True if it changed. Importable, like status_matrix.refresh.",
+      "file_type": "rationale",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L238",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_rationale_238",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "write models.md; true if it changed. importable, like status_matrix.refresh."
+    },
+    {
+      "label": "(cert, topic, lang) -> tokens and minutes, from the recorded completions.",
+      "file_type": "rationale",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_rationale_61",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "(cert, topic, lang) -> tokens and minutes, from the recorded completions."
+    },
+    {
+      "label": "One row per generated topic/language, attributed to the model in meta.yaml.\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/model_comparison.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "scripts_model_comparison_rationale_80",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "one row per generated topic/language, attributed to the model in meta.yaml...."
     },
     {
       "label": "Returns (exit-style status, detail). Cheap by construction: the prompt asks for\u2026",
@@ -12488,26 +12979,15 @@
       "norm_label": "corpus.py"
     },
     {
-      "label": "One certification: catalogue entry, syllabus and which topics have material.",
+      "label": "Which topics mention this \u2014 the fourth function of the study contract. The\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L265",
+      "source_location": "L338",
       "_origin": "ast",
-      "id": "teach_api_rationale_265",
+      "id": "teach_api_rationale_338",
       "community": 65,
       "community_name": "corpus.py",
-      "norm_label": "one certification: catalogue entry, syllabus and which topics have material."
-    },
-    {
-      "label": "Show the syllabus and the status of each topic.",
-      "file_type": "rationale",
-      "source_file": "teach/cli.py",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "teach_cli_rationale_34",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "show the syllabus and the status of each topic."
+      "norm_label": "which topics mention this \u2014 the fourth function of the study contract. the..."
     },
     {
       "label": "The four functions a study agent needs, and the only four it gets. Phase 2 of\u2026",
@@ -12576,17 +13056,6 @@
       "norm_label": "one certification's objectives: what the model picks from. this is the phase-2..."
     },
     {
-      "label": "The material for one topic: theory, exercises, and where it came from.\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/corpus.py",
-      "source_location": "L99",
-      "_origin": "ast",
-      "id": "teach_core_corpus_rationale_99",
-      "community": 65,
-      "community_name": "corpus.py",
-      "norm_label": "the material for one topic: theory, exercises, and where it came from...."
-    },
-    {
       "label": "INSTRUCTIONS.md",
       "file_type": "document",
       "node_kind": "page",
@@ -12647,17 +13116,6 @@
       "norm_label": "what to document"
     },
     {
-      "label": "next_work.py",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_next_work",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "next_work.py"
-    },
-    {
       "label": "run_cert.py",
       "file_type": "code",
       "source_file": "scripts/run_cert.py",
@@ -12665,30 +13123,8 @@
       "_origin": "ast",
       "id": "scripts_run_cert",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "run_cert.py"
-    },
-    {
-      "label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/fix_corrupted_content.py",
-      "source_location": "L181",
-      "_origin": "ast",
-      "id": "scripts_fix_corrupted_content_rationale_181",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. kept out of..."
-    },
-    {
-      "label": "Every active certification with what it still needs, most urgent first.",
-      "file_type": "rationale",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "scripts_next_work_rationale_42",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "every active certification with what it still needs, most urgent first."
     },
     {
       "label": "# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and",
@@ -12698,7 +13134,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_rationale_142",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "# note: --to, not --lang. `--lang` re-authors from the syllabus and"
     },
     {
@@ -12706,7 +13142,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L669",
+      "source_location": "L706",
       "_origin": "ast",
       "id": "docs_study_bot_design_alternatives_considered",
       "community": 68,
@@ -12730,7 +13166,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L688",
+      "source_location": "L725",
       "_origin": "ast",
       "id": "docs_study_bot_design_effort",
       "community": 68,
@@ -12742,7 +13178,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L524",
+      "source_location": "L561",
       "_origin": "ast",
       "id": "docs_study_bot_design_how_a_student_uses_it",
       "community": 68,
@@ -12754,7 +13190,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L535",
+      "source_location": "L572",
       "_origin": "ast",
       "id": "docs_study_bot_design_how_it_is_maintained",
       "community": 68,
@@ -12766,7 +13202,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L505",
+      "source_location": "L542",
       "_origin": "ast",
       "id": "docs_study_bot_design_is_it_all_api",
       "community": 68,
@@ -12778,7 +13214,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L503",
+      "source_location": "L540",
       "_origin": "ast",
       "id": "docs_study_bot_design_operating_it",
       "community": 68,
@@ -12790,7 +13226,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L459",
+      "source_location": "L496",
       "_origin": "ast",
       "id": "docs_study_bot_design_phase_1_5_built_2026_09_14_option_a",
       "community": 68,
@@ -12802,7 +13238,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L414",
+      "source_location": "L451",
       "_origin": "ast",
       "id": "docs_study_bot_design_phase_1_5_closing_the_loop_checks_that_improve_the_page",
       "community": 68,
@@ -12882,11 +13318,23 @@
       "norm_label": "phase 3 \u2014 career-level work, where sub-agents earn their cost"
     },
     {
+      "label": "Phase 3, MCP half \u2014 BUILT 2026-09-14",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": "docs/STUDY_BOT_DESIGN.md",
+      "source_location": "L410",
+      "_origin": "ast",
+      "id": "docs_study_bot_design_phase_3_mcp_half_built_2026_09_14",
+      "community": 68,
+      "community_name": "The phases",
+      "norm_label": "phase 3, mcp half \u2014 built 2026-09-14"
+    },
+    {
       "label": "Phase 4 \u2014 progress that outlives the session (out of scope for now)",
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L495",
+      "source_location": "L532",
       "_origin": "ast",
       "id": "docs_study_bot_design_phase_4_progress_that_outlives_the_session_out_of_scope_for_now",
       "community": 68,
@@ -12946,7 +13394,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L628",
+      "source_location": "L665",
       "_origin": "ast",
       "id": "docs_study_bot_design_tools_function_calling_evaluated_2026_09_09",
       "community": 68,
@@ -12958,7 +13406,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L588",
+      "source_location": "L625",
       "_origin": "ast",
       "id": "docs_study_bot_design_two_harnesses_not_one_the_distinction_that_sets_the_phases",
       "community": 68,
@@ -12976,17 +13424,6 @@
       "community": 68,
       "community_name": "The phases",
       "norm_label": "which models get used \u2014 counters, never events (2026-09-14)"
-    },
-    {
-      "label": "Client",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "client",
-      "community": 69,
-      "community_name": "probe_models.py",
-      "norm_label": "client"
     },
     {
       "label": "probe_models.py",
@@ -13220,6 +13657,28 @@
       "norm_label": "usage line for backends without the claude json envelope. litellm reports exact..."
     },
     {
+      "label": "A minimal MCP client: enough to initialise, list and call.",
+      "file_type": "rationale",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "tests_test_mcp_server_rationale_36",
+      "community": 69,
+      "community_name": "probe_models.py",
+      "norm_label": "a minimal mcp client: enough to initialise, list and call."
+    },
+    {
+      "label": "Completer",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "completer"
+    },
+    {
       "label": "generator.py",
       "file_type": "code",
       "source_file": "teach/core/generator.py",
@@ -13240,6 +13699,17 @@
       "community": 7,
       "community_name": "generator.py",
       "norm_label": "exception"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "teach_core_generator_py_path",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "path"
     },
     {
       "label": "Generate content with AI for pending/stale topics. This AUTHORS from the\u2026",
@@ -13286,6 +13756,39 @@
       "norm_label": "stop generation when material does not meet the pipeline.yaml floor...."
     },
     {
+      "label": "Provenance for one language directory: who made it, with what, when. Written\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L267",
+      "_origin": "ast",
+      "id": "teach_core_generator_rationale_267",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "provenance for one language directory: who made it, with what, when. written..."
+    },
+    {
+      "label": "Backend for active Antigravity AI session (uses IDE session without external\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L465",
+      "_origin": "ast",
+      "id": "teach_core_generator_rationale_465",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "backend for active antigravity ai session (uses ide session without external..."
+    },
+    {
+      "label": "`effort` overrides the declared thinking level for THIS completer. \"default\"\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L506",
+      "_origin": "ast",
+      "id": "teach_core_generator_rationale_506",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "`effort` overrides the declared thinking level for this completer. \"default\"..."
+    },
+    {
       "label": "Generate one topic's content in one language. The lab is shared.",
       "file_type": "rationale",
       "source_file": "teach/core/generator.py",
@@ -13319,59 +13822,15 @@
       "norm_label": "translate an existing topic instead of re-authoring it. `generate_topic` never..."
     },
     {
-      "label": "check_syllabus.py",
+      "label": "core/__init__.py",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
+      "source_file": "teach/core/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_check_syllabus",
+      "id": "teach_core_init",
       "community": 70,
       "community_name": "tracker.py",
-      "norm_label": "check_syllabus.py"
-    },
-    {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_py_path",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "path"
-    },
-    {
-      "label": "check_versions.py",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_check_versions",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "check_versions.py"
-    },
-    {
-      "label": "ocr_pdf.py",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "ocr_pdf.py"
-    },
-    {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_py_path",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "path"
+      "norm_label": "core/__init__.py"
     },
     {
       "label": "tracker.py",
@@ -13396,83 +13855,6 @@
       "norm_label": "exception"
     },
     {
-      "label": "How many objectives the official page publishes. Network, no model.",
-      "file_type": "rationale",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L128",
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_rationale_128",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "how many objectives the official page publishes. network, no model."
-    },
-    {
-      "label": "Structural signs the topic list was computed rather than read. Offline.\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_rationale_82",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "structural signs the topic list was computed rather than read. offline...."
-    },
-    {
-      "label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on.",
-      "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L49",
-      "_origin": "ast",
-      "id": "scripts_check_versions_rationale_49",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on."
-    },
-    {
-      "label": "True/False if both versions are known and comparable, else None. \"3.0\" and\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L63",
-      "_origin": "ast",
-      "id": "scripts_check_versions_rationale_63",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "true/false if both versions are known and comparable, else none. \"3.0\" and..."
-    },
-    {
-      "label": "current | outdated | unknown. `unknown` is a real answer and is reported as\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L88",
-      "_origin": "ast",
-      "id": "scripts_check_versions_rationale_88",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "current | outdated | unknown. `unknown` is a real answer and is reported as..."
-    },
-    {
-      "label": "What the PDF's own text layer yields. Empty-ish means OCR is needed.",
-      "file_type": "rationale",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_rationale_55",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "what the pdf's own text layer yields. empty-ish means ocr is needed."
-    },
-    {
-      "label": "(text, engine). Renders each page, then reads the pixels.",
-      "file_type": "rationale",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_rationale_65",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "(text, engine). renders each page, then reads the pixels."
-    },
-    {
       "label": "Scrape the official sources and update the catalog.",
       "file_type": "rationale",
       "source_file": "teach/cli.py",
@@ -13484,6 +13866,17 @@
       "norm_label": "scrape the official sources and update the catalog."
     },
     {
+      "label": "Loads `.env` from the repository root, once, before anything reads a variable.\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_init_rationale_1",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "loads `.env` from the repository root, once, before anything reads a variable...."
+    },
+    {
       "label": "Tracker/scraper: nothing is static \u2014 the whole catalog derives from sources. -\u2026",
       "file_type": "rationale",
       "source_file": "teach/core/tracker.py",
@@ -13493,17 +13886,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "tracker/scraper: nothing is static \u2014 the whole catalog derives from sources. -..."
-    },
-    {
-      "label": "Each curriculum's version is the date of the last commit touching its PDF.",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L149",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_149",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "each curriculum's version is the date of the last commit touching its pdf."
     },
     {
       "label": "Upstream facts for the vendor-cloud certs (category: cloud). AWS, Microsoft and\u2026",
@@ -13548,28 +13930,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "assign each incoming topic's status by comparing it against the stored one...."
-    },
-    {
-      "label": "The version an objectives page states, or None if it states none. None means\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L393",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_393",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "the version an objectives page states, or none if it states none. none means..."
-    },
-    {
-      "label": "Numbered objectives present in a syllabus document. Empty when the document\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L404",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_404",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "numbered objectives present in a syllabus document. empty when the document..."
     },
     {
       "label": "Scale the published weights to percentages summing to exactly 100. Syllabi\u2026",
@@ -13625,17 +13985,6 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "translate path texts into the supported languages. translations are stored..."
-    },
-    {
-      "label": "The AI proposes career paths from the catalog. edited: true is never\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L654",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_654",
-      "community": 70,
-      "community_name": "tracker.py",
-      "norm_label": "the ai proposes career paths from the catalog. edited: true is never..."
     },
     {
       "label": "Plain text from a URL: PDF (pypdf) or HTML (tags stripped).",
@@ -13979,26 +14328,15 @@
       "norm_label": "check_models.py"
     },
     {
-      "label": "gen_api_docs.py",
+      "label": "check_versions.py",
       "file_type": "code",
-      "source_file": "scripts/gen_api_docs.py",
+      "source_file": "scripts/check_versions.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_gen_api_docs",
+      "id": "scripts_check_versions",
       "community": 74,
       "community_name": "catalog.py",
-      "norm_label": "gen_api_docs.py"
-    },
-    {
-      "label": "bot_stats.py",
-      "file_type": "code",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "bot_stats.py"
+      "norm_label": "check_versions.py"
     },
     {
       "label": "catalog.py",
@@ -14034,6 +14372,39 @@
       "norm_label": "models_live.py"
     },
     {
+      "label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on.",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_49",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on."
+    },
+    {
+      "label": "True/False if both versions are known and comparable, else None. \"3.0\" and\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_63",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "true/false if both versions are known and comparable, else none. \"3.0\" and..."
+    },
+    {
+      "label": "current | outdated | unknown. `unknown` is a real answer and is reported as\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_88",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "current | outdated | unknown. `unknown` is a real answer and is reported as..."
+    },
+    {
       "label": "Compare the catalogue against OpenRouter, at most every few hours. Never raises\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
@@ -14054,61 +14425,6 @@
       "community": 74,
       "community_name": "catalog.py",
       "norm_label": "the study bot's model catalogue, from `models.yaml`, plus what is live. served..."
-    },
-    {
-      "label": "Which models the study bot is used with \u2014 counters, never events. The bot runs\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_rationale_1",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "which models the study bot is used with \u2014 counters, never events. the bot runs..."
-    },
-    {
-      "label": "Count one answer. Returns whether it was accepted. Never raises. `today` is the\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_rationale_102",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "count one answer. returns whether it was accepted. never raises. `today` is the..."
-    },
-    {
-      "label": "Atomic replace, so a crash mid-write cannot leave a truncated file.",
-      "file_type": "rationale",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L132",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_rationale_132",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "atomic replace, so a crash mid-write cannot leave a truncated file."
-    },
-    {
-      "label": "Where the counters live. A PVC in the cluster, the repo root locally.",
-      "file_type": "rationale",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_rationale_55",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "where the counters live. a pvc in the cluster, the repo root locally."
-    },
-    {
-      "label": "The event as it will be counted, or None if any field is not ours. Whole-event\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/bot_stats.py",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "teach_core_bot_stats_rationale_78",
-      "community": 74,
-      "community_name": "catalog.py",
-      "norm_label": "the event as it will be counted, or none if any field is not ours. whole-event..."
     },
     {
       "label": "Global certification catalog (catalog.yaml). Written by the tracker (and `cert\u2026",
@@ -14210,59 +14526,92 @@
       "norm_label": "the catalogue as the page should see it. never mutates the input. the frozen..."
     },
     {
-      "label": "Completer",
+      "label": "Each curriculum's version is the date of the last commit touching its PDF.",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L149",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_149",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "each curriculum's version is the date of the last commit touching its pdf."
+    },
+    {
+      "label": "The version an objectives page states, or None if it states none. None means\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L393",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_393",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "the version an objectives page states, or none if it states none. none means..."
+    },
+    {
+      "label": "The AI proposes career paths from the catalog. edited: true is never\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L654",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_654",
+      "community": 74,
+      "community_name": "catalog.py",
+      "norm_label": "the ai proposes career paths from the catalog. edited: true is never..."
+    },
+    {
+      "label": "test_claims.py",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "completer",
+      "id": "tests_test_claims",
       "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "completer"
+      "community_name": "ClaimTest",
+      "norm_label": "test_claims.py"
     },
     {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "teach_core_generator_py_path",
-      "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "path"
-    },
-    {
-      "label": "Provenance for one language directory: who made it, with what, when. Written\u2026",
+      "label": "Per-topic claims: several agents at once, never the same topic twice. The\u2026",
       "file_type": "rationale",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L267",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "teach_core_generator_rationale_267",
+      "id": "tests_test_claims_rationale_1",
       "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "provenance for one language directory: who made it, with what, when. written..."
+      "community_name": "ClaimTest",
+      "norm_label": "per-topic claims: several agents at once, never the same topic twice. the..."
     },
     {
-      "label": "Backend for active Antigravity AI session (uses IDE session without external\u2026",
+      "label": "Claim from a separate PROCESS: flock is per open file description, so a second\u2026",
       "file_type": "rationale",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L465",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L21",
       "_origin": "ast",
-      "id": "teach_core_generator_rationale_465",
+      "id": "tests_test_claims_rationale_21",
       "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "backend for active antigravity ai session (uses ide session without external..."
+      "community_name": "ClaimTest",
+      "norm_label": "claim from a separate process: flock is per open file description, so a second..."
     },
     {
-      "label": "`effort` overrides the declared thinking level for THIS completer. \"default\"\u2026",
+      "label": "The whole reason this is per topic and not global.",
       "file_type": "rationale",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L506",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L50",
       "_origin": "ast",
-      "id": "teach_core_generator_rationale_506",
+      "id": "tests_test_claims_rationale_50",
       "community": 75,
-      "community_name": "make_completer",
-      "norm_label": "`effort` overrides the declared thinking level for this completer. \"default\"..."
+      "community_name": "ClaimTest",
+      "norm_label": "the whole reason this is per topic and not global."
+    },
+    {
+      "label": "A lock file checked with exists() would strand a topic forever after a crash.\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_claims.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "tests_test_claims_rationale_68",
+      "community": 75,
+      "community_name": "ClaimTest",
+      "norm_label": "a lock file checked with exists() would strand a topic forever after a crash...."
     },
     {
       "label": "test_model_probe.py",
@@ -14287,17 +14636,6 @@
       "norm_label": "grading the study bot's models: the judgement, offline...."
     },
     {
-      "label": "The probe that sends real material and grades one fact from it.",
-      "file_type": "rationale",
-      "source_file": "tests/test_model_probe.py",
-      "source_location": "L221",
-      "_origin": "ast",
-      "id": "tests_test_model_probe_rationale_221",
-      "community": 76,
-      "community_name": "test_model_probe.py",
-      "norm_label": "the probe that sends real material and grades one fact from it."
-    },
-    {
       "label": "models.yaml is rewritten by two scripts; both must leave it readable.",
       "file_type": "rationale",
       "source_file": "tests/test_model_probe.py",
@@ -14309,15 +14647,59 @@
       "norm_label": "models.yaml is rewritten by two scripts; both must leave it readable."
     },
     {
-      "label": "run_until_complete.py",
+      "label": "check_syllabus.py",
       "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
+      "source_file": "scripts/check_syllabus.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_run_until_complete",
+      "id": "scripts_check_syllabus",
       "community": 77,
-      "community_name": "run_until_complete.py",
-      "norm_label": "run_until_complete.py"
+      "community_name": "check_syllabus.py",
+      "norm_label": "check_syllabus.py"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_py_path",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "path"
+    },
+    {
+      "label": "How many objectives the official page publishes. Network, no model.",
+      "file_type": "rationale",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_rationale_128",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "how many objectives the official page publishes. network, no model."
+    },
+    {
+      "label": "Structural signs the topic list was computed rather than read. Offline.\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_rationale_82",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "structural signs the topic list was computed rather than read. offline...."
+    },
+    {
+      "label": "Numbered objectives present in a syllabus document. Empty when the document\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L404",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_404",
+      "community": 77,
+      "community_name": "check_syllabus.py",
+      "norm_label": "numbered objectives present in a syllabus document. empty when the document..."
     },
     {
       "label": "AI-generated content \u2014 disclosure",
@@ -14676,6 +15058,17 @@
       "norm_label": "regenerate status.md from the filesystem (idempotent, no api cost). the same..."
     },
     {
+      "label": "Show the syllabus and the status of each topic.",
+      "file_type": "rationale",
+      "source_file": "teach/cli.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "teach_cli_rationale_34",
+      "community": 8,
+      "community_name": "cli.py",
+      "norm_label": "show the syllabus and the status of each topic."
+    },
+    {
       "label": "Serve the API + web over the same catalog.",
       "file_type": "rationale",
       "source_file": "teach/cli.py",
@@ -14709,81 +15102,48 @@
       "norm_label": "bring up a topic lab (local docker, or terraform if lab.yaml asks for it)."
     },
     {
-      "label": "quality_report.py",
+      "label": "ocr_pdf.py",
       "file_type": "code",
-      "source_file": "scripts/quality_report.py",
+      "source_file": "scripts/ocr_pdf.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_quality_report",
+      "id": "scripts_ocr_pdf",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality_report.py"
+      "community_name": "ocr_pdf.py",
+      "norm_label": "ocr_pdf.py"
     },
     {
-      "label": "quality.py",
+      "label": "Path",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L1",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast",
-      "id": "teach_core_quality",
+      "id": "scripts_ocr_pdf_py_path",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality.py"
+      "community_name": "ocr_pdf.py",
+      "norm_label": "path"
     },
     {
-      "label": "test_quality.py",
-      "file_type": "code",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_quality",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "test_quality.py"
-    },
-    {
-      "label": "Quality floor for generated material, identical for every backend. A different\u2026",
+      "label": "What the PDF's own text layer yields. Empty-ish means OCR is needed.",
       "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L1",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "teach_core_quality_rationale_1",
+      "id": "scripts_ocr_pdf_rationale_55",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality floor for generated material, identical for every backend. a different..."
+      "community_name": "ocr_pdf.py",
+      "norm_label": "what the pdf's own text layer yields. empty-ish means ocr is needed."
     },
     {
-      "label": "Rules for 'content' or 'exercises'. With no `quality` block in the YAML there\u2026",
+      "label": "(text, engine). Renders each page, then reads the pixels.",
       "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L24",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L65",
       "_origin": "ast",
-      "id": "teach_core_quality_rationale_24",
+      "id": "scripts_ocr_pdf_rationale_65",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "rules for 'content' or 'exercises'. with no `quality` block in the yaml there..."
-    },
-    {
-      "label": "Return the problems found. An empty list means the floor is met. `kind` is\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "teach_core_quality_rationale_31",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "return the problems found. an empty list means the floor is met. `kind` is..."
-    },
-    {
-      "label": "Quality floor: the same standard for every backend. Tested because a floor is\u2026",
-      "file_type": "rationale",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_quality_rationale_1",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality floor: the same standard for every backend. tested because a floor is..."
+      "community_name": "ocr_pdf.py",
+      "norm_label": "(text, engine). renders each page, then reads the pixels."
     },
     {
       "label": "The comprehension fixture has to keep matching the corpus. The excerpt is read\u2026",
@@ -14828,6 +15188,39 @@
       "community": 84,
       "community_name": "QualityThresholdsTest",
       "norm_label": "the floor is optional: a repo with no `quality` in the yaml must not break...."
+    },
+    {
+      "label": "The probe that sends real material and grades one fact from it.",
+      "file_type": "rationale",
+      "source_file": "tests/test_model_probe.py",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "tests_test_model_probe_rationale_221",
+      "community": 85,
+      "community_name": "ComprehensionTests",
+      "norm_label": "the probe that sends real material and grades one fact from it."
+    },
+    {
+      "label": "Contenido generado de un tema en un idioma (fallback al default).",
+      "file_type": "rationale",
+      "source_file": "teach/core/certs.py",
+      "source_location": "L163",
+      "_origin": "ast",
+      "id": "teach_core_certs_rationale_163",
+      "community": 87,
+      "community_name": "topic_content",
+      "norm_label": "contenido generado de un tema en un idioma (fallback al default)."
+    },
+    {
+      "label": "The material for one topic: theory, exercises, and where it came from.\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L99",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_99",
+      "community": 87,
+      "community_name": "topic_content",
+      "norm_label": "the material for one topic: theory, exercises, and where it came from...."
     },
     {
       "label": "BACKEND_COMPARISON.md",
@@ -21687,6 +22080,90 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_call",
+      "target": "tests_test_mcp_server_client_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_init",
+      "target": "tests_test_mcp_server_client_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_init",
+      "target": "tests_test_mcp_server_client_notify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_notify",
+      "target": "tests_test_mcp_server_client_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_request",
+      "target": "tests_test_mcp_server_client_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client_tools",
+      "target": "tests_test_mcp_server_client_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests_setupclass",
+      "target": "tests_test_mcp_server_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_model_probe.py",
       "source_location": "L124",
       "weight": 1.0,
@@ -22286,6 +22763,18 @@
     {
       "relation": "references",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "context": "command",
+      "_origin": "ast",
+      "source": "mcp_mcp_server_teach",
+      "target": "mcp_command_venv_bin_python3"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
       "source_location": "L397",
       "weight": 1.0,
@@ -22717,6 +23206,18 @@
     },
     {
       "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "skipunless",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "teach/core/generator.py",
@@ -23103,6 +23604,18 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
+      "target": "mcp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_model_probe.py",
       "source_location": "L27",
       "weight": 1.0,
@@ -23307,6 +23820,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server",
+      "target": "teach_core_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_translation_verify.py",
       "source_location": "L14",
       "weight": 1.0,
@@ -23420,7 +23945,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_probe_models_ask",
-      "target": "client",
+      "target": "tests_test_mcp_server_client",
       "confidence_score": 1.0
     },
     {
@@ -23432,7 +23957,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_probe_models_ask_retrying",
-      "target": "client",
+      "target": "tests_test_mcp_server_client",
       "confidence_score": 1.0
     },
     {
@@ -23444,7 +23969,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_probe_models_probe_languages",
-      "target": "client",
+      "target": "tests_test_mcp_server_client",
       "confidence_score": 1.0
     },
     {
@@ -23456,7 +23981,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_probe_models_probe_one",
-      "target": "client",
+      "target": "tests_test_mcp_server_client",
       "confidence_score": 1.0
     },
     {
@@ -23468,7 +23993,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_probe_models_probe_tools",
-      "target": "client",
+      "target": "tests_test_mcp_server_client",
       "confidence_score": 1.0
     },
     {
@@ -24963,6 +25488,30 @@
       "relation": "imports_from",
       "context": "submodule_import",
       "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server",
+      "target": "teach_core_certs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server",
+      "target": "teach_core_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_bot_stats.py",
       "source_location": "L18",
       "weight": 1.0,
@@ -25004,6 +25553,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_test_corpus",
+      "target": "teach_core_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
+      "target": "teach_mcp_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
       "target": "teach_core_corpus",
       "confidence_score": 1.0
     },
@@ -25767,7 +26340,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L148",
+      "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25778,7 +26351,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L219",
+      "source_location": "L243",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25789,18 +26362,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L294",
+      "source_location": "L318",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
-      "target": "changelog_2026_09_11_294",
+      "target": "changelog_2026_09_11_318",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L413",
+      "source_location": "L437",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25811,7 +26384,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L417",
+      "source_location": "L441",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25822,7 +26395,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L428",
+      "source_location": "L452",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25833,7 +26406,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L434",
+      "source_location": "L458",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25844,7 +26417,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L439",
+      "source_location": "L463",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25855,7 +26428,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L445",
+      "source_location": "L469",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25866,7 +26439,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L450",
+      "source_location": "L474",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25877,7 +26450,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L460",
+      "source_location": "L484",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -25888,55 +26461,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L473",
+      "source_location": "L497",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
       "target": "changelog_2026_07_16",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L481",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_2026_07_11_12",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L490",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_b7a8edb_open_web",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L494",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_32b929f_landing_page",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L498",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_deca856_local_deploy",
       "confidence_score": 1.0
     },
     {
@@ -25954,33 +26483,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L502",
+      "source_location": "L505",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
-      "target": "changelog_12e01a6_paths_linux_foundation",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L506",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_1d4bd14_multilingual_deploy",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CHANGELOG.md",
-      "source_location": "L510",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "changelog_changelog",
-      "target": "changelog_f6559b5_tracker_scraper",
+      "target": "changelog_2026_07_11_12",
       "confidence_score": 1.0
     },
     {
@@ -25991,7 +26498,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
-      "target": "changelog_9302677_paths_nodes_with_cert_names",
+      "target": "changelog_b7a8edb_open_web",
       "confidence_score": 1.0
     },
     {
@@ -25999,6 +26506,72 @@
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
       "source_location": "L518",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_32b929f_landing_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L522",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_deca856_local_deploy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L526",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_12e01a6_paths_linux_foundation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L530",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_1d4bd14_multilingual_deploy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L534",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_f6559b5_tracker_scraper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L538",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "changelog_changelog",
+      "target": "changelog_9302677_paths_nodes_with_cert_names",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L542",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog_changelog",
@@ -26328,7 +26901,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L80",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude_development_guidelines_for_teach_plat",
@@ -26339,7 +26912,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L91",
+      "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude_development_guidelines_for_teach_plat",
@@ -27296,7 +27869,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L505",
+      "source_location": "L542",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_operating_it",
@@ -27307,7 +27880,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L524",
+      "source_location": "L561",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_operating_it",
@@ -27318,7 +27891,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L535",
+      "source_location": "L572",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_operating_it",
@@ -27351,7 +27924,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L503",
+      "source_location": "L540",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_study_bot_design",
@@ -27362,7 +27935,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L588",
+      "source_location": "L625",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_study_bot_design",
@@ -27373,7 +27946,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L628",
+      "source_location": "L665",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_study_bot_design",
@@ -27384,7 +27957,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L669",
+      "source_location": "L706",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_study_bot_design",
@@ -27395,7 +27968,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L688",
+      "source_location": "L725",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_study_bot_design",
@@ -27483,11 +28056,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L414",
+      "source_location": "L410",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_the_phases",
-      "target": "docs_study_bot_design_phase_1_5_closing_the_loop_checks_that_improve_the_page",
+      "target": "docs_study_bot_design_phase_3_mcp_half_built_2026_09_14",
       "confidence_score": 1.0
     },
     {
@@ -27505,7 +28078,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L459",
+      "source_location": "L451",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_study_bot_design_the_phases",
+      "target": "docs_study_bot_design_phase_1_5_closing_the_loop_checks_that_improve_the_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/STUDY_BOT_DESIGN.md",
+      "source_location": "L496",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_the_phases",
@@ -27516,7 +28100,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/STUDY_BOT_DESIGN.md",
-      "source_location": "L495",
+      "source_location": "L532",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_study_bot_design_the_phases",
@@ -27665,6 +28249,17 @@
       "_origin": "ast",
       "source": "mcp",
       "target": "mcp_mcp_server_graphify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "mcp",
+      "target": "mcp_mcp_server_teach"
     },
     {
       "relation": "contains",
@@ -32531,6 +33126,28 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server",
+      "target": "teach_mcp_server_readable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server",
+      "target": "teach_mcp_server_serve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_bot_stats.py",
       "source_location": "L124",
       "weight": 1.0,
@@ -32647,6 +33264,39 @@
       "_origin": "ast",
       "source": "tests_test_k8s_apis",
       "target": "tests_test_k8s_apis_removedapitest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
+      "target": "tests_test_mcp_server_contracttests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
+      "target": "tests_test_mcp_server_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server",
+      "target": "tests_test_mcp_server_protocoltests",
       "confidence_score": 1.0
     },
     {
@@ -33879,6 +34529,204 @@
       "_origin": "ast",
       "source": "tests_test_k8s_apis_removedapitest",
       "target": "tests_test_k8s_apis_removedapitest_test_current_apis_are_not_reported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_notify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_tools",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_call",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_client",
+      "target": "tests_test_mcp_server_client_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_contracttests",
+      "target": "tests_test_mcp_server_contracttests_test_the_descriptions_cover_exactly_the_shared_contract",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_contracttests",
+      "target": "tests_test_mcp_server_contracttests_test_the_instructions_do_not_oversell_the_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_every_tool_is_described",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_listing_certifications_says_which_are_empty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_a_topic_arrives_with_its_sources",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_search_carries_its_reasoning",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_an_unknown_certification_says_what_to_do_instead",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_a_bad_topic_does_not_take_the_server_down",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_setupclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_teardownclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_protocoltests",
+      "target": "tests_test_mcp_server_protocoltests_test_it_offers_the_contract_and_nothing_else",
       "confidence_score": 1.0
     },
     {
@@ -37118,6 +37966,39 @@
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server_rationale_1",
+      "target": "teach_mcp_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server_rationale_63",
+      "target": "teach_mcp_server_readable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/mcp_server.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_mcp_server_rationale_83",
+      "target": "teach_mcp_server_serve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_bot_stats.py",
       "source_location": "L1",
       "weight": 1.0,
@@ -37267,6 +38148,39 @@
       "_origin": "ast",
       "source": "tests_test_k8s_apis_rationale_86",
       "target": "tests_test_k8s_apis_removedapitest_test_ignores_third_party_crds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_rationale_1",
+      "target": "tests_test_mcp_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_rationale_36",
+      "target": "tests_test_mcp_server_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mcp_server.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_mcp_server_rationale_83",
+      "target": "tests_test_mcp_server_protocoltests",
       "confidence_score": 1.0
     },
     {
@@ -37790,7 +38704,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L184",
+      "source_location": "L208",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog",
@@ -37812,7 +38726,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L415",
+      "source_location": "L439",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog",
@@ -37823,7 +38737,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L430",
+      "source_location": "L454",
       "weight": 1.0,
       "_origin": "ast",
       "source": "changelog",
@@ -37878,7 +38792,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L78",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude",
@@ -37889,7 +38803,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L93",
+      "source_location": "L97",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude",
@@ -37900,7 +38814,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L94",
+      "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude",
@@ -37911,7 +38825,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L94",
+      "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
       "source": "claude",
@@ -38368,5 +39282,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "450f33d83f264534806a21747fa2ad2322ba85bf"
+  "built_at_commit": "a477034d5f6bd20901e4d47d0b6ec4d9770dab30"
 }

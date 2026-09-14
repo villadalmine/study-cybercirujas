@@ -83,11 +83,22 @@ def get_catalog() -> dict:
 
 @app.get("/api/paths")
 def get_paths(lang: str = certs.DEFAULT_LANG) -> dict:
-    """Career paths with their steps, in the requested language (falls back to the default)."""
+    """Career paths with their steps, in the requested language.
+
+    The base fields of a path are whatever language it was WRITTEN in, and the
+    translations sit under `i18n`. Those are not the same thing as "the default
+    language", and conflating them was a live bug: this used to return the base
+    fields untouched whenever the requested language equalled
+    `certs.DEFAULT_LANG`, which was correct while that was `es` and wrong from
+    the moment English became the authoring language on 2026-08-04. Every
+    English visitor was served "Ingeniero Kubernetes" while `i18n.en` held
+    "Kubernetes Engineer", for six weeks.
+
+    So: merge whenever a translation exists, for every language including the
+    default, and fall through to the base fields only when one does not.
+    """
     _valid_lang(lang)
     paths = catalog.load().get("paths", {})
-    if lang == certs.DEFAULT_LANG:
-        return paths
     merged = {}
     for slug, path in paths.items():
         translated = (path.get("i18n") or {}).get(lang) or {}

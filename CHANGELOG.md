@@ -33,6 +33,35 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   both paths, asserting the caps hold. The Models page shipped with four defects
   because it was verified by reading.
 
+- **Phase 3, multi-pass: career-level questions.** Built on the owner's
+  instruction, ahead of the entry condition the design sets — recorded plainly,
+  because nothing has asked for career-level work yet and whether several paid
+  calls buy what one cannot is still open. The student picks a career instead of
+  a certification; one pass reads each certification in it (index and question
+  in, a 120-word note out) and a synthesis pass assembles them. The passes run
+  in parallel — they do not depend on each other, and N sequential round trips
+  is a minute of spinner.
+
+  Careers sit in the same selector as certifications, so choosing one IS
+  choosing phase 3, the way leaving the topic empty chooses phase 2. The
+  shortcuts change with the selection — study plan, overlap and gaps, compare,
+  what it assumes — because "give me an exercise" is meaningless for a career,
+  and the design's rule about that is now enforced by what the page offers
+  rather than by advice. Cost is stated as **calls**, not tokens, before asking:
+  N+1 on the student's key, N capped at 6. Measured on `gpt-5-mini` over the
+  Kubernetes path: 4 certifications, ~12k tokens, ~70s.
+
+- **A six-week-old bug: every English visitor saw career paths named in
+  Spanish.** Found because the first career run answered an English question in
+  Spanish, and the cause was not the bot. `/api/paths` returned a path's base
+  fields untouched whenever the requested language equalled
+  `certs.DEFAULT_LANG` — correct while that was `es`, wrong from the day English
+  became the authoring language on 2026-08-04. "Ingeniero Kubernetes" was served
+  to English visitors while `i18n.en` held "Kubernetes Engineer", and the same
+  for all twelve paths. A path's base fields are the language it was *written*
+  in, which is not the same thing as the platform's default; the merge now runs
+  for every language and `tests/test_paths_lang.py` holds it.
+
 - **Phase 3, MCP half: the corpus is addressable by any agent.**
   `teach/mcp_server.py` serves `list_certs`, `get_syllabus`, `get_topic` and
   `search_topics` over stdio — the second shipping of the same contract phase 2

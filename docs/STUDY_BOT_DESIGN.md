@@ -437,12 +437,43 @@ Three things came out of building it:
   it, the protocol tests skip without it, and `make verify` stays green on a
   fresh clone.
 
-**The multi-pass half of phase 3 is NOT built**, and deliberately. Its entry
-condition is demand for career-level work — study plans, gap analysis across a
-path — and nothing has asked for it. The MCP server stands alone and is useful
-today; sub-agents that read slices and a synthesiser that assembles them are
-several paid calls per question, and the design's own rule is that they must buy
-something a single pass cannot deliver before they are built.
+### Phase 3, multi-pass half — BUILT 2026-09-14 (owner's call)
+
+Built on the owner's instruction, ahead of the entry condition this document
+sets. Recording that plainly: nothing has asked for career-level work yet, and
+the rule that several paid calls must buy what one cannot is still the right
+rule. What follows is what was built and what it costs, so the decision can be
+revisited on evidence rather than on memory.
+
+**The shape.** The student picks a career instead of a certification. One pass
+reads each certification in it — its objective index and the question in, a note
+of at most 120 words out — and a synthesis pass assembles those notes into the
+answer. The passes run in parallel: they do not depend on each other, and N
+sequential round trips on a slow model is a minute of spinner.
+
+**Careers live in the same selector as certifications**, so choosing one IS
+choosing phase 3 — the same way leaving the topic empty chooses phase 2. A mode
+switch would be a second place to say what the selection already says.
+
+**The shortcuts change with the selection.** "Give me an exercise" is meaningless
+for a whole career and a study plan is meaningless for one topic, so the four
+chips become: study plan, overlap and gaps, compare these certifications, what
+it assumes you know. The design's own line — *defensible for a study plan; never
+for "give me an exercise"* — is enforced by what the page offers, not by advice.
+
+**Cost is stated as calls, before asking.** N+1 calls on the student's key, N
+capped at 6 (the longest path is 7). A token figure alone would hide that it
+happens several times. Measured on `gpt-5-mini` over the Kubernetes path: 4
+certifications, ~12k tokens, ~70s.
+
+**It found a six-week-old bug in the site.** The first run answered an English
+question in Spanish. The cause was not the bot: `/api/paths` returned a path's
+base fields untouched whenever the requested language equalled
+`certs.DEFAULT_LANG`, which was correct while that was `es` and wrong from the
+day English became the authoring language. Every English visitor had been
+reading "Ingeniero Kubernetes" while `i18n.en` held "Kubernetes Engineer".
+Fixed, with `tests/test_paths_lang.py` holding it: a path's base fields are the
+language it was WRITTEN in, which is not the same thing as the platform default.
 
 **If a vector index ever earns its place**, it is here — and it is one
 table in a Postgres that does not exist yet, not a chart of four
