@@ -4,6 +4,27 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-14
 
+- **Phase 1.5 built: the price check now reaches the page, not just a pod log.**
+  Its entry condition stopped being hypothetical — a 67%-wrong price had been
+  sitting in a CronJob log for days. `teach/core/models_live.py` holds the
+  comparison and is now the only copy of it: `check_models.py` imports it
+  instead of keeping its own, which is the drift the design doc warned about,
+  closed before it could happen. `/api/models` runs it in a background task at
+  most every six hours and annotates each model `live_in`/`live_out`/`gone`.
+
+  The frozen numbers stay put — they are what the probe measured against, and
+  swapping them silently would erase the fact that something changed — so the
+  page strikes through the old price and shows the new one beside it. A model
+  upstream no longer lists is withheld like a broken one, since the request
+  would 404 in the browser. The student's request never waits on openrouter.ai,
+  and an unreachable provider degrades to exactly today's behaviour rather than
+  a blank page, with a test that holds it. Nothing edits `models.yaml`: choosing
+  a replacement is the judgement half and stays with a human.
+
+- **The share notice moved above the fold.** It sat under the answer area, so a
+  student's first question could be counted before they had read what gets sent.
+  It now renders directly beneath the checkbox that controls it.
+
 - **A Models page, and the only telemetry this site collects: counters, never
   events.** Owner's question — can a page show which models get used most,
   without a key, a session, or anything identifying? The bot runs in the

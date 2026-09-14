@@ -13,13 +13,13 @@ import secrets
 from functools import lru_cache
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict
 from starlette.middleware.sessions import SessionMiddleware
 
-from .core import auth, bot_stats, catalog, certs, labs
+from .core import auth, bot_stats, catalog, certs, labs, models_live
 
 app = FastAPI(title="teach-plat", version="0.1.0")
 app.add_middleware(
@@ -144,16 +144,57 @@ def get_langs() -> dict:
     return {"langs": certs.LANGS, "default": certs.DEFAULT_LANG}
 
 
+# What the last out-of-band check found, and when. Module state on purpose: it
+# is a cache of a public fact, cheap to rebuild, and worth nothing after a
+# restart — exactly the kind of thing that must not acquire a database.
+_LIVE: dict = {"findings": {}, "checked_at": None}
+LIVE_MAX_AGE = 6 * 3600
+
+
+def _refresh_live(force: bool = False) -> None:
+    """Compare the catalogue against OpenRouter, at most every few hours.
+
+    Never raises and never blocks a student: if OpenRouter is unreachable the
+    previous findings stand, and on a cold start that means none — the
+    catalogue is served exactly as it is today, which is the degraded behaviour
+    we already live with, never a blank page.
+    """
+    import time
+
+    age = None if _LIVE["checked_at"] is None else time.time() - _LIVE["checked_at"]
+    if not force and age is not None and age < LIVE_MAX_AGE:
+        return
+    try:
+        _LIVE["findings"] = models_live.compare(catalog.load_models(),
+                                                models_live.upstream())
+        _LIVE["checked_at"] = time.time()
+    except Exception:                                             # noqa: BLE001
+        pass
+
+
 @app.get("/api/models")
-def get_models() -> dict:
-    """The study bot's model catalogue, from `models.yaml`.
+def get_models(background: BackgroundTasks) -> dict:
+    """The study bot's model catalogue, from `models.yaml`, plus what is live.
 
     Served rather than hardcoded in the page so there is one list, versioned
     with the code, checkable by `scripts/check_models.py` against OpenRouter's
     live API. The first draft of the bot had invented model ids in JavaScript;
     a catalogue nobody can verify is how that happens twice.
+
+    The frozen numbers are what the probe measured against and they stay; the
+    live ones arrive beside them as `live_in`/`live_out`/`gone`, so the page can
+    say a price moved instead of silently swapping it. The comparison runs in a
+    background task — a student's request never waits on openrouter.ai, and a
+    slow or unreachable provider costs this endpoint nothing.
+
+    Phase 1.5 of docs/STUDY_BOT_DESIGN.md: automate the guard, never the
+    decision. Which model should replace one that vanished is a judgement call
+    against the criteria in models.yaml, and nothing here edits that file.
     """
-    return catalog.load_models()
+    background.add_task(_refresh_live)
+    served = models_live.annotate(catalog.load_models(), _LIVE["findings"])
+    served["live_checked"] = bool(_LIVE["checked_at"])
+    return served
 
 
 @app.get("/api/status")

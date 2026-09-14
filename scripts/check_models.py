@@ -29,22 +29,17 @@ import argparse
 import sys
 from pathlib import Path
 
-import httpx
-
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from teach.core import catalog  # noqa: E402
+from teach.core import catalog, models_live  # noqa: E402
 
 CATALOGUE = REPO / "models.yaml"
-API = "https://openrouter.ai/api/v1/models"
-# Below this relative move a price change is noise (providers wobble in the
-# fourth decimal); above it a student would notice the bill.
-PRICE_TOLERANCE = 0.01
-
-
-def live() -> dict:
-    data = httpx.get(API, timeout=30, follow_redirects=True).json()["data"]
-    return {m["id"]: m for m in data}
+# One implementation of "what does upstream say", shared with the API, which
+# serves the same comparison to the page out of band. Two copies of this drifted
+# apart is the failure the design doc named before it could happen.
+API = models_live.API
+PRICE_TOLERANCE = models_live.PRICE_TOLERANCE
+live = models_live.upstream
 
 
 def main() -> int:
@@ -71,13 +66,11 @@ def main() -> int:
             if not m:
                 problems.append(f"GONE   {mid} ({tier}) — no longer offered upstream")
                 continue
-            pin = float(m["pricing"]["prompt"] or 0) * 1e6
-            pout = float(m["pricing"]["completion"] or 0) * 1e6
+            pin, pout = models_live.per_million(m)
             was_in, was_out = float(entry["in"]), float(entry["out"])
             if mid.endswith(":free") and (pin or pout):
                 problems.append(f"PAID   {mid} — was free, now ${pin:g}/${pout:g} per 1M")
-            elif abs(pin - was_in) > max(was_in * PRICE_TOLERANCE, 1e-6) or \
-                    abs(pout - was_out) > max(was_out * PRICE_TOLERANCE, 1e-6):
+            elif models_live.moved(was_in, pin) or models_live.moved(was_out, pout):
                 problems.append(
                     f"PRICE  {mid} — ${was_in:g}/${was_out:g} → ${pin:g}/${pout:g} per 1M")
             if entry.get("reasoning") and "reasoning" not in (m.get("supported_parameters") or []):

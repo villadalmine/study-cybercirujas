@@ -422,6 +422,37 @@ than anything else. Costs a GitHub token in the cluster, and it only serves the
 C later as the mechanism for the decision half. Do not build B: it is the most
 plumbing for the least benefit.
 
+### Phase 1.5 — BUILT 2026-09-14 (option A)
+
+The entry condition stopped being hypothetical: the CronJob found
+`deepseek-v4-pro` at $1.60/$3.20 against the $0.9553/$1.9105 the page was
+showing — **67% more than a student choosing it for the price was told** — and
+wrote it to a pod log. The finding existed for days and reached nobody.
+
+`teach/core/models_live.py` is the comparison, and it is now the ONLY one:
+`scripts/check_models.py` imports it rather than keeping its own copy, which is
+the drift the recommendation above warned about, closed before it could happen.
+`/api/models` calls it in a FastAPI background task at most every six hours and
+folds the result onto the served catalogue as `live_in` / `live_out` / `gone`.
+
+Three properties, each deliberate:
+
+- **The frozen numbers stay.** They are what the probe measured against, and
+  silently swapping them would erase the fact that anything changed. The live
+  ones arrive beside them, and the page strikes through the old and shows the
+  new.
+- **The student's request never waits on openrouter.ai.** The check is a
+  background task, rate-limited to one call per six hours, so a busy page cannot
+  turn into a crawler and a slow provider costs the endpoint nothing.
+- **An unreachable provider degrades to today's behaviour**, never to a blank
+  page or a 500 — the previous findings stand, and on a cold start that means
+  none. There is a test that holds exactly this.
+
+A model reported `gone` is withheld from the menu like a `broken` probe: the
+request would 404 in the student's browser, and offering it is simply wrong.
+Nothing here edits `models.yaml` — choosing the replacement is the judgement
+half, and it stays with a human.
+
 **Cost**: one background task in the API, no new services, no quota. The check
 is the same function `scripts/check_models.py` already implements — it should
 move to `teach/core/` so the API and the script share one implementation rather
