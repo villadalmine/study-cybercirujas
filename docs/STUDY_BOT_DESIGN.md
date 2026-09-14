@@ -466,6 +466,19 @@ capped at 6 (the longest path is 7). A token figure alone would hide that it
 happens several times. Measured on `gpt-5-mini` over the Kubernetes path: 4
 certifications, ~12k tokens, ~70s.
 
+**Thinking is billed against the same cap as the answer**, and building this
+made that concrete. A career pass reasons three times harder than an ordinary
+question — 1,790 tokens on `gpt-5-mini`, which cannot be told to stop — so
+inside the page's 2,000 cap the note came back cut off, and the synthesis came
+back empty. Both passes now get 4,000. The cap is a ceiling, not a charge, so
+the room costs nothing except where it rescues an answer; ordinary questions
+reason for 320–700 tokens and were never affected.
+
+The general lesson outlived the number: **a truncated answer looked exactly like
+a complete one**. Every path now reports whether its final message hit the
+limit, and an empty answer is said out loud rather than rendered as a blank
+panel — the same standard the material is held to.
+
 **It found a six-week-old bug in the site.** The first run answered an English
 question in Spanish. The cause was not the bot: `/api/paths` returned a path's
 base fields untouched whenever the requested language equalled

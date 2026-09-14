@@ -51,6 +51,23 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   N+1 on the student's key, N capped at 6. Measured on `gpt-5-mini` over the
   Kubernetes path: 4 certifications, ~12k tokens, ~70s.
 
+- **Thinking is billed against the same cap as the answer, and two calls were
+  losing to it.** The career passes ask a model to read 27 objectives and
+  summarise them against a question — heavy reasoning, short output — and on
+  `gpt-5-mini`, the default, which cannot be told to stop thinking, that meant
+  1,790 tokens of reasoning inside a 2,000 cap and a note cut off mid-sentence.
+  The synthesis was worse: at the same cap it spent the whole allowance thinking
+  and returned **nothing**, which the page rendered as a blank panel. Both now
+  get 4,000, and a cap is a ceiling rather than a charge — a model that answers
+  in 250 tokens is billed for 250, so the room costs nothing except where it
+  rescues an answer. Ordinary questions were never affected: they reason for
+  320–700 tokens and finish comfortably.
+
+  The general fix matters more than the number: **a truncated answer used to
+  look exactly like a complete one**. Every path now reports whether its final
+  message hit the limit, and the page says so — including when the answer came
+  back empty, which is a real outcome and not a reason to show a blank.
+
 - **A six-week-old bug: every English visitor saw career paths named in
   Spanish.** Found because the first career run answered an English question in
   Spanish, and the cause was not the bot. `/api/paths` returned a path's base
