@@ -212,6 +212,58 @@
       "norm_label": "storedshapetests"
     },
     {
+      "label": "ContractTests",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L18",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_contracttests",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": "contracttests"
+    },
+    {
+      "label": "ListAndSyllabusTests",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L38",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_listandsyllabustests",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": "listandsyllabustests"
+    },
+    {
+      "label": "SearchTests",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L73",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_searchtests",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": "searchtests"
+    },
+    {
+      "label": "TopicTests",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L130",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_topictests",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": "topictests"
+    },
+    {
       "label": "PipelineError",
       "file_type": "code",
       "source_file": "teach/core/pipeline.py",
@@ -220,8 +272,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "teach_core_pipeline_pipelineerror",
-      "community": 50,
-      "community_name": "load",
+      "community": 56,
+      "community_name": "pipeline.py",
       "norm_label": "pipelineerror"
     },
     {
@@ -293,13 +345,13 @@
       "label": "BotUsage",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L335",
+      "source_location": "L352",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "id": "teach_api_botusage",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "botusage"
     },
     {
@@ -312,7 +364,7 @@
       "_origin": "ast",
       "id": "teach_api_loginbody",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "loginbody"
     },
     {
@@ -1213,28 +1265,28 @@
       "norm_label": ".test_translated_yaml_key()"
     },
     {
-      "label": "get_catalog()",
+      "label": "get_bot_stats()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L79",
+      "source_location": "L398",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_get_catalog",
+      "id": "teach_api_get_bot_stats",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "get_catalog()"
+      "community_name": "api.py",
+      "norm_label": "get_bot_stats()"
     },
     {
-      "label": "get_cert()",
+      "label": "get_cert_video()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L264",
+      "source_location": "L130",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_get_cert",
+      "id": "teach_api_get_cert_video",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "get_cert()"
+      "community_name": "api.py",
+      "norm_label": "get_cert_video()"
     },
     {
       "label": "get_langs()",
@@ -1245,8 +1297,44 @@
       "_origin": "ast",
       "id": "teach_api_get_langs",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "get_langs()"
+    },
+    {
+      "label": "get_path_video()",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L124",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_api_get_path_video",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "get_path_video()"
+    },
+    {
+      "label": "get_paths()",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L85",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_api_get_paths",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "get_paths()"
+    },
+    {
+      "label": "get_search()",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L336",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_api_get_search",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "get_search()"
     },
     {
       "label": "get_status()",
@@ -1257,31 +1345,43 @@
       "_origin": "ast",
       "id": "teach_api_get_status",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "get_status()"
     },
     {
-      "label": "healthz()",
+      "label": "get_topic()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L392",
+      "source_location": "L317",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_api_healthz",
+      "id": "teach_api_get_topic",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "healthz()"
+      "community_name": "api.py",
+      "norm_label": "get_topic()"
+    },
+    {
+      "label": "get_topic_preview()",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L288",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_api_get_topic_preview",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "get_topic_preview()"
     },
     {
       "label": "index()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L398",
+      "source_location": "L415",
       "_callable": true,
       "_origin": "ast",
       "id": "teach_api_index",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "index()"
     },
     {
@@ -1293,32 +1393,32 @@
       "_origin": "ast",
       "id": "teach_api_status_snapshot",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "_status_snapshot()"
     },
     {
-      "label": "get_cert()",
+      "label": "_valid_lang()",
       "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L85",
+      "source_file": "teach/api.py",
+      "source_location": "L135",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_catalog_get_cert",
+      "id": "teach_api_valid_lang",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "get_cert()"
+      "community_name": "api.py",
+      "norm_label": "_valid_lang()"
     },
     {
-      "label": "list_certs()",
+      "label": "_video_info()",
       "file_type": "code",
-      "source_file": "teach/core/catalog.py",
-      "source_location": "L81",
+      "source_file": "teach/api.py",
+      "source_location": "L101",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_catalog_list_certs",
+      "id": "teach_api_video_info",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "list_certs()"
+      "community_name": "api.py",
+      "norm_label": "_video_info()"
     },
     {
       "label": "_get()",
@@ -1329,7 +1429,7 @@
       "_origin": "ast",
       "id": "teach_core_tracker_get",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "_get()"
     },
     {
@@ -1607,6 +1707,90 @@
       "community": 21,
       "community_name": "certs.py",
       "norm_label": "topics()"
+    },
+    {
+      "label": "_fold()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L121",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_fold",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "_fold()"
+    },
+    {
+      "label": "get_syllabus()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L72",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_get_syllabus",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "get_syllabus()"
+    },
+    {
+      "label": "get_topic()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L98",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_get_topic",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "get_topic()"
+    },
+    {
+      "label": "_informative()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L140",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_informative",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "_informative()"
+    },
+    {
+      "label": "list_certs()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L42",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_list_certs",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "list_certs()"
+    },
+    {
+      "label": "search_topics()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L154",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_search_topics",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "search_topics()"
+    },
+    {
+      "label": "_terms()",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L128",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_corpus_terms",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "_terms()"
     },
     {
       "label": "classify()",
@@ -2005,6 +2189,18 @@
       "norm_label": "references()"
     },
     {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/quality_report.py",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_quality_report_main",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "main()"
+    },
+    {
       "label": "cert_topics()",
       "file_type": "code",
       "source_file": "scripts/status_matrix.py",
@@ -2013,7 +2209,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_cert_topics",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "cert_topics()"
     },
     {
@@ -2025,7 +2221,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_check",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "check()"
     },
     {
@@ -2037,7 +2233,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_lab_cell",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "lab_cell()"
     },
     {
@@ -2049,7 +2245,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_lang_cell",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "lang_cell()"
     },
     {
@@ -2061,7 +2257,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_refresh",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "refresh()"
     },
     {
@@ -2073,20 +2269,8 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_render",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "_render()"
-    },
-    {
-      "label": "_spend_section()",
-      "file_type": "code",
-      "source_file": "scripts/status_matrix.py",
-      "source_location": "L285",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_status_matrix_spend_section",
-      "community": 33,
-      "community_name": "status_matrix.py",
-      "norm_label": "_spend_section()"
     },
     {
       "label": "_write()",
@@ -2097,8 +2281,44 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_write",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "_write()"
+    },
+    {
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_check",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "check()"
+    },
+    {
+      "label": "check_file()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_check_file",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "check_file()"
+    },
+    {
+      "label": "rules()",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_quality_rules",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "rules()"
     },
     {
       "label": "citations()",
@@ -2889,7 +3109,7 @@
       "_origin": "ast",
       "id": "scripts_run_batch_generate",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "generate()"
     },
     {
@@ -2901,7 +3121,7 @@
       "_origin": "ast",
       "id": "scripts_run_batch_generate_with_retries",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "generate_with_retries()"
     },
     {
@@ -2913,7 +3133,7 @@
       "_origin": "ast",
       "id": "scripts_run_batch_main",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "main()"
     },
     {
@@ -2925,7 +3145,7 @@
       "_origin": "ast",
       "id": "scripts_run_batch_pending",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "pending()"
     },
     {
@@ -2937,68 +3157,8 @@
       "_origin": "ast",
       "id": "scripts_run_batch_sort_key",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "_sort_key()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
-      "source_location": "L39",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_run_until_complete_main",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "main()"
-    },
-    {
-      "label": "pending()",
-      "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
-      "source_location": "L35",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_run_until_complete_pending",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "pending()"
-    },
-    {
-      "label": "budget()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L55",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_budget",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "budget()"
-    },
-    {
-      "label": "is_fatal()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L66",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_is_fatal",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "is_fatal()"
-    },
-    {
-      "label": "is_retryable()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L73",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_is_retryable",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "is_retryable()"
     },
     {
       "label": "me()",
@@ -3009,7 +3169,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_me",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "me()"
     },
     {
@@ -3021,7 +3181,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_mine",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "mine()"
     },
     {
@@ -3033,20 +3193,8 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_owner",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "owner()"
-    },
-    {
-      "label": "topics_per_run()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L59",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_topics_per_run",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "topics_per_run()"
     },
     {
       "label": "_cert_topic_ids()",
@@ -3071,6 +3219,18 @@
       "community": 49,
       "community_name": "fix_corrupted_content.py",
       "norm_label": "find_bad_combos()"
+    },
+    {
+      "label": "find_missing_videos()",
+      "file_type": "code",
+      "source_file": "scripts/fix_corrupted_content.py",
+      "source_location": "L180",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_fix_corrupted_content_find_missing_videos",
+      "community": 49,
+      "community_name": "fix_corrupted_content.py",
+      "norm_label": "find_missing_videos()"
     },
     {
       "label": "_finish()",
@@ -3169,28 +3329,52 @@
       "norm_label": "_usable_translate_backend()"
     },
     {
-      "label": "check_file()",
+      "label": "video_languages()",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L64",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L146",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_quality_check_file",
+      "id": "teach_core_pipeline_video_languages",
       "community": 49,
       "community_name": "fix_corrupted_content.py",
-      "norm_label": "check_file()"
+      "norm_label": "video_languages()"
     },
     {
       "label": "main()",
       "file_type": "code",
-      "source_file": "scripts/quality_report.py",
-      "source_location": "L23",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L75",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_quality_report_main",
+      "id": "scripts_next_work_main",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "main()"
+    },
+    {
+      "label": "survey()",
+      "file_type": "code",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_next_work_survey",
+      "community": 50,
+      "community_name": "steer.py",
+      "norm_label": "survey()"
+    },
+    {
+      "label": "_topic_count()",
+      "file_type": "code",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L66",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_next_work_topic_count",
+      "community": 50,
+      "community_name": "steer.py",
+      "norm_label": "_topic_count()"
     },
     {
       "label": "_cert_block()",
@@ -3201,7 +3385,7 @@
       "_origin": "ast",
       "id": "scripts_steer_cert_block",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "_cert_block()"
     },
     {
@@ -3213,7 +3397,7 @@
       "_origin": "ast",
       "id": "scripts_steer_create_block",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "create_block()"
     },
     {
@@ -3225,7 +3409,7 @@
       "_origin": "ast",
       "id": "scripts_steer_main",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "main()"
     },
     {
@@ -3237,7 +3421,7 @@
       "_origin": "ast",
       "id": "scripts_steer_set_key",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "set_key()"
     },
     {
@@ -3249,7 +3433,7 @@
       "_origin": "ast",
       "id": "scripts_steer_show",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "show()"
     },
     {
@@ -3261,68 +3445,8 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_certs",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "certs()"
-    },
-    {
-      "label": "default_languages()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L36",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_default_languages",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "default_languages()"
-    },
-    {
-      "label": "languages_for()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L132",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_languages_for",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "languages_for()"
-    },
-    {
-      "label": "load()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L25",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_load",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "load()"
-    },
-    {
-      "label": "on_demand_languages()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L40",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_on_demand_languages",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "on_demand_languages()"
-    },
-    {
-      "label": "path_video_languages()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L151",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_path_video_languages",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "path_video_languages()"
     },
     {
       "label": "targets()",
@@ -3333,92 +3457,224 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_targets",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "targets()"
     },
     {
-      "label": "load_syllabus()",
+      "label": ".test_it_is_the_four_functions_the_design_names()",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_contracttests_test_it_is_the_four_functions_the_design_names",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_it_is_the_four_functions_the_design_names()"
+    },
+    {
+      "label": ".test_nothing_in_the_contract_can_write()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_contracttests_test_nothing_in_the_contract_can_write",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_nothing_in_the_contract_can_write()"
+    },
+    {
+      "label": ".test_availability_is_reported_not_assumed()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L65",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_listandsyllabustests_test_availability_is_reported_not_assumed",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_availability_is_reported_not_assumed()"
+    },
+    {
+      "label": ".test_every_listed_certification_can_be_opened()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L39",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_listandsyllabustests_test_every_listed_certification_can_be_opened",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_every_listed_certification_can_be_opened()"
+    },
+    {
+      "label": ".test_the_count_matches_what_the_syllabus_holds()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L46",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_listandsyllabustests_test_the_count_matches_what_the_syllabus_holds",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_the_count_matches_what_the_syllabus_holds()"
+    },
+    {
+      "label": ".test_the_syllabus_is_small_enough_to_hand_a_model_whole()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_listandsyllabustests_test_the_syllabus_is_small_enough_to_hand_a_model_whole",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_the_syllabus_is_small_enough_to_hand_a_model_whole()"
+    },
+    {
+      "label": ".test_a_query_of_nothing_but_filler_still_answers()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L91",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_searchtests_test_a_query_of_nothing_but_filler_still_answers",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_a_query_of_nothing_but_filler_still_answers()"
+    },
+    {
+      "label": ".test_a_query_that_matches_nothing_returns_nothing()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L120",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_searchtests_test_a_query_that_matches_nothing_returns_nothing",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_a_query_that_matches_nothing_returns_nothing()"
+    },
+    {
+      "label": ".test_a_title_hit_outranks_a_domain_hit()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
       "source_location": "L74",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_syllabus_load_syllabus",
+      "id": "tests_test_corpus_searchtests_test_a_title_hit_outranks_a_domain_hit",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "load_syllabus()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_a_title_hit_outranks_a_domain_hit()"
     },
     {
-      "label": "main()",
+      "label": ".test_accents_and_case_do_not_matter()",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L151",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L96",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_syllabus_main",
+      "id": "tests_test_corpus_searchtests_test_accents_and_case_do_not_matter",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "main()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_accents_and_case_do_not_matter()"
     },
     {
-      "label": "smells()",
+      "label": ".test_an_exact_topic_id_wins()",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L81",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L79",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_syllabus_smells",
+      "id": "tests_test_corpus_searchtests_test_an_exact_topic_id_wins",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "smells()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_an_exact_topic_id_wins()"
     },
     {
-      "label": "upstream_objectives()",
+      "label": ".test_every_hit_explains_itself()",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L127",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L107",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_syllabus_upstream_objectives",
+      "id": "tests_test_corpus_searchtests_test_every_hit_explains_itself",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "upstream_objectives()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_every_hit_explains_itself()"
     },
     {
-      "label": "fetch_text()",
+      "label": ".test_filler_words_are_dropped_by_measurement_not_by_a_list()",
       "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L93",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L85",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_tracker_fetch_text",
+      "id": "tests_test_corpus_searchtests_test_filler_words_are_dropped_by_measurement_not_by_a_list",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "fetch_text()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_filler_words_are_dropped_by_measurement_not_by_a_list()"
     },
     {
-      "label": "_get_bytes()",
+      "label": ".test_material_breaks_a_tie()",
       "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L50",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L112",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_tracker_get_bytes",
+      "id": "tests_test_corpus_searchtests_test_material_breaks_a_tie",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "_get_bytes()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_material_breaks_a_tie()"
     },
     {
-      "label": "objective_ids()",
+      "label": ".test_the_cert_filter_is_honoured()",
       "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L403",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L102",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_tracker_objective_ids",
+      "id": "tests_test_corpus_searchtests_test_the_cert_filter_is_honoured",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "objective_ids()"
+      "community_name": "SearchTests",
+      "norm_label": ".test_the_cert_filter_is_honoured()"
+    },
+    {
+      "label": ".test_the_limit_is_bounded_however_it_is_asked_for()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L123",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_searchtests_test_the_limit_is_bounded_however_it_is_asked_for",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_the_limit_is_bounded_however_it_is_asked_for()"
+    },
+    {
+      "label": ".test_a_missing_language_says_so_rather_than_pretending()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L139",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_topictests_test_a_missing_language_says_so_rather_than_pretending",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_a_missing_language_says_so_rather_than_pretending()"
+    },
+    {
+      "label": ".test_the_material_travels_with_its_sources()",
+      "file_type": "code",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L131",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "tests_test_corpus_topictests_test_the_material_travels_with_its_sources",
+      "community": 51,
+      "community_name": "SearchTests",
+      "norm_label": ".test_the_material_travels_with_its_sources()"
     },
     {
       "label": "complete_certs()",
@@ -3513,7 +3769,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_dominant",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "dominant()"
     },
     {
@@ -3525,7 +3781,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_effective",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "effective()"
     },
     {
@@ -3537,7 +3793,7 @@
       "_origin": "ast",
       "id": "scripts_check_config_main",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "main()"
     },
     {
@@ -3549,32 +3805,8 @@
       "_origin": "ast",
       "id": "scripts_check_config_recent",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "recent()"
-    },
-    {
-      "label": "_agent_completer()",
-      "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L331",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_generator_agent_completer",
-      "community": 53,
-      "community_name": "_agent_completer",
-      "norm_label": "_agent_completer()"
-    },
-    {
-      "label": "_record_usage()",
-      "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L102",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_generator_record_usage",
-      "community": 53,
-      "community_name": "_agent_completer",
-      "norm_label": "_record_usage()"
     },
     {
       "label": "generation()",
@@ -3585,8 +3817,32 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_generation",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "generation()"
+    },
+    {
+      "label": "budget()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L55",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_budget",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "budget()"
+    },
+    {
+      "label": "default_languages()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L36",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_default_languages",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "default_languages()"
     },
     {
       "label": "in_milestone()",
@@ -3597,8 +3853,56 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_in_milestone",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "in_milestone()"
+    },
+    {
+      "label": "is_fatal()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L66",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_is_fatal",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "is_fatal()"
+    },
+    {
+      "label": "is_retryable()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L73",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_is_retryable",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "is_retryable()"
+    },
+    {
+      "label": "languages_for()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L132",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_languages_for",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "languages_for()"
+    },
+    {
+      "label": "load()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_load",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "load()"
     },
     {
       "label": "milestone()",
@@ -3609,7 +3913,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_milestone",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "milestone()"
     },
     {
@@ -3621,8 +3925,32 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_milestone_targets",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "milestone_targets()"
+    },
+    {
+      "label": "on_demand_languages()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_on_demand_languages",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "on_demand_languages()"
+    },
+    {
+      "label": "path_video_languages()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L151",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_path_video_languages",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "path_video_languages()"
     },
     {
       "label": "response()",
@@ -4141,6 +4469,18 @@
       "norm_label": "show_history()"
     },
     {
+      "label": "_spend_section()",
+      "file_type": "code",
+      "source_file": "scripts/status_matrix.py",
+      "source_location": "L285",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_status_matrix_spend_section",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "_spend_section()"
+    },
+    {
       "label": "by_topic()",
       "file_type": "code",
       "source_file": "scripts/topic_cost.py",
@@ -4369,124 +4709,64 @@
       "norm_label": "_english()"
     },
     {
-      "label": "frozen()",
+      "label": "get_catalog()",
       "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L48",
+      "source_file": "teach/api.py",
+      "source_location": "L79",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_versions_frozen",
+      "id": "teach_api_get_catalog",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "frozen()"
+      "community_name": "list_certs",
+      "norm_label": "get_catalog()"
     },
     {
-      "label": "main()",
+      "label": "get_cert()",
       "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L128",
+      "source_file": "teach/api.py",
+      "source_location": "L264",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_versions_main",
+      "id": "teach_api_get_cert",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "main()"
+      "community_name": "list_certs",
+      "norm_label": "get_cert()"
     },
     {
-      "label": "_same_version()",
+      "label": "healthz()",
       "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L62",
+      "source_file": "teach/api.py",
+      "source_location": "L409",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_versions_same_version",
+      "id": "teach_api_healthz",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "_same_version()"
+      "community_name": "list_certs",
+      "norm_label": "healthz()"
     },
     {
-      "label": "state()",
+      "label": "get_cert()",
       "file_type": "code",
-      "source_file": "scripts/check_versions.py",
+      "source_file": "teach/core/catalog.py",
       "source_location": "L85",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_versions_state",
+      "id": "teach_core_catalog_get_cert",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "state()"
+      "community_name": "list_certs",
+      "norm_label": "get_cert()"
     },
     {
-      "label": "survey()",
+      "label": "list_certs()",
       "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L108",
+      "source_file": "teach/core/catalog.py",
+      "source_location": "L81",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_check_versions_survey",
+      "id": "teach_core_catalog_list_certs",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "survey()"
-    },
-    {
-      "label": "published_version()",
-      "file_type": "code",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L392",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_tracker_published_version",
-      "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "published_version()"
-    },
-    {
-      "label": "find_missing_videos()",
-      "file_type": "code",
-      "source_file": "scripts/fix_corrupted_content.py",
-      "source_location": "L180",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_fix_corrupted_content_find_missing_videos",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "find_missing_videos()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L75",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_main",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "main()"
-    },
-    {
-      "label": "survey()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L41",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_survey",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "survey()"
-    },
-    {
-      "label": "_topic_count()",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L66",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_next_work_topic_count",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "_topic_count()"
+      "community_name": "list_certs",
+      "norm_label": "list_certs()"
     },
     {
       "label": "main()",
@@ -4497,7 +4777,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_main",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "main()"
     },
     {
@@ -4509,7 +4789,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_pending_topics",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "pending_topics()"
     },
     {
@@ -4521,20 +4801,8 @@
       "_origin": "ast",
       "id": "scripts_run_cert_run",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "run()"
-    },
-    {
-      "label": "video_languages()",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L146",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_pipeline_video_languages",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "video_languages()"
     },
     {
       "label": "ask()",
@@ -4595,18 +4863,6 @@
       "community": 69,
       "community_name": "probe_models.py",
       "norm_label": "graded()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "scripts/probe_models.py",
-      "source_location": "L748",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_probe_models_main",
-      "community": 69,
-      "community_name": "probe_models.py",
-      "norm_label": "main()"
     },
     {
       "label": "material()",
@@ -4789,18 +5045,6 @@
       "norm_label": "worst_case()"
     },
     {
-      "label": "_record_plain_usage()",
-      "file_type": "code",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L148",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_generator_record_plain_usage",
-      "community": 69,
-      "community_name": "probe_models.py",
-      "norm_label": "_record_plain_usage()"
-    },
-    {
       "label": "cert_generate()",
       "file_type": "code",
       "source_file": "teach/cli.py",
@@ -4811,6 +5055,18 @@
       "community": 7,
       "community_name": "generator.py",
       "norm_label": "cert_generate()"
+    },
+    {
+      "label": "_agent_completer()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L331",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_agent_completer",
+      "community": 7,
+      "community_name": "generator.py",
+      "norm_label": "_agent_completer()"
     },
     {
       "label": "_antigravity_completer()",
@@ -4957,6 +5213,162 @@
       "norm_label": "_write_meta()"
     },
     {
+      "label": "load_syllabus()",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_load_syllabus",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "load_syllabus()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L151",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_main",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "smells()",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L81",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_smells",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "smells()"
+    },
+    {
+      "label": "upstream_objectives()",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L127",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_upstream_objectives",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "upstream_objectives()"
+    },
+    {
+      "label": "frozen()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L48",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_frozen",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "frozen()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L128",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_main",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "_same_version()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_same_version",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "_same_version()"
+    },
+    {
+      "label": "state()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L85",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_state",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "state()"
+    },
+    {
+      "label": "survey()",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L108",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_check_versions_survey",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "survey()"
+    },
+    {
+      "label": "embedded_text()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_embedded_text",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "embedded_text()"
+    },
+    {
+      "label": "fetch()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L44",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_fetch",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "fetch()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L100",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_main",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "ocr()",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_ocr",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "ocr()"
+    },
+    {
       "label": "tracker_sync()",
       "file_type": "code",
       "source_file": "teach/cli.py",
@@ -5029,6 +5441,18 @@
       "norm_label": "_apply_snapshot_status()"
     },
     {
+      "label": "fetch_text()",
+      "file_type": "code",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L93",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_tracker_fetch_text",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "fetch_text()"
+    },
+    {
       "label": "generate_paths()",
       "file_type": "code",
       "source_file": "teach/core/tracker.py",
@@ -5041,6 +5465,18 @@
       "norm_label": "generate_paths()"
     },
     {
+      "label": "_get_bytes()",
+      "file_type": "code",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L50",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_tracker_get_bytes",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "_get_bytes()"
+    },
+    {
       "label": "normalise_weights()",
       "file_type": "code",
       "source_file": "teach/core/tracker.py",
@@ -5051,6 +5487,30 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "normalise_weights()"
+    },
+    {
+      "label": "objective_ids()",
+      "file_type": "code",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L403",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_tracker_objective_ids",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "objective_ids()"
+    },
+    {
+      "label": "published_version()",
+      "file_type": "code",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L392",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_tracker_published_version",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "published_version()"
     },
     {
       "label": "_reject_unreadable_syllabus()",
@@ -5159,18 +5619,6 @@
       "community": 71,
       "community_name": "bot_stats.py",
       "norm_label": "table()"
-    },
-    {
-      "label": "get_bot_stats()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L381",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_bot_stats",
-      "community": 71,
-      "community_name": "bot_stats.py",
-      "norm_label": "get_bot_stats()"
     },
     {
       "label": "accepted()",
@@ -5305,66 +5753,6 @@
       "norm_label": "translate()"
     },
     {
-      "label": "get_cert_video()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L130",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_cert_video",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "get_cert_video()"
-    },
-    {
-      "label": "get_path_video()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L124",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_path_video",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "get_path_video()"
-    },
-    {
-      "label": "get_paths()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L85",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_paths",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "get_paths()"
-    },
-    {
-      "label": "get_topic()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L317",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_topic",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "get_topic()"
-    },
-    {
-      "label": "get_topic_preview()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L288",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_get_topic_preview",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "get_topic_preview()"
-    },
-    {
       "label": "login()",
       "file_type": "code",
       "source_file": "teach/api.py",
@@ -5373,7 +5761,7 @@
       "_origin": "ast",
       "id": "teach_api_login",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "login()"
     },
     {
@@ -5385,7 +5773,7 @@
       "_origin": "ast",
       "id": "teach_api_logout",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "logout()"
     },
     {
@@ -5397,19 +5785,19 @@
       "_origin": "ast",
       "id": "teach_api_me",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "me()"
     },
     {
       "label": "post_bot_used()",
       "file_type": "code",
       "source_file": "teach/api.py",
-      "source_location": "L359",
+      "source_location": "L376",
       "_callable": true,
       "_origin": "ast",
       "id": "teach_api_post_bot_used",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "post_bot_used()"
     },
     {
@@ -5421,7 +5809,7 @@
       "_origin": "ast",
       "id": "teach_api_require_subscriber",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "require_subscriber()"
     },
     {
@@ -5433,32 +5821,8 @@
       "_origin": "ast",
       "id": "teach_api_require_user",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "require_user()"
-    },
-    {
-      "label": "_valid_lang()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L135",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_valid_lang",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "_valid_lang()"
-    },
-    {
-      "label": "_video_info()",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L101",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_api_video_info",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "_video_info()"
     },
     {
       "label": "authenticate()",
@@ -5469,7 +5833,7 @@
       "_origin": "ast",
       "id": "teach_core_auth_authenticate",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "authenticate()"
     },
     {
@@ -5481,7 +5845,7 @@
       "_origin": "ast",
       "id": "teach_core_auth_has_subscription",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "has_subscription()"
     },
     {
@@ -5579,6 +5943,18 @@
       "community": 74,
       "community_name": "models_live.py",
       "norm_label": "upstream()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/probe_models.py",
+      "source_location": "L748",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_probe_models_main",
+      "community": 75,
+      "community_name": "catalog.py",
+      "norm_label": "main()"
     },
     {
       "label": ".increase_indent()",
@@ -5701,52 +6077,40 @@
       "norm_label": ".test_the_wrong_file_is_a_miss()"
     },
     {
-      "label": "embedded_text()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_embedded_text",
-      "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "embedded_text()"
-    },
-    {
-      "label": "fetch()",
-      "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L44",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_fetch",
-      "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "fetch()"
-    },
-    {
       "label": "main()",
       "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L100",
+      "source_file": "scripts/run_until_complete.py",
+      "source_location": "L39",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_ocr_pdf_main",
+      "id": "scripts_run_until_complete_main",
       "community": 77,
-      "community_name": "ocr_pdf.py",
+      "community_name": "topics_per_run",
       "norm_label": "main()"
     },
     {
-      "label": "ocr()",
+      "label": "pending()",
       "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L64",
+      "source_file": "scripts/run_until_complete.py",
+      "source_location": "L35",
       "_callable": true,
       "_origin": "ast",
-      "id": "scripts_ocr_pdf_ocr",
+      "id": "scripts_run_until_complete_pending",
       "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "ocr()"
+      "community_name": "topics_per_run",
+      "norm_label": "pending()"
+    },
+    {
+      "label": "topics_per_run()",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L59",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_pipeline_topics_per_run",
+      "community": 77,
+      "community_name": "topics_per_run",
+      "norm_label": "topics_per_run()"
     },
     {
       "label": ".test_a_good_answer_and_a_disobedient_one_are_both_usable()",
@@ -6025,28 +6389,16 @@
       "norm_label": "status()"
     },
     {
-      "label": "check()",
+      "label": "_record_usage()",
       "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L30",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L102",
       "_callable": true,
       "_origin": "ast",
-      "id": "teach_core_quality_check",
+      "id": "teach_core_generator_record_usage",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "check()"
-    },
-    {
-      "label": "rules()",
-      "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L23",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "teach_core_quality_rules",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "rules()"
+      "community_name": "_record_usage",
+      "norm_label": "_record_usage()"
     },
     {
       "label": ".setUp()",
@@ -6239,6 +6591,18 @@
       "community": 84,
       "community_name": "QualityThresholdsTest",
       "norm_label": ".test_without_a_quality_block_everything_passes()"
+    },
+    {
+      "label": "_record_plain_usage()",
+      "file_type": "code",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L148",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "teach_core_generator_record_plain_usage",
+      "community": 85,
+      "community_name": "_record_plain_usage",
+      "norm_label": "_record_plain_usage()"
     },
     {
       "label": ".test_a_rate_limit_is_not_a_refusal()",
@@ -7978,7 +8342,7 @@
       "_origin": "ast",
       "id": "fileresponse",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "fileresponse"
     },
     {
@@ -7989,8 +8353,63 @@
       "_origin": "ast",
       "id": "response",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "response"
+    },
+    {
+      "label": "api.py",
+      "file_type": "code",
+      "source_file": "teach/api.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_api",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "api.py"
+    },
+    {
+      "label": "Platform API. Public (no login): catalog, syllabi and paths \u2014 the landing page\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_api_rationale_1",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "platform api. public (no login): catalog, syllabi and paths \u2014 the landing page..."
+    },
+    {
+      "label": "Info about a video (path or cert) if it has been generated: URL of the mp4\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "teach_api_rationale_102",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "info about a video (path or cert) if it has been generated: url of the mp4..."
+    },
+    {
+      "label": "A path's video (if it has been generated).",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "id": "teach_api_rationale_125",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "a path's video (if it has been generated)."
+    },
+    {
+      "label": "A single certification's video (if it has been generated).",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L131",
+      "_origin": "ast",
+      "id": "teach_api_rationale_131",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "a single certification's video (if it has been generated)."
     },
     {
       "label": "Languages the platform supports, and which one material is authored in.",
@@ -8000,7 +8419,7 @@
       "_origin": "ast",
       "id": "teach_api_rationale_143",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "languages the platform supports, and which one material is authored in."
     },
     {
@@ -8011,41 +8430,63 @@
       "_origin": "ast",
       "id": "teach_api_rationale_202",
       "community": 2,
-      "community_name": "_get",
+      "community_name": "api.py",
       "norm_label": "per-certification overview: exam versions, coverage, videos, freshness. the..."
     },
     {
-      "label": "One certification: catalogue entry, syllabus and which topics have material.",
+      "label": "Public teaser: first lines of the material + what the topic includes.",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L265",
+      "source_location": "L289",
       "_origin": "ast",
-      "id": "teach_api_rationale_265",
+      "id": "teach_api_rationale_289",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "one certification: catalogue entry, syllabus and which topics have material."
+      "community_name": "api.py",
+      "norm_label": "public teaser: first lines of the material + what the topic includes."
     },
     {
-      "label": "Liveness/readiness para Kubernetes.",
+      "label": "A topic's material: content, exercises, lab, and the provenance of what is\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L393",
+      "source_location": "L322",
       "_origin": "ast",
-      "id": "teach_api_rationale_393",
+      "id": "teach_api_rationale_322",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "liveness/readiness para kubernetes."
+      "community_name": "api.py",
+      "norm_label": "a topic's material: content, exercises, lab, and the provenance of what is..."
     },
     {
-      "label": "Every certification: name, exam, vendor, level, validity and official sources.",
+      "label": "Which topics mention this \u2014 the fourth function of the study contract. The\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L80",
+      "source_location": "L338",
       "_origin": "ast",
-      "id": "teach_api_rationale_80",
+      "id": "teach_api_rationale_338",
       "community": 2,
-      "community_name": "_get",
-      "norm_label": "every certification: name, exam, vendor, level, validity and official sources."
+      "community_name": "api.py",
+      "norm_label": "which topics mention this \u2014 the fourth function of the study contract. the..."
+    },
+    {
+      "label": "The counters, as they are. Public, because the page that shows them is. Soft\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L399",
+      "_origin": "ast",
+      "id": "teach_api_rationale_399",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "the counters, as they are. public, because the page that shows them is. soft..."
+    },
+    {
+      "label": "Career paths with their steps, in the requested language (falls back to the\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "teach_api_rationale_86",
+      "community": 2,
+      "community_name": "api.py",
+      "norm_label": "career paths with their steps, in the requested language (falls back to the..."
     },
     {
       "label": "test_tracker.py",
@@ -8114,6 +8555,28 @@
       "norm_label": "post"
     },
     {
+      "label": "corpus.py",
+      "file_type": "code",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_corpus",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "corpus.py"
+    },
+    {
+      "label": "core/__init__.py",
+      "file_type": "code",
+      "source_file": "teach/core/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_init",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "core/__init__.py"
+    },
+    {
       "label": "Read/write the per-certification MD (syllabus snapshot + status). The MD with\u2026",
       "file_type": "rationale",
       "source_file": "teach/core/certs.py",
@@ -8178,6 +8641,94 @@
       "community": 21,
       "community_name": "certs.py",
       "norm_label": "close the cycle for a stale topic: back to 'generated' and drop the timestamp,..."
+    },
+    {
+      "label": "The four functions a study agent needs, and the only four it gets. Phase 2 of\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_1",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "the four functions a study agent needs, and the only four it gets. phase 2 of..."
+    },
+    {
+      "label": "Lowercase, accent-stripped, so `Kubernetes` finds `kubernetes` and\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_122",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "lowercase, accent-stripped, so `kubernetes` finds `kubernetes` and..."
+    },
+    {
+      "label": "Drop the terms that match so much of the corpus they cannot rank it. All of\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L141",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_141",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "drop the terms that match so much of the corpus they cannot rank it. all of..."
+    },
+    {
+      "label": "Which topics mention this, ranked, with the reason for each hit. Scores a term\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L156",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_156",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "which topics mention this, ranked, with the reason for each hit. scores a term..."
+    },
+    {
+      "label": "Every certification, with enough to choose one and nothing more. `topics` and\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_43",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "every certification, with enough to choose one and nothing more. `topics` and..."
+    },
+    {
+      "label": "One certification's objectives: what the model picks from. This IS the phase-2\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_73",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "one certification's objectives: what the model picks from. this is the phase-2..."
+    },
+    {
+      "label": "The material for one topic: theory, exercises, and where it came from.\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L99",
+      "_origin": "ast",
+      "id": "teach_core_corpus_rationale_99",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "the material for one topic: theory, exercises, and where it came from...."
+    },
+    {
+      "label": "Loads `.env` from the repository root, once, before anything reads a variable.\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_init_rationale_1",
+      "community": 21,
+      "community_name": "certs.py",
+      "norm_label": "loads `.env` from the repository root, once, before anything reads a variable...."
     },
     {
       "label": "fix_fences.py",
@@ -8262,18 +8813,6 @@
       "norm_label": "developers.md"
     },
     {
-      "label": "AI_ROADMAP.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "source_file": "docs/AI_ROADMAP.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_ai_roadmap",
-      "community": 23,
-      "community_name": "README.md",
-      "norm_label": "ai_roadmap.md"
-    },
-    {
       "label": "AUDITOR_DESIGN.md",
       "file_type": "document",
       "node_kind": "page",
@@ -8284,6 +8823,18 @@
       "community": 23,
       "community_name": "README.md",
       "norm_label": "auditor_design.md"
+    },
+    {
+      "label": "BACKEND_COMPARISON.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "source_file": "docs/BACKEND_COMPARISON.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_backend_comparison",
+      "community": 23,
+      "community_name": "README.md",
+      "norm_label": "backend_comparison.md"
     },
     {
       "label": "CLEANUP.md",
@@ -8734,7 +9285,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L171",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "developers_building_features_on_it",
       "community": 27,
@@ -8758,7 +9309,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L228",
+      "source_location": "L229",
       "_origin": "ast",
       "id": "developers_dora_concretely",
       "community": 27,
@@ -8770,7 +9321,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L252",
+      "source_location": "L253",
       "_origin": "ast",
       "id": "developers_keeping_this_page_true",
       "community": 27,
@@ -8794,7 +9345,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L101",
+      "source_location": "L102",
       "_origin": "ast",
       "id": "developers_running_your_own_copy",
       "community": 27,
@@ -8806,7 +9357,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L143",
+      "source_location": "L144",
       "_origin": "ast",
       "id": "developers_staying_in_sync_with_upstream",
       "community": 27,
@@ -8842,7 +9393,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L195",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "developers_the_lifecycle_and_how_to_measure_it",
       "community": 27,
@@ -8860,6 +9411,17 @@
       "community": 27,
       "community_name": "Developers \u2014 use the API, run your own copy, build on it",
       "norm_label": "using the hosted api"
+    },
+    {
+      "label": "RuntimeError",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "runtimeerror",
+      "community": 28,
+      "community_name": "clean_registry.py",
+      "norm_label": "runtimeerror"
     },
     {
       "label": "clean_registry.py",
@@ -9133,6 +9695,17 @@
       "norm_label": "fetch and judge. deliberately a separate process per claim: one failure should..."
     },
     {
+      "label": "quality_report.py",
+      "file_type": "code",
+      "source_file": "scripts/quality_report.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_quality_report",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality_report.py"
+    },
+    {
       "label": "status_matrix.py",
       "file_type": "code",
       "source_file": "scripts/status_matrix.py",
@@ -9140,7 +9713,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "status_matrix.py"
     },
     {
@@ -9151,8 +9724,30 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_py_path",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "path"
+    },
+    {
+      "label": "quality.py",
+      "file_type": "code",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_quality",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality.py"
+    },
+    {
+      "label": "test_quality.py",
+      "file_type": "code",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_quality",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "test_quality.py"
     },
     {
       "label": "Regenerate STATUS.md from disk. True if it changed. The single implementation\u2026",
@@ -9162,7 +9757,7 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_100",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "regenerate status.md from disk. true if it changed. the single implementation..."
     },
     {
@@ -9173,19 +9768,8 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_129",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "[] if status.md matches the filesystem; the differing lines otherwise...."
-    },
-    {
-      "label": "The budget footer: what generation has actually consumed, from records.\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/status_matrix.py",
-      "source_location": "L286",
-      "_origin": "ast",
-      "id": "scripts_status_matrix_rationale_286",
-      "community": 33,
-      "community_name": "status_matrix.py",
-      "norm_label": "the budget footer: what generation has actually consumed, from records...."
     },
     {
       "label": "Count only material that meets the quality floor in pipeline.yaml. `wanted` is\u2026",
@@ -9195,8 +9779,63 @@
       "_origin": "ast",
       "id": "scripts_status_matrix_rationale_48",
       "community": 33,
-      "community_name": "status_matrix.py",
+      "community_name": "quality.py",
       "norm_label": "count only material that meets the quality floor in pipeline.yaml. `wanted` is..."
+    },
+    {
+      "label": "Quality floor for generated material, identical for every backend. A different\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_1",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality floor for generated material, identical for every backend. a different..."
+    },
+    {
+      "label": "Rules for 'content' or 'exercises'. With no `quality` block in the YAML there\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_24",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "rules for 'content' or 'exercises'. with no `quality` block in the yaml there..."
+    },
+    {
+      "label": "Return the problems found. An empty list means the floor is met. `kind` is\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_31",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "return the problems found. an empty list means the floor is met. `kind` is..."
+    },
+    {
+      "label": "Same as `check`, resolving the kind from the filename. A file that cannot be\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/quality.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "teach_core_quality_rationale_65",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "same as `check`, resolving the kind from the filename. a file that cannot be..."
+    },
+    {
+      "label": "Quality floor: the same standard for every backend. Tested because a floor is\u2026",
+      "file_type": "rationale",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_quality_rationale_1",
+      "community": 33,
+      "community_name": "quality.py",
+      "norm_label": "quality floor: the same standard for every backend. tested because a floor is..."
     },
     {
       "label": "check_citations.py",
@@ -9655,30 +10294,8 @@
       "_origin": "ast",
       "id": "scripts_run_batch",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "run_batch.py"
-    },
-    {
-      "label": "run_until_complete.py",
-      "file_type": "code",
-      "source_file": "scripts/run_until_complete.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_until_complete",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "run_until_complete.py"
-    },
-    {
-      "label": "pipeline.py",
-      "file_type": "code",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_pipeline",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "pipeline.py"
     },
     {
       "label": "Topics still missing for this combination, in syllabus order.",
@@ -9688,7 +10305,7 @@
       "_origin": "ast",
       "id": "scripts_run_batch_rationale_44",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "topics still missing for this combination, in syllabus order."
     },
     {
@@ -9699,19 +10316,8 @@
       "_origin": "ast",
       "id": "scripts_run_batch_rationale_61",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "one topic, start to finish. returns done | failed | skipped | fatal. the claim..."
-    },
-    {
-      "label": "Reader for pipeline.yaml \u2014 the declarative definition of what the content\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_pipeline_rationale_1",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "reader for pipeline.yaml \u2014 the declarative definition of what the content..."
     },
     {
       "label": "Which agent takes this certification by default; 'any' if unassigned. NOT a\u2026",
@@ -9721,7 +10327,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_156",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "which agent takes this certification by default; 'any' if unassigned. not a..."
     },
     {
@@ -9732,30 +10338,8 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_169",
       "community": 45,
-      "community_name": "pipeline.py",
+      "community_name": "main",
       "norm_label": "this agent's name, from teach_agent. unset means 'claude' \u2014 the historical..."
-    },
-    {
-      "label": "Maximum topics one invocation may generate. 0 means unbounded, which is\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "id": "teach_core_pipeline_rationale_60",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "maximum topics one invocation may generate. 0 means unbounded, which is..."
-    },
-    {
-      "label": "True for errors where retrying cannot help (quota exhausted), as opposed to\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "teach_core_pipeline_rationale_67",
-      "community": 45,
-      "community_name": "pipeline.py",
-      "norm_label": "true for errors where retrying cannot help (quota exhausted), as opposed to..."
     },
     {
       "label": "Certification Videos",
@@ -10200,6 +10784,17 @@
       "norm_label": "a veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto..."
     },
     {
+      "label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/fix_corrupted_content.py",
+      "source_location": "L181",
+      "_origin": "ast",
+      "id": "scripts_fix_corrupted_content_rationale_181",
+      "community": 49,
+      "community_name": "fix_corrupted_content.py",
+      "norm_label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. kept out of..."
+    },
+    {
       "label": "Produce videos for certifications whose content is finished. The unattended\u2026",
       "file_type": "rationale",
       "source_file": "scripts/fix_corrupted_content.py",
@@ -10275,17 +10870,6 @@
       "community": 49,
       "community_name": "fix_corrupted_content.py",
       "norm_label": "translate_backend if it can actually answer, else claude. a misconfigured..."
-    },
-    {
-      "label": "Same as `check`, resolving the kind from the filename. A file that cannot be\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "teach_core_quality_rationale_65",
-      "community": 49,
-      "community_name": "fix_corrupted_content.py",
-      "norm_label": "same as `check`, resolving the kind from the filename. a file that cannot be..."
     },
     {
       "label": "Agent Synchronization & Idea Queue (AGENTS_SYNC.md)",
@@ -10852,26 +11436,15 @@
       "norm_label": "workflow rules for agents"
     },
     {
-      "label": "RuntimeError",
+      "label": "next_work.py",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "runtimeerror",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "runtimeerror"
-    },
-    {
-      "label": "quality_report.py",
-      "file_type": "code",
-      "source_file": "scripts/quality_report.py",
+      "source_file": "scripts/next_work.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_quality_report",
+      "id": "scripts_next_work",
       "community": 50,
-      "community_name": "load",
-      "norm_label": "quality_report.py"
+      "community_name": "steer.py",
+      "norm_label": "next_work.py"
     },
     {
       "label": "steer.py",
@@ -10881,19 +11454,19 @@
       "_origin": "ast",
       "id": "scripts_steer",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "steer.py"
     },
     {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "label": "Every active certification with what it still needs, most urgent first.",
+      "file_type": "rationale",
+      "source_file": "scripts/next_work.py",
+      "source_location": "L42",
       "_origin": "ast",
-      "id": "teach_core_pipeline_py_path",
+      "id": "scripts_next_work_rationale_42",
       "community": 50,
-      "community_name": "load",
-      "norm_label": "path"
+      "community_name": "steer.py",
+      "norm_label": "every active certification with what it still needs, most urgent first."
     },
     {
       "label": "(start, end) line indices of a certification's block, so edits are surgical.\u2026",
@@ -10903,7 +11476,7 @@
       "_origin": "ast",
       "id": "scripts_steer_rationale_44",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "(start, end) line indices of a certification's block, so edits are surgical...."
     },
     {
@@ -10914,7 +11487,7 @@
       "_origin": "ast",
       "id": "scripts_steer_rationale_64",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "add a certification to pipeline.yaml that is not there yet. `activate` used to..."
     },
     {
@@ -10925,7 +11498,7 @@
       "_origin": "ast",
       "id": "scripts_steer_rationale_89",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "set one key inside one certification. true if the file changed."
     },
     {
@@ -10936,19 +11509,8 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_121",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "certifications declared in the pipeline, as {cert_id: config}."
-    },
-    {
-      "label": "Languages a certification is expected to have. A per-cert `languages` key\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/pipeline.py",
-      "source_location": "L133",
-      "_origin": "ast",
-      "id": "teach_core_pipeline_rationale_133",
-      "community": 50,
-      "community_name": "load",
-      "norm_label": "languages a certification is expected to have. a per-cert `languages` key..."
     },
     {
       "label": "[(cert_id, [langs]), ...] \u2014 what the audit and the unattended resume script\u2026",
@@ -10958,85 +11520,30 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_141",
       "community": 50,
-      "community_name": "load",
+      "community_name": "steer.py",
       "norm_label": "[(cert_id, [langs]), ...] \u2014 what the audit and the unattended resume script..."
     },
     {
-      "label": "check_syllabus.py",
+      "label": "test_corpus.py",
       "file_type": "code",
-      "source_file": "scripts/check_syllabus.py",
+      "source_file": "tests/test_corpus.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_check_syllabus",
+      "id": "tests_test_corpus",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "check_syllabus.py"
+      "community_name": "SearchTests",
+      "norm_label": "test_corpus.py"
     },
     {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_py_path",
-      "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "path"
-    },
-    {
-      "label": "How many objectives the official page publishes. Network, no model.",
+      "label": "The four functions a study agent gets \u2014 and the boundary around them. Phase 2\u2026",
       "file_type": "rationale",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L128",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_check_syllabus_rationale_128",
+      "id": "tests_test_corpus_rationale_1",
       "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "how many objectives the official page publishes. network, no model."
-    },
-    {
-      "label": "Structural signs the topic list was computed rather than read. Offline.\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/check_syllabus.py",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "scripts_check_syllabus_rationale_82",
-      "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "structural signs the topic list was computed rather than read. offline...."
-    },
-    {
-      "label": "Numbered objectives present in a syllabus document. Empty when the document\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L404",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_404",
-      "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "numbered objectives present in a syllabus document. empty when the document..."
-    },
-    {
-      "label": "(body, content-type), with a fetch that cannot hang the caller. httpx hangs\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_51",
-      "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "(body, content-type), with a fetch that cannot hang the caller. httpx hangs..."
-    },
-    {
-      "label": "Plain text from a URL: PDF (pypdf) or HTML (tags stripped).",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L94",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_94",
-      "community": 51,
-      "community_name": "fetch_text",
-      "norm_label": "plain text from a url: pdf (pypdf) or html (tags stripped)."
+      "community_name": "SearchTests",
+      "norm_label": "the four functions a study agent gets \u2014 and the boundary around them. phase 2..."
     },
     {
       "label": "publish_if_complete.py",
@@ -11079,7 +11586,7 @@
       "_origin": "ast",
       "id": "scripts_check_config",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "check_config.py"
     },
     {
@@ -11090,19 +11597,8 @@
       "_origin": "ast",
       "id": "scripts_check_config_rationale_53",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "(model, effort, notes) as the generator would resolve them right now. resolved..."
-    },
-    {
-      "label": "Append one line per completion: what it was for, and what it cost. Never\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L103",
-      "_origin": "ast",
-      "id": "teach_core_generator_rationale_103",
-      "community": 53,
-      "community_name": "_agent_completer",
-      "norm_label": "append one line per completion: what it was for, and what it cost. never..."
     },
     {
       "label": "Which model authors and at what effort. Declared, not left to the CLI. Read by\u2026",
@@ -11112,7 +11608,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_45",
       "community": 53,
-      "community_name": "_agent_completer",
+      "community_name": "generation",
       "norm_label": "which model authors and at what effort. declared, not left to the cli. read by..."
     },
     {
@@ -11186,6 +11682,18 @@
       "community": 54,
       "community_name": "Development Guidelines for teach-plat",
       "norm_label": "verification: what is proven, and what is only assumed"
+    },
+    {
+      "label": "AI_ROADMAP.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "source_file": "docs/AI_ROADMAP.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_ai_roadmap",
+      "community": 55,
+      "community_name": "AI certification roadmap",
+      "norm_label": "ai_roadmap.md"
     },
     {
       "label": "AI certification roadmap",
@@ -11296,6 +11804,39 @@
       "norm_label": "watchlist \u2014 official, but they fail a filter today"
     },
     {
+      "label": "pipeline.py",
+      "file_type": "code",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_pipeline",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "pipeline.py"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "teach_core_pipeline_py_path",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "path"
+    },
+    {
+      "label": "Reader for pipeline.yaml \u2014 the declarative definition of what the content\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "teach_core_pipeline_rationale_1",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "reader for pipeline.yaml \u2014 the declarative definition of what the content..."
+    },
+    {
       "label": "Is this cert/language part of the declared goal?",
       "file_type": "rationale",
       "source_file": "teach/core/pipeline.py",
@@ -11303,8 +11844,30 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_113",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "is this cert/language part of the declared goal?"
+    },
+    {
+      "label": "Languages a certification is expected to have. A per-cert `languages` key\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "teach_core_pipeline_rationale_133",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "languages a certification is expected to have. a per-cert `languages` key..."
+    },
+    {
+      "label": "True for errors where retrying cannot help (quota exhausted), as opposed to\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "teach_core_pipeline_rationale_67",
+      "community": 56,
+      "community_name": "pipeline.py",
+      "norm_label": "true for errors where retrying cannot help (quota exhausted), as opposed to..."
     },
     {
       "label": "The bounded goal the unattended timer is working toward, or {}. The timer used\u2026",
@@ -11314,7 +11877,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_79",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "the bounded goal the unattended timer is working toward, or {}. the timer used..."
     },
     {
@@ -11325,7 +11888,7 @@
       "_origin": "ast",
       "id": "teach_core_pipeline_rationale_98",
       "community": 56,
-      "community_name": "milestone_targets",
+      "community_name": "pipeline.py",
       "norm_label": "[(cert, [langs])] for the milestone, or none when none is declared. none and []..."
     },
     {
@@ -11851,6 +12414,17 @@
       "norm_label": "returns (exit-style status, detail). cheap by construction: the prompt asks for..."
     },
     {
+      "label": "The budget footer: what generation has actually consumed, from records.\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/status_matrix.py",
+      "source_location": "L286",
+      "_origin": "ast",
+      "id": "scripts_status_matrix_rationale_286",
+      "community": 62,
+      "community_name": "datetime",
+      "norm_label": "the budget footer: what generation has actually consumed, from records...."
+    },
+    {
       "label": "Roll completions up per (cert, topic, lang, op). A topic is several completions\u2026",
       "file_type": "rationale",
       "source_file": "scripts/topic_cost.py",
@@ -12057,59 +12631,37 @@
       "norm_label": "ascii diagrams are prose too, and this one is not a retry away: `cheap`..."
     },
     {
-      "label": "check_versions.py",
-      "file_type": "code",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L1",
+      "label": "One certification: catalogue entry, syllabus and which topics have material.",
+      "file_type": "rationale",
+      "source_file": "teach/api.py",
+      "source_location": "L265",
       "_origin": "ast",
-      "id": "scripts_check_versions",
+      "id": "teach_api_rationale_265",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "check_versions.py"
+      "community_name": "list_certs",
+      "norm_label": "one certification: catalogue entry, syllabus and which topics have material."
     },
     {
-      "label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on.",
+      "label": "Liveness/readiness para Kubernetes.",
       "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L49",
+      "source_file": "teach/api.py",
+      "source_location": "L410",
       "_origin": "ast",
-      "id": "scripts_check_versions_rationale_49",
+      "id": "teach_api_rationale_410",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on."
+      "community_name": "list_certs",
+      "norm_label": "liveness/readiness para kubernetes."
     },
     {
-      "label": "True/False if both versions are known and comparable, else None. \"3.0\" and\u2026",
+      "label": "Every certification: name, exam, vendor, level, validity and official sources.",
       "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L63",
+      "source_file": "teach/api.py",
+      "source_location": "L80",
       "_origin": "ast",
-      "id": "scripts_check_versions_rationale_63",
+      "id": "teach_api_rationale_80",
       "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "true/false if both versions are known and comparable, else none. \"3.0\" and..."
-    },
-    {
-      "label": "current | outdated | unknown. `unknown` is a real answer and is reported as\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/check_versions.py",
-      "source_location": "L88",
-      "_origin": "ast",
-      "id": "scripts_check_versions_rationale_88",
-      "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "current | outdated | unknown. `unknown` is a real answer and is reported as..."
-    },
-    {
-      "label": "The version an objectives page states, or None if it states none. None means\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/tracker.py",
-      "source_location": "L393",
-      "_origin": "ast",
-      "id": "teach_core_tracker_rationale_393",
-      "community": 65,
-      "community_name": "check_versions.py",
-      "norm_label": "the version an objectives page states, or none if it states none. none means..."
+      "community_name": "list_certs",
+      "norm_label": "every certification: name, exam, vendor, level, validity and official sources."
     },
     {
       "label": "INSTRUCTIONS.md",
@@ -12172,17 +12724,6 @@
       "norm_label": "what to document"
     },
     {
-      "label": "next_work.py",
-      "file_type": "code",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_next_work",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "next_work.py"
-    },
-    {
       "label": "run_cert.py",
       "file_type": "code",
       "source_file": "scripts/run_cert.py",
@@ -12190,30 +12731,8 @@
       "_origin": "ast",
       "id": "scripts_run_cert",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "run_cert.py"
-    },
-    {
-      "label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of\u2026",
-      "file_type": "rationale",
-      "source_file": "scripts/fix_corrupted_content.py",
-      "source_location": "L181",
-      "_origin": "ast",
-      "id": "scripts_fix_corrupted_content_rationale_181",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "[(cert, lang), ...] declared in pipeline.yaml but not rendered. kept out of..."
-    },
-    {
-      "label": "Every active certification with what it still needs, most urgent first.",
-      "file_type": "rationale",
-      "source_file": "scripts/next_work.py",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "scripts_next_work_rationale_42",
-      "community": 67,
-      "community_name": "video_languages",
-      "norm_label": "every active certification with what it still needs, most urgent first."
     },
     {
       "label": "# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and",
@@ -12223,7 +12742,7 @@
       "_origin": "ast",
       "id": "scripts_run_cert_rationale_142",
       "community": 67,
-      "community_name": "video_languages",
+      "community_name": "run_cert.py",
       "norm_label": "# note: --to, not --lang. `--lang` re-authors from the syllabus and"
     },
     {
@@ -12722,17 +13241,6 @@
       "norm_label": "ask the model, in each language, a question answered by real material. returns..."
     },
     {
-      "label": "Usage line for backends without the claude JSON envelope. litellm reports exact\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/generator.py",
-      "source_location": "L154",
-      "_origin": "ast",
-      "id": "teach_core_generator_rationale_154",
-      "community": 69,
-      "community_name": "probe_models.py",
-      "norm_label": "usage line for backends without the claude json envelope. litellm reports exact..."
-    },
-    {
       "label": "Completer",
       "file_type": "code",
       "source_file": "",
@@ -12876,6 +13384,61 @@
       "norm_label": "translate an existing topic instead of re-authoring it. `generate_topic` never..."
     },
     {
+      "label": "check_syllabus.py",
+      "file_type": "code",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "check_syllabus.py"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_py_path",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "path"
+    },
+    {
+      "label": "check_versions.py",
+      "file_type": "code",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_check_versions",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "check_versions.py"
+    },
+    {
+      "label": "ocr_pdf.py",
+      "file_type": "code",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "ocr_pdf.py"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_py_path",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "path"
+    },
+    {
       "label": "tracker.py",
       "file_type": "code",
       "source_file": "teach/core/tracker.py",
@@ -12896,6 +13459,83 @@
       "community": 70,
       "community_name": "tracker.py",
       "norm_label": "exception"
+    },
+    {
+      "label": "How many objectives the official page publishes. Network, no model.",
+      "file_type": "rationale",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_rationale_128",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "how many objectives the official page publishes. network, no model."
+    },
+    {
+      "label": "Structural signs the topic list was computed rather than read. Offline.\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_syllabus.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "scripts_check_syllabus_rationale_82",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "structural signs the topic list was computed rather than read. offline...."
+    },
+    {
+      "label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on.",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_49",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "(version, snapshot_date) as the syllabus records them \u2014 what we built on."
+    },
+    {
+      "label": "True/False if both versions are known and comparable, else None. \"3.0\" and\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_63",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "true/false if both versions are known and comparable, else none. \"3.0\" and..."
+    },
+    {
+      "label": "current | outdated | unknown. `unknown` is a real answer and is reported as\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/check_versions.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "scripts_check_versions_rationale_88",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "current | outdated | unknown. `unknown` is a real answer and is reported as..."
+    },
+    {
+      "label": "What the PDF's own text layer yields. Empty-ish means OCR is needed.",
+      "file_type": "rationale",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_rationale_55",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "what the pdf's own text layer yields. empty-ish means ocr is needed."
+    },
+    {
+      "label": "(text, engine). Renders each page, then reads the pixels.",
+      "file_type": "rationale",
+      "source_file": "scripts/ocr_pdf.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "scripts_ocr_pdf_rationale_65",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "(text, engine). renders each page, then reads the pixels."
     },
     {
       "label": "Scrape the official sources and update the catalog.",
@@ -12975,6 +13615,28 @@
       "norm_label": "assign each incoming topic's status by comparing it against the stored one...."
     },
     {
+      "label": "The version an objectives page states, or None if it states none. None means\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L393",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_393",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "the version an objectives page states, or none if it states none. none means..."
+    },
+    {
+      "label": "Numbered objectives present in a syllabus document. Empty when the document\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L404",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_404",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "numbered objectives present in a syllabus document. empty when the document..."
+    },
+    {
       "label": "Scale the published weights to percentages summing to exactly 100. Syllabi\u2026",
       "file_type": "rationale",
       "source_file": "teach/core/tracker.py",
@@ -13008,6 +13670,17 @@
       "norm_label": "freeze the official syllabus into the md: fetch objectives (html/pdf) -> ai ->..."
     },
     {
+      "label": "(body, content-type), with a fetch that cannot hang the caller. httpx hangs\u2026",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_51",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "(body, content-type), with a fetch that cannot hang the caller. httpx hangs..."
+    },
+    {
       "label": "Translate path texts into the supported languages. Translations are stored\u2026",
       "file_type": "rationale",
       "source_file": "teach/core/tracker.py",
@@ -13030,6 +13703,17 @@
       "norm_label": "the ai proposes career paths from the catalog. edited: true is never..."
     },
     {
+      "label": "Plain text from a URL: PDF (pypdf) or HTML (tags stripped).",
+      "file_type": "rationale",
+      "source_file": "teach/core/tracker.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "teach_core_tracker_rationale_94",
+      "community": 70,
+      "community_name": "tracker.py",
+      "norm_label": "plain text from a url: pdf (pypdf) or html (tags stripped)."
+    },
+    {
       "label": "gen_api_docs.py",
       "file_type": "code",
       "source_file": "scripts/gen_api_docs.py",
@@ -13050,17 +13734,6 @@
       "community": 71,
       "community_name": "bot_stats.py",
       "norm_label": "bot_stats.py"
-    },
-    {
-      "label": "The counters, as they are. Public, because the page that shows them is. Soft\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L382",
-      "_origin": "ast",
-      "id": "teach_api_rationale_382",
-      "community": 71,
-      "community_name": "bot_stats.py",
-      "norm_label": "the counters, as they are. public, because the page that shows them is. soft..."
     },
     {
       "label": "Which models the study bot is used with \u2014 counters, never events. The bot runs\u2026",
@@ -13169,7 +13842,7 @@
       "_origin": "ast",
       "id": "basemodel",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "basemodel"
     },
     {
@@ -13180,19 +13853,8 @@
       "_origin": "ast",
       "id": "request",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "request"
-    },
-    {
-      "label": "api.py",
-      "file_type": "code",
-      "source_file": "teach/api.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_api",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "api.py"
     },
     {
       "label": "post",
@@ -13202,7 +13864,7 @@
       "_origin": "ast",
       "id": "teach_api_py_post",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "post"
     },
     {
@@ -13213,107 +13875,30 @@
       "_origin": "ast",
       "id": "teach_core_auth",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "auth.py"
-    },
-    {
-      "label": "Platform API. Public (no login): catalog, syllabi and paths \u2014 the landing page\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_api_rationale_1",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "platform api. public (no login): catalog, syllabi and paths \u2014 the landing page..."
-    },
-    {
-      "label": "Info about a video (path or cert) if it has been generated: URL of the mp4\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "id": "teach_api_rationale_102",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "info about a video (path or cert) if it has been generated: url of the mp4..."
-    },
-    {
-      "label": "A path's video (if it has been generated).",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L125",
-      "_origin": "ast",
-      "id": "teach_api_rationale_125",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "a path's video (if it has been generated)."
-    },
-    {
-      "label": "A single certification's video (if it has been generated).",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L131",
-      "_origin": "ast",
-      "id": "teach_api_rationale_131",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "a single certification's video (if it has been generated)."
-    },
-    {
-      "label": "Public teaser: first lines of the material + what the topic includes.",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L289",
-      "_origin": "ast",
-      "id": "teach_api_rationale_289",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "public teaser: first lines of the material + what the topic includes."
-    },
-    {
-      "label": "A topic's material: content, exercises, lab, and the provenance of what is\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L322",
-      "_origin": "ast",
-      "id": "teach_api_rationale_322",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "a topic's material: content, exercises, lab, and the provenance of what is..."
     },
     {
       "label": "What the page reports after an answer. Six closed-set fields, no more. Pydantic\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L336",
+      "source_location": "L353",
       "_origin": "ast",
-      "id": "teach_api_rationale_336",
+      "id": "teach_api_rationale_353",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "what the page reports after an answer. six closed-set fields, no more. pydantic..."
     },
     {
       "label": "Count one bot answer, anonymously and only if the student left it on. The page\u2026",
       "file_type": "rationale",
       "source_file": "teach/api.py",
-      "source_location": "L360",
+      "source_location": "L377",
       "_origin": "ast",
-      "id": "teach_api_rationale_360",
+      "id": "teach_api_rationale_377",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "count one bot answer, anonymously and only if the student left it on. the page..."
-    },
-    {
-      "label": "Career paths with their steps, in the requested language (falls back to the\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/api.py",
-      "source_location": "L86",
-      "_origin": "ast",
-      "id": "teach_api_rationale_86",
-      "community": 73,
-      "community_name": "api.py",
-      "norm_label": "career paths with their steps, in the requested language (falls back to the..."
     },
     {
       "label": "Authentication \u2014 a minimal interface so real users/OIDC can be plugged in later\u2026",
@@ -13323,7 +13908,7 @@
       "_origin": "ast",
       "id": "teach_core_auth_rationale_1",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "authentication \u2014 a minimal interface so real users/oidc can be plugged in later..."
     },
     {
@@ -13334,7 +13919,7 @@
       "_origin": "ast",
       "id": "teach_core_auth_rationale_12",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "always denies. real auth pending (oidc/social login)."
     },
     {
@@ -13345,7 +13930,7 @@
       "_origin": "ast",
       "id": "teach_core_auth_rationale_17",
       "community": 73,
-      "community_name": "api.py",
+      "community_name": "login",
       "norm_label": "always denies. payment gateway pending (stripe or similar)."
     },
     {
@@ -13569,48 +14154,26 @@
       "norm_label": "models.yaml is rewritten by two scripts; both must leave it readable."
     },
     {
-      "label": "ocr_pdf.py",
+      "label": "run_until_complete.py",
       "file_type": "code",
-      "source_file": "scripts/ocr_pdf.py",
+      "source_file": "scripts/run_until_complete.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scripts_ocr_pdf",
+      "id": "scripts_run_until_complete",
       "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "ocr_pdf.py"
+      "community_name": "topics_per_run",
+      "norm_label": "run_until_complete.py"
     },
     {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_py_path",
-      "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "path"
-    },
-    {
-      "label": "What the PDF's own text layer yields. Empty-ish means OCR is needed.",
+      "label": "Maximum topics one invocation may generate. 0 means unbounded, which is\u2026",
       "file_type": "rationale",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L55",
+      "source_file": "teach/core/pipeline.py",
+      "source_location": "L60",
       "_origin": "ast",
-      "id": "scripts_ocr_pdf_rationale_55",
+      "id": "teach_core_pipeline_rationale_60",
       "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "what the pdf's own text layer yields. empty-ish means ocr is needed."
-    },
-    {
-      "label": "(text, engine). Renders each page, then reads the pixels.",
-      "file_type": "rationale",
-      "source_file": "scripts/ocr_pdf.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "scripts_ocr_pdf_rationale_65",
-      "community": 77,
-      "community_name": "ocr_pdf.py",
-      "norm_label": "(text, engine). renders each page, then reads the pixels."
+      "community_name": "topics_per_run",
+      "norm_label": "maximum topics one invocation may generate. 0 means unbounded, which is..."
     },
     {
       "label": "AI-generated content \u2014 disclosure",
@@ -14013,70 +14576,15 @@
       "norm_label": "bring up a topic lab (local docker, or terraform if lab.yaml asks for it)."
     },
     {
-      "label": "quality.py",
-      "file_type": "code",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_quality",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality.py"
-    },
-    {
-      "label": "test_quality.py",
-      "file_type": "code",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_quality",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "test_quality.py"
-    },
-    {
-      "label": "Quality floor for generated material, identical for every backend. A different\u2026",
+      "label": "Append one line per completion: what it was for, and what it cost. Never\u2026",
       "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L1",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L103",
       "_origin": "ast",
-      "id": "teach_core_quality_rationale_1",
+      "id": "teach_core_generator_rationale_103",
       "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality floor for generated material, identical for every backend. a different..."
-    },
-    {
-      "label": "Rules for 'content' or 'exercises'. With no `quality` block in the YAML there\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "teach_core_quality_rationale_24",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "rules for 'content' or 'exercises'. with no `quality` block in the yaml there..."
-    },
-    {
-      "label": "Return the problems found. An empty list means the floor is met. `kind` is\u2026",
-      "file_type": "rationale",
-      "source_file": "teach/core/quality.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "teach_core_quality_rationale_31",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "return the problems found. an empty list means the floor is met. `kind` is..."
-    },
-    {
-      "label": "Quality floor: the same standard for every backend. Tested because a floor is\u2026",
-      "file_type": "rationale",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_test_quality_rationale_1",
-      "community": 80,
-      "community_name": "quality.py",
-      "norm_label": "quality floor: the same standard for every backend. tested because a floor is..."
+      "community_name": "_record_usage",
+      "norm_label": "append one line per completion: what it was for, and what it cost. never..."
     },
     {
       "label": "The comprehension fixture has to keep matching the corpus. The excerpt is read\u2026",
@@ -14123,26 +14631,15 @@
       "norm_label": "the floor is optional: a repo with no `quality` in the yaml must not break...."
     },
     {
-      "label": "core/__init__.py",
-      "file_type": "code",
-      "source_file": "teach/core/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "teach_core_init",
-      "community": 85,
-      "community_name": "core/__init__.py",
-      "norm_label": "core/__init__.py"
-    },
-    {
-      "label": "Loads `.env` from the repository root, once, before anything reads a variable.\u2026",
+      "label": "Usage line for backends without the claude JSON envelope. litellm reports exact\u2026",
       "file_type": "rationale",
-      "source_file": "teach/core/__init__.py",
-      "source_location": "L1",
+      "source_file": "teach/core/generator.py",
+      "source_location": "L154",
       "_origin": "ast",
-      "id": "teach_core_init_rationale_1",
+      "id": "teach_core_generator_rationale_154",
       "community": 85,
-      "community_name": "core/__init__.py",
-      "norm_label": "loads `.env` from the repository root, once, before anything reads a variable...."
+      "community_name": "_record_plain_usage",
+      "norm_label": "usage line for backends without the claude json envelope. litellm reports exact..."
     },
     {
       "label": "The model that actually wrote the answer. A single CLI call bills more than one\u2026",
@@ -14154,18 +14651,6 @@
       "community": 87,
       "community_name": "_dominant_model",
       "norm_label": "the model that actually wrote the answer. a single cli call bills more than one..."
-    },
-    {
-      "label": "BACKEND_COMPARISON.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "source_file": "docs/BACKEND_COMPARISON.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_backend_comparison",
-      "community": 9,
-      "community_name": "Which backend authors better material?",
-      "norm_label": "backend_comparison.md"
     },
     {
       "label": "Caveats",
@@ -17007,7 +17492,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "teach/api.py",
-      "source_location": "L388",
+      "source_location": "L405",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_get_bot_stats",
@@ -17137,6 +17622,18 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/api.py",
+      "source_location": "L349",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_api_get_search",
+      "target": "teach_core_corpus_search_topics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
       "source_location": "L213",
       "weight": 1.0,
@@ -17235,7 +17732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "teach/api.py",
-      "source_location": "L394",
+      "source_location": "L411",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_healthz",
@@ -17246,7 +17743,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L399",
+      "source_location": "L416",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_index",
@@ -17295,7 +17792,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "teach/api.py",
-      "source_location": "L375",
+      "source_location": "L392",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_post_bot_used",
@@ -18163,6 +18660,150 @@
       "_origin": "ast",
       "source": "teach_core_claims_is_claimed",
       "target": "teach_core_claims_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_get_syllabus",
+      "target": "teach_core_catalog_get_cert"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_get_syllabus",
+      "target": "teach_core_certs_topic_langs"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_get_syllabus",
+      "target": "teach_core_certs_topics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_get_topic",
+      "target": "teach_core_certs_topic_content"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_list_certs",
+      "target": "teach_core_catalog_list_certs"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_list_certs",
+      "target": "teach_core_certs_topics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_search_topics",
+      "target": "teach_core_corpus_terms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_search_topics",
+      "target": "teach_core_corpus_list_certs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_search_topics",
+      "target": "teach_core_corpus_get_syllabus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_search_topics",
+      "target": "teach_core_corpus_fold",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_search_topics",
+      "target": "teach_core_corpus_informative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_terms",
+      "target": "teach_core_corpus_fold",
       "confidence_score": 1.0
     },
     {
@@ -21457,7 +22098,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L380",
+      "source_location": "L397",
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
@@ -21553,6 +22194,18 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
+      "source_location": "L335",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast",
+      "source": "teach_api_get_search",
+      "target": "teach_core_tracker_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/api.py",
       "source_location": "L200",
       "weight": 1.0,
       "context": "decorator",
@@ -21589,7 +22242,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L391",
+      "source_location": "L408",
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
@@ -21601,7 +22254,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L397",
+      "source_location": "L414",
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
@@ -21649,7 +22302,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L358",
+      "source_location": "L375",
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
@@ -22369,6 +23022,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "teach/core/generator.py",
       "source_location": "L46",
       "weight": 1.0,
@@ -22706,7 +23371,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L359",
+      "source_location": "L376",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_post_bot_used",
@@ -23826,6 +24491,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api",
+      "target": "teach_core_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/api.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_api",
       "target": "teach_core_labs",
       "confidence_score": 1.0
     },
@@ -23959,6 +24636,30 @@
       "_origin": "ast",
       "source": "teach_core_certs",
       "target": "teach_core_catalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_catalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_certs",
       "confidence_score": 1.0
     },
     {
@@ -24103,6 +24804,18 @@
       "_origin": "ast",
       "source": "tests_test_claims",
       "target": "teach_core_claims",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus",
+      "target": "teach_core_corpus",
       "confidence_score": 1.0
     },
     {
@@ -25503,7 +26216,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L101",
+      "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_developers_use_the_api_run_your_own_copy_build_on_it",
@@ -25514,7 +26227,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L143",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_developers_use_the_api_run_your_own_copy_build_on_it",
@@ -25525,7 +26238,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L171",
+      "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_developers_use_the_api_run_your_own_copy_build_on_it",
@@ -25536,7 +26249,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L195",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_developers_use_the_api_run_your_own_copy_build_on_it",
@@ -25547,7 +26260,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L252",
+      "source_location": "L253",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_developers_use_the_api_run_your_own_copy_build_on_it",
@@ -25591,7 +26304,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L228",
+      "source_location": "L229",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers_the_lifecycle_and_how_to_measure_it",
@@ -29309,22 +30022,22 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L335",
+      "source_location": "L336",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api",
-      "target": "teach_api_botusage",
+      "target": "teach_api_get_search",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L359",
+      "source_location": "L352",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api",
-      "target": "teach_api_post_bot_used",
+      "target": "teach_api_botusage",
       "confidence_score": 1.0
     },
     {
@@ -29342,22 +30055,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L381",
+      "source_location": "L376",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api",
-      "target": "teach_api_get_bot_stats",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "teach/api.py",
-      "source_location": "L392",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "teach_api",
-      "target": "teach_api_healthz",
+      "target": "teach_api_post_bot_used",
       "confidence_score": 1.0
     },
     {
@@ -29368,7 +30070,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api",
-      "target": "teach_api_index",
+      "target": "teach_api_get_bot_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/api.py",
+      "source_location": "L409",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_api",
+      "target": "teach_api_healthz",
       "confidence_score": 1.0
     },
     {
@@ -29380,6 +30093,17 @@
       "_origin": "ast",
       "source": "teach_api",
       "target": "teach_api_require_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/api.py",
+      "source_location": "L415",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_api",
+      "target": "teach_api_index",
       "confidence_score": 1.0
     },
     {
@@ -30062,6 +30786,83 @@
       "_origin": "ast",
       "source": "teach_core_claims",
       "target": "teach_core_claims_active",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_fold",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_terms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_informative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_search_topics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_list_certs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_get_syllabus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus",
+      "target": "teach_core_corpus_get_topic",
       "confidence_score": 1.0
     },
     {
@@ -31420,6 +32221,50 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus",
+      "target": "tests_test_corpus_topictests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus",
+      "target": "tests_test_corpus_contracttests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus",
+      "target": "tests_test_corpus_listandsyllabustests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus",
+      "target": "tests_test_corpus_searchtests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_env_scope.py",
       "source_location": "L24",
       "weight": 1.0,
@@ -31905,7 +32750,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L335",
+      "source_location": "L352",
       "weight": 1.0,
       "_origin": "ast",
       "source": "teach_api_botusage",
@@ -32306,6 +33151,204 @@
       "_origin": "ast",
       "source": "tests_test_claims_claimtest",
       "target": "tests_test_claims_claimtest_test_active_lists_what_is_being_worked_on",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_contracttests",
+      "target": "tests_test_corpus_contracttests_test_it_is_the_four_functions_the_design_names",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_contracttests",
+      "target": "tests_test_corpus_contracttests_test_nothing_in_the_contract_can_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_listandsyllabustests",
+      "target": "tests_test_corpus_listandsyllabustests_test_every_listed_certification_can_be_opened",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_listandsyllabustests",
+      "target": "tests_test_corpus_listandsyllabustests_test_the_count_matches_what_the_syllabus_holds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_listandsyllabustests",
+      "target": "tests_test_corpus_listandsyllabustests_test_the_syllabus_is_small_enough_to_hand_a_model_whole",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_listandsyllabustests",
+      "target": "tests_test_corpus_listandsyllabustests_test_availability_is_reported_not_assumed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_the_cert_filter_is_honoured",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_every_hit_explains_itself",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_material_breaks_a_tie",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_a_query_that_matches_nothing_returns_nothing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_the_limit_is_bounded_however_it_is_asked_for",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_a_title_hit_outranks_a_domain_hit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_an_exact_topic_id_wins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_filler_words_are_dropped_by_measurement_not_by_a_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_a_query_of_nothing_but_filler_still_answers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_searchtests",
+      "target": "tests_test_corpus_searchtests_test_accents_and_case_do_not_matter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_topictests",
+      "target": "tests_test_corpus_topictests_test_the_material_travels_with_its_sources",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_topictests",
+      "target": "tests_test_corpus_topictests_test_a_missing_language_says_so_rather_than_pretending",
       "confidence_score": 1.0
     },
     {
@@ -34391,10 +35434,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L336",
+      "source_location": "L338",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "teach_api_rationale_336",
+      "source": "teach_api_rationale_338",
+      "target": "teach_api_get_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/api.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_api_rationale_353",
       "target": "teach_api_botusage",
       "confidence_score": 1.0
     },
@@ -34402,10 +35456,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L360",
+      "source_location": "L377",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "teach_api_rationale_360",
+      "source": "teach_api_rationale_377",
       "target": "teach_api_post_bot_used",
       "confidence_score": 1.0
     },
@@ -34413,10 +35467,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L382",
+      "source_location": "L399",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "teach_api_rationale_382",
+      "source": "teach_api_rationale_399",
       "target": "teach_api_get_bot_stats",
       "confidence_score": 1.0
     },
@@ -34424,10 +35478,10 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "teach/api.py",
-      "source_location": "L393",
+      "source_location": "L410",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "teach_api_rationale_393",
+      "source": "teach_api_rationale_410",
       "target": "teach_api_healthz",
       "confidence_score": 1.0
     },
@@ -34913,6 +35967,83 @@
       "_origin": "ast",
       "source": "teach_core_claims_rationale_81",
       "target": "teach_core_claims_active",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_1",
+      "target": "teach_core_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_122",
+      "target": "teach_core_corpus_fold",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_141",
+      "target": "teach_core_corpus_informative",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_156",
+      "target": "teach_core_corpus_search_topics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_43",
+      "target": "teach_core_corpus_list_certs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_73",
+      "target": "teach_core_corpus_get_syllabus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "teach/core/corpus.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "teach_core_corpus_rationale_99",
+      "target": "teach_core_corpus_get_topic",
       "confidence_score": 1.0
     },
     {
@@ -35721,6 +36852,17 @@
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_corpus.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_corpus_rationale_1",
+      "target": "tests_test_corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_env_scope.py",
       "source_location": "L1",
       "weight": 1.0,
@@ -36415,7 +37557,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L201",
+      "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers",
@@ -36426,7 +37568,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DEVELOPERS.md",
-      "source_location": "L202",
+      "source_location": "L203",
       "weight": 1.0,
       "_origin": "ast",
       "source": "developers",
@@ -36861,5 +38003,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8cb0d1ace17882e37da0ba297ad99b099ba62389"
+  "built_at_commit": "d0373e403e3bd197cb4c7f78e53f8af36a5dd329"
 }

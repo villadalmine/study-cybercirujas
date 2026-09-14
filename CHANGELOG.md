@@ -4,6 +4,42 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-14
 
+- **Study bot phase 2: questions that span a whole certification.** The student
+  leaves the topic empty, the model is shown the index — fifteen to forty
+  titles, a few hundred tokens — and asks for the material it needs through
+  tools. No mode switch: the choice the student already makes carries the
+  information. Still no embeddings and no vector store; retrieval here is over
+  a catalogue already keyed by (cert, topic, lang).
+
+  **Tool calling was measured first.** The design cited "84% of OpenRouter
+  models support it", which is the advertised capability — the exact thing this
+  week has been about. `probe_models.py --tools` grades two turns, the call and
+  whether the model can carry the returned material into an answer, because
+  doing the first without the second leaves a student having paid for a round
+  trip and got nothing. **16 of 18 do both**; the two that did not are the
+  Gemmas, rate-limited on our key, so not measured rather than failed. Tool
+  calling is therefore the main path and the two-round-trip fallback covers the
+  unmeasured — the opposite of what the plan assumed.
+
+  The caps are somebody else's money, not tuning: at most 4 topics and 3 rounds,
+  bounded before the loop starts, and when the rounds run out the page asks once
+  more without tools so the student gets an answer instead of a spent key and a
+  spinner. What was loaded is shown as it arrives and named under the answer,
+  and the cost estimate says "the index now, plus up to 4 topics if it needs
+  them" rather than one number pretending to be the whole cost.
+
+  Verified by running it: `scripts/bot_loop_check.js` loads the page's own
+  functions, stubs just enough DOM, and drives the loop against a real model,
+  both paths, asserting the caps hold. The Models page shipped with four defects
+  because it was verified by reading.
+
+- **The four-function study contract** (`teach/core/corpus.py`), built once for
+  phases 2 and 3 as the design instructs: `list_certs`, `get_syllabus`,
+  `get_topic`, `search_topics`. Three already had endpoints; `/api/search` was
+  the one missing. Read-only and narrow, with a test asserting the module cannot
+  write, spend, or reach a path that does — the property that makes the MCP half
+  of phase 3 safe to offer at all.
+
 - **Phase 1.5 built: the price check now reaches the page, not just a pod log.**
   Its entry condition stopped being hypothetical — a 67%-wrong price had been
   sitting in a CronJob log for days. `teach/core/models_live.py` holds the

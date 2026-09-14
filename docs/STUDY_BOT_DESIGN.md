@@ -355,6 +355,40 @@ layer" conclusion, carried one step further.
 **Cost**: one extra round trip per question, on the student's key. Two code
 paths (tools + fallback) instead of one.
 
+### Phase 2 — BUILT 2026-09-14
+
+**Tool calling was measured before anything was built on it.** The 84% above is
+what OpenRouter's catalogue advertises, and this project has spent a week on the
+gap between advertised and actual — all eighteen models advertise
+`reasoning: true` and thirteen behave differently. So `probe_models.py --tools`
+declares one tool, asks a question that cannot be answered without calling it,
+and grades **two turns**: the call itself, and whether the model can carry the
+returned material into an answer. A model that does the first and not the second
+leaves the student having paid for a round trip and got nothing.
+
+**16 of 18 do both.** The two that did not are the Gemmas, rate-limited on our
+probe key — not measured, not failed. So tool calling is the main path and the
+two-round-trip fallback covers what we could not measure, which is the opposite
+of what the original plan assumed.
+
+**How a student reaches it**: by leaving the topic empty. A topic chosen means
+phase 1 — that material in the prompt. A certification with no topic means phase
+2 — the index goes in, the model asks for what it needs. No mode switch, because
+the choice the student already makes carries the information.
+
+**The caps are not tuning, they are somebody else's money.** At most 4 topics
+per question and 3 tool rounds, bounded before the loop starts, and if the
+rounds run out the page asks once more without tools so the student gets an
+answer rather than a spent key and a spinner. What was loaded is shown as it
+arrives and named under the answer.
+
+**Verified by running it, not by reading it** — `scripts/bot_loop_check.js`
+loads the page's own functions, stubs just enough DOM, and drives the loop
+against a real model. It holds the caps and both paths. Measured on
+`gpt-5-mini`: a cross-topic question costs ~12k tokens and ~18s through tools,
+~10k and ~20s through the fallback. The Models page shipped with four defects
+because it was verified by reading; this one was not.
+
 ### Phase 3 — career-level work, where sub-agents earn their cost
 
 **Entry**: phase 2 in use and a demand for tasks spanning certifications —
