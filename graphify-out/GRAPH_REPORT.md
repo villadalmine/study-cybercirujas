@@ -1,16 +1,16 @@
 # Graph Report - teach-plat  (2026-09-14)
 
 ## Corpus Check
-- 96 files · ~148,472 words
+- 97 files · ~151,423 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1252 nodes · 2036 edges · 88 communities (74 shown, 14 thin omitted)
+- 1269 nodes · 2052 edges · 86 communities (74 shown, 12 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d0373e40`
+- Built from commit: `450f33d8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,7 +47,7 @@
 - Roadmap — where this is and where it goes
 - API Facts Verification
 - Citation Claim Checking
-- quality.py
+- status_matrix.py
 - Citation URL Checks
 - problems
 - Usage Reporting
@@ -62,10 +62,10 @@
 - Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)
 - 1. The code graph (Graphify)
 - fix_corrupted_content.py
-- steer.py
+- languages_for
 - SearchTests
 - publish_if_complete.py
-- generation
+- _agent_completer
 - Development Guidelines for teach-plat
 - AI certification roadmap
 - pipeline.py
@@ -76,29 +76,27 @@
 - datetime
 - Check curriculum updates
 - _verify_translation
-- list_certs
+- corpus.py
 - OpenWiki scope for teach-plat
-- run_cert.py
+- video_languages
 - The phases
 - probe_models.py
 - tracker.py
-- bot_stats.py
+- bot_loop_check.js
 - translation_study.py
 - login
-- models_live.py
 - catalog.py
+- make_completer
 - test_model_probe.py
-- topics_per_run
+- run_until_complete.py
 - teach-plat
 - CatalogueStateTests
-- _record_usage
+- quality.py
 - FixtureTests
 - LanguageTests
 - VerdictTests
 - QualityThresholdsTest
-- _record_plain_usage
 - OffSwitchTests
-- _dominant_model
 
 ## God Nodes (most connected - your core abstractions)
 1. `Changelog` - 23 edges
@@ -119,15 +117,15 @@
   scripts/translation_study.py → tests/test_model_probe.py
 - `RejectsDamagedTranslations` --uses--> `GeneratorConfigError`  [INFERRED]
   tests/test_translation_verify.py → teach/core/generator.py
-- `effective()` --calls--> `_agent_completer()`  [EXTRACTED]
-  scripts/check_config.py → teach/core/generator.py
-- `main()` --calls--> `load_models()`  [EXTRACTED]
-  scripts/check_models.py → teach/core/catalog.py
+- `check_cert()` --calls--> `video_languages()`  [EXTRACTED]
+  scripts/check_provenance.py → teach/core/pipeline.py
+- `main()` --calls--> `targets()`  [EXTRACTED]
+  scripts/check_provenance.py → teach/core/pipeline.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (88 total, 14 thin omitted)
+## Communities (86 total, 12 thin omitted)
 
 ### Community 0 - "Backlog"
 Cohesion: 0.17
@@ -138,8 +136,8 @@ Cohesion: 0.12
 Nodes (17): 1. The container registry (the one that actually fills), 2. Rejected generation output (`.rejected/`), 3. Orphaned topic directories, 4. Local state (`~/.local/state/teach-plat/`), 5. Scratch files in the repository root, Check first, Cleanup — what fills up, and how to reclaim it, Delete (+9 more)
 
 ### Community 2 - "api.py"
-Cohesion: 0.11
-Nodes (27): FileResponse, Response, get_bot_stats(), get_cert_video(), get_langs(), get_path_video(), get_paths(), get_search() (+19 more)
+Cohesion: 0.09
+Nodes (31): FileResponse, Response, get_bot_stats(), get_catalog(), get_cert_video(), get_langs(), get_path_video(), get_paths() (+23 more)
 
 ### Community 3 - "catalogue"
 Cohesion: 0.14
@@ -158,15 +156,15 @@ Cohesion: 0.06
 Nodes (31): check_cert(), main(), _topics(), main(), _md_table(), observations(), Path, The same numbers main() prints, as a dict — shared by the MODELS.md renderer. (+23 more)
 
 ### Community 7 - "generator.py"
-Cohesion: 0.14
-Nodes (27): Completer, cert_generate(), Generate content with AI for pending/stale topics. This AUTHORS from the…, _agent_completer(), _antigravity_completer(), generate_cert(), generate_topic(), GeneratorConfigError (+19 more)
+Cohesion: 0.17
+Nodes (19): cert_generate(), Generate content with AI for pending/stale topics. This AUTHORS from the…, _dominant_model(), generate_cert(), generate_topic(), GeneratorConfigError, Exception, Content generator — interchangeable backends. Backends (env TEACH_BACKEND or… (+11 more)
 
 ### Community 8 - "cli.py"
 Cohesion: 0.08
-Nodes (34): command, cert_add(), cert_list(), cert_show(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script() (+26 more)
+Nodes (32): command, cert_add(), cert_list(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script(), lab_down() (+24 more)
 
 ### Community 9 - "Which backend authors better material?"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): Caveats, fable-5 vs opus-5, within cgoa (2026-08-19), The 62% figure, and why it is not what it looks like, The headline: on every objective check, they tie, The same-topic head-to-head, which reverses the conclusion above, What this means for the choice, Where they differ: volume and shape, Which backend authors better material?
 
 ### Community 10 - "Lab Lifecycle Management"
@@ -214,8 +212,8 @@ Cohesion: 0.14
 Nodes (3): A snapshot must be refused when the source document does not support it. Seven…, A snapshot must be refused when the document does not support it. Seven…, SyllabusCoverageTests
 
 ### Community 21 - "certs.py"
-Cohesion: 0.09
-Nodes (36): clear_topic_stale(), content_dir(), get_topic(), load(), md_path(), Path, Post, Read/write the per-certification MD (syllabus snapshot + status). The MD with… (+28 more)
+Cohesion: 0.16
+Nodes (22): get_topic_preview(), Public teaser: first lines of the material + what the topic includes., clear_topic_stale(), content_dir(), get_topic(), load(), md_path(), Path (+14 more)
 
 ### Community 22 - "classify"
 Cohesion: 0.67
@@ -257,9 +255,9 @@ Nodes (5): check(), main(), {(apiVersion, kind)} served by that release, from th
 Cohesion: 0.47
 Nodes (5): ask(), main(), (label, url) from the references section only. URLs in the body are examples…, Fetch and judge. Deliberately a separate process per claim: one failure should…, references()
 
-### Community 33 - "quality.py"
-Cohesion: 0.13
-Nodes (20): main(), cert_topics(), check(), lab_cell(), lang_cell(), Path, Regenerate STATUS.md from disk. True if it changed. The single implementation…, [] if STATUS.md matches the filesystem; the differing lines otherwise.… (+12 more)
+### Community 33 - "status_matrix.py"
+Cohesion: 0.23
+Nodes (13): cert_topics(), check(), lab_cell(), lang_cell(), Path, Regenerate STATUS.md from disk. True if it changed. The single implementation…, [] if STATUS.md matches the filesystem; the differing lines otherwise.…, The budget footer: what generation has actually consumed, from records.… (+5 more)
 
 ### Community 34 - "Citation URL Checks"
 Cohesion: 0.70
@@ -298,12 +296,12 @@ Cohesion: 0.12
 Nodes (16): 1. The code graph (Graphify), 2. The wiki (OpenWiki), 3. Real metrics, end to end, Developer tools: code graph, wiki, and real metrics, Optional, costs completions, Reading the numbers, Semantic enrichment — documented, deliberately not run, Setup, once (+8 more)
 
 ### Community 49 - "fix_corrupted_content.py"
-Cohesion: 0.14
-Nodes (21): _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main(), _publish_if_complete(), A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…, [(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of… (+13 more)
+Cohesion: 0.15
+Nodes (20): _cert_topic_ids(), find_bad_combos(), _finish(), main(), _publish_if_complete(), A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…, Produce videos for certifications whose content is finished. The unattended…, Ids de todos los topics del temario (frontmatter del .md), para poder detectar… (+12 more)
 
-### Community 50 - "steer.py"
-Cohesion: 0.16
-Nodes (16): main(), Every active certification with what it still needs, most urgent first., survey(), _topic_count(), _cert_block(), create_block(), main(), (start, end) line indices of a certification's block, so edits are surgical.… (+8 more)
+### Community 50 - "languages_for"
+Cohesion: 0.22
+Nodes (13): main(), _cert_block(), create_block(), main(), (start, end) line indices of a certification's block, so edits are surgical.…, Add a certification to pipeline.yaml that is not there yet. `activate` used to…, Set one key inside one certification. True if the file changed., set_key() (+5 more)
 
 ### Community 51 - "SearchTests"
 Cohesion: 0.08
@@ -313,21 +311,21 @@ Nodes (5): ContractTests, ListAndSyllabusTests, The four functions a study agent
 Cohesion: 0.33
 Nodes (9): complete_certs(), is_complete(), main(), publish(), Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…, (complete, why not). Everything the certification declares must be there.…, _record(), _save() (+1 more)
 
-### Community 53 - "generation"
-Cohesion: 0.39
-Nodes (7): dominant(), effective(), main(), (model, effort, notes) as the generator would resolve them right now. Resolved…, recent(), generation(), Which model authors and at what effort. Declared, not left to the CLI. Read by…
+### Community 53 - "_agent_completer"
+Cohesion: 0.29
+Nodes (10): dominant(), effective(), main(), (model, effort, notes) as the generator would resolve them right now. Resolved…, recent(), _agent_completer(), Append one line per completion: what it was for, and what it cost. Never…, _record_usage() (+2 more)
 
 ### Community 54 - "Development Guidelines for teach-plat"
 Cohesion: 0.33
 Nodes (6): Agent Idea Synchronization (AGENTS_SYNC.md), Commands, Content Workflow, Development Guidelines for teach-plat, Rules, Verification: what is proven, and what is only assumed
 
 ### Community 55 - "AI certification roadmap"
-Cohesion: 0.20
+Cohesion: 0.22
 Nodes (9): AI certification roadmap, How each course cites its own syllabus, Model-provider certifications — researched in depth 2026-09-09, NVIDIA career track (researched 2026-09-09, owner's request), Phase 1 — AI fundamentals (extends the three cloud careers), Phase 2 — the technical tier, led by market demand, Phase 3 — specialists (need a verification pass before cataloguing), The five filters (+1 more)
 
 ### Community 56 - "pipeline.py"
-Cohesion: 0.17
-Nodes (19): budget(), default_languages(), in_milestone(), is_fatal(), is_retryable(), languages_for(), load(), milestone() (+11 more)
+Cohesion: 0.14
+Nodes (21): budget(), certs(), default_languages(), in_milestone(), is_fatal(), is_retryable(), load(), milestone() (+13 more)
 
 ### Community 57 - "Within one certification (the only fair comparisons; authoring language `en` only)"
 Cohesion: 0.20
@@ -338,8 +336,8 @@ Cohesion: 0.31
 Nodes (3): A successful completion, overridden field by field., response(), ThinkingTests
 
 ### Community 62 - "datetime"
-Cohesion: 0.08
-Nodes (36): datetime, backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main() (+28 more)
+Cohesion: 0.09
+Nodes (34): datetime, backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main() (+26 more)
 
 ### Community 63 - "Check curriculum updates"
 Cohesion: 0.50
@@ -349,33 +347,33 @@ Nodes (3): Check curriculum updates, Notes, Steps
 Cohesion: 0.21
 Nodes (10): _comparable_code(), A code block reduced to the parts a translation must not touch. Code blocks are…, Structural checks a translation must satisfy but authoring cannot. This is what…, _verify_translation(), AcceptsCorrectTranslations, _english(), The structural gate that decides whether a translation is usable. Its own…, The source with its prose in English, code block untouched. (+2 more)
 
-### Community 65 - "list_certs"
-Cohesion: 0.25
-Nodes (8): get_catalog(), get_cert(), healthz(), One certification: catalogue entry, syllabus and which topics have material., Liveness/readiness para Kubernetes., Every certification: name, exam, vendor, level, validity and official sources., get_cert(), list_certs()
+### Community 65 - "corpus.py"
+Cohesion: 0.14
+Nodes (20): get_cert(), One certification: catalogue entry, syllabus and which topics have material., cert_show(), Show the syllabus and the status of each topic., get_cert(), topics(), _fold(), get_syllabus() (+12 more)
 
 ### Community 66 - "OpenWiki scope for teach-plat"
 Cohesion: 0.40
 Nodes (4): OpenWiki scope for teach-plat, Style, What NOT to document, What to document
 
-### Community 67 - "run_cert.py"
-Cohesion: 0.60
-Nodes (4): main(), pending_topics(), # NOTE: --to, not --lang. `--lang` re-authors from the syllabus and, run()
+### Community 67 - "video_languages"
+Cohesion: 0.21
+Nodes (11): find_missing_videos(), [(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of…, main(), Every active certification with what it still needs, most urgent first., survey(), _topic_count(), main(), pending_topics() (+3 more)
 
 ### Community 68 - "The phases"
 Cohesion: 0.09
-Nodes (22): Alternatives considered, Can it read what we send it? (2026-09-11, second pass), Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Phase 1.5 — BUILT 2026-09-14 (option A) (+14 more)
+Nodes (23): Alternatives considered, Can it read what we send it? (2026-09-11, second pass), Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Phase 1.5 — BUILT 2026-09-14 (option A) (+15 more)
 
 ### Community 69 - "probe_models.py"
-Cohesion: 0.09
-Nodes (40): Client, ask(), ask_retrying(), catalogue_state(), detect_language(), graded(), material(), off_switch() (+32 more)
+Cohesion: 0.08
+Nodes (43): Client, ask(), ask_retrying(), catalogue_state(), detect_language(), graded(), main(), material() (+35 more)
 
 ### Community 70 - "tracker.py"
 Cohesion: 0.06
 Nodes (59): load_syllabus(), main(), Path, How many objectives the official page publishes. Network, no model., Structural signs the topic list was computed rather than read. Offline.…, smells(), upstream_objectives(), frozen() (+51 more)
 
-### Community 71 - "bot_stats.py"
-Cohesion: 0.19
-Nodes (14): main(), table(), accepted(), _blank(), _known_models(), load(), path(), Which models the study bot is used with — counters, never events. The bot runs… (+6 more)
+### Community 71 - "bot_loop_check.js"
+Cohesion: 0.12
+Nodes (14): API, CERT, els, FALLBACK, fs, KEY, LANGUAGE, line (+6 more)
 
 ### Community 72 - "translation_study.py"
 Cohesion: 0.36
@@ -385,46 +383,46 @@ Nodes (7): evaluate(), main(), master_key(), Run the pipeline's own two gates. V
 Cohesion: 0.13
 Nodes (18): BaseModel, Request, BotUsage, login(), LoginBody, logout(), me(), post_bot_used() (+10 more)
 
-### Community 74 - "models_live.py"
-Cohesion: 0.16
-Nodes (15): BackgroundTasks, main(), get_models(), Compare the catalogue against OpenRouter, at most every few hours. Never raises…, The study bot's model catalogue, from `models.yaml`, plus what is live. Served…, _refresh_live(), annotate(), compare() (+7 more)
+### Community 74 - "catalog.py"
+Cohesion: 0.07
+Nodes (41): BackgroundTasks, main(), main(), table(), get_models(), Compare the catalogue against OpenRouter, at most every few hours. Never raises…, The study bot's model catalogue, from `models.yaml`, plus what is live. Served…, _refresh_live() (+33 more)
 
-### Community 75 - "catalog.py"
-Cohesion: 0.22
-Nodes (13): main(), _BlockDumper, catalog_path(), load_models(), models_path(), Path, Global certification catalog (catalog.yaml). Written by the tracker (and `cert…, Root of the data repo. Override with TEACH_ROOT. (+5 more)
+### Community 75 - "make_completer"
+Cohesion: 0.28
+Nodes (9): Completer, _antigravity_completer(), _litellm_completer(), make_completer(), Path, Provenance for one language directory: who made it, with what, when. Written…, Backend for active Antigravity AI session (uses IDE session without external…, `effort` overrides the declared thinking level for THIS completer. "default"… (+1 more)
 
 ### Community 76 - "test_model_probe.py"
 Cohesion: 0.20
 Nodes (5): CatalogueWriterTests, ComprehensionTests, Grading the study bot's models: the judgement, offline.…, The probe that sends real material and grades one fact from it., models.yaml is rewritten by two scripts; both must leave it readable.
 
-### Community 77 - "topics_per_run"
-Cohesion: 0.50
-Nodes (4): main(), pending(), Maximum topics one invocation may generate. 0 means unbounded, which is…, topics_per_run()
-
 ### Community 78 - "teach-plat"
 Cohesion: 0.13
 Nodes (15): AI-generated content — disclosure, Content process, Deploying to Kubernetes, Environment variables, Generation backends, Keeping it honest over time, Languages, Licence (+7 more)
+
+### Community 80 - "quality.py"
+Cohesion: 0.25
+Nodes (6): check(), Quality floor for generated material, identical for every backend. A different…, Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…, Return the problems found. An empty list means the floor is met. `kind` is…, rules(), Quality floor: the same standard for every backend. Tested because a floor is…
 
 ### Community 84 - "QualityThresholdsTest"
 Cohesion: 0.33
 Nodes (3): QualityThresholdsTest, The thresholds live in pipeline.yaml and are calibrated against material…, The floor is optional: a repo with no `quality` in the YAML must not break.…
 
 ## Knowledge Gaps
-- **265 isolated node(s):** `.venv/bin/python3`, `teach-plat`, `resume-generation.sh script`, `run_milestone.sh script`, `TEACH_AGENT` (+260 more)
+- **280 isolated node(s):** `.venv/bin/python3`, `teach-plat`, `fs`, `path`, `REPO` (+275 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `load_env()` connect `EnvScopeTests` to `certs.py`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **What connects `.venv/bin/python3`, `teach-plat`, `resume-generation.sh script` to the rest of the system?**
-  _265 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `load_env()` connect `EnvScopeTests` to `api.py`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **What connects `.venv/bin/python3`, `teach-plat`, `fs` to the rest of the system?**
+  _280 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `The routine, start to finish` be split into smaller, more focused modules?**
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
 - **Should `api.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.11375661375661375 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0946969696969697 - nodes in this community are weakly interconnected._
 - **Should `catalogue` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `video.py` be split into smaller, more focused modules?**
