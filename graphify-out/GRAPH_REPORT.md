@@ -1,16 +1,16 @@
 # Graph Report - teach-plat  (2026-09-14)
 
 ## Corpus Check
-- 100 files · ~155,677 words
+- 100 files · ~156,607 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1314 nodes · 2114 edges · 86 communities (75 shown, 11 thin omitted)
+- 1314 nodes · 2114 edges · 85 communities (74 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c645d357`
+- Built from commit: `a141f779`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -76,7 +76,6 @@
 - datetime
 - Check curriculum updates
 - _verify_translation
-- list_certs
 - OpenWiki scope for teach-plat
 - video_languages
 - The phases
@@ -125,7 +124,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (86 total, 11 thin omitted)
+## Communities (85 total, 11 thin omitted)
 
 ### Community 0 - "Backlog"
 Cohesion: 0.17
@@ -351,10 +350,6 @@ Nodes (3): Check curriculum updates, Notes, Steps
 Cohesion: 0.21
 Nodes (10): _comparable_code(), A code block reduced to the parts a translation must not touch. Code blocks are…, Structural checks a translation must satisfy but authoring cannot. This is what…, _verify_translation(), AcceptsCorrectTranslations, _english(), The structural gate that decides whether a translation is usable. Its own…, The source with its prose in English, code block untouched. (+2 more)
 
-### Community 65 - "list_certs"
-Cohesion: 0.25
-Nodes (8): get_catalog(), get_status(), healthz(), Per-certification overview: exam versions, coverage, videos, freshness. The…, Liveness/readiness para Kubernetes., Every certification: name, exam, vendor, level, validity and official sources., _status_snapshot(), list_certs()
-
 ### Community 66 - "OpenWiki scope for teach-plat"
 Cohesion: 0.40
 Nodes (4): OpenWiki scope for teach-plat, Style, What NOT to document, What to document
@@ -384,8 +379,8 @@ Cohesion: 0.36
 Nodes (7): evaluate(), main(), master_key(), Run the pipeline's own two gates. Verdict plus the reasons it failed., Read the proxy key from the cluster rather than from a file on disk. It is only…, One completion through the proxy. Returns text plus what it cost., translate()
 
 ### Community 73 - "api.py"
-Cohesion: 0.16
-Nodes (19): BaseModel, Request, BotUsage, login(), LoginBody, logout(), me(), post_bot_used() (+11 more)
+Cohesion: 0.11
+Nodes (27): BaseModel, Request, BotUsage, get_catalog(), get_status(), healthz(), login(), LoginBody (+19 more)
 
 ### Community 74 - "catalog.py"
 Cohesion: 0.05
