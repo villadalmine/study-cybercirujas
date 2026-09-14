@@ -46,7 +46,7 @@
 # starts charging or disappears, replace it against these criteria rather than
 # by picking whatever is free that week.
 
-checked: '2026-09-11'
+checked: '2026-09-14'
 source: https://openrouter.ai/api/v1/models
 tiers:
   top:
@@ -67,7 +67,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: openai/gpt-6-astra
       name: GPT-6 Astra
       in: 10
@@ -84,11 +84,11 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: moonshotai/kimi-k3
       name: Kimi K3
-      in: 2.34
-      out: 11.7
+      in: 2.6481
+      out: 13.2827
       ctx: 1048
       reasoning: true
       probe: ok
@@ -102,7 +102,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
   mid:
     - id: anthropic/claude-sonnet-5
       name: Claude Sonnet 5
@@ -121,7 +121,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: openai/gpt-5.6-sol
       name: GPT-5.6 Sol
       in: 2
@@ -139,7 +139,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: qwen/qwen3.7-max
       name: Qwen3.7 Max
       in: 1.475
@@ -157,11 +157,11 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: deepseek/deepseek-v4-pro
       name: DeepSeek V4 Pro
-      in: 0.9553
-      out: 1.9105
+      in: 1.6
+      out: 3.2
       ctx: 1048
       reasoning: true
       probe: ok
@@ -175,7 +175,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: moonshotai/kimi-k2.5
       name: Kimi K2.5
       in: 0.45
@@ -193,7 +193,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
   low:
     - id: anthropic/claude-haiku-4.5
       name: Claude Haiku 4.5
@@ -212,7 +212,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: openai/gpt-5-mini
       name: GPT-5 Mini
       in: 0.25
@@ -229,7 +229,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: minimax/minimax-m2.7
       name: MiniMax M2.7
       in: 0.3
@@ -246,7 +246,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: deepseek/deepseek-v4-flash
       name: DeepSeek V4 Flash
       in: 0.0886
@@ -264,7 +264,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: qwen/qwen3.7-flash
       name: Qwen3.7 Flash
       in: 0.03
@@ -282,7 +282,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: openai/gpt-5-nano
       name: GPT-5 Nano
       in: 0.05
@@ -299,7 +299,7 @@ tiers:
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
   free:
     - id: google/gemma-4-31b-it:free
       name: Gemma 4 31B
@@ -307,18 +307,19 @@ tiers:
       out: 0
       ctx: 262
       reasoning: true
-      probe: flaky
+      probe: rate
       thinking: unknown
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: google/gemma-4-26b-a4b-it:free
       name: Gemma 4 26B
       in: 0
       out: 0
       ctx: 262
       reasoning: true
-      probe: flaky
-      thinking: unknown
-      probed: '2026-09-11'
+      probe: ok
+      thinking: effort
+      thinking_off: enabled:false
+      probed: '2026-09-14'
     - id: nvidia/nemotron-3-ultra-550b-a55b:free
       name: Nemotron 3 Ultra 550B
       in: 0
@@ -330,10 +331,12 @@ tiers:
       thinking_off: enabled:false
       langs:
         - en
+        - es
         - pt
         - fr
+        - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'
     - id: nvidia/nemotron-3-super-120b-a12b:free
       name: Nemotron 3 Super 120B
       in: 0
@@ -347,7 +350,8 @@ tiers:
         - en
         - es
         - pt
+        - fr
         - de
         - zh
         - ja
-      probed: '2026-09-11'
+      probed: '2026-09-14'

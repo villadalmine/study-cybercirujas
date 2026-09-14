@@ -2,6 +2,49 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-14
+
+- **Prices the site showed were wrong, and the weekly CronJob had been saying
+  so to a pod log nobody reads.** `study-check-models` fired Monday 06:00 and
+  found `deepseek-v4-pro` at $1.60/$3.20 against the $0.9553/$1.9105 on the
+  page — **67% more than a student choosing it for the price was told** — plus
+  `kimi-k3` 13% off. Refreshed with `check_models.py --update` and deployed.
+  The job failing IS the designed signal; what is missing is the loop that
+  carries it to the page, which is phase 1.5 of the bot design.
+
+- **Re-probed the whole catalogue: 16 of 18 models identical to Thursday**
+  (164 calls, $0.31). That is the result a deterministic probe should give when
+  nothing upstream moved. The free tier moved, and how it moved was the finding.
+
+- **`langs` was recording weather, not verdicts.** `nemotron-3-ultra:free` came
+  back empty in es/de/zh on 11-Sep and in pt/fr on 14-Sep — different languages
+  each run, so the model is unreliable in *any* language rather than lacking a
+  particular one. Publishing the first sample as a verdict told a Portuguese
+  student on Monday the opposite of Thursday. Fixed with the mechanism the
+  script already used for rate limits: **one bounded retry**. Two empty answers
+  in a row is evidence; one is weather. Re-probed for free: the model now holds
+  6 of 7 languages, and German — which failed twice running — is the only real
+  exclusion.
+
+- **A bug that would have hidden working models from every menu.**
+  `gemma-4-26b:free` answered the liveness probe and was then rate-limited on
+  all seven language calls — our shared probe key, not the model. The pass wrote
+  `langs: []`, meaning "proven in no language", which the page reads as "offer
+  it nowhere". It had recorded *we could not measure* as *it does not work*.
+  `probe_languages` now returns `None` for "nothing was asked" and `--update`
+  keeps the catalogue's previous answer; the run prints `langs=unknown` and
+  names why. Three states — passed, failed on merit, not measured — and
+  conflating any two of them publishes a false claim.
+
+- **`probe: flaky` split into `rate` and `empty`**, because they are facts about
+  different things. A 429 is our shared key: OpenRouter's own message says to
+  bring your own key for your own limits, and every student does, so it says
+  almost nothing about their experience. An empty 200 is the model and reaches
+  them. The page labelled both "often rate-limited" — wrong for half of them.
+  Two states, two labels, seven languages. The two Gemmas stay in the menu
+  marked *unverified* rather than being replaced: four passes of rate limits on
+  our key is not evidence about a student's.
+
 ## 2026-09-11
 
 - **The study bot's models are now verified by calling them, not by reading the

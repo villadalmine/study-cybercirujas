@@ -237,6 +237,56 @@ this probe does not claim it. Same gap
 [AUDITOR_DESIGN.md](AUDITOR_DESIGN.md) describes for the material itself, and
 the same reason every answer carries the "unverified" notice.
 
+### Re-probing, and two things the second run taught (2026-09-14)
+
+The catalogue was re-probed three days after the first pass. Sixteen of
+eighteen models came back **identical** — same verdict, same thinking
+behaviour, same seven languages — which is the result a deterministic probe
+should give when nothing upstream changed. The free tier is what moved, and
+how it moved was the finding.
+
+**1. `langs` was recording weather, not verdicts.** `nemotron-3-ultra:free`
+returned an empty answer in Spanish, German and Chinese on 11-Sep, and in
+Portuguese and French on 14-Sep. Different languages each time: the model is
+simply unreliable, roughly a third of the time, in *any* language. Recording
+the first sample as a per-language verdict told a Portuguese student on Monday
+the opposite of what it told them on Thursday.
+
+The fix is the one the script already used for rate limits: **one bounded
+retry**. Two empty answers in a row is evidence; one is weather. Same
+mechanism, same reason, now applied to the failure that needed it.
+
+**2. A bug that hid working models.** `gemma-4-26b:free` answered the liveness
+probe and was then rate-limited on all seven language calls — our shared probe
+key, not the model. The pass recorded `langs: []`, "proven in no language", and
+the page would have hidden it from every menu on the site. It had recorded *we
+could not measure* as *it does not work*.
+
+There are three states, and conflating any two of them produces a false claim:
+
+| | Means | Effect on the menu |
+|---|---|---|
+| passed | asked, answered from the material, in that language | offered |
+| failed on merit | asked, and it missed, answered in the wrong language, or came back empty **twice** | not offered in that language |
+| **not measured** | rate limit on our key, transport error, drifted fixture | **previous verdict stands** — never narrowed |
+
+`probe_languages` now returns `None` rather than `[]` when nothing was asked,
+and `--update` keeps what the catalogue already held. The run says
+`langs=unknown` and names why, instead of quietly hiding a model.
+
+**The same distinction, one level up.** `probe:` used to collapse `rate` and
+`empty` into one `flaky`, and the page labelled both *"often rate-limited"*.
+Wrong for half of them: a 429 is our shared key, and OpenRouter's own message
+says to bring your own to get your own limits — which every student does. An
+empty 200 is the model, and it reaches the student. They are now separate
+states with separate labels, in all seven languages.
+
+**On replacing the two Gemmas**: not done, deliberately. They are rate-limited
+on *our* probe key, four passes running; nothing observed says a student with
+their own key sees the same. The catalogue's own header says free models churn
+by nature. The probe reports; a human decides — and the honest label is
+"unverified", which is what the page now shows.
+
 ### Phase 2 — questions across one certification
 
 **Entry**: students actually ask questions that span topics ("where does X

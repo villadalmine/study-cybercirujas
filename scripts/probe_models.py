@@ -284,16 +284,23 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
 def ask_retrying(client: httpx.Client, key: str, model: str, effort: str | None,
                  cap: int, reasoning: dict | None = None,
                  system: str | None = None, user: str | None = None) -> tuple[dict, int]:
-    """`ask` plus one retry for a rate limit. Returns (response, calls made).
+    """`ask` plus one retry for a transient failure. Returns (response, calls).
 
     A `:free` model that is saturated right now is not a broken model, and
     reporting it as one makes two identical runs disagree — which would cost
     this script the only property that makes it worth running: determinism.
     One retry, one fixed pause; a genuinely saturated provider still shows up
     as RATE.
+
+    An empty 200 is retried for the same reason, proven rather than assumed:
+    `nemotron-3-ultra` came back empty in es/de/zh on 2026-09-11 and in pt/fr on
+    2026-09-14. Different languages each time — so the failure is the model
+    being unreliable, not the model lacking a language, and recording the first
+    sample as a verdict told a Portuguese student on Monday the opposite of what
+    it told them on Thursday. Two empties in a row is evidence; one is weather.
     """
     probe = ask(client, key, model, effort, cap, reasoning, system, user)
-    if verdict(probe) != "rate":
+    if verdict(probe) not in ("rate", "empty"):
         return probe, 1
     time.sleep(RATE_RETRY_DELAY)
     return ask(client, key, model, effort, cap, reasoning, system, user), 2
@@ -381,6 +388,20 @@ def reasoning_mandatory(killed: dict) -> bool:
         return False
     message = (killed.get("message") or "").lower()
     return "mandatory" in message or "cannot be disabled" in message
+
+
+# What a probe verdict means to the PAGE, which has one decision to make: offer
+# this model or not, and with what warning. Only `broken` is withheld.
+CATALOGUE_STATE = {"ok": "ok", "answers": "ok", "rate": "rate", "empty": "empty"}
+
+
+def catalogue_state(verdict: str) -> str:
+    """The verdict as models.yaml records it. See the note at the call site.
+
+    `rate` and `empty` are kept apart because they are facts about different
+    things: the first about our shared probe key, the second about the model.
+    """
+    return CATALOGUE_STATE.get(verdict, "broken")
 
 
 def off_switch(killed: dict) -> str:
@@ -502,17 +523,29 @@ def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool,
     return row
 
 
+# A language attempt that failed for a reason that is not about the model. It
+# is NOT evidence against that language, and must never narrow the menu.
+NOT_MEASURED = ("rate", "auth", "error", "dead", "fixture-drift")
+
+
 def probe_languages(client: httpx.Client, key: str, model: str, fixture: dict,
                     langs: list[str], reasoning: dict | None = None) -> dict:
     """Ask the model, in each language, a question answered by real material.
 
-    Returns the languages the model may be offered in. A language is EXCLUDED
-    only on evidence — it missed the answer, or it replied in a language that
-    was measurably not the one asked. A reply too short to classify counts as
-    passing: absence of proof is not proof, and dropping a working model from a
-    language's menu is worse than leaving a doubtful one in it.
+    Returns the languages the model may be offered in, or `None` for "nothing
+    was measured" — which is not the same as the empty list, and the difference
+    is the whole point. A language is EXCLUDED only on the model's own merits:
+    it missed the answer, replied in a measurably different language, or came
+    back empty twice. A rate limit on OUR shared probe key, a transport error or
+    a drifted fixture prove nothing about the model, so they leave the language
+    unknown and the previous verdict standing.
+
+    Found in practice on 2026-09-14: `gemma-4-26b:free` answered the liveness
+    probe and was then rate-limited in all seven languages. The empty list that
+    produced would have hidden a working model from every menu on the site —
+    recording "we could not measure" as "it does not work".
     """
-    out = {"langs": [], "detail": {}, "cost": 0.0, "calls": 0}
+    out = {"langs": [], "detail": {}, "cost": 0.0, "calls": 0, "measured": 0}
     for lang in langs:
         excerpt = material(lang, fixture)
         if not excerpt or fixture["expect"] not in excerpt:
@@ -525,8 +558,14 @@ def probe_languages(client: httpx.Client, key: str, model: str, fixture: dict,
             system=STUDY_SYSTEM + excerpt, user=fixture["questions"][lang])
         out["calls"] += made
         out["cost"] += probe.get("cost", 0.0)
-        if verdict(probe) in ("dead", "auth", "error", "rate", "empty"):
+        if verdict(probe) in NOT_MEASURED:
             out["detail"][lang] = verdict(probe)
+            continue
+        out["measured"] += 1
+        if verdict(probe) == "empty":
+            # Twice in a row, after the retry: the model really does hand this
+            # student a blank answer.
+            out["detail"][lang] = "empty"
             continue
         found, replied = graded(probe.get("content", ""), fixture)
         if not found:
@@ -537,6 +576,9 @@ def probe_languages(client: httpx.Client, key: str, model: str, fixture: dict,
             continue
         out["detail"][lang] = "ok" if replied == lang else "ok (short reply)"
         out["langs"].append(lang)
+    if not out["measured"]:
+        # Nothing was actually asked of the model. Say "unknown", never "none".
+        out["langs"] = None
     return out
 
 
@@ -637,7 +679,11 @@ def main() -> int:
             if "langs" in row:
                 lost = [f"{k}:{v}" for k, v in row["lang_detail"].items()
                         if not v.startswith("ok")]
-                lang_note = (f" langs={'+'.join(row['langs']) or 'none'}"
+                # None is "nothing was measured", which reads very differently
+                # from "measured, passed none".
+                shown = ("unknown" if row["langs"] is None
+                         else "+".join(row["langs"]) or "none")
+                lang_note = (f" langs={shown}"
                              + (f" ({', '.join(lost)})" if lost else ""))
             print(f"  {mark} {row['id']:42} {tier:5} "
                   f"thinking={row['thinking']:8} ${row['cost']:.5f}{lang_note}"
@@ -660,8 +706,8 @@ def main() -> int:
         except Exception:                                         # noqa: BLE001
             left = {}
 
-    # Three states, not two. A `:free` model saturated for six seconds is not a
-    # dead model, and calling it one would drop a working model from the menu.
+    # Three outcomes, not two. A `:free` model saturated for six seconds is not
+    # a dead model, and calling it one would drop a working model from the menu.
     flaky = [r for r in rows if r["verdict"] in ("rate", "empty")]
     broken = [r for r in rows if r["verdict"] in ("dead", "auth", "error")]
     lying = [r for r in rows if r["thinking"] in ("none", "ignored", "always", "flat")]
@@ -711,11 +757,17 @@ def main() -> int:
                   f"`{fixture['expect']}` in that language. Nothing was asked, "
                   f"so nothing was proven — fix the fixture before trusting "
                   f"`langs` for it.")
-        orphans = [r for r in rows
-                   if "langs" in r and not r["langs"]]
+        # Measured in every language and passed none: a real finding.
+        orphans = [r for r in rows if r.get("langs") == []]
         for r in orphans:
             print(f"  NONE   {r['id']} answered in no language — it will not be "
                   f"offered anywhere")
+        # Measured in none: says nothing, and the catalogue keeps what it had.
+        unknown = [r for r in rows if "langs" in r and r["langs"] is None]
+        for r in unknown:
+            why = ", ".join(sorted({v for v in r["lang_detail"].values()}))
+            print(f"  ?      {r['id']} could not be asked in any language "
+                  f"({why}) — its previous verdict stands")
 
     if not broken and not flaky and not lying:
         print("\nEvery model answered, and every effort selector does what it says.")
@@ -745,6 +797,15 @@ def main() -> int:
                 # seconds is not a dead model, and writing `false` for it would
                 # drop a working model from the menu on the strength of one
                 # unlucky second.
+                #
+                # `rate` and `empty` stay apart for the same kind of reason.
+                # They are facts about different things: a 429 is OUR shared
+                # probe key hitting a limit — OpenRouter's own message says
+                # "add your own key to accumulate your rate limits", and every
+                # student brings one, so it says almost nothing about their
+                # experience. An empty 200 is the model, and it will happen to
+                # them too. Merging both into "flaky" made the page blame the
+                # model for our key.
                 # Rewritten in a fixed order, so a re-probe changes values and
                 # not the shape of the file. What a run could not measure keeps
                 # the previous answer rather than losing it: a model that was
@@ -755,9 +816,7 @@ def main() -> int:
                 for key in ("probe", "thinking", "thinking_off", "langs",
                             "probed"):
                     entry.pop(key, None)
-                entry["probe"] = {"ok": "ok", "answers": "ok",
-                                  "rate": "flaky", "empty": "flaky"}.get(
-                                      row["verdict"], "broken")
+                entry["probe"] = catalogue_state(row["verdict"])
                 entry["thinking"] = row["thinking"]
                 # The UI needs this one: for most models "no reasoning" only
                 # means anything if the switch is sent explicitly, and for a

@@ -136,6 +136,48 @@ class OffSwitchTests(unittest.TestCase):
             {"status": 400, "message": "context length exceeded"}))
 
 
+class CatalogueStateTests(unittest.TestCase):
+    """What a probe verdict becomes in models.yaml — the page's only input.
+
+    `rate` and `empty` used to collapse into one "flaky" value, and the page
+    labelled both "often rate-limited". That was wrong for half of them: a 429
+    is OUR shared probe key hitting a limit, and OpenRouter's own message says
+    to add your own key to get your own limits — which every student does. An
+    empty 200 is the model, and it reaches the student too.
+    """
+
+    def test_a_good_answer_and_a_disobedient_one_are_both_usable(self):
+        self.assertEqual(probe.catalogue_state("ok"), "ok")
+        self.assertEqual(probe.catalogue_state("answers"), "ok")
+
+    def test_our_rate_limit_is_not_the_models_fault(self):
+        self.assertEqual(probe.catalogue_state("rate"), "rate")
+        self.assertNotEqual(probe.catalogue_state("rate"),
+                            probe.catalogue_state("empty"))
+
+    def test_an_empty_answer_is_about_the_model(self):
+        self.assertEqual(probe.catalogue_state("empty"), "empty")
+
+    def test_only_a_real_failure_withholds_the_model(self):
+        for verdict in ("dead", "auth", "error"):
+            with self.subTest(verdict=verdict):
+                self.assertEqual(probe.catalogue_state(verdict), "broken")
+
+    def test_an_unknown_verdict_is_treated_as_broken(self):
+        # Fail closed: a verdict this function does not know about must not be
+        # silently offered to a student as working.
+        self.assertEqual(probe.catalogue_state("something-new"), "broken")
+
+    def test_the_page_withholds_exactly_the_broken_ones(self):
+        # The predicate in index.html is `m.probe !== 'broken'`; every other
+        # state stays in the menu, with a label.
+        page = (Path(__file__).resolve().parents[1] / "teach" / "web"
+                / "index.html").read_text()
+        self.assertIn("m.probe !== 'broken'", page)
+        for state in set(probe.CATALOGUE_STATE.values()):
+            self.assertNotEqual(state, "broken")
+
+
 class LanguageTests(unittest.TestCase):
     """Which language did the model reply in? Fixed lists, fixed rule.
 

@@ -186,8 +186,8 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	@echo "  scripts/check_models.py        do the study bot's models still exist, at that price?"
 	@echo "Costs quota, sample only:"
 	@echo "  scripts/check_claims.py        does the cited page SAY what we claim?"
-	@echo "Costs the bot key (~\$$0.007), never the subscription:"
-	@echo "  scripts/probe_models.py        do those models ANSWER, and does the effort selector work?"
+	@echo "Costs the bot key (\$$0.27 measured), never the subscription:"
+	@echo "  scripts/probe_models.py        do they answer, read our material, speak each language?"
 
 # ---------------------------------------------------------------------------
 # The paved path. Everything below is one command that does the whole thing in
