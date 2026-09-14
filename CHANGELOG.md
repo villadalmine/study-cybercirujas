@@ -4,6 +4,37 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-14
 
+- **A Models page, and the only telemetry this site collects: counters, never
+  events.** Owner's question — can a page show which models get used most,
+  without a key, a session, or anything identifying? The bot runs in the
+  browser, so nothing can be derived from traffic; but the page can say so, and
+  "collect nothing about the person" is achievable where "collect nothing" is
+  not.
+
+  What makes it anonymous is the shape of the data. Rows — `{model, at}` — are a
+  log, and on a site this quiet a rare model at a known minute correlates with a
+  person. So there are no rows: every write is `+= 1` on a counter that already
+  exists, nothing carries a per-request timestamp, and the key space is fixed by
+  `models.yaml`. There is no event to correlate because none is written.
+
+  `POST /api/bot/used` takes six closed-set fields (model, tier, intent,
+  material, reasoning, language) behind two gates: pydantic with
+  `extra="forbid"`, then validation against the catalogue. The `forbid` is the
+  one that matters — without it an unknown field is dropped silently, and a
+  future bug in the page could put the student's key in a body that request logs
+  would see. A **checkbox in the bot, ticked by default**, controls it, with the
+  full statement beside it: what is sent, and that the key, the question, the
+  answer and the topic never are. Unticked, no request is made.
+
+  The new **Models** page shows all of it — price, whether it answers, what the
+  reasoning control really does, which languages were proven, and how often it
+  was chosen. The last column is labelled as the soft signal it is: the endpoint
+  is anonymous and unauthenticated, so it cannot be deduplicated and should
+  decide nothing that deserves rigour. The other five are our own measurements.
+  Storage is a 128Mi Longhorn PVC — which also corrects a standing assumption:
+  phase 4 was recorded as blocked on the deployment having no storage. The
+  deployment had none; the cluster has Longhorn.
+
 - **Prices the site showed were wrong, and the weekly CronJob had been saying
   so to a pod log nobody reads.** `study-check-models` fired Monday 06:00 and
   found `deepseek-v4-pro` at $1.60/$3.20 against the $0.9553/$1.9105 on the

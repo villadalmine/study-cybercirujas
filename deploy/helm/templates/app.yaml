@@ -22,6 +22,12 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.botStats.enabled }}
+      volumes:
+        - name: bot-stats
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-bot-stats
+      {{- end }}
       containers:
         - name: app
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -55,6 +61,15 @@ spec:
               value: {{ $v | quote }}
             {{- end }}
             {{- end }}
+            {{- if .Values.botStats.enabled }}
+            - name: TEACH_BOT_STATS
+              value: /data/bot-stats.json
+            {{- end }}
+          {{- if .Values.botStats.enabled }}
+          volumeMounts:
+            - name: bot-stats
+              mountPath: /data
+          {{- end }}
           readinessProbe:
             httpGet:
               path: /healthz

@@ -1,0 +1,25 @@
+{{- if .Values.botStats.enabled }}
+# Counters for which models the study bot gets used with. Tiny and bounded by
+# the catalogue — eighteen models times a handful of enums, a few KB that never
+# grows with traffic, because what is stored are counters and never rows (see
+# teach/core/bot_stats.py).
+#
+# It needs a volume all the same: without one the numbers reset on every
+# `helm upgrade`, and a count that silently restarts is worse than no count.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-bot-stats
+  labels:
+    app.kubernetes.io/name: teach-plat
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- with .Values.botStats.storageClass }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.botStats.size | quote }}
+{{- end }}

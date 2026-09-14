@@ -57,3 +57,17 @@ llm:
 checkModels:
   enabled: true
   schedule: "0 6 * * 1"   # Mondays 06:00, cluster time
+
+# Counters for which models the study bot gets used with — anonymous by the
+# shape of the data, not by policy: counters only, never rows, no timestamp per
+# question, and the key space fixed by models.yaml. Nothing about the student is
+# received or stored; details in teach/core/bot_stats.py.
+#
+# The volume is small and will stay small, but it has to exist: without it the
+# counts reset on every `helm upgrade`. Disable this and the endpoint still
+# answers — it simply counts into a path that does not survive, which is the
+# right behaviour for a local run.
+botStats:
+  enabled: true
+  size: 128Mi
+  storageClass: longhorn

@@ -32,3 +32,7 @@ graphify-out/.last-scan
 .env.*
 *.env
 litellm.env
+
+# Study bot usage counters — written at runtime, per deployment. The cluster
+# keeps them on a PVC; a local run drops them here and they are not the repo's.
+bot-stats.json

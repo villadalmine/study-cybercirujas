@@ -117,7 +117,7 @@ starts when its **entry condition** is met, not when the previous one finishes.
 | 1.5 | the CronJob reports drift but only to a pod log | `/api/models` validates the catalogue against OpenRouter out-of-band and marks unavailable models so the page stops offering them — automating the guard, never the choice of replacement. **Partly done**: `probe_models.py --update` already writes `probe`/`thinking`/`thinking_off` into `models.yaml` and the page honours them, so the guard exists — as a manual pass, because it spends. What is left is the out-of-band half, and only for the free check |
 | 2 | students ask questions spanning topics of one certification | The topic index goes to the model, it names what it needs, the page loads those files — tool calling where supported (84% of models), two round trips as fallback. Still no vector store |
 | 3 | demand for career-level work: study plans, gap analysis | Multi-pass sub-agents, and the same four-function contract exposed over **MCP** so any external agent can study against the corpus |
-| 4 | an owner decision on persistence | Anonymous progress via `X-Session-ID`; blocked on the deployment having no storage |
+| 4 | an owner decision on persistence | Anonymous progress via `X-Session-ID`. **The recorded blocker was wrong**: the deployment had no storage, but the cluster runs Longhorn with three storage classes, and the bot's usage counters now use a PVC. What is left is the decision, not a capability |
 
 ## Smaller things, when there is an appetite
 

@@ -67,6 +67,8 @@ schema — point a client generator at it).
 
 | Method | Path | What it returns |
 |---|---|---|
+| `GET` | `/api/bot/stats` | The counters, as they are. Public, because the page that shows them is |
+| `POST` | `/api/bot/used` | Count one bot answer, anonymously and only if the student left it on |
 | `GET` | `/api/catalog` | Every certification: name, exam, vendor, level, validity and official sources |
 | `GET` | `/api/certs/{cert_id}` | One certification: catalogue entry, syllabus and which topics have material |
 | `GET` | `/api/certs/{cert_id}/topics/{topic_id}` | A topic's material: content, exercises, lab, and the provenance of what is served |

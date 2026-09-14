@@ -16,10 +16,10 @@ from pathlib import Path
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from starlette.middleware.sessions import SessionMiddleware
 
-from .core import auth, catalog, certs, labs
+from .core import auth, bot_stats, catalog, certs, labs
 
 app = FastAPI(title="teach-plat", version="0.1.0")
 app.add_middleware(
@@ -289,6 +289,62 @@ def get_topic(
         **certs.topic_content(cert_id, topic_id, lang=lang),
         "lab_status": labs.status(cert_id, topic_id),
     }
+
+
+class BotUsage(BaseModel):
+    """What the page reports after an answer. Six closed-set fields, no more.
+
+    Pydantic is the first gate and `bot_stats.accepted` the second: this one
+    rejects a malformed body, that one rejects a value outside the catalogue.
+
+    `extra="forbid"` is the point of the first gate. Without it an unknown field
+    is dropped silently, which is safe but only by accident — a future bug in
+    the page could put the student's key in the body and the server would accept
+    the request, and whatever logs requests would see it. Forbidding extras
+    means a body carrying anything beyond these six is refused outright.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    model: str
+    tier: str
+    intent: str
+    material: str
+    reasoning: str
+    lang: str
+
+
+@app.post("/api/bot/used")
+def post_bot_used(usage: BotUsage) -> dict:
+    """Count one bot answer, anonymously and only if the student left it on.
+
+    The page sends this AFTER an answer arrives, fire-and-forget, and only while
+    the "share which models I used" box is ticked. It carries no key, no
+    question, no answer, no topic, no identifier and no cookie — see the module
+    docstring in `teach/core/bot_stats.py` for why the data is shaped as
+    counters rather than rows, which is the part that makes it anonymous by
+    construction rather than by promise.
+
+    Deliberately not a 4xx when the body is rejected: the caller is a page that
+    cannot act on the difference, and an endpoint that reports which values it
+    accepts is an endpoint that can be probed for them.
+    """
+    import datetime
+
+    counted = bot_stats.record(usage.model_dump(),
+                               datetime.date.today().isoformat())
+    return {"counted": counted}
+
+
+@app.get("/api/bot/stats")
+def get_bot_stats() -> dict:
+    """The counters, as they are. Public, because the page that shows them is.
+
+    Soft numbers on purpose: the endpoint above is unauthenticated and
+    anonymous, so anyone can post to it and we cannot deduplicate without the
+    identity we chose not to have. Whatever renders this has to say so.
+    """
+    return bot_stats.load()
 
 
 @app.get("/healthz")

@@ -287,6 +287,56 @@ their own key sees the same. The catalogue's own header says free models churn
 by nature. The probe reports; a human decides — and the honest label is
 "unverified", which is what the page now shows.
 
+### Which models get used — counters, never events (2026-09-14)
+
+Owner's question: can another page show which models get used most, without
+collecting a key, a session, or anything identifying?
+
+The first answer was no, and it was wrong in an interesting way. The bot runs
+entirely in the browser — question, key and answer go straight to openrouter.ai
+— so nothing can be *derived* from traffic. But the page can *say* so, and the
+owner's constraint was never "collect nothing", it was "collect nothing about
+the person". Those are different, and the second one is achievable.
+
+**What makes it anonymous is the shape of the data, not a promise about it.**
+Storing rows — `{model, at}` — is a log, and on a site this quiet a rare model
+at a known minute correlates with a person. So there are no rows. Every write is
+`+= 1` on a counter that already exists, no timestamp is kept per request, and
+the key space is fixed by `models.yaml`. There is no event to correlate because
+none is ever written. *We promise not to look* is a policy; *there is nothing to
+look at* is a design, and only the second survives a change of maintainer.
+
+`POST /api/bot/used` takes six fields, all closed sets: model, tier, intent,
+material, reasoning, language. Two gates: pydantic with `extra="forbid"`, then
+validation against the catalogue. The `forbid` is the one that matters — without
+it an unknown field is dropped silently, which is safe only by accident, and a
+future bug in the page could put the student's key in the body where anything
+logging requests would see it. With it, a body carrying a seventh field is
+refused before it is read. A rejected body answers 200 without saying why: the
+page cannot act on the difference, and an endpoint that reports which values it
+accepts can be probed for them.
+
+**The student's control**: a checkbox in the bot, **ticked by default**, with
+the full statement beside it — what is sent, and that the key, the question, the
+answer and the topic never are. Untick it and the request is not made at all.
+
+**The numbers are soft and the page says so.** The endpoint is anonymous and
+unauthenticated by construction, so anyone can post to it and we cannot
+deduplicate without the identity we chose not to have. It shows which way people
+lean. It should decide nothing that deserves rigour — which is why the Models
+page puts it in the last column, beside five columns that *are* measurements of
+ours, reproducible and paid for.
+
+**Storage**: a 128Mi Longhorn PVC. Small and bounded — eighteen models times a
+handful of enums, a few KB that never grows with traffic — but it has to exist,
+because without it the counts reset on every `helm upgrade`, and a count that
+silently restarts is worse than no count.
+
+This also corrects a standing assumption: phase 4 is recorded here as blocked on
+"the deployment's lack of persistent storage". The *deployment* had none; the
+*cluster* has Longhorn and three storage classes. The blocker is an owner
+decision about persistence, not a missing capability.
+
 ### Phase 2 — questions across one certification
 
 **Entry**: students actually ask questions that span topics ("where does X
