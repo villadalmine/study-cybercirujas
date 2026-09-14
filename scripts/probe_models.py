@@ -103,6 +103,134 @@ DEFAULT_BUDGET = 0.60
 RATE_RETRY_DELAY = 6
 
 
+# ------------------------------------------------------------------ tool calling
+# Phase 2 of docs/STUDY_BOT_DESIGN.md sends the topic index and lets the model
+# ask for the topics it needs. The catalogue says 84% of OpenRouter models
+# support tool calling — but that is the ADVERTISED capability, and this whole
+# script exists because advertised and actual differ: all eighteen models here
+# advertise `reasoning: true` and thirteen behave differently. So before phase 2
+# is built on tool calling, tool calling gets measured on the models we offer.
+#
+# One tool, one question that cannot be answered without calling it, graded on
+# the call rather than on the prose: did it emit a well-formed call, naming this
+# tool, with arguments that parse and carry the identifiers the question gave?
+TOOL = {
+    "type": "function",
+    "function": {
+        "name": "get_topic",
+        "description": "Fetch the study material for one topic of a certification.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "cert": {"type": "string", "description": "Certification id, e.g. lpi-010-160"},
+                "topic": {"type": "string", "description": "Topic id, e.g. 5.2"},
+            },
+            "required": ["cert", "topic"],
+        },
+    },
+}
+TOOL_SYSTEM = (
+    "You are a study assistant for IT certifications. You do not have the "
+    "material in front of you: use the get_topic tool to fetch it before "
+    "answering."
+)
+TOOL_USER = ("Which file stores the local user accounts, according to topic 5.2 "
+             "of the certification lpi-010-160?")
+TOOL_ARGS = {"cert": "lpi-010-160", "topic": "5.2"}
+
+
+def tool_call_of(probe: dict) -> dict | None:
+    """The first tool call in a response, normalised, or None."""
+    calls = probe.get("tool_calls") or []
+    if not calls:
+        return None
+    call = (calls[0].get("function") or {})
+    try:
+        arguments = json.loads(call.get("arguments") or "{}")
+    except Exception:                                             # noqa: BLE001
+        arguments = None
+    return {"name": call.get("name"), "arguments": arguments}
+
+
+def tool_verdict(probe: dict) -> str:
+    """How well this model drove one tool.
+
+    calls      asked for the tool with the right name and the right arguments
+    wrong-args called it, but the arguments do not carry what the question said
+    malformed  called it with arguments that are not even JSON
+    ignored    answered in prose without calling anything — the phase-2 loop
+               never starts, so the model needs the two-round-trip path
+    refused    the request itself was rejected when tools were attached
+    """
+    if probe.get("status") in (400, 404, 422) and "tool" in (probe.get("message") or "").lower():
+        return "refused"
+    if verdict(probe) in ("dead", "auth", "error", "rate"):
+        return "unknown"
+    call = tool_call_of(probe)
+    if call is None:
+        return "ignored"
+    if call["arguments"] is None:
+        return "malformed"
+    if call["name"] != TOOL["function"]["name"]:
+        return "wrong-tool"
+    got = {k: str(v) for k, v in call["arguments"].items() if k in TOOL_ARGS}
+    return "calls" if got == TOOL_ARGS else "wrong-args"
+
+
+def probe_tools(client: httpx.Client, key: str, model: str,
+                reasoning: dict | None = None) -> dict:
+    """Two turns: does it ask for the tool, and can it use what comes back?
+
+    The second turn is the one that matters for phase 2 — a model that emits a
+    call but then cannot carry the returned material into an answer leaves the
+    student with a round trip paid for and nothing to show.
+    """
+    out = {"calls": 0, "cost": 0.0}
+    first, made = ask_retrying(client, key, model, None, CAP, reasoning=reasoning,
+                               system=TOOL_SYSTEM, user=TOOL_USER, tools=[TOOL])
+    out["calls"] += made
+    out["cost"] += first.get("cost", 0.0)
+    out["tools"] = tool_verdict(first)
+    if out["tools"] != "calls":
+        out["message"] = (first.get("message") or "")[:160]
+        return out
+
+    # Hand back the same excerpt phase 2 would, and see whether the answer uses
+    # it. Graded by the same substring as the comprehension pass.
+    fixture = yaml.safe_load(MATERIAL.read_text())
+    excerpt = material("en", fixture)
+    call = (first.get("tool_calls") or [{}])[0]
+    conversation = [
+        {"role": "system", "content": TOOL_SYSTEM},
+        {"role": "user", "content": TOOL_USER},
+        {"role": "assistant", "content": None, "tool_calls": [call]},
+        {"role": "tool", "tool_call_id": call.get("id"),
+         "name": TOOL["function"]["name"], "content": excerpt},
+    ]
+    second, made = ask_retrying(client, key, model, None, CAP,
+                                reasoning=reasoning, messages=conversation)
+    out["calls"] += made
+    out["cost"] += second.get("cost", 0.0)
+    answered = fixture["expect"].lower() in (second.get("content") or "").lower()
+    if not answered:
+        # One retry before this is written down, for the reason the language
+        # pass already learned: `deepseek-v4-flash` failed this turn on
+        # 2026-09-14 and passed the next run with the same fixed prompt. One
+        # sample is weather. It costs a call only on the models that fail.
+        retry, made = ask_retrying(client, key, model, None, CAP,
+                                   reasoning=reasoning, messages=conversation)
+        out["calls"] += made
+        out["cost"] += retry.get("cost", 0.0)
+        answered = fixture["expect"].lower() in (retry.get("content") or "").lower()
+        second = retry
+    out["tools"] = "calls" if answered else "calls-no-answer"
+    if not answered:
+        out["message"] = (second.get("message")
+                          or f"called the tool, then answered "
+                             f"{(second.get('content') or '')[:60]!r}")[:160]
+    return out
+
+
 # ---------------------------------------------------------------- comprehension
 # The bot's own system prompt, trimmed to the part that decides the answer. The
 # probe has to send what the page sends, or it grades a request nobody makes.
@@ -207,7 +335,8 @@ def worst_case(entries: list[dict], deep: bool, langs: list[str]) -> float:
 
 def ask(client: httpx.Client, key: str, model: str, effort: str | None,
         cap: int, reasoning: dict | None = None,
-        system: str | None = None, user: str | None = None) -> dict:
+        system: str | None = None, user: str | None = None,
+        tools: list | None = None, messages: list | None = None) -> dict:
     """One completion. Returns a plain dict; never raises for an HTTP error.
 
     `usage.include` asks OpenRouter for the real cost of this call, so the
@@ -216,13 +345,15 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
     """
     body = {
         "model": model,
-        "messages": [{"role": "system", "content": system or SYSTEM},
-                     {"role": "user", "content": user or USER}],
+        "messages": messages or [{"role": "system", "content": system or SYSTEM},
+                                 {"role": "user", "content": user or USER}],
         "max_tokens": cap,
         "temperature": 0,
         "seed": SEED,
         "usage": {"include": True},
     }
+    if tools:
+        body["tools"] = tools
     if effort:
         body["reasoning"] = {"effort": effort}
     elif reasoning is not None:
@@ -265,6 +396,7 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
     details = usage.get("completion_tokens_details") or {}
     out.update({
         "content": (message.get("content") or "").strip(),
+        "tool_calls": message.get("tool_calls") or [],
         # Three different shapes mean "it thought", and a model can use any of
         # them: a token count, the thinking text itself, or an opaque
         # `reasoning_details` blob (OpenAI returns encrypted reasoning that way
@@ -283,7 +415,9 @@ def ask(client: httpx.Client, key: str, model: str, effort: str | None,
 
 def ask_retrying(client: httpx.Client, key: str, model: str, effort: str | None,
                  cap: int, reasoning: dict | None = None,
-                 system: str | None = None, user: str | None = None) -> tuple[dict, int]:
+                 system: str | None = None, user: str | None = None,
+                 tools: list | None = None,
+                 messages: list | None = None) -> tuple[dict, int]:
     """`ask` plus one retry for a transient failure. Returns (response, calls).
 
     A `:free` model that is saturated right now is not a broken model, and
@@ -299,11 +433,13 @@ def ask_retrying(client: httpx.Client, key: str, model: str, effort: str | None,
     sample as a verdict told a Portuguese student on Monday the opposite of what
     it told them on Thursday. Two empties in a row is evidence; one is weather.
     """
-    probe = ask(client, key, model, effort, cap, reasoning, system, user)
+    probe = ask(client, key, model, effort, cap, reasoning, system, user,
+                tools, messages)
     if verdict(probe) not in ("rate", "empty"):
         return probe, 1
     time.sleep(RATE_RETRY_DELAY)
-    return ask(client, key, model, effort, cap, reasoning, system, user), 2
+    return ask(client, key, model, effort, cap, reasoning, system, user,
+               tools, messages), 2
 
 
 def verdict(probe: dict) -> str:
@@ -321,7 +457,10 @@ def verdict(probe: dict) -> str:
         return "error"
     content = (probe.get("content") or "").strip()
     if not content:
-        return "empty"
+        # A tool call IS the answer to a tool-calling turn: the model said what
+        # it wants, in the field where that is said. Only a reply with neither
+        # prose nor a call is empty.
+        return "ok" if probe.get("tool_calls") else "empty"
     if EXPECTED in content.lower():
         return "ok"
     return "answers"
@@ -432,7 +571,8 @@ def tally(row: dict, probe: dict) -> None:
 
 
 def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool,
-              fixture: dict | None = None, langs: list[str] | None = None) -> dict:
+              fixture: dict | None = None, langs: list[str] | None = None,
+              tools: bool = False) -> dict:
     """Three calls for a model that answers, one for a model that does not.
 
     Order matters: liveness first, and the reasoning questions only for a model
@@ -492,6 +632,17 @@ def probe_one(client: httpx.Client, key: str, entry: dict, deep: bool,
         # the response admits to a single reasoning token.
         row["thinking"] = "always"
         row["off_switch_message"] = (killed.get("message") or "")[:120]
+
+    if tools:
+        found = probe_tools(
+            client, key, model,
+            reasoning={"enabled": False} if row["off_switch"] == "enabled:false"
+            else None)
+        row["calls"] += found["calls"]
+        row["cost"] += found["cost"]
+        row["tools"] = found["tools"]
+        if found.get("message"):
+            row["tool_message"] = found["message"]
 
     if fixture and langs:
         # The question the bot exists to answer: can this model read the
@@ -604,6 +755,10 @@ def main() -> int:
                         help="languages to prove comprehension in, comma "
                              "separated (default: every language the site "
                              "offers); empty string skips the pass")
+    parser.add_argument("--tools", action="store_true",
+                        help="also measure tool calling — phase 2 of the bot "
+                             "design rests on it, and the 84%% in the catalogue "
+                             "is advertised, not observed")
     parser.add_argument("--deep", action="store_true",
                         help="also send effort=high, to check the dial actually moves")
     parser.add_argument("--dry-run", action="store_true",
@@ -664,7 +819,8 @@ def main() -> int:
     rows, spent, calls = [], 0.0, 0
     with httpx.Client(follow_redirects=True) as client:
         for tier, entry in selected:
-            row = probe_one(client, key, entry, args.deep, fixture, langs)
+            row = probe_one(client, key, entry, args.deep, fixture, langs,
+                            tools=args.tools)
             row["tier"] = tier
             row["name"] = entry.get("name", entry["id"])
             rows.append(row)
@@ -685,8 +841,9 @@ def main() -> int:
                          else "+".join(row["langs"]) or "none")
                 lang_note = (f" langs={shown}"
                              + (f" ({', '.join(lost)})" if lost else ""))
+            tool_note = f" tools={row['tools']}" if "tools" in row else ""
             print(f"  {mark} {row['id']:42} {tier:5} "
-                  f"thinking={row['thinking']:8} ${row['cost']:.5f}{lang_note}"
+                  f"thinking={row['thinking']:8} ${row['cost']:.5f}{tool_note}{lang_note}"
                   + (f"  {row['message']}" if row.get("message") else ""))
             if row["verdict"] == "answers":
                 print(f"         replied {row['reply']!r} instead of '{EXPECTED}'")
@@ -737,6 +894,16 @@ def main() -> int:
                          r.get("off_switch"), "")
             print(f"  {r['thinking'].upper():8} {r['id']} — "
                   f"{THINK_NOTE[r['thinking']]}{extra}")
+    if args.tools:
+        works = [r for r in rows if r.get("tools") == "calls"]
+        print(f"\nTool calling — what phase 2 would rest on:")
+        print(f"  {len(works)}/{len(rows)} model(s) called the tool correctly "
+              f"AND used what came back")
+        for r in rows:
+            if r.get("tools") and r["tools"] != "calls":
+                print(f"  {r['tools'].upper():16} {r['id']}"
+                      + (f" — {r['tool_message']}" if r.get("tool_message") else ""))
+
     if langs:
         print(f"\nComprehension on real material "
               f"({fixture['cert']}/{fixture['topic']}, "
@@ -813,11 +980,13 @@ def main() -> int:
                 # deleting yesterday's evidence would drop it from every menu
                 # for a reason that has nothing to do with the model.
                 previous = entry.get("langs")
-                for key in ("probe", "thinking", "thinking_off", "langs",
-                            "probed"):
+                for key in ("probe", "thinking", "thinking_off", "tools",
+                            "langs", "probed"):
                     entry.pop(key, None)
                 entry["probe"] = catalogue_state(row["verdict"])
                 entry["thinking"] = row["thinking"]
+                if "tools" in row:
+                    entry["tools"] = row["tools"]
                 # The UI needs this one: for most models "no reasoning" only
                 # means anything if the switch is sent explicitly, and for a
                 # few, sending it breaks the request.

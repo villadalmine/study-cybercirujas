@@ -39,7 +39,12 @@
 #                 (lpi-010-160/5.2) IN that language. A model is excluded from a
 #                 language only on evidence: a wrong answer, or a reply
 #                 measurably in another language.
-#   probed:       the date those four were last true.
+#   tools:        `calls` when the model asked for a declared tool with the right
+#                 arguments AND used what came back — the loop phase 2 of the bot
+#                 rests on. Measured for the same reason as everything else here:
+#                 OpenRouter's catalogue says 84% of models support tool calling,
+#                 and that is the advertised capability, not the observed one.
+#   probed:       the date those five were last true.
 #
 # FREE MODELS CHANGE OFTEN — that is their nature, and it is why
 # `scripts/check_models.py` runs inside `make check-updates`. When a free model
@@ -58,6 +63,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -76,6 +82,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       langs:
         - en
         - es
@@ -93,6 +100,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -112,6 +120,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: ignored
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -130,6 +139,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: ignored
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -148,6 +158,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -166,6 +177,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -184,6 +196,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -203,6 +216,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: effort
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -221,6 +235,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       langs:
         - en
         - es
@@ -238,6 +253,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       langs:
         - en
         - es
@@ -255,6 +271,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: effort
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -273,6 +290,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -291,6 +309,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       langs:
         - en
         - es
@@ -316,9 +335,8 @@ tiers:
       out: 0
       ctx: 262
       reasoning: true
-      probe: ok
-      thinking: effort
-      thinking_off: enabled:false
+      probe: rate
+      thinking: unknown
       probed: '2026-09-14'
     - id: nvidia/nemotron-3-ultra-550b-a55b:free
       name: Nemotron 3 Ultra 550B
@@ -328,6 +346,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
@@ -345,6 +364,7 @@ tiers:
       reasoning: true
       probe: ok
       thinking: always
+      tools: calls
       thinking_off: enabled:false
       langs:
         - en
