@@ -2,6 +2,29 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-15
+
+- **Phase 4: progress that outlives the session — kept in the browser, not on
+  the server.** The design proposed anonymous server-side progress behind an
+  `X-Session-ID`; the blocker it cited ("the deployment has no persistent
+  storage") turned out to be about the deployment and not the cluster, so the
+  choice stopped being technical and became one about what this platform should
+  hold. It holds nothing: progress lives in `localStorage` beside the key and
+  the share preference. No endpoint, no storage, no retention rule, no id to
+  forge, nothing to leak — and it stays true that the only thing the server
+  keeps about anyone is a counter with no event behind it. What it gives up is
+  syncing between devices, which is what accounts are for.
+
+  **Only what the page knows as fact is recorded**: which topics were opened and
+  when. Not "what you have mastered" — the quiz is free-form and grading it
+  would mean trusting a model's opinion of a student's answer, a confident claim
+  resting on an unverifiable judgement. Coverage counts against topics that HAVE
+  material, never against the syllabus: a topic nobody can study yet cannot be
+  held against anyone. Shown as a tick in the topic selector and one line under
+  the cost bar, with a control to forget it and a plain statement that it never
+  leaves the browser. Every access is wrapped — in a private window
+  `localStorage` throws, and the page shows nothing rather than breaking.
+
 ## 2026-09-14
 
 - **Study bot phase 2: questions that span a whole certification.** The student

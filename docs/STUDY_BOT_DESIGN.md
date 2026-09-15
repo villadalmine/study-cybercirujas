@@ -573,7 +573,38 @@ is the same function `scripts/check_models.py` already implements — it should
 move to `teach/core/` so the API and the script share one implementation rather
 than two that drift.
 
-### Phase 4 — progress that outlives the session (out of scope for now)
+### Phase 4 — BUILT 2026-09-15, in the browser rather than on the server
+
+The owner's decision, and it is the variant this document did not propose.
+
+Phase 4 as written below routes anonymous progress through an `X-Session-ID` to
+server-side storage. That works, and the blocker it names — "the deployment's
+lack of persistent storage" — turned out to be about the *deployment*, not the
+cluster: Longhorn is there, and the bot's usage counters already use a PVC. So
+the choice stopped being technical and became a question about what this
+platform should hold.
+
+**It holds nothing.** Progress lives in `localStorage`, beside the key and the
+share preference. No endpoint, no storage, no retention rule, no id to forge,
+nothing to leak, and it stays true that the only thing the server keeps about
+anyone is a counter with no event behind it. What it gives up is syncing between
+devices — which is what accounts are for, and accounts are what this site does
+not have on purpose.
+
+**What is recorded is only what the page knows as fact**: which topics you
+opened and when. Not "what you have mastered". The bot's quiz is free-form, and
+grading it would mean trusting a model's opinion of your answer — a confident
+claim resting on an unverifiable judgement, which is the one move this corpus is
+careful never to make. Coverage counts against the topics that HAVE material,
+not against the syllabus, because a topic nobody can study yet cannot be held
+against a student.
+
+It shows as a tick beside studied topics in the selector and one line under the
+cost bar, with a control to forget it and a statement that it never leaves the
+browser. Every read and write is wrapped: in a private window `localStorage`
+throws on access, and the page shows nothing rather than breaking.
+
+### Phase 4, as originally proposed — the server-side route not taken
 
 **Entry**: an owner decision on persistence. Everything above is ephemeral
 by design, which is what keeps it free of accounts and of server state.
