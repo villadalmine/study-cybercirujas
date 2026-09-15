@@ -1173,8 +1173,22 @@ async function botAskSpanning(key, cert, q, intent) {
   }
   msgs.push({ role: 'user', content:
     'Here is the material you asked for. Answer the question using only this.\n\n' + material.join('\n\n') });
+  // Withdraw the "reply with a JSON array of ids" instruction before asking for
+  // the answer. Left in place, a model can obey it a second time — and then the
+  // student is shown `["5.1","5.2","5.3"]` as if it were the answer, which is
+  // what happened in production before this line existed. Intermittent, because
+  // whether it re-asks depends on how much it got the first time.
+  msgs[0] = { role: 'system', content: msgs[0].content.split('\n\n')
+    .filter((part) => !part.startsWith('Answer only from material you have been given.'))
+    .concat('You now have the material. Answer the question from it. Do not ask for more topics.')
+    .join('\n\n') };
   const message = await botSend(key, msgs, null);
-  return { text: message.content || '', note: botLoadedNote(loaded), cut: message.cut };
+  const text = message.content || '';
+  // Belt and braces: if it answered with nothing but a list of ids anyway, that
+  // is not an answer and must not be rendered as one.
+  const onlyIds = /^\s*\[[^\]]*\]\s*$/.test(text);
+  return { text: onlyIds ? '' : text, note: botLoadedNote(loaded),
+           cut: message.cut || onlyIds };
 }
 
 const botLoadedNote = (loaded) => loaded.length

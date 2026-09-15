@@ -4,6 +4,16 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-15
 
+- **The two-round-trip fallback could hand a student a JSON array as its
+  answer.** After the material arrived, the system prompt still said "if you
+  need a topic, reply with NOTHING but a JSON array of its ids" — so a model
+  could obey it a second time, and `["5.1","5.2","5.3"]` was rendered as the
+  answer. Intermittent, because whether it re-asks depends on how much it got
+  the first time, which is why it survived the first round of testing and
+  showed up on the fourth production run. The instruction is now withdrawn
+  before the answer is asked for, and a reply that is nothing but a list of ids
+  is treated as no answer rather than shown as one.
+
 - **Phase 4: progress that outlives the session — kept in the browser, not on
   the server.** The design proposed anonymous server-side progress behind an
   `X-Session-ID`; the blocker it cited ("the deployment has no persistent
