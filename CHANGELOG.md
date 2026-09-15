@@ -4,6 +4,24 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-15
 
+- **Every question in the bot was failing with "path is not defined", and the
+  harness said green.** A rename of the three variables that read the
+  certification selector was applied with a first-occurrence replace, and the
+  same line exists earlier in `botMaterial` — so the rename landed there and
+  `botAsk` was left referring to a variable that never existed. The page caught
+  the `ReferenceError` and rendered it as *"OpenRouter error: path is not
+  defined"*, which reads as a problem with the student's key. Reported by the
+  owner; it shipped in revision 68 and lived through three deploys.
+
+  `scripts/bot_loop_check.js` never caught it because it calls `botAskSpanning`
+  and `botAskCareer` directly and never goes through `botAsk` — testing the
+  functions is not testing the page, which is the same lesson the Models page
+  taught and this time it cost a live outage. Two fixes: one `botSelection()` is
+  now the only thing that reads those controls, so a rename cannot land in half
+  the callers; and `scripts/bot_browser_check.js` drives a real Chromium through
+  the actual button for all three shapes — topic, certification, career — and
+  fails on a page error or on an answer that does not contain what it should.
+
 - **The two-round-trip fallback could hand a student a JSON array as its
   answer.** After the material arrived, the system prompt still said "if you
   need a topic, reply with NOTHING but a JSON array of its ids" — so a model

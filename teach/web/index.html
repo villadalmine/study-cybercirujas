@@ -645,7 +645,7 @@ function progressForget() {
 async function botProgressLine() {
   const el = $('bprog');
   if (!el) return;
-  const picked = $('bc').value;
+  const { picked } = botSelection();
   const data = progressRead();
   const total = Object.values(data).reduce((n, e) => n + e.asked, 0);
   if (!total) { el.innerHTML = ''; return; }
@@ -786,7 +786,7 @@ async function showBot() {
 // "Give me an exercise" is meaningless for a whole career, and a study plan is
 // meaningless for one topic. The shortcuts follow the selection rather than
 // offering four that half-apply.
-const botIsPath = () => $('bc').value.startsWith('path:');
+const botIsPath = () => !!botSelection().path;
 
 function botChips() {
   const intents = botIsPath() ? BOT_CAREER_INTENTS : BOT_INTENTS;
@@ -797,7 +797,7 @@ function botChips() {
 }
 
 async function botLoadTopics() {
-  const cert = botIsPath() ? '' : $('bc').value;
+  const { cert } = botSelection();
   BOT.topics = [];
   if (cert) {
     const data = await api(`/api/certs/${cert}`);
@@ -811,10 +811,19 @@ async function botLoadTopics() {
   botProgressLine();
 }
 
-async function botMaterial() {
+// What the student has selected, read in ONE place. Three functions used to
+// parse `$('bc').value` themselves, and a rename applied to the first of them
+// left `botAsk` referring to a variable that did not exist — so every question
+// died with "path is not defined" and the page reported it as an OpenRouter
+// error. One reader, one shape.
+function botSelection() {
   const picked = $('bc').value, topic = $('bt').value, mode = $('bx').value;
   const path = picked.startsWith('path:') ? picked.slice(5) : null;
-  const cert = path ? '' : picked;
+  return { picked, topic, mode, path, cert: path ? '' : picked };
+}
+
+async function botMaterial() {
+  const { cert, topic, mode } = botSelection();
   if (!cert || !topic || mode === 'none') return '';
   const key = `${cert}/${topic}/${LANG}`;
   if (!BOT.material || BOT.material.key !== key) {
@@ -825,7 +834,7 @@ async function botMaterial() {
 }
 
 async function botEstimate() {
-  const picked = $('bc').value, topic = $('bt').value, mode = $('bx').value;
+  const { picked, topic, mode, cert } = botSelection();
   if (!$('best')) return;
   // Phase 3 is the expensive one: one call per certification plus a synthesis.
   // The student is told the CALL COUNT before asking, because that is what they
@@ -836,7 +845,6 @@ async function botEstimate() {
     $('best').textContent = `${n + 1} ${t('botCalls')}`;
     return;
   }
-  const cert = picked;
   // Phase 2 sends the index, not a topic, and then fetches what the model asks
   // for — so the honest figure is "the index now, plus up to N topics if it
   // needs them", never a single number pretending to be the whole cost.
@@ -1071,7 +1079,7 @@ async function botAsk(intent) {
   BOT.lastIntent = intent || 'free';
   const q = intent ? t('bot' + intent[0].toUpperCase() + intent.slice(1)) : $('bq').value.trim();
   if (!q && !intent) return;
-  const cert = $('bc').value, topic = $('bt').value, mode = $('bx').value;
+  const { cert, topic, mode, path } = botSelection();
   // Three shapes, and the student chose which by what they left empty:
   //   a topic  → phase 1, that topic's material goes in the prompt
   //   a cert   → phase 2, the index goes in and the model asks for what it needs
