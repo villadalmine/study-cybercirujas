@@ -43,8 +43,10 @@ topics: []
 
 # {name}
 
-Snapshot del temario. Completar `topics` con id, title, weight, status y sources
-(ver certs/lpi-010-160.md como referencia) y correr `teach cert generate {cert_id}`.
+Syllabus snapshot. Do not fill `topics` by hand: run
+`teach cert snapshot {cert_id}`, which reads the official objectives URL in
+`catalog.yaml`, has the model turn them into structured topics, and freezes the
+result here. Then `teach cert generate {cert_id}`.
 """
 
 

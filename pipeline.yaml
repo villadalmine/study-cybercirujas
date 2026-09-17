@@ -238,6 +238,11 @@ certs:
   lpi-devops:
     active: true
     owner: claude
+    # Declared here in the same change that starts translating them, so the
+    # audit sees the pair from the first topic — "0 corrupt" over combos the
+    # audit does not scan is the blind spot that has bitten this repo three
+    # times.
+    languages: [en, es, pt, fr, de, zh, ja]
     video: [en, es]
   lpi-010-160:
     active: true

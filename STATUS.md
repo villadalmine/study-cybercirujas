@@ -20,7 +20,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpic-3-303` | 15 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpic-3-305` | 13 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpic-3-306` | 12 | ✅ | ✅ | – | – | – | – | – | ✅ |
-| `lpi-devops` | 15 | ✅ | ✅ | – | – | – | – | – | ✅ |
+| `lpi-devops` | 15 | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | 🔶 1/15c·1/15e | ✅ |
 | `cka` | 27 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `ckad` | 24 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `cks` | 26 | ✅ | ✅ | – | – | – | – | – | ✅ |
@@ -50,6 +50,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `nca-aiio` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `mcpa` | 17 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `ckne` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
 
 ## Exam versions
 
@@ -67,6 +69,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `cgoa` | unknown | 2026-08-18 | 2024-11-19 | 2025-11-28 | 2026-09-03 | ✅ current |
 | `cka` | 1.35 | 2026-07-16 | 1.35 | 2026-03-03 | 2026-09-03 | ✅ current |
 | `ckad` | 1.35 | 2026-07-11 | 1.35 | 2026-02-25 | 2026-09-03 | ✅ current |
+| `ckne` | unknown | 2026-09-17 | beta | – | 2026-09-17 | – unknown |
 | `cks` | 1.34 | 2026-07-17 | 1.34 | 2025-10-30 | 2026-09-03 | ✅ current |
 | `cnpa` | 2025-04-01 | 2026-07-30 | 2025-04-01 | 2025-04-01 | 2026-09-03 | ✅ current |
 | `cnpe` | unknown | 2026-07-30 | 2025-12-03 | 2025-12-03 | 2026-09-03 | ✅ current |
@@ -90,6 +93,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpic-3-303` | 3.0.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-305` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-306` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
+| `mcpa` | 2026-07-28 | 2026-09-17 | MCP 2026-07-28 | 2026-07-28 | 2026-09-17 | ✅ current |
 | `nca-aiio` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
 | `nca-genl` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
 | `ncp-aii` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
@@ -155,11 +159,13 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `nca-aiio` | – | – | – | – |
 | `nca-genl` | – | – | – | – |
 | `ncp-aii` | – | – | – | – |
+| `mcpa` | – | – | – | – |
+| `ckne` | – | – | – | – |
 
 ## Spend (measured)
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,249 completions · 56,491,736 output tokens · $1,862.59 API-equivalent
+- 2,253 completions · 56,527,677 output tokens · $1,864.45 API-equivalent
 - 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1120 · translate 861 · probe 205 · video-script 22 · untagged 21 · snapshot 13 · catalog-sync 7
+- per stage: author 1120 · translate 863 · probe 205 · video-script 22 · untagged 21 · snapshot 15 · catalog-sync 7

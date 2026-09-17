@@ -2,6 +2,38 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-17
+
+- **Two certifications catalogued: MCPA and CKNE.** Both entered through
+  `teach cert snapshot`, the documented process, against the objectives Linux
+  Foundation Education publishes — not hand-written, which is how the other 38
+  got there and the only version that is repeatable.
+
+  **MCPA — Model Context Protocol Associate**, the first certification from the
+  Agentic AI Foundation and the first to validate MCP knowledge. 17 topics
+  across the five published domains, whose weights the snapshot reproduces
+  exactly: MCP Fundamentals 16, Architecture & Components 14, Interactions &
+  Execution 26, Security & Governance 24, Use Cases & Ecosystem 20. Multiple
+  choice, 90 minutes, two-year validity, tracking MCP release 2026-07-28.
+
+  **CKNE — Certified Kubernetes Network Engineer**, performance-based, CKA-level
+  assumed. 22 topics over Core Infrastructure and CNI 15, Service Networking and
+  DNS 25, Advanced Traffic Management 20, Network Security and Policy 25,
+  Observability 15. **Its beta is closed and GA has not landed**, so the
+  objectives can still move; the snapshot records that and nothing is generated
+  against it yet. Writing material for a syllabus that has not settled is the
+  failure that cost this project seven LPI re-snapshots.
+
+  Also found: the Cilium certification already exists in the catalogue as `cca`,
+  and it is stale — frozen at 2024-10-21 while upstream last changed the
+  curriculum on 2025-11-28, with only five topics, one per domain. That is a
+  re-snapshot, not a new entry.
+
+- **`teach cert add` wrote its template in Spanish** and told the reader to fill
+  `topics` by hand, against both the repository's English-only rule and its own
+  process. It now points at `teach cert snapshot`, which is what actually
+  freezes a syllabus.
+
 ## 2026-09-15
 
 - **Every question in the bot was failing with "path is not defined", and the

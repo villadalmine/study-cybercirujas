@@ -603,6 +603,36 @@ certs:
     validity: 2 años
     requires:
     - nca-aiio
+  mcpa:
+    name: Model Context Protocol Associate (MCPA)
+    exam: MCPA
+    category: ai
+    tracked_version: MCP 2026-07-28
+    upstream_status: current
+    last_checked: '2026-09-17'
+    file: certs/mcpa.md
+    sources:
+      objectives: https://training.linuxfoundation.org/certification/model-context-protocol-associate-mcpa/
+    vendor: Linux Foundation
+    level: associate
+    validity: 2 years
+    curriculum_updated: '2026-07-28'
+    requires: []
+  ckne:
+    name: Certified Kubernetes Network Engineer (CKNE)
+    exam: CKNE
+    category: cloud-native
+    tracked_version: beta
+    upstream_status: current
+    last_checked: '2026-09-17'
+    file: certs/ckne.md
+    sources:
+      objectives: https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
+    vendor: CNCF
+    level: intermediate
+    validity: 2 years
+    requires:
+    - cka
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
