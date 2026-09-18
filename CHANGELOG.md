@@ -4,6 +4,25 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-09-17
 
+- **lpi-devops had a weak third and it is closed.** Five of its fifteen topics
+  were written on 2026-08-07 by `agy` at 22–35 KB, while the other ten came from
+  `claude-opus-5` on 2026-09-03 at 65–117 KB — and four of the five were the
+  whole *701 Software Engineering* domain, so **a third of the exam weight rested
+  on material a third the depth**. Regenerated on `claude-opus-5`: they now run
+  58–94 KB and the certification is even. Their Spanish had been translated from
+  the thin English (ratios 0.25–0.55) and was redone; it is back to 1.05–1.08,
+  which is what a real translation looks like.
+
+  The wider scan that found it is worth keeping: of 511 authored topics, only
+  147 are at the opus-5 standard. But **size is not quality** — all of them pass
+  the floor, and the jump came from a deliberate model and effort change on
+  2026-08-13, not from a defect. A certification written uniformly on an older
+  model is *even*; a student hits no hole. What is worth fixing is unevenness
+  *inside* one exam, and only five certifications have it: `lpi-devops` (done),
+  `cgoa` (2 topics), `kca` (17, genuinely half and half), plus `kcsa` and `cnpa`
+  — which are the reverse, uniform corpora with one or two upgraded outliers,
+  where matching them would mean redoing 41 and 25 topics to catch up with 1.
+
 - **Two certifications catalogued: MCPA and CKNE.** Both entered through
   `teach cert snapshot`, the documented process, against the objectives Linux
   Foundation Education publishes — not hand-written, which is how the other 38

@@ -1,7 +1,7 @@
-generated_at: '2026-08-07T08:49:16'
+generated_at: '2026-09-18T05:46:43'
 lang: es
 translated_from: en
-backend: gemini
-model: agy
+backend: claude
+model: claude-opus-5
 sources:
-- https://www.lpi.org/our-certifications/devops-tools-engineer-overview/
+- https://www.lpi.org/our-certifications/exam-701-objectives/

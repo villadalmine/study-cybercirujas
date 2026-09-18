@@ -235,6 +235,18 @@ certs:
     active: true
     owner: antigravity
     video: [en, es]
+  mcpa:
+    active: true
+    owner: claude
+    # English first, then Spanish — the fixed order. The rest on demand.
+    languages: [en, es]
+  ckne:
+    # Catalogued but NOT active: its beta is closed and GA has not landed, so
+    # the objectives can still move. Flip this when upstream publishes the
+    # final curriculum, not before.
+    active: false
+    owner: claude
+    languages: [en, es]
   lpi-devops:
     active: true
     owner: claude
@@ -242,7 +254,10 @@ certs:
     # audit sees the pair from the first topic — "0 corrupt" over combos the
     # audit does not scan is the blind spot that has bitten this repo three
     # times.
-    languages: [en, es, pt, fr, de, zh, ja]
+    # pt kept because one topic is already translated and material nothing
+    # audits is the blind spot this repo has hit three times. The other four
+    # languages are not wanted — owner, 2026-09-18.
+    languages: [en, es, pt]
     video: [en, es]
   lpi-010-160:
     active: true

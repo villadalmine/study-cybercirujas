@@ -20,7 +20,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpic-3-303` | 15 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpic-3-305` | 13 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `lpic-3-306` | 12 | ✅ | ✅ | – | – | – | – | – | ✅ |
-| `lpi-devops` | 15 | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | 🔶 1/15c·1/15e | ✅ |
+| `lpi-devops` | 15 | ✅ | ✅ | – | – | – | – | 🔶 3/15c·3/15e | ✅ |
 | `cka` | 27 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `ckad` | 24 | ✅ | ✅ | – | – | – | – | – | ✅ |
 | `cks` | 26 | ✅ | ✅ | – | – | – | – | – | ✅ |
@@ -50,7 +50,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `nca-aiio` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
-| `mcpa` | 17 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
 | `ckne` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
 
 ## Exam versions
@@ -166,6 +166,6 @@ None declared — the unattended timer generates nothing. That is the safe defau
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,253 completions · 56,527,677 output tokens · $1,864.45 API-equivalent
+- 2,335 completions · 59,557,089 output tokens · $1,959.57 API-equivalent
 - 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1120 · translate 863 · probe 205 · video-script 22 · untagged 21 · snapshot 15 · catalog-sync 7
+- per stage: author 1186 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 15 · catalog-sync 7
