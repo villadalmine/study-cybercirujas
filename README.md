@@ -5,6 +5,10 @@ official sources (syllabi scraped from lpi.org, PDFs from
 github.com/cncf/curriculum, etc.) — nothing hardcoded, nothing hand-written.
 See the disclosure below.
 
+> **Picking this up again?** [ROADMAP.md → *Where we left off*](ROADMAP.md#where-we-left-off--2026-09-18)
+> is the one place with the open work, what it costs, and the two traps that
+> spend quota when you are not looking.
+
 - **[STATUS.md](STATUS.md)** — which cert/language/lab/video is finished
 - **[MODELS.md](MODELS.md)** — which model wrote what, and how they compare
 - **[PLAN.md](PLAN.md)** — full design

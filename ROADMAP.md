@@ -7,7 +7,7 @@ this file rather than ticked — an item here means it is still open.
 Everything below is derived from the tree. Verify any line with `make status`,
 `make check-updates` or [STATUS.md](STATUS.md) rather than trusting the date.
 
-Last reviewed: **2026-09-11** · site: study.cybercirujas.club
+Last reviewed: **2026-09-18** · site: study.cybercirujas.club
 
 ## Where it is
 
@@ -18,10 +18,66 @@ Last reviewed: **2026-09-11** · site: study.cybercirujas.club
 | ☸️ CNCF / Kubernetes | 14 / 15 | `cba` — unreadable PDF, needs the OCR route and a human to check the result |
 | 🐧 Linux / LPI | 9 / 14 | `lpic-2` (41), `lpic-3-300` (20), `lpi-020-100` (17), `lfcs` (5), `lfca` (6) |
 | ☁️ Cloud providers | 3 / 3 | — AWS, Azure and Google careers exist end to end |
-| 🤖 AI | 0 / 6 | syllabi frozen, visible as coming-soon: `aws-aif` (14), `gcp-gail` (15), `ai-901` (7), `nca-aiio` (22), `nca-genl` (31), `ncp-aii` (39) |
+| 🤖 AI | 0 / 7 | `mcpa` complete in English, needs Spanish (17). Syllabi frozen, coming-soon: `aws-aif` (14), `gcp-gail` (15), `ai-901` (7), `nca-aiio` (22), `nca-genl` (31), `ncp-aii` (39) |
 
-**The study bot is live** (phase 1): pick a topic, bring your own OpenRouter
-key, ask. Zero platform cost.
+**The study bot is live**, all four phases: one topic, a whole certification
+(the model asks for what it needs through tools), a whole career (one pass per
+certification plus a synthesis), and progress kept in the student's own browser.
+Bring your own OpenRouter key. Zero platform cost.
+
+## Where we left off — 2026-09-18
+
+Everything below is open. Nothing is running and nothing spends until someone
+starts it.
+
+**Two certifications went in through `teach cert snapshot`:**
+
+- **`mcpa`** (Model Context Protocol Associate) — 17 topics, **complete in
+  English**, live. Needs Spanish: 17 translations.
+- **`ckne`** (Certified Kubernetes Network Engineer) — 22 topics, syllabus only,
+  `active: false` on purpose. **Its beta is closed and GA has not landed**, so
+  the objectives can still move. Flip it when upstream publishes the final
+  curriculum, not before — material written against an unsettled syllabus is
+  what cost this project seven LPI re-snapshots. Re-check the page before
+  spending anything.
+
+**`lpi-devops` is even again.** Five of its fifteen topics were `agy` at 22–35 KB
+against ten at 65–117 KB, and four of those five were the whole *701 Software
+Engineering* domain — a third of the exam weight at a third of the depth.
+Regenerated and re-translated; `es` ratios are back to 1.05–1.08.
+
+**Depth across the corpus, measured 2026-09-18.** Of 511 authored topics only
+147 are at the opus-5 standard (78 KB average); 119 are `agy` (23 KB), 94 are
+`claude` with the model unresolved (20 KB), 144 are `claude-opus-4-8` (31 KB).
+**Size is not quality** — every one passes the floor, and the jump came from the
+deliberate model/effort change of 2026-08-13, not a defect. A certification
+written uniformly on an older model is *even*, and a student hits no hole. What
+is worth fixing is unevenness *inside* one exam. Five have it:
+
+| Cert | To redo | Worth it? |
+|---|---|---|
+| `lpi-devops` | — | done |
+| `cgoa` | 2 of 4 | yes, cheap |
+| `kca` | 17 of 31 | genuinely half and half — owner's call, 17 topics of real quota |
+| `kcsa` | 41 of 42 | **no** — it is even; the outliers are one or two *upgraded* topics |
+| `cnpa` | 25 of 27 | **no** — same shape |
+
+**`cca` is stale.** The Cilium certification is already catalogued, frozen at
+`2024-10-21` while upstream last changed the curriculum on `2025-11-28`, and it
+carries five topics, one per domain — a coarse snapshot. That is a re-snapshot,
+not a new entry.
+
+**Two traps worth knowing before resuming:**
+
+- **`teach cert generate <cert>` with no `--topic` authors every pending topic in
+  one invocation**, ignoring `budget.topics_per_run`. It did 15 MCPA topics in
+  114 minutes when 2 were intended. AGENTS_SYNC.md warns about this in those
+  words. Always pass `--topic`.
+- **`fix_corrupted_content.py` does not only report — it fills.** `pt` is
+  declared for `lpi-devops` with 3 of 15 topics done, so an audit run starts
+  translating the missing 12. Either finish them, or drop `pt` from
+  `pipeline.yaml` **and** delete the three directories, since material nothing
+  audits is the blind spot this repo has hit three times.
 
 **The machinery is idle and spends nothing** until a milestone is declared:
 `scripts/steer.py milestone <cert> en es` then `make milestone`.
