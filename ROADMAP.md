@@ -11,13 +11,13 @@ Last reviewed: **2026-09-18** · site: study.cybercirujas.club
 
 ## Where it is
 
-**26 certifications published and studyable**, 38 in the catalogue:
+**26 certifications published and studyable**, 42 in the catalogue:
 
 | Family | Published | Outstanding |
 |---|---|---|
 | ☸️ CNCF / Kubernetes | 14 / 15 | `cba` — unreadable PDF, needs the OCR route and a human to check the result |
 | 🐧 Linux / LPI | 9 / 14 | `lpic-2` (41), `lpic-3-300` (20), `lpi-020-100` (17), `lfcs` (5), `lfca` (6) |
-| ☁️ Cloud providers | 3 / 3 | — AWS, Azure and Google careers exist end to end |
+| ☁️ Cloud providers | 3 / 5 | AWS, Azure and Google careers exist end to end. `terraform-associate` (37) and `terraform-advanced` (27) — syllabus only, `active: false` |
 | 🤖 AI | 0 / 7 | `mcpa` complete in English, needs Spanish (17). Syllabi frozen, coming-soon: `aws-aif` (14), `gcp-gail` (15), `ai-901` (7), `nca-aiio` (22), `nca-genl` (31), `ncp-aii` (39) |
 
 **The study bot is live**, all four phases: one topic, a whole certification
@@ -202,7 +202,11 @@ starts when its **entry condition** is met, not when the previous one finishes.
   Anthropic's four Pearson VUE exams have the right shape but no publicly
   published objectives (the Partner Academy is organisation-gated); OpenAI's is
   assessed inside ChatGPT and may never have a domain-weighted syllabus.
-  Re-check quarterly — next **2026-12**.
+  Re-checked **2026-09-29**, early, on the owner's ask: unchanged. Pearson VUE
+  and Anthropic's announcement both say the exams and their prep are for Claude
+  Partner Network members; neither publishes a domain list. The weighted domain
+  lists that circulate (e.g. "Agentic Architecture 27%") come from third-party
+  guides — see the next rule. Next check **2026-12**.
 - **Never catalogue a syllabus from a third-party summary.** Community guides
   circulate detailed domain lists for exams whose vendors publish none; using
   them is the same defect as scraping the wrong page, which cost this project

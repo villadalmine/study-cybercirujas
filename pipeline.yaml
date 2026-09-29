@@ -247,6 +247,16 @@ certs:
     active: false
     owner: claude
     languages: [en, es]
+  terraform-associate:
+    # Syllabus only, on the owner's call (2026-09-29): catalogued so the exam
+    # is on the map, nothing authored. Flip when it is time to spend on it.
+    active: false
+    owner: claude
+    languages: [en, es]
+  terraform-advanced:
+    active: false
+    owner: claude
+    languages: [en, es]
   lpi-devops:
     active: true
     owner: claude

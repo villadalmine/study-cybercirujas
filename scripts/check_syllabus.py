@@ -78,13 +78,18 @@ def load_syllabus(path: Path) -> dict:
         return {}
 
 
-def smells(topics: list[dict], sources: list[str], published: int = 0) -> list[str]:
+def smells(topics: list[dict], sources: list[str], published: int = 0,
+           unpublished: bool = False) -> list[str]:
     """Structural signs the topic list was computed rather than read. Offline.
 
     `published` is how many weights the source document printed, recorded by the
     snapshot. Without it, both offline signals below fire on CNCF's CAPA — five
     domains at 20% each, which is genuinely what the curriculum says. A syllabus
     that matches its source is not fabricated for having the shape of one that is.
+
+    `unpublished` is set when the vendor prints no weighting at all (HashiCorp),
+    declared by a person in catalog.yaml and copied into the syllabus by the
+    snapshot. Then an even split is the honest answer, and signal 1 is skipped.
     """
     found = []
     weights = [round(float(t.get("weight") or 0), 2) for t in topics]
@@ -93,7 +98,7 @@ def smells(topics: list[dict], sources: list[str], published: int = 0) -> list[s
 
     # 1. Weights derived from the count. `sum == 100` was the only rule, and
     #    dividing 100 by len(topics) passes it without reading a single weight.
-    if len(topics) > 2 and len(set(weights)) <= 2 and max(weights) - min(weights) < 0.02:
+    if (not unpublished and len(topics) > 2 and len(set(weights)) <= 2 and max(weights) - min(weights) < 0.02):
         found.append(
             f"all {len(topics)} weights are {weights[0]:g} — that is 100 divided by the "
             f"topic count, not a weighting anyone published"
@@ -171,7 +176,8 @@ def main() -> int:
             continue
         sources = front.get("sources") or []
         problems = smells(topics, sources,
-                          int(front.get("weights_published") or 0))
+                          int(front.get("weights_published") or 0),
+                          front.get("weights") == "unpublished")
 
         if args.upstream:
             count, url = upstream_objectives(sources)

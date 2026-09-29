@@ -451,7 +451,8 @@ def normalise_weights(topics: list[dict]) -> None:
         topic["weight"] = round(hundredths / 100, 2)
 
 
-def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None:
+def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str,
+                                weights_unpublished: bool = False) -> None:
     """Refuse a topic list that the source document does not support.
 
     Both checks exist because of the same incident: seven LPI certifications were
@@ -490,6 +491,14 @@ def _reject_unreadable_syllabus(topics: list[dict], text: str, url: str) -> None
     # domains at 20% each, and rejecting that would block a correct syllabus for
     # having the shape of a wrong one. The distinction is in the document, not in
     # the numbers — if it prints a weight per topic, the weights were read.
+    #
+    # And some vendors publish no weighting at all: HashiCorp lists Terraform
+    # objectives with nothing beside them. There an even split is not a guess
+    # passed off as data, it is the only honest answer — but only because a
+    # person looked and said so in catalog.yaml (`weights: unpublished`). The
+    # model saying so would be the same defect this check exists to catch.
+    if weights_unpublished:
+        return
     weights = [round(float(t.get("weight") or 0), 2) for t in topics]
     published = WEIGHT_TOKEN.findall(text)
     if (len(topics) > 2 and max(weights) - min(weights) < 0.02
@@ -567,7 +576,8 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     # Check the answer against the document it came from, before anything is
     # written. Both facts are derived from the fetched text, so this is not
     # specific to a vendor, an exam, or a page layout.
-    _reject_unreadable_syllabus(topics, text, url)
+    weights_unpublished = cert.get("weights") == "unpublished"
+    _reject_unreadable_syllabus(topics, text, url, weights_unpublished)
 
     stale_at = datetime.datetime.now().isoformat(timespec="seconds")
     added, stale, edited_changed = _apply_snapshot_status(topics, existing, url, stale_at)
@@ -588,6 +598,10 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     # 20% because CNCF publishes it that way" from "every weight is 20% because
     # nobody read one" — the same distinction, available for free, forever.
     post.metadata["weights_published"] = len(WEIGHT_TOKEN.findall(text))
+    if weights_unpublished:
+        # Carried into the syllabus so the offline checker, which never reads
+        # the catalog, knows the even split was declared rather than computed.
+        post.metadata["weights"] = "unpublished"
     post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))
     post.metadata["snapshot_date"] = datetime.date.today().isoformat()
     sources = post.metadata.get("sources") or []

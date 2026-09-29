@@ -52,6 +52,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
 | `ckne` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `terraform-associate` | 37 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `terraform-advanced` | 27 | ❌ | ❌ | – | – | – | – | – | ❌ |
 
 ## Exam versions
 
@@ -99,6 +101,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `ncp-aii` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
 | `otca` | unknown | 2026-08-08 | 2024-11-28 | 2024-11-28 | 2026-09-03 | ✅ current |
 | `pca` | unknown | 2026-08-08 | 2022-08-31 | 2022-08-31 | 2026-09-03 | ✅ current |
+| `terraform-advanced` | Terraform 1.6 | 2026-09-29 | Terraform 1.6 | – | 2026-09-29 | – unknown |
+| `terraform-associate` | 004 | 2026-09-29 | Terraform 1.12 | – | 2026-09-29 | – unknown |
 
 ## Path Videos
 
@@ -161,11 +165,13 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `ncp-aii` | – | – | – | – |
 | `mcpa` | – | – | – | – |
 | `ckne` | – | – | – | – |
+| `terraform-associate` | – | – | – | – |
+| `terraform-advanced` | – | – | – | – |
 
 ## Spend (measured)
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,335 completions · 59,557,089 output tokens · $1,959.57 API-equivalent
+- 2,339 completions · 59,568,024 output tokens · $1,960.58 API-equivalent
 - 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1186 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 15 · catalog-sync 7
+- per stage: author 1186 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · catalog-sync 7

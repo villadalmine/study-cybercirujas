@@ -89,6 +89,19 @@ class SyllabusCoverageTests(unittest.TestCase):
         topics = [{"id": f"{i}.1", "weight": 20} for i in range(1, 6)]
         tracker._reject_unreadable_syllabus(topics, page, "u")
 
+    def test_accepts_an_even_split_when_the_vendor_publishes_no_weights(self):
+        # HashiCorp lists Terraform objectives with no weighting at all. Declared
+        # by a person in catalog.yaml, the even split is the honest answer.
+        topics = [{"id": f"1.{i}", "weight": 25} for i in range(1, 5)]
+        tracker._reject_unreadable_syllabus(topics, "no numbering", "u",
+                                            weights_unpublished=True)
+
+    def test_declaring_no_weights_does_not_excuse_missing_objectives(self):
+        topics = [{"id": "1.1", "weight": 50}, {"id": "1.2", "weight": 50}]
+        with self.assertRaises(tracker.TrackerError):
+            tracker._reject_unreadable_syllabus(topics, self.PAGE, "u",
+                                                weights_unpublished=True)
+
     def test_strips_backend_diagnostics_that_are_not_the_answer(self):
         # A CAPA snapshot died at line 2 on "Client.listTools() called but
         # server has no tools" — a model call thrown away for a diagnostic that

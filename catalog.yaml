@@ -633,6 +633,37 @@ certs:
     validity: 2 years
     requires:
     - cka
+  terraform-associate:
+    name: 'HashiCorp Certified: Terraform Associate (004)'
+    exam: Terraform Associate 004
+    category: cloud
+    tracked_version: Terraform 1.12
+    upstream_status: current
+    last_checked: '2026-09-29'
+    file: certs/terraform-associate.md
+    sources:
+      objectives: https://developer.hashicorp.com/terraform/tutorials/certification-004/associate-review-004
+    vendor: HashiCorp
+    level: associate
+    validity: 2 years
+    weights: unpublished
+    requires: []
+  terraform-advanced:
+    name: 'HashiCorp Certified: Terraform Authoring and Operations Advanced'
+    exam: Terraform Authoring and Operations Advanced
+    category: cloud
+    tracked_version: Terraform 1.6
+    upstream_status: current
+    last_checked: '2026-09-29'
+    file: certs/terraform-advanced.md
+    sources:
+      objectives: https://developer.hashicorp.com/terraform/tutorials/pro-cert/adv-review
+    vendor: HashiCorp
+    level: professional
+    validity: 2 years
+    weights: unpublished
+    requires:
+    - terraform-associate
 paths:
   kubernetes:
     name: Ingeniero Kubernetes
