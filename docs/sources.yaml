@@ -38,6 +38,8 @@ projects:
   opentelemetry: {domains: [opentelemetry.io],       docs: https://opentelemetry.io/docs/, versioned: true}
   istio:        {domains: [istio.io],               docs: https://istio.io/latest/docs/,  versioned: true}
   cilium:       {domains: [docs.cilium.io, cilium.io], docs: https://docs.cilium.io/,     versioned: true}
+  coredns:      {domains: [coredns.io],             docs: https://coredns.io/manual/,     versioned: false}
+  cni:          {domains: [www.cni.dev, cni.dev],   docs: https://www.cni.dev/docs/,      versioned: true}
   kyverno:      {domains: [kyverno.io],             docs: https://kyverno.io/docs/,       versioned: true}
   prometheus:   {domains: [prometheus.io],          docs: https://prometheus.io/docs/,    versioned: false}
   sigstore:     {domains: [docs.sigstore.dev, sigstore.dev], docs: https://docs.sigstore.dev/, versioned: false}

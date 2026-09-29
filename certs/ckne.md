@@ -8,7 +8,7 @@ topics:
 - id: '1.1'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Installing and Configuring CNI Plugins
   topic: 1 - Core Infrastructure and CNI
   weight: 3.0
@@ -57,7 +57,7 @@ topics:
 - id: '2.3'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Customizing coreDNS for Services
   topic: 2 - Service Networking and DNS
   weight: 4.17

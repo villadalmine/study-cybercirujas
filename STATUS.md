@@ -51,7 +51,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
-| `ckne` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `ckne` | 22 | ❌ | 🔶 2/22c·2/22e | – | – | – | – | – | 🔶 2/22 |
 | `terraform-associate` | 37 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `terraform-advanced` | 27 | ❌ | ❌ | – | – | – | – | – | ❌ |
 
@@ -172,6 +172,6 @@ None declared — the unattended timer generates nothing. That is the safe defau
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,339 completions · 59,568,024 output tokens · $1,960.58 API-equivalent
+- 2,348 completions · 59,715,656 output tokens · $1,964.19 API-equivalent
 - 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1186 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · catalog-sync 7
+- per stage: author 1195 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · catalog-sync 7

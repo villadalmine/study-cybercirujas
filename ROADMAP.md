@@ -41,6 +41,16 @@ starts it.
   what cost this project seven LPI re-snapshots. Re-check the page before
   spending anything.
 
+**`ckne` has a two-topic English sample on `claude-opus-5-5` at default effort**
+(2026-09-29, the owner's call to see how it reads): 1.1 and 2.3, published.
+Measured per topic: ~63k output tokens, $1.6 API-equivalent, ~9 min — against
+127k, $3.64 and 24 min for the `opus-5 xhigh` standard, at similar size. That is
+*efficiency* on n=2; whether it is *better* is not measured. Pinned by
+`TEACH_CLAUDE_MODEL` for the sample only — `pipeline.yaml` still says opus-5
+xhigh. `ckne` stays `active: false` on purpose: the audit fills what is
+missing, so activating it would author the other 20 topics in one pass. Same
+2.3 on `claude-sonnet-5-5` default: $0.43, half the theory, no `autopath`.
+
 **`lpi-devops` is even again.** Five of its fifteen topics were `agy` at 22–35 KB
 against ten at 65–117 KB, and four of those five were the whole *701 Software
 Engineering* domain — a third of the exam weight at a third of the depth.
