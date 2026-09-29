@@ -39,8 +39,14 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-# A reference-section line: "- Label — *Title*: https://..."
-REFERENCE = re.compile(r"^[-*]\s+(?P<label>[^:]{4,160}?):\s*(?P<url>https?://\S+)\s*$", re.M)
+# Every URL in the references section is a citation, whatever the line looks
+# like. The corpus writes them at least eight ways — "Label: URL", "Label — URL",
+# "[Label](URL)", "**Label**: [URL](URL)", a bare URL under a label line — and a
+# pattern for one shape parsed nothing in 484 of 1,123 content files, which then
+# reported "0 look stale or wrong" without checking a single citation.
+MD_LINK = re.compile(r"\[([^\]]*)\]\((https?://[^)\s]+)\)")
+BARE_URL = re.compile(r"https?://[^\s)>\]`\"']+")
+MARKUP = re.compile(r"[*_`#>\[\]()]|^\s*(?:[-*+]|\d+[.)])\s+")
 REFS_HEADING = re.compile(
     r"^#+\s*(?:[0-9]+[.)]?\s*)?(Referencias|References|Références|Referenzen|Referências)",
     re.I | re.M,
@@ -53,8 +59,27 @@ def references(text: str) -> list[tuple[str, str]]:
     match = REFS_HEADING.search(text)
     if not match:
         return []
-    return [(m.group("label").strip(" *_—-"), m.group("url").rstrip(".,;)"))
-            for m in REFERENCE.finditer(text[match.end():])]
+    found: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    previous = ""
+    for line in text[match.end():].splitlines():
+        links = [(label, url) for label, url in MD_LINK.findall(line)]
+        rest = MD_LINK.sub(lambda m: m.group(1) if not BARE_URL.fullmatch(m.group(1)) else "", line)
+        urls = [url for _, url in links] + BARE_URL.findall(rest)
+        if not urls:
+            if line.strip():
+                previous = line
+            continue
+        label = MARKUP.sub("", BARE_URL.sub("", rest)).strip(" :—–-,;")
+        if len(label) < 4:
+            # A URL alone on its line is labelled by the line above it.
+            label = MARKUP.sub("", previous).strip(" :—–-,;") or urls[0]
+        for url in urls:
+            url = url.rstrip(".,;:)")
+            if url not in seen:
+                seen.add(url)
+                found.append((label, url))
+    return found
 
 
 def ask(url: str, label: str, backend: str) -> str:
@@ -102,7 +127,11 @@ def main() -> int:
     for path in files:
         refs = references(path.read_text(errors="replace"))
         if not refs:
-            print(f"{path}: no references section found")
+            # Distinguish the two: a missing section is a content problem, an
+            # unparsed one is this script's problem, and both used to print the same.
+            has_heading = bool(REFS_HEADING.search(path.read_text(errors="replace")))
+            print(f"{path}: " + ("references section found but no citation line parsed"
+                                 if has_heading else "no references section found"))
             continue
         picked = refs if args.all else rng.sample(refs, min(args.sample, len(refs)))
         print(f"\n=== {path} — {len(picked)} of {len(refs)} citations ===")
