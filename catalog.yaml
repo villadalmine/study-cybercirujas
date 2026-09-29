@@ -629,7 +629,7 @@ certs:
     sources:
       objectives: https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
     vendor: CNCF
-    level: intermediate
+    level: professional
     validity: 2 years
     requires:
     - cka

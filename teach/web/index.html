@@ -453,7 +453,10 @@ async function showLanding() {
           // el nombre de la organización se remarca cuando conviven varias
           // en la misma categoría (ej: LPI y Linux Foundation dentro de Linux)
           (vendors.length > 1 && vendor ? `<h3 class="vendor">${vendor}</h3>` : '') +
-          LEVEL_ORDER.filter((l) => byCategory[category][vendor][l]).map((level) =>
+          // Levels outside LEVEL_ORDER go last instead of vanishing: CKNE was
+          // catalogued as 'intermediate' and silently never drawn.
+          [...LEVEL_ORDER, ...Object.keys(byCategory[category][vendor]).filter((l) => !LEVEL_ORDER.includes(l))]
+            .filter((l) => byCategory[category][vendor][l]).map((level) =>
             `<div><span class="lvl">${lvlName[level] ? lvlName[level]() : level}</span></div><div class="grid">` +
             byCategory[category][vendor][level].map(([id, cert]) =>
               `<div class="cert" onclick="go(showCert,'${id}')">
