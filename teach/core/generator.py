@@ -365,9 +365,11 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
     # the prompt: after it, `--effort` would be read as part of the prompt.
     if effort is None:
         effort = os.environ.get("TEACH_CLAUDE_EFFORT") or pipeline.generation().get("effort")
-    elif effort == "default":
+    if effort == "default":
         # Explicit "use the CLI default": append nothing. Distinct from None
-        # (= nobody chose, fall through to the declared pin) on purpose.
+        # (= nobody chose, fall through to the declared pin) on purpose. Checked
+        # after the environment too: TEACH_CLAUDE_EFFORT=default used to reach
+        # the CLI as `--effort default`, which it rejects.
         effort = None
     if effort and backend == "claude" and "--effort" not in command:
         command = [*command[:-1], "--effort", effort, command[-1]]
