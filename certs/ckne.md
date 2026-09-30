@@ -64,7 +64,7 @@ topics:
 - id: '2.4'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Troubleshooting Service Network Traffic
   topic: 2 - Service Networking and DNS
   weight: 4.17
