@@ -134,7 +134,7 @@ topics:
 - id: '4.4'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Implementing Pod-level Authentication and Authorization
   topic: 4 - Network Security and Policy
   weight: 6.24
