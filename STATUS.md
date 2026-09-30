@@ -172,6 +172,6 @@ None declared — the unattended timer generates nothing. That is the safe defau
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,437 completions · 61,910,525 output tokens · $2,019.40 API-equivalent
+- 2,443 completions · 62,033,550 output tokens · $2,022.65 API-equivalent
 - 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1276 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · judge 8 · catalog-sync 7
+- per stage: author 1282 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · judge 8 · catalog-sync 7
