@@ -79,7 +79,7 @@
 #   https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto
 #   https://www.envoyproxy.io/docs/envoy/latest/faq/configuration/timeouts
 #   https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers
-#   https://gateway-api.sigs.k8s.io/api-types/httproute/
+#   https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 #   https://gateway-api-inference-extension.sigs.k8s.io/
 #   https://docs.vllm.ai/en/latest/design/prefix_caching.html
 # =============================================================================

@@ -1773,7 +1773,7 @@ The claims most likely to be tested, stated without qualification:
 - Kubernetes — Network Policies:
   https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Gateway API — HTTPRoute timeouts:
-  https://gateway-api.sigs.k8s.io/api-types/httproute/
+  https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Istio — DestinationRule traffic policy and consistent hashing:
   https://istio.io/latest/docs/reference/config/networking/destination-rule/
 - OpenTelemetry — Semantic conventions for generative AI agent and tool spans:

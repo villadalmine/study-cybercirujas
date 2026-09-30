@@ -1684,7 +1684,7 @@ mcp_requests_total{method="initialize",transport="streamable-http",outcome="ok"}
 - Kubernetes — Configure Liveness, Readiness and Startup Probes — https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 - Kubernetes — Pod Lifecycle and termination — https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 - Kubernetes — Network Policies — https://kubernetes.io/docs/concepts/services-networking/network-policies/
-- Gateway API — HTTPRoute (timeouts, retries) — https://gateway-api.sigs.k8s.io/api-types/httproute/
+- Gateway API — HTTPRoute (timeouts, retries) — https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Istio — DestinationRule (consistent hashing, outlier detection) — https://istio.io/latest/docs/reference/config/networking/destination-rule/
 - Istio — VirtualService (retries, `retryOn`) — https://istio.io/latest/docs/reference/config/networking/virtual-service/
 - Envoy — Router `x-envoy-retry-on` policies — https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter

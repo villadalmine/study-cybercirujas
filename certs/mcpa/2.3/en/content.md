@@ -1687,7 +1687,7 @@ Nine times out of ten a ticket that reads "the AI is broken" is leg 1 with a mod
 - Kubernetes Pod Disruption Budgets: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 - Kubernetes Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes HorizontalPodAutoscaler: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-- Gateway API HTTPRoute: https://gateway-api.sigs.k8s.io/api-types/httproute/
+- Gateway API HTTPRoute: https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Gateway API session persistence (GEP-1619): https://gateway-api.sigs.k8s.io/geps/gep-1619/
 - OpenTelemetry generative-AI semantic conventions: https://opentelemetry.io/docs/specs/semconv/gen-ai/
 - OpenTelemetry Collector configuration: https://opentelemetry.io/docs/collector/configuration/

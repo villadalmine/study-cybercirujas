@@ -256,6 +256,6 @@ Key failure conditions:
 ## References
 
 - Gateway API Official Documentation: https://gateway-api.sigs.k8s.io/
-- Gateway API Spec Reference: https://gateway-api.sigs.k8s.io/reference/spec/
+- Gateway API Spec Reference: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/
 - Gateway API Releases & Installation: https://github.com/kubernetes-sigs/gateway-api/releases
 - CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf

@@ -54,10 +54,10 @@
 #
 # REFERENCES
 #   https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-#   https://gateway-api.sigs.k8s.io/api-types/httproute/
-#   https://gateway-api.sigs.k8s.io/api-types/referencegrant/
+#   https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
+#   https://gateway-api.sigs.k8s.io/reference/api-types/referencegrant/
 #   https://gateway-api.sigs.k8s.io/guides/multiple-ns/
-#   https://gateway-api.sigs.k8s.io/reference/spec/
+#   https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/
 # =============================================================================
 
 set -euo pipefail

@@ -1719,7 +1719,7 @@ Emit these regardless of transport, and label by the dimensions that actually va
 - Kubernetes — configure liveness, readiness and startup probes: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 - Kubernetes — network policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes — Horizontal Pod Autoscaler: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-- Gateway API — HTTPRoute: https://gateway-api.sigs.k8s.io/api-types/httproute/
+- Gateway API — HTTPRoute: https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Istio — DestinationRule (consistent hashing): https://istio.io/latest/docs/reference/config/networking/destination-rule/
 - Prometheus Operator — ServiceMonitor and PrometheusRule: https://prometheus-operator.dev/docs/api-reference/api/
 - Docker — build and run reference: https://docs.docker.com/reference/cli/docker/container/run/

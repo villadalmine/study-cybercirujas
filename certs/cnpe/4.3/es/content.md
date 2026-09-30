@@ -707,7 +707,7 @@ Blue/Green *no* te salva de esto salvo que tengas bases de datos separadas por c
 - Kubernetes — Canary deployments (patrón nativo): https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#canary-deployments
 - Kubernetes — Service / EndpointSlices: https://kubernetes.io/docs/concepts/services-networking/service/
 - Gateway API — HTTPRoute traffic splitting (weight): https://gateway-api.sigs.k8s.io/guides/traffic-splitting/
-- Gateway API — spec `HTTPBackendRef.weight`: https://gateway-api.sigs.k8s.io/api-types/httproute/
+- Gateway API — spec `HTTPBackendRef.weight`: https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Argo Rollouts — Canary strategy: https://argo-rollouts.readthedocs.io/en/stable/features/canary/
 - Argo Rollouts — BlueGreen strategy: https://argo-rollouts.readthedocs.io/en/stable/features/bluegreen/
 - Argo Rollouts — Analysis & Progressive Delivery: https://argo-rollouts.readthedocs.io/en/stable/features/analysis/

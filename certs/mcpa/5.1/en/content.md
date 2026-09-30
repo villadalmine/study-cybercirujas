@@ -1033,7 +1033,7 @@ Counting servers is not an adoption metric; it is an inventory. A platform with 
 - RFC 8707 — Resource Indicators for OAuth 2.0: https://datatracker.ietf.org/doc/html/rfc8707
 - RFC 7591 — OAuth 2.0 Dynamic Client Registration: https://datatracker.ietf.org/doc/html/rfc7591
 - OAuth 2.1 draft: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1
-- Kubernetes Gateway API — HTTPRoute timeouts and session persistence: https://gateway-api.sigs.k8s.io/api-types/httproute/
+- Kubernetes Gateway API — HTTPRoute timeouts and session persistence: https://gateway-api.sigs.k8s.io/reference/api-types/httproute/
 - Kubernetes Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - Kyverno policy documentation: https://kyverno.io/docs/writing-policies/
