@@ -29,7 +29,7 @@ topics:
 - id: '1.4'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Troubleshooting Pod Connectivity (DNS, pod-to-pod)
   topic: 1 - Core Infrastructure and CNI
   weight: 3.0
