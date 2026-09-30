@@ -106,7 +106,7 @@ topics:
 - id: '3.4'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Implementing Cross Cluster Service Discovery and Load Balancing
   topic: 3 - Advanced Traffic Management
   weight: 5.0
