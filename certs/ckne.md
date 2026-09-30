@@ -148,7 +148,7 @@ topics:
 - id: '5.2'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Troubleshooting End to End Network Performance with Tracing
   topic: 5 - Observability
   weight: 5.0
