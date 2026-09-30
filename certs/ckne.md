@@ -36,7 +36,7 @@ topics:
 - id: '1.5'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Configuring Multi-interface Pods
   topic: 1 - Core Infrastructure and CNI
   weight: 3.0
