@@ -155,7 +155,7 @@ topics:
 - id: '5.3'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Auditing Traffic with Logs
   topic: 5 - Observability
   weight: 5.0
