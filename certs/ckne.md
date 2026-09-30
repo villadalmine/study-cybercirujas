@@ -120,7 +120,7 @@ topics:
 - id: '4.2'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Implementing Node and Pod Level Encryption
   topic: 4 - Network Security and Policy
   weight: 6.25
