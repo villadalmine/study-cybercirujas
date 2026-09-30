@@ -99,7 +99,7 @@ topics:
 - id: '3.3'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Configuring Egress Gateways for Cluster Exit Traffic
   topic: 3 - Advanced Traffic Management
   weight: 5.0
