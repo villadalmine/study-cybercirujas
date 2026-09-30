@@ -85,7 +85,7 @@ topics:
 - id: '3.1'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Optimizing LLM Traffic
   topic: 3 - Advanced Traffic Management
   weight: 5.0
