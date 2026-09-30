@@ -15,7 +15,7 @@ topics:
 - id: '1.2'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Managing IPAM and Pod CIDR Allocation
   topic: 1 - Core Infrastructure and CNI
   weight: 3.0
