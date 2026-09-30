@@ -2,6 +2,42 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-09-30
+
+- **CKNE is complete in English: 22 topics**, the first certification authored
+  on `claude-opus-5-5` at default effort. Every topic has theory, guided
+  exercises and a break-and-fix lab; 88 files audited by hand, 0 below the
+  floor. The syllabus is still the closed beta's, so it can move at GA.
+
+- **Which model writes the best study material — measured, not assumed.** The
+  same two CKNE topics (1.1 CNI, 2.3 CoreDNS) were authored by `claude-opus-5`
+  at `xhigh` (the pipeline standard), `claude-opus-5-5` and `claude-sonnet-5-5`
+  at default effort, then judged three independent ways:
+
+  | | opus-5-5 | opus-5 xhigh | sonnet-5-5 |
+  |---|---|---|---|
+  | Labs executed on a kind cluster | both pass cleanly | 2.3 passes (one check false-PASSes); 1.1 does not run on containerd 2.x | 2.3 cannot be passed; 1.1 has no pass/fail check |
+  | Blind cross-family judges, 8 verdicts | first in 8 | last in 7 | — |
+  | Verified critical errors | none found | invented `coredns -validate` flag, stale-`replace` rollback, `k8s_external` block that cannot start | fake `-plugins` "validation", Calico install without its CRDs |
+  | Per topic | 61k tok, $1.59 eq, 9 min, 91 KB | 95k, $2.85, 19 min, 152 KB | 25k, $0.42, 2.7 min, 54 KB |
+
+  More text from `opus-5 xhigh` meant more invented specifics, not better
+  material. The judges needed checking too: of 13 "critical" claims tested in
+  the cluster, 6 were true and 7 false — GPT-6.1 right 5 of 7, Grok 4.7 right
+  1 of 7. A judge's verdict is a lead, never a finding. n=2 in one certification,
+  so `pipeline.yaml` still declares opus-5 xhigh; switching the default is the
+  owner's call.
+
+- **`check_claims.py` had checked no citation in 43% of the corpus.** Its
+  pattern read one citation shape; 484 of 1,123 content files use others and
+  reported "0 look stale or wrong" having checked nothing. It now reads every
+  URL in the references section — 22,198 citations visible, 0 files unparsed.
+
+- **Gateway API citations repaired across the corpus.** The site moved its pages
+  under `/docs/` and `/reference/` without redirects; seven distinct URLs in
+  cka, cnpe, mcpa and ckne were rewritten, each only after the new URL returned
+  200.
+
 ## 2026-09-17
 
 - **lpi-devops had a weak third and it is closed.** Five of its fifteen topics

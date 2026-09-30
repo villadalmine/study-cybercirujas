@@ -11,11 +11,11 @@ Last reviewed: **2026-09-18** · site: study.cybercirujas.club
 
 ## Where it is
 
-**26 certifications published and studyable**, 42 in the catalogue:
+**27 certifications published and studyable**, 42 in the catalogue:
 
 | Family | Published | Outstanding |
 |---|---|---|
-| ☸️ CNCF / Kubernetes | 14 / 15 | `cba` — unreadable PDF, needs the OCR route and a human to check the result |
+| ☸️ CNCF / Kubernetes | 15 / 16 | `cba` — unreadable PDF, needs the OCR route and a human to check the result. `ckne` published in English (beta syllabus) |
 | 🐧 Linux / LPI | 9 / 14 | `lpic-2` (41), `lpic-3-300` (20), `lpi-020-100` (17), `lfcs` (5), `lfca` (6) |
 | ☁️ Cloud providers | 3 / 5 | AWS, Azure and Google careers exist end to end. `terraform-associate` (37) and `terraform-advanced` (27) — syllabus only, `active: false` |
 | 🤖 AI | 0 / 7 | `mcpa` complete in English, needs Spanish (17). Syllabi frozen, coming-soon: `aws-aif` (14), `gcp-gail` (15), `ai-901` (7), `nca-aiio` (22), `nca-genl` (31), `ncp-aii` (39) |
@@ -34,22 +34,26 @@ starts it.
 
 - **`mcpa`** (Model Context Protocol Associate) — 17 topics, **complete in
   English**, live. Needs Spanish: 17 translations.
-- **`ckne`** (Certified Kubernetes Network Engineer) — 22 topics, syllabus only,
-  `active: false` on purpose. **Its beta is closed and GA has not landed**, so
-  the objectives can still move. Flip it when upstream publishes the final
-  curriculum, not before — material written against an unsettled syllabus is
-  what cost this project seven LPI re-snapshots. Re-check the page before
-  spending anything.
+- **`ckne`** (Certified Kubernetes Network Engineer) — 22 topics, **complete in
+  English** (2026-09-30), live. Needs Spanish: 22 translations. **Its beta is
+  closed and GA has not landed**, so the objectives can still move: re-check
+  the page before translating, and re-snapshot if GA changes the curriculum.
 
-**`ckne` has a two-topic English sample on `claude-opus-5-5` at default effort**
-(2026-09-29, the owner's call to see how it reads): 1.1 and 2.3, published.
-Measured per topic: ~63k output tokens, $1.6 API-equivalent, ~9 min — against
-127k, $3.64 and 24 min for the `opus-5 xhigh` standard, at similar size. That is
-*efficiency* on n=2; whether it is *better* is not measured. Pinned by
-`TEACH_CLAUDE_MODEL` for the sample only — `pipeline.yaml` still says opus-5
-xhigh. `ckne` stays `active: false` on purpose: the audit fills what is
-missing, so activating it would author the other 20 topics in one pass. Same
-2.3 on `claude-sonnet-5-5` default: $0.43, half the theory, no `autopath`.
+**`ckne` is the first certification authored on `claude-opus-5-5` at default
+effort**, on the owner's call after a blind + executed comparison on two topics
+(the 2026-09-30 entry in CHANGELOG has the numbers).
+Pinned by `TEACH_CLAUDE_MODEL` for this cert only — `pipeline.yaml` still says
+opus-5 xhigh until the owner decides the default. `ckne` stays `active: false`
+on purpose: `fix_corrupted_content.py` fills what is missing, and with `es`
+declared it would start 22 translations unattended. Audited by hand instead:
+88 files, 0 below the floor, 0 fence-wrapped, provenance consistent, every
+cited domain catalogued. Five fresh citations were dead on arrival — sites that
+moved pages without redirects — and were replaced only by verified URLs.
+
+**Gateway API moved its site without redirects.** `/concepts/*`, `/api-types/*`
+and `/reference/spec/` now 404; seven distinct citations in cka, cnpe, mcpa and
+ckne were rewritten after checking the new URLs return 200. Models trained
+before the move keep writing the old paths, so expect it in new material.
 
 **`lpi-devops` is even again.** Five of its fifteen topics were `agy` at 22–35 KB
 against ten at 65–117 KB, and four of those five were the whole *701 Software
