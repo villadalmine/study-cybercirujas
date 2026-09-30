@@ -113,7 +113,7 @@ topics:
 - id: '4.1'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Securing Traffic with Network Policies
   topic: 4 - Network Security and Policy
   weight: 6.25
