@@ -92,7 +92,7 @@ topics:
 - id: '3.2'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Implementing Routing to Expose Networks
   topic: 3 - Advanced Traffic Management
   weight: 5.0
