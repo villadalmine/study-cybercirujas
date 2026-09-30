@@ -86,6 +86,25 @@ projects:
   crossplane:   {domains: [docs.crossplane.io, crossplane.io], docs: https://docs.crossplane.io/, versioned: true}
   gitops:       {domains: [opengitops.dev], docs: https://opengitops.dev/, versioned: false}
   gateway-api:  {domains: [gateway-api.sigs.k8s.io], docs: https://gateway-api.sigs.k8s.io/, versioned: true}
+  gateway-api-inference: {domains: [gateway-api-inference-extension.sigs.k8s.io], docs: https://gateway-api-inference-extension.sigs.k8s.io/, versioned: true}
+  network-policy-api: {domains: [network-policy-api.sigs.k8s.io], docs: https://network-policy-api.sigs.k8s.io/, versioned: true}
+  mcs-api:      {domains: [multicluster.sigs.k8s.io],  docs: https://multicluster.sigs.k8s.io/,  versioned: false}
+  kind:         {domains: [kind.sigs.k8s.io],          docs: https://kind.sigs.k8s.io/docs/,     versioned: true}
+  kubernetes-sigs: {domains: [kubernetes-sigs.github.io], docs: https://kubernetes-sigs.github.io/, versioned: false}
+  envoy-gateway: {domains: [gateway.envoyproxy.io, aigateway.envoyproxy.io], docs: https://gateway.envoyproxy.io/docs/, versioned: true}
+  linkerd:      {domains: [linkerd.io],               docs: https://linkerd.io/2/,              versioned: true}
+  antrea:       {domains: [antrea.io],                docs: https://antrea.io/docs/,            versioned: true}
+  metallb:      {domains: [metallb.universe.tf],      docs: https://metallb.universe.tf/,       versioned: false}
+  submariner:   {domains: [submariner.io],            docs: https://submariner.io/,             versioned: false}
+  kube-router:  {domains: [www.kube-router.io, kube-router.io], docs: https://www.kube-router.io/docs/, versioned: false}
+  k8gb:         {domains: [www.k8gb.io, k8gb.io],     docs: https://www.k8gb.io/,               versioned: false}
+  jaeger:       {domains: [www.jaegertracing.io, jaegertracing.io], docs: https://www.jaegertracing.io/docs/, versioned: true}
+  fluent-bit:   {domains: [docs.fluentbit.io],        docs: https://docs.fluentbit.io/,         versioned: true}
+  keda:         {domains: [keda.sh],                  docs: https://keda.sh/docs/,              versioned: true}
+  vllm:         {domains: [docs.vllm.ai],             docs: https://docs.vllm.ai/,              versioned: true}
+  llm-d:        {domains: [llm-d.ai],                 docs: https://llm-d.ai/docs/,             versioned: false}
+  frrouting:    {domains: [docs.frrouting.org],       docs: https://docs.frrouting.org/,        versioned: true}
+  netfilter:    {domains: [conntrack-tools.netfilter.org, www.netfilter.org, netfilter.org], docs: https://www.netfilter.org/documentation/, versioned: false}
   tetragon:     {domains: [tetragon.io], docs: https://tetragon.io/docs/, versioned: true}
   grafana:      {domains: [grafana.com], docs: https://grafana.com/docs/, versioned: true}
   spdx:         {domains: [spdx.org, spdx.dev], docs: https://spdx.dev/use/specifications/, versioned: true}
