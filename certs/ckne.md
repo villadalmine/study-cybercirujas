@@ -127,7 +127,7 @@ topics:
 - id: '4.3'
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
-  status: pending
+  status: generated
   title: Managing TLS Certificates for Gateway API
   topic: 4 - Network Security and Policy
   weight: 6.24
