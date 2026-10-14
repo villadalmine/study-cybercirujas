@@ -26,6 +26,24 @@ class ExecScriptCmdTests(unittest.TestCase):
         self.assertEqual(cmd[-3:], ["teach-x", "bash", "break_fix.sh"])
 
 
+class RunAsTests(unittest.TestCase):
+    """break_fix.sh runs as the user its own guard asks for."""
+
+    def test_linux_essentials_runs_as_student(self):
+        self.assertEqual(labs._script_user(REPO / "certs/lpi-010-160/2.1/lab"), "student")
+
+    def test_lpic_runs_as_root(self):
+        self.assertEqual(labs._script_user(REPO / "certs/lpic-1/104.5/lab"), "root")
+
+    def test_lab_yaml_wins(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            (directory / "break_fix.sh").write_text('[ "$(id -u)" -ne 0 ] && exit 1\n')
+            self.assertEqual(labs._script_user(directory), "root")
+            (directory / "lab.yaml").write_text("run_as: student\n")
+            self.assertEqual(labs._script_user(directory), "student")
+
+
 class EnterHintTests(unittest.TestCase):
     def test_container_lab_names_the_shell(self):
         hint = labs.enter_hint("lpi-010-160", "2.1")
