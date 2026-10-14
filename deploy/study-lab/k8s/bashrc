@@ -1,0 +1,11 @@
+# Loaded by interactive shells in study-lab:k8s.
+[ -f /etc/bash/kubectl.sh ] && . /etc/bash/kubectl.sh
+alias k=kubectl
+complete -o default -F __start_kubectl k 2>/dev/null
+export KUBECONFIG=/root/.kube/config
+PS1='\[\e[1;33m\][study-lab ${STUDY_LAB_ID:-k8s}]\[\e[0m\] \w \$ '
+if [ -z "$STUDY_LAB_MOTD_SHOWN" ]; then
+  export STUDY_LAB_MOTD_SHOWN=1
+  echo "study-lab ${STUDY_LAB_ID}: kubectl apunta al cluster kind del lab. El script esta en /lab."
+  echo "Cuando creas que lo arreglaste: salí (exit) y corré 'study-lab check ...' en tu terminal."
+fi

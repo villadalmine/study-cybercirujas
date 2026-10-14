@@ -1,3 +1,4 @@
+schema_version: 2
 cert: cka
 topic: '3.3'
 title: Configure workload autoscaling
@@ -10,3 +11,33 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: kind
+kubernetes: '1.35'
+script: break_fix.sh
+modes:
+  break:
+    args:
+    - break
+  verify:
+    args:
+    - verify
+  cleanup:
+    args:
+    - cleanup
+level: intermediate
+hints:
+- kubectl describe hpa -n autoscaling-lab — ¿por qué TARGETS dice <unknown>?
+- 'La utilización es uso / request: ¿el contenedor tiene requests de CPU?'
+limits:
+  ram_mb: 3072
+  cpus: 2
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+verified:
+  status: true
+  date: '2026-10-15'
+  by: 'study-lab runner: break -> check FAIL -> reference fix -> check PASS (scripts/prove_labs_cka_pilot.sh)'
+  method: runner
+  runner_image: study-lab:k8s (kind v0.33.0, kindest/node v1.35.8)
+license: Apache-2.0

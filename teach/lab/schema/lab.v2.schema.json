@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/villadalmine/study-cybercirujas/raw/main/teach/lab/schema/lab.v2.schema.json",
+  "title": "study lab.yaml v2",
+  "description": "Declarative spec of a break/fix lab. v2 is a strict superset of v1: every v1 file (no schema_version) validates unchanged, and the runner fills the v2 fields it can infer. Behaviour is added with metadata here, never with new runner code. Keys starting with x- are free for extensions.",
+  "type": "object",
+  "required": ["cert", "topic", "title"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-": {}
+  },
+  "properties": {
+    "schema_version": {
+      "description": "Absent means v1 (legacy). New labs write 2.",
+      "enum": [1, 2]
+    },
+    "cert": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$"},
+    "topic": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "title": {"type": "string", "minLength": 1, "description": "Topic title from the syllabus (can be as short as a subcommand, e.g. KCA 3.3 \"jp\")."},
+
+    "provider": {
+      "description": "v1 field. local = runs on the student's machine in a container.",
+      "enum": ["local", "terraform"]
+    },
+    "resources": {
+      "description": "v1 field, kept for compatibility. The runner reads limits instead when present.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "vms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string"},
+              "os": {"type": "string"},
+              "cpus": {"type": "number", "minimum": 0.5},
+              "ram_mb": {"type": "integer", "minimum": 128}
+            }
+          }
+        }
+      }
+    },
+    "setup": {
+      "description": "v1 field: scripts the lab ships. The first one is the break/fix script unless 'script' says otherwise.",
+      "type": "array",
+      "items": {"type": "string"}
+    },
+
+    "requires": {
+      "description": "Environment family. Picks the runner image: kind/k3s -> study-lab:k8s, linux -> study-lab:linux. Inferred for v1 labs (kubectl in the script -> kind).",
+      "enum": ["kind", "k3s", "linux"]
+    },
+    "kubernetes": {
+      "description": "Kubernetes minor or patch for kind/k3s labs (e.g. '1.35' or '1.35.8'). Default: the image's pinned node.",
+      "type": "string",
+      "pattern": "^1\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "nodes": {
+      "description": "kind topology: number of worker nodes besides the control plane.",
+      "type": "integer", "minimum": 0, "maximum": 3
+    },
+    "script": {
+      "description": "Path of the break/fix script, relative to the lab directory.",
+      "type": "string", "default": "break_fix.sh"
+    },
+    "run_in": {
+      "description": "Where the script runs. runner = the lab container (kubectl against kind); node = inside the kind control-plane node (kubelet, static pods, /etc/kubernetes).",
+      "enum": ["runner", "node"], "default": "runner"
+    },
+    "run_as": {
+      "description": "User that runs the script inside the container.",
+      "enum": ["root", "student"], "default": "root"
+    },
+    "modes": {
+      "description": "How the three contract actions map onto the script. Lets an existing script with different verbs (check, clean, --restore...) join the contract with metadata only.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "break": {"$ref": "#/$defs/mode"},
+        "verify": {"$ref": "#/$defs/verify_mode"},
+        "cleanup": {"$ref": "#/$defs/mode"}
+      }
+    },
+    "env": {
+      "description": "Environment for every mode (e.g. the confirmation variables the scripts read).",
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "ports": {
+      "description": "Ports published from the lab container to 127.0.0.1 on the host.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["container"],
+        "additionalProperties": false,
+        "properties": {
+          "container": {"type": "integer", "minimum": 1, "maximum": 65535},
+          "host": {"type": "integer", "minimum": 0, "maximum": 65535, "description": "0 = any free port"},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "limits": {
+      "description": "Resources of the lab container.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ram_mb": {"type": "integer", "minimum": 256, "maximum": 16384},
+        "cpus": {"type": "number", "minimum": 0.5, "maximum": 8}
+      }
+    },
+    "timeout": {
+      "description": "Seconds per phase.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "up": {"type": "integer", "minimum": 10},
+        "break": {"type": "integer", "minimum": 5},
+        "verify": {"type": "integer", "minimum": 5},
+        "cleanup": {"type": "integer", "minimum": 5}
+      }
+    },
+    "hints": {
+      "description": "Progressive hints, shown one at a time by 'study-lab hint'.",
+      "type": "array", "items": {"type": "string"}
+    },
+    "level": {"enum": ["beginner", "intermediate", "advanced"]},
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {"enum": ["curated", "community", "generated"]},
+        "repo": {"type": "string"},
+        "author": {"type": "string"},
+        "generated_by": {"type": "string", "description": "model that wrote it, for generated labs"}
+      }
+    },
+    "verified": {
+      "description": "Proof that break makes verify fail and the fix makes it pass, in the runner.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"type": "boolean"},
+        "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "by": {"type": "string"},
+        "method": {"enum": ["runner", "ci", "human"]},
+        "runner_image": {"type": "string"}
+      }
+    },
+    "license": {"type": "string", "description": "SPDX id, e.g. Apache-2.0 (this repo) or MIT."}
+  },
+  "$defs": {
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "args": {"type": "array", "items": {"type": "string"}},
+        "stdin": {"type": "string", "description": "Text piped to the script (answers to confirmation prompts)."},
+        "env": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    },
+    "verify_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "args": {"type": "array", "items": {"type": "string"}},
+        "stdin": {"type": "string"},
+        "env": {"type": "object", "additionalProperties": {"type": "string"}},
+        "success": {
+          "description": "When the lab counts as solved. Default: exit code 0. output_regex is for scripts whose verify always exits 0.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exit_code": {"type": "integer"},
+            "output_regex": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

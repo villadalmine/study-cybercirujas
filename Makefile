@@ -20,7 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
-.PHONY: preflight docker-run smoke determinism test-e2e
+.PHONY: preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
 .PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci
 
 help:
@@ -35,7 +35,7 @@ preflight: ## check what make setup needs (python3 >= 3.11 with venv, git) and s
 
 install: preflight ## create the venv and install the CLI
 	python3 -m venv $(VENV)
-	$(VENV)/bin/pip install -q -e .
+	$(VENV)/bin/pip install -q -e '.[lab]'
 	@echo "OK: $(TEACH)"
 
 list: ## certification catalog
@@ -123,8 +123,19 @@ milestone: ## work the declared milestone to completion, then stop
 publish-complete: ## build+deploy if a certification became complete (same TAG to both)
 	$(VENV)/bin/python3 scripts/publish_if_complete.py $(if $(DRY),--dry-run,)
 
-test: ## every fast test: units, offline smoke of site/API/CLI, labs, determinism (no key, no network)
+test: ## every fast test: units, offline smoke of site/API/CLI, labs, determinism, study-lab schema (no key, no network)
 	$(VENV)/bin/python3 -m unittest discover tests -v
+	$(VENV)/bin/python3 -m pytest tests/lab -m "not slow" -q
+
+test-lab-e2e: ## study-lab runner end-to-end with Docker (STUDY_LAB_E2E_K8S=1 adds the kind lab)
+	$(VENV)/bin/python3 -m pytest tests/lab -m slow -v
+
+lab-images: ## build the study-lab runner images (study-lab:k8s, study-lab:linux)
+	docker build -t study-lab:k8s deploy/study-lab/k8s
+	docker build -t study-lab:linux deploy/study-lab/linux
+
+lab-validate: ## validate every lab.yaml against the v2 schema (REPORT=file.json)
+	scripts/study-lab validate certs $(if $(REPORT),--report $(REPORT))
 
 determinism: ## derived files and validators twice, byte for byte, with network and models blocked
 	$(VENV)/bin/python3 -m unittest tests.test_determinism -v
@@ -133,6 +144,7 @@ test-e2e: ## slow: clone this repo fresh, make setup, serve, hit site/API/CLI, r
 	@# Clones the committed HEAD, not the working tree: commit first, or set
 	@# SRC=<url> to test the public repository exactly as a newcomer gets it.
 	bash tests/e2e/clone_and_run.sh
+	$(MAKE) test-lab-e2e
 
 audit: ## list pending/corrupt combos without regenerating anything
 	$(VENV)/bin/python3 scripts/fix_corrupted_content.py --audit-only

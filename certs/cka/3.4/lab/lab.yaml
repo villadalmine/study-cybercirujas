@@ -1,3 +1,4 @@
+schema_version: 2
 cert: cka
 topic: '3.4'
 title: Understand the primitives used to create robust, self-healing, application
@@ -11,3 +12,37 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: kind
+kubernetes: '1.35'
+script: break_fix.sh
+env:
+  TEACH_PLAT_LAB_CONFIRMED: 'yes'
+modes:
+  break:
+    args:
+    - break
+  verify:
+    args:
+    - check
+  cleanup:
+    args:
+    - clean
+level: beginner
+hints:
+- kubectl get pods -n cka-3-4-selfheal — mirá RESTARTS.
+- 'kubectl describe pod: ¿qué probe falla y contra qué puerto/path?'
+limits:
+  ram_mb: 3072
+  cpus: 2
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+verified:
+  status: true
+  date: '2026-10-15'
+  by: 'study-lab runner: break -> check FAIL -> reference fix -> check PASS (scripts/prove_labs_cka_pilot.sh)'
+  method: runner
+  runner_image: study-lab:k8s (kind v0.33.0, kindest/node v1.35.8)
+license: Apache-2.0
+timeout:
+  verify: 200

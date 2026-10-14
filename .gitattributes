@@ -1,0 +1,6 @@
+# Shell scripts run inside Linux containers (study-lab): never CRLF, even on a
+# Windows checkout with core.autocrlf=true.
+*.sh text eol=lf
+scripts/study-lab text eol=lf
+Dockerfile text eol=lf
+deploy/study-lab/** text eol=lf

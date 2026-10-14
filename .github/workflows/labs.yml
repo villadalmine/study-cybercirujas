@@ -1,0 +1,58 @@
+name: Labs
+
+# study-lab: schema + CLI tests on every push/PR, and the end-to-end with Docker
+# (linux family; the kind family on demand). The validate-lab action is also
+# exercised here exactly as an external repository would use it.
+
+on:
+  push:
+    branches: [main]
+    paths: ['teach/lab/**', 'certs/**/lab/**', 'deploy/study-lab/**', 'tests/lab/**', '.github/actions/validate-lab/**', '.github/workflows/labs.yml']
+  pull_request:
+    paths: ['teach/lab/**', 'certs/**/lab/**', 'deploy/study-lab/**', 'tests/lab/**', '.github/actions/validate-lab/**', '.github/workflows/labs.yml']
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Also run the kind (k8s) end-to-end
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q -e '.[lab]'
+      - name: Schema and CLI tests (no Docker)
+        run: python -m pytest tests/lab -m "not slow" -q
+      - name: The reusable action, as another repo would call it
+        uses: ./.github/actions/validate-lab
+        with:
+          path: certs
+          strict: "false"
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q -e '.[lab]'
+      - name: Build runner images
+        run: |
+          docker build -t study-lab:linux deploy/study-lab/linux
+          if [ "${{ inputs.kind }}" = "true" ]; then docker build -t study-lab:k8s deploy/study-lab/k8s; fi
+      - name: End-to-end (run, break, check FAIL, fix, check PASS, run x2, down without leftovers)
+        env:
+          STUDY_LAB_E2E_K8S: ${{ inputs.kind && '1' || '0' }}
+        run: python -m pytest tests/lab -m slow -v
