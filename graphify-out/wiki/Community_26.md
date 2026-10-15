@@ -1,46 +1,54 @@
 # Community 26
 
-> 13 nodes · cohesion 0.21
+> 21 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **usage_report.py** (10 connections) — `scripts/usage_report.py`
+- **check_config.py** (14 connections) — `scripts/check_config.py`
+- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
 - **collections** (10 connections)
 - **test_images.py** (9 connections) — `tests/lab/test_images.py`
-- **main()** (5 connections) — `scripts/usage_report.py`
+- **main()** (6 connections) — `scripts/check_config.py`
+- **main()** (6 connections) — `scripts/topic_cost.py`
+- **effective()** (5 connections) — `scripts/check_config.py`
 - **_cmd()** (5 connections) — `tests/lab/test_images.py`
-- **rows()** (3 connections) — `scripts/usage_report.py`
-- **_money()** (2 connections) — `scripts/usage_report.py`
-- **_tokens()** (2 connections) — `scripts/usage_report.py`
+- **recent()** (3 connections) — `scripts/check_config.py`
+- **by_topic()** (3 connections) — `scripts/topic_cost.py`
+- **records()** (3 connections) — `scripts/topic_cost.py`
+- **dominant()** (2 connections) — `scripts/check_config.py`
+- **dominant()** (2 connections) — `scripts/topic_cost.py`
 - **test_job_ids_are_unique_across_workflows()** (2 connections) — `tests/lab/test_images.py`
 - **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
 - **Path** (1 connections)
-- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
+- **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
+- **(model, effort, notes) as the generator would resolve them right now. Resolved…** (1 connections) — `scripts/check_config.py`
+- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
+- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
 - **Static guards on the runner images and the CI that builds them (no Docker…** (1 connections) — `tests/lab/test_images.py`
 
 ## Relationships
 
-- [Community 36](Community_36.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 43](Community_43.md) (10 shared connections)
+- [Community 36](Community_36.md) (6 shared connections)
+- [Community 67](Community_67.md) (5 shared connections)
+- [Community 7](Community_7.md) (4 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
 - [Community 75](Community_75.md) (2 shared connections)
 - [Community 22](Community_22.md) (2 shared connections)
+- [Community 102](Community_102.md) (2 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 - [Community 64](Community_64.md) (1 shared connections)
-- [_agent_completer](_agent_completer.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [Community 132](Community_132.md) (1 shared connections)
-- [Community 131](Community_131.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/usage_report.py`
+- `scripts/check_config.py`
+- `scripts/topic_cost.py`
 - `tests/lab/test_images.py`
 
 ## Audit Trail
 
-- EXTRACTED: 37 (100%)
+- EXTRACTED: 64 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,11 +1,10 @@
 # Within one certification (the only fair comparisons; authoring language `en` only)
 
-> 12 nodes · cohesion 0.17
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
 - **Within one certification (the only fair comparisons; authoring language `en` only)** (8 connections) — `MODELS.md`
-- **MODELS.md** (5 connections) — `MODELS.md`
 - **Model Comparison** (4 connections) — `MODELS.md`
 - **cgoa** (1 connections) — `MODELS.md`
 - **cnpa** (1 connections) — `MODELS.md`
@@ -19,8 +18,7 @@
 
 ## Relationships
 
-- [README.md](README.md.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
@@ -28,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

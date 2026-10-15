@@ -18,7 +18,7 @@
 - [Community 8](Community_8.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
 - [Community 136](Community_136.md) (1 shared connections)

@@ -7,8 +7,8 @@
 - **Contributing** (9 connections) — `CONTRIBUTING.md`
 - **Pull requests** (4 connections) — `CONTRIBUTING.md`
 - **Checks that must pass** (3 connections) — `CONTRIBUTING.md`
+- **Set up, once** (3 connections) — `CONTRIBUTING.md`
 - **What you can contribute** (3 connections) — `CONTRIBUTING.md`
-- **Set up, once** (2 connections) — `CONTRIBUTING.md`
 - **Agents** (1 connections) — `CONTRIBUTING.md`
 - **Conventions** (1 connections) — `CONTRIBUTING.md`
 - **Labels** (1 connections) — `CONTRIBUTING.md`
@@ -21,9 +21,9 @@
 
 ## Relationships
 
-- [Community 136](Community_136.md) (2 shared connections)
+- [Community 136](Community_136.md) (3 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 107](Community_107.md) (1 shared connections)
 
 ## Source Files
 
@@ -31,8 +31,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (82%)
-- INFERRED: 3 (18%)
+- EXTRACTED: 14 (78%)
+- INFERRED: 4 (22%)
 - AMBIGUOUS: 0 (0%)
 
 ---

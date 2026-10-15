@@ -1,35 +1,31 @@
 # Community 133
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **get_topic()** (7 connections) — `teach/api.py`
-- **get_topic_preview()** (6 connections) — `teach/api.py`
-- **get_paths()** (5 connections) — `teach/api.py`
-- **_valid_lang()** (5 connections) — `teach/api.py`
-- **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
-- **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
-- **Career paths with their steps, in the requested language. The base fields of a…** (1 connections) — `teach/api.py`
+- **_exec_script_cmd()** (7 connections) — `teach/core/labs.py`
+- **ExecScriptCmdTests** (4 connections) — `tests/test_labs.py`
+- **.test_subcommand_scripts_get_break()** (3 connections) — `tests/test_labs.py`
+- **.test_stdin_is_attached()** (2 connections) — `tests/test_labs.py`
+- **.test_terminal_gets_a_tty()** (2 connections) — `tests/test_labs.py`
+- **`docker exec` for break_fix.sh, with the student's stdin attached. Most scripts…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [login](login.md) (4 shared connections)
-- [Community 77](Community_77.md) (3 shared connections)
-- [certs.py](certs.py.md) (2 shared connections)
-- [Community 14](Community_14.md) (2 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 8](Community_8.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 8](Community_8.md) (3 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/api.py`
+- `teach/core/labs.py`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

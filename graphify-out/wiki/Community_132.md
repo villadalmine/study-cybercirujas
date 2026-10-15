@@ -1,32 +1,31 @@
 # Community 132
 
-> 7 nodes · cohesion 0.43
+> 7 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
-- **main()** (6 connections) — `scripts/topic_cost.py`
-- **by_topic()** (3 connections) — `scripts/topic_cost.py`
-- **records()** (3 connections) — `scripts/topic_cost.py`
-- **dominant()** (2 connections) — `scripts/topic_cost.py`
-- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
-- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
+- **_script_user()** (9 connections) — `teach/core/labs.py`
+- **RunAsTests** (5 connections) — `tests/test_labs.py`
+- **.test_lab_yaml_wins()** (2 connections) — `tests/test_labs.py`
+- **.test_linux_essentials_runs_as_student()** (2 connections) — `tests/test_labs.py`
+- **.test_lpic_runs_as_root()** (2 connections) — `tests/test_labs.py`
+- **Who runs break_fix.sh inside the container. Two families want opposite things:…** (1 connections) — `teach/core/labs.py`
+- **break_fix.sh runs as the user its own guard asks for.** (1 connections) — `tests/test_labs.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 62](Community_62.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
+- [Community 8](Community_8.md) (4 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/topic_cost.py`
+- `teach/core/labs.py`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

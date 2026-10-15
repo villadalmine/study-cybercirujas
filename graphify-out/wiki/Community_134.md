@@ -1,29 +1,28 @@
 # Community 134
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **ScopeTests** (7 connections) — `tests/test_check_pr.py`
-- **.test_docs_and_fixtures_are_not_code()** (1 connections) — `tests/test_check_pr.py`
-- **.test_generated_files_are_not_edited_by_hand()** (1 connections) — `tests/test_check_pr.py`
-- **.test_material_and_code_do_not_mix()** (1 connections) — `tests/test_check_pr.py`
-- **.test_one_lab_per_pr()** (1 connections) — `tests/test_check_pr.py`
-- **.test_one_topic_language_per_content_pr()** (1 connections) — `tests/test_check_pr.py`
-- **.test_size_limit_and_exception()** (1 connections) — `tests/test_check_pr.py`
+- **sitecustomize.py** (6 connections) — `tests/netguard/sitecustomize.py`
+- **_host()** (3 connections) — `tests/netguard/sitecustomize.py`
+- **_connect()** (2 connections) — `tests/netguard/sitecustomize.py`
+- **_connect_ex()** (2 connections) — `tests/netguard/sitecustomize.py`
+- **_getaddrinfo()** (1 connections) — `tests/netguard/sitecustomize.py`
+- **Block every network connection that does not go to this machine. Put this…** (1 connections) — `tests/netguard/sitecustomize.py`
 
 ## Relationships
 
-- [Community 121](Community_121.md) (1 shared connections)
+- [Community 64](Community_64.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `tests/netguard/sitecustomize.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 5 (62%)
+- INFERRED: 3 (38%)
 - AMBIGUOUS: 0 (0%)
 
 ---

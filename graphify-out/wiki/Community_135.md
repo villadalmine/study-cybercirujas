@@ -1,31 +1,33 @@
 # Community 135
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **Development Guidelines for teach-plat** (7 connections) — `CLAUDE.md`
-- **Rules** (3 connections) — `CLAUDE.md`
-- **Agent Idea Synchronization (AGENTS_SYNC.md)** (1 connections) — `CLAUDE.md`
-- **Commands** (1 connections) — `CLAUDE.md`
-- **Content Workflow** (1 connections) — `CLAUDE.md`
-- **Pull requests from agents** (1 connections) — `CLAUDE.md`
+- **mcp_server.py** (8 connections) — `teach/mcp_server.py`
+- **_readable()** (4 connections) — `teach/mcp_server.py`
+- **functools** (4 connections)
+- **Study against this corpus from any agent — the same four functions, over MCP.…** (1 connections) — `teach/mcp_server.py`
+- **Turn a lookup failure into something the agent can act on. The SDK's own…** (1 connections) — `teach/mcp_server.py`
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 93](Community_93.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 45](Community_45.md) (1 shared connections)
+- [Community 85](Community_85.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [login](login.md) (1 shared connections)
 
 ## Source Files
 
-- `CLAUDE.md`
+- `teach/mcp_server.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (78%)
-- INFERRED: 2 (22%)
+- EXTRACTED: 12 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

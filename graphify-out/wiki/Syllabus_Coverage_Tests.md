@@ -1,6 +1,6 @@
 # Syllabus Coverage Tests
 
-> 24 nodes · cohesion 0.12
+> 20 nodes · cohesion 0.15
 
 ## Key Concepts
 
@@ -8,7 +8,6 @@
 - **_reject_unreadable_syllabus()** (12 connections) — `teach/core/tracker.py`
 - **objective_ids()** (8 connections) — `teach/core/tracker.py`
 - **normalise_weights()** (7 connections) — `teach/core/tracker.py`
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `AGENTS_SYNC.md`
 - **.test_normalising_does_not_disguise_weights_taken_from_the_count()** (3 connections) — `tests/test_tracker.py`
 - **.test_accepts_a_full_extraction()** (2 connections) — `tests/test_tracker.py`
 - **.test_accepts_an_even_split_when_the_vendor_publishes_no_weights()** (2 connections) — `tests/test_tracker.py`
@@ -20,10 +19,7 @@
 - **.test_rejects_chapter_headings_extracted_from_a_numbered_document()** (2 connections) — `tests/test_tracker.py`
 - **.test_rejects_weights_computed_from_the_topic_count()** (2 connections) — `tests/test_tracker.py`
 - **.test_unnumbered_document_yields_nothing_rather_than_a_pass()** (2 connections) — `tests/test_tracker.py`
-- **What is now enforced, so this cannot recur** (2 connections) — `AGENTS_SYNC.md`
 - **.test_strips_backend_diagnostics_that_are_not_the_answer()** (1 connections) — `tests/test_tracker.py`
-- **What I need from you** (1 connections) — `AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `AGENTS_SYNC.md`
 - **Numbered objectives present in a syllabus document. Empty when the document…** (1 connections) — `teach/core/tracker.py`
 - **Scale the published weights to percentages summing to exactly 100. Syllabi…** (1 connections) — `teach/core/tracker.py`
 - **Refuse a topic list that the source document does not support. Both checks…** (1 connections) — `teach/core/tracker.py`
@@ -38,13 +34,12 @@
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
 - `teach/core/tracker.py`
 - `tests/test_tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 43 (98%)
+- EXTRACTED: 39 (98%)
 - INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 

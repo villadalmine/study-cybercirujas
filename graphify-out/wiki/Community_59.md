@@ -1,13 +1,16 @@
 # Community 59
 
-> 21 nodes · cohesion 0.13
+> 33 nodes · cohesion 0.08
 
 ## Key Concepts
 
 - **response()** (14 connections) — `tests/test_model_probe.py`
+- **Operating the pipeline — for maintainers** (11 connections) — `docs/OPERATING.md`
 - **ThinkingTests** (8 connections) — `tests/test_model_probe.py`
+- **translate()** (8 connections) — `scripts/translation_study.py`
 - **VerdictTests** (6 connections) — `tests/test_model_probe.py`
 - **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
+- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
 - **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
 - **.test_a_refused_parameter_is_none()** (2 connections) — `tests/test_model_probe.py`
@@ -19,26 +22,38 @@
 - **.test_a_different_answer_is_alive_but_not_obedient()** (2 connections) — `tests/test_model_probe.py`
 - **.test_the_expected_word_is_ok()** (2 connections) — `tests/test_model_probe.py`
 - **.test_two_hundred_with_no_content_is_empty()** (2 connections) — `tests/test_model_probe.py`
+- **Languages** (2 connections) — `docs/OPERATING.md`
 - **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
 - **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
 - **.test_a_generic_error_is_not_read_as_a_refused_parameter()** (1 connections) — `tests/test_model_probe.py`
 - **.test_each_failure_keeps_its_own_name()** (1 connections) — `tests/test_model_probe.py`
 - **.test_rate_limited_is_not_dead()** (1 connections) — `tests/test_model_probe.py`
-- **A successful completion, overridden field by field.** (1 connections) — `tests/test_model_probe.py`
+- **Content process** (1 connections) — `docs/OPERATING.md`
+- *... and 8 more nodes in this community*
 
 ## Relationships
 
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 64](Community_64.md) (2 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/AGENTIC_TOOLING_STUDY.md`
+- `docs/OPERATING.md`
+- `scripts/translation_study.py`
 - `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 32 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 49 (92%)
+- INFERRED: 4 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

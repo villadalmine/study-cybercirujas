@@ -1,6 +1,6 @@
 # Changelog
 
-> 23 nodes · cohesion 0.10
+> 25 nodes · cohesion 0.09
 
 ## Key Concepts
 
@@ -13,7 +13,9 @@
 - **2026-07-11/12** (2 connections) — `CHANGELOG.md`
 - **2026-07-29** (2 connections) — `CHANGELOG.md`
 - **2026-09-10** (2 connections) — `CHANGELOG.md`
+- **2026-09-11** (2 connections) — `CHANGELOG.md`
 - **2026-09-14** (2 connections) — `CHANGELOG.md`
+- **2026-09-17** (2 connections) — `CHANGELOG.md`
 - **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
 - **12e01a6 — Paths + Linux Foundation** (1 connections) — `CHANGELOG.md`
 - **1d4bd14 — Multilingual + Deploy** (1 connections) — `CHANGELOG.md`
@@ -31,16 +33,16 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (5 shared connections)
+- [Community 21](Community_21.md) (3 shared connections)
 - [Community 70](Community_70.md) (3 shared connections)
 - [Community 65](Community_65.md) (2 shared connections)
 - [Community 14](Community_14.md) (2 shared connections)
-- [Community 21](Community_21.md) (2 shared connections)
-- [Community 135](Community_135.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [Community 64](Community_64.md) (1 shared connections)
 - [Community 75](Community_75.md) (1 shared connections)
 - [fix_corrupted_content.py](fix_corrupted_content.py.md) (1 shared connections)
 - [Community 22](Community_22.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
 - [Community 105](Community_105.md) (1 shared connections)
 
 ## Source Files
@@ -51,8 +53,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 40 (77%)
-- INFERRED: 12 (23%)
+- EXTRACTED: 40 (74%)
+- INFERRED: 14 (26%)
 - AMBIGUOUS: 0 (0%)
 
 ---

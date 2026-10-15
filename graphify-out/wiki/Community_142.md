@@ -4,22 +4,21 @@
 
 ## Key Concepts
 
-- **_glob()** (5 connections) — `scripts/check_pr.py`
-- **Pattern** (1 connections)
-- **GitHub path filter semantics: `**` crosses directories, `*` does not.** (1 connections) — `scripts/check_pr.py`
+- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
+- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
+- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
 
 ## Relationships
 
-- [Community 31](Community_31.md) (2 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `teach/core/catalog.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

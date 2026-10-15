@@ -1,51 +1,36 @@
 # Community 103
 
-> 10 nodes · cohesion 0.47
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **README.md** (21 connections) — `README.md`
-- **CONTRIBUTING.md** (9 connections) — `CONTRIBUTING.md`
-- **OPERATING.md** (9 connections) — `docs/OPERATING.md`
-- **DEVELOPERS.md** (8 connections) — `DEVELOPERS.md`
-- **AUDITOR_DESIGN.md** (8 connections) — `docs/AUDITOR_DESIGN.md`
-- **CLEANUP.md** (7 connections) — `docs/CLEANUP.md`
-- **PRINCIPLES.md** (5 connections) — `docs/PRINCIPLES.md`
-- **GOVERNANCE.md** (5 connections) — `GOVERNANCE.md`
-- **CODE_OF_CONDUCT.md** (4 connections) — `CODE_OF_CONDUCT.md`
-- **Code of Conduct** (1 connections) — `CODE_OF_CONDUCT.md`
+- **Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)** (8 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **1. Graphify — measured pilot, 2026-08-18** (4 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **AGENTIC_TOOLING_STUDY.md** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **2. OpenWiki — studied, not yet run (every run spends)** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **3. LangSmith — optional visibility, narrow fit** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **4. The plan** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **5. Costs, summarized** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **7. Decisions that belong to the owner** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **Integration cautions (this repo specifically)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **Optional, costs completions (cheap, LiteLLM-able)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **What Graphify gives agents** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 
 ## Relationships
 
-- [README.md](README.md.md) (20 shared connections)
-- [Within one certification (the only fair comparisons; authoring language `en` only)](Within_one_certification_the_only_fair_comparisons;_authoring_language_`en`_only.md) (2 shared connections)
-- [Which backend authors better material?](Which_backend_authors_better_material_.md) (2 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
-- [Verifying the material is true — design notes](Verifying_the_material_is_true_—_design_notes.md) (1 shared connections)
-- [Community 6](Community_6.md) (1 shared connections)
-- [Community 84](Community_84.md) (1 shared connections)
-- [Community 85](Community_85.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 107](Community_107.md) (1 shared connections)
-- [Community 78](Community_78.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 
 ## Source Files
 
-- `CODE_OF_CONDUCT.md`
-- `CONTRIBUTING.md`
-- `DEVELOPERS.md`
-- `GOVERNANCE.md`
-- `README.md`
-- `docs/AUDITOR_DESIGN.md`
-- `docs/CLEANUP.md`
-- `docs/OPERATING.md`
-- `docs/PRINCIPLES.md`
+- `docs/AGENTIC_TOOLING_STUDY.md`
 
 ## Audit Trail
 
-- EXTRACTED: 56 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 12 (80%)
+- INFERRED: 3 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

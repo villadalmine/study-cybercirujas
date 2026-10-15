@@ -21,7 +21,7 @@
 ## Relationships
 
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 - [Community 136](Community_136.md) (1 shared connections)
 

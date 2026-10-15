@@ -1,37 +1,40 @@
 # Community 125
 
-> 10 nodes · cohesion 0.36
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **tempfile** (16 connections)
-- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
-- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
-- **main()** (6 connections) — `scripts/ocr_pdf.py`
-- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
-- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
-- **Path** (3 connections)
-- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
-- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
-- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
+- **list_certs()** (8 connections) — `teach/core/catalog.py`
+- **get_cert()** (6 connections) — `teach/api.py`
+- **_status_snapshot()** (6 connections) — `teach/api.py`
+- **get_cert()** (5 connections) — `teach/core/catalog.py`
+- **get_catalog()** (4 connections) — `teach/api.py`
+- **get_status()** (4 connections) — `teach/api.py`
+- **healthz()** (4 connections) — `teach/api.py`
+- **Per-certification overview: exam versions, coverage, videos, freshness. The…** (1 connections) — `teach/api.py`
+- **One certification: catalogue entry, syllabus and which topics have material.** (1 connections) — `teach/api.py`
+- **Liveness/readiness para Kubernetes.** (1 connections) — `teach/api.py`
+- **Every certification: name, exam, vendor, level, validity and official sources.** (1 connections) — `teach/api.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (9 shared connections)
-- [Community 61](Community_61.md) (6 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 121](Community_121.md) (2 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 116](Community_116.md) (1 shared connections)
+- [login](login.md) (5 shared connections)
+- [Community 77](Community_77.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [Community 18](Community_18.md) (2 shared connections)
+- [Community 85](Community_85.md) (2 shared connections)
+- [certs.py](certs.py.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/ocr_pdf.py`
+- `teach/api.py`
+- `teach/core/catalog.py`
 
 ## Audit Trail
 
-- EXTRACTED: 39 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

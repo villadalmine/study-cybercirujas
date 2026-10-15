@@ -1,34 +1,44 @@
 # Community 85
 
-> 9 nodes · cohesion 0.22
+> 15 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **Operating the pipeline — for maintainers** (11 connections) — `docs/OPERATING.md`
-- **Languages** (2 connections) — `docs/OPERATING.md`
-- **Content process** (1 connections) — `docs/OPERATING.md`
-- **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
-- **Environment variables** (1 connections) — `docs/OPERATING.md`
-- **Keeping it honest over time** (1 connections) — `docs/OPERATING.md`
-- **Quality** (1 connections) — `docs/OPERATING.md`
-- **Quickstart (maintainers)** (1 connections) — `docs/OPERATING.md`
-- **Running it yourself, without guessing** (1 connections) — `docs/OPERATING.md`
+- **get_syllabus()** (11 connections) — `teach/core/corpus.py`
+- **list_certs()** (8 connections) — `teach/core/corpus.py`
+- **serve()** (6 connections) — `teach/mcp_server.py`
+- **ListAndSyllabusTests** (5 connections) — `tests/test_corpus.py`
+- **.test_every_listed_certification_can_be_opened()** (3 connections) — `tests/test_corpus.py`
+- **.test_the_count_matches_what_the_syllabus_holds()** (3 connections) — `tests/test_corpus.py`
+- **get_syllabus()** (2 connections) — `teach/mcp_server.py`
+- **get_topic()** (2 connections) — `teach/mcp_server.py`
+- **list_certs()** (2 connections) — `teach/mcp_server.py`
+- **search_topics()** (2 connections) — `teach/mcp_server.py`
+- **.test_availability_is_reported_not_assumed()** (2 connections) — `tests/test_corpus.py`
+- **.test_the_syllabus_is_small_enough_to_hand_a_model_whole()** (2 connections) — `tests/test_corpus.py`
+- **Every certification, with enough to choose one and nothing more. `topics` and…** (1 connections) — `teach/core/corpus.py`
+- **One certification's objectives: what the model picks from. This IS the phase-2…** (1 connections) — `teach/core/corpus.py`
+- **Run the stdio server, as `.mcp.json` starts it.** (1 connections) — `teach/mcp_server.py`
 
 ## Relationships
 
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 136](Community_136.md) (1 shared connections)
+- [Community 45](Community_45.md) (5 shared connections)
+- [Community 114](Community_114.md) (2 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [certs.py](certs.py.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/OPERATING.md`
+- `teach/core/corpus.py`
+- `teach/mcp_server.py`
+- `tests/test_corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 32 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

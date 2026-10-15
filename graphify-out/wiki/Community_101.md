@@ -1,34 +1,43 @@
 # Community 101
 
-> 8 nodes · cohesion 0.25
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **Content Workflow** (9 connections) — `WORKFLOW.md`
-- **Backends** (2 connections) — `WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
-- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
-- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
-- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
-- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
-- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
+- **get_models()** (7 connections) — `teach/api.py`
+- **Content Status** (7 connections) — `STATUS.md`
+- **_refresh_live()** (6 connections) — `teach/api.py`
+- **upstream()** (5 connections) — `teach/core/models_live.py`
+- **Exam versions** (2 connections) — `STATUS.md`
+- **BackgroundTasks** (1 connections)
+- **Certification Videos** (1 connections) — `STATUS.md`
+- **Certifications** (1 connections) — `STATUS.md`
+- **Milestone** (1 connections) — `STATUS.md`
+- **Path Videos** (1 connections) — `STATUS.md`
+- **Spend (measured)** (1 connections) — `STATUS.md`
+- **Compare the catalogue against OpenRouter, at most every few hours. Never raises…** (1 connections) — `teach/api.py`
+- **The study bot's model catalogue, from `models.yaml`, plus what is live. Served…** (1 connections) — `teach/api.py`
+- **{id: model} as OpenRouter publishes it right now. Raises on failure.** (1 connections) — `teach/core/models_live.py`
 
 ## Relationships
 
+- [Community 3](Community_3.md) (3 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [login](login.md) (2 shared connections)
+- [Community 77](Community_77.md) (1 shared connections)
+- [Community 70](Community_70.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 65](Community_65.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
-- `WORKFLOW.md`
+- `STATUS.md`
+- `teach/api.py`
+- `teach/core/models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (83%)
-- INFERRED: 2 (17%)
+- EXTRACTED: 21 (91%)
+- INFERRED: 2 (9%)
 - AMBIGUOUS: 0 (0%)
 
 ---

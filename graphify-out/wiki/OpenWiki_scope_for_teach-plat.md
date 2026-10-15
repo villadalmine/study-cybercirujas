@@ -1,10 +1,9 @@
 # OpenWiki scope for teach-plat
 
-> 6 nodes · cohesion 0.33
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **DEVTOOLS.md** (6 connections) — `docs/DEVTOOLS.md`
 - **OpenWiki scope for teach-plat** (4 connections) — `openwiki/INSTRUCTIONS.md`
 - **INSTRUCTIONS.md** (2 connections) — `openwiki/INSTRUCTIONS.md`
 - **Style** (1 connections) — `openwiki/INSTRUCTIONS.md`
@@ -13,19 +12,15 @@
 
 ## Relationships
 
-- [README.md](README.md.md) (2 shared connections)
-- [1. The code graph (Graphify)](1._The_code_graph_Graphify.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/DEVTOOLS.md`
 - `openwiki/INSTRUCTIONS.md`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 5 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

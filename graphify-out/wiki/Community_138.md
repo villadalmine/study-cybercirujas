@@ -1,27 +1,28 @@
 # Community 138
 
-> 5 nodes · cohesion 0.40
+> 5 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **authorship()** (5 connections) — `scripts/check_pr.py`
-- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
-- **_cells()** (2 connections) — `scripts/check_pr.py`
-- **The data rows of '### Findings ledger' (None if the subsection is missing).** (1 connections) — `scripts/check_pr.py`
-- **Who is declared as author agrees with Provenance; the findings ledger is well…** (1 connections) — `scripts/check_pr.py`
+- **_owner_label()** (5 connections) — `teach/core/labs.py`
+- **OwnerLabelTests** (3 connections) — `tests/test_labs_ownership.py`
+- **.test_no_token_no_label()** (2 connections) — `tests/test_labs_ownership.py`
+- **.test_token_becomes_a_label()** (2 connections) — `tests/test_labs_ownership.py`
+- **`--label` that stamps who created the container, when that is known.…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [Community 31](Community_31.md) (4 shared connections)
-- [Community 75](Community_75.md) (2 shared connections)
+- [Community 8](Community_8.md) (2 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `teach/core/labs.py`
+- `tests/test_labs_ownership.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

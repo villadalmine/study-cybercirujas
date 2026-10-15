@@ -18,7 +18,7 @@
 
 - [Community 70](Community_70.md) (3 shared connections)
 - [Community 22](Community_22.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 67](Community_67.md) (2 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
 - [Community 64](Community_64.md) (2 shared connections)
