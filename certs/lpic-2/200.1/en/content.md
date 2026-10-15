@@ -368,6 +368,7 @@ Kernels ≥ 4.20 export, per resource, the share of wall time during which work 
 ```
 $ cat /proc/pressure/cpu
 some avg10=18.44 avg60=14.21 avg300=9.07 total=18472930184
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 
 $ cat /proc/pressure/io
 some avg10=41.07 avg60=38.84 avg300=31.22 total=99184772093
@@ -380,7 +381,7 @@ full avg10=0.00 avg60=0.00 avg300=0.01 total=402114
 
 - `some` — at least one task was stalled on this resource.
 - `full` — **every** non-idle task was stalled, i.e. the machine did no useful work at all. `io full = 29.88` means ~30 % of the last 10 seconds were pure, total I/O stall.
-- `cpu` has no meaningful `full` at system scope (a stalled CPU means another task ran).
+- `cpu` has no meaningful `full` at system scope (a task waiting for a CPU means another task ran on it): the kernel has printed the line since 5.13 and pins it to zero system-wide; inside a cgroup's `cpu.pressure` it is real, for example when `cpu.max` throttles the whole group (psi.rst: "CPU full is undefined at the system level, but has been reported since 5.13, so it is set to zero for backward compatibility").
 
 Why this matters architecturally: PSI is normalized `0–100`, interval-based, and directly comparable across resources. "CPU pressure 18 %, I/O pressure 41 %" is a ranked bottleneck list in two lines, which neither utilization nor load average can produce. It is also available per cgroup (`/sys/fs/cgroup/<slice>/cpu.pressure`), which makes it the correct SLO input on container hosts.
 
@@ -2296,6 +2297,7 @@ kernel.task_delayacct = 1
 
 $ grep . /proc/pressure/* 
 /proc/pressure/cpu:some avg10=1.42 avg60=2.11 avg300=1.88 total=18472930184
+/proc/pressure/cpu:full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 /proc/pressure/io:some avg10=0.84 avg60=1.02 avg300=0.91 total=99184772093
 /proc/pressure/io:full avg10=0.41 avg60=0.48 avg300=0.44 total=71204881003
 /proc/pressure/memory:some avg10=0.00 avg60=0.00 avg300=0.00 total=1204881
@@ -2407,6 +2409,7 @@ $ vmstat 5 2 | tail -1
  2  0  73216 1284992 912384 19884416    0    0   184   412 2104  4881  11  6 82  1  0  0
 $ cat /proc/pressure/cpu
 some avg10=0.84 avg60=0.91 avg300=0.88 total=18472930184
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 $ ss -ltn | grep 8080
 LISTEN     129        128                     0.0.0.0:8080             0.0.0.0:*
 $ nstat -n; sleep 10; nstat | grep -i listen

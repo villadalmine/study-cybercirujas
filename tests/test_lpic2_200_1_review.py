@@ -238,5 +238,17 @@ class MathisTest(unittest.TestCase):
             self.assertAlmostEqual(1.22 * 1448 / (0.080 * 0.001 ** 0.5) / 1e3, 698, delta=1)
 
 
+class CpuPressureTest(unittest.TestCase):
+    def test_cpu_full_exists_and_is_zero_system_wide(self):
+        # psi.rst: "CPU full is undefined at the system level, but has been
+        # reported since 5.13, so it is set to zero for backward compatibility".
+        for lang in LANGS:
+            text = read(lang, "content.md") + read(lang, "exercises.md")
+            self.assertNotRegex(text, r"non-existent\) `cpu full`|inexistente\) `cpu full`|does not publish `cpu full`|no publica `cpu full`", lang)
+            somes = re.findall(r"^(?:/proc/pressure/cpu:)?some avg10=", text, re.M)
+            fulls = re.findall(r"^(?:/proc/pressure/cpu:)?full avg10=0\.00 avg60=0\.00 avg300=0\.00 total=0$", text, re.M)
+            self.assertGreaterEqual(len(fulls), 4, lang)
+
+
 if __name__ == "__main__":
     unittest.main()

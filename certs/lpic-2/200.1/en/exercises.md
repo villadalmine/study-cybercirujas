@@ -217,6 +217,7 @@ grep . /proc/pressure/*
 
 ```
 /proc/pressure/cpu:some avg10=0.00 avg60=0.12 avg300=0.08 total=18412334
+/proc/pressure/cpu:full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 /proc/pressure/io:some avg10=0.00 avg60=0.04 avg300=0.02 total=9122841
 /proc/pressure/io:full avg10=0.00 avg60=0.01 avg300=0.01 total=4011223
 /proc/pressure/memory:some avg10=0.00 avg60=0.00 avg300=0.00 total=0
@@ -249,7 +250,7 @@ top -b -H -n 1 -o %CPU | head -15
 - **Q9.** Under `stress-ng --cpu 4` the load average converges near 4.00. Under the `dd iflag=direct` run, load average also rises although the CPU is idle. Explain mechanically why, and name the process state involved.
 - **Q10.** `WCHAN` reads `blk_mq_get_tag`. What layer is the process blocked in, and what does that tell you about queue depth on that device?
 - **Q11.** `%steal` is 18% sustained on a cloud instance. Which three remediations are available to you as the *guest* administrator, and which one is not (and why)?
-- **Q12.** Explain the difference between `cpu some` and the (non-existent) `cpu full`. Why does the kernel publish `full` for `io` and `memory` but not for `cpu`?
+- **Q12.** Explain the difference between `cpu some` and the `cpu full` line, which is always zero in `/proc/pressure/cpu`. Why is `full` meaningful for `io` and `memory` system-wide but not for `cpu`, and where is `cpu full` meaningful?
 - **Q13.** Utilization is 100% in two different incidents; in one, PSI `cpu some avg10` is 2%, in the other it is 85%. Which one is healthy, and what word distinguishes the two conditions?
 
 ---
@@ -1329,7 +1330,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 **Q11.** `%steal` is time your vCPU was runnable but the hypervisor scheduled someone else. As a guest you can: (1) move the instance to a different host or a dedicated/non-burstable instance type; (2) reduce your own vCPU count so the scheduler has an easier time placing you, or pin latency-sensitive work; (3) escalate to the provider with the measurement. What you **cannot** do is fix it with any guest-side tuning — no sysctl, scheduler policy or nice value reclaims stolen time, because the cycles were never yours. (On a *burstable* instance, also check for CPU-credit exhaustion, which presents the same way.)
 
-**Q12.** `some` is the fraction of wall time in which **at least one** non-idle task was stalled on the resource; `full` is the fraction in which **every** non-idle task was stalled, i.e. zero productive work was possible. The kernel does not publish `cpu full` because a task stalled waiting for CPU implies some *other* task is running on that CPU — by construction the system is never fully stalled on CPU, so the metric would always be zero.
+**Q12.** `some` is the fraction of wall time in which **at least one** non-idle task was stalled on the resource; `full` is the fraction in which **every** non-idle task was stalled, i.e. zero productive work was possible. System-wide, `cpu full` is always zero: a task stalled waiting for CPU implies some *other* task is running on that CPU, so the system as a whole is never fully stalled on CPU. The kernel has printed the line since 5.13 and sets it to zero for backward compatibility (Documentation/accounting/psi.rst). In a cgroup's `cpu.pressure` it is real: every non-idle task of the group can be waiting at once, for example when `cpu.max` throttles the group.
 
 **Q13.** The one with `cpu some avg10=2%` is healthy: 100% utilization with no queueing is a *well-used* machine, which is what you want from a batch node. The one at 85% is in trouble. The distinguishing word is **saturation** — work queued beyond the resource's ability to serve it. Utilization has a ceiling of 100% and stops conveying information there; saturation (PSI, run queue, `aqu-sz`) keeps rising and is what correlates with latency.
 

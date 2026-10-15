@@ -217,6 +217,7 @@ grep . /proc/pressure/*
 
 ```
 /proc/pressure/cpu:some avg10=0.00 avg60=0.12 avg300=0.08 total=18412334
+/proc/pressure/cpu:full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 /proc/pressure/io:some avg10=0.00 avg60=0.04 avg300=0.02 total=9122841
 /proc/pressure/io:full avg10=0.00 avg60=0.01 avg300=0.01 total=4011223
 /proc/pressure/memory:some avg10=0.00 avg60=0.00 avg300=0.00 total=0
@@ -249,7 +250,7 @@ top -b -H -n 1 -o %CPU | head -15
 - **Q9.** Con `stress-ng --cpu 4` el load average converge cerca de 4.00. Con la corrida de `dd iflag=direct`, el load average también sube aunque la CPU está idle. Explicá mecánicamente por qué, y nombrá el estado de proceso involucrado.
 - **Q10.** `WCHAN` dice `blk_mq_get_tag`. ¿En qué capa está bloqueado el proceso, y qué te dice eso sobre la profundidad de cola de ese dispositivo?
 - **Q11.** `%steal` está en 18% sostenido en una instancia de nube. ¿Qué tres remediaciones tenés disponibles como administrador del *guest*, y cuál no (y por qué)?
-- **Q12.** Explicá la diferencia entre `cpu some` y el (inexistente) `cpu full`. ¿Por qué el kernel publica `full` para `io` y `memory` pero no para `cpu`?
+- **Q12.** Explicá la diferencia entre `cpu some` y la línea `cpu full`, que en `/proc/pressure/cpu` siempre vale cero. ¿Por qué `full` tiene sentido para `io` y `memory` a nivel sistema pero no para `cpu`, y dónde sí lo tiene `cpu full`?
 - **Q13.** La utilización es 100% en dos incidentes distintos; en uno, PSI `cpu some avg10` es 2%, en el otro es 85%. ¿Cuál es sano, y qué palabra distingue las dos condiciones?
 
 ---
@@ -1329,7 +1330,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 **Q11.** `%steal` es tiempo en el que tu vCPU estaba ejecutable pero el hipervisor planificó a otro. Como guest podés: (1) mover la instancia a otro host o a un tipo de instancia dedicado/no burstable; (2) reducir tu propia cantidad de vCPUs para que al scheduler le resulte más fácil ubicarte, o fijar el trabajo sensible a la latencia; (3) escalar al proveedor con la medición. Lo que **no** podés hacer es arreglarlo con ningún tuning del lado del guest — ningún sysctl, política de scheduler ni valor de nice recupera tiempo robado, porque esos ciclos nunca fueron tuyos. (En una instancia *burstable*, revisá también el agotamiento de créditos de CPU, que se presenta igual.)
 
-**Q12.** `some` es la fracción de tiempo de reloj en la que **al menos una** tarea no-idle estuvo frenada en el recurso; `full` es la fracción en la que **todas** las tareas no-idle estuvieron frenadas, es decir en la que no era posible trabajo productivo alguno. El kernel no publica `cpu full` porque una tarea frenada esperando CPU implica que *otra* tarea está corriendo en esa CPU — por construcción el sistema nunca está completamente frenado en CPU, así que la métrica siempre sería cero.
+**Q12.** `some` es la fracción de tiempo de reloj en la que **al menos una** tarea no-idle estuvo frenada en el recurso; `full` es la fracción en la que **todas** las tareas no-idle estuvieron frenadas, es decir en la que no era posible trabajo productivo alguno. A nivel sistema, `cpu full` siempre vale cero: una tarea frenada esperando CPU implica que *otra* tarea está corriendo en esa CPU, así que el sistema entero nunca está completamente frenado en CPU. El kernel imprime la línea desde 5.13 y la fija en cero por compatibilidad (Documentation/accounting/psi.rst). En el `cpu.pressure` de un cgroup es real: todas las tareas no-idle del grupo pueden estar esperando a la vez, por ejemplo cuando `cpu.max` frena al grupo.
 
 **Q13.** El que tiene `cpu some avg10=2%` está sano: 100% de utilización sin encolamiento es una máquina *bien usada*, que es lo que querés de un nodo de batch. El que está en 85% está en problemas. La palabra que los distingue es **saturación** — trabajo encolado más allá de la capacidad del recurso de atenderlo. La utilización tiene un techo de 100% y deja de transmitir información ahí; la saturación (PSI, cola de ejecución, `aqu-sz`) sigue subiendo y es lo que correlaciona con la latencia.
 
