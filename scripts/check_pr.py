@@ -390,11 +390,11 @@ def main() -> int:
         pr = json.loads(Path(args.event).read_text(encoding="utf-8"))["pull_request"]
         title, body = pr["title"], pr.get("body") or ""
         labels = {label["name"] for label in pr.get("labels") or []}
-    if args.labels_file and Path(args.labels_file).is_file():
-        labels = read_labels(Path(args.labels_file))
     else:
         title = args.title or ""
         body = Path(args.body_file).read_text(encoding="utf-8") if args.body_file else ""
+    if args.labels_file and Path(args.labels_file).is_file():
+        labels = read_labels(Path(args.labels_file))  # live labels replace the replayed payload's
     files = args.files if args.files is not None else (changed_files(args.base) if args.base else [])
     code_lines = code_lines_changed(args.base) if args.base and args.files is None else None
 

@@ -1,8 +1,10 @@
 """scripts/check_pr.py: the PR format as a check, offline (fixtures in tests/fixtures/pr/)."""
 import io
+import json
 import sys
 import tempfile
 from contextlib import redirect_stdout
+from unittest import mock
 import unittest
 from pathlib import Path
 
@@ -236,6 +238,55 @@ class VerifyWorkflowTests(unittest.TestCase):
             labels = check_pr.read_labels(f)
         self.assertEqual(labels, {"site:none", "size-exception"})
         self.assertEqual(check_pr.scope(["teach/api.py"], code_lines=401, labels=labels), [])
+
+
+class MainTests(unittest.TestCase):
+    """check_pr.main() as CI and a contributor call it (review round 2 of #3: an `if`
+    inserted before the `else` of `if args.event` blanked the event's title and body)."""
+
+    TITLE = "fix(cka): reclaim policy"
+
+    def run_main(self, *argv):
+        out = io.StringIO()
+        with mock.patch.object(sys, "argv", ["check_pr.py", *argv, "--files", *TOUCHED]), redirect_stdout(out):
+            code = check_pr.main()
+        return code, out.getvalue()
+
+    def event(self, tmp, labels=()):
+        ev = Path(tmp) / "event.json"
+        ev.write_text(json.dumps({"pull_request": {
+            "title": self.TITLE, "body": (FIXTURES / "good.md").read_text(encoding="utf-8"),
+            "labels": [{"name": n} for n in labels]}}), encoding="utf-8")
+        return str(ev)
+
+    def test_event_alone_reads_title_and_body_from_the_event(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self.run_main("--event", self.event(tmp))
+        self.assertEqual(code, 0, out)
+        self.assertIn("PR description OK", out)
+
+    def test_a_missing_labels_file_keeps_the_event(self):
+        # The workflow's fallback when `gh api .../labels` fails: `rm -f labels.txt`.
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self.run_main("--event", self.event(tmp), "--labels-file", str(Path(tmp) / "nope.txt"))
+        self.assertEqual(code, 0, out)
+        self.assertNotIn("missing section", out)
+
+    def test_title_and_body_file_with_a_labels_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            labels = Path(tmp) / "labels.txt"
+            labels.write_text("size-exception\n", encoding="utf-8")
+            code, out = self.run_main("--title", self.TITLE, "--body-file", str(FIXTURES / "good.md"),
+                                      "--labels-file", str(labels))
+        self.assertEqual(code, 0, out)
+
+    def test_live_labels_replace_the_payload(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            labels = Path(tmp) / "labels.txt"
+            labels.write_text("scope-exception\n", encoding="utf-8")
+            with mock.patch.object(check_pr, "scope", wraps=check_pr.scope) as scope:
+                self.run_main("--event", self.event(tmp, labels=["stale"]), "--labels-file", str(labels))
+        self.assertEqual(scope.call_args.args[2], {"scope-exception"})
 
 
 class ScopeTests(unittest.TestCase):
