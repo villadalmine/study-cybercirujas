@@ -77,6 +77,19 @@ def inspect(name: str) -> dict | None:
     return json.loads(res.stdout)[0]
 
 
+def _ours(name: str, info: dict | None) -> dict | None:
+    """`info` if the container is a study-lab one; refuse to touch it otherwise.
+
+    run() recreates and down() removes containers by name. A container that
+    holds the name but was not created by study-lab (no `study-lab=1` label) is
+    someone else's work: never adopted, never deleted.
+    """
+    if info and (info.get("Config", {}).get("Labels") or {}).get("study-lab") != "1":
+        raise RunnerError(f"a container named {name} exists but was not created by study-lab "
+                          "(no study-lab=1 label); not touching it — rename or remove it yourself")
+    return info
+
+
 def ensure_image(lab: Lab) -> str:
     image = image_for(lab)
     if _docker("image", "inspect", image).returncode == 0:
@@ -153,7 +166,7 @@ def _state(name: str) -> str:
 def run(lab: Lab) -> int:
     name = container_name(lab)
     h = spec_hash(lab)
-    info = inspect(name)
+    info = _ours(name, inspect(name))
     if info and info["State"]["Running"] and info["Config"]["Labels"].get("study-lab.hash") == h:
         if _state(name) == "broken":
             print(f"[study-lab] {name} is already up and broken (same lab, nothing to do).")
@@ -247,7 +260,7 @@ def shell(lab: Lab, command: list[str] | None = None) -> int:
 
 def down(lab: Lab, purge_cache: bool = False) -> int:
     name = container_name(lab)
-    info = inspect(name)
+    info = _ours(name, inspect(name))
     if info and info["State"]["Running"] and lab.contract.get("cleanup") is not None:
         print("[study-lab] running the lab's cleanup")
         cmd, stdin = _mode_cmd(lab, name, "cleanup")
