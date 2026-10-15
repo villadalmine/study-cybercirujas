@@ -190,5 +190,16 @@ class MemAvailableTest(unittest.TestCase):
             self.assertNotRegex(answer, r"`MemAvailable` (drops|baja)", lang)
 
 
+class ListenQueueTest(unittest.TestCase):
+    def test_listen_recv_q_never_exceeds_backlog_plus_one(self):
+        # On LISTEN, ss shows Recv-Q = sk_ack_backlog and Send-Q =
+        # sk_max_ack_backlog (net/ipv4/tcp_diag.c); the queue is full when the
+        # first exceeds the second (sk_acceptq_is_full), so Recv-Q <= Send-Q + 1.
+        for lang in LANGS:
+            for name in ("content.md", "exercises.md"):
+                for recv, send in re.findall(r"^LISTEN +(\d+) +(\d+) ", read(lang, name), re.M):
+                    self.assertLessEqual(int(recv), int(send) + 1, f"{lang}/{name}")
+
+
 if __name__ == "__main__":
     unittest.main()

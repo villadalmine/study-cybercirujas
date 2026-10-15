@@ -2408,7 +2408,7 @@ $ vmstat 5 2 | tail -1
 $ cat /proc/pressure/cpu
 some avg10=0.84 avg60=0.91 avg300=0.88 total=18472930184
 $ ss -ltn | grep 8080
-LISTEN     412        128                     0.0.0.0:8080             0.0.0.0:*
+LISTEN     129        128                     0.0.0.0:8080             0.0.0.0:*
 $ nstat -n; sleep 10; nstat | grep -i listen
 TcpExtListenOverflows           1842               0.0
 TcpExtListenDrops               1842               0.0
