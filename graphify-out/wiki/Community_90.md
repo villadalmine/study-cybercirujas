@@ -1,18 +1,22 @@
 # Community 90
 
-> 9 nodes · cohesion 0.22
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **video.md** (8 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **video.md** (9 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **Evidence** (3 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **Authorship** (2 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **Depends on** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
-- **Evidence** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **Findings ledger** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **How to test it from a clean clone** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **Kind** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **Known gaps** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **Provenance** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **Risk and rollback** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **Video** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 - **What and why** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
+- **Where it ran** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/video.md`
 
 ## Relationships
 
@@ -24,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -30,17 +30,17 @@
 ## Relationships
 
 - [Community 70](Community_70.md) (10 shared connections)
+- [Community 22](Community_22.md) (6 shared connections)
 - [video.py](video.py.md) (6 shared connections)
-- [certs.py](certs.py.md) (5 shared connections)
 - [Community 18](Community_18.md) (5 shared connections)
-- [Community 22](Community_22.md) (5 shared connections)
 - [Community 3](Community_3.md) (5 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
+- [Community 47](Community_47.md) (4 shared connections)
 - [Community 77](Community_77.md) (3 shared connections)
-- [Community 2](Community_2.md) (3 shared connections)
 - [Community 45](Community_45.md) (3 shared connections)
 - [Community 69](Community_69.md) (3 shared connections)
 - [StoredShapeTests](StoredShapeTests.md) (3 shared connections)
+- [login](login.md) (2 shared connections)
 
 ## Source Files
 

@@ -1,25 +1,36 @@
 # Community 114
 
-> 4 nodes · cohesion 0.50
+> 15 nodes · cohesion 0.34
 
 ## Key Concepts
 
-- **ReferencesTest** (4 connections) — `tests/test_check_claims.py`
-- **.test_ignores_urls_outside_the_references_section()** (1 connections) — `tests/test_check_claims.py`
-- **.test_parses_both_separators_the_corpus_uses()** (1 connections) — `tests/test_check_claims.py`
-- **.test_parses_markdown_links_and_bare_urls_under_a_label()** (1 connections) — `tests/test_check_claims.py`
+- **Path** (15 connections)
+- **_base_slide()** (9 connections) — `teach/core/video.py`
+- **_font()** (8 connections) — `teach/core/video.py`
+- **_fonts_for()** (8 connections) — `teach/core/video.py`
+- **_render_slide()** (8 connections) — `teach/core/video.py`
+- **_slide_domains()** (8 connections) — `teach/core/video.py`
+- **_slide_bullets()** (7 connections) — `teach/core/video.py`
+- **_slide_path()** (7 connections) — `teach/core/video.py`
+- **_slide_title()** (7 connections) — `teach/core/video.py`
+- **_wrap()** (7 connections) — `teach/core/video.py`
+- **FreeTypeFont** (2 connections)
+- **ImageDraw** (2 connections)
+- **Image** (1 connections)
+- **(bold, regular) — Noto Sans CJK for zh/ja when installed, otherwise it falls…** (1 connections) — `teach/core/video.py`
+- **Barras horizontales con el peso de cada dominio del examen — dato real (sumado…** (1 connections) — `teach/core/video.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [video.py](video.py.md) (19 shared connections)
 
 ## Source Files
 
-- `tests/test_check_claims.py`
+- `teach/core/video.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 55 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

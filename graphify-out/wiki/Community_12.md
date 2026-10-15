@@ -1,6 +1,6 @@
 # Community 12
 
-> 78 nodes · cohesion 0.06
+> 79 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -29,7 +29,7 @@
 - **hashlib** (6 connections)
 - **build()** (5 connections) — `teach/lab/runner.py`
 - **image_for()** (5 connections) — `teach/lab/runner.py`
-- *... and 53 more nodes in this community*
+- *... and 54 more nodes in this community*
 
 ## Relationships
 
@@ -37,8 +37,9 @@
 - [Community 61](Community_61.md) (6 shared connections)
 - [Community 43](Community_43.md) (5 shared connections)
 - [Community 75](Community_75.md) (3 shared connections)
-- [video.py](video.py.md) (2 shared connections)
 - [Community 36](Community_36.md) (2 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
 - [Community 69](Community_69.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
@@ -54,7 +55,7 @@
 ## Audit Trail
 
 - EXTRACTED: 188 (90%)
-- INFERRED: 20 (10%)
+- INFERRED: 22 (10%)
 - AMBIGUOUS: 0 (0%)
 
 ---

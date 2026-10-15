@@ -18,10 +18,10 @@
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 6](Community_6.md) (2 shared connections)
 - [fix_corrupted_content.py](fix_corrupted_content.py.md) (2 shared connections)
-- [steer.py](steer.py.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 - [Community 54](Community_54.md) (1 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
-- [pipeline.py](pipeline.py.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [main](main.md) (1 shared connections)
 
 ## Source Files
 

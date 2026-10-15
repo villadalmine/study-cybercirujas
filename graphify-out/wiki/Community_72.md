@@ -1,12 +1,11 @@
 # Community 72
 
-> 10 nodes · cohesion 0.20
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
 - **Study bot — design** (8 connections) — `docs/STUDY_BOT_DESIGN.md`
 - **Operating it** (4 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Tools / function calling — evaluated 2026-09-09** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
 - **Alternatives considered** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
 - **Effort** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
 - **How a student uses it** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
@@ -27,8 +26,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 11 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,6 +1,6 @@
 # Community 45
 
-> 53 nodes · cohesion 0.06
+> 52 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -24,24 +24,26 @@
 - **_informative()** (3 connections) — `teach/core/corpus.py`
 - **.test_every_listed_certification_can_be_opened()** (3 connections) — `tests/test_corpus.py`
 - **.test_the_count_matches_what_the_syllabus_holds()** (3 connections) — `tests/test_corpus.py`
-- **wrapped()** (2 connections) — `teach/mcp_server.py`
 - **get_syllabus()** (2 connections) — `teach/mcp_server.py`
 - **get_topic()** (2 connections) — `teach/mcp_server.py`
 - **list_certs()** (2 connections) — `teach/mcp_server.py`
 - **search_topics()** (2 connections) — `teach/mcp_server.py`
-- *... and 28 more nodes in this community*
+- **.test_availability_is_reported_not_assumed()** (2 connections) — `tests/test_corpus.py`
+- *... and 27 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (6 shared connections)
-- [certs.py](certs.py.md) (5 shared connections)
+- [Community 47](Community_47.md) (4 shared connections)
 - [Community 75](Community_75.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 - [Community 74](Community_74.md) (3 shared connections)
-- [Community 2](Community_2.md) (2 shared connections)
-- [Community 0](Community_0.md) (1 shared connections)
+- [login](login.md) (2 shared connections)
+- [Community 113](Community_113.md) (2 shared connections)
+- [certs.py](certs.py.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
 - [Community 77](Community_77.md) (1 shared connections)
 - [Community 93](Community_93.md) (1 shared connections)
-- [pipeline.py](pipeline.py.md) (1 shared connections)
+- [main](main.md) (1 shared connections)
 
 ## Source Files
 
@@ -51,8 +53,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 104 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 104 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

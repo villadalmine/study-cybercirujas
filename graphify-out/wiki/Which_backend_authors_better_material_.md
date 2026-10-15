@@ -16,8 +16,8 @@
 
 ## Relationships
 
-- [README.md](README.md.md) (2 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 - [fix_corrupted_content.py](fix_corrupted_content.py.md) (1 shared connections)
 
 ## Source Files

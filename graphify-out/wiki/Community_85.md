@@ -5,7 +5,7 @@
 ## Key Concepts
 
 - **Operating the pipeline — for maintainers** (11 connections) — `docs/OPERATING.md`
-- **Unattended generation timer** (3 connections) — `docs/OPERATING.md`
+- **Languages** (2 connections) — `docs/OPERATING.md`
 - **Content process** (1 connections) — `docs/OPERATING.md`
 - **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
 - **Environment variables** (1 connections) — `docs/OPERATING.md`
@@ -16,11 +16,10 @@
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
 
 ## Source Files
 
@@ -28,8 +27,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 11 (85%)
-- INFERRED: 2 (15%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

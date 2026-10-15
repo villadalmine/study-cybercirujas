@@ -1,6 +1,6 @@
 # Community 110
 
-> 6 nodes · cohesion 0.53
+> 7 nodes · cohesion 0.43
 
 ## Key Concepts
 
@@ -9,22 +9,25 @@
 - **.test_cert_list()** (2 connections) — `tests/test_smoke.py`
 - **.test_cert_show()** (2 connections) — `tests/test_smoke.py`
 - **.test_lab_help()** (2 connections) — `tests/test_smoke.py`
+- **Command line** (2 connections) — `README.md`
 - **The CLI commands the README offers a student — no key, no model.** (1 connections) — `tests/test_smoke.py`
 
 ## Relationships
 
-- [Community 34](Community_34.md) (2 shared connections)
-- [Community 64](Community_64.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
 - [Community 78](Community_78.md) (1 shared connections)
 
 ## Source Files
 
+- `README.md`
 - `tests/test_smoke.py`
 
 ## Audit Trail
 
-- EXTRACTED: 9 (75%)
-- INFERRED: 3 (25%)
+- EXTRACTED: 10 (77%)
+- INFERRED: 3 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

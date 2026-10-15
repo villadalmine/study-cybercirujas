@@ -1,6 +1,6 @@
 # fix_corrupted_content.py
 
-> 24 nodes · cohesion 0.13
+> 26 nodes · cohesion 0.12
 
 ## Key Concepts
 
@@ -11,6 +11,7 @@
 - **find_bad_combos()** (9 connections) — `scripts/fix_corrupted_content.py`
 - **render_ready_videos()** (7 connections) — `scripts/fix_corrupted_content.py`
 - **_finish()** (6 connections) — `scripts/fix_corrupted_content.py`
+- **refresh()** (6 connections) — `scripts/status_matrix.py`
 - **_cert_topic_ids()** (5 connections) — `scripts/fix_corrupted_content.py`
 - **_record_quota_block()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_refresh_status()** (4 connections) — `scripts/fix_corrupted_content.py`
@@ -26,33 +27,35 @@
 - **Ship a certification the moment it is finished, without being asked. Finishing…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **Regenerate STATUS.md here, in the thing that does the work. It used to live…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **TRANSLATE_BACKEND if it can actually answer, else claude. A misconfigured…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **Regenerate STATUS.md from disk. True if it changed. The single implementation…** (1 connections) — `scripts/status_matrix.py`
 - **Quality floor for generated material, identical for every backend. A different…** (1 connections) — `teach/core/quality.py`
-- **Same as `check`, resolving the kind from the filename. A file that cannot be…** (1 connections) — `teach/core/quality.py`
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
 - [Community 22](Community_22.md) (7 shared connections)
-- [pipeline.py](pipeline.py.md) (7 shared connections)
+- [main](main.md) (7 shared connections)
 - [Community 43](Community_43.md) (6 shared connections)
-- [main](main.md) (4 shared connections)
-- [Community 54](Community_54.md) (4 shared connections)
+- [Community 13](Community_13.md) (4 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
+- [Community 54](Community_54.md) (3 shared connections)
 - [Community 61](Community_61.md) (3 shared connections)
 - [Community 7](Community_7.md) (3 shared connections)
-- [Community 13](Community_13.md) (3 shared connections)
 - [next_work.py](next_work.py.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 140](Community_140.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
 - [Community 6](Community_6.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
 
 ## Source Files
 
 - `scripts/fix_corrupted_content.py`
+- `scripts/status_matrix.py`
 - `teach/core/quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 92 (97%)
-- INFERRED: 3 (3%)
+- EXTRACTED: 95 (96%)
+- INFERRED: 4 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

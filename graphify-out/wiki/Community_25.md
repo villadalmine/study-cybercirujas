@@ -1,15 +1,18 @@
 # Community 25
 
-> 19 nodes · cohesion 0.16
+> 22 nodes · cohesion 0.14
 
 ## Key Concepts
 
 - **ServerSmokeTests** (14 connections) — `tests/test_smoke.py`
 - **.get()** (10 connections) — `tests/test_smoke.py`
 - **sitecustomize.py** (6 connections) — `tests/netguard/sitecustomize.py`
+- **socket** (5 connections)
 - **_host()** (3 connections) — `tests/netguard/sitecustomize.py`
+- **_free_port()** (3 connections) — `tests/test_smoke.py`
 - **_connect()** (2 connections) — `tests/netguard/sitecustomize.py`
 - **_connect_ex()** (2 connections) — `tests/netguard/sitecustomize.py`
+- **.setUpClass()** (2 connections) — `tests/test_smoke.py`
 - **.test_catalog_lists_certifications()** (2 connections) — `tests/test_smoke.py`
 - **.test_health()** (2 connections) — `tests/test_smoke.py`
 - **.test_missing_language_falls_back_and_says_so()** (2 connections) — `tests/test_smoke.py`
@@ -26,7 +29,8 @@
 
 ## Relationships
 
-- [Community 64](Community_64.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 64](Community_64.md) (2 shared connections)
 
 ## Source Files
 
@@ -35,8 +39,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 28 (90%)
-- INFERRED: 3 (10%)
+- EXTRACTED: 34 (92%)
+- INFERRED: 3 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

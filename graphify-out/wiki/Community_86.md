@@ -1,18 +1,22 @@
 # Community 86
 
-> 9 nodes · cohesion 0.22
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **lab.md** (8 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **lab.md** (9 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **Evidence** (3 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **Authorship** (2 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **Depends on** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
-- **Evidence** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **Findings ledger** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **How to test it from a clean clone** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **Kind** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **Known gaps** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **Lab cycle** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **Provenance** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **Risk and rollback** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 - **What and why** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
+- **Where it ran** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/lab.md`
 
 ## Relationships
 
@@ -24,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

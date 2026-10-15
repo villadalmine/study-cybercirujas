@@ -20,8 +20,8 @@
 
 - [Community 74](Community_74.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
+- [login](login.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 

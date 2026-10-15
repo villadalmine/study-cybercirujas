@@ -19,8 +19,7 @@
 
 ## Relationships
 
-- [login](login.md) (3 shared connections)
-- [Community 2](Community_2.md) (2 shared connections)
+- [login](login.md) (5 shared connections)
 - [Community 77](Community_77.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)

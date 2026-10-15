@@ -1,34 +1,48 @@
 # Community 102
 
-> 7 nodes · cohesion 0.29
+> 16 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **normalise_weights()** (7 connections) — `teach/core/tracker.py`
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `AGENTS_SYNC.md`
-- **.test_normalises_a_published_scale_to_exactly_one_hundred()** (2 connections) — `tests/test_tracker.py`
-- **What is now enforced, so this cannot recur** (2 connections) — `AGENTS_SYNC.md`
-- **What I need from you** (1 connections) — `AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `AGENTS_SYNC.md`
-- **Scale the published weights to percentages summing to exactly 100. Syllabi…** (1 connections) — `teach/core/tracker.py`
+- **model_comparison.py** (22 connections) — `scripts/model_comparison.py`
+- **observations()** (8 connections) — `scripts/model_comparison.py`
+- **render_markdown()** (7 connections) — `scripts/model_comparison.py`
+- **main()** (6 connections) — `scripts/model_comparison.py`
+- **_stats()** (5 connections) — `scripts/model_comparison.py`
+- **write()** (5 connections) — `scripts/model_comparison.py`
+- **statistics** (5 connections)
+- **usage_by_topic()** (4 connections) — `scripts/model_comparison.py`
+- **_md_table()** (3 connections) — `scripts/model_comparison.py`
+- **Path** (1 connections)
+- **The same numbers main() prints, as a dict — shared by the MODELS.md renderer.** (1 connections) — `scripts/model_comparison.py`
+- **MODELS.md: the model-comparison dashboard, derived and deterministic. Same…** (1 connections) — `scripts/model_comparison.py`
+- **Is one model better than another, and what does it cost to find out? Comparing…** (1 connections) — `scripts/model_comparison.py`
+- **Write MODELS.md; True if it changed. Importable, like status_matrix.refresh.** (1 connections) — `scripts/model_comparison.py`
+- **(cert, topic, lang) -> tokens and minutes, from the recorded completions.** (1 connections) — `scripts/model_comparison.py`
+- **One row per generated topic/language, attributed to the model in meta.yaml.…** (1 connections) — `scripts/model_comparison.py`
 
 ## Relationships
 
-- [Community 70](Community_70.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 22](Community_22.md) (2 shared connections)
+- [fix_corrupted_content.py](fix_corrupted_content.py.md) (2 shared connections)
+- [Community 6](Community_6.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
-- `teach/core/tracker.py`
-- `tests/test_tracker.py`
+- `scripts/model_comparison.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 47 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

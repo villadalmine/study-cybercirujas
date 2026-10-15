@@ -1,11 +1,12 @@
 # Developers — use the API, run your own copy, build on it
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
 - **Developers — use the API, run your own copy, build on it** (10 connections) — `DEVELOPERS.md`
 - **DORA, concretely** (3 connections) — `DEVELOPERS.md`
+- **Running your own copy** (2 connections) — `DEVELOPERS.md`
 - **The lifecycle, and how to measure it** (2 connections) — `DEVELOPERS.md`
 - **Building features on it** (1 connections) — `DEVELOPERS.md`
 - **Keeping this page true** (1 connections) — `DEVELOPERS.md`
@@ -17,8 +18,8 @@
 
 ## Relationships
 
-- [Community 34](Community_34.md) (2 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 136](Community_136.md) (2 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 
 ## Source Files
@@ -27,8 +28,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 11 (85%)
-- INFERRED: 2 (15%)
+- EXTRACTED: 11 (79%)
+- INFERRED: 3 (21%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -2,7 +2,7 @@
 
 > God node · 18 connections · `teach/core/tracker.py`
 
-**Community:** [Community 14](Community_14.md)
+**Community:** [Community 70](Community_70.md)
 
 ## Connections by Relation
 

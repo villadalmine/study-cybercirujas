@@ -1,6 +1,6 @@
 # Agent Synchronization & Idea Queue (AGENTS_SYNC.md)
 
-> God node · 19 connections · `AGENTS_SYNC.md`
+> God node · 20 connections · `AGENTS_SYNC.md`
 
 **Community:** [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md)
 
@@ -18,6 +18,7 @@
 - From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives `EXTRACTED`
 - Open — worth someone's time `EXTRACTED`
 - From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix `EXTRACTED`
+- Pull requests from agents `EXTRACTED`
 - What is fixed, and what is yours `EXTRACTED`
 - First: install the hook. It is the only rule that does not depend on you. `EXTRACTED`
 - Several agents at once: yes, and you do not have to coordinate `EXTRACTED`

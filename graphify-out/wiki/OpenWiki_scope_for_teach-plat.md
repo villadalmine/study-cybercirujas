@@ -15,7 +15,7 @@
 
 - [README.md](README.md.md) (2 shared connections)
 - [1. The code graph (Graphify)](1._The_code_graph_Graphify.md) (1 shared connections)
-- [Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)](Agentic_Tooling_Study-_Graphify_+_OpenWiki_+_LangSmith.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files

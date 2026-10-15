@@ -1,11 +1,11 @@
 # Community 40
 
-> 14 nodes · cohesion 0.25
+> 15 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **CheckPrTests** (14 connections) — `tests/test_check_pr.py`
-- **.body()** (11 connections) — `tests/test_check_pr.py`
+- **CheckPrTests** (15 connections) — `tests/test_check_pr.py`
+- **.body()** (12 connections) — `tests/test_check_pr.py`
 - **.test_a_complete_pr_passes()** (2 connections) — `tests/test_check_pr.py`
 - **.test_declared_site_must_match()** (2 connections) — `tests/test_check_pr.py`
 - **.test_deleted_material_is_not_missing_provenance()** (2 connections) — `tests/test_check_pr.py`
@@ -16,12 +16,13 @@
 - **.test_site_line_is_required()** (2 connections) — `tests/test_check_pr.py`
 - **.test_the_bad_fixture_fails_on_both_counts()** (2 connections) — `tests/test_check_pr.py`
 - **.test_title_must_be_a_conventional_commit()** (2 connections) — `tests/test_check_pr.py`
+- **.test_where_it_ran_outside_evidence_is_not_evidence()** (2 connections) — `tests/test_check_pr.py`
 - **.test_site_impact_is_computed_from_docker_yml_paths()** (1 connections) — `tests/test_check_pr.py`
 - **.test_the_templates_carry_every_required_section()** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 121](Community_121.md) (1 shared connections)
 
 ## Source Files
 
@@ -29,7 +30,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
