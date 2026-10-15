@@ -299,6 +299,39 @@ class MainTests(unittest.TestCase):
         self.assertEqual(scope.call_args.args[2], {"scope-exception"})
 
 
+class QualityOnlyTests(unittest.TestCase):
+    """A rescore (make quality) is not an edit of the material (quality-score PR)."""
+
+    META = "generated_at: '2026-07-16'\nlang: en\nbackend: claude\nmodel: claude\n"
+
+    def tree(self, tmp, head_meta, extra=()):
+        d = Path(tmp) / "certs" / "cka" / "1.1" / "en"
+        d.mkdir(parents=True)
+        (d / "meta.yaml").write_text(head_meta, encoding="utf-8")
+        files = ["certs/cka/1.1/en/meta.yaml", *extra]
+        return files, (lambda paths: {p: self.META for p in paths})
+
+    def test_only_the_quality_block_changed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            files, base = self.tree(tmp, self.META + "quality:\n  score: 80.0\n")
+            self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), {"certs/cka/1.1/en/meta.yaml"})
+
+    def test_any_other_change_still_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            files, base = self.tree(tmp, self.META.replace("model: claude", "model: other") + "quality: {}\n")
+            self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), set())
+
+    def test_content_changed_too_still_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            files, base = self.tree(tmp, self.META + "quality: {}\n", extra=["certs/cka/1.1/en/content.md"])
+            self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), set())
+
+    def test_base_texts_reads_git(self):
+        texts = check_pr.base_texts(["README.md", "no/such/file.md"], "HEAD")
+        self.assertIn("study", texts["README.md"].lower())
+        self.assertIsNone(texts["no/such/file.md"])
+
+
 class ScopeTests(unittest.TestCase):
     def test_one_topic_language_per_content_pr(self):
         files = ["certs/cka/1.1/es/content.md", "certs/cka/1.2/es/content.md"]

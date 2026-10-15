@@ -107,6 +107,54 @@ def site_impact(files: list[str]) -> str:
     return "image-rebuild" if hit else "none"
 
 
+def base_texts(paths: list[str], base: str) -> dict[str, str | None]:
+    """{path: its text at `base`} (None when it did not exist), in one `git cat-file --batch`."""
+    if not paths:
+        return {}
+    query = "".join(f"{base}:{p}\n" for p in paths)
+    res = subprocess.run(["git", "cat-file", "--batch"], cwd=REPO, input=query.encode("utf-8"),
+                         capture_output=True, check=True)
+    out, data, i = {}, res.stdout, 0
+    for p in paths:
+        header_end = data.index(b"\n", i)
+        header = data[i:header_end].split()
+        if len(header) < 3 or header[1] == b"missing":
+            out[p] = None
+            i = header_end + 1
+            continue
+        size = int(header[2])
+        out[p] = data[header_end + 1:header_end + 1 + size].decode("utf-8")
+        i = header_end + 1 + size + 1
+    return out
+
+
+def quality_only(files: list[str], base_text, root: Path = REPO) -> set[str]:
+    """meta.yaml files that are the only change in their topic/language and differ from
+    the base only in the `quality:` block scripts/quality_score.py writes.
+
+    That block is generated (`make quality`), not authorship: a PR that rescored
+    the corpus would otherwise be read as editing 1155 topics' material, each
+    asked for matching provenance. Any other change to the file still counts.
+    """
+    by_dir: dict[str, list[str]] = {}
+    for f in (f.replace("\\", "/") for f in files):
+        if MATERIAL.match(f):
+            by_dir.setdefault(f.rsplit("/", 1)[0], []).append(f.rsplit("/", 1)[1])
+    candidates = [f"{d}/meta.yaml" for d, names in by_dir.items() if names == ["meta.yaml"]]
+    before = base_text(candidates)
+    out = set()
+    for path in candidates:
+        if before.get(path) is None or not (root / path).exists():
+            continue
+        head = yaml.safe_load((root / path).read_text(encoding="utf-8")) or {}
+        old = yaml.safe_load(before[path]) or {}
+        head.pop("quality", None)
+        old.pop("quality", None)
+        if head == old:
+            out.add(path)
+    return out
+
+
 def material_dirs(files: list[str]) -> list[Path]:
     dirs = {Path(*Path(f).parts[:4]) for f in files if MATERIAL.match(f.replace("\\", "/"))}
     return sorted(dirs)
@@ -258,7 +306,8 @@ def kinds(files: list[str]) -> dict[str, set]:
     return out
 
 
-def scope(files: list[str], code_lines: int | None = None, labels: set | None = None) -> list[str]:
+def scope(files: list[str], code_lines: int | None = None, labels: set | None = None,
+          all_files: list[str] | None = None) -> list[str]:
     """Problems with the shape of a PR, independent of its description."""
     labels = labels or set()
     k = kinds(files)
@@ -274,7 +323,8 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
             problems.append("scope: study material and code in the same PR; split them "
                             f"(code: {', '.join(sorted(k['code'])[:3])}…)")
     touched_generated = [f for f in files if f in GENERATED]
-    if touched_generated and not any(f.startswith("certs/") for f in files):
+    # A rescored meta.yaml (left out of `files` as not authored) is still a certs/ change.
+    if touched_generated and not any(f.startswith("certs/") for f in (all_files or files)):
         problems.append(f"generated file changed without any certs/ change ({', '.join(touched_generated)}): "
                         "regenerate it with `teach status`, never edit it by hand")
     if code_lines is not None and code_lines > CODE_LIMIT and SIZE_LABEL not in labels:
@@ -410,7 +460,11 @@ def main() -> int:
     files = args.files if args.files is not None else (changed_files(args.base) if args.base else [])
     code_lines = code_lines_changed(args.base) if args.base and args.files is None else None
 
-    problems = check(title, body, files) + scope(files, code_lines, labels)
+    generated = quality_only(files, lambda paths: base_texts(paths, args.base)) if args.base else set()
+    if generated:
+        print(f"{len(generated)} meta.yaml change only their generated quality block: not counted as material")
+    authored = [f for f in files if f.replace("\\", "/") not in generated]
+    problems = check(title, body, authored) + scope(authored, code_lines, labels, all_files=files)
     if args.runs_file:
         Path(args.runs_file).write_text("".join(f"{repo} {run}\n" for repo, run in cited_runs(body)),
                                         encoding="utf-8")
