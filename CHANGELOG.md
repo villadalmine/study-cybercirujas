@@ -4,9 +4,9 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-15
 
-- **lpic-2 200.1 declares its source chain, and the stale chain hashes are refreshed** (fix,  was
-  red since #6): the Spanish  records  and the lab records ,
-  computed by  /  on a Linux (LF) checkout. The  of
+- **lpic-2 200.1 declares its source chain, and the stale chain hashes are refreshed** (fix, `main` was
+  red since #6): the Spanish `meta.yaml` records `source_sha256` and the lab records `derived_from`,
+  computed by `teach.core.certs` / `teach.lab.spec` on a Linux (LF) checkout. The `content_sha256` of
   the four CKA v2 labs (1.1, 3.3, 3.4, 3.5) is recomputed the same way: it had been taken on Windows
   with CRLF line endings, so the files were unchanged but the hashes read STALE on Linux. No lab was
   edited; only the hash line.
