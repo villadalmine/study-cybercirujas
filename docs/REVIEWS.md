@@ -110,5 +110,8 @@ The author updates both tables on every round, in the same edit that updates
 - no thread is left unresolved;
 - *Authorship* and its *Findings ledger* list every review and every finding
   of the last round.
+- docs are consistent (`make check-docs` green, CI job `docs-consistency`),
+  and the code graph is regenerated (`make graph`) when the PR touches
+  `teach/` or `scripts/` — or the PR says why not.
 
 Then the maintainer merges. An agent never does.
