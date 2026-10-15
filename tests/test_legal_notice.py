@@ -73,6 +73,14 @@ class LegalNoticeTests(unittest.TestCase):
         self.assertEqual(html.count("    foot: '"), html.count("    legal: '"))
         self.assertEqual(html.count("    legal: '"), html.count("legalLink: '"))
         self.assertIn("study-cybercirujas#legal", html)
+        # The summary names the same owners as the full text (review of #7).
+        legal = re.findall(r"^    legal: '([^']*)'", html, re.M)
+        self.assertEqual(len(legal), html.count("    foot: '"))
+        for line in legal:
+            for who in ("LPI", "The Linux Foundation", "CNCF", "Agentic AI Foundation", "AAIF", "AWS", "Google",
+                        "Microsoft", "HashiCorp", "NVIDIA"):
+                with self.subTest(owner=who, line=line[:40]):
+                    self.assertIn(who, line)
         self.assertIn("t('legal')", html)
 
 
