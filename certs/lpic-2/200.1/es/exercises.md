@@ -952,10 +952,15 @@ net.netfilter.nf_conntrack_tcp_timeout_established = 432000
 cpu=0 found=0 invalid=1244 insert=0 insert_failed=0 drop=0 early_drop=0 error=0 search_restart=118
 ```
 
-2. Hacé la tabla chica dentro del namespace del lab, forzala a llenarse, y observá el modo de falla:
+2. Hacé la tabla chica, forzala a llenarse desde los namespaces del lab y observá el modo de falla. Mientras está puesto, el límite vale para toda la VM: en el namespace propio de la VM también se descartan las conexiones nuevas si tiene más de 32 entradas, así que mantené abierta tu sesión SSH actual y no abras otra hasta el paso 3:
 
 ```bash
-sudo ip netns exec rtr sysctl -w net.netfilter.nf_conntrack_max=512
+# nf_conntrack_max is global: the kernel makes it read-only in every namespace
+# but the initial one (net/netfilter/nf_conntrack_standalone.c), so it is set on
+# the lab VM itself. Each namespace counts its own entries against it: 32 is
+# below the 64 streams iperf3 opens through rtr, so the table fills.
+orig_max=$(sysctl -n net.netfilter.nf_conntrack_max)
+sudo sysctl -w net.netfilter.nf_conntrack_max=32
 sudo ip netns exec rtr nft -f - <<'EOF'
 table inet ct {
     chain forward {
@@ -977,7 +982,7 @@ nf_conntrack: nf_conntrack: table full, dropping packet
 3. Restaurá un límite sano y notá el costo de memoria de la alternativa:
 
 ```bash
-sudo ip netns exec rtr sysctl -w net.netfilter.nf_conntrack_max=262144
+sudo sysctl -w net.netfilter.nf_conntrack_max="$orig_max"
 ```
 
 **Checkpoint — Q45–Q46**

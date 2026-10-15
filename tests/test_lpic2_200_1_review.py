@@ -135,5 +135,19 @@ class CitationsTest(unittest.TestCase):
                     self.assertNotIn(url, text, f"{lang}/{name}")
 
 
+class ConntrackLabTest(unittest.TestCase):
+    def test_lab_5c_can_fill_the_table(self):
+        # nf_conntrack_max is read-only outside the initial namespace
+        # (nf_conntrack_standalone.c: "Don't allow non-init_net ns to alter
+        # global sysctls"; reproduced on 6.18: Invalid argument), and the
+        # limit must be below the number of streams or nothing fills.
+        for lang in LANGS:
+            text = read(lang, "exercises.md")
+            self.assertNotRegex(text, r"netns exec \w+ sysctl -w net\.netfilter\.nf_conntrack_max", lang)
+            limit = int(re.search(r"^sudo sysctl -w net\.netfilter\.nf_conntrack_max=(\d+)$", text, re.M).group(1))
+            streams = int(re.search(r"iperf3 -c \S+ -P (\d+)", text).group(1))
+            self.assertLess(limit, streams, lang)
+
+
 if __name__ == "__main__":
     unittest.main()
