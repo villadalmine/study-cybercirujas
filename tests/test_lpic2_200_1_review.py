@@ -261,5 +261,17 @@ class NapiBudgetTest(unittest.TestCase):
             self.assertNotRegex(text, r"`netdev_budget_usecs`, 2000 µs\)", lang)
 
 
+class MemoryEventsTest(unittest.TestCase):
+    def test_q25_uses_cgroup_v2_definitions(self):
+        # cgroup-v2.rst, memory.events: max = "about to go over the max
+        # boundary" (direct reclaim runs); oom = "allocation was about to fail".
+        for lang in LANGS:
+            answer = next(l for l in read(lang, "exercises.md").splitlines()
+                          if l.startswith("**Q25.**"))
+            self.assertNotRegex(answer, r"refused and reclaim|rechazada y se forzó", lang)
+            self.assertIn("cgroup-v2.rst", answer, lang)
+            self.assertIn("`oom`", answer, lang)
+
+
 if __name__ == "__main__":
     unittest.main()
