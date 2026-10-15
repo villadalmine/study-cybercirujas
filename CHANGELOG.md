@@ -4,6 +4,10 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-15
 
+- **lpic-2 200.1 declares its source chain** (fix, `main` was red since #6): the Spanish
+  `meta.yaml` records `source_sha256` and the lab records `derived_from`, both
+  computed by the repo's own `teach.core.certs` / `teach.lab.spec` functions from
+  the committed English files, not typed by hand.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.

@@ -43,3 +43,7 @@ verified:
   by: 'study-lab runner on Docker 29.8 (Windows 11): run -> run again (no-op) -> check FAIL -> fix 1 -> check FAIL -> fix 2 -> check PASS -> down'
   runner_image: study-lab:linux (debian:bookworm-20261005)
 license: Apache-2.0
+derived_from:
+  syllabus: certs/lpic-2.md#200.1
+  content: certs/lpic-2/200.1/en/content.md
+  content_sha256: 7b1898375e58d2d51b0d0a707f34411550f39d2f77be311d244d888b8f8f6512
