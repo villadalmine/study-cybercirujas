@@ -224,8 +224,10 @@ the same action on `certs/` in `.github/workflows/labs.yml`.
 | the same, kind family | `test_e2e.py::test_kind_lab_from_template` | `STUDY_LAB_E2E_K8S=1 make test-e2e` |
 | pilot CKA labs with their reference fixes | `scripts/prove_labs_cka_pilot.sh` | `TOPICS="1.1 3.3" scripts/prove_labs_cka_pilot.sh` |
 
-CI: `.github/workflows/labs.yml` (unit + action on every push/PR touching labs;
-e2e linux always, kind on `workflow_dispatch`).
+CI: `.github/workflows/labs.yml`, jobs `lab-unit` (unit + action on every
+push/PR touching labs) and `lab-e2e` (linux always, kind on `workflow_dispatch`).
+The `lab-` prefix keeps them apart from `verify.yml`'s `verify` and `e2e`,
+which are the ones branch protection and *Where it ran* refer to.
 
 ## Pinned versions
 

@@ -20,8 +20,10 @@ on:
 permissions:
   contents: read
 
+# Job ids are prefixed `lab-`: check runs are listed and required by job name,
+# and verify.yml already has `verify` and `e2e` (tests/lab/test_images.py).
 jobs:
-  unit:
+  lab-unit:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -38,10 +40,10 @@ jobs:
           path: certs
           strict: "false"
 
-  e2e:
+  lab-e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    needs: unit
+    needs: lab-unit
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
