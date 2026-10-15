@@ -59,6 +59,15 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   sync and the deterministic verdict; the bot's models are a separate target,
   `make check-models`), how to read STATUS.md's *Exam versions*, the report
   order, and the rule that a re-snapshot is the owner's decision.
+- **Docs are checked against the repository on every PR** (CI job
+  `docs-consistency`, `make check-docs`): relative links and anchors, paths
+  named in code, `make` targets and `teach` commands must exist, and the
+  generated README/API tables must be fresh. Deterministic, offline, no model.
+- **The code graph is checked too.** CI rebuilds it with graphify (free,
+  tree-sitter only, pinned to 0.9.91) and compares it with the committed
+  `graphify-out/graph.json`; a PR that touches `teach/` or `scripts/` without
+  `make graph` fails. The graph, stale since 2026-09-18, is regenerated.
+- PR templates gain a checkbox: docs consistent / graph regenerated or why not.
 
 ## 2026-09-30
 
