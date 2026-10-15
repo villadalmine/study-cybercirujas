@@ -112,7 +112,7 @@ flowchart LR
 |---|---|---|---|
 | 1 syllabus | the vendor's published objectives | `version` (or `unknown` when the vendor publishes none), `snapshot_date`, the source URL | `check_source_chain.py`, `check_syllabus.py`, `check_versions.py` |
 | 2 content | the syllabus topic | `meta.yaml` `sources` and model; a *References* section citing official, open documentation | `check_source_chain.py`, `check_provenance.py`, `check_sources.py` (whose domain), `check_citations.py` (does the URL exist; network) |
-| 3 exercises and labs | the content and the syllabus objective | a lab's `cert`/`topic` match its directory and a syllabus topic; a v2 `lab.yaml` adds `derived_from` (syllabus topic, content file, its sha256) | `check_source_chain.py`, `teach lab validate` / `study-lab validate` |
+| 3 exercises and labs | the content and the syllabus objective | a lab's `cert`/`topic` match its directory and a syllabus topic; a v2 `lab.yaml` adds `derived_from` (syllabus topic, content file, and its chain hash — `teach.core.certs.chain_sha256`, which includes the file name, so it is not `sha256sum`) | `check_source_chain.py`, `teach lab validate` / `study-lab validate` |
 | 4 translations | the authoring-language original | `translated_from` and `source_sha256` (content + exercises) | `check_source_chain.py`, the translation gate (`_verify_translation`) |
 | 5 video | the syllabus (certification videos narrate its domains) | `derived_from`: the syllabus file and its sha256 | `check_source_chain.py` |
 

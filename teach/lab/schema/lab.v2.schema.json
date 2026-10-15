@@ -145,7 +145,7 @@
       "properties": {
         "syllabus": {"type": "string", "description": "the syllabus file and topic id, e.g. certs/cka.md#3.3"},
         "content": {"type": "string", "description": "repo path of the content.md the lab is derived from"},
-        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "the chain hash teach.core.certs.chain_sha256 computes (file name, NUL, bytes, NUL — so a renamed file is a different origin), not `sha256sum` of the file"}
       }
     },
     "verified": {

@@ -27,7 +27,13 @@ CHAIN_SOURCE_FILES = ("content.md", "exercises.md")
 
 
 def chain_sha256(*paths) -> str:
-    """One sha256 over the files, in order, each prefixed by its name (a missing file hashes as empty)."""
+    """One sha256 over the files, in order, each prefixed by its name (a missing file hashes as empty).
+
+    Not `sha256sum` of a file, even for one file: the name is part of the hash
+    (name, NUL, bytes, NUL), so the same text under another name is another
+    origin. To check by hand: `python3 -c "from teach.core.certs import
+    chain_sha256; print(chain_sha256('certs/cka/3.3/en/content.md'))"`.
+    """
     import hashlib
     from pathlib import Path as _Path
     digest = hashlib.sha256()
