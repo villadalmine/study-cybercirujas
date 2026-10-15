@@ -83,15 +83,20 @@ AGENT_COMMANDS = {
 # The filename or extension is too long", and translation prompts carry the
 # whole source file, routinely 30-80 KB.
 _ARGV_LIMIT_POSIX_BYTES = 100_000
-_ARGV_LIMIT_WINDOWS_CHARS = 30_000
+# CreateProcess's 32,767 units include the terminating NUL; a margin below it.
+_ARGV_LIMIT_WINDOWS_UNITS = 32_000
 
 
-def _prompt_on_stdin(prompt: str, platform: str | None = None) -> bool:
+def _prompt_on_stdin(prompt: str, command: list[str] | tuple[str, ...] = (),
+                     platform: str | None = None) -> bool:
     """Whether `prompt` must travel on stdin instead of as an argument."""
     if (platform or os.name) == "nt":
-        # UTF-16 code units, which is what Windows counts: a character outside
-        # the BMP (an emoji in a source) takes two.
-        return len(prompt.encode("utf-16-le")) // 2 > _ARGV_LIMIT_WINDOWS_CHARS
+        # Measure what CreateProcess receives, not the raw prompt: Python
+        # builds the line with list2cmdline, which quotes the argument and
+        # escapes every double quote, so a quote-dense source (YAML, JSON)
+        # grows. In UTF-16 code units, which is what Windows counts.
+        line = subprocess.list2cmdline([*command, prompt])
+        return len(line.encode("utf-16-le")) // 2 > _ARGV_LIMIT_WINDOWS_UNITS
     return len(prompt.encode()) > _ARGV_LIMIT_POSIX_BYTES
 
 
@@ -416,7 +421,7 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
         # reads a piped prompt exactly like an argument one. Small prompts keep
         # the argv path with stdin closed, because agent CLIs stall waiting on
         # an open stdin that never delivers.
-        if _prompt_on_stdin(prompt):
+        if _prompt_on_stdin(prompt, command):
             run_command = command[:-1] if command[-1] == "--" else list(command)
             stdin_kwargs = {"input": prompt}
         else:
