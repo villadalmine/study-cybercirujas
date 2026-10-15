@@ -179,5 +179,16 @@ class ProvenanceTest(unittest.TestCase):
                 self.assertEqual(set(edit), {"date", "author", "summary", "source"}, lang)
 
 
+class MemAvailableTest(unittest.TestCase):
+    def test_q16_matches_si_mem_available(self):
+        # mm/show_mem.c si_mem_available() counts the file LRU and never reads
+        # Dirty/Writeback: more dirty pages do not lower MemAvailable.
+        for lang in LANGS:
+            answer = next(l for l in read(lang, "exercises.md").splitlines()
+                          if l.startswith("**Q16.**"))
+            self.assertIn("si_mem_available()", answer, lang)
+            self.assertNotRegex(answer, r"`MemAvailable` (drops|baja)", lang)
+
+
 if __name__ == "__main__":
     unittest.main()
