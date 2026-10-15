@@ -161,9 +161,23 @@ def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False,
         code = proc.wait(timeout=timeout + grace)
     except subprocess.TimeoutExpired:
         if on_timeout:
-            try:
-                on_timeout()
-            except Exception as exc:  # best effort: the client is killed anyway
+            # Bounded: on_timeout runs because the lab stopped answering, which
+            # is when a `docker exec` into it can block too. It gets `grace`
+            # seconds (5 at least) in a thread; the client is killed either way.
+            errors: list[Exception] = []
+
+            def stop():
+                try:
+                    on_timeout()
+                except Exception as exc:  # best effort: the client is killed anyway
+                    errors.append(exc)
+
+            stopper = threading.Thread(target=stop, daemon=True)
+            stopper.start()
+            stopper.join(timeout=max(grace, 5))
+            if stopper.is_alive():
+                errors.append(TimeoutError(f"no answer in {max(grace, 5)}s"))
+            for exc in errors:
                 out.append(f"[study-lab] could not stop the process inside the container: {exc}\n")
         proc.kill()
         proc.wait()
@@ -207,9 +221,11 @@ def _mode_cmd(lab: Lab, name: str, action: str) -> tuple[list[str], str]:
 def _killer(lab: Lab, name: str, pattern: str):
     """on_timeout for _stream: stop `pattern` inside the lab container (and the kind node)."""
     def kill() -> None:
-        _docker("exec", name, "pkill", "-KILL", "-f", pattern)
+        # timeout=: a wedged container can make `docker exec` itself block.
+        _docker("exec", name, "pkill", "-KILL", "-f", pattern, timeout=GRACE)
         if lab.spec.get("run_in") == "node":
-            _docker("exec", name, "docker", "exec", "lab-control-plane", "pkill", "-KILL", "-f", pattern)
+            _docker("exec", name, "docker", "exec", "lab-control-plane", "pkill", "-KILL", "-f", pattern,
+                    timeout=GRACE)
     return kill
 
 

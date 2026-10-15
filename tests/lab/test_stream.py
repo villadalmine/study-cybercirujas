@@ -45,6 +45,25 @@ def test_a_child_that_exits_124_is_not_reported_as_a_timeout():
     assert runner._why(1, "verify", 120) == "exit 1"
 
 
+def test_a_stuck_on_timeout_does_not_hang_the_runner():
+    # The backstop runs when the lab is wedged; a `docker exec ... pkill` into
+    # it can block as well (review round 2 of PR #2).
+    t0 = time.monotonic()
+    code, out = runner._stream(SILENT_SLEEP, "", 1, quiet=True, grace=1, on_timeout=lambda: time.sleep(60))
+    assert code == 124
+    assert time.monotonic() - t0 < 15
+    assert "could not stop the process inside the container" in out
+
+
+def test_the_backstop_docker_exec_is_bounded(monkeypatch):
+    calls = []
+    monkeypatch.setattr(runner, "_docker", lambda *a, **k: calls.append(k))
+    lab = Lab("node")
+    runner._killer(lab, "study-lab-x", "/lab/break_fix.sh")()
+    assert len(calls) == 2
+    assert all(k.get("timeout") == runner.GRACE for k in calls)
+
+
 def test_output_and_exit_code_pass_through():
     code, out = runner._stream([sys.executable, "-c", "print('a'); print('b'); raise SystemExit(3)"],
                                "", 30, quiet=True, on_timeout=lambda: (_ for _ in ()).throw(AssertionError))
