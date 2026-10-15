@@ -45,3 +45,27 @@ human_edits:
   author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
   summary: 'exercises lab 5C: nf_conntrack_max set on the VM (read-only in non-init namespaces) to 32, below the 64 streams, and restored afterwards (commit 9e3e6f3)'
   source: https://github.com/torvalds/linux/blob/master/net/netfilter/nf_conntrack_standalone.c
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: 'Q16: MemAvailable barely moves with more Dirty, per si_mem_available() (commit 8fc6105)'
+  source: https://github.com/torvalds/linux/blob/master/mm/show_mem.c
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: 'ss LISTEN sample: Recv-Q 129 with backlog 128, the most the kernel reports (commit 12cbb26)'
+  source: https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_diag.c
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: conntrack entry size read from /sys/kernel/slab/nf_conntrack/slab_size (256 B measured on 6.18); slabtop row, sizing example and hash sizing follow (commits 2a60b03, 78fee03)
+  source: https://www.kernel.org/doc/html/latest/networking/nf_conntrack-sysctl.html
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: 'ceilings table in section 11: per-core packet rate removed, measured per host (commit 71dc419)'
+  source: 'none: removal of an unsourced figure'
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: Mathis bound with the 1.22 constant, same form as the exercises, paper added to References (commit 5e8eac9)
+  source: https://dl.acm.org/doi/10.1145/263932.264023
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
+  summary: meta.yaml sources cite exam-201-202-objectives/ (commit ce46970)
+  source: https://www.lpi.org/our-certifications/exam-201-202-objectives/
