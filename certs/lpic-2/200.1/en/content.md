@@ -1170,20 +1170,20 @@ This is the objective's least-practised area and the one that produces the most 
 
 Every firewall and routing decision is per packet. Link capacity is quoted in bits per second. The conversion is where capacity plans die.
 
-Ethernet on the wire per frame: payload + 14 B header + 4 B FCS + 8 B preamble/SFD + 12 B inter-frame gap.
+Ethernet frame = payload + 14 B header + 4 B FCS (64 B minimum). On the wire each frame also costs 8 B preamble/SFD + 12 B inter-frame gap, so bytes on wire = frame + 20. The rows below are frame sizes, with the payload they carry:
 
-| Frame payload | Bytes on wire | 1 GbE | 10 GbE | 25 GbE |
+| Frame (payload) | Bytes on wire | 1 GbE | 10 GbE | 25 GbE |
 |---|---|---|---|---|
-| 64 B | 84 | 1.488 Mpps | 14.88 Mpps | 37.2 Mpps |
-| 128 B | 148 | 844 kpps | 8.45 Mpps | 21.1 Mpps |
-| 512 B | 532 | 234 kpps | 2.35 Mpps | 5.87 Mpps |
-| 1500 B | 1538 | 81.3 kpps | 812.7 kpps | 2.03 Mpps |
-| 9000 B (jumbo) | 9038 | 13.8 kpps | 138.3 kpps | 345.7 kpps |
+| 64 B (46 B, minimum frame) | 84 | 1.488 Mpps | 14.88 Mpps | 37.2 Mpps |
+| 128 B (110 B) | 148 | 844 kpps | 8.45 Mpps | 21.1 Mpps |
+| 512 B (494 B) | 532 | 234 kpps | 2.35 Mpps | 5.87 Mpps |
+| 1518 B (1500 B, standard MTU) | 1538 | 81.3 kpps | 812.7 kpps | 2.03 Mpps |
+| 9018 B (9000 B, jumbo) | 9038 | 13.8 kpps | 138.3 kpps | 345.8 kpps |
 
-A conntrack-tracking Linux router on commodity hardware handles roughly 1–3 Mpps per core with a modest ruleset, and far less with long chains. Therefore:
+How many packets per second one core can push through conntrack and a ruleset depends on the CPU, the NIC, the driver and the ruleset; there is no figure to memorize, it has to be measured on the box, as shown just below. The point of the table is the ratio:
 
-- A 10 GbE link carrying 1500 B frames needs ~813 kpps — comfortable.
-- The same link carrying 64 B frames (DNS, VoIP, SYN flood, telemetry) needs 14.88 Mpps — **physically impossible** for a single-queue software firewall, at any bandwidth utilization. You will see 8 % `%ifutil` and massive drops simultaneously.
+- A 10 GbE link carrying full-size frames (1500 B payload) needs ~813 kpps.
+- The same link carrying minimum-size frames (DNS, VoIP, SYN flood, telemetry) needs 14.88 Mpps, eighteen times the packet rate at the same bit rate; a single-queue software firewall reaches its packet limit long before the link is full. You will see 8 % `%ifutil` and massive drops simultaneously.
 
 Measure the actual packet rate, never infer it from bandwidth:
 

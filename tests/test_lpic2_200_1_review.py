@@ -98,5 +98,21 @@ class AlertsTest(unittest.TestCase):
             self.assertEqual(missing, [], lang)
 
 
+class WireRateTest(unittest.TestCase):
+    def test_rows_are_frames_and_the_rates_follow(self):
+        # One semantics per row: an L2 frame (header + FCS included); on the
+        # wire it costs 20 B more (preamble/SFD 8 + inter-frame gap 12).
+        for lang in LANGS:
+            rows = re.findall(r"^\| (\d+) B \((\d+) B[^|]*\| (\d+) \| ([\d.]+) (k|M)pps",
+                              read(lang, "content.md"), re.M)
+            self.assertEqual(len(rows), 5, lang)
+            for frame, payload, wire, gbe, unit in rows:
+                frame, payload, wire = int(frame), int(payload), int(wire)
+                self.assertEqual(frame - payload, 18, (lang, frame))
+                self.assertEqual(wire - frame, 20, (lang, frame))
+                pps = 1e9 / (wire * 8) / (1e3 if unit == "k" else 1e6)
+                self.assertAlmostEqual(float(gbe), pps, delta=0.06 * pps, msg=(lang, frame))
+
+
 if __name__ == "__main__":
     unittest.main()

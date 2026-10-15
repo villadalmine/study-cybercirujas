@@ -1170,20 +1170,20 @@ Esta es el área menos practicada del objetivo y la que produce los incidentes m
 
 Cada decisión de firewall y de routing es por paquete. La capacidad del enlace se cotiza en bits por segundo. La conversión es donde mueren los planes de capacidad.
 
-Ethernet en el cable por frame: payload + 14 B de encabezado + 4 B de FCS + 8 B de preámbulo/SFD + 12 B de inter-frame gap.
+Frame Ethernet = payload + 14 B de encabezado + 4 B de FCS (64 B como mínimo). En el cable cada frame cuesta además 8 B de preámbulo/SFD + 12 B de inter-frame gap, así que bytes en el cable = frame + 20. Las filas son tamaños de frame, con el payload que llevan:
 
-| Payload del frame | Bytes en el cable | 1 GbE | 10 GbE | 25 GbE |
+| Frame (payload) | Bytes en el cable | 1 GbE | 10 GbE | 25 GbE |
 |---|---|---|---|---|
-| 64 B | 84 | 1.488 Mpps | 14.88 Mpps | 37.2 Mpps |
-| 128 B | 148 | 844 kpps | 8.45 Mpps | 21.1 Mpps |
-| 512 B | 532 | 234 kpps | 2.35 Mpps | 5.87 Mpps |
-| 1500 B | 1538 | 81.3 kpps | 812.7 kpps | 2.03 Mpps |
-| 9000 B (jumbo) | 9038 | 13.8 kpps | 138.3 kpps | 345.7 kpps |
+| 64 B (46 B, frame mínimo) | 84 | 1.488 Mpps | 14.88 Mpps | 37.2 Mpps |
+| 128 B (110 B) | 148 | 844 kpps | 8.45 Mpps | 21.1 Mpps |
+| 512 B (494 B) | 532 | 234 kpps | 2.35 Mpps | 5.87 Mpps |
+| 1518 B (1500 B, MTU estándar) | 1538 | 81.3 kpps | 812.7 kpps | 2.03 Mpps |
+| 9018 B (9000 B, jumbo) | 9038 | 13.8 kpps | 138.3 kpps | 345.8 kpps |
 
-Un router Linux que hace tracking de conntrack en hardware commodity maneja aproximadamente 1–3 Mpps por core con un ruleset modesto, y mucho menos con cadenas largas. Por lo tanto:
+Cuántos paquetes por segundo puede pasar un core por conntrack y un ruleset depende de la CPU, la NIC, el driver y el ruleset; no hay un número para memorizar, hay que medirlo en la máquina, como se muestra justo abajo. Lo que importa de la tabla es la proporción:
 
-- Un enlace de 10 GbE llevando frames de 1500 B necesita ~813 kpps — cómodo.
-- El mismo enlace llevando frames de 64 B (DNS, VoIP, SYN flood, telemetría) necesita 14,88 Mpps — **físicamente imposible** para un firewall por software de cola única, a cualquier nivel de utilización de ancho de banda. Vas a ver 8 % de `%ifutil` y descartes masivos simultáneamente.
+- Un enlace de 10 GbE con frames de tamaño completo (1500 B de payload) necesita ~813 kpps.
+- El mismo enlace con frames de tamaño mínimo (DNS, VoIP, SYN flood, telemetría) necesita 14,88 Mpps, dieciocho veces la tasa de paquetes con la misma tasa de bits; un firewall por software de cola única llega a su límite de paquetes mucho antes de que el enlace se llene. Vas a ver 8 % de `%ifutil` y descartes masivos simultáneamente.
 
 Medí la tasa real de paquetes, nunca la infieras del ancho de banda:
 
