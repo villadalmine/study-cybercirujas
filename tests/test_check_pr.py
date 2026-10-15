@@ -83,8 +83,16 @@ class CheckPrTests(unittest.TestCase):
             found = check_pr.sections(template.read_text(encoding="utf-8"))
             with self.subTest(template=template.name):
                 self.assertEqual([s for s in check_pr.SECTIONS if s not in found], [])
-                self.assertIn("### Where it ran", found["Evidence"] + template.read_text(encoding="utf-8"))
-                self.assertIn("### Known gaps", template.read_text(encoding="utf-8"))
+                # Inside Evidence: cited_runs() reads only that section.
+                self.assertIn("### Where it ran", found["Evidence"])
+                self.assertIn("### Known gaps", found["Evidence"])
+                self.assertEqual(check_pr.cited_runs(template.read_text(encoding="utf-8").replace(
+                    "- CI: ", "- CI: https://github.com/o/r/actions/runs/1 ")), [("o/r", "1")])
+
+    def test_where_it_ran_outside_evidence_is_not_evidence(self):
+        # The case the old assertion could not catch (review of #3).
+        moved = self.body("good.md").replace("### Where it ran", "## Lab cycle\n\n### Where it ran")
+        self.assertNotIn("### Where it ran", check_pr.sections(moved)["Evidence"])
 
 
 class WhereItRanTests(unittest.TestCase):
