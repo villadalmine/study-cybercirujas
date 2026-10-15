@@ -4,3 +4,44 @@ backend: claude
 model: claude-opus-5
 sources:
 - https://www.lpi.org/our-certifications/exam-201-objectives/
+human_edits:
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: content rebuilt by joining the two turns of the CLI session transcript (the CLI returned only the last turn); text unchanged (commit a6bab2e)
+  source: Claude Code CLI session transcript of the authoring call
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: 'Prometheus rules block: removed a deliberately broken ''rules'' stub so every YAML block parses (commit a6bab2e)'
+  source: scripts/check_manifests.py
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: two dead citations (docs.kernel.org/block/queue-sysfs.html, sysstat.github.io/sysstat-docs/, 404) replaced by the kernel stable ABI sysfs-block and sysstat.github.io (commit a6bab2e)
+  source: https://www.kernel.org/doc/Documentation/ABI/stable/sysfs-block
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: '200.1 header: LPI weight 6 and LPI''s partial list of files, terms and utilities quoted verbatim (commit 4c89068)'
+  source: https://www.lpi.org/our-certifications/exam-201-202-objectives/
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: sample output declared illustrative, not captured; iostat field change dated to sysstat 11.5.7, svctm removal to 12.1.2, vmstat guest column to procps-ng 4.0.4 (commit c40554a)
+  source: https://github.com/sysstat/sysstat/blob/master/CHANGES
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: 'sysstat playbook: override directory created before the copy into it; ENABLED="true" for debian-sa1 (commit 31582c6)'
+  source: debian:12 sysstat 12.6.1 /usr/lib/sysstat/debian-sa1, read in a container
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: node_exporter unit exports pgscan/pgsteal vmstat fields the reclaim alert uses (commit 707c7ca)
+  source: https://github.com/prometheus/node_exporter/blob/master/collector/vmstat_linux.go
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: 'wire-rate table: every row is an L2 frame with its payload; unsourced per-core Mpps figure removed (commit 93ff119)'
+  source: arithmetic in the table; tests/test_lpic2_200_1_review.py
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: 'citations: LPI 201/202 objective URLs replaced by the live exam-201-202-objectives page; iproute2 points at git.kernel.org (commit 3882a32)'
+  source: https://www.lpi.org/our-certifications/exam-201-202-objectives/
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
+  summary: 'exercises lab 5C: nf_conntrack_max set on the VM (read-only in non-init namespaces) to 32, below the 64 streams, and restored afterwards (commit 9e3e6f3)'
+  source: https://github.com/torvalds/linux/blob/master/net/netfilter/nf_conntrack_standalone.c

@@ -167,5 +167,17 @@ class LabContractTest(unittest.TestCase):
         self.assertNotRegex(code, r"\b(iostat|sar|mpstat|pidstat|iotop)\b")
 
 
+class ProvenanceTest(unittest.TestCase):
+    def test_hand_edits_are_recorded(self):
+        # CONTRIBUTING, "Provenance is mandatory": a hand edit appends a record.
+        import yaml
+        for lang in LANGS:
+            meta = yaml.safe_load((TOPIC / lang / "meta.yaml").read_text(encoding="utf-8"))
+            edits = meta.get("human_edits") or []
+            self.assertGreaterEqual(len(edits), 7, lang)
+            for edit in edits:
+                self.assertEqual(set(edit), {"date", "author", "summary", "source"}, lang)
+
+
 if __name__ == "__main__":
     unittest.main()
