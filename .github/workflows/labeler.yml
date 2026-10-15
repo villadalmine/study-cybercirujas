@@ -1,0 +1,21 @@
+name: Label PR by path
+
+# pull_request_target so labels also land on PRs from forks. Safe here because
+# this job never checks out or runs the PR's code: actions/labeler only reads
+# the list of changed files through the API.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/labeler@v7
+        with:
+          sync-labels: true

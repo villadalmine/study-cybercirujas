@@ -1,0 +1,30 @@
+# Labels by path, applied by .github/workflows/labeler.yml (actions/labeler).
+# Site impact (site:none / site:image-rebuild) is NOT here: scripts/check_pr.py
+# computes it from docker.yml's paths, the single source.
+"type:content":
+  - changed-files:
+      - any-glob-to-any-file: ['certs/*/*/*/content.md', 'certs/*/*/*/exercises.md', 'certs/*/*/*/meta.yaml']
+"type:lab":
+  - changed-files:
+      - any-glob-to-any-file: ['certs/*/*/lab/**']
+"type:video":
+  - changed-files:
+      - any-glob-to-any-file: ['media/**', 'certs/*/*/*/video*.md']
+"type:code":
+  - changed-files:
+      - any-glob-to-any-file: ['teach/**', 'scripts/**', 'tests/**', 'deploy/**', 'Makefile', 'pyproject.toml']
+"type:ci":
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**']
+"type:docs":
+  - changed-files:
+      - any-glob-to-any-file: ['*.md', 'docs/**']
+"lang:en":
+  - changed-files:
+      - any-glob-to-any-file: ['certs/*/*/en/**']
+"lang:es":
+  - changed-files:
+      - any-glob-to-any-file: ['certs/*/*/es/**']
+"lang:other":
+  - changed-files:
+      - any-glob-to-any-file: ['certs/*/*/fr/**', 'certs/*/*/de/**', 'certs/*/*/zh/**', 'certs/*/*/ja/**', 'certs/*/*/pt/**']
