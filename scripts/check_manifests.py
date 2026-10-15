@@ -100,7 +100,7 @@ _VendorTagLoader.add_multi_constructor("!", _vendor_tag)
 
 def problems(path: Path) -> list[tuple[int, str]]:
     found = []
-    text = path.read_text(errors="replace")
+    text = path.read_text(encoding="utf-8", errors="replace")
     for match in BLOCK.finditer(text):
         tag, body = match.group(1), match.group(2)
         if _skip(body):

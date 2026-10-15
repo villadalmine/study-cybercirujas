@@ -53,7 +53,7 @@ def catalogue() -> tuple[dict[str, str], set[str], dict]:
 def cited_domains(path: Path) -> list[str]:
     """Hosts cited in the references section only. URLs in the body are examples
     and cluster addresses, not sources."""
-    text = path.read_text(errors="replace")
+    text = path.read_text(encoding="utf-8", errors="replace")
     match = REFS_HEADING.search(text)
     if not match:
         return []

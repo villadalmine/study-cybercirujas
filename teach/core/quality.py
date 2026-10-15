@@ -69,6 +69,6 @@ def check_file(path) -> list[str]:
     if kind is None:
         return []
     try:
-        return check(kind, path.read_text(errors="replace"))
+        return check(kind, path.read_text(encoding="utf-8", errors="replace"))
     except OSError as error:
         return [f"unreadable: {error}"]

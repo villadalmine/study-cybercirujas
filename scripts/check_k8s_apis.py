@@ -79,7 +79,7 @@ def _deliberate(lines: list[str], index: int) -> bool:
 
 
 def findings(path: Path) -> list[tuple[int, str, str, str, bool]]:
-    text = path.read_text(errors="replace")
+    text = path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
     out = []
     for match in API_LINE.finditer(text):
