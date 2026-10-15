@@ -4,7 +4,7 @@ translated_from: en
 backend: claude
 model: claude-opus-5
 sources:
-- https://www.lpi.org/our-certifications/exam-201-objectives/
+- https://www.lpi.org/our-certifications/exam-201-202-objectives/
 human_edits:
 - date: '2026-10-15'
   author: 'study-author (AI agent, claude-opus-5-5), after review by fable (revisor-pr) on PR #6'
