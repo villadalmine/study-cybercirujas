@@ -15,16 +15,16 @@ name: Graph
 # bot PR touches only graphify-out/, which this trigger ignores, so there is
 # no loop.
 #
-# THE CHECKS ON THE BOT PR. A pull request opened with the built-in
-# GITHUB_TOKEN does not trigger workflows (GitHub's rule, to stop loops), so
-# verify / e2e / pr-format would never start and the PR could never satisfy
-# branch protection. The standard fix is to open it with a credential that is
-# not GITHUB_TOKEN: the repository secret GRAPH_BOT_TOKEN, a fine-grained
-# personal access token (or a GitHub App token) limited to this repository
-# with Contents: read and write and Pull requests: read and write. Without
-# the secret the job still works but falls back to GITHUB_TOKEN: the PR is
-# opened and its checks must be started by hand (see the notice the job
-# prints, and docs/REVIEWS.md → The graph refresh PR).
+# THE CHECKS ON THE BOT PR, WITH NO SECRET. A pull request opened with the
+# built-in GITHUB_TOKEN does not trigger pull_request/push workflows (GitHub's
+# rule, to stop loops), but workflow_dispatch is the documented exception. So
+# after opening or updating the PR, this same job dispatches verify.yml on
+# bot/graph-refresh with GITHUB_TOKEN (needs actions: write). The check runs
+# attach to the PR head commit under the names branch protection requires
+# (verify, e2e, pr-format; verify.yml's pr-format job looks the PR up by branch
+# when dispatched). No PAT, no App, nothing for a developer to configure. One
+# repository setting is needed once: Settings > Actions > General > "Allow
+# GitHub Actions to create and approve pull requests".
 
 on:
   push:
@@ -41,6 +41,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write      # to dispatch verify.yml on the bot branch
 
 concurrency:
   # Queue, never cancel: a half-finished branch update is worse than waiting.
@@ -83,23 +84,15 @@ jobs:
         if: steps.stale.outputs.stale == 'true'
         run: make graph
 
-      - name: Credential for the pull request
-        if: steps.stale.outputs.stale == 'true'
-        env:
-          BOT_TOKEN: ${{ secrets.GRAPH_BOT_TOKEN }}
-        run: |
-          if [ -z "$BOT_TOKEN" ]; then
-            echo "::notice title=GRAPH_BOT_TOKEN is not set::The PR is opened with GITHUB_TOKEN, so its required checks will not start by themselves. Create the secret (see the header of .github/workflows/graph.yml) or run: gh workflow run verify.yml --ref bot/graph-refresh"
-          fi
-
       - name: Open or update the pull request
         if: steps.stale.outputs.stale == 'true'
         # peter-evans/create-pull-request v8.1.1, pinned by commit SHA.
         # It force-updates the branch and the open PR, and does nothing when
         # the rebuilt files equal what is on main.
+        id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
-          token: ${{ secrets.GRAPH_BOT_TOKEN || github.token }}
+          token: ${{ github.token }}
           branch: bot/graph-refresh
           base: main
           add-paths: graphify-out/
@@ -173,3 +166,10 @@ jobs:
             ## Depends on
 
             nothing
+
+      - name: Start the required checks on the bot branch
+        # Skipped when create-pull-request changed nothing (no PR or commit).
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run verify.yml --ref bot/graph-refresh

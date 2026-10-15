@@ -84,7 +84,9 @@ project.
   translated. Study material in the language it is written for.
 - **Do not commit `graphify-out/`** (the code graph) and do not rebase just to
   refresh it: CI rebuilds it on `main` and opens a bot PR
-  (`bot/graph-refresh`). The post-commit hook may dirty it locally; run
+  (`bot/graph-refresh`). **Nothing changes for you locally:** `make graph`
+  stays optional, no secret, token or extra tool is needed, and the graph is
+  refreshed after merge. The post-commit hook may dirty `graphify-out/`; run
   `git restore graphify-out` before you stage. A stale graph in a PR is a
   warning, not a failure ([docs/DEVTOOLS.md](docs/DEVTOOLS.md)).
 - **Small pull requests**, one concern each. Generated files (STATUS.md,

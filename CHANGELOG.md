@@ -15,11 +15,10 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   Feature PRs no longer rebase or rebuild the graph and leave `graphify-out/`
   out of their diff; a stale graph in a PR is a warning. `check_pr.py` checks
   only the title of that bot PR (branch `bot/graph-refresh`, every file under
-  `graphify-out/`). **Pending for the maintainer:** create the repository secret
-  `GRAPH_BOT_TOKEN` (fine-grained PAT or GitHub App token, this repo, Contents
-  and Pull requests read/write); without it the PR is opened with
-  `GITHUB_TOKEN`, which does not start workflows, so its checks are started with
-  `gh workflow run verify.yml --ref bot/graph-refresh`.
+  `graphify-out/`). No secret or PAT: the job opens the PR with `GITHUB_TOKEN`
+  and then dispatches `verify.yml` on the branch, which starts the required
+  checks (`pr-format` looks the PR up by branch when dispatched). One
+  repository setting, once: Actions may create pull requests.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.

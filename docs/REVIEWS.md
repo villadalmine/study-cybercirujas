@@ -113,8 +113,8 @@ warning in `make verify` is fine; one that touches `graphify-out/` is asked to
 drop that from the diff. The bot PR is reviewed like any PR, minus the
 description: `scripts/check_pr.py` checks only its title when the branch is
 `bot/graph-refresh` and every changed file is under `graphify-out/`. Its
-required checks start only if the repository secret `GRAPH_BOT_TOKEN` exists
-(otherwise `gh workflow run verify.yml --ref bot/graph-refresh`). The
+required checks are started by the workflow itself (it dispatches `verify.yml` on the
+branch with `GITHUB_TOKEN`; no secret). The
 maintainer merges it; an agent never does.
 
 ## When a PR is ready
