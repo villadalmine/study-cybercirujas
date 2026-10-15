@@ -110,7 +110,7 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 
 | Cert | Topic-languages | Mean score | Verified | AI beta | Draft | Not scored |
 |---|---|---|---|---|---|---|
-| `lpi-010-160` | 133 | 76.6 | 0 | 132 | 1 | 0 |
+| `lpi-010-160` | 133 | 77.8 | 0 | 132 | 1 | 0 |
 | `lpic-1` | 84 | 78.1 | 0 | 84 | 0 | 0 |
 | `lpic-3-303` | 30 | 78.1 | 0 | 30 | 0 | 0 |
 | `lpic-3-305` | 26 | 78.5 | 0 | 26 | 0 | 0 |
