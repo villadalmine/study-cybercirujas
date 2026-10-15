@@ -261,6 +261,29 @@ skipped placeholder so the gap is visible.
 A lab that is known to be broken is listed, with the reason, in
 `tests/fixtures/labs_known_broken.txt`; fixing it means deleting its line.
 
+### Groundedness (advisory)
+
+Is each sentence of a topic supported by the sources it declares — its frozen
+syllabus entry and the documents it cites? `scripts/check_groundedness.py`
+answers it with models pinned in `groundedness.yaml`
+([PRINCIPLES §7](docs/PRINCIPLES.md#7-the-source-chain)). Unlike the checks
+above it needs a model and the network (the cited pages and, once, the
+weights), so it is not part of `make verify`:
+
+| Command | What it does |
+|---|---|
+| `make groundedness-setup` | once: torch (CPU) + GLiClass from `requirements-groundedness.txt`, and the pinned weights (~1.7 GB, sha256 checked) into `.cache/groundedness/` |
+| `make groundedness` | the GLiClass prefilter on the topics whose `content.md` changed against `BASE` (default `origin/main`), or on `DIRS="certs/<cert>/<topic>/<lang> ..."`; prints the unsupported claims with their score and records the `groundedness` check in each `meta.yaml` `quality:` (about 2 min for a topic of ~40 claims on 4 CPU cores) |
+| `make groundedness-deep` | the same, then each suspect through Granite Guardian 4.1 8B on a llama-server you start with the GGUF pinned in `groundedness.yaml` (`--temp 0 --seed 42 -np 1`, port in `deep.url` or `GUARDIAN_URL=`); CPU or a local GPU, ~15–35 s per suspect on CPU |
+
+CI runs the prefilter in the `groundedness` job (`.github/workflows/groundedness.yml`)
+on every PR that touches a `content.md` or the check itself: the result is in
+the job summary and, with the updated `meta.yaml` files, in its `groundedness`
+artifact. It is `mode: warn` — it never fails on a finding, and it is not one
+of the required checks. A flagged claim means *look*: reword it to what the
+source says, cite the source that says it, or reply in the PR why the
+classifier is wrong.
+
 ## Licence and conduct
 
 By contributing you agree your contribution is licensed under
