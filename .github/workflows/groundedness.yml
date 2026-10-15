@@ -1,0 +1,67 @@
+name: Groundedness
+
+# Are the claims of the topics a PR changes supported by the sources those
+# topics declare? scripts/check_groundedness.py with the GLiClass prefilter;
+# models, thresholds and mode in groundedness.yaml. In `mode: warn` it reports
+# in the job summary and never fails on a finding: whether it blocks is the
+# maintainer's decision, once a baseline is measured. Its own failures (install,
+# weights with the wrong sha256, the fixture test) do fail it. Network: the
+# pinned weights (cached) and the cited pages; the tests run with it blocked.
+# Not a required check: verify, e2e and pr-format are.
+
+on:
+  pull_request:
+    paths:
+      - 'certs/*/*/*/content.md'
+      - 'scripts/check_groundedness.py'
+      - 'groundedness.yaml'
+      - 'requirements-groundedness.txt'
+      - 'tests/test_groundedness.py'
+      - 'tests/fixtures/groundedness/**'
+      - '.github/workflows/groundedness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: groundedness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  groundedness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the topics changed against the base
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - id: rev
+        run: echo "rev=$(awk '/^prefilter:/{p=1} p && /revision:/{print $2; exit}' groundedness.yaml)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: .cache/groundedness/models
+          key: groundedness-weights-${{ steps.rev.outputs.rev }}
+      - name: Install, and the pinned weights (sha256 checked)
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -q -e . -r requirements-groundedness.txt
+          .venv/bin/python3 scripts/check_groundedness.py --download
+      - name: Tests, the model on the PR 6 fixture, network blocked
+        run: .venv/bin/python3 -m unittest tests.test_groundedness -v
+      - name: The topics this PR changes
+        run: |
+          .venv/bin/python3 scripts/check_groundedness.py --fetch --write --base "origin/${{ github.base_ref || 'main' }}" \
+            --json groundedness-report.json --summary "$GITHUB_STEP_SUMMARY"
+          mkdir -p meta && git diff --name-only -- 'certs/*/*/*/meta.yaml' | xargs -r cp --parents -t meta
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: groundedness
+          path: |
+            groundedness-report.json
+            meta/
+          if-no-files-found: ignore
