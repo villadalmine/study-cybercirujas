@@ -295,39 +295,25 @@ call and is listed here so it is not lost.
 
 ## `graphify-out/` and `openwiki/` — what they are and whether they belong
 
-**`graphify-out/`** (`graph.json`, `GRAPH_REPORT.md`, ~130 generated wiki
-pages) is a tree-sitter map of the *machinery* (`teach/`, `scripts/`, tests,
-configs and the docs), committed so agents can query it over MCP.
+**`graphify-out/`** (`graph.json`, `GRAPH_REPORT.md`, generated wiki pages) is
+a tree-sitter map of the *machinery* (`teach/`, `scripts/`, tests, configs and
+the docs), so agents can query it over MCP. graphify is a free pip install
+(no LLM, no key), pinned in `make graph-setup`.
 
-*Facts as of 2026-10-15 (updated by the docs-consistency PR):* it was stale
-from 2026-09-18 to 2026-10-15 because only the post-commit hook refreshed it,
-and only on a machine with graphify. Since that PR the graph is regenerated
-(graphifyy 0.9.91, pinned) and **CI keeps it honest**: the `docs-consistency`
-job rebuilds it in a temporary copy and fails a PR that touches `teach/` or
-`scripts/` without `make graph` (`scripts/check_graph.py --regenerate`). It is
-no longer stale by default. The `wiki/` pages are still generated names
-(`Community_12.md`, `main_2.md`) — noise for a human visitor.
-
-**Decision pending — the maintainer's (Rino), not taken by any PR:** keep
-committing `graphify-out/` (now CI-checked, at the cost of a `make graph`
-commit in every code PR), or stop committing it (gitignore `graphify-out/`,
-or only `graphify-out/wiki/`, and build it in CI as an artefact or on demand),
-and whether `openwiki/` and `make wiki` stay. Until then the current setup
-stays as is.
+**Decided (2026-10-15, Rino: "dale la a"): `graphify-out/` stays committed.**
+Every PR that touches code (`teach/`, `scripts/`) runs `make graph` and commits
+`graphify-out/`; CI's `docs-consistency` job rebuilds the graph and fails the
+PR when the committed one is not what the tree builds
+(`scripts/check_graph.py --regenerate`). The rejected alternative was to stop
+committing it and build it in CI or on demand.
 
 **`openwiki/`** holds only `INSTRUCTIONS.md`: the scope file for an OpenWiki run
 that costs API credits and has never produced a committed wiki. It is a
-configuration for a tool that is not in use.
+configuration for a tool that is not in use. It is never regenerated in a PR, because it
+costs credits; `make wiki` stays a manual, owner-only command.
 
-Recommendation (nothing removed — owner decides):
+Recommendations still open (nothing removed — owner decides):
 
-- **Stop committing generated graph output** (the original recommendation,
-  2026-10-14). Either gitignore `graphify-out/wiki/` (keep `graph.json` if
-  agents rely on it), or build the graph in CI and attach it to a release.
-  Its argument was "a committed artefact that is stale by default teaches
-  readers to distrust it"; since 2026-10-15 CI rejects a stale graph, so what
-  remains is the cost of the extra commit per code PR versus agents finding
-  the graph in the clone. Owner's call, above.
 - **Where a graph would pay off is the curriculum, not the code.** The repo
   already has the data for a *curriculum graph*: certification → domain →
   topic → official source, plus `requires` between certifications and the
