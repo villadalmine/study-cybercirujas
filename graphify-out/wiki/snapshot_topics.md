@@ -1,22 +1,22 @@
 # snapshot_topics()
 
-> God node · 13 connections · `teach/core/tracker.py`
+> God node · 18 connections · `teach/core/tracker.py`
 
-**Community:** [Syllabus Snapshot Checks](Syllabus_Snapshot_Checks.md)
+**Community:** [Community 14](Community_14.md)
 
 ## Connections by Relation
 
 ### calls
 - [load()](load.md) `EXTRACTED`
-- save() `EXTRACTED`
-- [load()](load.md) `EXTRACTED`
 - fetch_text() `EXTRACTED`
-- TrackerError `EXTRACTED`
-- _ai_yaml() `EXTRACTED`
-- save() `EXTRACTED`
 - _reject_unreadable_syllabus() `EXTRACTED`
-- cert_snapshot() `EXTRACTED`
+- save() `EXTRACTED`
+- _ai_yaml() `EXTRACTED`
+- [load()](load.md) `EXTRACTED`
+- TrackerError `EXTRACTED`
 - normalise_weights() `EXTRACTED`
+- save() `EXTRACTED`
+- cert_snapshot() `EXTRACTED`
 - _apply_snapshot_status() `EXTRACTED`
 
 ### contains
@@ -24,6 +24,13 @@
 
 ### rationale_for
 - Freeze the official syllabus into the MD: fetch objectives (HTML/PDF) -> AI ->… `EXTRACTED`
+
+### references
+- Labs — what an audit found, 2026-08-08 (design parked, not started) `EXTRACTED`
+- 2026-07-16 `EXTRACTED`
+- Pipeline Automation `EXTRACTED`
+- 1. Snapshot the syllabus — once per certification `EXTRACTED`
+- The syllabus-change trigger `INFERRED`
 
 ---
 

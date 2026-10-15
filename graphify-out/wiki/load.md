@@ -1,28 +1,36 @@
 # load()
 
-> God node · 15 connections · `teach/core/pipeline.py`
+> God node · 25 connections · `teach/lab/spec.py`
 
-**Community:** [Pipeline Config & Quality](Pipeline_Config_&_Quality.md)
+**Community:** [Community 1](Community_1.md)
 
 ## Connections by Relation
 
 ### calls
-- languages_for() `EXTRACTED`
-- video_languages() `EXTRACTED`
-- budget() `EXTRACTED`
-- generation() `EXTRACTED`
-- certs() `EXTRACTED`
-- milestone() `EXTRACTED`
-- show() `EXTRACTED`
-- owner() `EXTRACTED`
-- rules() `EXTRACTED`
-- default_languages() `EXTRACTED`
-- PipelineError `EXTRACTED`
-- on_demand_languages() `EXTRACTED`
-- path_video_languages() `EXTRACTED`
+- yaml `EXTRACTED`
+- [Lab](Lab.md) `EXTRACTED`
+- resolve() `EXTRACTED`
+- SpecError `EXTRACTED`
+- cmd_migrate() `EXTRACTED`
+- test_migrate_v1_to_v2_validates() `EXTRACTED`
+- schema_errors() `EXTRACTED`
+- cmd_list() `EXTRACTED`
+- cmd_validate() `EXTRACTED`
+- test_migrate_write_roundtrip() `EXTRACTED`
+- test_new_scaffold_passes_strict_validate() `EXTRACTED`
+- test_invalid_cases() `EXTRACTED`
+- normalize() `EXTRACTED`
+- test_curated_pilot_labs_are_strict_valid_and_verified() `EXTRACTED`
+- test_crlf_script_rejected() `EXTRACTED`
+- test_declared_modes_override_inference() `EXTRACTED`
+- test_full_v2_validates() `EXTRACTED`
+- test_missing_required_field() `EXTRACTED`
+- test_missing_script() `EXTRACTED`
+- test_numeric_topic_rejected() `EXTRACTED`
+- *…and 3 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
-- pipeline.py `EXTRACTED`
+- spec.py `EXTRACTED`
 
 ### references
 - Path `EXTRACTED`
