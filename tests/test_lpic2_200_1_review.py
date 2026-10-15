@@ -201,5 +201,21 @@ class ListenQueueTest(unittest.TestCase):
                     self.assertLessEqual(int(recv), int(send) + 1, f"{lang}/{name}")
 
 
+class ConntrackSizeTest(unittest.TestCase):
+    def test_one_per_entry_size_and_a_consistent_slabtop_row(self):
+        # Measured 2026-10-15: /sys/kernel/slab/nf_conntrack/slab_size = 256 on
+        # kernel 6.18 (object_size 248). The size depends on the build, so
+        # the material points at slab_size instead of quoting a constant.
+        for lang in LANGS:
+            text = read(lang, "content.md") + read(lang, "exercises.md")
+            self.assertNotRegex(text, r"~3[02]0 (B|bytes)", lang)
+            objs, size, slabs, per_slab, cache = re.search(
+                r"^ *(\d+) +\d+ +\d+% +([\d.]+)K +(\d+) +(\d+) +(\d+)K nf_conntrack$",
+                read(lang, "content.md"), re.M).groups()
+            self.assertGreaterEqual(int(slabs) * int(per_slab), int(objs), lang)
+            self.assertEqual(int(slabs) * 4, int(cache), lang)   # 4 KiB slabs
+            self.assertAlmostEqual(float(size) * 1024 * int(per_slab), 4096, delta=64)
+
+
 if __name__ == "__main__":
     unittest.main()

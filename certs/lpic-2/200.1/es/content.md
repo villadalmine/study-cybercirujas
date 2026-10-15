@@ -617,10 +617,10 @@ $ sudo slabtop -o -s c | head -10
 4128412 4021884  97%    0.19K  98296       42    786368K dentry
 1204884 1188412  98%    0.57K  43031       28    688496K radix_tree_node
  884112  881204  99%    0.10K  22669       39     90676K buffer_head
- 412884  402112  97%    1.06K  13763       30    440416K nf_conntrack
+ 412884  402112  97%    0.25K  25806       16    103224K nf_conntrack
 ```
 
-`dentry` con 786 MiB más `nf_conntrack` con 440 MiB es memoria de kernel que `free` reporta como `used` y que ningún proceso posee. 412 k entradas de conntrack también se vinculan directamente con la sección 7.2.
+`dentry` con 786 MiB más `nf_conntrack` con 101 MiB es memoria de kernel que `free` reporta como `used` y que ningún proceso posee. 412 k entradas de conntrack también se vinculan directamente con la sección 7.2.
 
 ### 4.7 Compromisos de las herramientas de memoria
 
@@ -1229,7 +1229,7 @@ $ echo 262144 | sudo tee /sys/module/nf_conntrack/parameters/hashsize
 262144
 ```
 
-Notá que `nf_conntrack_tcp_timeout_established = 432000` (5 días) es el valor por defecto y casi siempre está mal para un borde ocupado: fija una entrada por cinco días después del último paquete. Aritmética de dimensionamiento: cada entrada son ~320 B de slab `SUnreclaim` (ver sección 4.6), así que 1 048 576 entradas ≈ 320 MiB de memoria de kernel no recuperable. **Subir `nf_conntrack_max` sin presupuestar esa memoria convierte un incidente de descarte de paquetes en un incidente de OOM.** Mantené `hashsize ≈ max/4` o el hash degenera en recorridos de listas enlazadas (`search_restart`, `chaintoolong`).
+Notá que `nf_conntrack_tcp_timeout_established = 432000` (5 días) es el valor por defecto y casi siempre está mal para un borde ocupado: fija una entrada por cinco días después del último paquete. Aritmética de dimensionamiento: cada entrada es un objeto del cache de slab `nf_conntrack`, en `SUnreclaim` (ver sección 4.6); su tamaño depende de cómo se compiló el kernel, así que leelo en el host con `cat /sys/kernel/slab/nf_conntrack/slab_size` (256 B en el kernel 6.18 donde se comprobó), y 1 048 576 entradas a 256 B ≈ 256 MiB de memoria de kernel no recuperable. **Subir `nf_conntrack_max` sin presupuestar esa memoria convierte un incidente de descarte de paquetes en un incidente de OOM.** Dimensioná `hashsize` junto con él: por defecto `nf_conntrack_max` es igual a la cantidad de buckets, y cada entrada se hashea dos veces (dirección original y de respuesta), así que una tabla por defecto llena tiene cadenas de 2 en promedio (documentación `nf_conntrack-sysctl` del kernel); con `max` en cuatro veces los buckets, como arriba, una tabla llena tiene 8 en promedio.
 
 La respuesta estructuralmente mejor para caminos sin estado y de alta tasa es no trackear en absoluto:
 
@@ -2543,7 +2543,7 @@ Las trampas que se repiten, enunciadas como las respuestas que son:
 - **Modos de `iptraf-ng`:** `-i` tráfico IP, `-d` interfaz detallada, `-s` servicio por puerto, `-z` tamaños de paquete, `-l` estaciones LAN por MAC; `-B -L file -t minutos` para captura desatendida.
 - **Los techos de throughput son paquetes por segundo tan a menudo como bits por segundo.** 10 GbE son 14,88 Mpps a 64 B y 812,7 kpps a 1500 B.
 - **El throughput de un solo flujo TCP es `ventana / RTT`.** El `rwnd_limited` y el `sndbuf_limited` de `ss -ti` nombran directamente el lado limitante.
-- **"nf_conntrack: table full, dropping packet" en `dmesg`** es un evento de capacidad de firewall, y cada entrada cuesta ~320 B de slab de kernel no recuperable.
+- **"nf_conntrack: table full, dropping packet" en `dmesg`** es un evento de capacidad de firewall, y cada entrada cuesta un objeto de slab no recuperable (`cat /sys/kernel/slab/nf_conntrack/slab_size`).
 - **El proceso que invoca al OOM killer no es, por lo general, el proceso que mata.** Leé las dos líneas de `dmesg`.
 
 Un conjunto mínimo de comandos que deberías poder producir de memoria, en orden:

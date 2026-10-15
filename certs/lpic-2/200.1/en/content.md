@@ -617,10 +617,10 @@ $ sudo slabtop -o -s c | head -10
 4128412 4021884  97%    0.19K  98296       42    786368K dentry
 1204884 1188412  98%    0.57K  43031       28    688496K radix_tree_node
  884112  881204  99%    0.10K  22669       39     90676K buffer_head
- 412884  402112  97%    1.06K  13763       30    440416K nf_conntrack
+ 412884  402112  97%    0.25K  25806       16    103224K nf_conntrack
 ```
 
-`dentry` at 786 MiB plus `nf_conntrack` at 440 MiB is kernel memory that `free` reports as `used` and that no process owns. 412 k conntrack entries also ties directly to Section 7.2.
+`dentry` at 786 MiB plus `nf_conntrack` at 101 MiB is kernel memory that `free` reports as `used` and that no process owns. 412 k conntrack entries also ties directly to Section 7.2.
 
 ### 4.7 Memory tooling trade-offs
 
@@ -1229,7 +1229,7 @@ $ echo 262144 | sudo tee /sys/module/nf_conntrack/parameters/hashsize
 262144
 ```
 
-Note `nf_conntrack_tcp_timeout_established = 432000` (5 days) is the default and is almost always wrong for a busy edge: it pins an entry for five days after the last packet. Sizing arithmetic: each entry is ~320 B of `SUnreclaim` slab (see Section 4.6), so 1 048 576 entries ≈ 320 MiB of unreclaimable kernel memory. **Raising `nf_conntrack_max` without budgeting that memory converts a packet-drop incident into an OOM incident.** Keep `hashsize ≈ max/4` or the hash degenerates into linked-list walks (`search_restart`, `chaintoolong`).
+Note `nf_conntrack_tcp_timeout_established = 432000` (5 days) is the default and is almost always wrong for a busy edge: it pins an entry for five days after the last packet. Sizing arithmetic: each entry is one object of the `nf_conntrack` slab cache, in `SUnreclaim` (see Section 4.6); its size depends on the kernel build, so read it on the host with `cat /sys/kernel/slab/nf_conntrack/slab_size` (256 B on the 6.18 kernel this was checked on), and 1 048 576 entries at 256 B ≈ 256 MiB of unreclaimable kernel memory. **Raising `nf_conntrack_max` without budgeting that memory converts a packet-drop incident into an OOM incident.** Size `hashsize` with it: by default `nf_conntrack_max` equals the number of buckets, and every entry is hashed twice (original and reply direction), so a full default table averages chains of 2 (kernel `nf_conntrack-sysctl` documentation); with `max` at four times the buckets, as above, a full table averages 8.
 
 The structurally better answer for high-rate, stateless paths is to not track at all:
 
@@ -2543,7 +2543,7 @@ The traps that recur, stated as the answers they are:
 - **`iptraf-ng` modes:** `-i` IP traffic, `-d` detailed interface, `-s` per-port service, `-z` packet sizes, `-l` per-MAC LAN stations; `-B -L file -t minutes` for unattended capture.
 - **Throughput ceilings are packets per second as often as bits per second.** 10 GbE is 14.88 Mpps at 64 B and 812.7 kpps at 1500 B.
 - **Single-flow TCP throughput is `window / RTT`.** `ss -ti`'s `rwnd_limited` and `sndbuf_limited` name the limiting side directly.
-- **"nf_conntrack: table full, dropping packet" in `dmesg`** is a firewall capacity event, and each entry costs ~320 B of unreclaimable kernel slab.
+- **"nf_conntrack: table full, dropping packet" in `dmesg`** is a firewall capacity event, and each entry costs one unreclaimable slab object (`cat /sys/kernel/slab/nf_conntrack/slab_size`).
 - **The process that invokes the OOM killer is usually not the process it kills.** Read both `dmesg` lines.
 
 A minimal command set you should be able to produce from memory, in order:
