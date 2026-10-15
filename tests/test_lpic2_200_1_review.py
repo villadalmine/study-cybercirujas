@@ -47,5 +47,42 @@ class SampleOutputTest(unittest.TestCase):
             self.assertRegex(text, r"\*\*(illustrative|ilustrativa)\*\*")
 
 
+def yaml_blocks(text: str) -> list:
+    import yaml
+    out = []
+    for block in re.findall(r"^```yaml\n(.*?)^```", text, re.M | re.S):
+        try:
+            out.extend(d for d in yaml.safe_load_all(block) if d is not None)
+        except yaml.YAMLError:
+            pass
+    return out
+
+
+def sysstat_play_tasks(lang: str) -> list[str]:
+    for doc in yaml_blocks(read(lang, "content.md")):
+        for play in doc if isinstance(doc, list) else []:
+            tasks = (play or {}).get("tasks") or [] if isinstance(play, dict) else []
+            names = [t.get("name", "") for t in tasks if isinstance(t, dict)]
+            if any("Override the collection interval" in n for n in names):
+                return names
+    raise AssertionError(f"{lang}: sysstat playbook not found")
+
+
+class PlaybookTest(unittest.TestCase):
+    def test_override_directory_exists_before_the_copy_into_it(self):
+        # ansible.builtin.copy does not create parent directories.
+        for lang in LANGS:
+            names = sysstat_play_tasks(lang)
+            mkdir = names.index("Ensure the timer override directory exists")
+            copy = next(i for i, n in enumerate(names) if "Override the collection interval" in n)
+            self.assertLess(mkdir, copy, lang)
+
+    def test_debian_cron_helper_is_enabled(self):
+        # /usr/lib/sysstat/debian-sa1 (Debian 12, sysstat 12.6.1) exits unless
+        # ENABLED="true" in /etc/default/sysstat; the cron fallback runs it.
+        for lang in LANGS:
+            self.assertTrue(any("ENABLED" in n for n in sysstat_play_tasks(lang)), lang)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1619,11 +1619,27 @@ Un promedio de 10 minutos no puede representar una detención de 90 segundos; va
           ZIP="xz"
       notify: Reload systemd
 
+    - name: Let Debian's cron helper collect (debian-sa1 exits unless ENABLED="true")
+      ansible.builtin.lineinfile:
+        path: /etc/default/sysstat
+        regexp: '^ENABLED='
+        line: 'ENABLED="true"'
+      when: ansible_os_family == 'Debian'
+
     - name: Enable sysstat data collection
       ansible.builtin.service:
         name: sysstat
         enabled: true
         state: started
+
+    - name: Ensure the timer override directory exists
+      ansible.builtin.file:
+        path: /etc/systemd/system/sysstat-collect.timer.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: ansible_service_mgr == 'systemd'
 
     - name: Override the collection interval (systemd-timer distributions)
       ansible.builtin.copy:
@@ -1642,15 +1658,6 @@ Un promedio de 10 minutos no puede representar una detención de 90 segundos; va
           Persistent=false
       when: ansible_service_mgr == 'systemd'
       notify: Reload systemd
-
-    - name: Ensure the timer override directory exists
-      ansible.builtin.file:
-        path: /etc/systemd/system/sysstat-collect.timer.d
-        state: directory
-        owner: root
-        group: root
-        mode: "0755"
-      when: ansible_service_mgr == 'systemd'
 
     - name: Enable sysstat timers
       ansible.builtin.systemd_service:
