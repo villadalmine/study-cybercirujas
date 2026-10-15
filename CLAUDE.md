@@ -97,3 +97,6 @@ credits; the graph never does): [docs/DEVTOOLS.md](docs/DEVTOOLS.md).
 - **Idea Exchange Buffer**: [AGENTS_SYNC.md](AGENTS_SYNC.md) is an asynchronous proposal queue for AI agents (Antigravity, Claude, etc.) working on this repository.
 - **Mandatory Agent Check**: All AI agents MUST inspect [AGENTS_SYNC.md](AGENTS_SYNC.md) during context initialization or task evaluation. Read pending ideas, evaluate them technically, implement or transfer accepted items to [BACKLOG.md](BACKLOG.md) / [PLAN.md](PLAN.md), and delete processed entries from [AGENTS_SYNC.md](AGENTS_SYNC.md) so the queue remains clean for future proposals.
 
+## Pull requests from agents
+
+Agents open PRs exactly like people: one template per kind (`.github/PULL_REQUEST_TEMPLATE/`), every required section, provenance that names the model, `### Where it ran` linking the green CI run on the head commit, `### Known gaps`, and the commit trailers the tool adds. Copilot review findings are triaged in a comment and fixed one commit each ([docs/REVIEWS.md](docs/REVIEWS.md)). An agent never merges. Full rules: [CONTRIBUTING.md](CONTRIBUTING.md).

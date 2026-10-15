@@ -1015,3 +1015,7 @@ The measured verdict, 34 opus-4-8 topics against 26 opus-5 inside kca: opus-5
 writes **2.1x the material and 1.8x the code blocks at the same efficiency per
 token**. Per window they are within 3% of each other. The owner's constraint is
 quality, so opus-5 at `effort: xhigh` is the setting.
+
+## Pull requests from agents
+
+Agents open PRs exactly like people: one template per kind (`.github/PULL_REQUEST_TEMPLATE/`), every required section, provenance that names the model, `### Where it ran` linking the green CI run on the head commit, `### Known gaps`, and the commit trailers the tool adds. Copilot review findings are triaged in a comment and fixed one commit each ([docs/REVIEWS.md](docs/REVIEWS.md)). An agent never merges. Full rules: [CONTRIBUTING.md](CONTRIBUTING.md).
