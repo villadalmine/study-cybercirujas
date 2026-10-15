@@ -132,6 +132,7 @@ create_accounts() {
     fi
     usermod -aG "$LAB_GROUP" "$u"
   done
+  mkdir -p "$LAB_ROOT"   # $STATE lives in it; seed_content runs later
   printf '%s\n' "${created[@]:-}" > "$STATE"
   chmod 0600 "$STATE"
 }
