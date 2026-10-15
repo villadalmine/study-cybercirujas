@@ -22,6 +22,10 @@ content — cka / 1.1 / en
 scripts/check_provenance.py   -> OK
 ```
 
+### Where it ran
+
+- CI: https://github.com/villadalmine/study-cybercirujas/actions/runs/123 on the head commit
+
 ## How to test it from a clean clone
 
 ```bash

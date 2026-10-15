@@ -107,6 +107,11 @@ def check(title: str, body: str, files: list[str], root: Path = REPO) -> list[st
         elif not found[name]:
             problems.append(f"empty section: ## {name}")
 
+    if "Evidence" in found and not cited_runs(body):
+        problems.append("Evidence: add a '### Where it ran' subsection linking the CI run on this "
+                        "PR's head commit (github.com/<owner>/<repo>/actions/runs/<id>); the "
+                        "'where-it-ran' comment CI posts has the line ready to paste")
+
     impact = site_impact(files)
     site = re.search(r"^\s*[-*]?\s*Site:\s*(\S+)", found.get("Kind", ""), re.M)
     if not site:
@@ -147,10 +152,81 @@ def check(title: str, body: str, files: list[str], root: Path = REPO) -> list[st
     return problems
 
 
+# --- scope: one concern per PR (CONTRIBUTING → Size and scope) ---------------
+
+CODE_LIMIT = 400                     # changed lines of code, generated files excluded
+GENERATED = ("STATUS.md", "MODELS.md")
+LAB = re.compile(r"^certs/([^/]+)/([^/]+)/lab/")
+CODE = re.compile(r"^(teach/|scripts/|tests/(?!fixtures/)|deploy/|\.github/|Makefile$|pyproject\.toml$)")
+SCOPE_LABEL = "scope-exception"      # set by a maintainer, never by the check
+SIZE_LABEL = "size-exception"
+
+
+def kinds(files: list[str]) -> dict[str, set]:
+    """What a PR touches, by kind: material (topic/lang dirs), labs, code, docs."""
+    out: dict[str, set] = {"material": set(), "lab": set(), "code": set(), "docs": set()}
+    for f in (f.replace("\\", "/") for f in files):
+        if MATERIAL.match(f):
+            out["material"].add("/".join(f.split("/")[1:4]))
+        elif LAB.match(f):
+            out["lab"].add("/".join(f.split("/")[1:3]))
+        elif CODE.match(f):
+            out["code"].add(f)
+        else:
+            out["docs"].add(f)
+    return out
+
+
+def scope(files: list[str], code_lines: int | None = None, labels: set | None = None) -> list[str]:
+    """Problems with the shape of a PR, independent of its description."""
+    labels = labels or set()
+    k = kinds(files)
+    problems = []
+    if SCOPE_LABEL not in labels:
+        if len(k["material"]) > 1:
+            problems.append(f"scope: material in {len(k['material'])} topic/language directories "
+                            f"({', '.join(sorted(k['material'])[:4])}…); one per PR — stack the rest "
+                            "with 'Depends on'")
+        if len(k["lab"]) > 1:
+            problems.append(f"scope: {len(k['lab'])} labs changed; one lab per PR")
+        if (k["material"] or k["lab"]) and k["code"]:
+            problems.append("scope: study material and code in the same PR; split them "
+                            f"(code: {', '.join(sorted(k['code'])[:3])}…)")
+    touched_generated = [f for f in files if f in GENERATED]
+    if touched_generated and not any(f.startswith("certs/") for f in files):
+        problems.append(f"generated file changed without any certs/ change ({', '.join(touched_generated)}): "
+                        "regenerate it with `teach status`, never edit it by hand")
+    if code_lines is not None and code_lines > CODE_LIMIT and SIZE_LABEL not in labels:
+        problems.append(f"size: {code_lines} changed lines of code (limit {CODE_LIMIT}, generated files "
+                        "excluded); split it into stacked PRs ('Depends on: #N')")
+    return problems
+
+
+RUN_LINK = re.compile(r"github\.com/([\w.-]+/[\w.-]+)/actions/runs/(\d+)")
+
+
+def cited_runs(body: str) -> list[tuple[str, str]]:
+    """(repo, run id) linked under '### Where it ran' inside Evidence."""
+    evidence = sections(body).get("Evidence", "")
+    match = re.search(r"^###\s+Where it ran.*?$(.*?)(?=^###\s|\Z)", evidence, re.M | re.S)
+    return RUN_LINK.findall(match.group(1)) if match else []
+
+
 def changed_files(base: str) -> list[str]:
     result = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD"],
                             cwd=REPO, capture_output=True, text=True, check=True)
     return [line for line in result.stdout.splitlines() if line]
+
+
+def code_lines_changed(base: str) -> int:
+    result = subprocess.run(["git", "diff", "--numstat", f"{base}...HEAD"],
+                            cwd=REPO, capture_output=True, text=True, check=True)
+    total = 0
+    for line in result.stdout.splitlines():
+        added, removed, path = line.split("\t", 2)
+        if added != "-" and CODE.match(path) and path not in GENERATED:
+            total += int(added) + int(removed)
+    return total
 
 
 def main() -> int:
@@ -162,17 +238,26 @@ def main() -> int:
     parser.add_argument("--base", help="git ref to diff against, e.g. origin/main")
     parser.add_argument("--files", nargs="*", default=None)
     parser.add_argument("--label-file", help="write the site label here (for the labelling step)")
+    parser.add_argument("--runs-file",
+                        help="write the CI runs cited under 'Where it ran' here, one 'repo id' per "
+                             "line, for the job step that checks them against the API")
     args = parser.parse_args()
 
+    labels: set = set()
     if args.event:
         pr = json.loads(Path(args.event).read_text(encoding="utf-8"))["pull_request"]
         title, body = pr["title"], pr.get("body") or ""
+        labels = {label["name"] for label in pr.get("labels") or []}
     else:
         title = args.title or ""
         body = Path(args.body_file).read_text(encoding="utf-8") if args.body_file else ""
     files = args.files if args.files is not None else (changed_files(args.base) if args.base else [])
+    code_lines = code_lines_changed(args.base) if args.base and args.files is None else None
 
-    problems = check(title, body, files)
+    problems = check(title, body, files) + scope(files, code_lines, labels)
+    if args.runs_file:
+        Path(args.runs_file).write_text("".join(f"{repo} {run}\n" for repo, run in cited_runs(body)),
+                                        encoding="utf-8")
     impact = site_impact(files)
     print(f"site: {impact}")
     summary = os.environ.get("GITHUB_STEP_SUMMARY")

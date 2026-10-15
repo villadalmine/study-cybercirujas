@@ -31,6 +31,19 @@ scripts/check_provenance.py
 scripts/quality_report.py <cert>
 ```
 
+### Where it ran
+
+<!-- The CI run on this PR's HEAD commit, green: github.com/villadalmine/study-cybercirujas/actions/runs/<id>.
+     CI posts a 'where-it-ran' comment with this line ready to paste after each push; a new push
+     makes the old link stale and pr-format fails until it is updated. Add the machine or local
+     environment too if you ran anything there. -->
+- CI: 
+- Local: 
+
+### Known gaps
+
+<!-- What this evidence does NOT cover. Always present; 'none' is a claim, not a default. -->
+
 ## How to test it from a clean clone
 
 ```bash

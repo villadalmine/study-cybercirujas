@@ -81,6 +81,47 @@ class CheckPrTests(unittest.TestCase):
             found = check_pr.sections(template.read_text(encoding="utf-8"))
             with self.subTest(template=template.name):
                 self.assertEqual([s for s in check_pr.SECTIONS if s not in found], [])
+                self.assertIn("### Where it ran", found["Evidence"] + template.read_text(encoding="utf-8"))
+                self.assertIn("### Known gaps", template.read_text(encoding="utf-8"))
+
+
+class WhereItRanTests(unittest.TestCase):
+    def test_runs_are_read_from_the_subsection(self):
+        body = (FIXTURES / "good.md").read_text(encoding="utf-8")
+        self.assertEqual(check_pr.cited_runs(body), [("villadalmine/study-cybercirujas", "123")])
+
+    def test_evidence_without_a_run_fails(self):
+        body = (FIXTURES / "good.md").read_text(encoding="utf-8").replace("/actions/runs/123", "")
+        self.assertTrue(any("Where it ran" in p for p in check_pr.check("docs: x", body, [])))
+
+
+class ScopeTests(unittest.TestCase):
+    def test_one_topic_language_per_content_pr(self):
+        files = ["certs/cka/1.1/es/content.md", "certs/cka/1.2/es/content.md"]
+        self.assertTrue(any("2 topic/language" in p for p in check_pr.scope(files)))
+        self.assertEqual(check_pr.scope(files[:1]), [])
+
+    def test_one_lab_per_pr(self):
+        files = ["certs/cka/1.1/lab/lab.yaml", "certs/cka/1.2/lab/lab.yaml"]
+        self.assertTrue(any("2 labs" in p for p in check_pr.scope(files)))
+
+    def test_material_and_code_do_not_mix(self):
+        files = ["certs/cka/1.1/en/content.md", "teach/api.py"]
+        self.assertTrue(any("material and code" in p for p in check_pr.scope(files)))
+        self.assertEqual(check_pr.scope(files, labels={"scope-exception"}), [])
+
+    def test_generated_files_are_not_edited_by_hand(self):
+        self.assertTrue(any("generated file" in p for p in check_pr.scope(["STATUS.md"])))
+        self.assertEqual(check_pr.scope(["STATUS.md", "certs/cka/1.1/en/content.md"]), [])
+
+    def test_size_limit_and_exception(self):
+        self.assertTrue(any("size:" in p for p in check_pr.scope(["teach/api.py"], code_lines=401)))
+        self.assertEqual(check_pr.scope(["teach/api.py"], code_lines=401, labels={"size-exception"}), [])
+        self.assertEqual(check_pr.scope(["teach/api.py"], code_lines=400), [])
+
+    def test_docs_and_fixtures_are_not_code(self):
+        k = check_pr.kinds(["README.md", "docs/x.md", "tests/fixtures/pr/good.md", "tests/test_x.py"])
+        self.assertEqual(k["code"], {"tests/test_x.py"})
 
 
 if __name__ == "__main__":

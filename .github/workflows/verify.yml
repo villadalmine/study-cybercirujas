@@ -113,7 +113,32 @@ jobs:
       - name: Check the PR description
         run: |
           pip install -q pyyaml
-          python3 scripts/check_pr.py --event "$GITHUB_EVENT_PATH"             --base "origin/${{ github.base_ref }}" --label-file site-label.txt
+          python3 scripts/check_pr.py --event "$GITHUB_EVENT_PATH" \
+            --base "origin/${{ github.base_ref }}" \
+            --label-file site-label.txt --runs-file cited-runs.txt
+      - name: Check the run cited under "Where it ran"
+        # check_pr.py stays offline; the network check lives here, with the
+        # job's own token. At least one cited run must be of this repository,
+        # on the PR's current head commit, and green. A new push makes the old
+        # link stale on purpose: the 'where-it-ran' comment has the new one.
+        if: always() && hashFiles('cited-runs.txt') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          found=0
+          while read -r repo run; do
+            [ -n "$run" ] || continue
+            if [ "$repo" != "$REPO" ]; then echo "run $run belongs to $repo, not $REPO"; continue; fi
+            state="$(gh api "repos/$REPO/actions/runs/$run" --jq '"\(.head_sha) \(.conclusion)"' 2>/dev/null || true)"
+            echo "run $run: $state"
+            [ "$state" = "$HEAD_SHA success" ] && found=1
+          done < cited-runs.txt
+          if [ "$found" != 1 ]; then
+            echo "::error::'Where it ran' must link a green CI run of $REPO on the head commit $HEAD_SHA. Copy the line from the where-it-ran comment and edit the description."
+            exit 1
+          fi
       - name: Label the site impact
         # Runs even when the description check fails: the label is a fact
         # about the files. A fork's token cannot write labels; that is fine.
@@ -126,3 +151,38 @@ jobs:
           other=$([ "$label" = "site:none" ] && echo "site:image-rebuild" || echo "site:none")
           gh label create "$label" --force --color "$([ "$label" = "site:none" ] && echo 0e8a16 || echo d93f0b)"             --description "set by scripts/check_pr.py from the changed files"
           gh pr edit "${{ github.event.pull_request.number }}" --add-label "$label" --remove-label "$other" ||             gh pr edit "${{ github.event.pull_request.number }}" --add-label "$label"
+
+  where-it-ran:
+    # After verify and e2e pass on a new head, post (or update) one comment
+    # with the exact line for the description's "Where it ran" subsection.
+    # Our own Actions token, no external bot. The author still pastes it:
+    # the description is the record, and pr-format checks what it says.
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
+    needs: [verify, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true      # a fork's token cannot comment; the check still works
+    permissions:
+      pull-requests: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          RUN: ${{ github.run_id }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          marker='<!-- where-it-ran -->'
+          body="$marker
+          **Where it ran** — paste this into the description, under *Evidence → Where it ran*:
+
+          \`\`\`
+          - CI: https://github.com/$REPO/actions/runs/$RUN — verify and e2e green on head \`${SHA:0:7}\`
+          \`\`\`"
+          id="$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+                --jq ".[] | select(.user.login == \"github-actions[bot]\") | select(.body | startswith(\"$marker\")) | .id" | head -1)"
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" -f body="$body" >/dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null
+          fi
