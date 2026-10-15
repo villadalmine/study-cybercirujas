@@ -393,8 +393,10 @@ Torvalds; Kubernetes® es marca registrada de The Linux Foundation. El material
 de estudio (`content.md`, `exercises.md`) y los laboratorios prácticos
 (`break_fix.sh`) son material original, generado de forma independiente a
 partir de los temarios públicos oficiales que cita cada tema. Este repositorio
-no contiene ni permite *braindumps*, preguntas reales de examen ni material
-protegido por acuerdos de confidencialidad (NDA).
+no contiene y no acepta *braindumps*, preguntas reales de examen ni material
+protegido por acuerdos de confidencialidad (NDA): una contribución así se
+cierra sin mergear y se puede reportar
+([regla de contribución](CONTRIBUTING.md#no-braindumps)).
 
 **English.** study-cybercirujas is an independent, open-source educational
 project. It is not affiliated with, sponsored by, endorsed by or approved by
@@ -409,6 +411,7 @@ owners and are used only for descriptive and identification purposes
 Kubernetes® is a registered trademark of The Linux Foundation. The study
 material (`content.md`, `exercises.md`) and hands-on labs (`break_fix.sh`)
 are original material, produced independently from the public official
-syllabi each topic cites. This repository does not contain or allow
-*braindumps*, real exam questions or material covered by non-disclosure
-agreements (NDA).
+syllabi each topic cites. This repository does not contain and does not
+accept *braindumps*, real exam questions or material covered by
+non-disclosure agreements (NDA): such a contribution is closed without merging
+and can be reported ([contribution rule](CONTRIBUTING.md#no-braindumps)).

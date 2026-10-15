@@ -35,6 +35,11 @@ The curriculum is a repository, and it is treated like software:
 | build artefacts | the site, the API, the Docker image, STATUS.md, the README table — all derived, never hand-kept |
 | CI | `.github/workflows/verify.yml` runs the same targets a contributor runs |
 
+Inputs are public and attributable: the corpus is derived from the public
+official syllabi and documentation it cites, never from leaked exam questions
+(*braindumps*) or material under NDA — such contributions are refused
+([CONTRIBUTING → No braindumps, no NDA material](../CONTRIBUTING.md#no-braindumps)).
+
 ## 3. Determinism
 
 Everything that is *used* — serving, studying, validating, running a lab —

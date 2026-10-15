@@ -53,6 +53,25 @@ human_edits:
 With AI or without it, the same rule: nothing enters the corpus without
 saying where it came from.
 
+<a id="no-braindumps"></a>
+
+### No braindumps, no NDA material
+
+Material is written from the **public** official syllabi and documentation
+only. We do not accept:
+
+- questions or answers leaked from real exams (*braindumps*), whether copied,
+  paraphrased or "remembered";
+- anything covered by a non-disclosure agreement (NDA): exam content, beta
+  exam items, vendor training material that is not public.
+
+A PR that adds any of it is closed without merging, and the content is removed
+if it ever landed. If you find some in the repository, report it with the
+*Content error* issue form (say it is a braindump or NDA material and where it
+is), or privately to the maintainer; it is removed first and discussed after.
+Exam candidates sign the vendors' NDAs: this rule protects them as much as the
+project.
+
 ## Conventions
 
 - **Branches:** `<type>/<short-topic>`, e.g. `fix/cka-1.1-reclaim-policy`,

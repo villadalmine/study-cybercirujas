@@ -52,6 +52,22 @@ class LegalNoticeTests(unittest.TestCase):
                 with self.subTest(lang=lang, must=must):
                     self.assertIn(must, flat)
 
+    def test_the_no_braindumps_promise_rests_on_a_contribution_rule(self):
+        # "does not accept" must point at a rule that exists (review of #7).
+        contributing = (REPO / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        self.assertIn('<a id="no-braindumps"></a>', contributing)
+        rule = contributing.split('<a id="no-braindumps"></a>', 1)[1].split("\n## ", 1)[0]
+        for must in ("braindumps", "NDA", "closed", "Content error"):
+            with self.subTest(must=must):
+                self.assertIn(must, rule)
+        es, en = legal_section().split("**English.**", 1)
+        self.assertIn("no acepta", re.sub(r"\s+", " ", es))
+        self.assertIn("does not accept", re.sub(r"\s+", " ", en))
+        for para in (es, en):
+            self.assertIn("CONTRIBUTING.md#no-braindumps", para)
+            self.assertNotIn("permite", para)
+            self.assertNotIn("or allow", para)
+
     def test_the_site_footer_summarises_and_links_it_in_every_language(self):
         html = (REPO / "teach" / "web" / "index.html").read_text(encoding="utf-8")
         self.assertEqual(html.count("    foot: '"), html.count("    legal: '"))
