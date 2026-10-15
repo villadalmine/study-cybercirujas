@@ -71,6 +71,7 @@ VALIDATORS = [
     ["scripts/check_sources.py"],
     ["scripts/check_versions.py"],
     ["scripts/check_syllabus.py"],
+    ["scripts/check_source_chain.py"],
 ]
 # Must give the same verdict twice; whether every lab passes is
 # tests/test_labs.py's job (it knows the documented exceptions).
