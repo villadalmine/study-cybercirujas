@@ -1,17 +1,17 @@
-# Graph Report - teach-plat  (2026-10-15)
+# Graph Report - pr9  (2026-10-15)
 
 ## Corpus Check
-- 154 files · ~206,016 words
+- 155 files · ~207,399 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: (none) 12, .example 1, .service 1)
 
 ## Summary
-- 2163 nodes · 4338 edges · 156 communities (96 shown, 60 thin omitted)
+- 2206 nodes · 4404 edges · 155 communities (101 shown, 54 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 147 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `96b024b4`
+- Built from commit: `b503f9f3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,7 @@
 - models_live.py
 - video.py
 - Agent Synchronization & Idea Queue (AGENTS_SYNC.md)
-- claim
+- claims.py
 - generator.py
 - labs.py
 - Which backend authors better material?
@@ -44,13 +44,13 @@
 - topic_cost.py
 - Developers — use the API, run your own copy, build on it
 - clean_registry.py
-- translation_study.py
+- run_batch.py
 - Roadmap — where this is and where it goes
 - check_pr.py
-- load
+- spec.py
 - DeterminismTests
 - Contributing
-- problems
+- check_manifests.py
 - json
 - probe_models.py
 - Milestone Run Script
@@ -66,33 +66,33 @@
 - pipeline.py
 - ProtocolTests
 - publish_if_complete.py
-- The routine, start to finish
+- test_lpic2_200_1_review.py
 - snapshot_topics
 - AI certification roadmap
 - lab/cli.py
 - Within one certification (the only fair comparisons; authoring language `en` only)
 - EnvScopeTests
-- response
+- test_e2e.py
 - subprocess
-- _stream
-- study-lab — break/fix labs in a throwaway container
+- steer.py
+- status_matrix.py
 - check_citations.py
 - generate_topic
 - OpenWiki scope for teach-plat
 - argparse
 - The phases
-- probe_tools
+- verdict
 - tracker.py
 - bot_loop_check.js
 - Study bot — design
-- post_bot_used
+- load
 - catalog.py
 - check_docs.py
 - ComprehensionTests
-- api.py
+- topic_content
 - study.cybercirujas — free, open study material for IT certifications
 - CatalogueStateTests
-- Operating the pipeline — for maintainers
+- response
 - FixtureTests
 - LanguageTests
 - CheckDocsTests
@@ -101,9 +101,9 @@
 - lab.md
 - translation.md
 - PathLanguageTests
-- test_runner_guard.py
+- yaml
 - video.md
-- check_syllabus.py
+- next_work.py
 - clone_and_run.sh
 - Client
 - pull_request_template.md
@@ -136,13 +136,13 @@
 - _prompt_on_stdin
 - AuthorshipTests
 - re
-- get
+- api.py
 - CitedRunTests
 - OwnedTeardownTests
 - MainTests
 - test_legal_notice.py
 - check_k8s_apis.py
-- topic_content
+- check_claims.py
 - _script_user
 - _exec_script_cmd
 - sitecustomize.py
@@ -155,17 +155,16 @@
 - generation
 - _split_answer
 - WhereItRanTests
-- ContractTests
+- test_mcp_server.py
 - EnterHintTests
 - check_config.py
-- Development Guidelines for teach-plat
-- VerdictTests
+- _reject_if_recap
+- check_api_facts.py
 - authorship
 - verify_workflow
 - CheckUpdatesDocTests
-- OffSwitchTests
+- _BlockDumper
 - CitationsHeadingTests
-- test_model_probe.py
 - _glob
 
 ## God Nodes (most connected - your core abstractions)
@@ -178,7 +177,7 @@
 7. `search_topics()` - 19 edges
 8. `_verify_translation()` - 19 edges
 9. `snapshot_topics()` - 18 edges
-10. `kubectl()` - 17 edges
+10. `read()` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `2026-09-10` --references--> `survey()`  [INFERRED]
@@ -195,15 +194,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (156 total, 60 thin omitted)
+## Communities (155 total, 54 thin omitted)
 
 ### Community 0 - "Backlog"
 Cohesion: 0.25
 Nodes (8): Backlog, Content, Deploy — Technical Debt, Labs — Execution Modes (see PLAN.md, SDD section), Pipeline Automation, RAG Study Bot — Proposal Under Review (`chart/`) — superseded, Repo Hygiene, Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
 
 ### Community 1 - "test_cli.py"
-Cohesion: 0.09
-Nodes (25): Tests, docker_ok(), git_repo(), image_ok(), new_lab(), run_cli(), test_all_curated_labs_pass_the_schema(), test_curated_pilot_labs_are_strict_valid_and_verified() (+17 more)
+Cohesion: 0.17
+Nodes (15): Tests, git_repo(), run_cli(), test_all_curated_labs_pass_the_schema(), test_curated_pilot_labs_are_strict_valid_and_verified(), test_from_repo_path_cannot_escape(), test_hint_and_list(), test_migrate_write_roundtrip() (+7 more)
 
 ### Community 2 - "scaffold"
 Cohesion: 0.18
@@ -219,27 +218,31 @@ Nodes (32): Video — Technical Debt, 2026-07-17, _ask_scenes(), _base_slide(), 
 
 ### Community 5 - "Agent Synchronization & Idea Queue (AGENTS_SYNC.md)"
 Cohesion: 0.05
-Nodes (42): Agent Synchronization & Idea Queue (AGENTS_SYNC.md), Changed, do not redo, Checks that cost no quota — run them, they are free, Decisions left to the owner, not to us, Division of work — owner's call, 2026-08-07, First: install the hook. It is the only rule that does not depend on you., Found while wiring this up, not caused by it: check_manifests fails, From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives (+34 more)
+Nodes (37): Agent Synchronization & Idea Queue (AGENTS_SYNC.md), Changed, do not redo, Checks that cost no quota — run them, they are free, Decisions left to the owner, not to us, Division of work — owner's call, 2026-08-07, First: install the hook. It is the only rule that does not depend on you., Found while wiring this up, not caused by it: check_manifests fails, From claude — 2026-08-14: where this stands, and how to resume (+29 more)
 
-### Community 6 - "claim"
-Cohesion: 0.13
-Nodes (7): claim(), is_claimed(), _path(), _try_lock(), _unlock(), ClaimTest, _try_claim()
+### Community 6 - "claims.py"
+Cohesion: 0.06
+Nodes (26): 1. The container registry (the one that actually fills), 2. Rejected generation output (`.rejected/`), 3. Orphaned topic directories, 4. Local state (`~/.local/state/teach-plat/`), 5. Scratch files in the repository root, Check first, Cleanup — what fills up, and how to reclaim it, Delete (+18 more)
 
 ### Community 7 - "generator.py"
-Cohesion: 0.16
-Nodes (12): _agent_completer(), complete(), _antigravity_completer(), complete(), _dominant_model(), GeneratorConfigError, _litellm_completer(), complete() (+4 more)
+Cohesion: 0.14
+Nodes (13): _agent_completer(), complete(), _antigravity_completer(), complete(), _dominant_model(), GeneratorConfigError, _litellm_completer(), complete() (+5 more)
 
 ### Community 8 - "labs.py"
 Cohesion: 0.17
 Nodes (20): Labs — what an audit found, 2026-08-08 (design parked, not started), _break_args(), down(), _down_cluster(), enter_hint(), lab_dir(), _lab_name(), LabError (+12 more)
 
 ### Community 9 - "Which backend authors better material?"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): Caveats, fable-5 vs opus-5, within cgoa (2026-08-19), The 62% figure, and why it is not what it looks like, The headline: on every objective check, they tie, The same-topic head-to-head, which reverses the conclusion above, What this means for the choice, Where they differ: volume and shape, Which backend authors better material?
 
+### Community 10 - "certs.py"
+Cohesion: 0.18
+Nodes (5): content_dir(), get_topic(), topic_langs(), topic_outdated_langs(), StaleCycleTest
+
 ### Community 12 - "runner.py"
-Cohesion: 0.16
-Nodes (24): build(), check(), container_name(), _docker(), down(), ensure_image(), image_for(), _in_time() (+16 more)
+Cohesion: 0.06
+Nodes (54): Create a lab that follows the template, How it works, Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15), Not done yet, Pinned versions, Quick start, Run a lab from another repository, State of the 548 curated labs (validate, 2026-10-15) (+46 more)
 
 ### Community 13 - "check"
 Cohesion: 0.13
@@ -247,27 +250,27 @@ Nodes (5): _reusable(), check(), rules(), QualityFloorTest, QualityThresholdsTes
 
 ### Community 14 - "The loop"
 Cohesion: 0.12
-Nodes (17): 1. Snapshot the syllabus — once per certification, 2. Generate, 2b. The quality floor — the same standard for every backend, 2c. What "quality" can and cannot be proven mechanically, 3. Audit — never skip this, 4. Status, 5. Commit, Backends (+9 more)
+Nodes (16): 1. Snapshot the syllabus — once per certification, 2. Generate, 2b. The quality floor — the same standard for every backend, 2c. What "quality" can and cannot be proven mechanically, 4. Status, 5. Commit, Backends, Content Workflow (+8 more)
 
 ### Community 15 - "Changelog"
-Cohesion: 0.09
-Nodes (23): 12e01a6 — Paths + Linux Foundation, 1d4bd14 — Multilingual + Deploy, 2026-07-11/12, 2026-07-19, 2026-07-27, 2026-07-28, 2026-07-29, 2026-09-10 (+15 more)
+Cohesion: 0.12
+Nodes (17): 12e01a6 — Paths + Linux Foundation, 1d4bd14 — Multilingual + Deploy, 2026-07-28, 2026-07-29, 2026-08-03, 2026-09-10, 2026-09-14, 2026-09-15 (+9 more)
 
 ### Community 16 - "Platform Architecture Plan"
 Cohesion: 0.14
 Nodes (14): Catalog by Categories, CLI, Code Architecture, Data Model, Decoupled Lab Runner (Future, Go), Design Principles, Educational Platform, Execution Modes + Exercise Videos (SDD — evaluation, pending implementation) (+6 more)
 
 ### Community 18 - "teach/cli.py"
-Cohesion: 0.08
-Nodes (20): cert_add(), cert_generate(), cert_list(), cert_show(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script() (+12 more)
+Cohesion: 0.09
+Nodes (18): cert_add(), cert_list(), cert_show(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script(), lab_down() (+10 more)
 
 ### Community 20 - "Syllabus Coverage Tests"
-Cohesion: 0.15
-Nodes (4): normalise_weights(), objective_ids(), _reject_unreadable_syllabus(), SyllabusCoverageTests
+Cohesion: 0.18
+Nodes (3): objective_ids(), _reject_unreadable_syllabus(), SyllabusCoverageTests
 
 ### Community 21 - "_verify_translation"
-Cohesion: 0.11
-Nodes (15): 2026-08-03, 2026-08-04, Can a cheap model do the translation step?, Caveat, Method, Recommendation, Results, Three bugs this study found in our own checks (+7 more)
+Cohesion: 0.12
+Nodes (14): 2026-08-04, Can a cheap model do the translation step?, Caveat, Method, Recommendation, Results, Three bugs this study found in our own checks, Translating is not the same deliverable as authoring (+6 more)
 
 ### Community 22 - "check_versions.py"
 Cohesion: 0.21
@@ -278,8 +281,8 @@ Cohesion: 0.20
 Nodes (10): A funnel, cheapest layer first, Honest limits, Layer 0 — what exists (free, deterministic), Layer 1 — a structured fact base, no RAG at all (free, deterministic), Layer 2 — retrieval over a bounded corpus (cheap, one-off indexing), Layer 3 — adversarial judging (costs quota, sample only), The design mistake to avoid, The gap, precisely (+2 more)
 
 ### Community 26 - "topic_cost.py"
-Cohesion: 0.16
-Nodes (7): by_topic(), dominant(), main(), records(), _cmd(), test_job_ids_are_unique_across_workflows(), test_k8s_inner_dockerd_listens_on_the_unix_socket_only()
+Cohesion: 0.17
+Nodes (8): by_topic(), dominant(), main(), records(), main(), _money(), rows(), _tokens()
 
 ### Community 27 - "Developers — use the API, run your own copy, build on it"
 Cohesion: 0.20
@@ -289,9 +292,9 @@ Nodes (10): Building features on it, Developers — use the API, run your own co
 Cohesion: 0.42
 Nodes (5): deployed_tags(), in_registry(), kubectl(), main(), usage()
 
-### Community 29 - "translation_study.py"
-Cohesion: 0.12
-Nodes (12): 6. Where the value actually is (owner's question, 2026-08-18), Languages, generate(), generate_with_retries(), pending(), _sort_key(), main(), pending() (+4 more)
+### Community 29 - "run_batch.py"
+Cohesion: 0.32
+Nodes (4): generate(), generate_with_retries(), pending(), _sort_key()
 
 ### Community 30 - "Roadmap — where this is and where it goes"
 Cohesion: 0.25
@@ -301,65 +304,65 @@ Nodes (8): Current focus — set 2026-09-11, Roadmap — where this is and where
 Cohesion: 0.13
 Nodes (15): changed_files(), check(), cited_runs(), code_lines_changed(), declared(), image_paths(), judge_run(), kinds() (+7 more)
 
-### Community 32 - "load"
-Cohesion: 0.13
-Nodes (22): 2026-10-15, derived_from(), infer_contract(), load(), load_schema(), migrate(), normalize(), schema_errors() (+14 more)
+### Community 32 - "spec.py"
+Cohesion: 0.16
+Nodes (9): 2026-10-15, derived_from(), infer_contract(), load_schema(), migrate(), normalize(), schema_errors(), _verb_present() (+1 more)
 
 ### Community 34 - "Contributing"
 Cohesion: 0.14
 Nodes (14): Agents, Checks that must pass, Contributing, Conventions, Labels, Licence and conduct, Merging and deploying the site, No braindumps, no NDA material (+6 more)
 
-### Community 35 - "problems"
-Cohesion: 0.16
-Nodes (8): main(), problems(), _skip(), _VendorTagLoader, main(), status_rows(), table(), main()
+### Community 35 - "check_manifests.py"
+Cohesion: 0.28
+Nodes (4): main(), problems(), _skip(), _VendorTagLoader
 
 ### Community 36 - "json"
-Cohesion: 0.12
-Nodes (13): evidence(), main(), gh_api(), classify(), main(), main(), probe(), record() (+5 more)
+Cohesion: 0.11
+Nodes (12): 2026-09-11, evidence(), main(), gh_api(), classify(), main(), main(), probe() (+4 more)
 
 ### Community 37 - "probe_models.py"
 Cohesion: 0.14
-Nodes (11): catalogue_state(), main(), off_switch(), _price(), probe_one(), reasoning_mandatory(), rejects_reasoning(), tally() (+3 more)
+Nodes (11): ask(), ask_retrying(), catalogue_state(), main(), material(), _price(), probe_one(), probe_tools() (+3 more)
 
 ### Community 44 - "StoredShapeTests"
-Cohesion: 0.09
-Nodes (10): Verification: what is proven, and what is only assumed, accepted(), _blank(), _known_models(), load(), path(), record(), _write() (+2 more)
+Cohesion: 0.10
+Nodes (9): accepted(), _blank(), _known_models(), load(), path(), record(), _write(), AcceptanceTests (+1 more)
 
 ### Community 45 - "search_topics"
 Cohesion: 0.17
 Nodes (5): _fold(), _informative(), search_topics(), _terms(), SearchTests
 
 ### Community 46 - "has_subscription"
-Cohesion: 0.14
-Nodes (13): Platform (Long-Term Roadmap, see PLAN.md), 1. Catalog Tracker (Scraper — nothing is static), 2. Generator (AI, on-demand), 3. Web: Public Landing + Paid Study Zone, Architecture — 3 Components, login(), LoginBody, logout() (+5 more)
+Cohesion: 0.20
+Nodes (8): Platform (Long-Term Roadmap, see PLAN.md), 1. Catalog Tracker (Scraper — nothing is static), 2. Generator (AI, on-demand), 3. Web: Public Landing + Paid Study Zone, Architecture — 3 Components, me(), authenticate(), has_subscription()
 
 ### Community 47 - "certs.py"
-Cohesion: 0.23
-Nodes (9): clear_topic_stale(), get_topic(), load(), md_path(), _read(), save(), scaffold(), set_topic_status() (+1 more)
+Cohesion: 0.26
+Nodes (8): clear_topic_stale(), load(), md_path(), _read(), save(), scaffold(), set_topic_status(), topics()
 
 ### Community 48 - "1. The code graph (Graphify)"
 Cohesion: 0.12
 Nodes (16): 1. The code graph (Graphify), 2. The wiki (OpenWiki), 3. Real metrics, end to end, Developer tools: code graph, wiki, and real metrics, Optional, costs completions, Reading the numbers, Semantic enrichment — documented, deliberately not run, Setup, once (+8 more)
 
 ### Community 49 - "fix_corrupted_content.py"
-Cohesion: 0.07
-Nodes (21): check_cert(), main(), _topics(), _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main() (+13 more)
+Cohesion: 0.13
+Nodes (9): _cert_topic_ids(), find_bad_combos(), _finish(), _publish_if_complete(), _record_quota_block(), _refresh_status(), render_ready_videos(), strip_fences_in_place() (+1 more)
 
 ### Community 50 - "pipeline.py"
-Cohesion: 0.08
-Nodes (25): main(), main(), _cert_block(), create_block(), main(), set_key(), show(), budget() (+17 more)
+Cohesion: 0.13
+Nodes (17): What changed in the machinery this session, and why you should not undo it, main(), main(), budget(), in_milestone(), is_fatal(), is_retryable(), load() (+9 more)
 
 ### Community 52 - "publish_if_complete.py"
-Cohesion: 0.29
-Nodes (7): complete_certs(), is_complete(), main(), publish(), _record(), _save(), _topic_ids()
+Cohesion: 0.39
+Nodes (5): complete_certs(), main(), publish(), _record(), _save()
 
-### Community 53 - "The routine, start to finish"
-Cohesion: 0.12
-Nodes (17): 1. The container registry (the one that actually fills), 2. Rejected generation output (`.rejected/`), 3. Orphaned topic directories, 4. Local state (`~/.local/state/teach-plat/`), 5. Scratch files in the repository root, Check first, Cleanup — what fills up, and how to reclaim it, Delete (+9 more)
+### Community 53 - "test_lpic2_200_1_review.py"
+Cohesion: 0.07
+Nodes (21): AlertsTest, CitationsTest, ConntrackLabTest, ConntrackSizeTest, CpuPressureTest, LabContractTest, ListenQueueTest, MathisTest (+13 more)
 
 ### Community 54 - "snapshot_topics"
-Cohesion: 0.16
-Nodes (13): 2026-07-16, Phase 1 — AI fundamentals (extends the three cloud careers), tracker_sync(), add_cert(), load(), save(), _ai_yaml(), generate_paths() (+5 more)
+Cohesion: 0.19
+Nodes (9): From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives, What I need from you, What is now enforced, so this cannot recur, What this means for your work, 2026-07-16, _ai_yaml(), normalise_weights(), snapshot_topics() (+1 more)
 
 ### Community 55 - "AI certification roadmap"
 Cohesion: 0.25
@@ -373,73 +376,81 @@ Nodes (11): _banner(), _clone(), cmd_hint(), cmd_list(), cmd_migrate(), cmd_new(
 Cohesion: 0.18
 Nodes (11): cgoa, cnpa, kca, kcsa, lpic-1, lpic-3-303, mcpa, Model Comparison (+3 more)
 
-### Community 61 - "subprocess"
+### Community 59 - "test_e2e.py"
 Cohesion: 0.16
+Nodes (10): docker_ok(), image_ok(), new_lab(), docker_set(), flow(), no_docker_tcp_listener(), snapshot(), test_kind_lab_from_template() (+2 more)
+
+### Community 61 - "subprocess"
+Cohesion: 0.15
 Nodes (12): graphify_bin(), main(), normalized(), rebuild_in_copy(), regenerate(), touches_graph_sources(), embedded_text(), fetch() (+4 more)
 
-### Community 62 - "_stream"
+### Community 62 - "steer.py"
 Cohesion: 0.16
-Nodes (11): _stream(), _why(), Lab, test_a_child_that_exits_124_is_not_reported_as_a_timeout(), test_a_stuck_on_timeout_does_not_hang_the_runner(), test_output_and_exit_code_pass_through(), test_scripts_run_under_timeout_inside_the_container(), test_the_backstop_docker_exec_is_bounded() (+3 more)
+Nodes (10): main(), _cert_block(), create_block(), main(), set_key(), show(), certs(), default_languages() (+2 more)
 
-### Community 63 - "study-lab — break/fix labs in a throwaway container"
-Cohesion: 0.15
-Nodes (11): Create a lab that follows the template, How it works, Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15), Not done yet, Pinned versions, Quick start, Run a lab from another repository, State of the 548 curated labs (validate, 2026-10-15) (+3 more)
+### Community 63 - "status_matrix.py"
+Cohesion: 0.18
+Nodes (8): cert_topics(), check(), lab_cell(), lang_cell(), refresh(), _render(), _write(), check_file()
 
 ### Community 64 - "check_citations.py"
-Cohesion: 0.13
-Nodes (8): check(), main(), spec_kinds(), tracked_versions(), citations(), main(), status(), section()
+Cohesion: 0.09
+Nodes (12): citations(), main(), status(), load_syllabus(), main(), smells(), upstream_objectives(), evaluate() (+4 more)
 
 ### Community 65 - "generate_topic"
-Cohesion: 0.22
-Nodes (6): topic_langs(), topic_outdated_langs(), generate_topic(), _topic_context(), _write_meta(), First, the thing that surprises everyone
+Cohesion: 0.20
+Nodes (8): 2026-07-19, cert_generate(), generate_cert(), generate_topic(), _system(), _topic_context(), _write_meta(), First, the thing that surprises everyone
 
 ### Community 66 - "OpenWiki scope for teach-plat"
-Cohesion: 0.33
+Cohesion: 0.40
 Nodes (4): OpenWiki scope for teach-plat, Style, What NOT to document, What to document
 
 ### Community 67 - "argparse"
 Cohesion: 0.13
-Nodes (9): ask(), main(), references(), main(), main(), table(), main(), pending_topics() (+1 more)
+Nodes (9): main(), main(), table(), main(), main(), pending_topics(), run(), main() (+1 more)
 
 ### Community 68 - "The phases"
 Cohesion: 0.13
 Nodes (15): Can it read what we send it? (2026-09-11, second pass), Phase 1.5 — BUILT 2026-09-14 (option A), Phase 1.5 — closing the loop: checks that improve the page, Phase 1 — feedback, and the probe that answers it (2026-09-11), Phase 1 — SHIPPED 2026-09-09, Phase 1 — topic chat with a task harness, Phase 2 — BUILT 2026-09-14, Phase 2 — questions across one certification (+7 more)
 
-### Community 69 - "probe_tools"
-Cohesion: 0.20
-Nodes (5): material(), probe_tools(), tool_call_of(), tool_verdict(), verdict()
+### Community 69 - "verdict"
+Cohesion: 0.16
+Nodes (7): off_switch(), rejects_reasoning(), thinking_mode(), thought(), tool_call_of(), tool_verdict(), verdict()
 
 ### Community 70 - "tracker.py"
-Cohesion: 0.18
-Nodes (6): _apply_snapshot_status(), fetch_text(), _get(), _get_bytes(), sync_cncf(), _topic_identity()
+Cohesion: 0.14
+Nodes (9): Phase 1 — AI fundamentals (extends the three cloud careers), tracker_sync(), _apply_snapshot_status(), fetch_text(), _get(), _get_bytes(), sync_clouds(), sync_cncf() (+1 more)
 
 ### Community 71 - "bot_loop_check.js"
 Cohesion: 0.06
 Nodes (24): fs, KEY, line, ONLY, path, PORT, REPO, SHAPES (+16 more)
 
 ### Community 72 - "Study bot — design"
-Cohesion: 0.20
-Nodes (10): Alternatives considered, Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Study bot — design, The insight: explicit selection replaces retrieval (+2 more)
+Cohesion: 0.22
+Nodes (9): Alternatives considered, Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Study bot — design, The insight: explicit selection replaces retrieval (+1 more)
+
+### Community 73 - "load"
+Cohesion: 0.30
+Nodes (13): load(), test_crlf_script_rejected(), test_declared_modes_override_inference(), test_full_v2_validates(), test_invalid_cases(), test_migrate_v1_to_v2_validates(), test_missing_required_field(), test_missing_script() (+5 more)
 
 ### Community 74 - "catalog.py"
-Cohesion: 0.22
-Nodes (6): _BlockDumper, catalog_path(), load_models(), models_path(), root(), save_models()
+Cohesion: 0.15
+Nodes (12): add_cert(), catalog_path(), load(), load_models(), models_path(), root(), save(), save_models() (+4 more)
 
 ### Community 75 - "check_docs.py"
 Cohesion: 0.18
 Nodes (10): anchors(), check_file(), generated_checks(), main(), make_targets(), prose_lines(), slug(), teach_commands() (+2 more)
 
-### Community 77 - "api.py"
-Cohesion: 0.12
-Nodes (7): get_cert_video(), get_path_video(), get_paths(), get_topic(), get_topic_preview(), _valid_lang(), _video_info()
+### Community 77 - "topic_content"
+Cohesion: 0.18
+Nodes (8): In Progress / Next (Ordering), 2026-08-20, get_paths(), get_topic(), get_topic_preview(), _valid_lang(), topic_content(), 6. Publish — only for a complete certification
 
 ### Community 78 - "study.cybercirujas — free, open study material for IT certifications"
 Cohesion: 0.15
 Nodes (13): AI-generated content, Ask questions about the material with a local model (RAG), ⚖️ Aviso Legal y de Marcas Registradas / Legal & Trademark Disclaimer, Certifications, Contributing, For maintainers, Licence, Practice: break-and-fix labs (+5 more)
 
-### Community 80 - "Operating the pipeline — for maintainers"
-Cohesion: 0.15
-Nodes (13): Checking curriculum updates, Content process, Deploying to Kubernetes, Environment variables, Keeping it honest over time, Operating the pipeline — for maintainers, Quality, Quickstart (maintainers) (+5 more)
+### Community 80 - "response"
+Cohesion: 0.06
+Nodes (20): 6. Where the value actually is (owner's question, 2026-08-18), Checking curriculum updates, Content process, Deploying to Kubernetes, Environment variables, Keeping it honest over time, Languages, Operating the pipeline — for maintainers (+12 more)
 
 ### Community 84 - "Documentation audit — 2026-10-14"
 Cohesion: 0.50
@@ -457,25 +468,25 @@ Nodes (12): Authorship, Depends on, Evidence, Findings ledger, How to test it fr
 Cohesion: 0.15
 Nodes (12): Authorship, Depends on, Evidence, Findings ledger, How to test it from a clean clone, Kind, Known gaps, Provenance (+4 more)
 
-### Community 89 - "test_runner_guard.py"
-Cohesion: 0.29
-Nodes (8): docker_calls(), FakeLab, test_check_shell_exec_refuse_a_foreign_container(), test_down_refuses_a_foreign_container(), test_node_image_for_supported_minors(), test_ours_passes_study_lab_containers(), test_run_refuses_a_foreign_container(), test_run_refuses_a_kubernetes_minor_without_a_node_image()
+### Community 89 - "yaml"
+Cohesion: 0.24
+Nodes (7): check_cert(), main(), _topics(), main(), status_rows(), table(), test_job_ids_are_unique_across_workflows()
 
 ### Community 90 - "video.md"
 Cohesion: 0.15
 Nodes (12): Authorship, Depends on, Evidence, Findings ledger, How to test it from a clean clone, Kind, Known gaps, Provenance (+4 more)
 
-### Community 91 - "check_syllabus.py"
-Cohesion: 0.31
-Nodes (4): load_syllabus(), main(), smells(), upstream_objectives()
+### Community 91 - "next_work.py"
+Cohesion: 0.20
+Nodes (7): find_missing_videos(), main(), survey(), _topic_count(), is_complete(), _topic_ids(), video_languages()
 
 ### Community 92 - "clone_and_run.sh"
 Cohesion: 0.33
 Nodes (7): fail(), get(), ok(), PYTHONPATH, clone_and_run.sh script, step(), TEACH_OFFLINE
 
 ### Community 93 - "Client"
-Cohesion: 0.24
-Nodes (3): ask(), ask_retrying(), Client
+Cohesion: 0.26
+Nodes (3): Tools / function calling — evaluated 2026-09-09, wrapped(), Client
 
 ### Community 94 - "pull_request_template.md"
 Cohesion: 0.17
@@ -502,8 +513,8 @@ Cohesion: 0.18
 Nodes (10): Authorship, Depends on, Evidence, Findings ledger, How to test it from a clean clone, Kind, Provenance, Risk and rollback (+2 more)
 
 ### Community 102 - "model_comparison.py"
-Cohesion: 0.06
-Nodes (30): backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main(), _md_table() (+22 more)
+Cohesion: 0.07
+Nodes (23): backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), main(), _md_table() (+15 more)
 
 ### Community 103 - "Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)"
 Cohesion: 0.18
@@ -533,13 +544,17 @@ Nodes (5): Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08), German
 Cohesion: 0.67
 Nodes (3): .venv/bin/python3, graphify, teach
 
+### Community 114 - "test_corpus.py"
+Cohesion: 0.18
+Nodes (4): get_topic(), get_topic(), ContractTests, TopicTests
+
 ### Community 124 - "re"
 Cohesion: 0.27
 Nodes (4): catalogue(), cited_domains(), duplicate_keys(), main()
 
-### Community 125 - "get"
-Cohesion: 0.12
-Nodes (11): get_bot_stats(), get_catalog(), get_cert(), get_langs(), get_search(), get_status(), healthz(), index() (+3 more)
+### Community 125 - "api.py"
+Cohesion: 0.07
+Nodes (21): BotUsage, get_bot_stats(), get_catalog(), get_cert(), get_cert_video(), get_langs(), get_path_video(), get_search() (+13 more)
 
 ### Community 129 - "test_legal_notice.py"
 Cohesion: 0.33
@@ -549,9 +564,9 @@ Nodes (3): legal_section(), LegalNoticeTests, owner()
 Cohesion: 0.47
 Nodes (3): _deliberate(), findings(), main()
 
-### Community 131 - "topic_content"
-Cohesion: 0.20
-Nodes (7): In Progress / Next (Ordering), 2026-08-20, topic_content(), get_topic(), get_topic(), TopicTests, 6. Publish — only for a complete certification
+### Community 131 - "check_claims.py"
+Cohesion: 0.36
+Nodes (3): ask(), main(), references()
 
 ### Community 134 - "sitecustomize.py"
 Cohesion: 0.47
@@ -562,20 +577,24 @@ Cohesion: 0.43
 Nodes (5): Open — worth someone's time, Running your own copy, Unattended generation timer, Use it in 2 minutes, make()
 
 ### Community 137 - "Automated review (Copilot)"
-Cohesion: 0.33
+Cohesion: 0.40
 Nodes (5): Authorship: who wrote it, who found what, who fixed it, Automated review (Copilot), How it behaves, How we work with it, When a PR is ready
 
 ### Community 141 - "generation"
-Cohesion: 0.22
-Nodes (5): Generation backends, _cli_env(), _record_usage(), generation(), CliEnvTest
+Cohesion: 0.28
+Nodes (4): Generation backends, _cli_env(), generation(), CliEnvTest
 
 ### Community 146 - "check_config.py"
 Cohesion: 0.43
 Nodes (4): dominant(), effective(), main(), recent()
 
-### Community 147 - "Development Guidelines for teach-plat"
-Cohesion: 0.33
-Nodes (6): Agent Idea Synchronization (AGENTS_SYNC.md), Commands, Content Workflow, Development Guidelines for teach-plat, Pull requests from agents, Rules
+### Community 147 - "_reject_if_recap"
+Cohesion: 0.17
+Nodes (12): 2026-07-11/12, 2026-07-27, Agent Idea Synchronization (AGENTS_SYNC.md), Commands, Content Workflow, Development Guidelines for teach-plat, Pull requests from agents, Rules (+4 more)
+
+### Community 148 - "check_api_facts.py"
+Cohesion: 0.43
+Nodes (4): check(), main(), spec_kinds(), tracked_versions()
 
 ### Community 149 - "authorship"
 Cohesion: 0.40
@@ -583,23 +602,23 @@ Nodes (3): authorship(), _cells(), ledger_rows()
 
 ## Knowledge Gaps
 - **4 isolated node(s):** `teach-plat`, `TEACH_AGENT`, `TEACH_OFFLINE`, `PYTHONPATH`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 924 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **60 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 927 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **54 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `kubectl()` connect `clean_registry.py` to `Backlog`, `topic_content`, `video.py`, `make`, `labs.py`, `study.cybercirujas — free, open study material for IT certifications`, `_verify_translation`, `Developers — use the API, run your own copy, build on it`, `subprocess`, `Roadmap — where this is and where it goes`, `study-lab — break/fix labs in a throwaway container`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `kubectl()` connect `clean_registry.py` to `Backlog`, `video.py`, `make`, `labs.py`, `runner.py`, `topic_content`, `study.cybercirujas — free, open study material for IT certifications`, `Changelog`, `_verify_translation`, `Developers — use the API, run your own copy, build on it`, `subprocess`, `Roadmap — where this is and where it goes`?**
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **What connects `teach-plat`, `TEACH_AGENT`, `TEACH_OFFLINE` to the rest of the system?**
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `test_cli.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.09291521486643438 - nodes in this community are weakly interconnected._
-- **Why does `Agent Synchronization & Idea Queue (AGENTS_SYNC.md)` connect `Agent Synchronization & Idea Queue (AGENTS_SYNC.md)` to `make`, `Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)`, `README.md`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
 - **Should `models_live.py` be split into smaller, more focused modules?**
   _Cohesion score 0.07549361207897794 - nodes in this community are weakly interconnected._
-- **Why does `study.cybercirujas — free, open study material for IT certifications` connect `study.cybercirujas — free, open study material for IT certifications` to `make`, `.teach`, `README.md`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `Changelog` connect `Changelog` to `spec.py`, `generate_topic`, `video.py`, `json`, `topic_content`, `_reject_if_recap`, `RejectsDamagedTranslations`, `_verify_translation`, `snapshot_topics`, `README.md`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Should `video.py` be split into smaller, more focused modules?**
   _Cohesion score 0.10730804810360776 - nodes in this community are weakly interconnected._
+- **Why does `Agent Synchronization & Idea Queue (AGENTS_SYNC.md)` connect `Agent Synchronization & Idea Queue (AGENTS_SYNC.md)` to `make`, `Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)`, `snapshot_topics`, `README.md`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
+- **Should `Agent Synchronization & Idea Queue (AGENTS_SYNC.md)` be split into smaller, more focused modules?**
+  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._

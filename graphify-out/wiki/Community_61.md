@@ -1,6 +1,6 @@
 # Community 61
 
-> 24 nodes · cohesion 0.16
+> 26 nodes · cohesion 0.15
 
 ## Key Concepts
 
@@ -9,6 +9,7 @@
 - **check_graph.py** (16 connections) — `scripts/check_graph.py`
 - **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
 - **test_labs_ownership.py** (10 connections) — `tests/test_labs_ownership.py`
+- **test_e2e_isolation.py** (9 connections) — `tests/test_e2e_isolation.py`
 - **rebuild_in_copy()** (7 connections) — `scripts/check_graph.py`
 - **regenerate()** (7 connections) — `scripts/check_graph.py`
 - **ocr()** (7 connections) — `scripts/ocr_pdf.py`
@@ -27,22 +28,23 @@
 - **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
 - **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
 - **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
-- **`teach lab down` with an ownership token removes only what that token created.…** (1 connections) — `tests/test_labs_ownership.py`
+- **The e2e lab step never adopts or deletes a lab it did not create. Review on #1:…** (1 connections) — `tests/test_e2e_isolation.py`
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
 - [Community 43](Community_43.md) (21 shared connections)
 - [Community 67](Community_67.md) (10 shared connections)
 - [Community 8](Community_8.md) (8 shared connections)
-- [Community 1](Community_1.md) (7 shared connections)
 - [Community 36](Community_36.md) (6 shared connections)
-- [fix_corrupted_content.py](fix_corrupted_content.py.md) (6 shared connections)
-- [Community 29](Community_29.md) (6 shared connections)
-- [Community 12](Community_12.md) (5 shared connections)
+- [Community 12](Community_12.md) (6 shared connections)
+- [Community 59](Community_59.md) (6 shared connections)
 - [Community 70](Community_70.md) (4 shared connections)
 - [Community 75](Community_75.md) (4 shared connections)
 - [Community 7](Community_7.md) (3 shared connections)
 - [Community 31](Community_31.md) (3 shared connections)
+- [Community 64](Community_64.md) (3 shared connections)
+- [Community 124](Community_124.md) (2 shared connections)
 
 ## Source Files
 
@@ -53,7 +55,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 148 (100%)
+- EXTRACTED: 154 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

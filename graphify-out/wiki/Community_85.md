@@ -22,12 +22,11 @@
 ## Relationships
 
 - [Community 45](Community_45.md) (5 shared connections)
+- [Community 114](Community_114.md) (2 shared connections)
 - [Community 125](Community_125.md) (2 shared connections)
 - [Community 47](Community_47.md) (2 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
-- [Community 65](Community_65.md) (1 shared connections)
+- [certs.py](certs.py.md) (1 shared connections)
 - [Community 135](Community_135.md) (1 shared connections)
-- [Community 131](Community_131.md) (1 shared connections)
 
 ## Source Files
 

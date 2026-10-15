@@ -21,13 +21,13 @@
 ## Relationships
 
 - [Community 70](Community_70.md) (4 shared connections)
-- [problems](problems.md) (3 shared connections)
-- [Community 102](Community_102.md) (3 shared connections)
+- [Community 89](Community_89.md) (3 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
 - [Community 67](Community_67.md) (2 shared connections)
-- [Community 54](Community_54.md) (2 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
 - [Changelog](Changelog.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
 
 ## Source Files
 

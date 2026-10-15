@@ -1,54 +1,49 @@
 # Community 77
 
-> 21 nodes · cohesion 0.12
+> 12 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **api.py** (47 connections) — `teach/api.py`
+- **topic_content()** (11 connections) — `teach/core/certs.py`
 - **get_topic()** (7 connections) — `teach/api.py`
 - **get_topic_preview()** (6 connections) — `teach/api.py`
 - **get_paths()** (5 connections) — `teach/api.py`
 - **_valid_lang()** (5 connections) — `teach/api.py`
-- **_video_info()** (5 connections) — `teach/api.py`
-- **get_cert_video()** (4 connections) — `teach/api.py`
-- **get_path_video()** (4 connections) — `teach/api.py`
-- **Platform API. Public (no login): catalog, syllabi and paths — the landing page…** (1 connections) — `teach/api.py`
-- **Info about a video (path or cert) if it has been generated: URL of the mp4…** (1 connections) — `teach/api.py`
-- **A path's video (if it has been generated).** (1 connections) — `teach/api.py`
-- **A single certification's video (if it has been generated).** (1 connections) — `teach/api.py`
+- **In Progress / Next (Ordering)** (4 connections) — `BACKLOG.md`
+- **2026-08-20** (2 connections) — `CHANGELOG.md`
+- **6. Publish — only for a complete certification** (2 connections) — `WORKFLOW.md`
 - **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
 - **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
 - **Career paths with their steps, in the requested language. The base fields of a…** (1 connections) — `teach/api.py`
-- **fastapi** (1 connections)
-- **fastapi_responses** (1 connections)
-- **fastapi_staticfiles** (1 connections)
-- **pydantic** (1 connections)
-- **secrets** (1 connections)
-- **starlette_middleware_sessions** (1 connections)
+- **Contenido generado de un tema en un idioma (fallback al default).** (1 connections) — `teach/core/certs.py`
 
 ## Relationships
 
-- [Community 125](Community_125.md) (14 shared connections)
-- [Community 46](Community_46.md) (7 shared connections)
-- [Community 47](Community_47.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 8](Community_8.md) (2 shared connections)
-- [Community 3](Community_3.md) (2 shared connections)
-- [Community 101](Community_101.md) (2 shared connections)
-- [Community 73](Community_73.md) (2 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 135](Community_135.md) (1 shared connections)
-- [PathLanguageTests](PathLanguageTests.md) (1 shared connections)
+- [Community 125](Community_125.md) (8 shared connections)
+- [certs.py](certs.py.md) (3 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 8](Community_8.md) (1 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 133](Community_133.md) (1 shared connections)
+- [Changelog](Changelog.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
 
 ## Source Files
 
+- `BACKLOG.md`
+- `CHANGELOG.md`
+- `WORKFLOW.md`
 - `teach/api.py`
+- `teach/core/certs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 70 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 31 (91%)
+- INFERRED: 3 (9%)
 - AMBIGUOUS: 0 (0%)
 
 ---

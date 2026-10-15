@@ -26,11 +26,13 @@
 
 ## Relationships
 
-- [Community 32](Community_32.md) (10 shared connections)
 - [Community 12](Community_12.md) (9 shared connections)
-- [Community 1](Community_1.md) (8 shared connections)
+- [Community 73](Community_73.md) (5 shared connections)
+- [Community 32](Community_32.md) (5 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [problems](problems.md) (3 shared connections)
+- [Community 1](Community_1.md) (4 shared connections)
+- [Community 59](Community_59.md) (4 shared connections)
+- [Community 89](Community_89.md) (3 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
 - [Community 36](Community_36.md) (2 shared connections)
 - [Community 67](Community_67.md) (2 shared connections)

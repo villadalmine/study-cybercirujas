@@ -1,35 +1,51 @@
 # Community 59
 
-> 10 nodes · cohesion 0.31
+> 21 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **response()** (14 connections) — `tests/test_model_probe.py`
-- **ThinkingTests** (8 connections) — `tests/test_model_probe.py`
-- **.test_a_refused_parameter_is_none()** (2 connections) — `tests/test_model_probe.py`
-- **.test_accepted_and_never_used_is_ignored()** (2 connections) — `tests/test_model_probe.py`
-- **.test_an_unreachable_second_probe_decides_nothing()** (2 connections) — `tests/test_model_probe.py`
-- **.test_effort_works_when_off_is_really_off()** (2 connections) — `tests/test_model_probe.py`
-- **.test_thinking_is_visible_in_three_different_shapes()** (2 connections) — `tests/test_model_probe.py`
-- **.test_thinking_with_the_field_omitted_is_always()** (2 connections) — `tests/test_model_probe.py`
-- **.test_a_generic_error_is_not_read_as_a_refused_parameter()** (1 connections) — `tests/test_model_probe.py`
-- **A successful completion, overridden field by field.** (1 connections) — `tests/test_model_probe.py`
+- **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
+- **conftest.py** (15 connections) — `tests/lab/conftest.py`
+- **flow()** (9 connections) — `tests/lab/test_e2e.py`
+- **lab/__init__.py** (9 connections) — `teach/lab/__init__.py`
+- **test_kind_lab_from_template()** (5 connections) — `tests/lab/test_e2e.py`
+- **test_linux_lab_from_git_repo()** (5 connections) — `tests/lab/test_e2e.py`
+- **docker_ok()** (4 connections) — `tests/lab/conftest.py`
+- **image_ok()** (4 connections) — `tests/lab/conftest.py`
+- **new_lab()** (4 connections) — `tests/lab/conftest.py`
+- **test_linux_lab_from_template()** (4 connections) — `tests/lab/test_e2e.py`
+- **pytest** (4 connections)
+- **docker_set()** (3 connections) — `tests/lab/test_e2e.py`
+- **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
+- **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
+- **skipif** (3 connections)
+- **fixture** (1 connections)
+- **study-lab: run break/fix labs in throwaway containers (docs/LABS-RUNNER.md).** (1 connections) — `teach/lab/__init__.py`
+- **Shared fixtures for the study-lab tests (pytest; unittest discover skips this…** (1 connections) — `tests/lab/conftest.py`
+- **Factory: scaffold a lab from the template with `study-lab new`.** (1 connections) — `tests/lab/conftest.py`
+- **End-to-end with Docker (marked slow): run, break, verify FAIL -> fix -> PASS,…** (1 connections) — `tests/lab/test_e2e.py`
+- **The inner dockerd must not listen on TCP (2375/2376 = 0x0947/0x0948), only on…** (1 connections) — `tests/lab/test_e2e.py`
 
 ## Relationships
 
-- [Community 148](Community_148.md) (3 shared connections)
-- [Community 154](Community_154.md) (2 shared connections)
-- [Community 152](Community_152.md) (2 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Community 1](Community_1.md) (11 shared connections)
+- [Community 61](Community_61.md) (6 shared connections)
+- [Community 12](Community_12.md) (5 shared connections)
+- [Community 56](Community_56.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `teach/lab/__init__.py`
+- `tests/lab/conftest.py`
+- `tests/lab/test_e2e.py`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (95%)
-- INFERRED: 1 (5%)
+- EXTRACTED: 64 (97%)
+- INFERRED: 2 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,27 +1,24 @@
 # Community 152
 
-> 5 nodes · cohesion 0.40
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
-- **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
-- **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
-- **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
-- **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
+- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
+- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
+- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
 
 ## Relationships
 
-- [Community 59](Community_59.md) (2 shared connections)
-- [Community 154](Community_154.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `teach/core/catalog.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

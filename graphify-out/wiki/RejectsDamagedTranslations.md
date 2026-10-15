@@ -23,8 +23,8 @@
 
 ## Relationships
 
-- [Community 21](Community_21.md) (2 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 - [Changelog](Changelog.md) (1 shared connections)
 
 ## Source Files

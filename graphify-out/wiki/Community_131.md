@@ -1,50 +1,34 @@
 # Community 131
 
-> 11 nodes · cohesion 0.20
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **topic_content()** (11 connections) — `teach/core/certs.py`
-- **get_topic()** (6 connections) — `teach/core/corpus.py`
-- **In Progress / Next (Ordering)** (4 connections) — `BACKLOG.md`
-- **TopicTests** (3 connections) — `tests/test_corpus.py`
-- **get_topic()** (2 connections) — `teach/mcp_server.py`
-- **.test_a_missing_language_says_so_rather_than_pretending()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_material_travels_with_its_sources()** (2 connections) — `tests/test_corpus.py`
-- **2026-08-20** (2 connections) — `CHANGELOG.md`
-- **6. Publish — only for a complete certification** (2 connections) — `WORKFLOW.md`
-- **Contenido generado de un tema en un idioma (fallback al default).** (1 connections) — `teach/core/certs.py`
-- **The material for one topic: theory, exercises, and where it came from.…** (1 connections) — `teach/core/corpus.py`
+- **check_claims.py** (11 connections) — `scripts/check_claims.py`
+- **main()** (6 connections) — `scripts/check_claims.py`
+- **ask()** (4 connections) — `scripts/check_claims.py`
+- **references()** (3 connections) — `scripts/check_claims.py`
+- **random** (2 connections)
+- **Does the cited page actually SAY what the material claims it says?…** (1 connections) — `scripts/check_claims.py`
+- **(label, url) from the references section only. URLs in the body are examples…** (1 connections) — `scripts/check_claims.py`
+- **Fetch and judge. Deliberately a separate process per claim: one failure should…** (1 connections) — `scripts/check_claims.py`
 
 ## Relationships
 
-- [Community 77](Community_77.md) (2 shared connections)
-- [Community 47](Community_47.md) (2 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
-- [problems](problems.md) (1 shared connections)
-- [Community 45](Community_45.md) (1 shared connections)
-- [Community 85](Community_85.md) (1 shared connections)
-- [Community 0](Community_0.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 133](Community_133.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 67](Community_67.md) (2 shared connections)
+- [Community 124](Community_124.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 64](Community_64.md) (1 shared connections)
 
 ## Source Files
 
-- `BACKLOG.md`
-- `CHANGELOG.md`
-- `WORKFLOW.md`
-- `teach/core/certs.py`
-- `teach/core/corpus.py`
-- `teach/mcp_server.py`
-- `tests/test_corpus.py`
+- `scripts/check_claims.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (88%)
-- INFERRED: 3 (12%)
+- EXTRACTED: 19 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

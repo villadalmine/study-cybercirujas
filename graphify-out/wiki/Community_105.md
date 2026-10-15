@@ -14,9 +14,9 @@
 
 ## Relationships
 
-- [Community 37](Community_37.md) (4 shared connections)
-- [Community 69](Community_69.md) (2 shared connections)
-- [Community 93](Community_93.md) (2 shared connections)
+- [Community 37](Community_37.md) (6 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 93](Community_93.md) (1 shared connections)
 - [Changelog](Changelog.md) (1 shared connections)
 - [The phases](The_phases.md) (1 shared connections)
 

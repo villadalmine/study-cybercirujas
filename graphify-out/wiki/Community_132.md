@@ -16,7 +16,7 @@
 
 - [Community 8](Community_8.md) (4 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [problems](problems.md) (1 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
 
 ## Source Files
 

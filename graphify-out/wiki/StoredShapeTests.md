@@ -1,6 +1,6 @@
 # StoredShapeTests
 
-> 36 nodes · cohesion 0.09
+> 34 nodes · cohesion 0.10
 
 ## Key Concepts
 
@@ -20,7 +20,6 @@
 - **.test_no_timestamp_is_written_per_request()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_since_is_the_first_day_and_never_moves()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_the_breakdown_counts_each_characteristic_independently()** (3 connections) — `tests/test_bot_stats.py`
-- **threading** (3 connections)
 - **_blank()** (2 connections) — `teach/core/bot_stats.py`
 - **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
@@ -29,32 +28,29 @@
 - **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_refused_event_writes_nothing_at_all()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_an_unwritable_path_is_swallowed()** (2 connections) — `tests/test_bot_stats.py`
-- *... and 11 more nodes in this community*
+- **.setUp()** (1 connections) — `tests/test_bot_stats.py`
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
 - [Community 43](Community_43.md) (6 shared connections)
 - [Community 74](Community_74.md) (3 shared connections)
+- [Community 125](Community_125.md) (3 shared connections)
 - [Community 36](Community_36.md) (3 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
 - [Community 67](Community_67.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
-- [Community 77](Community_77.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
 - [Community 147](Community_147.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
-- `CLAUDE.md`
 - `teach/core/bot_stats.py`
 - `tests/test_bot_stats.py`
 
 ## Audit Trail
 
-- EXTRACTED: 77 (96%)
+- EXTRACTED: 74 (96%)
 - INFERRED: 3 (4%)
 - AMBIGUOUS: 0 (0%)
 
