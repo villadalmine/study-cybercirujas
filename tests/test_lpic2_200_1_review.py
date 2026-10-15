@@ -217,5 +217,13 @@ class ConntrackSizeTest(unittest.TestCase):
             self.assertAlmostEqual(float(size) * 1024 * int(per_slab), 4096, delta=64)
 
 
+class PacketRateTest(unittest.TestCase):
+    def test_no_per_core_packet_rate_is_quoted(self):
+        # No source gives one; it depends on CPU, NIC, driver and ruleset.
+        for lang in LANGS:
+            text = read(lang, "content.md") + read(lang, "exercises.md")
+            self.assertNotRegex(text, r"Mpps (per|por) core", lang)
+
+
 if __name__ == "__main__":
     unittest.main()

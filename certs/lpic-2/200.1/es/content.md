@@ -2152,7 +2152,7 @@ $ sadf -x -- -A -f /var/log/sa/sa14 | head -4
 |---|---|---|---|
 | CPU (paralela) | `cores × 1.0` | `mpstat -P ALL` | `r` > cores en `vmstat`; `%wait` en `pidstat` |
 | CPU (un thread) | `1 core` | `pidstat -t`, `top -H` | un core al 100 %, la máquina al `100/ncores` % |
-| Softirq / camino de paquetes | ~1–3 Mpps por core | `mpstat -I SCPU`, `softnet_stat` | `time_squeeze`, `rx_missed_errors` |
+| Softirq / camino de paquetes | se mide en cada host (§7.1) | `mpstat -I SCPU`, `softnet_stat` | `time_squeeze`, `rx_missed_errors` |
 | Capacidad de memoria | `MemTotal - kernel - min_free` | `MemAvailable`, `memory.current` | `majflt/s`, `%vmeff` cayendo |
 | Ancho de banda de memoria | plataforma (`mbw`, `perf stat`) | `perf stat -e cache-misses` | caída de IPC sin cambio en la carga |
 | IOPS de disco | IOPS del dispositivo a la profundidad de cola que usás | job de techo de `fio` | `await` subiendo mientras los IOPS quedan planos |
