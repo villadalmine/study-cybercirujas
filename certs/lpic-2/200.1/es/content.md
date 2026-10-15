@@ -2202,7 +2202,7 @@ $ sudo sysctl -w net.ipv4.tcp_congestion_control=bbr
 net.ipv4.tcp_congestion_control = bbr
 ```
 
-Para un camino largo, gordo y con pérdidas, la cota de Mathis es el chequeo de cordura antes de comprar nada: `BW ≈ MSS / (RTT × √p)`. Con `MSS=1448`, `RTT=0.080 s`, pérdida `p=0.001`: `1448 / (0.080 × 0.0316) ≈ 573 kB/s ≈ 4.6 Mbit/s` por flujo con control de congestión clásico basado en pérdida. En un camino con 0,1 % de pérdida, **ningún ajuste de ventana lleva a un único flujo CUBIC más allá de unos pocos megabits por segundo** — las respuestas son BBR, flujos paralelos, o arreglar la pérdida.
+Para un camino largo, gordo y con pérdidas, la cota de Mathis (Mathis et al., 1997, en las Referencias) es el chequeo de cordura antes de comprar nada: `BW ≈ (MSS / RTT) × (1.22 / √p)`, para un flujo tipo Reno, la misma forma que usan los ejercicios. Con `MSS=1448`, `RTT=0.080 s`, pérdida `p=0.001`: `1.22 × 1448 / (0.080 × 0.0316) ≈ 698 kB/s ≈ 5.6 Mbit/s` por flujo. Ningún ajuste de ventana lleva a ese flujo más allá de la cota en un camino con 0,1 % de pérdida; las respuestas son un control de congestión que no use la pérdida como señal, flujos paralelos, o arreglar la pérdida.
 
 Verificá con los instrumentos estándar, en ambas direcciones y con paralelismo:
 
@@ -2621,6 +2621,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - `ethtool`: https://man7.org/linux/man-pages/man8/ethtool.8.html
 - Documentación de `fio`: https://fio.readthedocs.io/en/latest/fio_doc.html
 - Documentación de `iperf3`: https://software.es.net/iperf/
+- M. Mathis et al., *The Macroscopic Behavior of the TCP Congestion Avoidance Algorithm*, ACM SIGCOMM CCR 27(3), 1997 (la cota `1.22 / √p`): https://dl.acm.org/doi/10.1145/263932.264023
 - Herramientas `bcc` (`biolatency`, `biosnoop`, `tcplife`, `tcpretrans`): https://github.com/iovisor/bcc
 - `bpftrace`: https://github.com/bpftrace/bpftrace
 - Wiki de `perf`: https://perfwiki.github.io/main/

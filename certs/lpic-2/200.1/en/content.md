@@ -2202,7 +2202,7 @@ $ sudo sysctl -w net.ipv4.tcp_congestion_control=bbr
 net.ipv4.tcp_congestion_control = bbr
 ```
 
-For a lossy long-fat path, the Mathis bound is the sanity check before buying anything: `BW ≈ MSS / (RTT × √p)`. With `MSS=1448`, `RTT=0.080 s`, loss `p=0.001`: `1448 / (0.080 × 0.0316) ≈ 573 kB/s ≈ 4.6 Mbit/s` per flow with classic loss-based CC. On a 0.1 %-loss path, **no window tuning gets a single CUBIC flow past a few megabits per second** — the answers are BBR, parallel flows, or fixing the loss.
+For a lossy long-fat path, the Mathis bound (Mathis et al., 1997, in the References) is the sanity check before buying anything: `BW ≈ (MSS / RTT) × (1.22 / √p)`, for one Reno-like flow, the same form the exercises use. With `MSS=1448`, `RTT=0.080 s`, loss `p=0.001`: `1.22 × 1448 / (0.080 × 0.0316) ≈ 698 kB/s ≈ 5.6 Mbit/s` per flow. No window tuning lifts such a flow past the bound on a 0.1 %-loss path; the answers are a congestion control that does not treat loss as its signal, parallel flows, or fixing the loss.
 
 Verify with the standard instruments, in both directions and with parallelism:
 
@@ -2621,6 +2621,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - `ethtool`: https://man7.org/linux/man-pages/man8/ethtool.8.html
 - `fio` documentation: https://fio.readthedocs.io/en/latest/fio_doc.html
 - `iperf3` documentation: https://software.es.net/iperf/
+- M. Mathis et al., *The Macroscopic Behavior of the TCP Congestion Avoidance Algorithm*, ACM SIGCOMM CCR 27(3), 1997 (the `1.22 / √p` bound): https://dl.acm.org/doi/10.1145/263932.264023
 - `bcc` tools (`biolatency`, `biosnoop`, `tcplife`, `tcpretrans`): https://github.com/iovisor/bcc
 - `bpftrace`: https://github.com/bpftrace/bpftrace
 - `perf` wiki: https://perfwiki.github.io/main/

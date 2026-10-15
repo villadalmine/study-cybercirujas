@@ -225,5 +225,17 @@ class PacketRateTest(unittest.TestCase):
             self.assertNotRegex(text, r"Mpps (per|por) core", lang)
 
 
+class MathisTest(unittest.TestCase):
+    def test_one_form_of_the_bound_with_its_constant_and_source(self):
+        # Mathis et al. 1997 (doi 10.1145/263932.264023): (MSS/RTT) * C/sqrt(p),
+        # C = 1.22; exercises.md already used it, content.md dropped C.
+        for lang in LANGS:
+            content = read(lang, "content.md")
+            self.assertNotIn("BW ≈ MSS / (RTT × √p)", content, lang)
+            self.assertIn("(MSS / RTT) × (1.22 / √p)", content, lang)
+            self.assertIn("10.1145/263932.264023", content, lang)
+            self.assertAlmostEqual(1.22 * 1448 / (0.080 * 0.001 ** 0.5) / 1e3, 698, delta=1)
+
+
 if __name__ == "__main__":
     unittest.main()
