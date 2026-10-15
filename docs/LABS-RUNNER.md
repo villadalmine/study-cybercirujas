@@ -110,7 +110,7 @@ cert: cka
 topic: '1.1'                 # always a string
 title: Implement storage classes and dynamic volume provisioning
 requires: kind               # kind | k3s | linux  -> picks study-lab:k8s or study-lab:linux
-kubernetes: '1.35'           # optional: kind node version (1.34-1.37 with kind v0.33.0)
+kubernetes: '1.35'           # optional: kind node version (1.34-1.37 with kind v0.33.0; any other minor fails, never falls back)
 nodes: 0                     # optional: kind workers
 script: break_fix.sh
 run_in: runner               # runner (kubectl from the lab container) | node (inside the kind control plane)

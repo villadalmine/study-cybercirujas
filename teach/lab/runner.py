@@ -214,8 +214,26 @@ def _state(name: str) -> str:
     return res.stdout.strip() if res.returncode == 0 else ""
 
 
+def node_image(lab: Lab) -> str:
+    """The kind node image for the lab's `kubernetes:` minor ("" = the image's default).
+
+    A minor this image has no node for is an error, not a silent fallback to
+    the pinned default: the lab would say one version and run another.
+    """
+    want = str(lab.spec.get("kubernetes") or "")
+    if lab.spec.get("requires") != "kind" or not want:
+        return ""
+    minor = ".".join(want.split(".")[:2])
+    if minor not in KIND_NODES:
+        raise RunnerError(f"kubernetes: '{want}' is not available in {image_for(lab)} "
+                          f"(kind node images for {', '.join(sorted(KIND_NODES))}); "
+                          "change it in lab.yaml or drop it to use the default")
+    return KIND_NODES[minor]
+
+
 def run(lab: Lab) -> int:
     name = container_name(lab)
+    node = node_image(lab)  # before touching Docker: an unsupported version fails fast
     h = spec_hash(lab)
     info = _ours(name, inspect(name))
     if info and info["State"]["Running"] and info["Config"]["Labels"].get("study-lab.hash") == h:
@@ -251,7 +269,6 @@ def run(lab: Lab) -> int:
 
     print(f"[study-lab] preparing the environment ({fam}) inside {name}")
     if fam in ("kind", "k3s"):
-        node = KIND_NODES.get(".".join((lab.spec.get("kubernetes") or "").split(".")[:2]), "")
         init = ["study-lab-init", fam, str(lab.spec.get("nodes", 0))] + ([node] if node else [])
     else:
         init = ["study-lab-init"]

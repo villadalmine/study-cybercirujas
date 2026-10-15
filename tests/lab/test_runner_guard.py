@@ -67,3 +67,21 @@ def test_ours_passes_study_lab_containers():
     info = {"Config": {"Labels": {"study-lab": "1"}}}
     assert runner._ours("x", info) is info
     assert runner._ours("x", None) is None
+
+
+@pytest.mark.parametrize("version", ["1.33", "1.38", "1.33.2"])
+def test_run_refuses_a_kubernetes_minor_without_a_node_image(monkeypatch, docker_calls, version):
+    # The schema accepts any 1.N; without a node image for it, kind used to run
+    # the pinned default silently.
+    lab = FakeLab()
+    lab.spec = {"requires": "kind", "kubernetes": version, "timeout": {}}
+    with pytest.raises(runner.RunnerError, match=r"not available.*1\.34, 1\.35, 1\.36, 1\.37"):
+        runner.run(lab)
+    assert docker_calls == []
+
+
+@pytest.mark.parametrize("version,tag", [("1.35", "v1.35.8"), ("1.34.2", "v1.34.11"), ("", "")])
+def test_node_image_for_supported_minors(version, tag):
+    lab = FakeLab()
+    lab.spec = {"requires": "kind", "kubernetes": version}
+    assert tag in runner.node_image(lab)
