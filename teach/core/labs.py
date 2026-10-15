@@ -128,7 +128,8 @@ def _up_container(directory: Path, spec: dict, name: str) -> None:
     script = directory / "break_fix.sh"
     _run(["docker", "cp", str(script), f"{name}:/home/student/break_fix.sh"])
     user = _script_user(directory)
-    result = subprocess.run(_exec_script_cmd(name, interactive=sys.stdin.isatty(), user=user))
+    result = subprocess.run(_exec_script_cmd(name, interactive=sys.stdin.isatty(), user=user,
+                                             args=_break_args(directory)))
     if result.returncode != 0:
         raise LabError("break_fix.sh failed inside the container (see output above).")
 
@@ -166,7 +167,25 @@ def _script_user(directory: Path) -> str:
     return "student"
 
 
-def _exec_script_cmd(name: str, interactive: bool, user: str = "student") -> list[str]:
+BREAK_CASE = re.compile(r'^[ \t]*"?break"?[ \t]*\)', re.MULTILINE)
+
+
+def _break_args(directory: Path) -> list[str]:
+    """The argument that makes break_fix.sh break, for scripts that need one.
+
+    About a third of the scripts are subcommand style (`case "$1" in break) ...
+    verify) ... cleanup)`) and, run without an argument, print their usage and
+    exit 0 — so `teach lab up` reported a running lab with nothing broken
+    (found with kcna 2.2 on 2026-10-15). Scripts that break by default
+    (`--break` is optional, or there are no subcommands) get no argument.
+    """
+    script = directory / "break_fix.sh"
+    text = script.read_text(encoding="utf-8", errors="replace") if script.exists() else ""
+    return ["break"] if BREAK_CASE.search(text) else []
+
+
+def _exec_script_cmd(name: str, interactive: bool, user: str = "student",
+                     args: list[str] | None = None) -> list[str]:
     """`docker exec` for break_fix.sh, with the student's stdin attached.
 
     Most scripts ask for a confirmation first (`read -r -p "... (type SI)"`),
@@ -177,7 +196,7 @@ def _exec_script_cmd(name: str, interactive: bool, user: str = "student") -> lis
     """
     flags = ["-i", "-t"] if interactive else ["-i"]
     return ["docker", "exec", *flags, "-u", user, "-w", "/home/student",
-            name, "bash", "break_fix.sh"]
+            name, "bash", "break_fix.sh", *(args or [])]
 
 
 OWNER_LABEL = "org.cybercirujas.study.owner"
@@ -223,7 +242,7 @@ def _up_cluster(directory: Path, name: str) -> None:
         raise LabError(f"kind create cluster failed:\n{result.stderr.strip()}")
     _run(["kubectl", "config", "use-context", f"kind-{name}"])
     script = directory / "break_fix.sh"
-    result = subprocess.run(["bash", str(script)], cwd=directory)
+    result = subprocess.run(["bash", str(script), *_break_args(directory)], cwd=directory)
     if result.returncode != 0:
         raise LabError("break_fix.sh failed against the kind cluster (see output above).")
 

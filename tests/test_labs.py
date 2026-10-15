@@ -25,6 +25,13 @@ class ExecScriptCmdTests(unittest.TestCase):
         self.assertEqual(cmd[:4], ["docker", "exec", "-i", "-t"])
         self.assertEqual(cmd[-3:], ["teach-x", "bash", "break_fix.sh"])
 
+    def test_subcommand_scripts_get_break(self):
+        repo = Path(__file__).resolve().parent.parent
+        self.assertEqual(labs._break_args(repo / "certs/kcna/2.2/lab"), ["break"])
+        self.assertEqual(labs._break_args(repo / "certs/lpi-010-160/2.1/lab"), [])
+        cmd = labs._exec_script_cmd("teach-x", interactive=False, args=["break"])
+        self.assertEqual(cmd[-2:], ["break_fix.sh", "break"])
+
 
 class RunAsTests(unittest.TestCase):
     """break_fix.sh runs as the user its own guard asks for."""
