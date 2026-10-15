@@ -45,6 +45,7 @@ memory. The checks form a ladder, and it matters which rung a claim rests on —
 | Does the embedded YAML parse? | `scripts/check_manifests.py` | free |
 | Does it teach a removed Kubernetes API? | `scripts/check_k8s_apis.py` | free |
 | Is it traceable, accounted for, in order? | `scripts/check_provenance.py` | free |
+| Does every link (syllabus → content → labs → translations → video) declare its origin, and has that origin moved? | `scripts/check_source_chain.py` | free |
 | Does the cited page **say** what the material claims? | `scripts/check_claims.py` | one completion per citation — sample |
 | Is the explanation **true**? | nothing yet — see [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md) | — |
 

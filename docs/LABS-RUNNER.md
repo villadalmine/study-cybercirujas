@@ -126,6 +126,7 @@ timeout: {up: 600, break: 300, verify: 120, cleanup: 300}
 hints: ["...", "..."]
 level: beginner | intermediate | advanced
 origin: {kind: curated | community | generated, repo: ..., author: ..., generated_by: ...}
+derived_from: {syllabus: 'certs/cka.md#1.1', content: certs/cka/1.1/en/content.md, content_sha256: <chain hash>}  # labs in certs/: required (scripts/check_source_chain.py)
 verified: {status: true, date: '2026-10-15', method: runner | ci | human, by: ..., runner_image: ...}
 license: Apache-2.0
 x-anything: {}               # free extension keys

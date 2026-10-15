@@ -233,6 +233,7 @@ scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught
 scripts/check_api_facts.py        # do manifests use APIs the tracked release serves?
 scripts/check_sources.py          # is each citation an official project source?
 scripts/check_provenance.py       # traceable, accounted for, content before video
+scripts/check_source_chain.py     # does every link declare its origin? (PRINCIPLES -> The source chain)
 scripts/check_syllabus.py         # does the syllabus cover the exam, or its index?
 scripts/check_versions.py         # what we built on vs what the exam publishes now
 scripts/status_matrix.py --check  # is STATUS.md still what the filesystem says?
