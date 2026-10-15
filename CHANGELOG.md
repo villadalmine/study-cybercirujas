@@ -11,6 +11,9 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   `.gitattributes` forces `eol=lf` for `*.md`, `*.yaml`, `*.yml` and `*.py`. A Windows checkout with
   `core.autocrlf=true` had produced different hashes than Linux (the CKA labs and lpic-2 200.1 read
   STALE on CI). Hashes of LF content are unchanged.
+- **CKA labs: chain hashes refreshed** (fix): the `content_sha256` of the CKA v2 labs 1.1, 3.3, 3.4 and 3.5
+  had been taken on Windows with CRLF line endings, so they read STALE on Linux. Recomputed with
+  `teach.core.certs.chain_sha256` on an LF checkout; no lab or content was edited.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.
