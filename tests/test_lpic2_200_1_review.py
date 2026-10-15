@@ -149,5 +149,23 @@ class ConntrackLabTest(unittest.TestCase):
             self.assertLess(limit, streams, lang)
 
 
+class LabContractTest(unittest.TestCase):
+    def test_lab_follows_the_study_lab_contract(self):
+        import yaml
+        lab = TOPIC / "lab"
+        spec = yaml.safe_load((lab / "lab.yaml").read_text(encoding="utf-8"))
+        self.assertEqual(spec["requires"], "linux")      # systemd as PID 1
+        self.assertEqual(spec["run_as"], "root")
+        self.assertEqual({k: v["args"] for k, v in spec["modes"].items()},
+                         {"break": ["break"], "verify": ["verify"], "cleanup": ["cleanup"]})
+        script = (lab / "break_fix.sh").read_text(encoding="utf-8")
+        self.assertIn('case "${1:-break}" in', script)   # no argument = break
+        self.assertNotIn(chr(13), script)                # LF only: bash rejects CRLF
+        # Only tools the study-lab:linux image ships (procps, psmisc, lsof):
+        # no sysstat or iotop in the part that runs.
+        code = script.split("# --- SOLUTION")[0]
+        self.assertNotRegex(code, r"\b(iostat|sar|mpstat|pidstat|iotop)\b")
+
+
 if __name__ == "__main__":
     unittest.main()
