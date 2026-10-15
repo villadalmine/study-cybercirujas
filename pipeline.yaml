@@ -61,6 +61,13 @@ generation:
   # comparisons went wrong. Raise it after `scripts/model_comparison.py` has
   # something to say.
   effort: xhigh
+  # Per-message output ceiling handed to the claude CLI as
+  # CLAUDE_CODE_MAX_OUTPUT_TOKENS. Its own default (64k observed) split the
+  # lpic-2/200.1 content (132 KB at xhigh) across two turns, and the JSON
+  # envelope only carries the last one — see generator._split_answer, which
+  # now rejects that instead of saving the tail. 128000 was accepted by the
+  # CLI on 2026-10-15. An explicit environment variable still wins.
+  max_output_tokens: 128000
 
 budget:
   # Maximum topics generated per invocation. Raise deliberately, not by habit.
