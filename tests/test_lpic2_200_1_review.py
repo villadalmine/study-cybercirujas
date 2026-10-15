@@ -273,5 +273,16 @@ class MemoryEventsTest(unittest.TestCase):
             self.assertIn("`oom`", answer, lang)
 
 
+class OverheadTest(unittest.TestCase):
+    def test_tool_cost_column_quotes_no_unsourced_percentage(self):
+        # Sampling overhead depends on -F and the event; no source gives a
+        # range, so the column stays qualitative like its other rows.
+        for lang in LANGS:
+            row = next(l for l in read(lang, "content.md").splitlines()
+                       if l.startswith("| `perf top` / `perf record` |"))
+            self.assertNotRegex(row, r"\d+\s*[–-]\s*\d+\s*%", lang)
+            self.assertIn("`-F`", row, lang)
+
+
 if __name__ == "__main__":
     unittest.main()

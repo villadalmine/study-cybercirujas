@@ -417,7 +417,7 @@ burst_usec 0
 | `pidstat -t` | per task | ≥ 1 s | low | `%wait`, context switches, per-thread | needs an interval to be meaningful |
 | `sar -u -q -P ALL` | system + per CPU | historical | ~0 | **the past**, capacity planning | resolution = collection interval |
 | `/proc/pressure/*` | system + cgroup | 10/60/300 s | ~0 | ranking saturation across resources | kernel ≥ 4.20; no per-process |
-| `perf top` / `perf record` | instruction/function | sampled | 1–5 % | *which code* burns CPU | needs symbols; PMU often absent in VMs |
+| `perf top` / `perf record` | instruction/function | sampled | low, grows with the sampling rate (`-F`) | *which code* burns CPU | needs symbols; PMU often absent in VMs |
 | `exec`/`cpudist` (eBPF) | per event | per-event | low | short-lived processes, run-queue histograms | kernel + tooling requirements |
 
 ---
