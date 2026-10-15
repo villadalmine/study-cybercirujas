@@ -114,5 +114,26 @@ class WireRateTest(unittest.TestCase):
                 self.assertAlmostEqual(float(gbe), pps, delta=0.06 * pps, msg=(lang, frame))
 
 
+# Checked on 2026-10-15 with redirects followed: each of these answers 200
+# but not with the page cited (LPI's 202 page lands on the LPI home page),
+# or not at all (404, or 403 to every client).
+DEAD_CITATIONS = (
+    "https://www.lpi.org/our-certifications/exam-202-objectives/",
+    "https://www.lpi.org/our-certifications/exam-201-objectives/",
+    "https://wiki.linuxfoundation.org/networking/iproute2",
+    "https://docs.kernel.org/block/queue-sysfs.html",
+    "https://sysstat.github.io/sysstat-docs/",
+)
+
+
+class CitationsTest(unittest.TestCase):
+    def test_no_citation_known_not_to_reach_its_page(self):
+        for lang in LANGS:
+            for name in ("content.md", "exercises.md"):
+                text = read(lang, name)
+                for url in DEAD_CITATIONS:
+                    self.assertNotIn(url, text, f"{lang}/{name}")
+
+
 if __name__ == "__main__":
     unittest.main()

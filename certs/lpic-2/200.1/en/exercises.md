@@ -3,7 +3,7 @@
 
 > **What this topic really asks of you.** Not "name a tool", but: given a box that is *slow*, decide **which of the four resources** (CPU, memory, disk I/O, network I/O) is saturated, **prove it with a number**, **attribute it to a process or a client**, and **estimate whether the number is near the hardware's ceiling**. Every exercise below ends in a number you can defend.
 >
-> LPI's partial list of files, terms and utilities for this objective is, verbatim: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirm the current list on the official objectives page — LPI revises it: <https://www.lpi.org/our-certifications/exam-201-objectives/>. The exercises add the modern equivalents a production engineer is expected to reach for (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), because in a real incident you will be judged on the diagnosis, not on tool vintage.
+> LPI's partial list of files, terms and utilities for this objective is, verbatim: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirm the current list on the official objectives page — LPI revises it: <https://www.lpi.org/our-certifications/exam-201-202-objectives/>. The exercises add the modern equivalents a production engineer is expected to reach for (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), because in a real incident you will be judged on the diagnosis, not on tool vintage.
 
 ### Lab requirements
 
@@ -1449,7 +1449,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 ## Sources
 
-- LPI, *Exam 201-450 Objectives* (LPIC-2, version 4.5.0), objective 200.1 — <https://www.lpi.org/our-certifications/exam-201-objectives/>
+- LPI, *Exam 201-450 Objectives* (LPIC-2, version 4.5.0), objective 200.1 — <https://www.lpi.org/our-certifications/exam-201-202-objectives/>
 - Linux kernel documentation, *The /proc Filesystem* — <https://www.kernel.org/doc/html/latest/filesystems/proc.html>
 - Linux kernel documentation, *I/O statistics fields* (`/proc/diskstats`) — <https://www.kernel.org/doc/html/latest/admin-guide/iostats.html>
 - Linux kernel documentation, *PSI – Pressure Stall Information* — <https://www.kernel.org/doc/html/latest/accounting/psi.html>

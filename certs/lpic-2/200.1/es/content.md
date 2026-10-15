@@ -2571,8 +2571,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 
 **Oficial de LPI**
 
-- Objetivos del examen 201-450 (incluye 200.1, peso 6): https://www.lpi.org/our-certifications/exam-201-objectives/
-- Objetivos del examen 202-450: https://www.lpi.org/our-certifications/exam-202-objectives/
+- Objetivos de los exámenes 201-450 y 202-450, versión 4.5.0 (incluye 200.1, peso 6): https://www.lpi.org/our-certifications/exam-201-202-objectives/
 - Vista general de la certificación LPIC-2: https://www.lpi.org/our-certifications/lpic-2-overview/
 
 **Documentación del kernel (`docs.kernel.org`)**
@@ -2600,7 +2599,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - `procps-ng` (`ps`, `top`, `vmstat`, `free`, `pstree`, `slabtop`): https://gitlab.com/procps-ng/procps
 - `CHANGES` de `sysstat` (campos de iostat en 11.5.7, `svctm` eliminado en 12.1.2): https://github.com/sysstat/sysstat/blob/master/CHANGES
 - `NEWS` de `procps-ng` (tiempo de guest de `vmstat` en la salida por defecto, 4.0.4): https://gitlab.com/procps-ng/procps/-/blob/master/NEWS
-- `iproute2` (`ip`, `ss`, `nstat`, `tc`): https://wiki.linuxfoundation.org/networking/iproute2
+- `iproute2` (`ip`, `ss`, `nstat`, `tc`), repositorio upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/
 - `ss(8)`: https://man7.org/linux/man-pages/man8/ss.8.html
 - `ip(8)`: https://man7.org/linux/man-pages/man8/ip.8.html
 - `tc(8)`: https://man7.org/linux/man-pages/man8/tc.8.html

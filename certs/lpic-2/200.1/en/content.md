@@ -2571,8 +2571,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 
 **LPI official**
 
-- Exam 201-450 objectives (includes 200.1, weight 6): https://www.lpi.org/our-certifications/exam-201-objectives/
-- Exam 202-450 objectives: https://www.lpi.org/our-certifications/exam-202-objectives/
+- Exam 201-450 and 202-450 objectives, version 4.5.0 (includes 200.1, weight 6): https://www.lpi.org/our-certifications/exam-201-202-objectives/
 - LPIC-2 certification overview: https://www.lpi.org/our-certifications/lpic-2-overview/
 
 **Kernel documentation (`docs.kernel.org`)**
@@ -2600,7 +2599,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - `procps-ng` (`ps`, `top`, `vmstat`, `free`, `pstree`, `slabtop`): https://gitlab.com/procps-ng/procps
 - `sysstat` CHANGES (iostat fields in 11.5.7, `svctm` removed in 12.1.2): https://github.com/sysstat/sysstat/blob/master/CHANGES
 - `procps-ng` NEWS (`vmstat` guest time in default output, 4.0.4): https://gitlab.com/procps-ng/procps/-/blob/master/NEWS
-- `iproute2` (`ip`, `ss`, `nstat`, `tc`): https://wiki.linuxfoundation.org/networking/iproute2
+- `iproute2` (`ip`, `ss`, `nstat`, `tc`), upstream repository: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/
 - `ss(8)`: https://man7.org/linux/man-pages/man8/ss.8.html
 - `ip(8)`: https://man7.org/linux/man-pages/man8/ip.8.html
 - `tc(8)`: https://man7.org/linux/man-pages/man8/tc.8.html

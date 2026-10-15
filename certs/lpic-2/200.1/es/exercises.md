@@ -3,7 +3,7 @@
 
 > **Lo que este tema realmente te exige.** No "nombrar una herramienta", sino: dada una máquina que está *lenta*, decidir **cuál de los cuatro recursos** (CPU, memoria, I/O de disco, I/O de red) está saturado, **probarlo con un número**, **atribuirlo a un proceso o a un cliente** y **estimar si ese número está cerca del techo del hardware**. Todos los ejercicios de abajo terminan en un número que podés defender.
 >
-> La lista parcial de archivos, términos y utilidades de LPI para este objetivo es, textual: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirmá la lista actual en la página oficial de objetivos — LPI la revisa: <https://www.lpi.org/our-certifications/exam-201-objectives/>. Los ejercicios agregan los equivalentes modernos que se espera que un ingeniero de producción use (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), porque en un incidente real te van a juzgar por el diagnóstico, no por la antigüedad de la herramienta.
+> La lista parcial de archivos, términos y utilidades de LPI para este objetivo es, textual: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirmá la lista actual en la página oficial de objetivos — LPI la revisa: <https://www.lpi.org/our-certifications/exam-201-202-objectives/>. Los ejercicios agregan los equivalentes modernos que se espera que un ingeniero de producción use (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), porque en un incidente real te van a juzgar por el diagnóstico, no por la antigüedad de la herramienta.
 
 ### Requisitos del laboratorio
 
@@ -1449,7 +1449,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 ## Fuentes
 
-- LPI, *Exam 201-450 Objectives* (LPIC-2, versión 4.5.0), objetivo 200.1 — <https://www.lpi.org/our-certifications/exam-201-objectives/>
+- LPI, *Exam 201-450 Objectives* (LPIC-2, versión 4.5.0), objetivo 200.1 — <https://www.lpi.org/our-certifications/exam-201-202-objectives/>
 - Documentación del kernel Linux, *The /proc Filesystem* — <https://www.kernel.org/doc/html/latest/filesystems/proc.html>
 - Documentación del kernel Linux, *I/O statistics fields* (`/proc/diskstats`) — <https://www.kernel.org/doc/html/latest/admin-guide/iostats.html>
 - Documentación del kernel Linux, *PSI – Pressure Stall Information* — <https://www.kernel.org/doc/html/latest/accounting/psi.html>
