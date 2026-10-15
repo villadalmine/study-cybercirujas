@@ -1,4 +1,5 @@
 """scripts/check_docs.py: docs that point at things the repository does not have fail, offline."""
+import subprocess
 import sys
 import tempfile
 import textwrap
@@ -46,13 +47,18 @@ class CheckDocsTests(unittest.TestCase):
 
             <a id="custom"></a>
             """), encoding="utf-8")
+        self.git("init", "-q")
         patcher = mock.patch.object(check_docs, "REPO", self.root)
         patcher.start()
         self.addCleanup(patcher.stop)
         self.addCleanup(self.tmp.cleanup)
 
+    def git(self, *args):
+        subprocess.run(["git", *args], cwd=self.root, check=True, capture_output=True)
+
     def problems(self, text, name="README.md"):
         (self.root / name).write_text(textwrap.dedent(text), encoding="utf-8")
+        self.git("add", "-A")
         top, subs = check_docs.teach_commands()
         return check_docs.check_file(name, check_docs.make_targets(), top, subs, {})
 
@@ -92,6 +98,18 @@ class CheckDocsTests(unittest.TestCase):
         for bad in ("make nope", "make also-nope", "teach cert diff", "teach pipeline"):
             with self.subTest(bad=bad):
                 self.assertIn(bad, problems)
+
+    def test_existence_is_asked_of_git_case_exact_and_tracked_only(self):
+        # Review of #9: on Windows `scripts/Real.py` and an untracked file passed locally.
+        problems = "\n".join(self.problems("`scripts/Real.py` and [notes](docs/LOCAL.md)\n"))
+        self.assertIn("`scripts/Real.py` names a path that does not exist", problems)
+        untracked = self.root / "docs" / "UNTRACKED.md"
+        untracked.write_text("# U\n", encoding="utf-8")
+        top, subs = check_docs.teach_commands()
+        (self.root / "README.md").write_text("[u](docs/UNTRACKED.md)\n", encoding="utf-8")
+        found = check_docs.check_file("README.md", check_docs.make_targets(), top, subs, {},
+                                      tracked=check_docs.tracked_paths())
+        self.assertTrue(any("docs/UNTRACKED.md" in p for p in found), found)
 
     def test_links_inside_code_blocks_are_not_checked(self):
         self.assertEqual(self.problems("```\n[x](docs/GONE.md)\n```\n"), [])

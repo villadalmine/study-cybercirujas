@@ -24,6 +24,7 @@ ALLOWED below with the reason, never silently.
 from __future__ import annotations
 
 import argparse
+import posixpath
 import re
 import subprocess
 import sys
@@ -63,6 +64,27 @@ MAKE_CMD = re.compile(r"^(?:\$\s+)?make\s+([a-z][\w-]*)")
 TEACH_CMD = re.compile(r"^(?:\$\s+)?(?:\.venv/bin/)?teach\s+([a-z][\w-]*)(?:\s+([a-z][\w-]*))?")
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 EXPLICIT_ANCHOR = re.compile(r"<a\s+(?:id|name)=[\"']([^\"']+)[\"']", re.I)
+
+
+def tracked_paths() -> set[str]:
+    """Every tracked file and every directory that holds one, exactly as git spells them.
+
+    Existence is asked of git, not of the working tree: on a case-insensitive
+    file system (Windows, macOS) `scripts/Check_Docs.py` "exists", and an
+    untracked local file exists only on one machine — both pass locally and
+    fail in CI. Membership in this set is case-exact and the same everywhere.
+    """
+    out = subprocess.run(["git", "ls-files", "-z"], cwd=REPO, capture_output=True, text=True,
+                         encoding="utf-8", check=True)
+    paths: set[str] = set()
+    for f in out.stdout.split(chr(0)):
+        if not f:
+            continue
+        paths.add(f)
+        parts = f.split("/")
+        for i in range(1, len(parts)):
+            paths.add("/".join(parts[:i]))
+    return paths
 
 
 def tracked_markdown() -> list[str]:
@@ -138,8 +160,11 @@ def teach_commands() -> tuple[set[str], dict[str, set[str]]]:
     return top, subs
 
 
-def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: dict) -> list[str]:
+def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: dict,
+               tracked: set[str] | None = None) -> list[str]:
     path = REPO / rel
+    if tracked is None:
+        tracked = cache.setdefault("__tracked__", tracked_paths())
     text = path.read_text(encoding="utf-8")
     problems = []
     check_commands = rel not in COMMANDS_NOT_CHECKED
@@ -163,24 +188,24 @@ def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: di
             if re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I):   # http:, mailto:, …
                 continue
             file_part, _, frag = target.partition("#")
-            dest = (path.parent / file_part).resolve() if file_part else path
-            try:
-                dest_rel = dest.relative_to(REPO).as_posix()
-            except ValueError:
+            # Normalised as written (no resolve(): on Windows it would fix the case for us).
+            dest_rel = posixpath.normpath(posixpath.join(posixpath.dirname(rel), file_part)) if file_part else rel
+            if dest_rel == ".." or dest_rel.startswith("../"):
                 problems.append(f"{where}: link {target!r} leaves the repository")
                 continue
-            if file_part and not dest.exists():
+            dest = REPO / dest_rel
+            if file_part and dest_rel.rstrip("/") not in tracked:
                 if dest_rel not in ALLOWED:
                     problems.append(f"{where}: link to {dest_rel!r}, which does not exist")
                 continue
-            if frag and dest.suffix == ".md" and dest.is_file() and frag.lower() not in anchors(dest, cache):
+            if frag and dest.suffix == ".md" and dest_rel in tracked and frag.lower() not in anchors(dest, cache):
                 problems.append(f"{where}: link to {dest_rel}#{frag}, which has no such heading or anchor")
         for span in CODE_SPAN.findall(line):
             m = PATH_LIKE.match(span.strip())
             if not m:
                 continue
             ref = m.group(1).rstrip("/")
-            if ref in ALLOWED or (REPO / ref).exists():
+            if ref in ALLOWED or ref in tracked:
                 continue
             problems.append(f"{where}: `{span}` names a path that does not exist")
     return problems
