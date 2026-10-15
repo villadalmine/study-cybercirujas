@@ -110,7 +110,11 @@ head commit** (plus the machine or local environment, if you ran anything
 there), and a `### Known gaps` subsection says what that evidence does *not*
 cover. After each push CI posts a *where-it-ran* comment with the exact line to
 paste; `pr-format` checks, with the API, that a cited run belongs to this
-repository, is on the head commit and is green. A new push makes the old link
+repository, is a run of `.github/workflows/verify.yml` on a `pull_request`
+event, is on the head commit, and has its `verify` and `e2e` jobs green. That
+proves *this workflow ran green on this commit*, not that the workflow is the
+one on `main`: `pr-format` runs from the PR branch, so the maintainer reads
+every `.github/` change (CODEOWNERS lists it on its own). A new push makes the old link
 stale on purpose, so the description has to be updated — that keeps "it passed"
 attached to the code that is actually being merged.
 

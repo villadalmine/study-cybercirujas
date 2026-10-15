@@ -117,33 +117,22 @@ jobs:
             --base "origin/${{ github.base_ref }}" \
             --label-file site-label.txt --runs-file cited-runs.txt
       - name: Check the run cited under "Where it ran"
-        # check_pr.py stays offline; the network check lives here, with the
-        # job's own token. At least one cited run must be of this repository,
-        # on the PR's current head commit, with its `verify` and `e2e` jobs
-        # green. The jobs, not the run: the run that proves the code also
-        # contains this very job, which was red until the link was pasted
-        # (found on #3, run 38683552353). A new push makes the old link stale
-        # on purpose: the 'where-it-ran' comment has the new one.
+        # check_pr.py stays offline; this step is its one networked mode, with
+        # the job's own token. At least one cited run must be of this
+        # repository, on the PR's current head commit, from verify.yml on a
+        # pull_request event, with its `verify` and `e2e` jobs green. The jobs,
+        # not the run: the run that proves the code also contains this very
+        # job, which was red until the link was pasted (found on #3, run
+        # 38683552353). The workflow, not only the job names: a PR could add
+        # a workflow with jobs named verify/e2e (review of #3). pr-format runs
+        # from the PR branch, so a PR that edits .github/ is still read by the
+        # maintainer. A new push makes the old link stale on purpose.
         if: always() && hashFiles('cited-runs.txt') != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          found=0
-          while read -r repo run; do
-            [ -n "$run" ] || continue
-            if [ "$repo" != "$REPO" ]; then echo "run $run belongs to $repo, not $REPO"; continue; fi
-            sha="$(gh api "repos/$REPO/actions/runs/$run" --jq .head_sha 2>/dev/null || true)"
-            jobs="$(gh api "repos/$REPO/actions/runs/$run/jobs" \
-                    --jq '[.jobs[] | select(.name == "verify" or .name == "e2e") | "\(.name)=\(.conclusion)"] | sort | join(" ")' 2>/dev/null || true)"
-            echo "run $run: head ${sha:0:7}, $jobs"
-            [ "$sha" = "$HEAD_SHA" ] && [ "$jobs" = "e2e=success verify=success" ] && found=1
-          done < cited-runs.txt
-          if [ "$found" != 1 ]; then
-            echo "::error::'Where it ran' must link a green CI run of $REPO on the head commit $HEAD_SHA. Copy the line from the where-it-ran comment and edit the description."
-            exit 1
-          fi
+          python3 scripts/check_pr.py --verify-runs cited-runs.txt \
+            --repo "${{ github.repository }}" --head "${{ github.event.pull_request.head.sha }}"
       - name: Label the site impact
         # Runs even when the description check fails: the label is a fact
         # about the files. A fork's token cannot write labels; that is fine.

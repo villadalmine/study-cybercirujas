@@ -212,6 +212,57 @@ def cited_runs(body: str) -> list[tuple[str, str]]:
     return RUN_LINK.findall(match.group(1)) if match else []
 
 
+# --- the cited run, checked against the API (the only networked part) --------
+
+VERIFY_WORKFLOW = ".github/workflows/verify.yml"
+PROOF_JOBS = ("verify", "e2e")
+
+
+def judge_run(run: dict, jobs: dict, head_sha: str) -> str | None:
+    """Why a cited run does not prove this head, or None if it does.
+
+    Jobs named verify/e2e are not enough: any workflow (one the PR itself adds)
+    can name its jobs that way, so the run must come from verify.yml and from a
+    pull_request event. The jobs, not the run's conclusion: the run that proves
+    the code also contains pr-format, which was red until the link was pasted.
+    """
+    if run.get("head_sha") != head_sha:
+        return f"is on head {str(run.get('head_sha'))[:7]}, not the PR head {head_sha[:7]}"
+    if run.get("path") != VERIFY_WORKFLOW:
+        return f"comes from {run.get('path')}, not {VERIFY_WORKFLOW}"
+    if run.get("event") != "pull_request":
+        return f"was triggered by {run.get('event')}, not pull_request"
+    states = {j.get("name"): j.get("conclusion") for j in jobs.get("jobs") or [] if j.get("name") in PROOF_JOBS}
+    if states != {name: "success" for name in PROOF_JOBS}:
+        return "has " + (", ".join(f"{k}={v}" for k, v in sorted(states.items())) or "no verify/e2e jobs")
+    return None
+
+
+def gh_api(path: str) -> dict:
+    """`gh api <path>` as JSON; its error goes to the log instead of being swallowed."""
+    result = subprocess.run(["gh", "api", path], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"gh api {path}: {result.stderr.strip() or result.stdout.strip()}")
+    return json.loads(result.stdout)
+
+
+def verify_runs(cited: list[tuple[str, str]], repo: str, head_sha: str, fetch=gh_api) -> bool:
+    """True if at least one cited run proves this head; prints why each one does or does not."""
+    ok = False
+    for cited_repo, run in cited:
+        if cited_repo != repo:
+            print(f"run {run} belongs to {cited_repo}, not {repo}")
+            continue
+        try:
+            reason = judge_run(fetch(f"repos/{repo}/actions/runs/{run}"),
+                               fetch(f"repos/{repo}/actions/runs/{run}/jobs"), head_sha)
+        except (RuntimeError, ValueError) as exc:
+            reason = f"could not be read: {exc}"
+        print(f"run {run}: " + (reason or f"{VERIFY_WORKFLOW}, verify and e2e green on {head_sha[:7]}"))
+        ok = ok or reason is None
+    return ok
+
+
 def changed_files(base: str) -> list[str]:
     result = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD"],
                             cwd=REPO, capture_output=True, text=True, check=True)
@@ -241,7 +292,21 @@ def main() -> int:
     parser.add_argument("--runs-file",
                         help="write the CI runs cited under 'Where it ran' here, one 'repo id' per "
                              "line, for the job step that checks them against the API")
+    parser.add_argument("--verify-runs", metavar="RUNS_FILE",
+                        help="networked mode, for CI only: check the runs listed in RUNS_FILE "
+                             "(from --runs-file) with `gh api`; needs --repo and --head")
+    parser.add_argument("--repo", help="owner/name of this repository (with --verify-runs)")
+    parser.add_argument("--head", help="the PR's head commit SHA (with --verify-runs)")
     args = parser.parse_args()
+
+    if args.verify_runs:
+        cited = [tuple(line.split()) for line in Path(args.verify_runs).read_text(encoding="utf-8").splitlines()
+                 if len(line.split()) == 2]
+        if verify_runs(cited, args.repo, args.head):
+            return 0
+        print(f"::error::'Where it ran' must link a green run of {VERIFY_WORKFLOW} in {args.repo} on the "
+              f"head commit {args.head}. Copy the line from the where-it-ran comment and edit the description.")
+        return 1
 
     labels: set = set()
     if args.event:

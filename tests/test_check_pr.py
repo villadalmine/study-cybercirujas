@@ -1,6 +1,8 @@
 """scripts/check_pr.py: the PR format as a check, offline (fixtures in tests/fixtures/pr/)."""
+import io
 import sys
 import tempfile
+from contextlib import redirect_stdout
 import unittest
 from pathlib import Path
 
@@ -93,6 +95,45 @@ class WhereItRanTests(unittest.TestCase):
     def test_evidence_without_a_run_fails(self):
         body = (FIXTURES / "good.md").read_text(encoding="utf-8").replace("/actions/runs/123", "")
         self.assertTrue(any("Where it ran" in p for p in check_pr.check("docs: x", body, [])))
+
+
+HEAD = "a" * 40
+REPO_NAME = "villadalmine/study-cybercirujas"
+GOOD_RUN = {"head_sha": HEAD, "path": ".github/workflows/verify.yml", "event": "pull_request"}
+GOOD_JOBS = {"jobs": [{"name": "verify", "conclusion": "success"}, {"name": "e2e", "conclusion": "success"},
+                      {"name": "pr-format", "conclusion": "failure"}]}
+
+
+class CitedRunTests(unittest.TestCase):
+    """The run under 'Where it ran' must be verify.yml's, on this head (review of #3)."""
+
+    def fetch(self, run=GOOD_RUN, jobs=GOOD_JOBS):
+        return lambda path: jobs if path.endswith("/jobs") else run
+
+    def test_a_green_verify_run_on_the_head_proves_it(self):
+        self.assertIsNone(check_pr.judge_run(GOOD_RUN, GOOD_JOBS, HEAD))
+        self.assertTrue(check_pr.verify_runs([(REPO_NAME, "1")], REPO_NAME, HEAD, self.fetch()))
+
+    def test_jobs_named_verify_and_e2e_in_another_workflow_do_not(self):
+        run = dict(GOOD_RUN, path=".github/workflows/anything.yml")
+        self.assertIn("anything.yml", check_pr.judge_run(run, GOOD_JOBS, HEAD))
+        self.assertFalse(check_pr.verify_runs([(REPO_NAME, "1")], REPO_NAME, HEAD, self.fetch(run)))
+
+    def test_a_dispatched_run_does_not(self):
+        self.assertIn("workflow_dispatch", check_pr.judge_run(dict(GOOD_RUN, event="workflow_dispatch"),
+                                                              GOOD_JOBS, HEAD))
+
+    def test_another_head_or_a_red_job_does_not(self):
+        self.assertIn("not the PR head", check_pr.judge_run(dict(GOOD_RUN, head_sha="b" * 40), GOOD_JOBS, HEAD))
+        red = {"jobs": [{"name": "verify", "conclusion": "success"}, {"name": "e2e", "conclusion": "failure"}]}
+        self.assertIn("e2e=failure", check_pr.judge_run(GOOD_RUN, red, HEAD))
+
+    def test_an_api_error_is_reported_not_swallowed(self):
+        def fail(path):
+            raise RuntimeError("HTTP 403: Resource not accessible by integration")
+        with redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(check_pr.verify_runs([(REPO_NAME, "1")], REPO_NAME, HEAD, fail))
+        self.assertIn("HTTP 403", out.getvalue())
 
 
 class ScopeTests(unittest.TestCase):

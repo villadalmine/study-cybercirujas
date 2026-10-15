@@ -4,3 +4,7 @@
 #   /certs/cka/        @someone
 #   /certs/*/*/es/     @someone-else
 *       @villadalmine
+# CI and its checks run from the PR branch: a PR that edits them is read by
+# the maintainer on purpose (CONTRIBUTING → Where it ran). Keep this line
+# even when areas get other owners.
+/.github/      @villadalmine
