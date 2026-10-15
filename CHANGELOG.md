@@ -7,6 +7,10 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 - **lpic-2 200.1 declares its source chain** (fix, `main` was red since #6): the Spanish
   `meta.yaml` records `source_sha256` and the lab records `derived_from`, computed by
   `teach.core.certs` / `teach.lab.spec` on a Linux (LF) checkout, not typed by hand.
+- **Chain hashes no longer depend on line endings**: `chain_sha256` reads CRLF as LF and
+  `.gitattributes` forces `eol=lf` for `*.md`, `*.yaml`, `*.yml` and `*.py`. A Windows checkout with
+  `core.autocrlf=true` had produced different hashes than Linux (the CKA labs and lpic-2 200.1 read
+  STALE on CI). Hashes of LF content are unchanged.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.
