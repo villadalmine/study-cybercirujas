@@ -144,7 +144,11 @@ test-e2e: ## slow: clone this repo fresh, make setup, serve, hit site/API/CLI, r
 	@# Clones the committed HEAD, not the working tree: commit first, or set
 	@# SRC=<url> to test the public repository exactly as a newcomer gets it.
 	bash tests/e2e/clone_and_run.sh
-	$(MAKE) test-lab-e2e
+	@# The study-lab e2e runs from this checkout's venv. CI's e2e job has none
+	@# (clone_and_run.sh builds its own in a temp clone); the Labs workflow
+	@# runs the study-lab e2e there instead.
+	@if [ -x $(VENV)/bin/python3 ]; then $(MAKE) test-lab-e2e; \
+	else echo "skip study-lab e2e: no $(VENV) here (run 'make setup'; CI runs it in .github/workflows/labs.yml)"; fi
 
 audit: ## list pending/corrupt combos without regenerating anything
 	$(VENV)/bin/python3 scripts/fix_corrupted_content.py --audit-only
