@@ -1,0 +1,50 @@
+# Quality score: how much each check weighs, and what the levels mean.
+#
+# Versioned data, read by teach/core/scoring.py (scripts/quality_score.py,
+# `make quality`). Changing a number here changes every topic's score: the
+# `quality:` blocks in meta.yaml are regenerated from this file and checked in
+# CI (`scripts/quality_score.py --check`). Bump `version` with any change.
+#
+# score = 100 * earned / possible, over the checks that apply to the topic.
+#   pass     earns the full weight
+#   not_run  earns weight * (1 - not_run_penalty)   — unmeasured is not "fine"
+#   fail     earns weight * (1 - fail_penalty)      — measured and wrong costs more
+# A check that does not apply (no YAML in the topic, an original that is not a
+# translation) is left out of both sides.
+
+version: 1
+
+not_run_penalty: 0.5
+fail_penalty: 1.0
+
+checks:
+  quality_floor:       {weight: 15, what: "content.md and exercises.md meet the floor in pipeline.yaml (teach/core/quality.py)"}
+  provenance:          {weight: 10, what: "meta.yaml names backend, model and date, and none of them is 'unknown' (scripts/check_provenance.py)"}
+  sources:             {weight: 10, what: "a References section with URLs, mostly from catalogued official projects (scripts/check_sources.py)"}
+  citations_resolve:   {weight: 5,  what: "the cited URLs exist (scripts/check_citations.py; network, so not run in CI)"}
+  k8s_manifests:       {weight: 10, what: "YAML/JSON blocks parse and use no removed Kubernetes API (check_manifests.py, check_k8s_apis.py)"}
+  translation_gate:    {weight: 10, what: "a translation keeps code blocks, URLs, headings and length (generator._verify_translation)"}
+  source_chain:        {weight: 10, what: "this link declares its origin and the origin has not changed since (scripts/check_source_chain.py)"}
+  lab:                 {weight: 10, what: "the topic's lab ran in the study-lab runner: break -> verify FAIL -> fix -> verify PASS -> cleanup (lab.yaml verified)"}
+  independent_review:  {weight: 10, what: "an independent review (fable revisor-pr, Copilot) with its link, recorded in meta.yaml reviews"}
+  human_review:        {weight: 5,  what: "a person reviewed or edited it (meta.yaml human_edits / human_review)"}
+  groundedness:        {weight: 5,  what: "each claim is supported by its cited source — placeholder until the classifier lab picks the model; always not_run today"}
+
+# Minimum share of cited domains that must belong to a catalogued project
+# (docs/sources.yaml, neutral domains included) for `sources` to pass.
+sources_min_catalogued: 0.5
+
+levels:
+  # Checked top to bottom; the first that matches wins.
+  - id: verified
+    label: Verified
+    min_score: 85
+    requires_pass: [lab, independent_review]
+  - id: ai-beta
+    label: AI beta
+    min_score: 60
+    requires_pass: [quality_floor, provenance]
+  - id: draft
+    label: Draft
+    min_score: 0
+    requires_pass: []
