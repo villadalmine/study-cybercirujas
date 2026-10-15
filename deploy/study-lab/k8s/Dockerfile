@@ -48,4 +48,12 @@ LABEL org.opencontainers.image.title="study-lab:k8s" \
 
 # dockerd-entrypoint.sh (from docker:dind) stays PID 1's child: dockerd runs,
 # the runner execs study-lab-init and the lab script next to it.
+#
+# The inner dockerd listens on its unix socket ONLY. With no CMD the entrypoint
+# adds --host=tcp://0.0.0.0:2375 without TLS when DOCKER_TLS_CERTDIR is empty:
+# an unauthenticated, root-equivalent Docker API inside a --privileged
+# container, reachable from every other container on the same bridge. Passing
+# `dockerd --host=unix://...` makes the entrypoint skip its default listeners.
+# tests/lab/test_images.py pins this; the kind e2e checks nothing listens on :2375/:2376.
 WORKDIR /lab
+CMD ["dockerd", "--host=unix:///var/run/docker.sock"]

@@ -26,7 +26,7 @@ def snapshot():
             "networks": docker_set("network", "ls", "-q")}
 
 
-def flow(target, from_repo, fix_cmd):
+def flow(target, from_repo, fix_cmd, after_run=None):
     lab = cli.resolve(target, from_repo)
     args = lab.cli_args
     name = runner.container_name(lab)
@@ -42,6 +42,8 @@ def flow(target, from_repo, fix_cmd):
                                  '{{range .Mounts}}{{if eq .Type "volume"}}{{.Name}} {{end}}{{end}}', name],
                                 capture_output=True, text=True).stdout.split()
         own_volumes = set(mounts) - {runner.CACHE_VOLUME}
+        if after_run:
+            after_run(name)
         assert run_cli("run", *args) == 0                       # idempotent: same container, still broken
         assert docker_set("ps", "-q", "--filter", f"name=^{name}$") == cid
         assert run_cli("check", *args) == 1                     # broken -> verify fails
@@ -71,8 +73,20 @@ def test_linux_lab_from_git_repo(new_lab, tmp_path, monkeypatch):
     flow(["labs/e2e"], f"file://{repo}", ["chmod", "644", "/srv/lab-e2e-2/app.conf"])
 
 
+def no_docker_tcp_listener(name):
+    """The inner dockerd must not listen on TCP (2375/2376 = 0x0947/0x0948), only on its unix socket."""
+    res = subprocess.run(["docker", "exec", name, "sh", "-c",
+                          "cat /proc/net/tcp /proc/net/tcp6 2>/dev/null"], capture_output=True, text=True)
+    assert res.returncode == 0, res.stderr
+    listening = [l for l in res.stdout.splitlines()[1:]
+                 if len(l.split()) > 3 and l.split()[3] == "0A"]
+    ports = {int(l.split()[1].rsplit(":", 1)[1], 16) for l in listening}
+    assert not ports & {2375, 2376}, f"inner dockerd listens on TCP: {sorted(ports)}"
+
+
 @pytest.mark.skipif(os.environ.get("STUDY_LAB_E2E_K8S") != "1" or not image_ok("study-lab:k8s"),
                     reason="set STUDY_LAB_E2E_K8S=1 (and build study-lab:k8s) for the kind e2e")
 def test_kind_lab_from_template(new_lab):
     d = new_lab(requires="kind", name="e2e-kind", cert="e2e", topic="3")
-    flow([str(d)], None, ["kubectl", "-n", "lab-e2e-3", "set", "image", "deploy/web", "busybox=busybox:1.37"])
+    flow([str(d)], None, ["kubectl", "-n", "lab-e2e-3", "set", "image", "deploy/web", "busybox=busybox:1.37"],
+         after_run=no_docker_tcp_listener)
