@@ -1746,6 +1746,7 @@ A 10-minute average cannot represent a 90-second stall; it will show a 15 % bump
             --collector.netdev.enable-detailed-tx-metrics \
             --collector.netdev.enable-detailed-rx-metrics \
             --collector.netstat.fields=^(.*_(InErrors|InCsumErrors|RetransSegs|OutRsts|ListenOverflows|ListenDrops|RcvbufErrors|SndbufErrors|NoPorts)|Tcp_(ActiveOpens|PassiveOpens|CurrEstab|InSegs|OutSegs))$ \
+            --collector.vmstat.fields=^(oom_kill|pgpg|pswp|pg.*fault|pgscan|pgsteal).* \
             --collector.processes \
             --collector.cgroups \
             --collector.systemd \

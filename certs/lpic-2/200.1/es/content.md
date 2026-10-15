@@ -1746,6 +1746,7 @@ Un promedio de 10 minutos no puede representar una detención de 90 segundos; va
             --collector.netdev.enable-detailed-tx-metrics \
             --collector.netdev.enable-detailed-rx-metrics \
             --collector.netstat.fields=^(.*_(InErrors|InCsumErrors|RetransSegs|OutRsts|ListenOverflows|ListenDrops|RcvbufErrors|SndbufErrors|NoPorts)|Tcp_(ActiveOpens|PassiveOpens|CurrEstab|InSegs|OutSegs))$ \
+            --collector.vmstat.fields=^(oom_kill|pgpg|pswp|pg.*fault|pgscan|pgsteal).* \
             --collector.processes \
             --collector.cgroups \
             --collector.systemd \

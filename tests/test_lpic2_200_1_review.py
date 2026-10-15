@@ -84,5 +84,19 @@ class PlaybookTest(unittest.TestCase):
             self.assertTrue(any("ENABLED" in n for n in sysstat_play_tasks(lang)), lang)
 
 
+class AlertsTest(unittest.TestCase):
+    def test_vmstat_metrics_used_by_alerts_are_exported(self):
+        # node_exporter's vmstat collector exports only --collector.vmstat.fields,
+        # default ^(oom_kill|pgpg|pswp|pg.*fault).* (collector/vmstat_linux.go).
+        default = r"^(oom_kill|pgpg|pswp|pg.*fault).*"
+        for lang in LANGS:
+            text = read(lang, "content.md")
+            used = set(re.findall(r"node_vmstat_(\w+)", text))
+            flag = re.search(r"--collector\.vmstat\.fields=(\S+)", text)
+            pattern = flag.group(1) if flag else default
+            missing = sorted(f for f in used if not re.match(pattern, f))
+            self.assertEqual(missing, [], lang)
+
+
 if __name__ == "__main__":
     unittest.main()
