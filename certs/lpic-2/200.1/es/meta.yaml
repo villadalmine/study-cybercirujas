@@ -58,3 +58,19 @@ human_edits:
   author: 'study-author (AI agent, claude-opus-5-5), after review round 2 by fable (revisor-pr) on PR #6'
   summary: 'mirrors the English fix: meta.yaml sources cite exam-201-202-objectives/ (commit ce46970)'
   source: https://www.lpi.org/our-certifications/exam-201-202-objectives/
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 3 by fable (revisor-pr) on PR #6'
+  summary: 'mirrors the English fix: Q12 and the content note: cpu full is printed since 5.13, zero system-wide, real per cgroup; cpu pressure samples show the full line (commit 6353da9)'
+  source: https://docs.kernel.org/accounting/psi.html
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 3 by fable (revisor-pr) on PR #6'
+  summary: 'mirrors the English fix: Q47 and lab 5D: netdev_budget_usecs default is 2 jiffies, 8000 us at HZ=250 (Debian 12) (commit 6037891)'
+  source: https://github.com/torvalds/linux/blob/master/net/core/hotdata.c
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 3 by fable (revisor-pr) on PR #6'
+  summary: 'mirrors the English fix: Q25: memory.events max and oom as cgroup-v2.rst defines them (commit 1fcc0ad)'
+  source: https://docs.kernel.org/admin-guide/cgroup-v2.html
+- date: '2026-10-15'
+  author: 'study-author (AI agent, claude-opus-5-5), after review round 3 by fable (revisor-pr) on PR #6'
+  summary: 'mirrors the English fix: tool table: unsourced 1-5 % perf overhead replaced by a qualitative cost (commit 47a522e)'
+  source: 'none: removal of an unsourced figure'
