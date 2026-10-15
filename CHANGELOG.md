@@ -4,6 +4,18 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-15
 
+- **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
+  source chain*): syllabus → content → exercises and labs → translations →
+  video, each link resting only on the one before and saying which.
+  `scripts/check_source_chain.py` (in `make verify` and CI) fails when a link
+  does not declare its origin and reports it STALE when that origin changed.
+  New translations record `source_sha256`, certification video scripts record
+  the syllabus they narrate with its sha256, and `lab.yaml` v2 gains
+  `derived_from` (the four v2 CKA labs are migrated). The 422 artefacts made
+  before this are listed in a baseline that only shrinks.
+- **`check_citations.py` reads every References heading**: numbered ones
+  (`## 14. References`), suffixed ones and CJK ones were skipped, so citations
+  were checked in 459 of 1155 topics; now 1155.
 - **Legal and trademark disclaimer.** The end of the README carries it in
   Spanish and English (anchor `#legal`), and every page of the site shows a
   one-line summary with a link, in all seven UI languages. The project is
