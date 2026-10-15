@@ -37,8 +37,11 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 CACHE = Path("/tmp/teach-citations-cache.json")
 
+# The heading may be numbered ("## 14. References", "### 10) Referencias") and
+# carry a suffix ("## 10. References (official sources)"): ~630 topics use one of
+# those forms, and their citations were silently skipped (found on #6).
 REFS_SECTION = re.compile(
-    r"^#+ *(?:Referencias|References|Références|Referenzen|Referências|参考文献|参考)\s*$(.*)",
+    r"^#+ *(?:[0-9]+[.)]? *)?(?:Referencias|References|Références|Referenzen|Referências|参考文献|参考)(?![A-Za-z])[^\n]*$(.*)",
     re.MULTILINE | re.DOTALL | re.IGNORECASE,
 )
 URL = re.compile(r"https?://[^\s)\]>\"'`]+")
@@ -49,7 +52,7 @@ BLOCKED = {401, 403, 405, 418, 429, 503}
 
 
 def citations(path: Path) -> set[str]:
-    match = REFS_SECTION.search(path.read_text(errors="replace"))
+    match = REFS_SECTION.search(path.read_text(encoding="utf-8", errors="replace"))
     if not match:
         return set()
     return {u.rstrip(".,;:>") for u in URL.findall(match.group(1))}
