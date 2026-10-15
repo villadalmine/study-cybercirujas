@@ -13,8 +13,14 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   On the 50 labelled claims in `tests/fixtures/groundedness` (13 of them the
   real errors found on PR #6) the prefilter gives accuracy 0.96, 13/13 traps
   and 1 false alarm in 25, the same bytes twice, with the network blocked.
-  It is advisory (`mode: warn`). The CI job and the `make` targets come in the
-  next PR.
+  It is advisory (`mode: warn`).
+- **Groundedness in CI and in `make`.** The `groundedness` job
+  (`.github/workflows/groundedness.yml`) runs the prefilter on the topics a PR
+  changes, and the fixture test with the weights. It writes the unsupported
+  claims to the job summary and uploads the report and the updated
+  `meta.yaml` files. It never fails on a finding and is not a required check.
+  Locally: `make groundedness-setup`, `make groundedness` and
+  `make groundedness-deep` (CONTRIBUTING → *Groundedness (advisory)*).
 
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
