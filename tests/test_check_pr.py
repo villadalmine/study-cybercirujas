@@ -128,6 +128,10 @@ class CitedRunTests(unittest.TestCase):
         red = {"jobs": [{"name": "verify", "conclusion": "success"}, {"name": "e2e", "conclusion": "failure"}]}
         self.assertIn("e2e=failure", check_pr.judge_run(GOOD_RUN, red, HEAD))
 
+    def test_the_repository_name_is_compared_without_case(self):
+        pasted = "Villadalmine/Study-Cybercirujas"
+        self.assertTrue(check_pr.verify_runs([(pasted, "1")], REPO_NAME, HEAD, self.fetch()))
+
     def test_an_api_error_is_reported_not_swallowed(self):
         def fail(path):
             raise RuntimeError("HTTP 403: Resource not accessible by integration")

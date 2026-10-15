@@ -250,11 +250,11 @@ def verify_runs(cited: list[tuple[str, str]], repo: str, head_sha: str, fetch=gh
     """True if at least one cited run proves this head; prints why each one does or does not."""
     ok = False
     for cited_repo, run in cited:
-        if cited_repo != repo:
+        if cited_repo.lower() != repo.lower():  # GitHub owner/repo names ignore case
             print(f"run {run} belongs to {cited_repo}, not {repo}")
             continue
         try:
-            reason = judge_run(fetch(f"repos/{repo}/actions/runs/{run}"),
+            reason = judge_run(fetch(f"repos/{repo}/actions/runs/{run}"),  # canonical name, not the pasted one
                                fetch(f"repos/{repo}/actions/runs/{run}/jobs"), head_sha)
         except (RuntimeError, ValueError) as exc:
             reason = f"could not be read: {exc}"
