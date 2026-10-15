@@ -157,17 +157,28 @@ class CitationsHeadingTests(unittest.TestCase):
     def test_numbered_suffixed_and_cjk_headings(self):
         for heading in ("## References", "## 14. References", "### 10) Referencias",
                         "## 10. References (official sources)", "## Références", "## 参考文献",
-                        "## 参考資料", "## 参考资料 / References"):
+                        "## 参考資料", "## 参考资料 / References", "## 参考文档", "## 参考资料（References）"):
             with self.subTest(heading=heading), tempfile.TemporaryDirectory() as tmp:
                 path = Path(tmp) / "content.md"
                 path.write_text(f"# T\n\n{heading}\n\n- https://example.org/a\n", encoding="utf-8")
                 self.assertEqual(check_citations.citations(path), {"https://example.org/a"})
 
     def test_a_heading_that_merely_starts_with_the_word_is_not_references(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "content.md"
-            path.write_text("# T\n\n## Referenceshelf\n\n- https://example.org/a\n", encoding="utf-8")
-            self.assertEqual(check_citations.citations(path), set())
+        # "## 参考例：…" is "a reference example" (lpi-010-160/5.4/ja), not References (review of #10).
+        for heading in ("## Referenceshelf", "## 参考例：確認コマンドまとめ"):
+            with self.subTest(heading=heading), tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / "content.md"
+                path.write_text(f"# T\n\n{heading}\n\n- https://example.org/a\n", encoding="utf-8")
+                self.assertEqual(check_citations.citations(path), set())
+
+    def test_one_definition_for_every_check(self):
+        import check_claims
+        import check_sources
+        from teach.core import references
+        for module in (check_source_chain, check_sources, check_claims):
+            with self.subTest(module=module.__name__):
+                self.assertIs(module.REFS_HEADING, references.HEADING)
+        self.assertIs(check_citations.references_section, references.section)
 
 
 if __name__ == "__main__":

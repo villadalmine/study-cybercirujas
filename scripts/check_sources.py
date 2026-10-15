@@ -37,10 +37,7 @@ sys.path.insert(0, str(REPO))
 from teach.core.generator import URL_RE  # noqa: E402
 
 CATALOGUE = REPO / "docs" / "sources.yaml"
-REFS_HEADING = re.compile(
-    r"^#+\s*(?:[0-9]+[.)]?\s*)?(Referencias|References|Références|Referenzen|Referências)",
-    re.I | re.M,
-)
+from teach.core.references import HEADING as REFS_HEADING  # noqa: E402  (one definition)
 
 
 def catalogue() -> tuple[dict[str, str], set[str], dict]:

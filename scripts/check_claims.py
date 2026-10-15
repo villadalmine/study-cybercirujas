@@ -47,10 +47,7 @@ sys.path.insert(0, str(REPO))
 MD_LINK = re.compile(r"\[([^\]]*)\]\((https?://[^)\s]+)\)")
 BARE_URL = re.compile(r"https?://[^\s)>\]`\"']+")
 MARKUP = re.compile(r"[*_`#>\[\]()]|^\s*(?:[-*+]|\d+[.)])\s+")
-REFS_HEADING = re.compile(
-    r"^#+\s*(?:[0-9]+[.)]?\s*)?(Referencias|References|Références|Referenzen|Referências)",
-    re.I | re.M,
-)
+from teach.core.references import HEADING as REFS_HEADING  # noqa: E402  (one definition)
 
 
 def references(text: str) -> list[tuple[str, str]]:

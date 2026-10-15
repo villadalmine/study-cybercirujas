@@ -41,10 +41,7 @@ sys.path.insert(0, str(REPO))
 from teach.core.certs import chain_sha256 as sha256_of  # noqa: E402  (one hash definition)
 from teach.core.certs import translation_source_sha256  # noqa: E402
 BASELINE = REPO / "tests" / "fixtures" / "source_chain_baseline.txt"
-REFS_HEADING = re.compile(
-    r"^#+\s*(?:[0-9]+[.)]?\s*)?(Referencias|References|Références|Referenzen|Referências|参考文献|参考)",
-    re.I | re.M,
-)
+from teach.core.references import HEADING as REFS_HEADING  # noqa: E402  (one definition)
 URL = re.compile(r"https?://[^\s)\]>\"'`]+")
 
 
