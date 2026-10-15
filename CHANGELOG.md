@@ -30,6 +30,13 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   - PRs are labelled by path (`actions/labeler`), and the review and merge
     rules (squash only, nobody merges their own PR, an agent never merges)
     are written down in CONTRIBUTING and `docs/REVIEWS.md`.
+- **Checking curriculum updates is a documented procedure, not a skill.** The
+  `check-updates` Claude Code skill is gone; its steps live in
+  [docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates)
+  for every contributor and agent: what `make check-updates` runs (AI sync,
+  deterministic verdict, the bot's models), how to read STATUS.md's *Exam
+  versions*, the report order, and the rule that a re-snapshot is the owner's
+  decision.
 
 ## 2026-09-30
 
