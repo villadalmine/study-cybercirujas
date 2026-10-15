@@ -152,6 +152,28 @@ class VerifyWorkflowTests(unittest.TestCase):
         # GET actions/runs/{id} and /jobs need actions: read on a private repository.
         self.assertEqual(verify_workflow()["jobs"]["pr-format"]["permissions"].get("actions"), "read")
 
+    def test_a_waiver_label_re_runs_pr_format_and_nothing_else(self):
+        # Adding scope-exception/size-exception fires `labeled`; before, the
+        # waiver took effect only after an unrelated edit or push (review of #3).
+        wf = verify_workflow()
+        self.assertTrue({"labeled", "unlabeled"} <= set(wf["on"]["pull_request"]["types"]))
+        for job in ("verify", "e2e", "where-it-ran"):
+            with self.subTest(job=job):
+                self.assertIn('!contains(fromJSON(\'["edited","labeled","unlabeled"]\')', wf["jobs"][job]["if"])
+        self.assertIn('"labeled"', wf["concurrency"]["group"])
+
+    def test_labels_are_read_live_not_from_the_replayed_payload(self):
+        step = next(s for s in verify_workflow()["jobs"]["pr-format"]["steps"]
+                    if s.get("name") == "Check the PR description")
+        self.assertIn("/labels", step["run"])
+        self.assertIn("--labels-file labels.txt", step["run"])
+        with tempfile.TemporaryDirectory() as tmp:
+            f = Path(tmp) / "labels.txt"
+            f.write_text("site:none\nsize-exception\n\n", encoding="utf-8")
+            labels = check_pr.read_labels(f)
+        self.assertEqual(labels, {"site:none", "size-exception"})
+        self.assertEqual(check_pr.scope(["teach/api.py"], code_lines=401, labels=labels), [])
+
 
 class ScopeTests(unittest.TestCase):
     def test_one_topic_language_per_content_pr(self):

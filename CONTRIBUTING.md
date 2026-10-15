@@ -128,7 +128,9 @@ attached to the code that is actually being merged.
 | any | material and code are never mixed; generated files (`STATUS.md`, `MODELS.md`) are regenerated, never edited by hand | fails |
 
 A maintainer can waive scope or size for one PR with the label
-`scope-exception` or `size-exception`, saying why in the PR.
+`scope-exception` or `size-exception`, saying why in the PR. Setting or
+removing the label re-runs `pr-format` on its own (it reads the labels live),
+without re-running `verify` and `e2e`.
 
 ### Labels
 

@@ -20,9 +20,10 @@ on:
   pull_request:
     # `edited` re-runs pr-format when the title or description changes;
     # without it a corrected description stayed red and an edited one kept
-    # the old green verdict (review on #1). verify and e2e skip `edited`:
-    # the code did not change.
-    types: [opened, synchronize, reopened, edited]
+    # the old green verdict (review on #1). `labeled`/`unlabeled` re-run it
+    # when a maintainer sets scope-exception or size-exception (review of
+    # #3). verify, e2e and where-it-ran skip all three: the code did not change.
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
   workflow_dispatch:
 
 permissions:
@@ -30,13 +31,13 @@ permissions:
 
 concurrency:
   # A newer push makes the older run irrelevant; cancel it rather than queue.
-  # A description edit must not cancel a code run on the same ref.
-  group: verify-${{ github.ref }}-${{ github.event.action == 'edited' && 'edited' || 'code' }}
+  # A description edit or a label must not cancel a code run on the same ref.
+  group: verify-${{ github.ref }}-${{ contains(fromJSON('["edited","labeled","unlabeled"]'), github.event.action) && 'meta' || 'code' }}
   cancel-in-progress: true
 
 jobs:
   verify:
-    if: github.event.action != 'edited'
+    if: ${{ !contains(fromJSON('["edited","labeled","unlabeled"]'), github.event.action) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -76,7 +77,7 @@ jobs:
     # The newcomer's path, end to end: clone, make setup, make serve, the
     # site, the API, the CLI, and a break-and-fix lab in Docker. Slow (a pip
     # install and a container), so it runs beside verify rather than inside it.
-    if: github.event.action != 'edited'
+    if: ${{ !contains(fromJSON('["edited","labeled","unlabeled"]'), github.event.action) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -112,9 +113,15 @@ jobs:
         with:
           python-version: '3.12'
       - name: Check the PR description
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           pip install -q pyyaml
-          python3 scripts/check_pr.py --event "$GITHUB_EVENT_PATH" \
+          # Labels read live, not from the payload: "Re-run jobs" replays the
+          # original event, which may predate a waiver label.
+          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels" \
+            --jq '.[].name' > labels.txt || rm -f labels.txt
+          python3 scripts/check_pr.py --event "$GITHUB_EVENT_PATH" --labels-file labels.txt \
             --base "origin/${{ github.base_ref }}" \
             --label-file site-label.txt --runs-file cited-runs.txt
       - name: Check the run cited under "Where it ran"
@@ -152,7 +159,7 @@ jobs:
     # with the exact line for the description's "Where it ran" subsection.
     # Our own Actions token, no external bot. The author still pastes it:
     # the description is the record, and pr-format checks what it says.
-    if: github.event_name == 'pull_request' && github.event.action != 'edited'
+    if: ${{ github.event_name == 'pull_request' && !contains(fromJSON('["edited","labeled","unlabeled"]'), github.event.action) }}
     needs: [verify, e2e]
     runs-on: ubuntu-latest
     timeout-minutes: 5

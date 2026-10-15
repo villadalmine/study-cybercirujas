@@ -263,6 +263,11 @@ def verify_runs(cited: list[tuple[str, str]], repo: str, head_sha: str, fetch=gh
     return ok
 
 
+def read_labels(path: Path) -> set:
+    """One label per line, as `gh api .../labels --jq '.[].name'` writes them."""
+    return {line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()}
+
+
 def changed_files(base: str) -> list[str]:
     result = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD"],
                             cwd=REPO, capture_output=True, text=True, check=True)
@@ -292,6 +297,9 @@ def main() -> int:
     parser.add_argument("--runs-file",
                         help="write the CI runs cited under 'Where it ran' here, one 'repo id' per "
                              "line, for the job step that checks them against the API")
+    parser.add_argument("--labels-file",
+                        help="the PR's current labels, one per line (read live in CI); they replace "
+                             "the event payload's, which a re-run replays as they were")
     parser.add_argument("--verify-runs", metavar="RUNS_FILE",
                         help="networked mode, for CI only: check the runs listed in RUNS_FILE "
                              "(from --runs-file) with `gh api`; needs --repo and --head")
@@ -313,6 +321,8 @@ def main() -> int:
         pr = json.loads(Path(args.event).read_text(encoding="utf-8"))["pull_request"]
         title, body = pr["title"], pr.get("body") or ""
         labels = {label["name"] for label in pr.get("labels") or []}
+    if args.labels_file and Path(args.labels_file).is_file():
+        labels = read_labels(Path(args.labels_file))
     else:
         title = args.title or ""
         body = Path(args.body_file).read_text(encoding="utf-8") if args.body_file else ""
