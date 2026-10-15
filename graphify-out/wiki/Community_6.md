@@ -1,6 +1,6 @@
 # Community 6
 
-> 46 nodes · cohesion 0.06
+> 45 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -15,7 +15,6 @@
 - **.test_a_claim_does_not_survive_the_process_that_held_it()** (4 connections) — `tests/test_claims.py`
 - **_try_claim()** (4 connections) — `tests/test_claims.py`
 - **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
-- **main()** (3 connections) — `scripts/unstage_inflight.py`
 - **_path()** (3 connections) — `teach/core/claims.py`
 - **.test_a_claim_is_released_when_the_block_exits()** (3 connections) — `tests/test_claims.py`
 - **.test_a_different_topic_is_granted_at_the_same_time()** (3 connections) — `tests/test_claims.py`
@@ -29,31 +28,30 @@
 - **.tearDown()** (1 connections) — `tests/test_claims.py`
 - **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
 - **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
-- *... and 21 more nodes in this community*
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- *... and 20 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (9 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 49](Community_49.md) (4 shared connections)
+- [Community 29](Community_29.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 102](Community_102.md) (2 shared connections)
-- [Community 91](Community_91.md) (2 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
-- [Community 29](Community_29.md) (2 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/CLEANUP.md`
-- `scripts/unstage_inflight.py`
 - `teach/core/claims.py`
 - `tests/test_claims.py`
 
 ## Audit Trail
 
-- EXTRACTED: 80 (98%)
+- EXTRACTED: 78 (98%)
 - INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 

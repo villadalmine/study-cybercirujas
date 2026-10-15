@@ -1,10 +1,9 @@
 # Community 124
 
-> 11 nodes · cohesion 0.27
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **re** (56 connections)
 - **check_sources.py** (13 connections) — `scripts/check_sources.py`
 - **cited_domains()** (5 connections) — `scripts/check_sources.py`
 - **main()** (5 connections) — `scripts/check_sources.py`
@@ -18,18 +17,14 @@
 
 ## Relationships
 
-- [Community 75](Community_75.md) (5 shared connections)
-- [Community 31](Community_31.md) (5 shared connections)
-- [Community 64](Community_64.md) (4 shared connections)
-- [Community 70](Community_70.md) (4 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 12](Community_12.md) (3 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 67](Community_67.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 148](Community_148.md) (2 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
+- [Community 35](Community_35.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 64](Community_64.md) (1 shared connections)
 
 ## Source Files
 
@@ -37,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 24 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

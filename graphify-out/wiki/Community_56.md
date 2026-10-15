@@ -1,52 +1,39 @@
 # Community 56
 
-> 19 nodes · cohesion 0.20
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **lab/cli.py** (26 connections) — `teach/lab/cli.py`
-- **main()** (17 connections) — `teach/lab/cli.py`
-- **resolve()** (10 connections) — `teach/lab/cli.py`
-- **SpecError** (8 connections) — `teach/lab/spec.py`
-- **_clone()** (6 connections) — `teach/lab/cli.py`
-- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
-- **cmd_new()** (6 connections) — `teach/lab/cli.py`
-- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
-- **_banner()** (4 connections) — `teach/lab/cli.py`
-- **cmd_list()** (4 connections) — `teach/lab/cli.py`
-- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
-- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
-- **Lab** (3 connections)
-- **Path** (2 connections)
-- **__main__.py** (2 connections) — `teach/lab/__main__.py`
-- **Exception** (1 connections)
-- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
-- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
-- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
+- **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
+- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **Languages** (2 connections) — `docs/OPERATING.md`
+- **Content process** (1 connections) — `docs/OPERATING.md`
+- **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
+- **Environment variables** (1 connections) — `docs/OPERATING.md`
+- **Keeping it honest over time** (1 connections) — `docs/OPERATING.md`
+- **Quality** (1 connections) — `docs/OPERATING.md`
+- **Quickstart (maintainers)** (1 connections) — `docs/OPERATING.md`
+- **Reading the "Exam versions" table in STATUS.md** (1 connections) — `docs/OPERATING.md`
+- **Reporting it, most severe first** (1 connections) — `docs/OPERATING.md`
+- **Running it yourself, without guessing** (1 connections) — `docs/OPERATING.md`
+- **The rule** (1 connections) — `docs/OPERATING.md`
+- **What `make check-updates` does** (1 connections) — `docs/OPERATING.md`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (9 shared connections)
-- [Community 73](Community_73.md) (5 shared connections)
-- [Community 32](Community_32.md) (5 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 1](Community_1.md) (4 shared connections)
-- [Community 59](Community_59.md) (4 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 67](Community_67.md) (2 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/lab/__main__.py`
-- `teach/lab/cli.py`
-- `teach/lab/spec.py`
+- `docs/OPERATING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 75 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 16 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

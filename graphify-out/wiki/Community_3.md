@@ -1,6 +1,6 @@
 # Community 3
 
-> 42 nodes · cohesion 0.08
+> 47 nodes · cohesion 0.07
 
 ## Key Concepts
 
@@ -9,10 +9,12 @@
 - **test_models_live.py** (10 connections) — `tests/test_models_live.py`
 - **catalogue()** (9 connections) — `tests/test_models_live.py`
 - **EndpointTests** (7 connections) — `tests/test_models_live.py`
+- **get_models()** (7 connections) — `teach/api.py`
 - **annotate()** (7 connections) — `teach/core/models_live.py`
 - **Content Status** (7 connections) — `STATUS.md`
 - **CompareTests** (6 connections) — `tests/test_models_live.py`
 - **main()** (6 connections) — `scripts/check_models.py`
+- **_refresh_live()** (6 connections) — `teach/api.py`
 - **priced()** (6 connections) — `tests/test_models_live.py`
 - **upstream()** (5 connections) — `teach/core/models_live.py`
 - **AnnotateTests** (4 connections) — `tests/test_models_live.py`
@@ -27,31 +29,30 @@
 - **.test_the_frozen_numbers_are_never_overwritten()** (3 connections) — `tests/test_models_live.py`
 - **.test_a_model_that_vanished_is_flagged_not_priced()** (3 connections) — `tests/test_models_live.py`
 - **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
-- **Exam versions** (2 connections) — `STATUS.md`
-- **copy** (2 connections)
-- *... and 17 more nodes in this community*
+- *... and 22 more nodes in this community*
 
 ## Relationships
 
+- [Community 74](Community_74.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 101](Community_101.md) (3 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 125](Community_125.md) (4 shared connections)
 - [Community 70](Community_70.md) (2 shared connections)
-- [Community 125](Community_125.md) (2 shared connections)
-- [Community 67](Community_67.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
 - `STATUS.md`
 - `scripts/check_models.py`
+- `teach/api.py`
 - `teach/core/models_live.py`
 - `tests/test_models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 78 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 86 (97%)
+- INFERRED: 3 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

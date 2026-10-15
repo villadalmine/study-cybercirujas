@@ -1,62 +1,50 @@
 # Community 64
 
-> 32 nodes · cohesion 0.09
+> 15 nodes · cohesion 0.19
 
 ## Key Concepts
 
+- **test_source_chain.py** (20 connections) — `tests/test_source_chain.py`
 - **check_citations.py** (16 connections) — `scripts/check_citations.py`
-- **translation_study.py** (16 connections) — `scripts/translation_study.py`
-- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **test_smoke.py** (14 connections) — `tests/test_smoke.py`
 - **references.py** (8 connections) — `teach/core/references.py`
-- **main()** (7 connections) — `scripts/translation_study.py`
 - **main()** (6 connections) — `scripts/check_citations.py`
-- **main()** (5 connections) — `scripts/check_syllabus.py`
-- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
-- **evaluate()** (5 connections) — `scripts/translation_study.py`
 - **socket** (5 connections)
-- **urllib_request** (5 connections)
 - **citations()** (4 connections) — `scripts/check_citations.py`
-- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
-- **master_key()** (4 connections) — `scripts/translation_study.py`
 - **section()** (4 connections) — `teach/core/references.py`
-- **urllib_error** (4 connections)
-- **smells()** (3 connections) — `scripts/check_syllabus.py`
 - **_free_port()** (3 connections) — `tests/test_smoke.py`
 - **status()** (2 connections) — `scripts/check_citations.py`
-- **Path** (1 connections)
+- **.setUpClass()** (2 connections) — `tests/test_smoke.py`
 - **Path** (1 connections)
 - **Check that cited sources actually exist. What this catches and what it does not…** (1 connections) — `scripts/check_citations.py`
-- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
-- **Does the frozen syllabus cover the exam, or only its table of contents? The…** (1 connections) — `scripts/check_syllabus.py`
-- *... and 7 more nodes in this community*
+- **Where a topic's References section starts — one definition for every check.…** (1 connections) — `teach/core/references.py`
+- **The text after the first References heading, or None when there is none.** (1 connections) — `teach/core/references.py`
+- **The source chain (docs/PRINCIPLES.md): every link declares its origin, and a…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (13 shared connections)
-- [Community 67](Community_67.md) (6 shared connections)
-- [Community 36](Community_36.md) (5 shared connections)
-- [Community 124](Community_124.md) (4 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
-- [Community 61](Community_61.md) (3 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 80](Community_80.md) (2 shared connections)
-- [Community 25](Community_25.md) (2 shared connections)
-- [Community 37](Community_37.md) (2 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 104](Community_104.md) (5 shared connections)
+- [Community 19](Community_19.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 130](Community_130.md) (2 shared connections)
+- [Community 150](Community_150.md) (2 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
+- [Community 1](Community_1.md) (2 shared connections)
+- [Community 25](Community_25.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 148](Community_148.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/check_citations.py`
-- `scripts/check_syllabus.py`
-- `scripts/translation_study.py`
 - `teach/core/references.py`
 - `tests/test_smoke.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 101 (100%)
+- EXTRACTED: 55 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

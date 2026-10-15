@@ -1,54 +1,59 @@
 # Community 31
 
-> 27 nodes · cohesion 0.13
+> 56 nodes · cohesion 0.07
 
 ## Key Concepts
 
+- **re** (56 connections)
 - **check_pr.py** (30 connections) — `scripts/check_pr.py`
+- **check_docs.py** (19 connections) — `scripts/check_docs.py`
 - **main()** (12 connections) — `scripts/check_pr.py`
 - **check()** (11 connections) — `scripts/check_pr.py`
+- **check_file()** (7 connections) — `scripts/check_docs.py`
+- **main()** (7 connections) — `scripts/check_docs.py`
 - **cited_runs()** (6 connections) — `scripts/check_pr.py`
+- **anchors()** (5 connections) — `scripts/check_docs.py`
+- **slug()** (5 connections) — `scripts/check_docs.py`
+- **authorship()** (5 connections) — `scripts/check_pr.py`
+- **_glob()** (5 connections) — `scripts/check_pr.py`
+- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
 - **sections()** (5 connections) — `scripts/check_pr.py`
 - **site_impact()** (5 connections) — `scripts/check_pr.py`
+- **prose_lines()** (4 connections) — `scripts/check_docs.py`
+- **teach_commands()** (4 connections) — `scripts/check_docs.py`
+- **tracked_paths()** (4 connections) — `scripts/check_docs.py`
 - **declared()** (4 connections) — `scripts/check_pr.py`
+- **gh_api()** (4 connections) — `scripts/check_pr.py`
 - **image_paths()** (4 connections) — `scripts/check_pr.py`
 - **material_dirs()** (4 connections) — `scripts/check_pr.py`
 - **read_labels()** (4 connections) — `scripts/check_pr.py`
 - **scope()** (4 connections) — `scripts/check_pr.py`
 - **verify_runs()** (4 connections) — `scripts/check_pr.py`
-- **changed_files()** (3 connections) — `scripts/check_pr.py`
-- **code_lines_changed()** (3 connections) — `scripts/check_pr.py`
-- **judge_run()** (3 connections) — `scripts/check_pr.py`
-- **kinds()** (3 connections) — `scripts/check_pr.py`
-- **Path** (3 connections)
-- **Check a pull request's description: sections, title, and declared provenance.…** (1 connections) — `scripts/check_pr.py`
-- **What a PR touches, by kind: material (topic/lang dirs), labs, code, docs.** (1 connections) — `scripts/check_pr.py`
-- **Problems with the shape of a PR, independent of its description.** (1 connections) — `scripts/check_pr.py`
-- **(repo, run id) linked under '### Where it ran' inside Evidence.** (1 connections) — `scripts/check_pr.py`
-- **Why a cited run does not prove this head, or None if it does. Jobs named…** (1 connections) — `scripts/check_pr.py`
-- **True if at least one cited run proves this head; prints why each one does or…** (1 connections) — `scripts/check_pr.py`
-- **One label per line, as `gh api .../labels --jq '.[].name'` writes them.** (1 connections) — `scripts/check_pr.py`
-- **`## Heading` → its text, with HTML comments removed.** (1 connections) — `scripts/check_pr.py`
-- *... and 2 more nodes in this community*
+- *... and 31 more nodes in this community*
 
 ## Relationships
 
-- [Community 124](Community_124.md) (5 shared connections)
-- [Community 149](Community_149.md) (4 shared connections)
+- [Community 61](Community_61.md) (10 shared connections)
+- [Community 36](Community_36.md) (5 shared connections)
+- [Community 35](Community_35.md) (5 shared connections)
+- [Community 70](Community_70.md) (5 shared connections)
+- [Community 45](Community_45.md) (4 shared connections)
+- [Community 19](Community_19.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 61](Community_61.md) (3 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 67](Community_67.md) (2 shared connections)
-- [Community 155](Community_155.md) (2 shared connections)
+- [Community 130](Community_130.md) (3 shared connections)
+- [Community 12](Community_12.md) (3 shared connections)
+- [Community 148](Community_148.md) (2 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 104](Community_104.md) (2 shared connections)
 
 ## Source Files
 
+- `scripts/check_docs.py`
 - `scripts/check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 72 (100%)
+- EXTRACTED: 171 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,44 +1,34 @@
 # Community 75
 
-> 19 nodes · cohesion 0.18
+> 6 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **check_docs.py** (19 connections) — `scripts/check_docs.py`
-- **check_file()** (7 connections) — `scripts/check_docs.py`
-- **main()** (7 connections) — `scripts/check_docs.py`
-- **anchors()** (5 connections) — `scripts/check_docs.py`
-- **slug()** (5 connections) — `scripts/check_docs.py`
-- **prose_lines()** (4 connections) — `scripts/check_docs.py`
-- **teach_commands()** (4 connections) — `scripts/check_docs.py`
-- **tracked_paths()** (4 connections) — `scripts/check_docs.py`
-- **unicodedata** (4 connections)
-- **generated_checks()** (3 connections) — `scripts/check_docs.py`
-- **make_targets()** (3 connections) — `scripts/check_docs.py`
-- **tracked_markdown()** (3 connections) — `scripts/check_docs.py`
-- **posixpath** (2 connections)
-- **Path** (1 connections)
-- **GitHub's heading anchor: markup stripped, lower-cased, punctuation dropped,…** (1 connections) — `scripts/check_docs.py`
-- **Top-level commands and {group: subcommands}, read statically from teach/cli.py.** (1 connections) — `scripts/check_docs.py`
-- **Are the docs consistent with the repository they describe? Deterministic,…** (1 connections) — `scripts/check_docs.py`
-- **Every tracked file and every directory that holds one, exactly as git spells…** (1 connections) — `scripts/check_docs.py`
-- **(line number, line, in_code_block) for every line.** (1 connections) — `scripts/check_docs.py`
+- **steer.py** (14 connections) — `scripts/steer.py`
+- **set_key()** (4 connections) — `scripts/steer.py`
+- **_cert_block()** (3 connections) — `scripts/steer.py`
+- **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
+- **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
+- **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
 
 ## Relationships
 
-- [Community 124](Community_124.md) (5 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 67](Community_67.md) (2 shared connections)
-- [Community 45](Community_45.md) (2 shared connections)
+- [Community 62](Community_62.md) (4 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_docs.py`
+- `scripts/steer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 46 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

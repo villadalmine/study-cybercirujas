@@ -1,32 +1,32 @@
 # Community 72
 
-> 9 nodes · cohesion 0.22
+> 8 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **Study bot — design** (8 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Operating it** (4 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Alternatives considered** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Effort** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **How a student uses it** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **How it is maintained** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Is it all API?** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **The insight: explicit selection replaces retrieval** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Two harnesses, not one (the distinction that sets the phases)** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **rules()** (6 connections) — `teach/core/quality.py`
+- **QualityThresholdsTest** (5 connections) — `tests/test_quality.py`
+- **.test_without_a_quality_block_everything_passes()** (4 connections) — `tests/test_quality.py`
+- **.test_floor_sits_below_the_observed_minimum()** (2 connections) — `tests/test_quality.py`
+- **.test_thresholds_are_declared()** (2 connections) — `tests/test_quality.py`
+- **Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…** (1 connections) — `teach/core/quality.py`
+- **The thresholds live in pipeline.yaml and are calibrated against material…** (1 connections) — `tests/test_quality.py`
+- **The floor is optional: a repo with no `quality` in the YAML must not break.…** (1 connections) — `tests/test_quality.py`
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [The phases](The_phases.md) (1 shared connections)
-- [Community 93](Community_93.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 13](Community_13.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
 
 ## Source Files
 
-- `docs/STUDY_BOT_DESIGN.md`
+- `teach/core/quality.py`
+- `tests/test_quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

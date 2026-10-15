@@ -1,10 +1,11 @@
 # Community 51
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
 - **ProtocolTests** (12 connections) — `tests/test_mcp_server.py`
+- **.setUpClass()** (2 connections) — `tests/test_mcp_server.py`
 - **.tearDownClass()** (1 connections) — `tests/test_mcp_server.py`
 - **.test_a_bad_topic_does_not_take_the_server_down()** (1 connections) — `tests/test_mcp_server.py`
 - **.test_a_topic_arrives_with_its_sources()** (1 connections) — `tests/test_mcp_server.py`
@@ -27,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 13 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
