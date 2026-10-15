@@ -15,7 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
-import time
+import threading
 from pathlib import Path
 
 from .spec import Lab
@@ -111,31 +111,66 @@ def build(family: str) -> None:
         raise RunnerError(f"docker build {family} failed")
 
 
-def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False) -> tuple[int, str]:
-    """Run, echo output live, and return (exit code, full output)."""
+# Seconds the host waits beyond a phase's timeout before it gives up on the
+# `docker exec` client: the `timeout` wrapper inside the container fires first.
+GRACE = 15
+
+
+def _in_time(timeout: int, cmd: list[str]) -> list[str]:
+    """`cmd` under coreutils `timeout` INSIDE the container (all three images have it).
+
+    timeout runs the command in its own process group and signals the whole
+    group, so `kind create`, `kubectl wait` or a `sleep` started by the script
+    die with it; killing only the host's `docker exec` client would leave them
+    running in the container.
+    """
+    return ["timeout", "-k", "10", str(timeout), *cmd]
+
+
+def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False,
+            on_timeout=None) -> tuple[int, str]:
+    """Run, echo output live, and return (exit code, full output).
+
+    The deadline holds even while the child prints nothing: stdout is read in a
+    thread and the main thread waits on the process. On expiry `on_timeout()`
+    runs (to stop what runs inside the container), the client is killed and the
+    exit code is 124, like coreutils timeout.
+    """
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
     try:
         proc.stdin.write(stdin)
         proc.stdin.close()
-    except BrokenPipeError:
+    except (BrokenPipeError, OSError):
         pass
-    out = []
-    deadline = time.monotonic() + timeout
-    for line in proc.stdout:
-        out.append(line)
-        if not quiet:
-            sys.stdout.write(line)
-            sys.stdout.flush()
-        if time.monotonic() > deadline:
-            proc.kill()
-            out.append(f"\n[study-lab] timeout after {timeout}s\n")
-            break
+    out: list[str] = []
+
+    def pump():
+        for line in proc.stdout:
+            out.append(line)
+            if not quiet:
+                sys.stdout.write(line)
+                sys.stdout.flush()
+
+    reader = threading.Thread(target=pump, daemon=True)
+    reader.start()
     try:
-        code = proc.wait(timeout=max(1, deadline - time.monotonic()))
+        code = proc.wait(timeout=timeout)
     except subprocess.TimeoutExpired:
+        if on_timeout:
+            try:
+                on_timeout()
+            except Exception as exc:  # best effort: the client is killed anyway
+                out.append(f"[study-lab] could not stop the process inside the container: {exc}\n")
         proc.kill()
+        proc.wait()
         code = 124
+    reader.join(timeout=5)
+    if code == 124:
+        msg = f"\n[study-lab] timeout after {timeout}s\n"
+        out.append(msg)
+        if not quiet:
+            sys.stdout.write(msg)
     return code, "".join(out)
 
 
@@ -148,14 +183,30 @@ def _mode_cmd(lab: Lab, name: str, action: str) -> tuple[list[str], str]:
     env.update(mode.get("env") or {})
     script = f"/lab/{lab.spec['script']}"
     env_flags = [x for k, v in env.items() for x in ("-e", f"{k}={v}")]
+    script_cmd = _in_time(lab.spec["timeout"][action], ["bash", script, *args])
     if lab.spec["run_in"] == "node":
-        inner = ["docker", "exec", "-i", *env_flags, "-w", "/lab", "lab-control-plane", "bash", script, *args]
+        inner = ["docker", "exec", "-i", *env_flags, "-w", "/lab", "lab-control-plane", *script_cmd]
         cmd = ["docker", "exec", "-i", name, *inner]
     else:
         user = lab.spec["run_as"]
         cmd = ["docker", "exec", "-i", *env_flags, "-e", f"STUDY_LAB_ID={lab.lab_id}",
-               "-u", user, "-w", "/lab", name, "bash", script, *args]
+               "-u", user, "-w", "/lab", name, *script_cmd]
     return cmd, mode.get("stdin", "")
+
+
+def _killer(lab: Lab, name: str, pattern: str):
+    """on_timeout for _stream: stop `pattern` inside the lab container (and the kind node)."""
+    def kill() -> None:
+        _docker("exec", name, "pkill", "-KILL", "-f", pattern)
+        if lab.spec.get("run_in") == "node":
+            _docker("exec", name, "docker", "exec", "lab-control-plane", "pkill", "-KILL", "-f", pattern)
+    return kill
+
+
+def _run_mode(lab: Lab, name: str, action: str) -> tuple[int, str]:
+    cmd, stdin = _mode_cmd(lab, name, action)
+    return _stream(cmd, stdin, lab.spec["timeout"][action] + GRACE,
+                   on_timeout=_killer(lab, name, f"/lab/{lab.spec['script']}"))
 
 
 def _state(name: str) -> str:
@@ -201,18 +252,22 @@ def run(lab: Lab) -> int:
     print(f"[study-lab] preparing the environment ({fam}) inside {name}")
     if fam in ("kind", "k3s"):
         node = KIND_NODES.get(".".join((lab.spec.get("kubernetes") or "").split(".")[:2]), "")
-        init = ["docker", "exec", name, "study-lab-init", fam, str(lab.spec.get("nodes", 0))] + ([node] if node else [])
+        init = ["study-lab-init", fam, str(lab.spec.get("nodes", 0))] + ([node] if node else [])
     else:
-        init = ["docker", "exec", name, "study-lab-init"]
-    code, _ = _stream(init, "", lab.spec["timeout"]["up"])
+        init = ["study-lab-init"]
+    up = lab.spec["timeout"]["up"]
+    code, _ = _stream(["docker", "exec", name, *_in_time(up, init)], "", up + GRACE,
+                      on_timeout=_killer(lab, name, "study-lab-init"))
     if code != 0:
         raise RunnerError(f"the environment did not come up (exit {code}); see above. 'study-lab down' cleans it.")
     if lab.spec["run_in"] == "node":
         _docker("exec", name, "docker", "cp", "/lab", "lab-control-plane:/", check=True)
 
     print(f"[study-lab] breaking the lab ({' '.join(lab.contract['break']) or 'no args'})")
-    cmd, stdin = _mode_cmd(lab, name, "break")
-    code, _ = _stream(cmd, stdin, lab.spec["timeout"]["break"])
+    # Unknown until break finishes: a break that times out or fails must not
+    # leave an older "broken" behind for the next run to trust.
+    _docker("exec", name, "rm", "-f", STATE_FILE, check=True)
+    code, _ = _run_mode(lab, name, "break")
     if code != 0:
         raise RunnerError(f"break failed (exit {code}); the lab is not in a known state. Try 'study-lab down' and run again.")
     _docker("exec", name, "sh", "-c", f"echo broken > {STATE_FILE}", check=True)
@@ -237,8 +292,7 @@ def _require_running(lab: Lab) -> str:
 
 def check(lab: Lab) -> int:
     name = _require_running(lab)
-    cmd, stdin = _mode_cmd(lab, name, "verify")
-    code, out = _stream(cmd, stdin, lab.spec["timeout"]["verify"])
+    code, out = _run_mode(lab, name, "verify")
     success = ((lab.spec.get("modes") or {}).get("verify") or {}).get("success") or {}
     ok = code == success.get("exit_code", 0)
     if ok and success.get("output_regex"):
@@ -263,8 +317,7 @@ def down(lab: Lab, purge_cache: bool = False) -> int:
     info = _ours(name, inspect(name))
     if info and info["State"]["Running"] and lab.contract.get("cleanup") is not None:
         print("[study-lab] running the lab's cleanup")
-        cmd, stdin = _mode_cmd(lab, name, "cleanup")
-        _stream(cmd, stdin, lab.spec["timeout"]["cleanup"])
+        _run_mode(lab, name, "cleanup")
     if info:
         _docker("rm", "-f", "-v", name, check=True)
         print(f"[study-lab] {name} removed (with its anonymous volumes: the inner dockerd and kind go with it)")
