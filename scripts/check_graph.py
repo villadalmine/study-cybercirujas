@@ -59,6 +59,10 @@ def rebuild_in_copy(graphify: str) -> dict:
     ignored = [line.strip().rstrip("/") for line in
                (REPO / ".graphifyignore").read_text(encoding="utf-8").splitlines()
                if line.strip() and not line.startswith("#")]
+    # graphify-out/ is in .graphifyignore (not mapped) but must be copied: the
+    # rebuild keeps the committed graph's community ids and labels, so without
+    # it the same code gets different community numbers.
+    ignored = [p for p in ignored if p != "graphify-out"]
     files = subprocess.run(["git", "ls-files", "-z"], cwd=REPO, capture_output=True,
                            text=True, check=True).stdout.split("\0")
     with tempfile.TemporaryDirectory() as tmp:
