@@ -66,8 +66,10 @@ EXPLICIT_ANCHOR = re.compile(r"<a\s+(?:id|name)=[\"']([^\"']+)[\"']", re.I)
 
 
 def tracked_markdown() -> list[str]:
-    out = subprocess.run(["git", "ls-files", "*.md"], cwd=REPO, capture_output=True, text=True, check=True)
-    return sorted(f for f in out.stdout.splitlines() if not f.startswith(SKIP_DIRS))
+    # -z: without it git quotes non-ASCII names (an em dash in a graphify wiki page name).
+    out = subprocess.run(["git", "ls-files", "-z", "*.md"], cwd=REPO, capture_output=True, text=True,
+                         encoding="utf-8", check=True)
+    return sorted(f for f in out.stdout.split(chr(0)) if f and not f.startswith(SKIP_DIRS))
 
 
 def prose_lines(text: str):
