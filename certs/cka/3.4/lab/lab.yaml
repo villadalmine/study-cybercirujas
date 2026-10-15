@@ -49,4 +49,4 @@ timeout:
 derived_from:
   syllabus: 'certs/cka.md#3.4'
   content: certs/cka/3.4/en/content.md
-  content_sha256: c33f542a33609be97fe851e4e482495ebcbc4b310be74d3f373b07f5db040546
+  content_sha256: 0f8e728678067f679b9a27e230c52d63de0fcdba8364f79f6c519694bddf8313
