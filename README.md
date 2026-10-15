@@ -374,3 +374,41 @@ project's transparency layer under
 Code and material: [Apache License 2.0](LICENSE). The exam syllabi the material
 derives from belong to their vendors; details in
 [DEVELOPERS.md](DEVELOPERS.md#licence).
+
+<a id="legal"></a>
+
+## ⚖️ Aviso Legal y de Marcas Registradas / Legal & Trademark Disclaimer
+
+**Español.** study-cybercirujas es un proyecto educativo independiente y de
+código abierto. No está afiliado, patrocinado, respaldado ni aprobado por el
+Linux Professional Institute (LPI), The Linux Foundation, la Cloud Native
+Computing Foundation (CNCF), la Agentic AI Foundation (AAIF), Amazon Web
+Services (AWS), Google, Microsoft, HashiCorp (una empresa de IBM) ni NVIDIA.
+Los nombres de las certificaciones, los códigos de examen y las marcas
+mencionadas (por ejemplo LPIC, Linux Essentials, CKA, CKAD, CKS, KCNA, LFCS,
+MCPA, AWS Certified, Azure, Google Cloud, Terraform o NVIDIA-Certified)
+pertenecen a sus respectivos dueños y se usan solo con fines descriptivos e
+identificativos (*nominative fair use*). Linux® es marca registrada de Linus
+Torvalds; Kubernetes® es marca registrada de The Linux Foundation. El material
+de estudio (`content.md`, `exercises.md`) y los laboratorios prácticos
+(`break_fix.sh`) son material original, generado de forma independiente a
+partir de los temarios públicos oficiales que cita cada tema. Este repositorio
+no contiene ni permite *braindumps*, preguntas reales de examen ni material
+protegido por acuerdos de confidencialidad (NDA).
+
+**English.** study-cybercirujas is an independent, open-source educational
+project. It is not affiliated with, sponsored by, endorsed by or approved by
+the Linux Professional Institute (LPI), The Linux Foundation, the Cloud Native
+Computing Foundation (CNCF), the Agentic AI Foundation (AAIF), Amazon Web
+Services (AWS), Google, Microsoft, HashiCorp (an IBM company) or NVIDIA.
+Certification names, exam codes and the trademarks mentioned (for example
+LPIC, Linux Essentials, CKA, CKAD, CKS, KCNA, LFCS, MCPA, AWS Certified,
+Azure, Google Cloud, Terraform or NVIDIA-Certified) belong to their respective
+owners and are used only for descriptive and identification purposes
+(*nominative fair use*). Linux® is the registered trademark of Linus Torvalds;
+Kubernetes® is a registered trademark of The Linux Foundation. The study
+material (`content.md`, `exercises.md`) and hands-on labs (`break_fix.sh`)
+are original material, produced independently from the public official
+syllabi each topic cites. This repository does not contain or allow
+*braindumps*, real exam questions or material covered by non-disclosure
+agreements (NDA).
