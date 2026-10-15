@@ -11,11 +11,21 @@ class CheckUpdatesDocTests(unittest.TestCase):
         text = (REPO / "docs" / "OPERATING.md").read_text(encoding="utf-8")
         self.assertIn("\n## Checking curriculum updates\n", text)
         section = text.split("\n## Checking curriculum updates\n", 1)[1].split("\n## ", 1)[0]
+        # models.yaml is checked by `make check-models`, a separate target (review of #8).
+        self.assertIn("make check-models", section)
+        self.assertIn("`make check-updates` does not run it", section)
         for must in ("tracker sync", "check_versions.py", "models.yaml", "Exam versions",
                      "Outdated", "not measured", "Never re-snapshot without the owner's decision",
                      "catalog.yaml", "STATUS.md"):
             with self.subTest(must=must):
                 self.assertIn(must, section)
+
+    def test_the_makefile_agrees(self):
+        makefile = (REPO / "Makefile").read_text(encoding="utf-8")
+        recipe = makefile.split("\ncheck-updates:", 1)[1].split("\n\n", 1)[0]
+        self.assertIn("check_versions.py", recipe)
+        self.assertNotIn("check_models", recipe)
+        self.assertIn("\ncheck-models:", makefile)
 
     def test_agents_and_people_find_it(self):
         for doc in ("CLAUDE.md", "AGENTS_SYNC.md"):

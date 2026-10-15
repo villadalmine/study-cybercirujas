@@ -286,8 +286,8 @@ Nothing here degrades silently, because each moving part has a check that
 costs no quota:
 
 ```bash
-make check-updates      # exam syllabi vs what each vendor publishes today,
-                        # plus the bot's model catalogue vs OpenRouter
+make check-updates      # exam syllabi vs what each vendor publishes today
+make check-models       # the bot's model catalogue vs OpenRouter (separate target)
 make verify             # quality floor, manifests, k8s APIs, provenance, graph, tests
 make metrics            # tokens and quota windows spent, per stage and per day
 ```
@@ -318,11 +318,12 @@ make check-updates
 | `scripts/status_matrix.py` | regenerates `STATUS.md`, including the **Exam versions** table | free |
 | `scripts/check_versions.py` | the **deterministic part**: the verdict per certification, built-on version vs upstream version | free |
 
-The same run also checks the **study bot's model catalogue** (`models.yaml`)
-against OpenRouter's live API: models that vanished, prices that moved,
-`:free` models that started charging, models that dropped `reasoning`. That
-output is advisory (the target does not fail on it), but a `GONE` or `PAID`
-line means the bot is showing students something untrue.
+The **study bot's model catalogue** (`models.yaml`) is a separate target,
+run in the same sitting: `make check-models` (`scripts/check_models.py`, free,
+no key) asks OpenRouter's live API for models that vanished, prices that
+moved, `:free` models that started charging, and models that dropped
+`reasoning`. `make check-updates` does not run it. A `GONE` or `PAID` line
+means the bot is showing students something untrue.
 
 ### Reading the "Exam versions" table in STATUS.md
 

@@ -652,7 +652,7 @@ ones churn:
 ```bash
 scripts/check_models.py            # GONE / PRICE / PAID / PARAM, exit 1 on drift
 scripts/check_models.py --update   # accept new prices into models.yaml
-make check-updates                 # runs it alongside the syllabus check
+make check-models                  # the same, as a make target (not part of check-updates)
 
 make probe-models                  # call every model: does it answer, does the
                                    # effort selector do anything, and can it
