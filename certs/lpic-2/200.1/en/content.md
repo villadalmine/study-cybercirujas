@@ -1,8 +1,9 @@
 # LPIC-2 — Topic 200.1: Measure and Troubleshoot Resource Usage
 
-**Exam:** 201-450 · **Version:** 4.5.0 · **Weight:** 5
+**Exam:** 201-450 · **Objectives version:** 4.5.0 · **LPI weight:** 6 (of 120 across exams 201 and 202; 5.0 in this site's syllabus, which scales LPIC-2 to 100)
 **Key knowledge areas:** measure CPU, memory, disk I/O and network I/O; measure firewalling and routing throughput; map client bandwidth usage; correlate system symptoms with likely problems; estimate throughput and identify bottlenecks.
-**Terms and utilities:** `iostat`, `iotop`, `ip`, `ss`, `iptraf`, `mpstat`, `netstat`, `pstree`, `ps`, `sar`, `top`, `uptime`, `w`, `vmstat`.
+**Files, terms and utilities (LPI's partial list, verbatim):** `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out.
+This material also uses tools that are not on that list (`mpstat`, `pidstat`, `ip`, `nstat`, PSI, cgroup v2); they help in practice, but the exam objective is the list above.
 
 > All terminal output in this document was captured on a reference lab host: Debian 13, kernel `6.8.0-45-generic`, `sysstat 12.7.6`, `procps-ng 4.0.4`, `iproute2 6.9.0`, x86_64, 16 CPUs, NVMe root, one 25 GbE uplink. **Column sets differ between tool versions** — `iostat` renamed `avgqu-sz` to `aqu-sz` and removed `svctm` in sysstat 12, and `vmstat` added the `gu` column in procps-ng 4. Always read the header your host prints, never the header you remember.
 
@@ -2562,7 +2563,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 
 **LPI official**
 
-- Exam 201-450 objectives (includes 200.1, weight 5): https://www.lpi.org/our-certifications/exam-201-objectives/
+- Exam 201-450 objectives (includes 200.1, weight 6): https://www.lpi.org/our-certifications/exam-201-objectives/
 - Exam 202-450 objectives: https://www.lpi.org/our-certifications/exam-202-objectives/
 - LPIC-2 certification overview: https://www.lpi.org/our-certifications/lpic-2-overview/
 

@@ -1,9 +1,9 @@
 # LPIC-2 · Topic 200.1 — Measure and Troubleshoot Resource Usage
-## Guided exercises (weight 5.0 · exam 201-450, version 4.5.0)
+## Guided exercises (LPI weight 6 · exam 201-450, objectives version 4.5.0)
 
 > **What this topic really asks of you.** Not "name a tool", but: given a box that is *slow*, decide **which of the four resources** (CPU, memory, disk I/O, network I/O) is saturated, **prove it with a number**, **attribute it to a process or a client**, and **estimate whether the number is near the hardware's ceiling**. Every exercise below ends in a number you can defend.
 >
-> The utilities named by the objective are `ps`, `top`, `uptime`, `w`, `pstree`, `pmap`, `lsof`, `vmstat`, `iostat`, `iotop`, `netstat`, `ss` and `sar`. Confirm the current list on the official objectives page — LPI revises it: <https://www.lpi.org/our-certifications/exam-201-objectives/>. The exercises add the modern equivalents a production engineer is expected to reach for (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), because in a real incident you will be judged on the diagnosis, not on tool vintage.
+> LPI's partial list of files, terms and utilities for this objective is, verbatim: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirm the current list on the official objectives page — LPI revises it: <https://www.lpi.org/our-certifications/exam-201-objectives/>. The exercises add the modern equivalents a production engineer is expected to reach for (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), because in a real incident you will be judged on the diagnosis, not on tool vintage.
 
 ### Lab requirements
 

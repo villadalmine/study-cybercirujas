@@ -1,8 +1,9 @@
 # LPIC-2 — Tema 200.1: Medir y diagnosticar el uso de recursos
 
-**Examen:** 201-450 · **Versión:** 4.5.0 · **Peso:** 5
+**Examen:** 201-450 · **Versión de los objetivos:** 4.5.0 · **Peso LPI:** 6 (de 120 entre los exámenes 201 y 202; 5,0 en el temario de este sitio, que escala LPIC-2 a 100)
 **Áreas de conocimiento clave:** medir CPU, memoria, I/O de disco e I/O de red; medir el throughput de firewalling y routing; mapear el uso de ancho de banda de los clientes; correlacionar síntomas del sistema con problemas probables; estimar throughput e identificar cuellos de botella.
-**Términos y utilidades:** `iostat`, `iotop`, `ip`, `ss`, `iptraf`, `mpstat`, `netstat`, `pstree`, `ps`, `sar`, `top`, `uptime`, `w`, `vmstat`.
+**Archivos, términos y utilidades (lista parcial de LPI, textual):** `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out.
+Este material usa además herramientas que no están en esa lista (`mpstat`, `pidstat`, `ip`, `nstat`, PSI, cgroup v2); sirven en la práctica, pero el objetivo del examen es la lista de arriba.
 
 > Toda la salida de terminal de este documento se capturó en un host de laboratorio de referencia: Debian 13, kernel `6.8.0-45-generic`, `sysstat 12.7.6`, `procps-ng 4.0.4`, `iproute2 6.9.0`, x86_64, 16 CPUs, raíz en NVMe, un uplink de 25 GbE. **Los conjuntos de columnas difieren entre versiones de las herramientas** — `iostat` renombró `avgqu-sz` a `aqu-sz` y eliminó `svctm` en sysstat 12, y `vmstat` agregó la columna `gu` en procps-ng 4. Leé siempre el encabezado que imprime tu host, nunca el encabezado que recordás.
 
@@ -2562,7 +2563,7 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 
 **Oficial de LPI**
 
-- Objetivos del examen 201-450 (incluye 200.1, peso 5): https://www.lpi.org/our-certifications/exam-201-objectives/
+- Objetivos del examen 201-450 (incluye 200.1, peso 6): https://www.lpi.org/our-certifications/exam-201-objectives/
 - Objetivos del examen 202-450: https://www.lpi.org/our-certifications/exam-202-objectives/
 - Vista general de la certificación LPIC-2: https://www.lpi.org/our-certifications/lpic-2-overview/
 

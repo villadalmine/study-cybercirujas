@@ -1,9 +1,9 @@
 # LPIC-2 · Topic 200.1 — Medir y diagnosticar el uso de recursos
-## Ejercicios guiados (peso 5.0 · examen 201-450, versión 4.5.0)
+## Ejercicios guiados (peso LPI 6 · examen 201-450, versión de los objetivos 4.5.0)
 
 > **Lo que este tema realmente te exige.** No "nombrar una herramienta", sino: dada una máquina que está *lenta*, decidir **cuál de los cuatro recursos** (CPU, memoria, I/O de disco, I/O de red) está saturado, **probarlo con un número**, **atribuirlo a un proceso o a un cliente** y **estimar si ese número está cerca del techo del hardware**. Todos los ejercicios de abajo terminan en un número que podés defender.
 >
-> Las utilidades que nombra el objetivo son `ps`, `top`, `uptime`, `w`, `pstree`, `pmap`, `lsof`, `vmstat`, `iostat`, `iotop`, `netstat`, `ss` y `sar`. Confirmá la lista actual en la página oficial de objetivos — LPI la revisa: <https://www.lpi.org/our-certifications/exam-201-objectives/>. Los ejercicios agregan los equivalentes modernos que se espera que un ingeniero de producción use (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), porque en un incidente real te van a juzgar por el diagnóstico, no por la antigüedad de la herramienta.
+> La lista parcial de archivos, términos y utilidades de LPI para este objetivo es, textual: `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out. Confirmá la lista actual en la página oficial de objetivos — LPI la revisa: <https://www.lpi.org/our-certifications/exam-201-objectives/>. Los ejercicios agregan los equivalentes modernos que se espera que un ingeniero de producción use (`mpstat`, `pidstat`, `nstat`, `nft`, PSI, cgroup v2), porque en un incidente real te van a juzgar por el diagnóstico, no por la antigüedad de la herramienta.
 
 ### Requisitos del laboratorio
 
