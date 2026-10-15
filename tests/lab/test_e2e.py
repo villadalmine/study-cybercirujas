@@ -27,14 +27,21 @@ def snapshot():
 
 
 def flow(target, from_repo, fix_cmd):
-    before = snapshot()
     lab = cli.resolve(target, from_repo)
     args = lab.cli_args
     name = runner.container_name(lab)
+    own_volumes: set = set()
     try:
         assert run_cli("run", *args) == 0                       # run + break
         cid = docker_set("ps", "-q", "--filter", f"name=^{name}$")
         assert len(cid) == 1
+        # The lab's own anonymous volumes, by identity: comparing global
+        # snapshots failed whenever anything else on the host (another kind
+        # cluster, another test) created a volume during the run.
+        mounts = subprocess.run(["docker", "inspect", "-f",
+                                 '{{range .Mounts}}{{if eq .Type "volume"}}{{.Name}} {{end}}{{end}}', name],
+                                capture_output=True, text=True).stdout.split()
+        own_volumes = set(mounts) - {runner.CACHE_VOLUME}
         assert run_cli("run", *args) == 0                       # idempotent: same container, still broken
         assert docker_set("ps", "-q", "--filter", f"name=^{name}$") == cid
         assert run_cli("check", *args) == 1                     # broken -> verify fails
@@ -44,9 +51,9 @@ def flow(target, from_repo, fix_cmd):
         assert run_cli("down", *args) == 0                      # cleanup + remove
     after = snapshot()
     assert after["containers"] == set()
-    leftover = after["volumes"] - before["volumes"] - {runner.CACHE_VOLUME}
-    assert leftover == set(), f"leftover volumes: {leftover}"
-    assert after["networks"] - before["networks"] == set()
+    leftover = own_volumes & after["volumes"]
+    assert leftover == set(), f"leftover volumes of the lab: {leftover}"
+    assert not any(name in n for n in docker_set("network", "ls", "--format", "{{.Name}}"))
     assert run_cli("down", *args) == 0                          # down twice: no-op
 
 
