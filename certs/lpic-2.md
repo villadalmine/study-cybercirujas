@@ -9,7 +9,7 @@ topics:
 - id: '200.1'
   sources:
   - https://www.lpi.org/our-certifications/exam-201-objectives/
-  status: pending
+  status: generated
   title: Measure and Troubleshoot Resource Usage
   topic: 200 - Capacity Planning
   weight: 5.0
