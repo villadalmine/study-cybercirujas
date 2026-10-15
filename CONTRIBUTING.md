@@ -72,6 +72,34 @@ is), or privately to the maintainer; it is removed first and discussed after.
 Exam candidates sign the vendors' NDAs: this rule protects them as much as the
 project.
 
+### Raising a topic's quality score
+
+Every `certs/<cert>/<topic>/<lang>/meta.yaml` has a `quality:` block: the
+score (0-100), the level (*Verified*, *AI beta*, *Draft*) and every check
+behind it, each `pass`, `fail` or `not_run` with its evidence. It is written by
+`make quality` (`scripts/quality_score.py`), **never by hand**, and CI fails
+if a block is not what the files give — so after generating or editing
+material, run `make quality CERT=<cert>` and commit the meta.yaml it changed.
+The weights and thresholds are in `quality_weights.yaml`.
+
+To raise a topic's score, turn its `not_run` and `fail` entries into `pass`:
+
+| Check | How it passes |
+|---|---|
+| `quality_floor` | content.md and exercises.md meet the floor in `pipeline.yaml` |
+| `provenance` | meta.yaml names a real backend and model (not `unknown`) |
+| `sources` | a References section whose URLs mostly belong to projects in `docs/sources.yaml` |
+| `k8s_manifests` | every YAML/JSON block parses; no removed Kubernetes API |
+| `translation_gate` | the translation keeps the source's code blocks, URLs, headings and length |
+| `source_chain` | the link declares its origin (docs/PRINCIPLES.md → The source chain) and it has not changed since |
+| `lab` | the topic's lab ran in the study-lab runner and its `lab.yaml` records `verified` |
+| `independent_review` | a `reviews:` entry in meta.yaml: `{by, link, date, result: pass}` — `fable (revisor-pr)` or Copilot, with the review's link |
+| `human_review` | a `human_edits:` entry (see *Provenance is mandatory*) |
+| `citations_resolve`, `groundedness` | not run in CI today (network, and a model to be chosen); they stay `not_run` |
+
+*Verified* needs a score of 85 or more **and** a passed lab and independent
+review; a high score from automatic checks alone stops at *AI beta*.
+
 ## Conventions
 
 - **Branches:** `<type>/<short-topic>`, e.g. `fix/cka-1.1-reclaim-policy`,

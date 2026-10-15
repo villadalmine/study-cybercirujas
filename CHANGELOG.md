@@ -14,6 +14,19 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 - **CKA labs: chain hashes refreshed** (fix): the `content_sha256` of the CKA v2 labs 1.1, 3.3, 3.4 and 3.5
   had been taken on Windows with CRLF line endings, so they read STALE on Linux. Recomputed with
   `teach.core.certs.chain_sha256` on an LF checkout; no lab or content was edited.
+- **Every topic has a quality score** (0-100) and a level — *Verified*, *AI
+  beta*, *Draft* — from every check that exists, recorded check by check in a
+  `quality:` block of its `meta.yaml` (pass / fail / not_run, weight, date,
+  evidence). Weights and thresholds in `quality_weights.yaml`; written by
+  `make quality`, verified in CI (`scripts/quality_score.py --check`); shown in
+  STATUS.md (*Quality*), on the site (a badge per topic) and in the API
+  (`quality` in a topic's response). Measured today: 1153 topic-languages at
+  *AI beta*, 2 at *Draft* (backfilled metadata), none *Verified* — no topic has
+  both a runner-verified lab and a recorded independent review yet.
+- The quality floor, `check_sources`, `check_manifests` and `check_k8s_apis`
+  read the corpus as UTF-8 on every platform (on Windows, accented and CJK
+  References headings were not found).
+
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.

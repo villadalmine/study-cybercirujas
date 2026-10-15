@@ -102,6 +102,24 @@ for the reviewer and the maintainer.
 The author updates both tables on every round, in the same edit that updates
 *Where it ran*.
 
+## Recording a review in the material
+
+A review of study material also counts for the topic's quality score
+(CONTRIBUTING → Raising a topic's quality score). When an independent review
+(the `revisor-pr` agent, Copilot, a person) passes a topic, its PR adds to that
+topic's `meta.yaml`:
+
+```yaml
+reviews:
+  - by: fable (revisor-pr)
+    link: https://github.com/<owner>/<repo>/pull/<n>#pullrequestreview-<id>
+    date: 2026-10-15
+    result: pass        # or fail
+```
+
+and runs `make quality` so the block shows it. A failed review is recorded
+too: it lowers the score until a later review passes.
+
 ## When a PR is ready
 
 - the latest Copilot review is triaged and has no open valid finding (or the

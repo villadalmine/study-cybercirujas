@@ -136,6 +136,18 @@ recorded (2026-10-15) are listed one by one in
 | 4 translations | 367 of 367 say `translated_from`; 0 recorded which version of the source | 367 (baseline) |
 | 5 videos | 53 of 53 certification scripts say cert and language; 0 recorded the syllabus version | 53 (baseline) |
 
+**The quality score is the chain's summary.** Every topic and language
+carries, in its `meta.yaml`, a `quality:` block written by
+`scripts/quality_score.py` (`make quality`; `--check` in CI): one entry per
+check — quality floor, provenance, sources, citations, Kubernetes manifests,
+translation gate, source chain, the lab in the runner, independent review,
+human review, and a reserved place for groundedness — each `pass`, `fail` or
+`not_run`, with its weight, date and evidence. The weights and the level
+thresholds (*Verified*, *AI beta*, *Draft*) live in `quality_weights.yaml`. A
+check that did not run costs part of its weight and a failed one all of it:
+what was not measured is never counted as fine. The score is visible in
+STATUS.md, on the site and in the API.
+
 *Not enforced:* that a sentence is *true* to the source it cites. The chain
 proves where each link comes from and when its origin moved; correctness is
 the quality floor, the citation and source checks, and review.
