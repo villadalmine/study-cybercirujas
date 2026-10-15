@@ -250,5 +250,16 @@ class CpuPressureTest(unittest.TestCase):
             self.assertGreaterEqual(len(fulls), 4, lang)
 
 
+class NapiBudgetTest(unittest.TestCase):
+    def test_budget_usecs_default_follows_hz(self):
+        # net/core/hotdata.c: .netdev_budget_usecs = 2 * USEC_PER_SEC / HZ;
+        # Debian bookworm builds with CONFIG_HZ_250=y, so the lab VM prints 8000.
+        for lang in LANGS:
+            text = read(lang, "content.md") + read(lang, "exercises.md")
+            for value in re.findall(r"netdev_budget_usecs = (\d+)", text):
+                self.assertEqual(int(value), 2 * 1_000_000 // 250, lang)
+            self.assertNotRegex(text, r"`netdev_budget_usecs`, 2000 µs\)", lang)
+
+
 if __name__ == "__main__":
     unittest.main()

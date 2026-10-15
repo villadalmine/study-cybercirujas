@@ -1007,7 +1007,7 @@ grep -E 'NET_RX|NET_TX' /proc/softirqs | cut -c1-100
 cpu0   processed=128412     dropped=0        time_squeeze=412      backlog_len=0
 cpu1   processed=98412      dropped=0        time_squeeze=18       backlog_len=0
 net.core.netdev_budget = 300
-net.core.netdev_budget_usecs = 2000
+net.core.netdev_budget_usecs = 8000
 net.core.netdev_max_backlog = 1000
 ```
 
@@ -1408,7 +1408,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 **Q46.** `drop` cuenta paquetes descartados porque la tabla estaba llena o no se pudo asignar una entrada. **`insert_failed`** cuenta intentos de insertar una entrada nueva que colisionó con una entrada existente idéntica en su tupla — en la práctica casi siempre **colisiones de puerto de origen del NAT**: muchas conexiones desde el mismo origen siendo SNAT'eadas a una sola dirección, donde el kernel no pudo encontrar una tupla `(saddr, sport, daddr, dport)` libre. Lo produce una tasa alta de conexiones desde detrás de una única dirección NAT con un rango de puertos chico, no una tabla llena. Remedios: un pool de SNAT más grande (`nft ... snat to 198.51.100.1-198.51.100.8`), randomización de puertos estilo `--random-fully`, o diseños sin `fullcone` — ninguno de los cuales involucra `nf_conntrack_max`.
 
-**Q47.** (1) `dropped 0` significa que el backlog de entrada por CPU no se desbordó — no se perdieron paquetes en esa etapa, así que `netdev_max_backlog` es adecuado. (2) **`time_squeeze`** cuenta cuántas veces el loop de polling de NAPI se quedó sin su **presupuesto** (`net.core.netdev_budget`, 300 paquetes, o `netdev_budget_usecs`, 2000 µs) con trabajo todavía pendiente, y tuvo que diferir a `ksoftirqd` — es decir, la CPU no pudo drenar el ring en una sola pasada. (3) `%soft 70%` en cpu0 sola con ~1% en el resto significa que **todo el procesamiento de recepción está cayendo en una sola CPU**: una única cola de hardware, o una única IRQ, fijada ahí. Los dos mecanismos para distribuirlo: **RSS** (Receive Side Scaling — múltiples colas de hardware, cada una con su propia IRQ, repartidas vía `/proc/irq/*/smp_affinity`, idealmente gestionadas por `irqbalance` o fijación explícita) y, donde la NIC no puede hacerlo, **RPS** (Receive Packet Steering, redistribución por software vía `/sys/class/net/<if>/queues/rx-*/rps_cpus`), opcionalmente con RFS para localidad de flujo. Subir `netdev_budget` sólo hace que la única CPU trabaje más duro; no agrega capacidad.
+**Q47.** (1) `dropped 0` significa que el backlog de entrada por CPU no se desbordó — no se perdieron paquetes en esa etapa, así que `netdev_max_backlog` es adecuado. (2) **`time_squeeze`** cuenta cuántas veces el loop de polling de NAPI se quedó sin su **presupuesto** (`net.core.netdev_budget`, 300 paquetes por defecto, o `netdev_budget_usecs`, 2 jiffies por defecto: `2 * USEC_PER_SEC / HZ`, o sea 8000 µs con `HZ=250`, que usa el kernel de Debian 12, y 2000 µs con `HZ=1000`; valores por defecto en `net/core/hotdata.c`) con trabajo todavía pendiente, y tuvo que diferir a `ksoftirqd` — es decir, la CPU no pudo drenar el ring en una sola pasada. (3) `%soft 70%` en cpu0 sola con ~1% en el resto significa que **todo el procesamiento de recepción está cayendo en una sola CPU**: una única cola de hardware, o una única IRQ, fijada ahí. Los dos mecanismos para distribuirlo: **RSS** (Receive Side Scaling — múltiples colas de hardware, cada una con su propia IRQ, repartidas vía `/proc/irq/*/smp_affinity`, idealmente gestionadas por `irqbalance` o fijación explícita) y, donde la NIC no puede hacerlo, **RPS** (Receive Packet Steering, redistribución por software vía `/sys/class/net/<if>/queues/rx-*/rps_cpus`), opcionalmente con RFS para localidad de flujo. Subir `netdev_budget` sólo hace que la única CPU trabaje más duro; no agrega capacidad.
 
 ### Lab 6
 
@@ -1460,6 +1460,8 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 - Código de Linux, `si_mem_available()` (cómo se calcula `MemAvailable`) — <https://github.com/torvalds/linux/blob/master/mm/show_mem.c>
 - Documentación del kernel Linux, *I/O statistics fields* (`/proc/diskstats`) — <https://www.kernel.org/doc/html/latest/admin-guide/iostats.html>
 - Documentación del kernel Linux, *PSI – Pressure Stall Information* — <https://www.kernel.org/doc/html/latest/accounting/psi.html>
+- Código de Linux, `net/core/hotdata.c` (valores por defecto de `netdev_budget`, `netdev_budget_usecs`, `netdev_max_backlog`) — <https://github.com/torvalds/linux/blob/master/net/core/hotdata.c>
+- Equipo del kernel de Debian, configuración del kernel de bookworm (`CONFIG_HZ_250=y`) — <https://salsa.debian.org/kernel-team/linux/-/blob/debian/6.1/bookworm/debian/config/config>
 - Documentación del kernel Linux, *Control Group v2* (controlador de memoria, `memory.events`, `memory.stat`) — <https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html>
 - Documentación del kernel Linux, *Documentation for /proc/sys/vm* (`dirty_ratio`, `swappiness`, `overcommit_memory`) — <https://www.kernel.org/doc/html/latest/admin-guide/sysctl/vm.html>
 - Documentación del kernel Linux, *Documentation for /proc/sys/net* (`netdev_budget`, `netdev_max_backlog`) — <https://www.kernel.org/doc/html/latest/admin-guide/sysctl/net.html>

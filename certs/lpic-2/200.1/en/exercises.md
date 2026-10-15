@@ -1007,7 +1007,7 @@ grep -E 'NET_RX|NET_TX' /proc/softirqs | cut -c1-100
 cpu0   processed=128412     dropped=0        time_squeeze=412      backlog_len=0
 cpu1   processed=98412      dropped=0        time_squeeze=18       backlog_len=0
 net.core.netdev_budget = 300
-net.core.netdev_budget_usecs = 2000
+net.core.netdev_budget_usecs = 8000
 net.core.netdev_max_backlog = 1000
 ```
 
@@ -1408,7 +1408,7 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 
 **Q46.** `drop` counts packets dropped because the table was full or an entry could not be allocated. **`insert_failed`** counts attempts to insert a new entry that collided with an existing, identical tuple — in practice almost always **NAT source-port collisions**: many connections from the same source being SNAT'd to one address, where the kernel could not find a free `(saddr, sport, daddr, dport)` tuple. It is produced by high connection rates from behind a single NAT address with a small port range, not by a full table. Remedies: a larger SNAT pool (`nft ... snat to 198.51.100.1-198.51.100.8`), `--random-fully`-style port randomization, or `fullcone`-free designs — none of which involve `nf_conntrack_max`.
 
-**Q47.** (1) `dropped 0` means the per-CPU input backlog has not overflowed — no packets lost at that stage, so `netdev_max_backlog` is adequate. (2) **`time_squeeze`** counts how many times the NAPI poll loop ran out of its **budget** (`net.core.netdev_budget`, 300 packets, or `netdev_budget_usecs`, 2000 µs) with work still pending, and had to defer to `ksoftirqd` — i.e. the CPU could not drain the ring in one pass. (3) `%soft 70%` on cpu0 alone with ~1% elsewhere means **all receive processing is landing on one CPU**: one hardware queue, or one IRQ, pinned there. The two mechanisms to spread it: **RSS** (Receive Side Scaling — multiple hardware queues, each with its own IRQ, spread via `/proc/irq/*/smp_affinity`, ideally managed by `irqbalance` or explicit pinning) and, where the NIC cannot do it, **RPS** (Receive Packet Steering, software redistribution via `/sys/class/net/<if>/queues/rx-*/rps_cpus`), optionally with RFS for flow locality. Raising `netdev_budget` only makes the single CPU work harder; it does not add capacity.
+**Q47.** (1) `dropped 0` means the per-CPU input backlog has not overflowed — no packets lost at that stage, so `netdev_max_backlog` is adequate. (2) **`time_squeeze`** counts how many times the NAPI poll loop ran out of its **budget** (`net.core.netdev_budget`, 300 packets by default, or `netdev_budget_usecs`, 2 jiffies by default: `2 * USEC_PER_SEC / HZ`, so 8000 µs at `HZ=250`, which Debian 12's kernel uses, and 2000 µs at `HZ=1000`; defaults in `net/core/hotdata.c`) with work still pending, and had to defer to `ksoftirqd` — i.e. the CPU could not drain the ring in one pass. (3) `%soft 70%` on cpu0 alone with ~1% elsewhere means **all receive processing is landing on one CPU**: one hardware queue, or one IRQ, pinned there. The two mechanisms to spread it: **RSS** (Receive Side Scaling — multiple hardware queues, each with its own IRQ, spread via `/proc/irq/*/smp_affinity`, ideally managed by `irqbalance` or explicit pinning) and, where the NIC cannot do it, **RPS** (Receive Packet Steering, software redistribution via `/sys/class/net/<if>/queues/rx-*/rps_cpus`), optionally with RFS for flow locality. Raising `netdev_budget` only makes the single CPU work harder; it does not add capacity.
 
 ### Lab 6
 
@@ -1460,6 +1460,8 @@ sysctl net.ipv4.ip_forward net.netfilter.nf_conntrack_max 2>/dev/null
 - Linux source, `si_mem_available()` (how `MemAvailable` is computed) — <https://github.com/torvalds/linux/blob/master/mm/show_mem.c>
 - Linux kernel documentation, *I/O statistics fields* (`/proc/diskstats`) — <https://www.kernel.org/doc/html/latest/admin-guide/iostats.html>
 - Linux kernel documentation, *PSI – Pressure Stall Information* — <https://www.kernel.org/doc/html/latest/accounting/psi.html>
+- Linux source, `net/core/hotdata.c` (defaults of `netdev_budget`, `netdev_budget_usecs`, `netdev_max_backlog`) — <https://github.com/torvalds/linux/blob/master/net/core/hotdata.c>
+- Debian kernel team, bookworm kernel configuration (`CONFIG_HZ_250=y`) — <https://salsa.debian.org/kernel-team/linux/-/blob/debian/6.1/bookworm/debian/config/config>
 - Linux kernel documentation, *Control Group v2* (memory controller, `memory.events`, `memory.stat`) — <https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html>
 - Linux kernel documentation, *Documentation for /proc/sys/vm* (`dirty_ratio`, `swappiness`, `overcommit_memory`) — <https://www.kernel.org/doc/html/latest/admin-guide/sysctl/vm.html>
 - Linux kernel documentation, *Documentation for /proc/sys/net* (`netdev_budget`, `netdev_max_backlog`) — <https://www.kernel.org/doc/html/latest/admin-guide/sysctl/net.html>
