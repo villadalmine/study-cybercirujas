@@ -221,7 +221,8 @@ What is checked, and what each one actually establishes:
 
 | Check | Command | Proves | Does not prove |
 |---|---|---|---|
-| Structural floor | `make quality` | Not a stub; has the sections the prompt required | Anything about correctness |
+| Structural floor | `make quality` (its floor report) | Not a stub; has the sections the prompt required | Anything about correctness |
+| Quality score | `make quality` (writes each meta.yaml `quality:` block), `scripts/quality_score.py --check` | Every check that exists ran, or is recorded as not run, and the block is current | Anything a check does not measure (groundedness is reserved, not run) |
 | Recap guard | automatic, in the generator | The backend returned material, not a summary of its own actions | — |
 | Citation liveness | `scripts/check_citations.py` | The cited sources exist | That they support the claim made |
 | Manifest syntax | `scripts/check_manifests.py` | Embedded YAML/JSON parses | That the fields are real API fields |

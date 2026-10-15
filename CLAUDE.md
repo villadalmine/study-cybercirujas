@@ -41,6 +41,7 @@ memory. The checks form a ladder, and it matters which rung a claim rests on —
 | Question | Tool | Cost |
 |---|---|---|
 | Is it a stub, or missing required structure? | quality floor, **before writing** | free |
+| What did every check say about this topic, and how much does it add up to? | `make quality` → meta.yaml `quality:` (`scripts/quality_score.py --check` in CI) | free |
 | Does the cited URL resolve? | `scripts/check_citations.py` | free |
 | Is the citation an official project source, and whose? | `scripts/check_sources.py` + [docs/sources.yaml](docs/sources.yaml) | free |
 | Does the embedded YAML parse? | `scripts/check_manifests.py` | free |

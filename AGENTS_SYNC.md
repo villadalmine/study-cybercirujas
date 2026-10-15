@@ -401,7 +401,7 @@ than re-authored.
 ```bash
 make audit                          # pending/corrupt combos + unrendered videos
 scripts/check_provenance.py         # traceability, bookkeeping, ordering
-make quality                        # what meets the floor
+make quality                        # the floor report, then rescore: commit the meta.yaml it changes
 make test                           # 34 tests, stdlib unittest
 scripts/usage_report.py             # what has actually been spent, per model
 ```

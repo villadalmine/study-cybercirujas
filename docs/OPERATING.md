@@ -224,7 +224,7 @@ files that merely exist.
 
 ```bash
 make verify                       # everything below, in one command
-make quality                      # what meets the floor and what does not
+make quality                      # floor report, then rescore and write each meta.yaml quality block (CERT=<cert> for one)
 make audit                        # pending/corrupt combos, and unrendered videos
 make test                         # floor and stale-invalidation tests
 scripts/check_citations.py        # do the cited sources exist?
@@ -234,6 +234,7 @@ scripts/check_api_facts.py        # do manifests use APIs the tracked release se
 scripts/check_sources.py          # is each citation an official project source?
 scripts/check_provenance.py       # traceable, accounted for, content before video
 scripts/check_source_chain.py     # does every link declare its origin? (PRINCIPLES -> The source chain)
+scripts/quality_score.py --check  # is every topic's quality block what the files give?
 scripts/check_syllabus.py         # does the syllabus cover the exam, or its index?
 scripts/check_versions.py         # what we built on vs what the exam publishes now
 scripts/status_matrix.py --check  # is STATUS.md still what the filesystem says?
