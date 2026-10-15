@@ -326,6 +326,11 @@ class QualityOnlyTests(unittest.TestCase):
             files, base = self.tree(tmp, self.META + "quality: {}\n", extra=["certs/cka/1.1/en/content.md"])
             self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), set())
 
+    def test_status_md_with_only_rescored_metadata_is_not_a_hand_edit(self):
+        rescored = ["STATUS.md", "certs/cka/1.1/en/meta.yaml"]
+        self.assertEqual(check_pr.scope(["STATUS.md"], all_files=rescored), [])
+        self.assertTrue(any("generated file" in p for p in check_pr.scope(["STATUS.md"])))
+
     def test_base_texts_reads_git(self):
         texts = check_pr.base_texts(["README.md", "no/such/file.md"], "HEAD")
         self.assertIn("study", texts["README.md"].lower())
