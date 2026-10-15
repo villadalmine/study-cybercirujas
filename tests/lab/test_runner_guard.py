@@ -1,8 +1,8 @@
 """study-lab never adopts or deletes a container it did not create.
 
-run() recreates and down() removes containers by name; a container holding the
-name without the study-lab=1 label is someone else's (manual review of the
-labs-runner PR). No Docker needed: docker calls are recorded, not executed.
+run() recreates, down() removes and check/shell/exec enter containers by name;
+a container holding the name without the study-lab=1 label is someone else's
+(manual review of the labs-runner PR, and review of PR #2). No Docker needed: docker calls are recorded, not executed.
 """
 import pytest
 
@@ -40,6 +40,27 @@ def test_run_refuses_a_foreign_container(monkeypatch, docker_calls):
     with pytest.raises(runner.RunnerError, match="not created by study-lab"):
         runner.run(FakeLab())
     assert not any(a[:2] == ("rm", "-f") for a in docker_calls)
+
+
+@pytest.mark.parametrize("action", ["check", "shell", "exec"])
+def test_check_shell_exec_refuse_a_foreign_container(monkeypatch, docker_calls, action):
+    monkeypatch.setattr(runner, "inspect", lambda name: {"State": {"Running": True},
+                                                        "Config": {"Labels": {}}})
+    entered = []
+    monkeypatch.setattr(runner, "_stream", lambda *a, **k: entered.append(a) or (0, ""))
+    monkeypatch.setattr(runner.subprocess, "call", lambda *a, **k: entered.append(a) or 0)
+    lab = FakeLab()
+    lab.spec = {"timeout": {"verify": 5}, "env": {}, "script": "break_fix.sh",
+                "run_in": "container", "run_as": "root", "requires": "kind"}
+    lab.contract = {"verify": ["verify"]}
+    with pytest.raises(runner.RunnerError, match="not created by study-lab"):
+        if action == "check":
+            runner.check(lab)
+        elif action == "shell":
+            runner.shell(lab)
+        else:
+            runner.shell(lab, ["id"])
+    assert entered == []
 
 
 def test_ours_passes_study_lab_containers():

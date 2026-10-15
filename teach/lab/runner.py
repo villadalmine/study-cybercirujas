@@ -80,9 +80,9 @@ def inspect(name: str) -> dict | None:
 def _ours(name: str, info: dict | None) -> dict | None:
     """`info` if the container is a study-lab one; refuse to touch it otherwise.
 
-    run() recreates and down() removes containers by name. A container that
-    holds the name but was not created by study-lab (no `study-lab=1` label) is
-    someone else's work: never adopted, never deleted.
+    run() recreates, down() removes and check/shell/exec enter containers by
+    name. A container that holds the name but was not created by study-lab (no
+    `study-lab=1` label) is someone else's work: never adopted, entered or deleted.
     """
     if info and (info.get("Config", {}).get("Labels") or {}).get("study-lab") != "1":
         raise RunnerError(f"a container named {name} exists but was not created by study-lab "
@@ -284,7 +284,7 @@ def _next_steps(lab: Lab) -> None:
 
 def _require_running(lab: Lab) -> str:
     name = container_name(lab)
-    info = inspect(name)
+    info = _ours(name, inspect(name))  # check/shell/exec never enter a container study-lab did not create
     if not info or not info["State"]["Running"]:
         raise RunnerError(f"{name} is not running: start it with 'study-lab run ...'")
     return name
