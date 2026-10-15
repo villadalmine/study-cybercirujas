@@ -1,61 +1,49 @@
 # Community 19
 
-> 25 nodes · cohesion 0.14
+> 19 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **json** (65 connections)
-- **generator.py** (49 connections) — `teach/core/generator.py`
-- **translation_study.py** (16 connections) — `scripts/translation_study.py`
-- **quota.py** (15 connections) — `scripts/quota.py`
-- **time** (14 connections)
-- **translate()** (8 connections) — `scripts/translation_study.py`
-- **main()** (7 connections) — `scripts/translation_study.py`
-- **main()** (6 connections) — `scripts/quota.py`
-- **probe()** (6 connections) — `scripts/quota.py`
-- **_record_plain_usage()** (6 connections) — `teach/core/generator.py`
-- **evaluate()** (5 connections) — `scripts/translation_study.py`
-- **_record_usage()** (5 connections) — `teach/core/generator.py`
-- **master_key()** (4 connections) — `scripts/translation_study.py`
-- **record()** (3 connections) — `scripts/quota.py`
-- **show_history()** (3 connections) — `scripts/quota.py`
-- **2026-09-11** (2 connections) — `CHANGELOG.md`
-- **Detect whether the AI backend currently has quota, and record the history.…** (1 connections) — `scripts/quota.py`
-- **Returns (exit-style status, detail). Cheap by construction: the prompt asks for…** (1 connections) — `scripts/quota.py`
-- **Run the pipeline's own two gates. Verdict plus the reasons it failed.** (1 connections) — `scripts/translation_study.py`
-- **Measure what a translation actually costs, and whether it survives…** (1 connections) — `scripts/translation_study.py`
-- **Read the proxy key from the cluster rather than from a file on disk. It is only…** (1 connections) — `scripts/translation_study.py`
-- **One completion through the proxy. Returns text plus what it cost.** (1 connections) — `scripts/translation_study.py`
-- **Content generator — interchangeable backends. Backends (env TEACH_BACKEND or…** (1 connections) — `teach/core/generator.py`
-- **Append one line per completion: what it was for, and what it cost. Never…** (1 connections) — `teach/core/generator.py`
-- **Usage line for backends without the claude JSON envelope. litellm reports exact…** (1 connections) — `teach/core/generator.py`
+- **lab/cli.py** (26 connections) — `teach/lab/cli.py`
+- **main()** (17 connections) — `teach/lab/cli.py`
+- **resolve()** (10 connections) — `teach/lab/cli.py`
+- **SpecError** (8 connections) — `teach/lab/spec.py`
+- **_clone()** (6 connections) — `teach/lab/cli.py`
+- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
+- **cmd_new()** (6 connections) — `teach/lab/cli.py`
+- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
+- **_banner()** (4 connections) — `teach/lab/cli.py`
+- **cmd_list()** (4 connections) — `teach/lab/cli.py`
+- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
+- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
+- **Lab** (3 connections)
+- **Path** (2 connections)
+- **__main__.py** (2 connections) — `teach/lab/__main__.py`
+- **Exception** (1 connections)
+- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
+- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
+- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (16 shared connections)
-- [Community 36](Community_36.md) (11 shared connections)
-- [Community 61](Community_61.md) (9 shared connections)
-- [Community 37](Community_37.md) (7 shared connections)
-- [Community 7](Community_7.md) (6 shared connections)
-- [Community 32](Community_32.md) (6 shared connections)
-- [Changelog](Changelog.md) (5 shared connections)
-- [Community 65](Community_65.md) (5 shared connections)
-- [Community 1](Community_1.md) (5 shared connections)
-- [Community 21](Community_21.md) (4 shared connections)
-- [Community 141](Community_141.md) (4 shared connections)
-- [Community 31](Community_31.md) (4 shared connections)
+- [Community 1](Community_1.md) (18 shared connections)
+- [Community 12](Community_12.md) (9 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 22](Community_22.md) (3 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 35](Community_35.md) (2 shared connections)
 
 ## Source Files
 
-- `CHANGELOG.md`
-- `scripts/quota.py`
-- `scripts/translation_study.py`
-- `teach/core/generator.py`
+- `teach/lab/__main__.py`
+- `teach/lab/cli.py`
+- `teach/lab/spec.py`
 
 ## Audit Trail
 
-- EXTRACTED: 177 (98%)
-- INFERRED: 4 (2%)
+- EXTRACTED: 75 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -4,17 +4,16 @@
 
 ## Key Concepts
 
-- **Automated review (Copilot)** (5 connections) — `docs/REVIEWS.md`
-- **REVIEWS.md** (4 connections) — `docs/REVIEWS.md`
+- **Automated review (Copilot)** (6 connections) — `docs/REVIEWS.md`
 - **Authorship: who wrote it, who found what, who fixed it** (1 connections) — `docs/REVIEWS.md`
 - **How it behaves** (1 connections) — `docs/REVIEWS.md`
 - **How we work with it** (1 connections) — `docs/REVIEWS.md`
+- **Recording a review in the material** (1 connections) — `docs/REVIEWS.md`
 - **When a PR is ready** (1 connections) — `docs/REVIEWS.md`
 
 ## Relationships
 
-- [README.md](README.md.md) (2 shared connections)
-- [Community 107](Community_107.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
@@ -22,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

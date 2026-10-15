@@ -1,47 +1,40 @@
 # Community 26
 
-> 13 nodes · cohesion 0.21
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **collections** (11 connections)
-- **usage_report.py** (10 connections) — `scripts/usage_report.py`
-- **test_images.py** (9 connections) — `tests/lab/test_images.py`
-- **main()** (5 connections) — `scripts/usage_report.py`
-- **_cmd()** (5 connections) — `tests/lab/test_images.py`
-- **rows()** (3 connections) — `scripts/usage_report.py`
-- **_money()** (2 connections) — `scripts/usage_report.py`
-- **_tokens()** (2 connections) — `scripts/usage_report.py`
-- **test_job_ids_are_unique_across_workflows()** (2 connections) — `tests/lab/test_images.py`
-- **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
-- **Path** (1 connections)
-- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
-- **Static guards on the runner images and the CI that builds them (no Docker…** (1 connections) — `tests/lab/test_images.py`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 19](Community_19.md) (4 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 31](Community_31.md) (2 shared connections)
-- [Community 35](Community_35.md) (2 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 64](Community_64.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 124](Community_124.md) (1 shared connections)
-- [Community 32](Community_32.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/usage_report.py`
-- `tests/lab/test_images.py`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

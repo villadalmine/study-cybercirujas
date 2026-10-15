@@ -19,8 +19,8 @@
 
 ## Relationships
 
-- [Community 125](Community_125.md) (5 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
+- [Community 54](Community_54.md) (3 shared connections)
+- [Community 125](Community_125.md) (3 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 - [Platform Architecture Plan](Platform_Architecture_Plan.md) (1 shared connections)

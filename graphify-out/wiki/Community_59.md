@@ -1,43 +1,37 @@
 # Community 59
 
-> 13 nodes · cohesion 0.24
+> 14 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **tempfile** (17 connections)
-- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
-- **test_check_docs.py** (9 connections) — `tests/test_check_docs.py`
-- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
-- **main()** (6 connections) — `scripts/ocr_pdf.py`
-- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
-- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
-- **Path** (3 connections)
-- **textwrap** (2 connections)
-- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
-- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
-- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
-- **scripts/check_docs.py: docs that point at things the repository does not have…** (1 connections) — `tests/test_check_docs.py`
+- **verdict()** (8 connections) — `scripts/probe_models.py`
+- **off_switch()** (6 connections) — `scripts/probe_models.py`
+- **thinking_mode()** (6 connections) — `scripts/probe_models.py`
+- **tool_verdict()** (5 connections) — `scripts/probe_models.py`
+- **rejects_reasoning()** (4 connections) — `scripts/probe_models.py`
+- **thought()** (4 connections) — `scripts/probe_models.py`
+- **tool_call_of()** (4 connections) — `scripts/probe_models.py`
+- **The first tool call in a response, normalised, or None.** (1 connections) — `scripts/probe_models.py`
+- **How well this model drove one tool. calls asked for the tool with the right…** (1 connections) — `scripts/probe_models.py`
+- **Grade one response. Pure function of the dict — see the tests.** (1 connections) — `scripts/probe_models.py`
+- **Did the provider refuse BECAUSE of the `reasoning` field? A 400/422 naming the…** (1 connections) — `scripts/probe_models.py`
+- **Did this response involve thinking, in any of the three shapes?** (1 connections) — `scripts/probe_models.py`
+- **How the effort selector behaves for this model, from two probes. off = exactly…** (1 connections) — `scripts/probe_models.py`
+- **Does `reasoning: {enabled: false}` actually stop this model thinking? Asked of…** (1 connections) — `scripts/probe_models.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (10 shared connections)
-- [Community 61](Community_61.md) (7 shared connections)
-- [Community 130](Community_130.md) (3 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 150](Community_150.md) (2 shared connections)
-- [Community 64](Community_64.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
-- [Community 83](Community_83.md) (1 shared connections)
+- [Community 37](Community_37.md) (12 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/ocr_pdf.py`
-- `tests/test_check_docs.py`
+- `scripts/probe_models.py`
 
 ## Audit Trail
 
-- EXTRACTED: 49 (100%)
+- EXTRACTED: 29 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

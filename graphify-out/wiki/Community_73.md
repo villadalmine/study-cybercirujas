@@ -4,31 +4,27 @@
 
 ## Key Concepts
 
-- **Content Workflow** (9 connections) — `WORKFLOW.md`
-- **Backends** (2 connections) — `WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
-- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
-- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
-- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
-- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
-- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
+- **EndpointTests** (7 connections) — `tests/test_models_live.py`
+- **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
+- **.setUp()** (1 connections) — `tests/test_models_live.py`
+- **.tearDown()** (1 connections) — `tests/test_models_live.py`
+- **.test_a_fresh_check_is_not_repeated_on_every_request()** (1 connections) — `tests/test_models_live.py`
+- **explode()** (1 connections) — `tests/test_models_live.py`
+- **.test_findings_reach_the_page()** (1 connections) — `tests/test_models_live.py`
+- **The guard must never be able to break the page it protects.** (1 connections) — `tests/test_models_live.py`
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [Community 65](Community_65.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 3](Community_3.md) (1 shared connections)
 
 ## Source Files
 
-- `WORKFLOW.md`
+- `tests/test_models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (83%)
-- INFERRED: 2 (17%)
+- EXTRACTED: 7 (88%)
+- INFERRED: 1 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

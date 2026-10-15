@@ -1,55 +1,41 @@
 # Community 32
 
-> 21 nodes · cohesion 0.17
+> 16 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **metrics_report.py** (15 connections) — `scripts/metrics_report.py`
-- **quota_facts.py** (14 connections) — `teach/core/quota_facts.py`
-- **datetime** (12 connections)
-- **main()** (9 connections) — `scripts/metrics_report.py`
-- **tokens_per_window()** (9 connections) — `teach/core/quota_facts.py`
-- **exhaustions()** (8 connections) — `teach/core/quota_facts.py`
-- **_rows()** (7 connections) — `teach/core/quota_facts.py`
-- **cooldown_until()** (4 connections) — `teach/core/quota_facts.py`
-- **rows()** (3 connections) — `scripts/metrics_report.py`
-- **session_windows()** (3 connections) — `scripts/metrics_report.py`
-- **limit_kind()** (3 connections) — `teach/core/quota_facts.py`
-- **backend_of()** (2 connections) — `scripts/metrics_report.py`
-- **_fmt()** (2 connections) — `scripts/metrics_report.py`
-- **in_tokens()** (2 connections) — `scripts/metrics_report.py`
-- **Path** (1 connections)
-- **Real metrics for the whole pipeline: per stage, per day, per quota window.…** (1 connections) — `scripts/metrics_report.py`
-- **Facts about quota, derived from what was recorded — never estimated. Three…** (1 connections) — `teach/core/quota_facts.py`
-- **When it is worth attempting generation again, or None to attempt now. A spend…** (1 connections) — `teach/core/quota_facts.py`
-- **What the API said the limit was: spend | weekly | session. Read from the…** (1 connections) — `teach/core/quota_facts.py`
-- **Every recorded block, with its kind and when it started and ended.…** (1 connections) — `teach/core/quota_facts.py`
-- **Output tokens produced between one exhaustion and the next. Median. This is…** (1 connections) — `teach/core/quota_facts.py`
+- **RejectsDamagedTranslations** (11 connections) — `tests/test_translation_verify.py`
+- **.assertRejected()** (10 connections) — `tests/test_translation_verify.py`
+- **.test_diagram_that_breaks_alignment()** (4 connections) — `tests/test_translation_verify.py`
+- **.test_command_is_not_covered_by_the_diagram_rule()** (3 connections) — `tests/test_translation_verify.py`
+- **.test_deleted_comment_line()** (3 connections) — `tests/test_translation_verify.py`
+- **.test_summary_instead_of_translation()** (3 connections) — `tests/test_translation_verify.py`
+- **.test_translated_yaml_key()** (3 connections) — `tests/test_translation_verify.py`
+- **.test_dropped_code_block()** (2 connections) — `tests/test_translation_verify.py`
+- **.test_dropped_heading()** (2 connections) — `tests/test_translation_verify.py`
+- **.test_dropped_url()** (2 connections) — `tests/test_translation_verify.py`
+- **2026-09-11** (2 connections) — `CHANGELOG.md`
+- **Blanking comment text must not let a model drop the line entirely: the '#'…** (1 connections) — `tests/test_translation_verify.py`
+- **Re-padding is the model's job: a diagram whose borders no longer line up is…** (1 connections) — `tests/test_translation_verify.py`
+- **|' and '-' are excluded from the box character set on purpose, so an ordinary…** (1 connections) — `tests/test_translation_verify.py`
+- **The cheap-model failure the length band exists for.** (1 connections) — `tests/test_translation_verify.py`
+- **The failure that silently breaks every example: the model translates the…** (1 connections) — `tests/test_translation_verify.py`
 
 ## Relationships
 
-- [Community 19](Community_19.md) (6 shared connections)
-- [Community 36](Community_36.md) (4 shared connections)
-- [Community 63](Community_63.md) (4 shared connections)
-- [Community 102](Community_102.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [publish_if_complete.py](publish_if_complete.py.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 8](Community_8.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
+- [Community 21](Community_21.md) (2 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Changelog](Changelog.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/metrics_report.py`
-- `teach/core/quota_facts.py`
+- `CHANGELOG.md`
+- `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 65 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 25 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

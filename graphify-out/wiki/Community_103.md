@@ -1,6 +1,6 @@
 # Community 103
 
-> 9 nodes · cohesion 0.22
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
@@ -8,6 +8,8 @@
 - **1. Graphify — measured pilot, 2026-08-18** (4 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **AGENTIC_TOOLING_STUDY.md** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **2. OpenWiki — studied, not yet run (every run spends)** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **3. LangSmith — optional visibility, narrow fit** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **4. The plan** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **5. Costs, summarized** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **7. Decisions that belong to the owner** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **Integration cautions (this repo specifically)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
@@ -16,10 +18,10 @@
 
 ## Relationships
 
-- [Community 111](Community_111.md) (2 shared connections)
-- [OpenWiki scope for teach-plat](OpenWiki_scope_for_teach-plat.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 - [Community 34](Community_34.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
@@ -27,8 +29,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 12 (80%)
+- INFERRED: 3 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

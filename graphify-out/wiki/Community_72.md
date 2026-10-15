@@ -1,33 +1,37 @@
 # Community 72
 
-> 8 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **rules()** (6 connections) — `teach/core/quality.py`
-- **QualityThresholdsTest** (5 connections) — `tests/test_quality.py`
-- **.test_without_a_quality_block_everything_passes()** (4 connections) — `tests/test_quality.py`
-- **.test_floor_sits_below_the_observed_minimum()** (2 connections) — `tests/test_quality.py`
-- **.test_thresholds_are_declared()** (2 connections) — `tests/test_quality.py`
-- **Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…** (1 connections) — `teach/core/quality.py`
-- **The thresholds live in pipeline.yaml and are calibrated against material…** (1 connections) — `tests/test_quality.py`
-- **The floor is optional: a repo with no `quality` in the YAML must not break.…** (1 connections) — `tests/test_quality.py`
+- **run_batch.py** (15 connections) — `scripts/run_batch.py`
+- **generate_with_retries()** (8 connections) — `scripts/run_batch.py`
+- **pending()** (5 connections) — `scripts/run_batch.py`
+- **generate()** (3 connections) — `scripts/run_batch.py`
+- **_sort_key()** (2 connections) — `scripts/run_batch.py`
+- **Generate a bounded batch of topics, honouring the budget in pipeline.yaml.…** (1 connections) — `scripts/run_batch.py`
+- **Topics still missing for this combination, in syllabus order.** (1 connections) — `scripts/run_batch.py`
+- **One topic, start to finish. Returns done | failed | skipped | fatal. The claim…** (1 connections) — `scripts/run_batch.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 13](Community_13.md) (2 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 29](Community_29.md) (3 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 6](Community_6.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
+- [Community 35](Community_35.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/quality.py`
-- `tests/test_quality.py`
+- `scripts/run_batch.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 26 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

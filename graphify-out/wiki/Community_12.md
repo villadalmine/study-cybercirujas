@@ -1,6 +1,6 @@
 # Community 12
 
-> 79 nodes · cohesion 0.06
+> 67 nodes · cohesion 0.07
 
 ## Key Concepts
 
@@ -13,7 +13,6 @@
 - **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
 - **RunnerError** (10 connections) — `teach/lab/runner.py`
 - **down()** (10 connections) — `teach/lab/runner.py`
-- **study-lab — break/fix labs in a throwaway container** (9 connections) — `docs/LABS-RUNNER.md`
 - **check()** (8 connections) — `teach/lab/runner.py`
 - **container_name()** (8 connections) — `teach/lab/runner.py`
 - **_require_running()** (8 connections) — `teach/lab/runner.py`
@@ -29,23 +28,25 @@
 - **hashlib** (6 connections)
 - **build()** (5 connections) — `teach/lab/runner.py`
 - **image_for()** (5 connections) — `teach/lab/runner.py`
-- *... and 54 more nodes in this community*
+- **spec_hash()** (5 connections) — `teach/lab/runner.py`
+- *... and 42 more nodes in this community*
 
 ## Relationships
 
-- [Community 1](Community_1.md) (19 shared connections)
+- [Community 1](Community_1.md) (11 shared connections)
+- [Community 19](Community_19.md) (9 shared connections)
 - [Community 61](Community_61.md) (6 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 31](Community_31.md) (3 shared connections)
-- [Community 19](Community_19.md) (3 shared connections)
-- [Community 130](Community_130.md) (2 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 131](Community_131.md) (3 shared connections)
+- [Community 126](Community_126.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/LABS-RUNNER.md`
 - `teach/lab/runner.py`
 - `teach/lab/spec.py`
 - `tests/lab/test_runner_guard.py`
@@ -53,8 +54,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 188 (90%)
-- INFERRED: 22 (10%)
+- EXTRACTED: 179 (90%)
+- INFERRED: 20 (10%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,33 +1,30 @@
 # Community 67
 
-> 6 nodes · cohesion 0.47
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **run_cert.py** (12 connections) — `scripts/run_cert.py`
-- **main()** (6 connections) — `scripts/run_cert.py`
-- **run()** (3 connections) — `scripts/run_cert.py`
-- **pending_topics()** (2 connections) — `scripts/run_cert.py`
-- **# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and** (1 connections) — `scripts/run_cert.py`
-- **The ONE way to take a certification from nothing to finished. Every agent and…** (1 connections) — `scripts/run_cert.py`
+- **QualityOnlyTests** (9 connections) — `tests/test_check_pr.py`
+- **.tree()** (5 connections) — `tests/test_check_pr.py`
+- **.test_any_other_change_still_counts()** (2 connections) — `tests/test_check_pr.py`
+- **.test_content_changed_too_still_counts()** (2 connections) — `tests/test_check_pr.py`
+- **.test_only_the_quality_block_changed()** (2 connections) — `tests/test_check_pr.py`
+- **.test_recording_a_review_is_not_authorship()** (2 connections) — `tests/test_check_pr.py`
+- **.test_base_texts_reads_git()** (1 connections) — `tests/test_check_pr.py`
+- **.test_status_md_with_only_rescored_metadata_is_not_a_hand_edit()** (1 connections) — `tests/test_check_pr.py`
+- **A rescore (make quality) is not an edit of the material (quality-score PR).** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 50](Community_50.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/run_cert.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 13 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

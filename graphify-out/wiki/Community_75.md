@@ -1,35 +1,34 @@
 # Community 75
 
-> 6 nodes · cohesion 0.40
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **steer.py** (14 connections) — `scripts/steer.py`
-- **set_key()** (4 connections) — `scripts/steer.py`
-- **_cert_block()** (3 connections) — `scripts/steer.py`
-- **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
-- **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
-- **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
+- **probe_languages()** (10 connections) — `scripts/probe_models.py`
+- **graded()** (4 connections) — `scripts/probe_models.py`
+- **detect_language()** (3 connections) — `scripts/probe_models.py`
+- **Re-probing, and two things the second run taught (2026-09-14)** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Best-effort language of a reply: one of MARKERS, 'zh', 'ja', or 'unclear'. Kana…** (1 connections) — `scripts/probe_models.py`
+- **(did it find the answer in the material, which language it replied in). Both…** (1 connections) — `scripts/probe_models.py`
+- **Ask the model, in each language, a question answered by real material. Returns…** (1 connections) — `scripts/probe_models.py`
 
 ## Relationships
 
-- [Community 62](Community_62.md) (4 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
+- [Community 37](Community_37.md) (6 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
+- [Community 93](Community_93.md) (1 shared connections)
+- [Changelog](Changelog.md) (1 shared connections)
+- [The phases](The_phases.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/steer.py`
+- `docs/STUDY_BOT_DESIGN.md`
+- `scripts/probe_models.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 14 (88%)
+- INFERRED: 2 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

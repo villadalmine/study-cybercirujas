@@ -1,6 +1,6 @@
 # _verify_translation()
 
-> God node · 19 connections · `teach/core/generator.py`
+> God node · 20 connections · `teach/core/generator.py`
 
 **Community:** [Community 21](Community_21.md)
 
@@ -10,6 +10,7 @@
 - translate_topic() `EXTRACTED`
 - GeneratorConfigError `EXTRACTED`
 - .assertRejected() `EXTRACTED`
+- translation_check() `EXTRACTED`
 - evaluate() `EXTRACTED`
 - _comparable_code() `EXTRACTED`
 - .test_translated_comments_inside_code_blocks() `EXTRACTED`
