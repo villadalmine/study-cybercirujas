@@ -5,3 +5,74 @@ backend: claude
 model: claude-opus-4-8
 sources:
 - https://github.com/cncf/curriculum/raw/master/OTCA_Curriculum.pdf
+quality:
+  weights_version: 1
+  score: 77.5
+  level: ai-beta
+  checks:
+  - name: quality_floor
+    version: '1'
+    result: pass
+    weight: 15
+    ran_at: null
+    evidence: content.md and exercises.md meet the floor
+  - name: provenance
+    version: '1'
+    result: pass
+    weight: 10
+    ran_at: null
+    evidence: claude / claude-opus-4-8, 2026-08-10
+  - name: sources
+    version: '1'
+    result: pass
+    weight: 10
+    ran_at: null
+    evidence: 14 citation(s), 100% from catalogued projects
+  - name: citations_resolve
+    version: '1'
+    result: not_run
+    weight: 5
+    ran_at: null
+    evidence: 'network check: scripts/check_citations.py (not run in CI)'
+  - name: k8s_manifests
+    version: '1'
+    result: pass
+    weight: 10
+    ran_at: null
+    evidence: 6 YAML/JSON block(s) parse; no removed Kubernetes API
+  - name: translation_gate
+    version: '1'
+    result: pass
+    weight: 10
+    ran_at: null
+    evidence: structure preserved against en
+  - name: source_chain
+    version: '1'
+    result: not_run
+    weight: 10
+    ran_at: null
+    evidence: made before origins were recorded (source_chain_baseline.txt)
+  - name: lab
+    version: '1'
+    result: not_run
+    weight: 10
+    ran_at: null
+    evidence: not yet run in the study-lab runner
+  - name: independent_review
+    version: '1'
+    result: not_run
+    weight: 10
+    ran_at: null
+    evidence: no independent review recorded
+  - name: human_review
+    version: '1'
+    result: not_run
+    weight: 5
+    ran_at: null
+    evidence: no human review or edit recorded
+  - name: groundedness
+    version: '1'
+    result: not_run
+    weight: 5
+    ran_at: null
+    evidence: 'pending: the classifier lab decides which model checks it'
