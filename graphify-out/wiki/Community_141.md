@@ -1,47 +1,41 @@
 # Community 141
 
-> 14 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **steer.py** (14 connections) — `scripts/steer.py`
-- **main()** (9 connections) — `scripts/steer.py`
-- **targets()** (8 connections) — `teach/core/pipeline.py`
-- **certs()** (6 connections) — `teach/core/pipeline.py`
-- **show()** (5 connections) — `scripts/steer.py`
-- **set_key()** (4 connections) — `scripts/steer.py`
-- **_cert_block()** (3 connections) — `scripts/steer.py`
-- **create_block()** (3 connections) — `scripts/steer.py`
-- **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
-- **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
-- **Add a certification to pipeline.yaml that is not there yet. `activate` used to…** (1 connections) — `scripts/steer.py`
-- **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
-- **Certifications declared in the pipeline, as {cert_id: config}.** (1 connections) — `teach/core/pipeline.py`
-- **[(cert_id, [langs]), ...] — what the audit and the unattended resume script…** (1 connections) — `teach/core/pipeline.py`
+- **generation()** (9 connections) — `teach/core/pipeline.py`
+- **_cli_env()** (7 connections) — `teach/core/generator.py`
+- **_record_usage()** (5 connections) — `teach/core/generator.py`
+- **CliEnvTest** (4 connections) — `tests/test_split_answer.py`
+- **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
+- **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
+- **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
+- **Generation backends** (2 connections) — `docs/OPERATING.md`
+- **Environment for the agent CLI: ours, plus the declared output ceiling. The…** (1 connections) — `teach/core/generator.py`
+- **Append one line per completion: what it was for, and what it cost. Never…** (1 connections) — `teach/core/generator.py`
+- **Which model authors and at what effort. Declared, not left to the CLI. Read by…** (1 connections) — `teach/core/pipeline.py`
 
 ## Relationships
 
-- [Community 50](Community_50.md) (8 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 67](Community_67.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [main](main.md) (1 shared connections)
-- [publish_if_complete.py](publish_if_complete.py.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [next_work.py](next_work.py.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 146](Community_146.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/steer.py`
+- `docs/OPERATING.md`
+- `teach/core/generator.py`
 - `teach/core/pipeline.py`
+- `tests/test_split_answer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 40 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 23 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

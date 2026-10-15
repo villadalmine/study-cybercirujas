@@ -1,51 +1,50 @@
 # Community 56
 
-> 16 nodes · cohesion 0.19
+> 19 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **status_matrix.py** (19 connections) — `scripts/status_matrix.py`
-- **_render()** (14 connections) — `scripts/status_matrix.py`
-- **check_file()** (13 connections) — `teach/core/quality.py`
-- **refresh()** (6 connections) — `scripts/status_matrix.py`
-- **lang_cell()** (5 connections) — `scripts/status_matrix.py`
-- **main()** (4 connections) — `scripts/quality_report.py`
-- **cert_topics()** (3 connections) — `scripts/status_matrix.py`
-- **check()** (3 connections) — `scripts/status_matrix.py`
-- **lab_cell()** (3 connections) — `scripts/status_matrix.py`
-- **_write()** (3 connections) — `scripts/status_matrix.py`
+- **lab/cli.py** (26 connections) — `teach/lab/cli.py`
+- **main()** (17 connections) — `teach/lab/cli.py`
+- **resolve()** (10 connections) — `teach/lab/cli.py`
+- **SpecError** (8 connections) — `teach/lab/spec.py`
+- **_clone()** (6 connections) — `teach/lab/cli.py`
+- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
+- **cmd_new()** (6 connections) — `teach/lab/cli.py`
+- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
+- **_banner()** (4 connections) — `teach/lab/cli.py`
+- **cmd_list()** (4 connections) — `teach/lab/cli.py`
+- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
+- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
+- **Lab** (3 connections)
 - **Path** (2 connections)
-- **Regenerate STATUS.md from disk. True if it changed. The single implementation…** (1 connections) — `scripts/status_matrix.py`
-- **[] if STATUS.md matches the filesystem; the differing lines otherwise.…** (1 connections) — `scripts/status_matrix.py`
-- **Generates STATUS.md: cert x language x lab matrix, and path x video language…** (1 connections) — `scripts/status_matrix.py`
-- **Count only material that meets the quality floor in pipeline.yaml. `wanted` is…** (1 connections) — `scripts/status_matrix.py`
-- **Same as `check`, resolving the kind from the filename. A file that cannot be…** (1 connections) — `teach/core/quality.py`
+- **__main__.py** (2 connections) — `teach/lab/__main__.py`
+- **Exception** (1 connections)
+- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
+- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
+- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (6 shared connections)
-- [fix_corrupted_content.py](fix_corrupted_content.py.md) (6 shared connections)
-- [Community 50](Community_50.md) (5 shared connections)
-- [Community 22](Community_22.md) (5 shared connections)
-- [Community 62](Community_62.md) (3 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
-- [Community 18](Community_18.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [publish_if_complete.py](publish_if_complete.py.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 13](Community_13.md) (1 shared connections)
-- [Which backend authors better material?](Which_backend_authors_better_material_.md) (1 shared connections)
+- [Community 32](Community_32.md) (10 shared connections)
+- [Community 12](Community_12.md) (9 shared connections)
+- [Community 1](Community_1.md) (8 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [problems](problems.md) (3 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 67](Community_67.md) (2 shared connections)
 
 ## Source Files
 
-- `scripts/quality_report.py`
-- `scripts/status_matrix.py`
-- `teach/core/quality.py`
+- `teach/lab/__main__.py`
+- `teach/lab/cli.py`
+- `teach/lab/spec.py`
 
 ## Audit Trail
 
-- EXTRACTED: 55 (96%)
-- INFERRED: 2 (4%)
+- EXTRACTED: 75 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

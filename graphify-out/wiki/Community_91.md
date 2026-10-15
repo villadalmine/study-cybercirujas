@@ -17,12 +17,12 @@
 ## Relationships
 
 - [Community 70](Community_70.md) (3 shared connections)
-- [Community 22](Community_22.md) (2 shared connections)
+- [problems](problems.md) (2 shared connections)
 - [Community 67](Community_67.md) (2 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
 - [Community 64](Community_64.md) (2 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
 
 ## Source Files
 

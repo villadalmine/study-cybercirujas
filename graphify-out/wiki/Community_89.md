@@ -1,30 +1,34 @@
 # Community 89
 
-> 6 nodes · cohesion 0.47
+> 12 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
-- **table()** (4 connections) — `scripts/gen_readme_table.py`
-- **main()** (3 connections) — `scripts/gen_readme_table.py`
-- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
-- **Regenerate the certification table in README.md from STATUS.md. STATUS.md is…** (1 connections) — `scripts/gen_readme_table.py`
-- **The `## Certifications` table of STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
+- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
+- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
+- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
+- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **parametrize** (4 connections)
+- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
+- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **fixture** (1 connections)
+- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
 
 ## Relationships
 
-- [Community 67](Community_67.md) (2 shared connections)
-- [Community 22](Community_22.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 12](Community_12.md) (8 shared connections)
+- [Community 1](Community_1.md) (2 shared connections)
 
 ## Source Files
 
-- `scripts/gen_readme_table.py`
+- `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 29 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

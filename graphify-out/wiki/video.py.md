@@ -6,8 +6,8 @@
 
 - **video.py** (49 connections) — `teach/core/video.py`
 - **Path** (15 connections)
+- **generate_cert_script()** (12 connections) — `teach/core/video.py`
 - **VideoError** (10 connections) — `teach/core/video.py`
-- **generate_cert_script()** (10 connections) — `teach/core/video.py`
 - **_render_from_script()** (10 connections) — `teach/core/video.py`
 - **_base_slide()** (9 connections) — `teach/core/video.py`
 - **generate_script()** (9 connections) — `teach/core/video.py`
@@ -33,18 +33,18 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (6 shared connections)
 - [Community 18](Community_18.md) (5 shared connections)
 - [Community 7](Community_7.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
+- [Community 54](Community_54.md) (3 shared connections)
 - [Community 47](Community_47.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
 - [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
 - [Community 70](Community_70.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
+- [problems](problems.md) (1 shared connections)
 
 ## Source Files
 
@@ -54,7 +54,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 140 (94%)
+- EXTRACTED: 142 (94%)
 - INFERRED: 9 (6%)
 - AMBIGUOUS: 0 (0%)
 

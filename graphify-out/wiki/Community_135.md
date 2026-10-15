@@ -1,12 +1,13 @@
 # Community 135
 
-> 5 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.40
 
 ## Key Concepts
 
 - **mcp_server.py** (8 connections) — `teach/mcp_server.py`
 - **_readable()** (4 connections) — `teach/mcp_server.py`
 - **functools** (4 connections)
+- **wrapped()** (2 connections) — `teach/mcp_server.py`
 - **Study against this corpus from any agent — the same four functions, over MCP.…** (1 connections) — `teach/mcp_server.py`
 - **Turn a lookup failure into something the agent can act on. The SDK's own…** (1 connections) — `teach/mcp_server.py`
 
@@ -18,7 +19,7 @@
 - [Community 45](Community_45.md) (1 shared connections)
 - [Community 85](Community_85.md) (1 shared connections)
 - [Community 50](Community_50.md) (1 shared connections)
-- [login](login.md) (1 shared connections)
+- [Community 77](Community_77.md) (1 shared connections)
 
 ## Source Files
 
@@ -26,8 +27,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 12 (86%)
+- INFERRED: 2 (14%)
 - AMBIGUOUS: 0 (0%)
 
 ---

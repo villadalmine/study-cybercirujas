@@ -19,9 +19,9 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (2 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [OpenWiki scope for teach-plat](OpenWiki_scope_for_teach-plat.md) (1 shared connections)
 - [Community 136](Community_136.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
 
 ## Source Files
 

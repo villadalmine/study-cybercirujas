@@ -1,6 +1,6 @@
 # _verify_translation()
 
-> God node · 18 connections · `teach/core/generator.py`
+> God node · 19 connections · `teach/core/generator.py`
 
 **Community:** [Community 21](Community_21.md)
 
@@ -26,6 +26,7 @@
 - Structural checks a translation must satisfy but authoring cannot. This is what… `EXTRACTED`
 
 ### references
+- 7. The source chain `INFERRED`
 - 2026-08-03 `INFERRED`
 - 2026-08-04 `INFERRED`
 - Rules `INFERRED`

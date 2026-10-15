@@ -1,12 +1,12 @@
 # Community 21
 
-> 30 nodes · cohesion 0.08
+> 25 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **_verify_translation()** (18 connections) — `teach/core/generator.py`
+- **_verify_translation()** (19 connections) — `teach/core/generator.py`
 - **Can a cheap model do the translation step?** (9 connections) — `docs/TRANSLATION_STUDY.md`
-- **Development Guidelines for teach-plat** (7 connections) — `CLAUDE.md`
+- **test_translation_verify.py** (8 connections) — `tests/test_translation_verify.py`
 - **_english()** (5 connections) — `tests/test_translation_verify.py`
 - **AcceptsCorrectTranslations** (4 connections) — `tests/test_translation_verify.py`
 - **_comparable_code()** (4 connections) — `teach/core/generator.py`
@@ -15,47 +15,47 @@
 - **.test_faithful_translation()** (3 connections) — `tests/test_translation_verify.py`
 - **2026-08-03** (3 connections) — `CHANGELOG.md`
 - **2026-08-04** (3 connections) — `CHANGELOG.md`
-- **Rules** (3 connections) — `CLAUDE.md`
 - **Three bugs this study found in our own checks** (3 connections) — `docs/TRANSLATION_STUDY.md`
-- **Verification: what is proven, and what is only assumed** (2 connections) — `CLAUDE.md`
 - **Method** (2 connections) — `docs/TRANSLATION_STUDY.md`
 - **Why translating and authoring are different problems** (2 connections) — `docs/TRANSLATION_STUDY.md`
-- **Agent Idea Synchronization (AGENTS_SYNC.md)** (1 connections) — `CLAUDE.md`
-- **Commands** (1 connections) — `CLAUDE.md`
-- **Content Workflow** (1 connections) — `CLAUDE.md`
-- **Pull requests from agents** (1 connections) — `CLAUDE.md`
 - **Caveat** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **Recommendation** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **Results** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **Translating is not the same deliverable as authoring** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **What this actually saves** (1 connections) — `docs/TRANSLATION_STUDY.md`
-- *... and 5 more nodes in this community*
+- **A code block reduced to the parts a translation must not touch. Code blocks are…** (1 connections) — `teach/core/generator.py`
+- **Structural checks a translation must satisfy but authoring cannot. This is what…** (1 connections) — `teach/core/generator.py`
+- **The structural gate that decides whether a translation is usable. Its own…** (1 connections) — `tests/test_translation_verify.py`
+- **The source with its prose in English, code block untouched.** (1 connections) — `tests/test_translation_verify.py`
+- **Comments are prose. The authored English material has English comments, so…** (1 connections) — `tests/test_translation_verify.py`
+- **ASCII diagrams are prose too, and this one is not a retry away: `cheap`…** (1 connections) — `tests/test_translation_verify.py`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (7 shared connections)
-- [Changelog](Changelog.md) (3 shared connections)
+- [Community 7](Community_7.md) (6 shared connections)
+- [RejectsDamagedTranslations](RejectsDamagedTranslations.md) (2 shared connections)
+- [Changelog](Changelog.md) (2 shared connections)
 - [clean_registry.py](clean_registry.py.md) (2 shared connections)
-- [README.md](README.md.md) (2 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
-- [Community 64](Community_64.md) (1 shared connections)
-- [RejectsDamagedTranslations](RejectsDamagedTranslations.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
 - [Community 14](Community_14.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 - [fix_corrupted_content.py](fix_corrupted_content.py.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
 - `CHANGELOG.md`
-- `CLAUDE.md`
 - `docs/TRANSLATION_STUDY.md`
 - `teach/core/generator.py`
 - `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 43 (78%)
-- INFERRED: 12 (22%)
+- EXTRACTED: 41 (79%)
+- INFERRED: 11 (21%)
 - AMBIGUOUS: 0 (0%)
 
 ---

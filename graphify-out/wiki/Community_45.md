@@ -1,6 +1,6 @@
 # Community 45
 
-> 21 nodes · cohesion 0.16
+> 20 nodes · cohesion 0.17
 
 ## Key Concepts
 
@@ -9,7 +9,6 @@
 - **SearchTests** (11 connections) — `tests/test_corpus.py`
 - **_fold()** (5 connections) — `teach/core/corpus.py`
 - **_terms()** (4 connections) — `teach/core/corpus.py`
-- **unicodedata** (4 connections)
 - **_informative()** (3 connections) — `teach/core/corpus.py`
 - **.test_a_query_of_nothing_but_filler_still_answers()** (2 connections) — `tests/test_corpus.py`
 - **.test_a_query_that_matches_nothing_returns_nothing()** (2 connections) — `tests/test_corpus.py`
@@ -29,14 +28,16 @@
 ## Relationships
 
 - [Community 85](Community_85.md) (5 shared connections)
-- [Community 75](Community_75.md) (4 shared connections)
-- [Community 114](Community_114.md) (3 shared connections)
+- [Community 114](Community_114.md) (2 shared connections)
+- [Community 75](Community_75.md) (2 shared connections)
+- [Community 124](Community_124.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
 - [Community 77](Community_77.md) (1 shared connections)
-- [login](login.md) (1 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
 - [Community 135](Community_135.md) (1 shared connections)
+- [Community 131](Community_131.md) (1 shared connections)
 
 ## Source Files
 
@@ -45,7 +46,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 53 (100%)
+- EXTRACTED: 51 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

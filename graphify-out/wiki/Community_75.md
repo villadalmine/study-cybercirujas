@@ -1,10 +1,9 @@
 # Community 75
 
-> 19 nodes · cohesion 0.19
+> 19 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **re** (51 connections)
 - **check_docs.py** (19 connections) — `scripts/check_docs.py`
 - **check_file()** (7 connections) — `scripts/check_docs.py`
 - **main()** (7 connections) — `scripts/check_docs.py`
@@ -13,6 +12,7 @@
 - **prose_lines()** (4 connections) — `scripts/check_docs.py`
 - **teach_commands()** (4 connections) — `scripts/check_docs.py`
 - **tracked_paths()** (4 connections) — `scripts/check_docs.py`
+- **unicodedata** (4 connections)
 - **generated_checks()** (3 connections) — `scripts/check_docs.py`
 - **make_targets()** (3 connections) — `scripts/check_docs.py`
 - **tracked_markdown()** (3 connections) — `scripts/check_docs.py`
@@ -26,18 +26,11 @@
 
 ## Relationships
 
-- [Community 31](Community_31.md) (8 shared connections)
-- [Community 61](Community_61.md) (6 shared connections)
-- [Community 70](Community_70.md) (5 shared connections)
-- [Community 45](Community_45.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 64](Community_64.md) (3 shared connections)
-- [Community 12](Community_12.md) (3 shared connections)
+- [Community 124](Community_124.md) (5 shared connections)
+- [Community 61](Community_61.md) (4 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 - [Community 67](Community_67.md) (2 shared connections)
-- [Community 32](Community_32.md) (2 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
-- [Community 1](Community_1.md) (2 shared connections)
-- [Community 26](Community_26.md) (2 shared connections)
+- [Community 45](Community_45.md) (2 shared connections)
 
 ## Source Files
 
@@ -45,7 +38,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 90 (100%)
+- EXTRACTED: 46 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

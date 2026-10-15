@@ -33,16 +33,16 @@
 
 - [Community 43](Community_43.md) (21 shared connections)
 - [Community 67](Community_67.md) (10 shared connections)
-- [Community 1](Community_1.md) (9 shared connections)
 - [Community 8](Community_8.md) (8 shared connections)
-- [Community 75](Community_75.md) (6 shared connections)
+- [Community 1](Community_1.md) (7 shared connections)
 - [Community 36](Community_36.md) (6 shared connections)
-- [Community 12](Community_12.md) (6 shared connections)
+- [fix_corrupted_content.py](fix_corrupted_content.py.md) (6 shared connections)
+- [Community 29](Community_29.md) (6 shared connections)
+- [Community 12](Community_12.md) (5 shared connections)
 - [Community 70](Community_70.md) (4 shared connections)
+- [Community 75](Community_75.md) (4 shared connections)
 - [Community 7](Community_7.md) (3 shared connections)
 - [Community 31](Community_31.md) (3 shared connections)
-- [fix_corrupted_content.py](fix_corrupted_content.py.md) (3 shared connections)
-- [main](main.md) (3 shared connections)
 
 ## Source Files
 

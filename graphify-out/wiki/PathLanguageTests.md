@@ -18,9 +18,10 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [login](login.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 77](Community_77.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files

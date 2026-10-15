@@ -18,16 +18,14 @@
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [fix_corrupted_content.py](fix_corrupted_content.py.md) (3 shared connections)
 - [Community 36](Community_36.md) (3 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
 - [Community 67](Community_67.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 22](Community_22.md) (2 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [fix_corrupted_content.py](fix_corrupted_content.py.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [problems](problems.md) (2 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
 
 ## Source Files
 

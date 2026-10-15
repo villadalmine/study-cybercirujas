@@ -1,6 +1,6 @@
 # Community 85
 
-> 15 nodes · cohesion 0.18
+> 14 nodes · cohesion 0.20
 
 ## Key Concepts
 
@@ -11,7 +11,6 @@
 - **.test_every_listed_certification_can_be_opened()** (3 connections) — `tests/test_corpus.py`
 - **.test_the_count_matches_what_the_syllabus_holds()** (3 connections) — `tests/test_corpus.py`
 - **get_syllabus()** (2 connections) — `teach/mcp_server.py`
-- **get_topic()** (2 connections) — `teach/mcp_server.py`
 - **list_certs()** (2 connections) — `teach/mcp_server.py`
 - **search_topics()** (2 connections) — `teach/mcp_server.py`
 - **.test_availability_is_reported_not_assumed()** (2 connections) — `tests/test_corpus.py`
@@ -23,11 +22,12 @@
 ## Relationships
 
 - [Community 45](Community_45.md) (5 shared connections)
-- [Community 114](Community_114.md) (2 shared connections)
 - [Community 125](Community_125.md) (2 shared connections)
 - [Community 47](Community_47.md) (2 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 65](Community_65.md) (1 shared connections)
 - [Community 135](Community_135.md) (1 shared connections)
+- [Community 131](Community_131.md) (1 shared connections)
 
 ## Source Files
 
@@ -37,7 +37,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

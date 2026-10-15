@@ -7,7 +7,7 @@
 ## Connections by Relation
 
 ### calls
-- [main()](main_2.md) `EXTRACTED`
+- main() `EXTRACTED`
 - _stream() `EXTRACTED`
 - _docker() `EXTRACTED`
 - RunnerError `EXTRACTED`
