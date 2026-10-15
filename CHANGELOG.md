@@ -15,7 +15,7 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   before this are listed in a baseline that only shrinks.
 - **`check_citations.py` reads every References heading**: numbered ones
   (`## 14. References`), suffixed ones and CJK ones were skipped, so citations
-  were checked in 459 of 1155 topics; now 1155.
+  were found in 501 of 1155 topics (459 when run on Windows, which also read them as cp1252); now 1155.
 - **Legal and trademark disclaimer.** The end of the README carries it in
   Spanish and English (anchor `#legal`), and every page of the site shows a
   one-line summary with a link, in all seven UI languages. The project is
