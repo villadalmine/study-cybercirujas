@@ -23,8 +23,21 @@ class SplitAnswerTest(unittest.TestCase):
 
     def test_several_turns_are_rejected(self):
         reason = generator._split_answer({"num_turns": 2, "result": "seconds`)."})
-        self.assertIn("split across 2 turns", reason)
+        self.assertIn("num_turns=2", reason)
         self.assertIn("max_output_tokens", reason)
+        self.assertIn("_CLAUDE_NO_TOOLS", reason)
+
+    def test_a_tail_that_opens_on_a_heading_is_still_rejected(self):
+        # The case the quality floor cannot catch: the last turn starts with
+        # '#', so it looks like a whole topic.
+        self.assertIsNotNone(generator._split_answer(
+            {"num_turns": 2, "result": "# 12. Verification\n\nmore text"}))
+
+    def test_every_tool_is_denied(self):
+        # A list of names leaves MCP and newer built-in tools callable, and a
+        # tool call is a turn too.
+        self.assertEqual(generator._CLAUDE_NO_TOOLS, "*")
+        self.assertIn("*", generator.AGENT_COMMANDS["claude"])
 
 
 class CliEnvTest(unittest.TestCase):

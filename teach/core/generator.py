@@ -56,9 +56,13 @@ class GeneratorConfigError(Exception):
 # ("ja/content.md に完全な学習コンテンツを書きました...") instead of the
 # requested content. --disallowedTools forces a plain-text answer, which is all
 # it can do without tools.
-_CLAUDE_NO_TOOLS = (
-    "Write,Edit,Bash,Read,Glob,Grep,NotebookEdit,WebFetch,WebSearch,Task"
-)
+#
+# `*` and not a list of names: a list leaves out every tool it does not name.
+# Measured on 2026-10-15 in this repo with CLI 2.1.299 (haiku, asked to call
+# any tool it had): with the ten names below denied, it still called other
+# tools and the completion took 3 turns; with `*`, 1 turn and no tool call.
+# The repo's .mcp.json servers and any newer built-in tool are covered too.
+_CLAUDE_NO_TOOLS = "*"
 
 # `--output-format json` is what makes spend measurable. The plain text mode
 # answers and tells you nothing; the JSON envelope carries `result` (the answer)
@@ -103,7 +107,9 @@ def _prompt_on_stdin(prompt: str, command: list[str] | tuple[str, ...] = (),
 def _split_answer(envelope: dict) -> str | None:
     """Why this envelope's `result` is not the whole answer, or None if it is.
 
-    With tools disallowed, a completion is one turn. When the answer outgrows
+    With every tool disallowed (_CLAUDE_NO_TOOLS), a completion is one turn,
+    and a second turn has two possible causes: a tool call the denial did not
+    cover, or a continuation. When the answer outgrows
     the CLI's per-message output limit, the CLI asks the model to continue in a
     new turn — and `result` carries only the LAST turn. lpic-2/200.1 (en,
     2026-10-15) came back as 13 KB starting mid-sentence, the tail of a 132 KB
@@ -114,9 +120,12 @@ def _split_answer(envelope: dict) -> str | None:
     turns = envelope.get("num_turns")
     if isinstance(turns, int) and turns > 1:
         return (
-            f"the answer was split across {turns} turns by the CLI's output "
-            f"token limit, and `result` holds only the last one. Nothing was "
-            f"saved. Raise generation.max_output_tokens in pipeline.yaml."
+            f"the CLI reported num_turns={turns} for a completion that should "
+            f"take one, and `result` holds only the last turn. Nothing was "
+            f"saved. Two causes: the answer outgrew the output-token limit "
+            f"(raise generation.max_output_tokens in pipeline.yaml), or the "
+            f"model called a tool the denial did not cover (check "
+            f"_CLAUDE_NO_TOOLS). The CLI session transcript shows which."
         )
     return None
 
