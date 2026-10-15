@@ -122,6 +122,15 @@ class SourceChainTests(unittest.TestCase):
         lab.write_text(yaml.safe_dump(data), encoding="utf-8")
         self.assertIn("!= its directory", self.run_check()[1])
 
+    def test_the_baseline_cannot_grow(self):
+        # Review of #10: "only shrinks" was enforced in one direction only.
+        self.tree.meta("es", {"backend": "claude", "model": "m", "sources": ["x"], "translated_from": "en"})
+        (self.tree.root / "baseline.txt").write_text("certs/demo/1.1/es/meta.yaml\n", encoding="utf-8")
+        with mock.patch.object(check_source_chain, "BASELINE_MAX", 0):
+            code, out = self.run_check()
+        self.assertEqual(code, 1)
+        self.assertIn("it only shrinks", out)
+
     def test_a_stale_baseline_line_must_be_deleted(self):
         (self.tree.root / "baseline.txt").write_text("certs/demo/1.1/es/meta.yaml\n", encoding="utf-8")
         code, out = self.run_check()
@@ -131,6 +140,12 @@ class SourceChainTests(unittest.TestCase):
     def test_the_real_repository_passes(self):
         mock.patch.stopall()
         self.assertEqual(check_source_chain.main([]), 0)
+
+    def test_the_real_baseline_is_within_its_ceiling(self):
+        mock.patch.stopall()
+        # 422 on 2026-10-15. Lower BASELINE_MAX when lines go; never raise it.
+        self.assertLessEqual(check_source_chain.BASELINE_MAX, 422)
+        self.assertLessEqual(len(check_source_chain.baseline()), check_source_chain.BASELINE_MAX)
 
 
 class ChainHashTests(unittest.TestCase):

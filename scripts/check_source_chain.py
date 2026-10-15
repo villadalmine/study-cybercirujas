@@ -41,6 +41,9 @@ sys.path.insert(0, str(REPO))
 from teach.core.certs import chain_sha256 as sha256_of  # noqa: E402  (one hash definition)
 from teach.core.certs import translation_source_sha256  # noqa: E402
 BASELINE = REPO / "tests" / "fixtures" / "source_chain_baseline.txt"
+# The baseline only shrinks: the check fails if it has more lines than this.
+# Lower it in the same PR that deletes lines; never raise it.
+BASELINE_MAX = 422
 from teach.core.references import HEADING as REFS_HEADING  # noqa: E402  (one definition)
 URL = re.compile(r"https?://[^\s)\]>\"'`]+")
 
@@ -229,7 +232,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"chain: baseline entry {path} no longer needs an exception — delete its line")
     for path, what in chain.missing:
         print(f"chain: {path} does not declare its origin: {what}")
-    if chain.missing or gone:
+    grown = len(chain.legacy) > BASELINE_MAX
+    if grown:
+        print(f"chain: the baseline has {len(chain.legacy)} lines, more than BASELINE_MAX ({BASELINE_MAX}): "
+              "it only shrinks — declare the new artefact's origin instead of excusing it")
+    if chain.missing or gone or grown:
         print(f"\n{len(chain.missing)} link(s) without origin, {len(gone)} stale baseline line(s). "
               "See docs/PRINCIPLES.md -> The source chain.")
         return 1
