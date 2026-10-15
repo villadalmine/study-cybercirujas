@@ -14,6 +14,22 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   (CONTRIBUTING → `#no-braindumps`, also in PRINCIPLES §2). A PR with
   questions leaked from real exams or material under NDA is closed without
   merging; anyone can report such content with the *Content error* form.
+- **Every pull request now follows one checked standard** (CONTRIBUTING →
+  Pull requests, `scripts/check_pr.py`, job `pr-format`). New for every
+  contributor, person or agent:
+  - *Evidence → Where it ran* links the green CI run of `verify.yml` on the
+    PR's current head commit, and *Known gaps* says what that evidence does
+    not cover; `pr-format` checks the run against the GitHub API.
+  - Scope and size: one topic per content PR, one lab per lab PR, material
+    never mixed with code, at most 400 changed lines of code; the maintainer
+    waives them with the `scope-exception` / `size-exception` labels.
+  - `## Authorship` with a `### Findings ledger`: who wrote it, every review,
+    and who found and who fixed each finding; the author row must agree with
+    *Provenance*. Agents add the commit trailers `Agent:`, `Model:`, and on a
+    fix `Found-by:`, `Fixed-by:`, `Fixes-review:`.
+  - PRs are labelled by path (`actions/labeler`), and the review and merge
+    rules (squash only, nobody merges their own PR, an agent never merges)
+    are written down in CONTRIBUTING and `docs/REVIEWS.md`.
 
 ## 2026-09-30
 
