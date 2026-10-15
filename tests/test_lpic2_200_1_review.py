@@ -37,5 +37,15 @@ class ObjectiveTest(unittest.TestCase):
                 self.assertIn(LPI_LIST, read(lang, name), f"{lang}/{name}")
 
 
+class SampleOutputTest(unittest.TestCase):
+    def test_no_claim_of_a_capture_that_never_happened(self):
+        # The material is model-written; nothing was run on a host. Saying
+        # otherwise is the kind of invented provenance the review caught.
+        for lang in LANGS:
+            text = read(lang, "content.md")
+            self.assertNotRegex(text, r"captured on a reference|se captur[óo] en un host")
+            self.assertRegex(text, r"\*\*(illustrative|ilustrativa)\*\*")
+
+
 if __name__ == "__main__":
     unittest.main()

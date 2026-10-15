@@ -5,7 +5,7 @@
 **Files, terms and utilities (LPI's partial list, verbatim):** `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out.
 This material also uses tools that are not on that list (`mpstat`, `pidstat`, `ip`, `nstat`, PSI, cgroup v2); they help in practice, but the exam objective is the list above.
 
-> All terminal output in this document was captured on a reference lab host: Debian 13, kernel `6.8.0-45-generic`, `sysstat 12.7.6`, `procps-ng 4.0.4`, `iproute2 6.9.0`, x86_64, 16 CPUs, NVMe root, one 25 GbE uplink. **Column sets differ between tool versions** — `iostat` renamed `avgqu-sz` to `aqu-sz` and removed `svctm` in sysstat 12, and `vmstat` added the `gu` column in procps-ng 4. Always read the header your host prints, never the header you remember.
+> Sample output in this document is **illustrative**: it was written to be internally consistent, not captured from a host, and the host names, dates and kernel strings in it are made up. **Column sets differ between tool versions** — `iostat`'s extended report changed its fields in sysstat 11.5.7 (`avgqu-sz` became `aqu-sz`) and dropped `svctm` in 12.1.2, and `vmstat` prints guest time (`gu`) in its default output since procps-ng 4.0.4 (sysstat `CHANGES`, procps-ng `NEWS`, both in the References). Always read the header your host prints, never the header you remember.
 
 ---
 
@@ -2590,6 +2590,8 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - `sysstat` (`sar`, `sadc`, `sadf`, `iostat`, `mpstat`, `pidstat`) project and documentation: https://github.com/sysstat/sysstat
 - `sysstat` project site (releases, features, FAQ): https://sysstat.github.io/
 - `procps-ng` (`ps`, `top`, `vmstat`, `free`, `pstree`, `slabtop`): https://gitlab.com/procps-ng/procps
+- `sysstat` CHANGES (iostat fields in 11.5.7, `svctm` removed in 12.1.2): https://github.com/sysstat/sysstat/blob/master/CHANGES
+- `procps-ng` NEWS (`vmstat` guest time in default output, 4.0.4): https://gitlab.com/procps-ng/procps/-/blob/master/NEWS
 - `iproute2` (`ip`, `ss`, `nstat`, `tc`): https://wiki.linuxfoundation.org/networking/iproute2
 - `ss(8)`: https://man7.org/linux/man-pages/man8/ss.8.html
 - `ip(8)`: https://man7.org/linux/man-pages/man8/ip.8.html

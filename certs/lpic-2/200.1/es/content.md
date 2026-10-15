@@ -5,7 +5,7 @@
 **Archivos, términos y utilidades (lista parcial de LPI, textual):** `iostat`, `iotop`, `vmstat`, `netstat`, `ss`, `iptraf`, `pstree`, `ps`, `w`, `lsof`, `top`, `htop`, `uptime`, `sar`, swap, processes blocked on I/O, blocks in, blocks out.
 Este material usa además herramientas que no están en esa lista (`mpstat`, `pidstat`, `ip`, `nstat`, PSI, cgroup v2); sirven en la práctica, pero el objetivo del examen es la lista de arriba.
 
-> Toda la salida de terminal de este documento se capturó en un host de laboratorio de referencia: Debian 13, kernel `6.8.0-45-generic`, `sysstat 12.7.6`, `procps-ng 4.0.4`, `iproute2 6.9.0`, x86_64, 16 CPUs, raíz en NVMe, un uplink de 25 GbE. **Los conjuntos de columnas difieren entre versiones de las herramientas** — `iostat` renombró `avgqu-sz` a `aqu-sz` y eliminó `svctm` en sysstat 12, y `vmstat` agregó la columna `gu` en procps-ng 4. Leé siempre el encabezado que imprime tu host, nunca el encabezado que recordás.
+> La salida de ejemplo de este documento es **ilustrativa**: se escribió para que sea coherente, no se capturó de un host, y los nombres de host, las fechas y las versiones de kernel que aparecen son inventados. **Los conjuntos de columnas difieren entre versiones de las herramientas** — el reporte extendido de `iostat` cambió sus campos en sysstat 11.5.7 (`avgqu-sz` pasó a ser `aqu-sz`) y eliminó `svctm` en 12.1.2, y `vmstat` muestra el tiempo de guest (`gu`) en su salida por defecto desde procps-ng 4.0.4 (`CHANGES` de sysstat, `NEWS` de procps-ng, ambos en las Referencias). Leé siempre el encabezado que imprime tu host, nunca el encabezado que recordás.
 
 ---
 
@@ -2590,6 +2590,8 @@ $ sudo iptraf-ng -d eth0 -B -L /var/log/iptraf-ng/eth0.log -t 5
 - Proyecto y documentación de `sysstat` (`sar`, `sadc`, `sadf`, `iostat`, `mpstat`, `pidstat`): https://github.com/sysstat/sysstat
 - Sitio del proyecto `sysstat` (releases, features, FAQ): https://sysstat.github.io/
 - `procps-ng` (`ps`, `top`, `vmstat`, `free`, `pstree`, `slabtop`): https://gitlab.com/procps-ng/procps
+- `CHANGES` de `sysstat` (campos de iostat en 11.5.7, `svctm` eliminado en 12.1.2): https://github.com/sysstat/sysstat/blob/master/CHANGES
+- `NEWS` de `procps-ng` (tiempo de guest de `vmstat` en la salida por defecto, 4.0.4): https://gitlab.com/procps-ng/procps/-/blob/master/NEWS
 - `iproute2` (`ip`, `ss`, `nstat`, `tc`): https://wiki.linuxfoundation.org/networking/iproute2
 - `ss(8)`: https://man7.org/linux/man-pages/man8/ss.8.html
 - `ip(8)`: https://man7.org/linux/man-pages/man8/ip.8.html
