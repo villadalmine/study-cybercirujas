@@ -2,6 +2,19 @@
 
 Record of what has been delivered. Free-form, reverse chronological order (most recent first). Design details live in [PLAN.md](PLAN.md); pending items live in [BACKLOG.md](BACKLOG.md).
 
+## 2026-10-15
+
+- **Legal and trademark disclaimer.** The end of the README carries it in
+  Spanish and English (anchor `#legal`), and every page of the site shows a
+  one-line summary with a link, in all seven UI languages. The project is
+  independent; it is not affiliated with LPI, The Linux Foundation, CNCF, the
+  Agentic AI Foundation, AWS, Google, Microsoft, HashiCorp or NVIDIA; their
+  names and marks only identify the exams (nominative fair use).
+- **New contribution rule: no braindumps, no NDA material**
+  (CONTRIBUTING → `#no-braindumps`, also in PRINCIPLES §2). A PR with
+  questions leaked from real exams or material under NDA is closed without
+  merging; anyone can report such content with the *Content error* form.
+
 ## 2026-09-30
 
 - **CKNE is complete in English: 22 topics**, the first certification authored
