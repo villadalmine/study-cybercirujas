@@ -2019,8 +2019,8 @@ groups:
             At 100% the kernel drops packets and logs "nf_conntrack: table full".
             Inspect the composition first (conntrack -L | awk), because the usual
             cause is a 5-day established timeout or a TIME_WAIT pile, not real load.
-            Raising nf_conntrack_max costs ~320 bytes of unreclaimable kernel
-            memory per entry.
+            Raising nf_conntrack_max costs one unreclaimable slab object per
+            entry (/sys/kernel/slab/nf_conntrack/slab_size on the host).
 ```
 
 ### 9.4 Un slice de systemd apto para medición
