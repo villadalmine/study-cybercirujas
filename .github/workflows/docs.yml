@@ -1,0 +1,52 @@
+name: Docs
+
+# Documentation that stays true to the repository it describes, checked on
+# every PR — the maintainer's rule (2026-10-15): "if you change something, all
+# the documentation stays consistent; something that checks it on the PRs, and
+# the same for whether the graph needs looking at".
+#
+# Deterministic, no keys, no model. graphify is a free pip install
+# (tree-sitter only), pinned in the Makefile (graph-setup) and here.
+# openwiki/ is out on purpose: it costs API credits.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-consistency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0       # check_graph diffs against the base branch
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -q -e .
+          .venv/bin/pip install -q graphifyy==0.9.91
+      - name: Links, anchors, paths, make targets, teach commands, generated files
+        run: .venv/bin/python3 scripts/check_docs.py
+      - name: Code graph is what this tree builds
+        # Rebuilt in a temp copy and compared with graphify-out/graph.json.
+        # Fails only when the change touches teach/ or scripts/; warns otherwise.
+        run: |
+          base="${{ github.base_ref }}"
+          if [ -n "$base" ]; then
+            .venv/bin/python3 scripts/check_graph.py --regenerate --base "origin/$base"
+          else
+            .venv/bin/python3 scripts/check_graph.py --regenerate
+          fi
