@@ -82,6 +82,11 @@ project.
 - **Language:** English is the standard for PRs, commits and code; a PR
   description in your own language is welcome too — everything gets
   translated. Study material in the language it is written for.
+- **Do not commit `graphify-out/`** (the code graph) and do not rebase just to
+  refresh it: CI rebuilds it on `main` and opens a bot PR
+  (`bot/graph-refresh`). The post-commit hook may dirty it locally; run
+  `git restore graphify-out` before you stage. A stale graph in a PR is a
+  warning, not a failure ([docs/DEVTOOLS.md](docs/DEVTOOLS.md)).
 - **Small pull requests**, one concern each. Generated files (STATUS.md,
   MODELS.md, the README table, the API table) are regenerated, never edited
   by hand: `teach status`, `scripts/gen_readme_table.py`, `scripts/gen_api_docs.py`.

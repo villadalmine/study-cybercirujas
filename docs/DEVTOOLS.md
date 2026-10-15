@@ -20,7 +20,7 @@ Three ideas, one sentence each:
 ### Setup, once per clone
 
 ```bash
-make graph-setup     # pip-installs graphifyy into .venv
+make graph-setup     # pip-installs graphifyy into .venv (version pinned: GRAPHIFY_VERSION in the Makefile)
 make graph           # build: graph.json, graph.html, GRAPH_REPORT.md in graphify-out/
 ```
 
@@ -79,6 +79,23 @@ Nothing to remember:
    docs-only commits. Warn-only by default; `--strict` for anything that
    relies on the graph.
 3. Manual at any time: `make graph` (also regenerates `graph.html`).
+4. **On `main`, CI keeps the committed graph fresh** (`.github/workflows/graph.yml`).
+   After a push that touches `teach/`, `scripts/`, `tests/` or the graph config
+   (or a manual `workflow_dispatch`, which is how docs-only drift is caught), the
+   job runs `scripts/check_graph.py --strict`; only if the graph is stale does it
+   install the graphify version pinned in the Makefile, run `make graph` and
+   open or update **one** PR from `bot/graph-refresh`
+   (`chore(graph): regenerate code graph`) with `peter-evans/create-pull-request`.
+   Fresh graph: nothing happens. Same commit twice: no new PR, no new commit.
+   Merging that PR touches only `graphify-out/`, which the trigger ignores, so
+   there is no loop. A feature PR neither rebases nor rebuilds the graph and
+   keeps `graphify-out/` out of its diff; a stale graph in a PR is a warning.
+   main is protected, so the bot PR needs its checks like any other, and a PR
+   opened with the built-in `GITHUB_TOKEN` does not start workflows: set the
+   repository secret `GRAPH_BOT_TOKEN` (fine-grained PAT or GitHub App token,
+   this repo only, Contents and Pull requests read/write). Without it the PR is
+   still opened and its checks are started with
+   `gh workflow run verify.yml --ref bot/graph-refresh`.
 
 The hook needs `git config core.hooksPath .githooks`, which `make setup`
 already sets — same switch that installs the pre-commit contract hook.

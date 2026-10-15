@@ -4,6 +4,22 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-15
 
+- **The code graph is refreshed on `main`, not in every PR**
+  (`.github/workflows/graph.yml`). After a merge that touches `teach/`,
+  `scripts/`, `tests/` or the graph config, the job asks
+  `scripts/check_graph.py --strict` and, only if the graph is stale, rebuilds
+  it with `make graph` (tree-sitter, no LLM, no cost; graphify pinned as
+  `GRAPHIFY_VERSION` in the Makefile) and opens or updates one PR,
+  `chore(graph): regenerate code graph`, from `bot/graph-refresh`
+  (`peter-evans/create-pull-request`, pinned by SHA; main stays protected).
+  Feature PRs no longer rebase or rebuild the graph and leave `graphify-out/`
+  out of their diff; a stale graph in a PR is a warning. `check_pr.py` checks
+  only the title of that bot PR (branch `bot/graph-refresh`, every file under
+  `graphify-out/`). **Pending for the maintainer:** create the repository secret
+  `GRAPH_BOT_TOKEN` (fine-grained PAT or GitHub App token, this repo, Contents
+  and Pull requests read/write); without it the PR is opened with
+  `GITHUB_TOKEN`, which does not start workflows, so its checks are started with
+  `gh workflow run verify.yml --ref bot/graph-refresh`.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.

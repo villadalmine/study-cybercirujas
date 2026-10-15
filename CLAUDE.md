@@ -12,7 +12,7 @@
 - **Run Status Matrix Script**: `.venv/bin/python3 scripts/status_matrix.py`
 - **Run Corruption Fix Script**: `.venv/bin/python3 scripts/fix_corrupted_content.py`
 - **Model Comparison Dashboard**: [MODELS.md](MODELS.md) — generated, regenerates with STATUS.md; per-cert tables are the only fair model comparisons
-- **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
+- **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; post-commit hook locally, and CI on main via a bot PR — do not commit `graphify-out/` in your PR)
 - **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
 - **Check Curriculum Updates**: `make check-updates` (exam syllabi vs what each vendor publishes; spends a few completions on the sync). How to read and report it, and the rule that a re-snapshot is the owner's decision: [docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates)
 - **Check Bot Models**: `make check-models` (do the study bot's models still exist, at the price shown? — free, no key)
@@ -73,8 +73,13 @@ window.
 
 **The machinery has a queryable map.** `graphify-out/graph.json` (+
 `GRAPH_REPORT.md`) is a tree-sitter code graph of `teach/`, `scripts/` and
-`tests/` — free to build, refreshed by the post-commit hook, staleness checked
-by `scripts/check_graph.py` in `make verify`, served to agents over MCP via
+`tests/` — free to build, refreshed by the post-commit hook locally and, on
+`main`, by the `graph.yml` workflow, which opens or updates one bot PR
+(`bot/graph-refresh`, `chore(graph): regenerate code graph`) when
+`scripts/check_graph.py` says it is stale. **A PR never rebases or rebuilds the
+graph to refresh it, and leaves `graphify-out/` out of its diff**
+(`git restore graphify-out` if the hook dirtied it); a stale graph in a PR is a
+warning. Staleness is checked by `scripts/check_graph.py` in `make verify`, served to agents over MCP via
 `.mcp.json` — which needs `make mcp-setup` first, or both servers there die at
 startup with `ModuleNotFoundError`. The study corpus is served over MCP too
 (`teach/mcp_server.py`): the same four functions the study bot calls —

@@ -102,6 +102,21 @@ for the reviewer and the maintainer.
 The author updates both tables on every round, in the same edit that updates
 *Where it ran*.
 
+## The graph refresh PR
+
+`graphify-out/` (the committed code graph) is not part of anyone's feature PR.
+Whoever merges first no longer makes the other rebase to refresh it:
+`.github/workflows/graph.yml` regenerates it on `main` and opens one bot PR,
+`chore(graph): regenerate code graph`, from the branch `bot/graph-refresh`
+([docs/DEVTOOLS.md](DEVTOOLS.md)). A feature PR that shows a stale graph
+warning in `make verify` is fine; one that touches `graphify-out/` is asked to
+drop that from the diff. The bot PR is reviewed like any PR, minus the
+description: `scripts/check_pr.py` checks only its title when the branch is
+`bot/graph-refresh` and every changed file is under `graphify-out/`. Its
+required checks start only if the repository secret `GRAPH_BOT_TOKEN` exists
+(otherwise `gh workflow run verify.yml --ref bot/graph-refresh`). The
+maintainer merges it; an agent never does.
+
 ## When a PR is ready
 
 - the latest Copilot review is triaged and has no open valid finding (or the

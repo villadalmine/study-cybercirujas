@@ -41,6 +41,18 @@ class CheckPrTests(unittest.TestCase):
                                       ["certs/cka/1.1/en/content.md"], root=Path(tmp))
             self.assertTrue(any("no meta.yaml" in p for p in problems))
 
+    def test_the_graph_bot_pr_is_checked_by_title_and_files_only(self):
+        graph = ["graphify-out/graph.json", "graphify-out/wiki/index.md"]
+        title = "chore(graph): regenerate code graph"
+        ref = "bot/graph-refresh"
+        self.assertEqual(check_pr.check(title, "", graph, head_ref=ref), [])
+        # the title is still checked
+        self.assertTrue(check_pr.check("regenerate", "", graph, head_ref=ref))
+        # another branch, or any file outside graphify-out/, gets the full check
+        self.assertTrue(check_pr.check(title, "", graph, head_ref="bot/other"))
+        self.assertTrue(check_pr.check(title, "", graph + ["scripts/check_pr.py"], head_ref=ref))
+        self.assertTrue(check_pr.check(title, "", [], head_ref=ref))
+
     def test_title_must_be_a_conventional_commit(self):
         problems = check_pr.check("Fixed stuff", self.body("good.md"), [])
         self.assertTrue(any("Conventional Commit" in p for p in problems))

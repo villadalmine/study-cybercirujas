@@ -8,6 +8,12 @@ acting on a cached idea of the code instead of the code. The build is
 tree-sitter AST only, so keeping it fresh costs no quota; there is no excuse
 for it to be stale except nobody noticing.
 
+Who keeps it fresh: main, not each PR. After a merge that touches what the
+graph covers, .github/workflows/graph.yml runs this script with --strict and,
+if the graph is stale, opens ONE bot PR (bot/graph-refresh) with the rebuilt
+graph. A feature PR therefore never needs `make graph` or a rebase to refresh
+it: for a PR a stale graph is a warning, never a failure.
+
 Warn-only by default so `make verify` keeps proving content soundness even on
 a clone that never built a graph. --strict turns both findings into failures
 (for anything that is about to RELY on the graph, e.g. serving it over MCP).
@@ -87,7 +93,8 @@ def main() -> int:
         print(f"graph: OK — nothing it covers changed since {baseline[:8]}.")
         return 0
     print(f"graph: possibly STALE — {len(covered)} covered file(s) changed since "
-          f"{baseline[:8]} (e.g. {covered[0]}). Run `make graph` (free) to settle it.")
+          f"{baseline[:8]} (e.g. {covered[0]}). Run `make graph` (free) to settle it locally; "
+          "CI refreshes the committed one on main, so a PR need not.")
     return fail
 
 

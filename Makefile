@@ -6,6 +6,10 @@
 #   make publish MSG="content 1.1"
 
 VENV    := .venv
+# The one place the graph builder is pinned: `make graph-setup` and the
+# graph.yml workflow (which reads this line) install exactly this, so a CI
+# rebuild and a local one produce the same graph.
+GRAPHIFY_VERSION := 0.9.91
 TEACH   := $(VENV)/bin/teach
 CERT    ?= lpi-010-160
 BACKEND ?=
@@ -196,7 +200,7 @@ probe-models: ## do the bot's models ANSWER, read the material, and speak each l
 	@# its effort selector and its per-language filtering from.
 	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),) $(if $(LANGS),--langs "$(LANGS)",)
 
-graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
+graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota; CI does it on main)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
 	$(VENV)/bin/graphify export wiki
@@ -212,7 +216,7 @@ mcp-check: ## drive the study MCP server over stdio and print what it answers
 	$(VENV)/bin/python3 -m unittest tests.test_mcp_server -v
 
 graph-setup: ## one-time: install graphifyy into the venv (~40 tree-sitter grammars)
-	$(VENV)/bin/pip install -q graphifyy
+	$(VENV)/bin/pip install -q graphifyy==$(GRAPHIFY_VERSION)
 	@echo "OK: $(VENV)/bin/graphify — now: make graph"
 
 wiki: ## update the OpenWiki wiki — COSTS API credits, never runs unattended (docs/DEVTOOLS.md)
