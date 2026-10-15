@@ -220,6 +220,8 @@ installing dependencies. CI runs the same targets.
 | labs: every lab honours the contract; `lab new` produces a valid lab; broken specs are caught; `lab up` attaches stdin | `tests/test_labs.py` | `make test` |
 | translation: the structural gate a translation must pass (code blocks, URLs, headings, length) | `tests/test_translation_verify.py` | `make test` |
 | content: quality floor, manifests, Kubernetes APIs, provenance, sources, syllabus, versions; README/API tables up to date | `scripts/check_*.py`, `gen_*.py --check` | `make verify-ci` |
+| docs consistent with the repo: relative links and anchors, paths in code, `make` targets and `teach` commands exist, generated files fresh | `scripts/check_docs.py`, `tests/test_check_docs.py` | `make check-docs` (CI: job `docs-consistency`) |
+| the code graph is what the tree builds (fails when a PR touches `teach/` or `scripts/` and did not run `make graph`) | `scripts/check_graph.py --regenerate` | `make graph-setup && make graph` (free, tree-sitter only; CI: job `docs-consistency`) |
 | the PR description: required sections, Conventional Commit title, declared provenance = `meta.yaml`, Where it ran on the head commit, size and scope | `scripts/check_pr.py`, `tests/test_check_pr.py` | `scripts/check_pr.py --title "<title>" --body-file <body.md> --base origin/main` (CI runs it on every PR) |
 | everything fast above, in one go | `tests/` | `make test` |
 

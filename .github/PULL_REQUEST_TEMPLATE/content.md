@@ -73,6 +73,8 @@ scripts/check_provenance.py && scripts/quality_report.py <cert>
 
 ## Risk and rollback
 
+- [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->
 
 ## Depends on

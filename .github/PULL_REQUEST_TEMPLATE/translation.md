@@ -81,6 +81,8 @@ python3 -m unittest tests.test_translation_verify
 
 ## Risk and rollback
 
+- [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->
 
 ## Depends on

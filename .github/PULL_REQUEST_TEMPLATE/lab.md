@@ -79,6 +79,8 @@ teach lab validate <cert> <topic> && teach lab up <cert> <topic>
 
 ## Risk and rollback
 
+- [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->
 
 ## Depends on

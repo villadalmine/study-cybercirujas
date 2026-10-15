@@ -196,6 +196,9 @@ probe-models: ## do the bot's models ANSWER, read the material, and speak each l
 	@# its effort selector and its per-language filtering from.
 	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),) $(if $(LANGS),--langs "$(LANGS)",)
 
+check-docs: ## docs consistent with the repo: links, anchors, paths, make/teach commands, generated files (free)
+	$(VENV)/bin/python3 scripts/check_docs.py
+
 graph: ## rebuild the code graph + derived wiki (tree-sitter AST — no LLM, no quota)
 	@test -x $(VENV)/bin/graphify || { echo "graphify not installed: make graph-setup"; exit 1; }
 	$(VENV)/bin/graphify update .
@@ -212,7 +215,9 @@ mcp-check: ## drive the study MCP server over stdio and print what it answers
 	$(VENV)/bin/python3 -m unittest tests.test_mcp_server -v
 
 graph-setup: ## one-time: install graphifyy into the venv (~40 tree-sitter grammars)
-	$(VENV)/bin/pip install -q graphifyy
+	@# Pinned: the CI docs job rebuilds the graph and compares it with the committed
+	@# one, so local and CI must run the same graphify (bump both together).
+	$(VENV)/bin/pip install -q graphifyy==0.9.91
 	@echo "OK: $(VENV)/bin/graphify — now: make graph"
 
 wiki: ## update the OpenWiki wiki — COSTS API credits, never runs unattended (docs/DEVTOOLS.md)
@@ -232,6 +237,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_units.py
 	$(VENV)/bin/python3 scripts/check_config.py
 	$(VENV)/bin/python3 scripts/check_graph.py
+	$(VENV)/bin/python3 scripts/check_docs.py --no-generated
 	$(VENV)/bin/python3 scripts/gen_api_docs.py --check
 	$(VENV)/bin/python3 scripts/gen_readme_table.py --check
 	$(VENV)/bin/python3 -m unittest discover tests
