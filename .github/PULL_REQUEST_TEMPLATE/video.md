@@ -51,6 +51,24 @@ teach cert video ...
 - Screenshot of a frame: <!-- drag an image here -->
 - Rendered with: <!-- TTS voice, ffmpeg version, threads -->
 
+## Authorship
+
+<!-- Who did what, updated on every review round (CONTRIBUTING → Authorship). The Author
+     row starts with "Human:" or "AI:" and agrees with Provenance; for AI it names the
+     agent and the model. One Reviewer row per review (Copilot, revisor-pr, a person). -->
+| Role | Who | What | Link |
+| :--- | :--- | :--- | :--- |
+| Author | Human: @you · or · AI: <agent> · <model id> | commits `<first>..<last>` | |
+| Reviewer | | head `<sha>` — result | |
+| Approval and merge | maintainer (human) | pending | |
+
+### Findings ledger
+
+<!-- One row per finding, from any reviewer, CI or a person. Status: fixed |
+     rejected — <reason> | open. "Verified by" is who confirmed the fix next round. -->
+| # | Found by | Head | Severity | Finding | Fixed by | Fix | Verified by | Status |
+| :- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+
 ## How to test it from a clean clone
 
 ```bash

@@ -47,11 +47,68 @@ and observed on PR #1.
 6. **If Copilot cannot run** (quota), the author says so in the PR and the
    diff it did not review is reviewed by hand.
 
+## Authorship: who wrote it, who found what, who fixed it
+
+The same record for every PR, whoever reviews it (Copilot, the `revisor-pr`
+agent, a person) and whoever wrote it. It answers two questions from the PR
+alone: *who is the author* and *who found and who fixed each problem*.
+
+**Commits.** Besides the trailers the tool adds (`Co-Authored-By:`, a session
+link), an agent's commits carry:
+
+```
+Agent: study-author (general-purpose)
+Model: claude-opus-5-5
+```
+
+and a commit that fixes a finding also carries:
+
+```
+Found-by: fable (revisor-pr) https://github.com/<owner>/<repo>/pull/<n>#discussion_r<id>
+Fixed-by: study-author/claude-opus-5-5
+Fixes-review: https://github.com/<owner>/<repo>/pull/<n>#discussion_r<id>
+```
+
+A person writes `Found-by:` and `Fixes-review:` the same way when fixing a
+finding by hand. Commits already pushed are not rewritten to add them.
+
+**`## Authorship` in the description** (required, `check_pr.py`):
+
+| Role | Who | What | Link |
+| :--- | :--- | :--- | :--- |
+| Author | AI: study-author · claude-opus-5-5 | commits `7c53077..6fd099f` | session |
+| Reviewer | Copilot code review | head `a1c8200` — no review (quota) | review id |
+| Reviewer | AI: fable (`revisor-pr`) | head `cbe35a5` — 2 medium, 4 low | review link |
+| Approval and merge | the maintainer (human) | pending | — |
+
+The Author row starts with `Human:` or `AI:` and must agree with
+*Provenance* (`Author: human|ai`; for AI it names the declared model).
+
+**`### Findings ledger`** under it, one row per finding:
+
+| # | Found by | Head | Severity | Finding | Fixed by | Fix | Verified by | Status |
+| :- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | fable `revisor-pr` r123 | `cbe35a5` | medium | … | study-author / claude-opus-5-5 | `db8db53` | fable, round 2 (link) | fixed |
+
+*Found by* is Copilot, `revisor-pr`, CI (with the run) or a person, with the
+link to the comment. *Verified by* is filled in when the next round confirms
+the fix (a Copilot review lists it as "resolved since last review"; a
+`revisor-pr` round says so); until then it says *pending*. *Status* is
+`fixed`, `open`, or `rejected — <reason>`: a rejected finding keeps its row,
+with the argument. `check_pr.py` checks the shape (9 columns, *Found by*
+present, a valid status, *Fixed by* and *Fix* for a fixed row); the content is
+for the reviewer and the maintainer.
+
+The author updates both tables on every round, in the same edit that updates
+*Where it ran*.
+
 ## When a PR is ready
 
 - the latest Copilot review is triaged and has no open valid finding (or the
   PR says it could not run and how the diff was reviewed instead);
 - CI is green on the head commit and *Where it ran* links that run;
-- no thread is left unresolved.
+- no thread is left unresolved;
+- *Authorship* and its *Findings ledger* list every review and every finding
+  of the last round.
 
 Then the maintainer merges. An agent never does.

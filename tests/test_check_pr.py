@@ -54,6 +54,7 @@ class CheckPrTests(unittest.TestCase):
 
     def test_no_material_touched_skips_provenance_matching(self):
         body = (self.body("good.md").replace("- Model: claude", "- Model: anything")
+                .replace("AI: content-agent · claude", "AI: content-agent · anything")  # Authorship agrees
                 .replace("Site: image-rebuild", "Site: none"))
         self.assertEqual(check_pr.check("docs: x", body, ["README.md"]), [])
 
@@ -93,6 +94,60 @@ class CheckPrTests(unittest.TestCase):
         # The case the old assertion could not catch (review of #3).
         moved = self.body("good.md").replace("### Where it ran", "## Lab cycle\n\n### Where it ran")
         self.assertNotIn("### Where it ran", check_pr.sections(moved)["Evidence"])
+
+
+class AuthorshipTests(unittest.TestCase):
+    """## Authorship: who wrote it agrees with Provenance; who found and fixed what."""
+
+    def body(self):
+        return (FIXTURES / "good.md").read_text(encoding="utf-8")
+
+    def problems(self, body):
+        return [p for p in check_pr.check("docs: x", body, []) if "Authorship" in p or "ledger" in p
+                or "## Authorship" in p]
+
+    def test_the_fixture_passes(self):
+        self.assertEqual(self.problems(self.body()), [])
+
+    def test_the_section_is_required(self):
+        body = self.body().replace("## Authorship", "## Credits")
+        self.assertIn("missing section: ## Authorship", check_pr.check("docs: x", body, []))
+
+    def test_the_author_must_agree_with_provenance(self):
+        body = self.body().replace("| Author | AI: content-agent · claude |", "| Author | Human: @someone |")
+        self.assertTrue(any("Author row says Human" in p for p in self.problems(body)))
+        body = self.body().replace("- Author: ai", "- Author: human")
+        self.assertTrue(any("Provenance says Author: human" in p for p in self.problems(body)))
+
+    def test_an_ai_author_names_the_declared_model(self):
+        body = self.body().replace("| Author | AI: content-agent · claude |", "| Author | AI: content-agent |")
+        self.assertTrue(any("must name the model" in p for p in self.problems(body)))
+
+    def test_an_author_row_is_required(self):
+        body = self.body().replace("| Author | AI: content-agent · claude |", "| Writer | someone |")
+        self.assertTrue(any("add an Author row" in p for p in self.problems(body)))
+
+    def test_the_findings_ledger_is_required_and_well_formed(self):
+        self.assertTrue(any("Findings ledger" in p for p in
+                            self.problems(self.body().replace("### Findings ledger", "### Notes"))))
+        row = "| 1 | Copilot r1 | `aaaaaaa` | low | typo | content-agent / claude | `bbbbbbb` | pending | fixed |"
+        for bad, why in ((row.replace("| fixed |", "| done |"), "status must be"),
+                         (row.replace("| fixed |", "| rejected |"), "status must be"),
+                         (row.replace("| Copilot r1 |", "|  |"), "'Found by' is empty"),
+                         (row.replace("| `bbbbbbb` |", "|  |"), "'Fix' is empty"),
+                         (row.replace("| low |", "|"), "8 columns")):
+            with self.subTest(why=why):
+                self.assertTrue(any(why in p for p in self.problems(self.body().replace(row, bad))))
+        rejected = row.replace("| fixed |", "| rejected — the API already caps it |")
+        self.assertEqual(self.problems(self.body().replace(row, rejected)), [])
+
+    def test_the_templates_carry_an_empty_ledger_and_pass_the_author_rule(self):
+        for template in list((REPO / ".github" / "PULL_REQUEST_TEMPLATE").glob("*.md")) + [
+                REPO / ".github" / "pull_request_template.md"]:
+            found = check_pr.sections(template.read_text(encoding="utf-8"))
+            with self.subTest(template=template.name):
+                self.assertEqual(check_pr.ledger_rows(found["Authorship"]), [])
+                self.assertIn("| Author | Human:", found["Authorship"])
 
 
 class WhereItRanTests(unittest.TestCase):

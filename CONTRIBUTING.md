@@ -92,8 +92,8 @@ One template per kind of change, in
 [`.github/PULL_REQUEST_TEMPLATE/`](.github/PULL_REQUEST_TEMPLATE/):
 `content.md`, `translation.md`, `lab.md`, `video.md`, `code.md`, `docs.md`
 (pick one with `?template=<name>.md` on the compare URL). Every PR has the same
-required sections — **What and why · Kind · Provenance · Evidence · How to test
-it from a clean clone · Risk and rollback · Depends on** — and each template
+required sections — **What and why · Kind · Provenance · Evidence · Authorship ·
+How to test it from a clean clone · Risk and rollback · Depends on** — and each template
 adds only what its kind needs (a translation: the gate result and three
 paragraphs picked with a stated seed; a lab: break → verify fails, fix → verify
 passes; a video: duration, a frame, the audio language).
@@ -117,6 +117,22 @@ one on `main`: `pr-format` runs from the PR branch, so the maintainer reads
 every `.github/` change (CODEOWNERS lists it on its own). A new push makes the old link
 stale on purpose, so the description has to be updated — that keeps "it passed"
 attached to the code that is actually being merged.
+
+**Authorship.** Every PR records who did what, and keeps it current on every
+review round:
+
+- a table with the **author** (`Human: <who>` or `AI: <agent> · <model>`, and
+  the range of commits), one row per **review** (Copilot, the `revisor-pr`
+  agent, a person: link, the head it read, the result) and the **approval and
+  merge** (always a human maintainer);
+- a `### Findings ledger`, one row per finding, whoever found it (a reviewer,
+  CI, a person): found by (with the link to the comment) · head · severity ·
+  fixed by · fix commit · verified by (who confirmed it next round) · status
+  (`fixed`, `open`, or `rejected — <reason>`).
+
+`check_pr.py` fails the PR when the section or the ledger is missing, a ledger
+row is malformed, or the author row disagrees with *Provenance* (human vs AI,
+and for AI the model). Details and an example: [docs/REVIEWS.md](docs/REVIEWS.md).
 
 ### Size and scope
 
@@ -143,8 +159,11 @@ by `pr-format`, and `type:content|lab|video|code|ci|docs` and
 
 AI agents (Claude Code, Codex, Gemini, …) open PRs exactly like people: the
 same templates, the same required sections, provenance that names the model,
-"Where it ran" on the head commit, and the commit trailers their tool adds
-(`Co-Authored-By:` and a session link). The checks do not care who wrote the
+"Where it ran" on the head commit, the commit trailers their tool adds
+(`Co-Authored-By:` and a session link), plus `Agent: <role>` and
+`Model: <model id>` on every commit, and on a commit that fixes a finding
+`Found-by: <reviewer> <link>`, `Fixed-by: <agent>/<model>` and
+`Fixes-review: <link>` ([docs/REVIEWS.md](docs/REVIEWS.md) → Authorship). The checks do not care who wrote the
 PR — that is the point.
 
 ## Reviews and merging

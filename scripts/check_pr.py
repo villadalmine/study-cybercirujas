@@ -11,6 +11,10 @@ check instead of a request. It fails when:
   computed site impact: `image-rebuild` when the PR touches anything the
   public image is built from (the `paths` of .github/workflows/docker.yml,
   the single source), `none` otherwise;
+- the Authorship section has no `| Author | Human: … |` or `| Author | AI: … |`
+  row, that row disagrees with Provenance (human/ai, and for AI the model), it
+  has no `### Findings ledger`, or a ledger row is malformed (9 columns, a
+  "Found by", and a status: fixed | open | rejected — <reason>);
 - the PR touches study material under certs/ and the provenance it declares
   does not match the meta.yaml of the topics it touches: for `Author: ai`, the
   declared backend and model must be the ones meta.yaml records; for
@@ -36,7 +40,7 @@ import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 
-SECTIONS = ("What and why", "Kind", "Provenance", "Evidence",
+SECTIONS = ("What and why", "Kind", "Provenance", "Evidence", "Authorship",
             "How to test it from a clean clone", "Risk and rollback", "Depends on")
 TYPES = ("feat", "fix", "docs", "test", "ci", "chore", "refactor", "perf", "build",
          "style", "revert", "i18n", "content", "lab", "video")
@@ -112,6 +116,9 @@ def check(title: str, body: str, files: list[str], root: Path = REPO) -> list[st
                         "PR's head commit (github.com/<owner>/<repo>/actions/runs/<id>); the "
                         "'where-it-ran' comment CI posts has the line ready to paste")
 
+    if "Authorship" in found and "Provenance" in found:
+        problems += authorship(found["Authorship"], declared(found["Provenance"]))
+
     impact = site_impact(files)
     site = re.search(r"^\s*[-*]?\s*Site:\s*(\S+)", found.get("Kind", ""), re.M)
     if not site:
@@ -149,6 +156,68 @@ def check(title: str, body: str, files: list[str], root: Path = REPO) -> list[st
         elif not meta.get("human_edits"):
             problems.append(f"{directory}: Author is human but meta.yaml has no human_edits "
                             "entry (CONTRIBUTING.md → Provenance is mandatory)")
+    return problems
+
+
+# --- authorship: who wrote it, who found what, who fixed it -----------------
+
+AUTHOR_ROW = re.compile(r"^\|\s*Author\s*\|([^|]*)\|", re.M | re.I)
+LEDGER_COLUMNS = 9  # # · found by · head · severity · finding · fixed by · fix · verified by · status
+STATUS = re.compile(r"^(fixed|open|rejected\s*[—–:-]+\s*\S.*)$", re.I)
+
+
+def _cells(line: str) -> list[str]:
+    return [c.strip() for c in line.strip().strip("|").split("|")]
+
+
+def ledger_rows(authorship_text: str) -> list[list[str]] | None:
+    """The data rows of '### Findings ledger' (None if the subsection is missing)."""
+    match = re.search(r"^###\s+Findings ledger\s*$(.*?)(?=^###\s|\Z)", authorship_text, re.M | re.S)
+    if not match:
+        return None
+    rows = []
+    for line in match.group(1).splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = _cells(line)
+        if cells[0] == "#" or all(re.fullmatch(r":?-+:?", c) for c in cells if c):
+            continue  # header or separator
+        rows.append(cells)
+    return rows
+
+
+def authorship(text: str, prov: dict[str, str]) -> list[str]:
+    """Who is declared as author agrees with Provenance; the findings ledger is well formed."""
+    problems = []
+    row = AUTHOR_ROW.search(text)
+    who = row.group(1).strip() if row else ""
+    kind = re.match(r"(?i)(ai|human)\s*:", who)
+    if not kind:
+        problems.append("Authorship: add an Author row, '| Author | Human: <who> | …' or "
+                        "'| Author | AI: <agent> · <model> | …'")
+    else:
+        said = prov.get("author", "").lower()
+        if said in ("ai", "human") and kind.group(1).lower() != said:
+            problems.append(f"Authorship: the Author row says {kind.group(1)}, Provenance says Author: {said}")
+        models = [m.strip() for m in prov.get("model", "").split(",") if m.strip() and m.strip() != "none"]
+        if kind.group(1).lower() == "ai" and models and not any(m in who for m in models):
+            problems.append(f"Authorship: the Author row must name the model Provenance declares ({', '.join(models)})")
+    rows = ledger_rows(text)
+    if rows is None:
+        problems.append("Authorship: add a '### Findings ledger' subsection (its table may have no rows yet)")
+        return problems
+    for cells in rows:
+        ref = cells[0] or "?"
+        if len(cells) != LEDGER_COLUMNS:
+            problems.append(f"Findings ledger row {ref}: {len(cells)} columns, expected {LEDGER_COLUMNS}")
+            continue
+        if not cells[1]:
+            problems.append(f"Findings ledger row {ref}: 'Found by' is empty")
+        if not STATUS.match(cells[8]):
+            problems.append(f"Findings ledger row {ref}: status must be fixed, open or "
+                            f"'rejected — <reason>', not {cells[8]!r}")
+        elif cells[8].lower() == "fixed" and not (cells[5] and cells[6]):
+            problems.append(f"Findings ledger row {ref}: fixed, but 'Fixed by' or 'Fix' is empty")
     return problems
 
 
