@@ -23,6 +23,15 @@ with the committed graphify-out/graph.json (ignoring `built_at_commit`). The
 rebuild is deterministic: same tree, same graph, whatever the directory.
 A difference fails only when the change touches teach/ or scripts/ (the
 machinery the graph maps); for anything else it is a warning.
+
+The rebuild is graphify's INCREMENTAL update on top of the committed
+graphify-out/, exactly what `make graph` does — not a build from nothing. That
+is deliberate: graphify keeps the committed community ids and labels, and a
+from-scratch build of the same tree numbers communities differently (and,
+measured on 2026-10-15, counts one more link: 3918 vs 3917). The guarantee is
+therefore "same tree AND same committed graph give the same result", and
+`make graph` must run on top of the committed graphify-out/, never from an
+empty one. tests/test_check_graph.py pins that the copy includes it.
 """
 from __future__ import annotations
 

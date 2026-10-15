@@ -15,6 +15,28 @@ import check_graph  # noqa: E402
 GRAPH = {"directed": False, "nodes": [{"id": "a"}], "links": [], "built_at_commit": "aaaa"}
 
 
+class IncrementalContractTests(unittest.TestCase):
+    """The rebuild runs on top of the committed graphify-out/, like `make graph` (review of #9)."""
+
+    def test_the_copy_includes_the_committed_graph(self):
+        seen = {}
+        real_run = check_graph.subprocess.run
+
+        def fake_run(cmd, *args, **kwargs):
+            if cmd[0] == "graphify":
+                out = Path(kwargs["cwd"]) / "graphify-out"
+                seen["graph"] = (out / "graph.json").exists()
+                seen["labels"] = (out / ".graphify_labels.json").exists()
+                seen["certs"] = (Path(kwargs["cwd"]) / "certs").exists()
+                return check_graph.subprocess.CompletedProcess(cmd, 0, "", "")
+            return real_run(cmd, *args, **kwargs)
+
+        with mock.patch.object(check_graph.subprocess, "run", fake_run):
+            graph = check_graph.rebuild_in_copy("graphify")
+        self.assertEqual(seen, {"graph": True, "labels": True, "certs": False})
+        self.assertIn("nodes", graph)
+
+
 class RegenerateTests(unittest.TestCase):
     def run_regenerate(self, rebuilt, touched):
         with tempfile.TemporaryDirectory() as tmp:
