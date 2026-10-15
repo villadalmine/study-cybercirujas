@@ -128,13 +128,18 @@ def base_texts(paths: list[str], base: str) -> dict[str, str | None]:
     return out
 
 
+# meta.yaml keys that record checks and reviews of the material, not its authorship.
+NOT_AUTHORSHIP_KEYS = ("quality", "reviews")
+
+
 def quality_only(files: list[str], base_text, root: Path = REPO) -> set[str]:
     """meta.yaml files that are the only change in their topic/language and differ from
-    the base only in the `quality:` block scripts/quality_score.py writes.
+    the base only in NOT_AUTHORSHIP_KEYS: the `quality:` block scripts/quality_score.py
+    writes, and the `reviews:` a reviewer records (docs/REVIEWS.md).
 
-    That block is generated (`make quality`), not authorship: a PR that rescored
-    the corpus would otherwise be read as editing 1155 topics' material, each
-    asked for matching provenance. Any other change to the file still counts.
+    Neither is authorship: a PR that rescored the corpus, or recorded a review,
+    would otherwise be read as editing the topic's material and asked for
+    provenance matching its author. Any other change to the file still counts.
     """
     by_dir: dict[str, list[str]] = {}
     for f in (f.replace("\\", "/") for f in files):
@@ -148,8 +153,9 @@ def quality_only(files: list[str], base_text, root: Path = REPO) -> set[str]:
             continue
         head = yaml.safe_load((root / path).read_text(encoding="utf-8")) or {}
         old = yaml.safe_load(before[path]) or {}
-        head.pop("quality", None)
-        old.pop("quality", None)
+        for key in NOT_AUTHORSHIP_KEYS:
+            head.pop(key, None)
+            old.pop(key, None)
         if head == old:
             out.add(path)
     return out

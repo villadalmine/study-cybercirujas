@@ -316,6 +316,14 @@ class QualityOnlyTests(unittest.TestCase):
             files, base = self.tree(tmp, self.META + "quality:\n  score: 80.0\n")
             self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), {"certs/cka/1.1/en/meta.yaml"})
 
+    def test_recording_a_review_is_not_authorship(self):
+        # docs/REVIEWS.md: add a reviews: entry and run make quality (review of the quality PR).
+        review = ("reviews:\n- by: fable (revisor-pr)\n  link: https://github.com/o/r/pull/1\n"
+                  "  date: '2026-10-15'\n  result: pass\nquality:\n  score: 90.0\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            files, base = self.tree(tmp, self.META + review)
+            self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), {"certs/cka/1.1/en/meta.yaml"})
+
     def test_any_other_change_still_counts(self):
         with tempfile.TemporaryDirectory() as tmp:
             files, base = self.tree(tmp, self.META.replace("model: claude", "model: other") + "quality: {}\n")
