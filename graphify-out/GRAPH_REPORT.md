@@ -1,7 +1,7 @@
 # Graph Report - teach-plat  (2026-10-15)
 
 ## Corpus Check
-- 147 files · ~191,532 words
+- 147 files · ~191,554 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 14 file(s) not represented in the graph (top: (none) 11, .example 1, .service 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `25e36c1c`
+- Built from commit: `350e8f98`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
