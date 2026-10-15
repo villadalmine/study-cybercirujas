@@ -183,6 +183,9 @@ def cmd_new(args) -> int:
         "verified": {"status": False}, "license": "Apache-2.0",
         "x-created": datetime.date.today().isoformat(),
     }
+    derived = spec.derived_from(dest)   # a lab in certs/<cert>/<topic>/lab/ declares its origin
+    if derived:
+        doc["derived_from"] = derived
     (dest / "lab.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8", newline="\n")
     print(f"lab creado en {dest} ({args.requires}). Editá break_fix.sh y probalo con: study-lab run {dest}")
     return 0

@@ -92,3 +92,23 @@ def test_hint_and_list(capsys):
     assert "pista 2/" in capsys.readouterr().out
     assert run_cli("list", "cka") == 0
     assert "1.1" in capsys.readouterr().out
+
+
+def test_new_in_certs_declares_where_the_lab_comes_from(tmp_path):
+    # Review of #10: `study-lab new` wrote v2 without derived_from, which
+    # check_source_chain.py fails at once for a lab in certs/.
+    topic = tmp_path / "certs" / "demo" / "1.1"
+    (topic / "en").mkdir(parents=True)
+    (topic / "en" / "content.md").write_text("# T\n", encoding="utf-8")
+    assert run_cli("new", str(topic / "lab"), "--cert", "demo", "--topic", "1.1",
+                   "--title", "Demo lab", "--requires", "linux") == 0
+    import yaml
+    from teach.core import certs as core_certs
+    doc = yaml.safe_load((topic / "lab" / "lab.yaml").read_text(encoding="utf-8"))
+    assert doc["derived_from"] == {"syllabus": "certs/demo.md#1.1", "content": "certs/demo/1.1/en/content.md",
+                                   "content_sha256": core_certs.chain_sha256(topic / "en" / "content.md")}
+
+
+def test_new_outside_certs_has_no_derived_from(new_lab):
+    import yaml
+    assert "derived_from" not in yaml.safe_load((new_lab() / "lab.yaml").read_text(encoding="utf-8"))
