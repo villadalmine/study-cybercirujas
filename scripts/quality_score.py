@@ -162,17 +162,18 @@ def lab_check(topic_dir: Path, ctx: Context) -> dict:
 
 
 def review_check(meta: dict, w: dict) -> dict:
+    """The LATEST review decides (docs/REVIEWS.md): a later fail outweighs an earlier pass.
+
+    Latest by date; on the same date, the one listed last. A result other than
+    pass counts as fail.
+    """
     reviews = [r for r in meta.get("reviews") or [] if isinstance(r, dict)]
-    passed = [r for r in reviews if r.get("result") == "pass"]
-    if passed:
-        last = sorted(passed, key=lambda r: str(r.get("date")))[-1]
-        return entry("independent_review", "pass", w, f"{last.get('by')}: {last.get('link')}",
-                     ran_at=str(last.get("date")) if last.get("date") else None)
-    if reviews:
-        last = sorted(reviews, key=lambda r: str(r.get("date")))[-1]
-        return entry("independent_review", "fail", w, f"{last.get('by')}: {last.get('link')}",
-                     ran_at=str(last.get("date")) if last.get("date") else None)
-    return entry("independent_review", "not_run", w, "no independent review recorded")
+    if not reviews:
+        return entry("independent_review", "not_run", w, "no independent review recorded")
+    latest = max(enumerate(reviews), key=lambda ir: (str(ir[1].get("date")), ir[0]))[1]
+    result = "pass" if latest.get("result") == "pass" else "fail"
+    return entry("independent_review", result, w, f"latest of {len(reviews)}: {latest.get('by')}: {latest.get('link')}",
+                 ran_at=str(latest.get("date")) if latest.get("date") else None)
 
 
 def human_check(meta: dict, w: dict) -> dict:

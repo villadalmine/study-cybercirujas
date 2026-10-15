@@ -103,6 +103,25 @@ class BlockTests(unittest.TestCase):
         self.assertEqual(quality_score.main(["--check"]), 0)
 
 
+class ReviewTests(unittest.TestCase):
+    """The latest review decides (docs/REVIEWS.md; review of the quality-score PR)."""
+
+    CASES = [
+        ([], "not_run"),
+        ([{"date": "2026-10-01", "result": "pass"}], "pass"),
+        ([{"date": "2026-10-01", "result": "pass"}, {"date": "2026-10-15", "result": "fail"}], "fail"),
+        ([{"date": "2026-10-15", "result": "fail"}, {"date": "2026-10-01", "result": "pass"}], "fail"),
+        ([{"date": "2026-10-01", "result": "fail"}, {"date": "2026-10-15", "result": "pass"}], "pass"),
+        ([{"date": "2026-10-15", "result": "pass"}, {"date": "2026-10-15", "result": "fail"}], "fail"),
+    ]
+
+    def test_table(self):
+        for reviews, want in self.CASES:
+            with self.subTest(reviews=reviews):
+                got = quality_score.review_check({"reviews": [dict(r, by="fable", link="x") for r in reviews]}, W)
+                self.assertEqual(got["result"], want)
+
+
 class VisibleTests(unittest.TestCase):
     def test_the_api_serves_the_summary(self):
         topic = certs.topic_content("cka", "3.3", lang="en")
