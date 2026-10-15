@@ -41,8 +41,12 @@ class PromptTransportTest(unittest.TestCase):
         self.assertFalse(_prompt_on_stdin("x" * 20_000, platform="nt"))
 
     def test_the_command_counts_too(self):
-        # The flags share the same 32,767 units with the prompt.
-        prompt = "x" * 31_900
+        # The flags share the same 32,767 units with the prompt. Sized from the
+        # command itself, so it does not depend on how long the flags are
+        # (the denial list shrank to '*' and broke a fixed 31,900).
+        import subprocess
+        flags = len(subprocess.list2cmdline(AGENT_COMMANDS["claude"]))
+        prompt = "x" * (32_000 - flags // 2)
         self.assertFalse(_prompt_on_stdin(prompt, platform="nt"))
         self.assertTrue(_prompt_on_stdin(prompt, AGENT_COMMANDS["claude"], platform="nt"))
 
