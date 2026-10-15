@@ -44,4 +44,4 @@ license: Apache-2.0
 derived_from:
   syllabus: 'certs/cka.md#3.3'
   content: certs/cka/3.3/en/content.md
-  content_sha256: 59e3197e4b11353c45e0f670dde6c107467afa36e60ec330d6d8d8485db848b0
+  content_sha256: 0b57b99d96829c1f0bc9ebd02b61d4b4c22d4c58de1f8b225cbd310d6aa033ae
