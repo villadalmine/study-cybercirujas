@@ -174,6 +174,25 @@ def load(directory: Path, origin: str = "local", source: str | None = None) -> L
     return lab
 
 
+def derived_from(lab_dir: Path) -> dict | None:
+    """For a lab in certs/<cert>/<topic>/lab/: the syllabus topic and the authoring-language
+    content it is derived from, with that file's sha256 (docs/PRINCIPLES.md -> The source chain)."""
+    from teach.core import certs as core_certs
+    lab_dir = Path(lab_dir).resolve()
+    topic_dir = lab_dir.parent
+    repo = topic_dir.parent.parent.parent
+    if topic_dir.parent.parent.name != "certs" or lab_dir.name != "lab":
+        return None
+    cert, topic = topic_dir.parent.name, topic_dir.name
+    for lang in core_certs.FALLBACK_LANGS:
+        content = topic_dir / lang / "content.md"
+        if content.exists():
+            return {"syllabus": f"certs/{cert}.md#{topic}",
+                    "content": content.relative_to(repo).as_posix(),
+                    "content_sha256": core_certs.chain_sha256(content)}
+    return None
+
+
 def migrate(lab: Lab) -> dict:
     """The v2 file a v1 lab would have: explicit requires and modes, nothing guessed silently."""
     out = dict(lab.raw)
@@ -185,5 +204,8 @@ def migrate(lab: Lab) -> dict:
             modes[action] = {"args": lab.contract[action]}
     out["modes"] = modes
     out.setdefault("origin", {"kind": "curated" if lab.origin == "curated" else "community"})
+    derived = derived_from(lab.directory)
+    if derived:
+        out.setdefault("derived_from", derived)
     out.setdefault("verified", {"status": False})
     return out

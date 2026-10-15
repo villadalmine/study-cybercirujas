@@ -388,7 +388,12 @@ def generate_cert_script(
         "voiceover": _domains_voiceover(domains, lang),
         "domains": domains,
     }
-    script = {"cert": cert_id, "lang": lang, **backend_meta, "scenes": scenes}
+    syllabus = catalog.root() / "certs" / f"{cert_id}.md"
+    script = {"cert": cert_id, "lang": lang, **backend_meta,
+              # The source chain: the syllabus these domains come from, and which version of it.
+              "derived_from": {"syllabus": f"certs/{cert_id}.md",
+                               "syllabus_sha256": certs.chain_sha256(syllabus)},
+              "scenes": scenes}
     out_dir.mkdir(parents=True, exist_ok=True)
     script_path.write_text(yaml.safe_dump(script, sort_keys=False, allow_unicode=True), encoding="utf-8")
     return {"written": str(script_path)}

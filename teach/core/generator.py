@@ -989,6 +989,8 @@ def translate_topic(
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
         "lang": lang,
         "translated_from": source_lang,
+        # The source chain: which version of the source this translates.
+        "source_sha256": certs.translation_source_sha256(directory, source_lang),
         **backend_meta,
         "sources": certs.get_topic(cert_id, topic_id).get("sources", []),
     }, sort_keys=False))

@@ -137,6 +137,17 @@
         "generated_by": {"type": "string", "description": "model that wrote it, for generated labs"}
       }
     },
+    "derived_from": {
+      "description": "The source chain (docs/PRINCIPLES.md): the syllabus topic this lab exercises and the content it is derived from, with that file's sha256. Required for labs in certs/ (scripts/check_source_chain.py).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["syllabus", "content", "content_sha256"],
+      "properties": {
+        "syllabus": {"type": "string", "description": "the syllabus file and topic id, e.g. certs/cka.md#3.3"},
+        "content": {"type": "string", "description": "repo path of the content.md the lab is derived from"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
     "verified": {
       "description": "Proof that break makes verify fail and the fix makes it pass, in the runner.",
       "type": "object",

@@ -46,3 +46,7 @@ verified:
 license: Apache-2.0
 timeout:
   verify: 200
+derived_from:
+  syllabus: 'certs/cka.md#3.4'
+  content: certs/cka/3.4/en/content.md
+  content_sha256: 0f8e728678067f679b9a27e230c52d63de0fcdba8364f79f6c519694bddf8313

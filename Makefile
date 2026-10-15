@@ -224,6 +224,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_manifests.py
 	$(VENV)/bin/python3 scripts/check_k8s_apis.py
 	$(VENV)/bin/python3 scripts/check_provenance.py
+	$(VENV)/bin/python3 scripts/check_source_chain.py
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_syllabus.py
@@ -255,6 +256,7 @@ verify-ci: ## the free checks that hold on ANY clean clone — what CI runs, and
 	$(VENV)/bin/python3 scripts/check_manifests.py
 	$(VENV)/bin/python3 scripts/check_k8s_apis.py
 	$(VENV)/bin/python3 scripts/check_provenance.py
+	$(VENV)/bin/python3 scripts/check_source_chain.py
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_syllabus.py

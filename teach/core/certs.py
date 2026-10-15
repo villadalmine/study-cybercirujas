@@ -21,6 +21,28 @@ LANGS = ["es", "en", "fr", "de", "zh", "ja", "pt"]
 # labs, video scripts — and every other language is a translation of it.
 DEFAULT_LANG = "en"
 
+# The source chain (docs/PRINCIPLES.md): a derived artefact records the sha256
+# of what it was derived from, so a later change to the source is visible.
+CHAIN_SOURCE_FILES = ("content.md", "exercises.md")
+
+
+def chain_sha256(*paths) -> str:
+    """One sha256 over the files, in order, each prefixed by its name (a missing file hashes as empty)."""
+    import hashlib
+    from pathlib import Path as _Path
+    digest = hashlib.sha256()
+    for path in map(_Path, paths):
+        digest.update(path.name.encode() + b"\0")
+        digest.update(path.read_bytes() if path.exists() else b"")
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def translation_source_sha256(topic_dir, source_lang: str) -> str:
+    """What a translation of this topic is derived from: the source language's content + exercises."""
+    from pathlib import Path as _Path
+    return chain_sha256(*(_Path(topic_dir) / source_lang / name for name in CHAIN_SOURCE_FILES))
+
 # Fallback chain for a language that has no content yet, tried in order.
 #
 # A single default is not enough during (and after) the switch to authoring in
