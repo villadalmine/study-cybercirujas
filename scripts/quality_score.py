@@ -185,6 +185,17 @@ def human_check(meta: dict, w: dict) -> dict:
     return entry("human_review", "not_run", w, "no human review or edit recorded")
 
 
+def groundedness_check(meta: dict, w: dict) -> dict:
+    """Keep a recorded `groundedness` entry (written by the classifier lab, not computed here).
+
+    Only when none is recorded does it default to not_run.
+    """
+    for recorded in (meta.get("quality") or {}).get("checks") or []:
+        if isinstance(recorded, dict) and recorded.get("name") == "groundedness":
+            return recorded
+    return entry("groundedness", "not_run", w, "pending: the classifier lab decides which model checks it")
+
+
 def block_for(lang_dir: Path, ctx: Context) -> dict:
     w = ctx.weights
     meta = yaml.safe_load((lang_dir / "meta.yaml").read_text(encoding="utf-8")) or {}
@@ -192,7 +203,7 @@ def block_for(lang_dir: Path, ctx: Context) -> dict:
               entry("citations_resolve", "not_run", w, "network check: scripts/check_citations.py (not run in CI)"),
               k8s_check(lang_dir, w), translation_check(lang_dir, meta, w), chain_check(lang_dir, meta, ctx),
               lab_check(lang_dir.parent, ctx), review_check(meta, w), human_check(meta, w),
-              entry("groundedness", "not_run", w, "pending: the classifier lab decides which model checks it")]
+              groundedness_check(meta, w)]
     checks = [c for c in checks if c is not None]
     value = score(checks, w)
     return {"weights_version": w["version"], "score": value, "level": level_for(value, checks, w)["id"],

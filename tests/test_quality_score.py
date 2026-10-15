@@ -1,4 +1,5 @@
 """The quality score: the formula, the levels, determinism, and that blocks are never hand-kept."""
+import shutil
 import sys
 import tempfile
 import unittest
@@ -120,6 +121,38 @@ class ReviewTests(unittest.TestCase):
             with self.subTest(reviews=reviews):
                 got = quality_score.review_check({"reviews": [dict(r, by="fable", link="x") for r in reviews]}, W)
                 self.assertEqual(got["result"], want)
+
+
+class GroundednessTests(unittest.TestCase):
+    """A groundedness entry recorded by the classifier lab survives a rescore (PR #13)."""
+
+    def test_no_entry_defaults_to_not_run(self):
+        self.assertEqual(quality_score.groundedness_check({}, W)["result"], "not_run")
+
+    def test_a_recorded_entry_is_kept_not_overwritten(self):
+        recorded = {"name": "groundedness", "version": "1", "result": "pass", "weight": W["checks"]["groundedness"]["weight"],
+                    "ran_at": "2026-10-16", "evidence": "classifier: 0.97 of claims supported"}
+        meta = {"quality": {"checks": [check("lab", "pass"), recorded]}}
+        self.assertEqual(quality_score.groundedness_check(meta, W), recorded)
+
+    def test_rescoring_a_topic_with_a_recorded_entry_keeps_it_and_is_stable(self):
+        lang_dir = REPO / "certs" / "cka" / "3.3" / "en"
+        text = (lang_dir / "meta.yaml").read_text(encoding="utf-8")
+        recorded = {"name": "groundedness", "version": "1", "result": "pass", "weight": W["checks"]["groundedness"]["weight"],
+                    "ran_at": "2026-10-16", "evidence": "recorded"}
+        meta = yaml.safe_load(text)
+        meta["quality"]["checks"] = [c for c in meta["quality"]["checks"] if c["name"] != "groundedness"] + [recorded]
+        with tempfile.TemporaryDirectory() as tmp:
+            topic = Path(tmp) / "certs" / "cka" / "3.3"
+            shutil.copytree(lang_dir.parent, topic)
+            target = topic / "en"
+            (target / "meta.yaml").write_text(yaml.safe_dump(meta, sort_keys=False, allow_unicode=True), encoding="utf-8")
+            ctx = quality_score.Context()
+            with mock.patch.object(quality_score, "rel", side_effect=lambda p: str(p)):
+                block = quality_score.block_for(target, ctx)
+        kept = [c for c in block["checks"] if c["name"] == "groundedness"]
+        self.assertEqual(kept, [recorded])
+        self.assertEqual(block["checks"][-1], recorded)
 
 
 class VisibleTests(unittest.TestCase):
