@@ -128,13 +128,16 @@ def _in_time(timeout: int, cmd: list[str]) -> list[str]:
 
 
 def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False,
-            on_timeout=None) -> tuple[int, str]:
+            on_timeout=None, grace: int = 0) -> tuple[int, str]:
     """Run, echo output live, and return (exit code, full output).
 
-    The deadline holds even while the child prints nothing: stdout is read in a
-    thread and the main thread waits on the process. On expiry `on_timeout()`
-    runs (to stop what runs inside the container), the client is killed and the
-    exit code is 124, like coreutils timeout.
+    `timeout` is the phase's own value (lab.yaml `timeout.*`), the one the
+    in-container `timeout` enforces; the host waits `timeout + grace` as a
+    backstop. The deadline holds even while the child prints nothing: stdout is
+    read in a thread and the main thread waits on the process. When the host
+    deadline expires, `on_timeout()` runs (to stop what runs inside the
+    container), the client is killed and the exit code is 124. A child that
+    exits 124 by itself is passed through; callers say what 124 may mean.
     """
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
@@ -155,7 +158,7 @@ def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False,
     reader = threading.Thread(target=pump, daemon=True)
     reader.start()
     try:
-        code = proc.wait(timeout=timeout)
+        code = proc.wait(timeout=timeout + grace)
     except subprocess.TimeoutExpired:
         if on_timeout:
             try:
@@ -165,13 +168,20 @@ def _stream(cmd: list[str], stdin: str, timeout: int, quiet: bool = False,
         proc.kill()
         proc.wait()
         code = 124
-    reader.join(timeout=5)
-    if code == 124:
         msg = f"\n[study-lab] timeout after {timeout}s\n"
         out.append(msg)
         if not quiet:
             sys.stdout.write(msg)
+    reader.join(timeout=5)
     return code, "".join(out)
+
+
+def _why(code: int, phase: str, seconds: int) -> str:
+    """`exit N`, plus what 124 most likely means (coreutils timeout's status)."""
+    if code != 124:
+        return f"exit {code}"
+    return (f"exit 124: the {seconds}s limit of timeout.{phase} in lab.yaml ran out "
+            "(or the script itself exited 124)")
 
 
 def _mode_cmd(lab: Lab, name: str, action: str) -> tuple[list[str], str]:
@@ -205,7 +215,7 @@ def _killer(lab: Lab, name: str, pattern: str):
 
 def _run_mode(lab: Lab, name: str, action: str) -> tuple[int, str]:
     cmd, stdin = _mode_cmd(lab, name, action)
-    return _stream(cmd, stdin, lab.spec["timeout"][action] + GRACE,
+    return _stream(cmd, stdin, lab.spec["timeout"][action], grace=GRACE,
                    on_timeout=_killer(lab, name, f"/lab/{lab.spec['script']}"))
 
 
@@ -273,10 +283,11 @@ def run(lab: Lab) -> int:
     else:
         init = ["study-lab-init"]
     up = lab.spec["timeout"]["up"]
-    code, _ = _stream(["docker", "exec", name, *_in_time(up, init)], "", up + GRACE,
+    code, _ = _stream(["docker", "exec", name, *_in_time(up, init)], "", up, grace=GRACE,
                       on_timeout=_killer(lab, name, "study-lab-init"))
     if code != 0:
-        raise RunnerError(f"the environment did not come up (exit {code}); see above. 'study-lab down' cleans it.")
+        raise RunnerError(f"the environment did not come up ({_why(code, 'up', up)}); see above. "
+                          "'study-lab down' cleans it.")
     if lab.spec["run_in"] == "node":
         _docker("exec", name, "docker", "cp", "/lab", "lab-control-plane:/", check=True)
 
@@ -286,7 +297,8 @@ def run(lab: Lab) -> int:
     _docker("exec", name, "rm", "-f", STATE_FILE, check=True)
     code, _ = _run_mode(lab, name, "break")
     if code != 0:
-        raise RunnerError(f"break failed (exit {code}); the lab is not in a known state. Try 'study-lab down' and run again.")
+        raise RunnerError(f"break failed ({_why(code, 'break', lab.spec['timeout']['break'])}); the lab is not "
+                          "in a known state. Try 'study-lab down' and run again.")
     _docker("exec", name, "sh", "-c", f"echo broken > {STATE_FILE}", check=True)
     _next_steps(lab)
     return 0
@@ -314,7 +326,7 @@ def check(lab: Lab) -> int:
     ok = code == success.get("exit_code", 0)
     if ok and success.get("output_regex"):
         ok = re.search(success["output_regex"], out, re.M) is not None
-    print(f"\n[study-lab] check: {'PASS' if ok else 'FAIL'}  (exit {code}"
+    print(f"\n[study-lab] check: {'PASS' if ok else 'FAIL'}  ({_why(code, 'verify', lab.spec['timeout']['verify'])}"
           + (f", regex /{success['output_regex']}/ {'found' if ok else 'not found'}" if success.get("output_regex") else "") + ")")
     return 0 if ok else 1
 

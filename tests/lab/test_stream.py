@@ -27,6 +27,24 @@ def test_timeout_stops_what_runs_inside_the_container():
     assert killed == [1]
 
 
+def test_the_message_names_the_phase_timeout_not_the_host_backstop():
+    # lab.yaml says timeout.up: 600; the host waits 600 + GRACE. The student
+    # must read 600 (review round 2 of PR #2).
+    t0 = time.monotonic()
+    code, out = runner._stream(SILENT_SLEEP, "", 1, quiet=True, grace=1)
+    assert code == 124
+    assert 1.5 < time.monotonic() - t0 < 10
+    assert "timeout after 1s" in out and "2s" not in out
+
+
+def test_a_child_that_exits_124_is_not_reported_as_a_timeout():
+    code, out = runner._stream([sys.executable, "-c", "raise SystemExit(124)"], "", 30, quiet=True)
+    assert code == 124
+    assert "timeout after" not in out
+    assert "ran out" in runner._why(124, "verify", 120) and "120s" in runner._why(124, "verify", 120)
+    assert runner._why(1, "verify", 120) == "exit 1"
+
+
 def test_output_and_exit_code_pass_through():
     code, out = runner._stream([sys.executable, "-c", "print('a'); print('b'); raise SystemExit(3)"],
                                "", 30, quiet=True, on_timeout=lambda: (_ for _ in ()).throw(AssertionError))
