@@ -52,7 +52,7 @@ and say so to your own users.
 |---|---|---|
 | Code (`teach/`, `scripts/`, `deploy/`) | **Apache 2.0** — see [LICENSE](LICENSE) | Use it, fork it, sell what you build with it. Keep the notice |
 | Study material (`certs/**`) | **Apache 2.0**, same as the code | AI-generated; carries the disclosure obligation above |
-| Exam syllabi it derives from | **Their vendors'** | CNCF curricula are CC-BY 4.0; LPI, AWS, Microsoft, Google and NVIDIA publish under their own terms. We never copy them verbatim — topics are original text written *from* them, with the source document linked. If you redistribute, that separation is yours to preserve too |
+| Exam syllabi it derives from | **Their vendors'** | The CNCF curricula (github.com/cncf/curriculum) are CC-BY 4.0. The Linux Foundation's own exams outside that repository (LFCS, LFCA, CKNE, MCPA, published on training.linuxfoundation.org), LPI, AWS, Microsoft, Google, HashiCorp (an IBM company) and NVIDIA publish under their own terms. We never copy them verbatim — topics are original text written *from* them, with the source document linked. If you redistribute, that separation is yours to preserve too. Names and trademarks: [README → Legal & Trademark Disclaimer](README.md#legal) |
 
 ## Using the hosted API
 
