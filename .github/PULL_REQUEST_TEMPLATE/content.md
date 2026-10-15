@@ -28,7 +28,7 @@ content — certification / topic / language:
 make test
 ...
 scripts/check_provenance.py
-scripts/quality_report.py <cert>
+make quality CERT=<cert>     # floor report + rescore; commit the meta.yaml it changes
 ```
 
 ### Where it ran
@@ -68,7 +68,7 @@ scripts/quality_report.py <cert>
 git clone https://github.com/villadalmine/study-cybercirujas.git && cd study-cybercirujas
 git fetch origin pull/<N>/head:pr && git checkout pr
 make setup && make test
-scripts/check_provenance.py && scripts/quality_report.py <cert>
+scripts/check_provenance.py && make quality CERT=<cert> && .venv/bin/python3 scripts/quality_score.py --check
 ```
 
 ## Risk and rollback
