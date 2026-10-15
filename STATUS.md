@@ -104,6 +104,41 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `terraform-advanced` | Terraform 1.6 | 2026-09-29 | Terraform 1.6 | – | 2026-09-29 | – unknown |
 | `terraform-associate` | 004 | 2026-09-29 | Terraform 1.12 | – | 2026-09-29 | – unknown |
 
+## Quality
+
+Score 0-100 per topic and language, from every check that exists (`quality_weights.yaml`; a check that did not run costs part of its weight, a failed one costs all of it). Written into each meta.yaml by `make quality`, never by hand. How to raise a topic's score: CONTRIBUTING → Raising a topic's quality score.
+
+| Cert | Topic-languages | Mean score | Verified | AI beta | Draft | Not scored |
+|---|---|---|---|---|---|---|
+| `lpi-010-160` | 133 | 76.6 | 0 | 132 | 1 | 0 |
+| `lpic-1` | 84 | 78.1 | 0 | 84 | 0 | 0 |
+| `lpic-3-303` | 30 | 78.1 | 0 | 30 | 0 | 0 |
+| `lpic-3-305` | 26 | 78.5 | 0 | 26 | 0 | 0 |
+| `lpic-3-306` | 24 | 77.4 | 0 | 24 | 0 | 0 |
+| `lpi-devops` | 33 | 77.3 | 0 | 33 | 0 | 0 |
+| `cka` | 54 | 80.9 | 0 | 54 | 0 | 0 |
+| `ckad` | 48 | 80.4 | 0 | 48 | 0 | 0 |
+| `cks` | 52 | 78.7 | 0 | 51 | 1 | 0 |
+| `kcna` | 26 | 78.5 | 0 | 26 | 0 | 0 |
+| `kcsa` | 84 | 79.5 | 0 | 84 | 0 | 0 |
+| `cgoa` | 8 | 79.0 | 0 | 8 | 0 | 0 |
+| `capa` | 10 | 79.4 | 0 | 10 | 0 | 0 |
+| `cnpa` | 54 | 80.6 | 0 | 54 | 0 | 0 |
+| `cnpe` | 36 | 80.6 | 0 | 36 | 0 | 0 |
+| `cca` | 10 | 79.0 | 0 | 10 | 0 | 0 |
+| `ica` | 34 | 79.6 | 0 | 34 | 0 | 0 |
+| `kca` | 62 | 79.3 | 0 | 62 | 0 | 0 |
+| `otca` | 40 | 79.0 | 0 | 40 | 0 | 0 |
+| `pca` | 52 | 79.0 | 0 | 52 | 0 | 0 |
+| `lpi-030-100` | 36 | 78.5 | 0 | 36 | 0 | 0 |
+| `lpi-050-100` | 36 | 78.3 | 0 | 36 | 0 | 0 |
+| `lpi-702` | 56 | 77.0 | 0 | 56 | 0 | 0 |
+| `aws-clf` | 38 | 78.8 | 0 | 38 | 0 | 0 |
+| `az-900` | 22 | 79.0 | 0 | 22 | 0 | 0 |
+| `gcp-cdl` | 28 | 79.0 | 0 | 28 | 0 | 0 |
+| `mcpa` | 17 | 75.3 | 0 | 17 | 0 | 0 |
+| `ckne` | 22 | 80.6 | 0 | 22 | 0 | 0 |
+
 ## Path Videos
 
 | Path | ES | EN | DE | ZH |

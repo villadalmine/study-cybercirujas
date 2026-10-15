@@ -211,10 +211,13 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
     # disclosure is for; the README only reaches repo readers). Read from the
     # served language's meta.yaml, so a fallback shows the fallback's origin.
     generated_by = None
+    quality_summary = None
     meta_file = directory / (fallback or lang) / "meta.yaml"
     if meta_file.exists():
         try:
             raw = yaml.safe_load(meta_file.read_text(encoding="utf-8")) or {}
+            from .scoring import summary as quality_of
+            quality_summary = quality_of(raw)
             generated_by = {key: raw.get(key) for key in
                             ("model", "backend", "generated_at", "translated_from")}
             # The official syllabus this topic was written from. Recorded per
@@ -233,4 +236,6 @@ def topic_content(cert_id: str, topic_id: str, lang: str = DEFAULT_LANG) -> dict
         "lang": fallback or lang,
         "lang_fallback": fallback,
         "generated_by": generated_by,
+        # Score, level and every check behind it (scripts/quality_score.py).
+        "quality": quality_summary,
     }

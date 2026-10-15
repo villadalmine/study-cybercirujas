@@ -250,6 +250,8 @@ def _render() -> str:
             f"| {row['last_checked'] or 'never'} | {MARK[row['state']]} |"
         )
 
+    lines += _quality_section(catalog)
+
     lines += ["", "## Path Videos", "",
               "| Path | " + " | ".join(l.upper() for l in VIDEO_LANGS) + " |",
               "|---|" + "---|" * len(VIDEO_LANGS)]
@@ -280,6 +282,41 @@ def _render() -> str:
 
     lines += _spend_section()
     return "\n".join(lines) + "\n"
+
+
+def _quality_section(catalog: dict) -> list[str]:
+    """Per certification: the mean quality score and how many topic-languages sit
+    at each level, read from the `quality:` blocks scripts/quality_score.py writes."""
+    from teach.core.scoring import load_weights
+    levels = [lv["id"] for lv in load_weights()["levels"]]
+    labels = {lv["id"]: lv["label"] for lv in load_weights()["levels"]}
+    lines = ["", "## Quality", "",
+             "Score 0-100 per topic and language, from every check that exists "
+             "(`quality_weights.yaml`; a check that did not run costs part of its "
+             "weight, a failed one costs all of it). Written into each meta.yaml by "
+             "`make quality`, never by hand. How to raise a topic's score: "
+             "CONTRIBUTING → Raising a topic's quality score.", "",
+             "| Cert | Topic-languages | Mean score | " + " | ".join(labels[lv] for lv in levels) + " | Not scored |",
+             "|---|---|---|" + "---|" * len(levels) + "---|"]
+    for cert_id in catalog["certs"]:
+        cert_dir = REPO / "certs" / cert_id
+        scores, counts, unscored = [], {lv: 0 for lv in levels}, 0
+        for meta_file in sorted(cert_dir.glob("*/*/meta.yaml")):
+            if not (meta_file.parent / "content.md").exists():
+                continue
+            block = (yaml.safe_load(meta_file.read_text(encoding="utf-8")) or {}).get("quality")
+            if not isinstance(block, dict) or block.get("level") not in counts:
+                unscored += 1
+                continue
+            scores.append(float(block.get("score") or 0))
+            counts[block["level"]] += 1
+        total = len(scores) + unscored
+        if not total:
+            continue
+        mean = f"{sum(scores) / len(scores):.1f}" if scores else "–"
+        lines.append(f"| `{cert_id}` | {total} | {mean} | " + " | ".join(str(counts[lv]) for lv in levels)
+                     + f" | {unscored} |")
+    return lines
 
 
 def _spend_section() -> list[str]:
