@@ -140,6 +140,19 @@ class CitedRunTests(unittest.TestCase):
         self.assertIn("HTTP 403", out.getvalue())
 
 
+def verify_workflow() -> dict:
+    import yaml
+    wf = yaml.safe_load((REPO / ".github" / "workflows" / "verify.yml").read_text(encoding="utf-8"))
+    wf["on"] = wf.get("on", wf.get(True))  # YAML 1.1 reads `on:` as True
+    return wf
+
+
+class VerifyWorkflowTests(unittest.TestCase):
+    def test_pr_format_can_read_the_cited_run(self):
+        # GET actions/runs/{id} and /jobs need actions: read on a private repository.
+        self.assertEqual(verify_workflow()["jobs"]["pr-format"]["permissions"].get("actions"), "read")
+
+
 class ScopeTests(unittest.TestCase):
     def test_one_topic_language_per_content_pr(self):
         files = ["certs/cka/1.1/es/content.md", "certs/cka/1.2/es/content.md"]
