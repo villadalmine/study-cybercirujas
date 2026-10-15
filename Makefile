@@ -20,6 +20,7 @@ REGISTRY ?= registry.registry:5000
 
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
+.PHONY: groundedness groundedness-setup groundedness-deep
 .PHONY: preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
 .PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci
 
@@ -164,6 +165,18 @@ quality: ## floor report, then score every topic and write its meta.yaml quality
 	$(VENV)/bin/python3 scripts/quality_report.py $(CERT)
 	$(VENV)/bin/python3 scripts/quality_score.py $(if $(CERT),certs/$(CERT))
 	$(VENV)/bin/python3 scripts/quality_score.py --report $(if $(CERT),certs/$(CERT))
+
+GROUND := $(VENV)/bin/python3 scripts/check_groundedness.py --fetch --write $(if $(DIRS),$(DIRS),--base $(if $(BASE),$(BASE),origin/main))
+
+groundedness-setup: ## install the groundedness classifier (torch CPU, GLiClass) and download its pinned weights
+	$(VENV)/bin/pip install -q -r requirements-groundedness.txt
+	$(VENV)/bin/python3 scripts/check_groundedness.py --download
+
+groundedness: ## claims not supported by their sources, GLiClass prefilter (topics changed vs BASE=origin/main, or DIRS=)
+	$(GROUND)
+
+groundedness-deep: ## the same, suspects confirmed by Granite Guardian on your llama-server (GUARDIAN_URL=)
+	$(GROUND) --deep
 
 clean-registry: ## prune old image tags and reclaim registry space (KEEP=3, APPLY=1)
 	@# Dry run unless APPLY=1. Never prunes a tag any deployment is using, and
