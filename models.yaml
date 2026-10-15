@@ -47,7 +47,9 @@
 #   probed:       the date those five were last true.
 #
 # FREE MODELS CHANGE OFTEN — that is their nature, and it is why
-# `scripts/check_models.py` runs inside `make check-updates`. When a free model
+# `scripts/check_models.py` exists: `make check-models` (run it in the same
+# sitting as `make check-updates`, which does not include it) and a weekly
+# CronJob in the cluster. When a free model
 # starts charging or disappears, replace it against these criteria rather than
 # by picking whatever is free that week.
 

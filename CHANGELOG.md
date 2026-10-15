@@ -33,10 +33,10 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 - **Checking curriculum updates is a documented procedure, not a skill.** The
   `check-updates` Claude Code skill is gone; its steps live in
   [docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates)
-  for every contributor and agent: what `make check-updates` runs (AI sync,
-  deterministic verdict, the bot's models), how to read STATUS.md's *Exam
-  versions*, the report order, and the rule that a re-snapshot is the owner's
-  decision.
+  for every contributor and agent: what `make check-updates` runs (the AI
+  sync and the deterministic verdict; the bot's models are a separate target,
+  `make check-models`), how to read STATUS.md's *Exam versions*, the report
+  order, and the rule that a re-snapshot is the owner's decision.
 
 ## 2026-09-30
 
