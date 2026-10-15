@@ -295,13 +295,25 @@ call and is listed here so it is not lost.
 
 ## `graphify-out/` and `openwiki/` — what they are and whether they belong
 
-**`graphify-out/`** (1.7 MB, 70 generated wiki pages + `graph.json`) is a
-tree-sitter map of the *machinery* (`teach/`, `scripts/`), committed so agents
-can query it over MCP. Facts: the committed graph is from 2026-09-18 and
-`scripts/check_graph.py` on a fresh clone reports it **stale** (code changed
-on 2026-09-29); the post-commit hook only refreshes it on a machine that has
-graphify installed, so in practice it lags. The `wiki/` pages are generated
-names like `Agy_Test_Script.md` — noise for a human visitor.
+**`graphify-out/`** (`graph.json`, `GRAPH_REPORT.md`, ~130 generated wiki
+pages) is a tree-sitter map of the *machinery* (`teach/`, `scripts/`, tests,
+configs and the docs), committed so agents can query it over MCP.
+
+*Facts as of 2026-10-15 (updated by the docs-consistency PR):* it was stale
+from 2026-09-18 to 2026-10-15 because only the post-commit hook refreshed it,
+and only on a machine with graphify. Since that PR the graph is regenerated
+(graphifyy 0.9.91, pinned) and **CI keeps it honest**: the `docs-consistency`
+job rebuilds it in a temporary copy and fails a PR that touches `teach/` or
+`scripts/` without `make graph` (`scripts/check_graph.py --regenerate`). It is
+no longer stale by default. The `wiki/` pages are still generated names
+(`Community_12.md`, `main_2.md`) — noise for a human visitor.
+
+**Decision pending — the maintainer's (Rino), not taken by any PR:** keep
+committing `graphify-out/` (now CI-checked, at the cost of a `make graph`
+commit in every code PR), or stop committing it (gitignore `graphify-out/`,
+or only `graphify-out/wiki/`, and build it in CI as an artefact or on demand),
+and whether `openwiki/` and `make wiki` stay. Until then the current setup
+stays as is.
 
 **`openwiki/`** holds only `INSTRUCTIONS.md`: the scope file for an OpenWiki run
 that costs API credits and has never produced a committed wiki. It is a
@@ -309,10 +321,13 @@ configuration for a tool that is not in use.
 
 Recommendation (nothing removed — owner decides):
 
-- **Stop committing generated graph output.** Either gitignore
-  `graphify-out/wiki/` (keep `graph.json` if agents rely on it), or build the
-  graph in CI and attach it to a release. A committed artifact that is stale
-  by default teaches readers to distrust it.
+- **Stop committing generated graph output** (the original recommendation,
+  2026-10-14). Either gitignore `graphify-out/wiki/` (keep `graph.json` if
+  agents rely on it), or build the graph in CI and attach it to a release.
+  Its argument was "a committed artefact that is stale by default teaches
+  readers to distrust it"; since 2026-10-15 CI rejects a stale graph, so what
+  remains is the cost of the extra commit per code PR versus agents finding
+  the graph in the clone. Owner's call, above.
 - **Where a graph would pay off is the curriculum, not the code.** The repo
   already has the data for a *curriculum graph*: certification → domain →
   topic → official source, plus `requires` between certifications and the
