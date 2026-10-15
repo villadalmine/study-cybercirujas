@@ -158,6 +158,23 @@ class ChainHashTests(unittest.TestCase):
             self.assertNotEqual(certs.chain_sha256(a, b), certs.chain_sha256(b, a))
             self.assertRegex(certs.chain_sha256(a), r"^[0-9a-f]{64}$")
 
+    def test_line_endings_are_not_part_of_the_hash(self):
+        """A CRLF copy (Windows checkout, core.autocrlf=true) hashes the same as the LF original."""
+        with tempfile.TemporaryDirectory() as d:
+            lf, crlf = Path(d, "lf"), Path(d, "crlf")
+            (lf / "en").mkdir(parents=True)
+            (crlf / "en").mkdir(parents=True)
+            body = "# Title\n\nline two\n\n```\ncode\n```\n"
+            for root in (lf, crlf):
+                (root / "en" / "exercises.md").write_text("Q1\nQ2\n", encoding="utf-8", newline="\n" if root is lf else "\r\n")
+            (lf / "en" / "content.md").write_bytes(body.encode())
+            (crlf / "en" / "content.md").write_bytes(body.replace("\n", "\r\n").encode())
+            self.assertNotEqual((lf / "en" / "content.md").read_bytes(), (crlf / "en" / "content.md").read_bytes())
+            self.assertEqual(certs.chain_sha256(lf / "en" / "content.md"), certs.chain_sha256(crlf / "en" / "content.md"))
+            self.assertEqual(certs.translation_source_sha256(lf, "en"), certs.translation_source_sha256(crlf, "en"))
+            # a real change still shows
+            (crlf / "en" / "content.md").write_bytes(body.replace("two", "three").replace("\n", "\r\n").encode())
+            self.assertNotEqual(certs.chain_sha256(lf / "en" / "content.md"), certs.chain_sha256(crlf / "en" / "content.md"))
     def test_migrating_a_curated_lab_records_its_origin(self):
         derived = spec.derived_from(REPO / "certs" / "cka" / "3.3" / "lab")
         self.assertEqual(derived["syllabus"], "certs/cka.md#3.3")

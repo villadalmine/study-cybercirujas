@@ -31,7 +31,9 @@ def chain_sha256(*paths) -> str:
 
     Not `sha256sum` of a file, even for one file: the name is part of the hash
     (name, NUL, bytes, NUL), so the same text under another name is another
-    origin. To check by hand: `python3 -c "from teach.core.certs import
+    origin. Line endings are not part of the origin: CRLF is read as LF, so a
+    Windows checkout with core.autocrlf=true hashes the same as a Linux one.
+    To check by hand: `python3 -c "from teach.core.certs import
     chain_sha256; print(chain_sha256('certs/cka/3.3/en/content.md'))"`.
     """
     import hashlib
@@ -39,7 +41,7 @@ def chain_sha256(*paths) -> str:
     digest = hashlib.sha256()
     for path in map(_Path, paths):
         digest.update(path.name.encode() + b"\0")
-        digest.update(path.read_bytes() if path.exists() else b"")
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n") if path.exists() else b"")
         digest.update(b"\0")
     return digest.hexdigest()
 

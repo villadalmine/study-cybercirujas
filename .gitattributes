@@ -4,3 +4,11 @@
 scripts/study-lab text eol=lf
 Dockerfile text eol=lf
 deploy/study-lab/** text eol=lf
+
+# The source chain hashes content and meta (teach.core.certs.chain_sha256): keep
+# them LF on every checkout, so a Windows clone with core.autocrlf=true does not
+# produce different bytes. chain_sha256 also reads CRLF as LF, as a second line.
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.py text eol=lf
