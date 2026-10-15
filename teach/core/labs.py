@@ -24,6 +24,7 @@ only reads and writes the contract.
 
 import datetime
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -126,12 +127,65 @@ def _up_container(directory: Path, spec: dict, name: str) -> None:
     _run(["docker", "exec", name, "useradd", "-m", "student"])
     script = directory / "break_fix.sh"
     _run(["docker", "cp", str(script), f"{name}:/home/student/break_fix.sh"])
-    result = subprocess.run(_exec_script_cmd(name, interactive=sys.stdin.isatty()))
+    user = _script_user(directory)
+    result = subprocess.run(_exec_script_cmd(name, interactive=sys.stdin.isatty(), user=user,
+                                             args=_break_args(directory)))
     if result.returncode != 0:
         raise LabError("break_fix.sh failed inside the container (see output above).")
 
 
-def _exec_script_cmd(name: str, interactive: bool) -> list[str]:
+# The guard each script carries at its top, read as code rather than prose:
+# `[ "$(id -u)" -ne 0 ] && die` / `[ $EUID -eq 0 ] || die` require root;
+# `[ "$(id -u)" -eq 0 ]; then refuse` refuses it.
+_UID = r'(\$\{?EUID\}?|\$\(id -u\))"?'
+REQUIRES_ROOT = re.compile(_UID + r'\s*(-ne|!=)\s*"?0"?|' + _UID + r'\s*-eq\s*0\s*\]\]?\s*\|\|')
+REFUSES_ROOT = re.compile(_UID + r'\s*-eq\s*0\s*\]\]?\s*(;\s*then|&&)|'
+                          + _UID + r'\s*(-ne|!=)\s*"?0"?\s*\]\]?\s*\|\|')
+RUN_AS = ("root", "student")
+
+
+def _script_user(directory: Path) -> str:
+    """Who runs break_fix.sh inside the container.
+
+    Two families want opposite things: Linux Essentials scripts refuse root
+    (the scenario is an ordinary user's shell), LPIC-1/2/3 scripts manage
+    accounts and system paths and refuse anything but root. Running all of
+    them as `student` made ~140 labs die on their first line (found
+    2026-10-15 with lpic-1 104.5). `run_as:` in lab.yaml decides when present;
+    otherwise the script's own guard does, and an ambiguous or absent guard
+    means `student`, the safer default.
+    """
+    spec_file = directory / "lab.yaml"
+    if spec_file.exists():
+        spec = yaml.safe_load(spec_file.read_text(encoding="utf-8")) or {}
+        if spec.get("run_as") in RUN_AS:
+            return spec["run_as"]
+    script = directory / "break_fix.sh"
+    text = script.read_text(encoding="utf-8", errors="replace") if script.exists() else ""
+    if REQUIRES_ROOT.search(text) and not REFUSES_ROOT.search(text):
+        return "root"
+    return "student"
+
+
+BREAK_CASE = re.compile(r'^[ \t]*"?break"?[ \t]*\)', re.MULTILINE)
+
+
+def _break_args(directory: Path) -> list[str]:
+    """The argument that makes break_fix.sh break, for scripts that need one.
+
+    About a third of the scripts are subcommand style (`case "$1" in break) ...
+    verify) ... cleanup)`) and, run without an argument, print their usage and
+    exit 0 — so `teach lab up` reported a running lab with nothing broken
+    (found with kcna 2.2 on 2026-10-15). Scripts that break by default
+    (`--break` is optional, or there are no subcommands) get no argument.
+    """
+    script = directory / "break_fix.sh"
+    text = script.read_text(encoding="utf-8", errors="replace") if script.exists() else ""
+    return ["break"] if BREAK_CASE.search(text) else []
+
+
+def _exec_script_cmd(name: str, interactive: bool, user: str = "student",
+                     args: list[str] | None = None) -> list[str]:
     """`docker exec` for break_fix.sh, with the student's stdin attached.
 
     Most scripts ask for a confirmation first (`read -r -p "... (type SI)"`),
@@ -141,8 +195,8 @@ def _exec_script_cmd(name: str, interactive: bool) -> list[str]:
     piped stdin ("the input device is not a TTY").
     """
     flags = ["-i", "-t"] if interactive else ["-i"]
-    return ["docker", "exec", *flags, "-u", "student", "-w", "/home/student",
-            name, "bash", "break_fix.sh"]
+    return ["docker", "exec", *flags, "-u", user, "-w", "/home/student",
+            name, "bash", "break_fix.sh", *(args or [])]
 
 
 OWNER_LABEL = "org.cybercirujas.study.owner"
@@ -188,7 +242,7 @@ def _up_cluster(directory: Path, name: str) -> None:
         raise LabError(f"kind create cluster failed:\n{result.stderr.strip()}")
     _run(["kubectl", "config", "use-context", f"kind-{name}"])
     script = directory / "break_fix.sh"
-    result = subprocess.run(["bash", str(script)], cwd=directory)
+    result = subprocess.run(["bash", str(script), *_break_args(directory)], cwd=directory)
     if result.returncode != 0:
         raise LabError("break_fix.sh failed against the kind cluster (see output above).")
 
@@ -270,6 +324,8 @@ def validate_spec(directory: Path) -> list[str]:
     # Extra keys are allowed on purpose: the lab.yaml v2 of the study-lab
     # runner (schema_version, modes, hints, ...) is a superset of this one.
     problems += [f"{spec_file}: missing key '{k}'" for k in REQUIRED_KEYS if k not in spec]
+    if "run_as" in spec and spec["run_as"] not in RUN_AS:
+        problems.append(f"{spec_file}: run_as {spec['run_as']!r} not in {RUN_AS}")
     provider = spec.get("provider")
     if provider not in PROVIDERS:
         problems.append(f"{spec_file}: provider {provider!r} not in {PROVIDERS}")
@@ -364,7 +420,8 @@ def enter_hint(cert_id: str, topic_id: str) -> str | None:
     name = _lab_name(cert_id, topic_id)
     if _needs_cluster(directory):
         return f"kubectl config use-context kind-{name}"
-    return f"docker exec -it -u student -w /home/student {name} bash"
+    user = _script_user(directory)
+    return f"docker exec -it -u {user} -w /home/student {name} bash"
 
 
 def down(cert_id: str, topic_id: str) -> dict:

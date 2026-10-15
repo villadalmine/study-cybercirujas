@@ -144,6 +144,13 @@ check() {
   fi
 
   local restarts_before restarts_after
+  # Right after a rollout the old Pod can still be Terminating and would be
+  # counted in "before" but not in "after" (found with study-lab, 2026-10-15):
+  # wait until only the 3 live Pods remain before comparing.
+  for _ in $(seq 1 30); do
+    [[ "$(kubectl -n "${NAMESPACE}" get pods -l app=webapp --no-headers 2>/dev/null | wc -l)" -eq 3 ]] && break
+    sleep 2
+  done
   restarts_before=$(kubectl -n "${NAMESPACE}" get pods -l app=webapp \
     -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{" "}{end}')
   sleep 15

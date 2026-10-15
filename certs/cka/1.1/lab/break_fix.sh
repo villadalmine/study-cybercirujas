@@ -222,8 +222,14 @@ esac
 #      name: cka-lab-broken-sc
 #    provisioner: <PROVISIONER_REAL_DETECTADO_EN_EL_PASO_1>
 #    reclaimPolicy: Delete
-#    volumeBindingMode: Immediate
+#    volumeBindingMode: WaitForFirstConsumer
 #    EOF
+#
+#    OJO (probado con study-lab en kind, 2026-10-15): copiá también el
+#    volumeBindingMode de la StorageClass que funciona. local-path
+#    (kind, k3s) solo provisiona con WaitForFirstConsumer; con Immediate
+#    el PVC sigue Pending con "configuration error, no node was specified".
+#    Otros provisioners (CSI, minikube-hostpath) aceptan Immediate.
 #
 # 3) El PVC cka-lab-pvc sigue existiendo, sin modificar, referenciando
 #    la StorageClass por nombre. Apenas el controller de provisioning

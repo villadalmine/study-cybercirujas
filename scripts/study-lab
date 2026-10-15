@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# study-lab without installing teach-plat: needs python3 + PyYAML + jsonschema.
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" exec python3 -m teach.lab "$@"

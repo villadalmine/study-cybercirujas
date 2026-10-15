@@ -26,9 +26,15 @@ dependencies = [
 # `make mcp-setup`, the same shape as `make graph-setup` for graphify.
 [project.optional-dependencies]
 mcp = ["mcp>=2.0"]
+# study-lab validate (JSON Schema of lab.yaml v2). The runner itself is stdlib + PyYAML.
+lab = ["jsonschema>=4.10", "pytest>=8"]
 
 [project.scripts]
 teach = "teach.cli:main"
+study-lab = "teach.lab.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["teach"]
+
+[tool.pytest.ini_options]
+markers = ["slow: end-to-end with Docker (make test-e2e)"]
