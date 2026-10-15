@@ -4,6 +4,18 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-15
 
+- **Groundedness check, the checker** (`scripts/check_groundedness.py`,
+  `groundedness.yaml`). Every sentence of a topic's `content.md` is checked
+  against the sources the topic declares (its frozen syllabus entry and the
+  documents it cites, downloaded once into `.cache/groundedness/`). GLiClass
+  large v3.0 is the prefilter and Granite Guardian 4.1 8B confirms the
+  suspects with `--deep`; both are pinned by Hugging Face revision and sha256.
+  On the 50 labelled claims in `tests/fixtures/groundedness` (13 of them the
+  real errors found on PR #6) the prefilter gives accuracy 0.96, 13/13 traps
+  and 1 false alarm in 25, the same bytes twice, with the network blocked.
+  It is advisory (`mode: warn`). The CI job and the `make` targets come in the
+  next PR.
+
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.
