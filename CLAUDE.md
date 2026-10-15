@@ -14,6 +14,7 @@
 - **Model Comparison Dashboard**: [MODELS.md](MODELS.md) — generated, regenerates with STATUS.md; per-cert tables are the only fair model comparisons
 - **Rebuild Code Graph**: `make graph` (tree-sitter AST — free, no LLM; auto-refreshed by the post-commit hook)
 - **Spend Metrics**: `make metrics` (per stage / day / quota window, from records)
+- **Check Curriculum Updates**: `make check-updates` (exam syllabi vs what each vendor publishes; spends a few completions on the sync). How to read and report it, and the rule that a re-snapshot is the owner's decision: [docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates)
 - **Check Bot Models**: `make check-models` (do the study bot's models still exist, at the price shown? — free, no key)
 - **Probe Bot Models**: `make probe-models [UPDATE=1] [TIER=free] [LANGS=en,es]` (do they answer, read the material we send them, and reply in each language? — $0.27 measured for a full pass on `LITELLM_API_KEY_BOT`, `LANGS=""` for the ~$0.008 liveness-only pass, never the subscription)
 - **Update Wiki**: `make wiki` (OpenWiki — COSTS API credits, manual only)

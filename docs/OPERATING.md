@@ -293,10 +293,67 @@ make metrics            # tokens and quota windows spent, per stage and per day
 ```
 
 `make check-updates` is the quarterly habit: it refreshes the **Exam versions**
-table in STATUS.md and prints what drifted. The same information is served at
+table in STATUS.md and prints what drifted ([how to read and report it](#checking-curriculum-updates)). The same information is served at
 `/api/status` and rendered in the site's **Status** section, so the public page
 and the repository cannot disagree — they are two projections of the same
 functions over the same tree.
+
+## Checking curriculum updates
+
+The question: **is the frozen material built on the exam version each vendor
+publishes today?** Two facts are kept apart on purpose
+(`scripts/check_versions.py` explains why): what we froze lives in each
+`certs/<cert>.md` frontmatter; what upstream publishes lives in
+`catalog.yaml`, and only `teach tracker sync` writes it.
+
+### What `make check-updates` does
+
+```bash
+make check-updates
+```
+
+| Step | What it is | Cost |
+|---|---|---|
+| `teach tracker sync --backend claude` | the **AI part**: scrapes what each vendor currently publishes and writes only the upstream fields of `catalog.yaml`. It can never touch a frozen syllabus (a sync once overwrote the very comparison it was meant to enable). | a few completions |
+| `scripts/status_matrix.py` | regenerates `STATUS.md`, including the **Exam versions** table | free |
+| `scripts/check_versions.py` | the **deterministic part**: the verdict per certification, built-on version vs upstream version | free |
+
+The same run also checks the **study bot's model catalogue** (`models.yaml`)
+against OpenRouter's live API: models that vanished, prices that moved,
+`:free` models that started charging, models that dropped `reasoning`. That
+output is advisory (the target does not fail on it), but a `GONE` or `PAID`
+line means the bot is showing students something untrue.
+
+### Reading the "Exam versions" table in STATUS.md
+
+It is the record of the check, one row per certification: the version the
+material is built on, the snapshot date, the upstream version, when upstream
+changed, when it was last checked, and the verdict — ✅ current · ⚠️ outdated ·
+– unknown.
+
+### Reporting it, most severe first
+
+1. **Outdated** certifications: name the version gap and estimate the
+   re-snapshot's reach honestly. A version bump can be a renumbering or a full
+   overhaul (lpi-devops v2.0 dropped Ansible and added a Kubernetes domain;
+   only title-exact topics survived the remap). Recommend a re-snapshot with
+   the map-exact / author-the-rest procedure, never a blind remap.
+2. **Unknown** rows mean **not measured, not "fine"**: say which side lacks a
+   version, and whether checking upstream could settle it.
+3. **Current** rows need no words beyond the count.
+
+### The rule
+
+**Never re-snapshot without the owner's decision.** A re-snapshot changes the
+scope of the content; whoever runs the check presents the table and the
+recommendation and stops there — person or agent.
+
+Afterwards, **commit the refreshed `catalog.yaml` and `STATUS.md`**, so the
+table on GitHub reflects the latest check.
+
+This section replaces the `check-updates` Claude Code skill that used to live
+in `.claude/skills/` (retired 2026-10-15): the procedure belongs in the docs
+every contributor and every agent reads, not in one tool's private folder.
 
 ## Deploying to Kubernetes
 

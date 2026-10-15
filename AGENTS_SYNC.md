@@ -230,6 +230,11 @@ Then record it:
 git add … && git commit                        # one topic per commit is fine
 ```
 
+**Is the material still current?** `make check-updates`, then follow
+[docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates):
+outdated first, *unknown* is not *fine*, and never re-snapshot without the
+owner's decision.
+
 **If a command fails, that is information, not a dead end.** Report the error in
 this file. Do not build a way around it — the way around is how an orchestrator
 gets written that skips the claims and the budget and then reports success it did

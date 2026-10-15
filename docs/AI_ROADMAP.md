@@ -164,7 +164,8 @@ pipeline is built on one. Even when it opens, OpenAI may never publish the
 document our snapshot needs.
 
 **Actions, concrete:**
-1. Re-check quarterly (next: 2026-12) via `/check-updates` reasoning —
+1. Re-check quarterly (next: 2026-12) with `make check-updates`
+   ([OPERATING.md → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)) —
    specifically whether `anthropic.com` publishes an exam guide outside the
    Partner Academy, and whether OpenAI's proctored exam ships with an
    objectives document.

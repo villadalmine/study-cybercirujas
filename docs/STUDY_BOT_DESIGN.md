@@ -744,7 +744,9 @@ skill) is worth it. Three different questions, three different answers.
 
 **A harness skill to build this: no.** Skills earn their keep on
 *recurring* procedures — `check-updates` runs quarterly and has steps
-people forget. Building the bot happens once; a skill for it is
+people forget (that procedure has since moved to
+[OPERATING.md → Checking curriculum updates](OPERATING.md#checking-curriculum-updates);
+the skill was retired 2026-10-15). Building the bot happens once; a skill for it is
 documentation with extra ceremony. This design document already does that
 job better.
 
