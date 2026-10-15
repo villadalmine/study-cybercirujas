@@ -119,8 +119,11 @@ jobs:
       - name: Check the run cited under "Where it ran"
         # check_pr.py stays offline; the network check lives here, with the
         # job's own token. At least one cited run must be of this repository,
-        # on the PR's current head commit, and green. A new push makes the old
-        # link stale on purpose: the 'where-it-ran' comment has the new one.
+        # on the PR's current head commit, with its `verify` and `e2e` jobs
+        # green. The jobs, not the run: the run that proves the code also
+        # contains this very job, which was red until the link was pasted
+        # (found on #3, run 38683552353). A new push makes the old link stale
+        # on purpose: the 'where-it-ran' comment has the new one.
         if: always() && hashFiles('cited-runs.txt') != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -131,9 +134,11 @@ jobs:
           while read -r repo run; do
             [ -n "$run" ] || continue
             if [ "$repo" != "$REPO" ]; then echo "run $run belongs to $repo, not $REPO"; continue; fi
-            state="$(gh api "repos/$REPO/actions/runs/$run" --jq '"\(.head_sha) \(.conclusion)"' 2>/dev/null || true)"
-            echo "run $run: $state"
-            [ "$state" = "$HEAD_SHA success" ] && found=1
+            sha="$(gh api "repos/$REPO/actions/runs/$run" --jq .head_sha 2>/dev/null || true)"
+            jobs="$(gh api "repos/$REPO/actions/runs/$run/jobs" \
+                    --jq '[.jobs[] | select(.name == "verify" or .name == "e2e") | "\(.name)=\(.conclusion)"] | sort | join(" ")' 2>/dev/null || true)"
+            echo "run $run: head ${sha:0:7}, $jobs"
+            [ "$sha" = "$HEAD_SHA" ] && [ "$jobs" = "e2e=success verify=success" ] && found=1
           done < cited-runs.txt
           if [ "$found" != 1 ]; then
             echo "::error::'Where it ran' must link a green CI run of $REPO on the head commit $HEAD_SHA. Copy the line from the where-it-ran comment and edit the description."
