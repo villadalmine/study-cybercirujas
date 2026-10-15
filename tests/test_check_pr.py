@@ -259,6 +259,16 @@ class MainTests(unittest.TestCase):
             "labels": [{"name": n} for n in labels]}}), encoding="utf-8")
         return str(ev)
 
+    def test_the_docstring_shows_the_invocations_ci_runs(self):
+        # --help prints it; it must match verify.yml (review round 3 of #3).
+        wf = (REPO / ".github" / "workflows" / "verify.yml").read_text(encoding="utf-8")
+        doc = check_pr.__doc__
+        self.assertNotIn("No network, no model:", doc)
+        for flag in ("--labels-file", "--label-file", "--runs-file", "--verify-runs", "--repo", "--head"):
+            with self.subTest(flag=flag):
+                self.assertIn(flag, doc)
+                self.assertIn(flag, wf)
+
     def test_event_alone_reads_title_and_body_from_the_event(self):
         with tempfile.TemporaryDirectory() as tmp:
             code, out = self.run_main("--event", self.event(tmp))

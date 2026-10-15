@@ -20,11 +20,23 @@ check instead of a request. It fails when:
   declared backend and model must be the ones meta.yaml records; for
   `Author: human`, every touched meta.yaml must carry a `human_edits` entry.
 
-No network, no model: it reads the PR body, the list of changed files and the
-meta.yaml files in the checkout.
+It also checks scope and size (one topic, one lab, material apart from code,
+<= 400 changed lines of code), waived by the scope-exception/size-exception
+labels.
 
+No model. No network either, except `--verify-runs` (CI only): that mode asks
+the GitHub API, with `gh api`, whether the run cited under "Where it ran" is
+a green run of verify.yml on the PR's head commit. Everything else reads the
+PR body, the list of changed files and the meta.yaml files in the checkout.
+
+    # by hand
     scripts/check_pr.py --title "docs: x" --body-file body.md --files a b c
-    scripts/check_pr.py --event "$GITHUB_EVENT_PATH" --base origin/main   # CI
+
+    # CI (.github/workflows/verify.yml, job pr-format), step 1: the description
+    scripts/check_pr.py --event "$GITHUB_EVENT_PATH" --labels-file labels.txt \
+        --base origin/<base> --label-file site-label.txt --runs-file cited-runs.txt
+    # step 2: the cited run, against the API
+    scripts/check_pr.py --verify-runs cited-runs.txt --repo <owner/name> --head <sha>
 """
 from __future__ import annotations
 
