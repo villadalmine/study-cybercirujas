@@ -1,0 +1,8 @@
+# The groundedness prefilter (scripts/check_groundedness.py), on top of `pip install -e .`.
+# Pinned to the versions it was measured with on 2026-10-15 (groundedness.yaml).
+# torch comes from PyTorch's CPU index: the PyPI wheel for Linux pulls CUDA (~2 GB).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1
+transformers==5.19.0
+gliclass==0.1.20
+huggingface_hub==2.2.0

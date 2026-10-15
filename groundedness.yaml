@@ -1,0 +1,63 @@
+# Groundedness check — data, not code (scripts/check_groundedness.py).
+#
+# Is each claim in a topic's content.md supported by the sources that topic
+# declares (its frozen syllabus entry and the documents it cites)? A small
+# classifier answers it in CI as a PREFILTER; a larger judge confirms the
+# suspects locally (--deep). Models, revisions, hashes and thresholds live
+# here so a change to any of them is a reviewed diff, never a code edit.
+#
+# Measured 2026-10-15 on 50 labelled claims (tests/fixtures/groundedness: 25
+# supported, 25 not, 13 of them the real errors fable found on PR #6), CPU,
+# 4 threads, temperature 0:
+#   GLiClass large v3.0      accuracy 0.96, 13/13 traps, 1 false alarm, 0.6 s/claim, 2.4 GB RAM
+#   Granite Guardian 4.1 8B  accuracy 0.98, 13/13 traps, 1 false alarm, 34 s/claim, 10 GB RAM
+
+version: 1
+
+# warn: the CI job reports and never fails on findings. block: a finding fails
+# the job. Moving to block is the maintainer's decision, once a baseline over
+# the corpus has been measured.
+mode: warn
+
+prefilter:
+  repo: knowledgator/gliclass-large-v3.0          # Apache-2.0, zero-shot NLI-style classifier
+  revision: e065d1844f913a9aa611cf33623a9538b8aa8841
+  sha256:
+    model.safetensors: db27b9a3290060c9ba4a0ba6386bebca4aae61bcf37ffae2a5b667c27b4b1d78
+  # A claim whose best score against its sources is below this is "unsupported".
+  # 0.5 is the default and was not tuned: tuned on the same 50 claims it gives
+  # the same 0.96, so there is nothing to gain by fitting it.
+  threshold: 0.5
+  max_length: 1024     # tokens, the pipeline's own limit (premise + claim)
+  threads: 4           # fixed: the same thread count gives the same bytes
+
+deep:
+  repo: ibm-granite/granite-guardian-4.1-8b-GGUF  # Apache-2.0
+  revision: bc78f0995361543a70438fe44a60bb7613fed2f0
+  file: granite-guardian-4.1-8b-Q4_K_M.gguf
+  sha256: 979114c9e6a589a1e37c2d597677555d3eb78c2856e920ed4ec97f7bded787a4
+  # P("yes" = the text is ungrounded) at or above this confirms a suspect.
+  threshold: 0.5
+  url: http://127.0.0.1:18090   # a llama-server you run with the file above, --temp 0 --seed 42 -np 1
+  # The prompt of the model's chat_template.jinja at this revision, with one
+  # document ({document}, JSON) and the claim as the assistant's text ({claim}).
+  prompt: "<|start_of_role|>system<|end_of_role|>You are a helpful assistant with access to the following documents. You may use one or more documents to assist with the user query.\n\nYou are given a list of documents within <documents></documents> XML tags:\n<documents>\n{document}\n</documents>\n\nWrite the response to the user's input by strictly aligning with the facts in the provided documents. If the information needed to answer the question is not available in the documents, inform the user that the question cannot be answered based on the available data.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>{claim}<|end_of_text|>\n<|start_of_role|>user<|end_of_role|><guardian><no-think>As a judge agent, assess whether the provided text meets the given judging criteria using all available information, including conversations, documents, and tools. Provide your score immediately without explanation. Output empty <think>\n</think> tags followed by your score in <score></score> tags.\n\n### Criteria: A text is considered ungrounded or unfaithful if it includes information lacking support from, or directly contradicting, the provided document(s). This risk arises when the text fabricates details, misinterprets the content, or makes unsupported extrapolations beyond what is explicitly stated in the document(s).\n\n### Scoring Schema: If the last assistant's text meets the criteria, return 'yes'; otherwise, return 'no'.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>"
+
+# How content.md becomes claims: fenced code, headings, tables, HTML comments
+# and the References section are dropped; paragraphs and list items are split
+# into sentences; a sentence of fewer than min_words words is not a claim.
+segmentation:
+  min_words: 6
+
+# How sources become premises: each document is cut into overlapping word
+# windows, and each claim is scored against the top_k windows (from all of the
+# topic's sources) that share the most words with it.
+retrieval:
+  chunk_words: 200
+  overlap_words: 50
+  top_k: 3
+
+# Recorded as the `groundedness` check in meta.yaml `quality:`. The weight is
+# the one quality_weights.yaml gives it in the quality score (PR #11).
+quality:
+  weight: 5
