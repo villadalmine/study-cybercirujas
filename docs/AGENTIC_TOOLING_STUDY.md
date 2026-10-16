@@ -93,7 +93,7 @@ and can export static HTML. It only rewrites its own
 `openwiki/INSTRUCTIONS.md` for scope.
 
 Why it is interesting here: the repo's real documentation surface
-(WORKFLOW.md, AGENTS_SYNC.md, CHANGELOG.md, pipeline.yaml comments) is rich
+(WORKFLOW.md, AGENTS_SYNC.md, docs/HISTORY.md, pipeline.yaml comments) is rich
 but hand-maintained and drift-prone; an agent-maintained wiki that re-reads
 `teach/` and `scripts/` on change would give every future agent a current
 map, and the visualizer gives the owner the "see the whole system" view.

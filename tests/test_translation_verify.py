@@ -3,7 +3,7 @@
 Its own failure modes matter in both directions: too loose and damaged material
 ships, too strict and every correct translation is rejected. The second is not
 hypothetical — it shipped, and it rejected output from every model including
-Claude (see CHANGELOG 2026-08-03).
+Claude (see docs/HISTORY.md, 2026-08-03).
 
     .venv/bin/python3 -m unittest discover tests
 """

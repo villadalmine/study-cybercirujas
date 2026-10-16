@@ -268,10 +268,10 @@ call and is listed here so it is not lost.
    removed, yet it still carries the August queues between Claude and
    Antigravity (`## Queue — … 2026-08-06`, `2026-08-08`) and dated status
    letters (`From claude — 2026-08-11 … 08-19`). Proposal: keep the rules
-   (first ~400 lines), move the dated letters into CHANGELOG or delete them
+   (first ~400 lines), move the dated letters into docs/HISTORY.md or delete them
    (git keeps them), empty the queue.
 2. **`ROADMAP.md` "Where we left off"** is a session note, not a roadmap. Keep
-   it short (open items only) or move it to CHANGELOG at the end of each
+   it short (open items only) or move it to docs/HISTORY.md at the end of each
    session; the README no longer links to it.
 3. **`PLAN.md`** is mostly history now. Either trim it to the principles
    (snapshot, state in files, generate once, CLI first, separate roles — the

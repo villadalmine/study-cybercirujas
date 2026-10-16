@@ -367,7 +367,7 @@ project's transparency layer under
 | [WORKFLOW.md](WORKFLOW.md) | the content cycle (snapshot → generate → audit → publish) and its failure modes |
 | [DEVELOPERS.md](DEVELOPERS.md) | the API, running your own copy, building on the corpus |
 | [ROADMAP.md](ROADMAP.md) · [BACKLOG.md](BACKLOG.md) | what is next and why · open design questions |
-| [CHANGELOG.md](CHANGELOG.md) | what has been delivered |
+| [CHANGELOG.md](CHANGELOG.md) · [docs/HISTORY.md](docs/HISTORY.md) | what each release changed · the dated record up to 2026-10-16 |
 | [STATUS.md](STATUS.md) · [MODELS.md](MODELS.md) | generated: completeness per language · which model wrote what |
 | [docs/](docs/) | design studies: [study bot](docs/STUDY_BOT_DESIGN.md), [auditor](docs/AUDITOR_DESIGN.md), [AI certifications](docs/AI_ROADMAP.md), [backends](docs/BACKEND_COMPARISON.md), [translation](docs/TRANSLATION_STUDY.md), [dev tools](docs/DEVTOOLS.md), [cleanup: disk and docs](docs/CLEANUP.md) |
 

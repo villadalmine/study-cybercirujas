@@ -1,0 +1,71 @@
+name: Release
+
+# release-please keeps ONE open "Release PR" that bumps the version and writes CHANGELOG.md from the
+# Conventional Commit titles of the squashed PRs on main. Merging that PR is the human gate: it
+# creates the tag vX.Y.Z and the GitHub Release, and the image job below publishes
+# ghcr.io/<repo>:vX.Y.Z. Rules and cadence: CONTRIBUTING.md -> Releases.
+#
+# WHY A GITHUB APP TOKEN, NOT GITHUB_TOKEN. A pull request opened with the built-in GITHUB_TOKEN
+# starts no pull_request workflows, so the required checks (verify, e2e, pr-format) would never run
+# on the Release PR and it could not be merged (the same wall the graph bot hit, #38 and #42). The
+# GitHub App `study-cybercirujas-releases` (Contents and Pull requests: write, installed only on this
+# repository) gives a one-hour token per run; its id and private key are the repository secrets
+# RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY. Without them the first step fails and nothing else
+# happens. Setup and rotation: the runbook study-github-app-releases.
+#
+# The Release PR is exempt from the PR-description sections in scripts/check_pr.py (is_release_please):
+# by author login, head repository, branch and the files it touches, never by a commit's email.
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}   # each job asks for what it needs
+
+concurrency:
+  # Queue, never cancel: two pushes in a row must not race the Release PR branch.
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read   # the App token does the writing; the job itself only reads
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - name: Token of the releases GitHub App
+        id: app-token
+        # v3.3.0; `app-id` is deprecated in favour of `client-id` (the App's "Iv..." id), which the
+        # secret does not hold; it still works and only warns.
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - name: release-please
+        id: release
+        # v5.0.0. Reads release-please-config.json and .release-please-manifest.json (manifest mode).
+        # Outputs used: release_created, tag_name, version (the root component's, documented in the
+        # action's README).
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  image:
+    # A tag created with the App token starts no workflow (`on: push: tags` would never fire), so the
+    # versioned image is built here, in the same run, only when this run created the release.
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker.yml
+    with:
+      version: ${{ needs.release-please.outputs.version }}

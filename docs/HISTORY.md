@@ -1,0 +1,897 @@
+# History
+
+The dated, hand-written record of what was delivered up to **2026-10-16**, frozen on that date
+(decision 4 of the repository-management proposal): nothing is added here any more. From the first
+release on, what changed is written by release-please into [CHANGELOG.md](../CHANGELOG.md), one section
+per version, from the Conventional Commit titles. Design details live in [PLAN.md](../PLAN.md); pending
+items live in [BACKLOG.md](../BACKLOG.md).
+
+Free-form, reverse chronological order (most recent first).
+
+## 2026-10-16
+
+- **Triage and stale** (ci): `.github/workflows/triage.yml` puts `triage:needed` on issues and pull requests from outside
+  the project (no checkout, never reads the title or body); `.github/workflows/stale.yml` (`actions/stale` v11.0.0
+  pinned by commit, **debug-only**: it only logs) marks and closes kindly: `triage:needs-info` issues 14+7 days, other
+  issues 90+30 (exempt: milestone, `help wanted`, `good first issue`, `priority:high`, `type:rfc`, `from-review`,
+  `lifecycle:frozen`), pull requests waiting for their author 30+14. CONTRIBUTING gains "Triage and response times"
+  (first reply 3 days, decision 7, `needs-info` 14).
+
+- **Issue forms** (ci, #75): every form opens its issue with `triage:needed`; new "Idea / feature" form
+  (`type:feature`); `config.yml` links to Discussions (questions) and to the response times. A test fails if a form
+  forgets `triage:needed`.
+
+- **Label sync** (ci): `.github/workflows/sync-labels.yml` applies `.github/labels.yml` to the repo with
+  `EndBug/label-sync` pinned by commit: on a push to main that changes the file (create and update only) and on
+  a manual dispatch (`dry-run` on by default, `delete-other-labels` off). Renames go through `aliases`, so
+  `bug`, `enhancement`, `documentation`, `question` and `needs-info` keep their issues.
+
+- **Labels are code** (ci, #75): `.github/labels.yml` holds the 43 labels (colour, description, `aliases` for the
+  renames) and `scripts/check_labels.py` (`make labels-check`, in `make verify-ci`) fails when an issue form, the
+  labeler, a workflow or `check_pr.py` names a label that does not exist. The forms named four that did not
+  (`content`, `lab`, `proposal`, `i18n`); they now use `type:bug`, `type:content`, `type:lab` and `type:rfc`.
+  CONTRIBUTING "Labels" lists the families and the criteria for `help wanted` and `good first issue`. The sync
+  workflow and the triage labels follow in their own PRs.
+
+- **check_pr hardening** (ci, #85, #86, #90): the DCO check no longer grandfathers PRs by number (a
+  reopened old PR could take new unsigned commits): every commit of base..HEAD needs its sign-off. The graph
+  bot exemption no longer trusts the commit author email: it rests on the PR author login, head repository,
+  branch and files. The upgrade milestone must name every cert whose `tracked_version` or objectives change
+  and carry the new version ("CKA & CKAD v1.37 upgrade" authorizes cka and ckad at 1.37 only).
+
+- **DCO sign-off and AI disclosure on every PR** (ci, #68): every non-merge commit of a PR must
+  carry `Signed-off-by:` with the author's email (or the PR author's GitHub noreply address); the
+  `DCO` file holds the Developer Certificate of Origin 1.1. `scripts/check_pr.py` fails with the fix
+  (`git commit --amend -s` / `git rebase --signoff origin/main`). Exempt: the graph bot's PR.
+  Grandfathered: PRs numbered below `DCO_FIRST_PR` (73, so #61 and every PR opened earlier).
+  Provenance (`Author: human|ai`, and for ai the Backend and Model) is now validated on every PR, not
+  only on `certs/` changes. CONTRIBUTING gains "Sign your commits (DCO)", the AI policy and the
+  "Thanks @user (#N)" changelog rule; PR templates gain the checklist line; our agents use `git commit -s`.
+
+- **`study-lab export --target killercoda`** (refs #43): deterministic exporter from `lab.yaml` + the lab script to Killercoda scenarios, one course per certification (`structure.json`), `ubuntu` for linux labs and `kubernetes-kubeadm-1node` for kind ones; `verify` is the lab's own verify mode. `make killercoda-export`, workflow `killercoda.yml` (generates and compares, never pushes), page `docs/RUN-A-LAB-ANYWHERE.md`.
+
+## 2026-10-15
+
+- **lpic-2 200.1 declares its source chain** (fix, `main` was red since #6): the Spanish
+  `meta.yaml` records `source_sha256` and the lab records `derived_from`, computed by
+  `teach.core.certs` / `teach.lab.spec` on a Linux (LF) checkout, not typed by hand.
+- **Chain hashes no longer depend on line endings**: `chain_sha256` reads CRLF as LF and
+  `.gitattributes` forces `eol=lf` for `*.md`, `*.yaml`, `*.yml` and `*.py`. A Windows checkout with
+  `core.autocrlf=true` had produced different hashes than Linux (the CKA labs and lpic-2 200.1 read
+  STALE on CI). Hashes of LF content are unchanged.
+- **CKA labs: chain hashes refreshed** (fix): the `content_sha256` of the CKA v2 labs 1.1, 3.3, 3.4 and 3.5
+  had been taken on Windows with CRLF line endings, so they read STALE on Linux. Recomputed with
+  `teach.core.certs.chain_sha256` on an LF checkout; no lab or content was edited.
+- **Every topic has a quality score** (0-100) and a level — *Verified*, *AI
+  beta*, *Draft* — from every check that exists, recorded check by check in a
+  `quality:` block of its `meta.yaml` (pass / fail / not_run, weight, date,
+  evidence). Weights and thresholds in `quality_weights.yaml`; written by
+  `make quality`, verified in CI (`scripts/quality_score.py --check`); shown in
+  STATUS.md (*Quality*), on the site (a badge per topic) and in the API
+  (`quality` in a topic's response). Measured today: 1153 topic-languages at
+  *AI beta*, 2 at *Draft* (backfilled metadata), none *Verified* — no topic has
+  both a runner-verified lab and a recorded independent review yet.
+- The quality floor, `check_sources`, `check_manifests` and `check_k8s_apis`
+  read the corpus as UTF-8 on every platform (on Windows, accented and CJK
+  References headings were not found).
+
+- **Groundedness check, the checker** (`scripts/check_groundedness.py`,
+  `groundedness.yaml`). Every sentence of a topic's `content.md` is checked
+  against the sources the topic declares (its frozen syllabus entry and the
+  documents it cites, downloaded once into `.cache/groundedness/`). GLiClass
+  large v3.0 is the prefilter and Granite Guardian 4.1 8B confirms the
+  suspects with `--deep`; both are pinned by Hugging Face revision and sha256.
+  On the 50 labelled claims in `tests/fixtures/groundedness` (13 of them the
+  real errors found on PR #6) the prefilter gives accuracy 0.96, 13/13 traps
+  and 1 false alarm in 25, the same bytes twice, with the network blocked.
+  `--write` records the `groundedness` entry in the shape `quality_score.py` keeps and re-renders
+  the whole quality block, so `quality_score.py --check` stays OK. It is advisory (`mode: warn`).
+- **Groundedness in CI and in `make`.** The `groundedness` job
+  (`.github/workflows/groundedness.yml`) runs the prefilter on the topics a PR
+  changes, and the fixture test with the weights. It writes the unsupported
+  claims to the job summary and uploads the report and the updated
+  `meta.yaml` files. It never fails on a finding and is not a required check.
+  Locally: `make groundedness-setup`, `make groundedness` and
+  `make groundedness-deep` (CONTRIBUTING → *Groundedness (advisory)*).
+- **The code graph is refreshed on `main`, not in every PR**
+  (`.github/workflows/graph.yml`). After a merge that touches `teach/`,
+  `scripts/`, `tests/` or the graph config, the job asks
+  `scripts/check_graph.py --regenerate --strict` and, only if the graph is stale, rebuilds
+  it with `make graph` (tree-sitter, no LLM, no cost; graphify pinned as
+  `GRAPHIFY_VERSION` in the Makefile) and opens or updates one PR,
+  `chore(graph): regenerate code graph`, from `bot/graph-refresh`
+  (`peter-evans/create-pull-request`, pinned by SHA; main stays protected).
+  Feature PRs no longer rebase or rebuild the graph and leave `graphify-out/`
+  out of their diff; a stale graph in a PR is a warning. `check_pr.py` checks
+  only the title of that bot PR (branch `bot/graph-refresh`, every file under
+  `graphify-out/`, author `github-actions[bot]`, same-repository head). No secret
+  or PAT: the job opens the PR with `GITHUB_TOKEN`, dispatches `verify.yml` on the
+  branch and reports the verdict of its `verify`, `e2e` and `pr-format` jobs on the
+  PR head as check runs (`pr-format` looks the PR up by branch when dispatched).
+  One repository setting, once: Actions may create pull requests.
+- **`make pr-check`: the checks CI runs on a PR, on your machine** (CONTRIBUTING ->
+  *Check before you push*). One OK/FAIL/WARN line per check, about a minute with
+  `QUICK=1` and five with the full unit tests: the `make verify-ci` recipe read from the Makefile (so it cannot drift from
+  CI), the secrets scan, `check_docs.py`, a warn-only code-graph check, `check_pr.py` on a draft
+  description (`PR_BODY=`), and groundedness when its weights are cached, and a WARN when tracked files have CRLF. Optional, never auto-installed
+  pre-push hook: `make install-hooks` / `make uninstall-hooks`. Network, model,
+  Docker and cluster checks stay in CI.
+- **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
+  source chain*): syllabus → content → exercises and labs → translations →
+  video, each link resting only on the one before and saying which.
+  `scripts/check_source_chain.py` (in `make verify` and CI) fails when a link
+  does not declare its origin and reports it STALE when that origin changed.
+  New translations record `source_sha256`, certification video scripts record
+  the syllabus they narrate with its sha256, and `lab.yaml` v2 gains
+  `derived_from` (the four v2 CKA labs are migrated). The 422 artefacts made
+  before this are listed in a baseline that only shrinks.
+- **`check_citations.py` reads every References heading**: numbered ones
+  (`## 14. References`), suffixed ones and CJK ones were skipped, so citations
+  were found in 501 of 1155 topics (459 when run on Windows, which also read them as cp1252); now 1155.
+- **Legal and trademark disclaimer.** The end of the README carries it in
+  Spanish and English (anchor `#legal`), and every page of the site shows a
+  one-line summary with a link, in all seven UI languages. The project is
+  independent; it is not affiliated with LPI, The Linux Foundation, CNCF, the
+  Agentic AI Foundation, AWS, Google, Microsoft, HashiCorp or NVIDIA; their
+  names and marks only identify the exams (nominative fair use).
+- **New contribution rule: no braindumps, no NDA material**
+  (CONTRIBUTING → `#no-braindumps`, also in PRINCIPLES §2). A PR with
+  questions leaked from real exams or material under NDA is closed without
+  merging; anyone can report such content with the *Content error* form.
+- **Every pull request now follows one checked standard** (CONTRIBUTING →
+  Pull requests, `scripts/check_pr.py`, job `pr-format`). New for every
+  contributor, person or agent:
+  - *Evidence → Where it ran* links the green CI run of `verify.yml` on the
+    PR's current head commit, and *Known gaps* says what that evidence does
+    not cover; `pr-format` checks the run against the GitHub API.
+  - Scope and size: one topic per content PR, one lab per lab PR, material
+    never mixed with code, at most 400 changed lines of code; the maintainer
+    waives them with the `scope-exception` / `size-exception` labels.
+  - `## Authorship` with a `### Findings ledger`: who wrote it, every review,
+    and who found and who fixed each finding; the author row must agree with
+    *Provenance*. Agents add the commit trailers `Agent:`, `Model:`, and on a
+    fix `Found-by:`, `Fixed-by:`, `Fixes-review:`.
+  - PRs are labelled by path (`actions/labeler`), and the review and merge
+    rules (squash only, nobody merges their own PR, an agent never merges)
+    are written down in CONTRIBUTING and `docs/REVIEWS.md`.
+- **Checking curriculum updates is a documented procedure, not a skill.** The
+  `check-updates` Claude Code skill is gone; its steps live in
+  [docs/OPERATING.md → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)
+  for every contributor and agent: what `make check-updates` runs (the AI
+  sync and the deterministic verdict; the bot's models are a separate target,
+  `make check-models`), how to read STATUS.md's *Exam versions*, the report
+  order, and the rule that a re-snapshot is the owner's decision.
+- **Docs are checked against the repository on every PR** (CI job
+  `docs-consistency`, `make check-docs`): relative links and anchors, paths
+  named in code, `make` targets and `teach` commands must exist, and the
+  generated README/API tables must be fresh. Deterministic, offline, no model.
+- **The code graph is checked too.** CI rebuilds it with graphify (free,
+  tree-sitter only, pinned to 0.9.91) and compares it with the committed
+  `graphify-out/graph.json`; a PR that touches `teach/` or `scripts/` without
+  `make graph` fails. The graph, stale since 2026-09-18, is regenerated.
+- PR templates gain a checkbox: docs consistent / graph regenerated or why not.
+
+## 2026-09-30
+
+- **CKNE is complete in English: 22 topics**, the first certification authored
+  on `claude-opus-5-5` at default effort. Every topic has theory, guided
+  exercises and a break-and-fix lab; 88 files audited by hand, 0 below the
+  floor. The syllabus is still the closed beta's, so it can move at GA.
+
+- **Which model writes the best study material — measured, not assumed.** The
+  same two CKNE topics (1.1 CNI, 2.3 CoreDNS) were authored by `claude-opus-5`
+  at `xhigh` (the pipeline standard), `claude-opus-5-5` and `claude-sonnet-5-5`
+  at default effort, then judged three independent ways:
+
+  | | opus-5-5 | opus-5 xhigh | sonnet-5-5 |
+  |---|---|---|---|
+  | Labs executed on a kind cluster | both pass cleanly | 2.3 passes (one check false-PASSes); 1.1 does not run on containerd 2.x | 2.3 cannot be passed; 1.1 has no pass/fail check |
+  | Blind cross-family judges, 8 verdicts | first in 8 | last in 7 | — |
+  | Verified critical errors | none found | invented `coredns -validate` flag, stale-`replace` rollback, `k8s_external` block that cannot start | fake `-plugins` "validation", Calico install without its CRDs |
+  | Per topic | 61k tok, $1.59 eq, 9 min, 91 KB | 95k, $2.85, 19 min, 152 KB | 25k, $0.42, 2.7 min, 54 KB |
+
+  More text from `opus-5 xhigh` meant more invented specifics, not better
+  material. The judges needed checking too: of 13 "critical" claims tested in
+  the cluster, 6 were true and 7 false — GPT-6.1 right 5 of 7, Grok 4.7 right
+  1 of 7. A judge's verdict is a lead, never a finding. n=2 in one certification,
+  so `pipeline.yaml` still declares opus-5 xhigh; switching the default is the
+  owner's call.
+
+- **`check_claims.py` had checked no citation in 43% of the corpus.** Its
+  pattern read one citation shape; 484 of 1,123 content files use others and
+  reported "0 look stale or wrong" having checked nothing. It now reads every
+  URL in the references section — 22,198 citations visible, 0 files unparsed.
+
+- **Gateway API citations repaired across the corpus.** The site moved its pages
+  under `/docs/` and `/reference/` without redirects; seven distinct URLs in
+  cka, cnpe, mcpa and ckne were rewritten, each only after the new URL returned
+  200.
+
+## 2026-09-17
+
+- **lpi-devops had a weak third and it is closed.** Five of its fifteen topics
+  were written on 2026-08-07 by `agy` at 22–35 KB, while the other ten came from
+  `claude-opus-5` on 2026-09-03 at 65–117 KB — and four of the five were the
+  whole *701 Software Engineering* domain, so **a third of the exam weight rested
+  on material a third the depth**. Regenerated on `claude-opus-5`: they now run
+  58–94 KB and the certification is even. Their Spanish had been translated from
+  the thin English (ratios 0.25–0.55) and was redone; it is back to 1.05–1.08,
+  which is what a real translation looks like.
+
+  The wider scan that found it is worth keeping: of 511 authored topics, only
+  147 are at the opus-5 standard. But **size is not quality** — all of them pass
+  the floor, and the jump came from a deliberate model and effort change on
+  2026-08-13, not from a defect. A certification written uniformly on an older
+  model is *even*; a student hits no hole. What is worth fixing is unevenness
+  *inside* one exam, and only five certifications have it: `lpi-devops` (done),
+  `cgoa` (2 topics), `kca` (17, genuinely half and half), plus `kcsa` and `cnpa`
+  — which are the reverse, uniform corpora with one or two upgraded outliers,
+  where matching them would mean redoing 41 and 25 topics to catch up with 1.
+
+- **Two certifications catalogued: MCPA and CKNE.** Both entered through
+  `teach cert snapshot`, the documented process, against the objectives Linux
+  Foundation Education publishes — not hand-written, which is how the other 38
+  got there and the only version that is repeatable.
+
+  **MCPA — Model Context Protocol Associate**, the first certification from the
+  Agentic AI Foundation and the first to validate MCP knowledge. 17 topics
+  across the five published domains, whose weights the snapshot reproduces
+  exactly: MCP Fundamentals 16, Architecture & Components 14, Interactions &
+  Execution 26, Security & Governance 24, Use Cases & Ecosystem 20. Multiple
+  choice, 90 minutes, two-year validity, tracking MCP release 2026-07-28.
+
+  **CKNE — Certified Kubernetes Network Engineer**, performance-based, CKA-level
+  assumed. 22 topics over Core Infrastructure and CNI 15, Service Networking and
+  DNS 25, Advanced Traffic Management 20, Network Security and Policy 25,
+  Observability 15. **Its beta is closed and GA has not landed**, so the
+  objectives can still move; the snapshot records that and nothing is generated
+  against it yet. Writing material for a syllabus that has not settled is the
+  failure that cost this project seven LPI re-snapshots.
+
+  Also found: the Cilium certification already exists in the catalogue as `cca`,
+  and it is stale — frozen at 2024-10-21 while upstream last changed the
+  curriculum on 2025-11-28, with only five topics, one per domain. That is a
+  re-snapshot, not a new entry.
+
+- **`teach cert add` wrote its template in Spanish** and told the reader to fill
+  `topics` by hand, against both the repository's English-only rule and its own
+  process. It now points at `teach cert snapshot`, which is what actually
+  freezes a syllabus.
+
+## 2026-09-15
+
+- **Every question in the bot was failing with "path is not defined", and the
+  harness said green.** A rename of the three variables that read the
+  certification selector was applied with a first-occurrence replace, and the
+  same line exists earlier in `botMaterial` — so the rename landed there and
+  `botAsk` was left referring to a variable that never existed. The page caught
+  the `ReferenceError` and rendered it as *"OpenRouter error: path is not
+  defined"*, which reads as a problem with the student's key. Reported by the
+  owner; it shipped in revision 68 and lived through three deploys.
+
+  `scripts/bot_loop_check.js` never caught it because it calls `botAskSpanning`
+  and `botAskCareer` directly and never goes through `botAsk` — testing the
+  functions is not testing the page, which is the same lesson the Models page
+  taught and this time it cost a live outage. Two fixes: one `botSelection()` is
+  now the only thing that reads those controls, so a rename cannot land in half
+  the callers; and `scripts/bot_browser_check.js` drives a real Chromium through
+  the actual button for all three shapes — topic, certification, career — and
+  fails on a page error or on an answer that does not contain what it should.
+
+- **The two-round-trip fallback could hand a student a JSON array as its
+  answer.** After the material arrived, the system prompt still said "if you
+  need a topic, reply with NOTHING but a JSON array of its ids" — so a model
+  could obey it a second time, and `["5.1","5.2","5.3"]` was rendered as the
+  answer. Intermittent, because whether it re-asks depends on how much it got
+  the first time, which is why it survived the first round of testing and
+  showed up on the fourth production run. The instruction is now withdrawn
+  before the answer is asked for, and a reply that is nothing but a list of ids
+  is treated as no answer rather than shown as one.
+
+- **Phase 4: progress that outlives the session — kept in the browser, not on
+  the server.** The design proposed anonymous server-side progress behind an
+  `X-Session-ID`; the blocker it cited ("the deployment has no persistent
+  storage") turned out to be about the deployment and not the cluster, so the
+  choice stopped being technical and became one about what this platform should
+  hold. It holds nothing: progress lives in `localStorage` beside the key and
+  the share preference. No endpoint, no storage, no retention rule, no id to
+  forge, nothing to leak — and it stays true that the only thing the server
+  keeps about anyone is a counter with no event behind it. What it gives up is
+  syncing between devices, which is what accounts are for.
+
+  **Only what the page knows as fact is recorded**: which topics were opened and
+  when. Not "what you have mastered" — the quiz is free-form and grading it
+  would mean trusting a model's opinion of a student's answer, a confident claim
+  resting on an unverifiable judgement. Coverage counts against topics that HAVE
+  material, never against the syllabus: a topic nobody can study yet cannot be
+  held against anyone. Shown as a tick in the topic selector and one line under
+  the cost bar, with a control to forget it and a plain statement that it never
+  leaves the browser. Every access is wrapped — in a private window
+  `localStorage` throws, and the page shows nothing rather than breaking.
+
+## 2026-09-14
+
+- **Study bot phase 2: questions that span a whole certification.** The student
+  leaves the topic empty, the model is shown the index — fifteen to forty
+  titles, a few hundred tokens — and asks for the material it needs through
+  tools. No mode switch: the choice the student already makes carries the
+  information. Still no embeddings and no vector store; retrieval here is over
+  a catalogue already keyed by (cert, topic, lang).
+
+  **Tool calling was measured first.** The design cited "84% of OpenRouter
+  models support it", which is the advertised capability — the exact thing this
+  week has been about. `probe_models.py --tools` grades two turns, the call and
+  whether the model can carry the returned material into an answer, because
+  doing the first without the second leaves a student having paid for a round
+  trip and got nothing. **16 of 18 do both**; the two that did not are the
+  Gemmas, rate-limited on our key, so not measured rather than failed. Tool
+  calling is therefore the main path and the two-round-trip fallback covers the
+  unmeasured — the opposite of what the plan assumed.
+
+  The caps are somebody else's money, not tuning: at most 4 topics and 3 rounds,
+  bounded before the loop starts, and when the rounds run out the page asks once
+  more without tools so the student gets an answer instead of a spent key and a
+  spinner. What was loaded is shown as it arrives and named under the answer,
+  and the cost estimate says "the index now, plus up to 4 topics if it needs
+  them" rather than one number pretending to be the whole cost.
+
+  Verified by running it: `scripts/bot_loop_check.js` loads the page's own
+  functions, stubs just enough DOM, and drives the loop against a real model,
+  both paths, asserting the caps hold. The Models page shipped with four defects
+  because it was verified by reading.
+
+- **Phase 3, multi-pass: career-level questions.** Built on the owner's
+  instruction, ahead of the entry condition the design sets — recorded plainly,
+  because nothing has asked for career-level work yet and whether several paid
+  calls buy what one cannot is still open. The student picks a career instead of
+  a certification; one pass reads each certification in it (index and question
+  in, a 120-word note out) and a synthesis pass assembles them. The passes run
+  in parallel — they do not depend on each other, and N sequential round trips
+  is a minute of spinner.
+
+  Careers sit in the same selector as certifications, so choosing one IS
+  choosing phase 3, the way leaving the topic empty chooses phase 2. The
+  shortcuts change with the selection — study plan, overlap and gaps, compare,
+  what it assumes — because "give me an exercise" is meaningless for a career,
+  and the design's rule about that is now enforced by what the page offers
+  rather than by advice. Cost is stated as **calls**, not tokens, before asking:
+  N+1 on the student's key, N capped at 6. Measured on `gpt-5-mini` over the
+  Kubernetes path: 4 certifications, ~12k tokens, ~70s.
+
+- **Thinking is billed against the same cap as the answer, and two calls were
+  losing to it.** The career passes ask a model to read 27 objectives and
+  summarise them against a question — heavy reasoning, short output — and on
+  `gpt-5-mini`, the default, which cannot be told to stop thinking, that meant
+  1,790 tokens of reasoning inside a 2,000 cap and a note cut off mid-sentence.
+  The synthesis was worse: at the same cap it spent the whole allowance thinking
+  and returned **nothing**, which the page rendered as a blank panel. Both now
+  get 4,000, and a cap is a ceiling rather than a charge — a model that answers
+  in 250 tokens is billed for 250, so the room costs nothing except where it
+  rescues an answer. Ordinary questions were never affected: they reason for
+  320–700 tokens and finish comfortably.
+
+  The general fix matters more than the number: **a truncated answer used to
+  look exactly like a complete one**. Every path now reports whether its final
+  message hit the limit, and the page says so — including when the answer came
+  back empty, which is a real outcome and not a reason to show a blank.
+
+- **A six-week-old bug: every English visitor saw career paths named in
+  Spanish.** Found because the first career run answered an English question in
+  Spanish, and the cause was not the bot. `/api/paths` returned a path's base
+  fields untouched whenever the requested language equalled
+  `certs.DEFAULT_LANG` — correct while that was `es`, wrong from the day English
+  became the authoring language on 2026-08-04. "Ingeniero Kubernetes" was served
+  to English visitors while `i18n.en` held "Kubernetes Engineer", and the same
+  for all twelve paths. A path's base fields are the language it was *written*
+  in, which is not the same thing as the platform's default; the merge now runs
+  for every language and `tests/test_paths_lang.py` holds it.
+
+- **Phase 3, MCP half: the corpus is addressable by any agent.**
+  `teach/mcp_server.py` serves `list_certs`, `get_syllabus`, `get_topic` and
+  `search_topics` over stdio — the second shipping of the same contract phase 2
+  calls, as the design asked. A thin wrapper over `teach/core/corpus.py`: the
+  behaviour and the tests live there, this adds a protocol and nothing else.
+  Driven over the real protocol in `tests/test_mcp_server.py`, subprocess and
+  all, because a server that imports cleanly and answers nothing is the failure
+  that matters.
+
+  Building it turned up that **the MCP server `.mcp.json` already declared had
+  never worked**: the SDK was not installed, so `graphify.serve` died at startup
+  while CLAUDE.md claimed the code graph was "served to agents over MCP". One
+  install fixed the older claim and enabled the new one. The SDK is an optional
+  extra (`make mcp-setup`), not a dependency — the deployed pod serves HTTP and
+  has no use for stdio tools — and the protocol tests skip without it so a fresh
+  clone stays green.
+
+  Two smaller things: the SDK answers a failed lookup with "Error executing tool
+  get_syllabus", which cannot tell an agent a typo from an outage, so a
+  not-found now names what was missing and which tool lists the valid ones. And
+  **the multi-pass half of phase 3 is deliberately not built** — its entry
+  condition is demand for career-level work, several paid calls per question
+  have to buy something a single pass cannot, and nothing has asked.
+
+- **The four-function study contract** (`teach/core/corpus.py`), built once for
+  phases 2 and 3 as the design instructs: `list_certs`, `get_syllabus`,
+  `get_topic`, `search_topics`. Three already had endpoints; `/api/search` was
+  the one missing. Read-only and narrow, with a test asserting the module cannot
+  write, spend, or reach a path that does — the property that makes the MCP half
+  of phase 3 safe to offer at all.
+
+- **Phase 1.5 built: the price check now reaches the page, not just a pod log.**
+  Its entry condition stopped being hypothetical — a 67%-wrong price had been
+  sitting in a CronJob log for days. `teach/core/models_live.py` holds the
+  comparison and is now the only copy of it: `check_models.py` imports it
+  instead of keeping its own, which is the drift the design doc warned about,
+  closed before it could happen. `/api/models` runs it in a background task at
+  most every six hours and annotates each model `live_in`/`live_out`/`gone`.
+
+  The frozen numbers stay put — they are what the probe measured against, and
+  swapping them silently would erase the fact that something changed — so the
+  page strikes through the old price and shows the new one beside it. A model
+  upstream no longer lists is withheld like a broken one, since the request
+  would 404 in the browser. The student's request never waits on openrouter.ai,
+  and an unreachable provider degrades to exactly today's behaviour rather than
+  a blank page, with a test that holds it. Nothing edits `models.yaml`: choosing
+  a replacement is the judgement half and stays with a human.
+
+- **Four defects in the Models page, found by rendering it.** It had shipped
+  without anyone seeing it draw. Running the page's own script against the
+  deployed payloads showed: with every usage count at zero — the normal state
+  for a long time — sorting by "times chosen" fell through to alphabetical by
+  id, replacing the catalogue's curated tier order with noise shaped like a
+  ranking; the tier itself was nowhere on the page, so the grouping had no
+  visible reason; a model upstream had dropped still showed "✅ answers", which
+  is a true fact about the past presented as a claim about the present; and its
+  row said "no longer offered" twice. The table now keeps catalogue order until
+  there is something to rank by, names the tier, and lets `gone` outrank the
+  probe verdict.
+
+- **The share notice moved above the fold.** It sat under the answer area, so a
+  student's first question could be counted before they had read what gets sent.
+  It now renders directly beneath the checkbox that controls it.
+
+- **A Models page, and the only telemetry this site collects: counters, never
+  events.** Owner's question — can a page show which models get used most,
+  without a key, a session, or anything identifying? The bot runs in the
+  browser, so nothing can be derived from traffic; but the page can say so, and
+  "collect nothing about the person" is achievable where "collect nothing" is
+  not.
+
+  What makes it anonymous is the shape of the data. Rows — `{model, at}` — are a
+  log, and on a site this quiet a rare model at a known minute correlates with a
+  person. So there are no rows: every write is `+= 1` on a counter that already
+  exists, nothing carries a per-request timestamp, and the key space is fixed by
+  `models.yaml`. There is no event to correlate because none is written.
+
+  `POST /api/bot/used` takes six closed-set fields (model, tier, intent,
+  material, reasoning, language) behind two gates: pydantic with
+  `extra="forbid"`, then validation against the catalogue. The `forbid` is the
+  one that matters — without it an unknown field is dropped silently, and a
+  future bug in the page could put the student's key in a body that request logs
+  would see. A **checkbox in the bot, ticked by default**, controls it, with the
+  full statement beside it: what is sent, and that the key, the question, the
+  answer and the topic never are. Unticked, no request is made.
+
+  The new **Models** page shows all of it — price, whether it answers, what the
+  reasoning control really does, which languages were proven, and how often it
+  was chosen. The last column is labelled as the soft signal it is: the endpoint
+  is anonymous and unauthenticated, so it cannot be deduplicated and should
+  decide nothing that deserves rigour. The other five are our own measurements.
+  Storage is a 128Mi Longhorn PVC — which also corrects a standing assumption:
+  phase 4 was recorded as blocked on the deployment having no storage. The
+  deployment had none; the cluster has Longhorn.
+
+- **Prices the site showed were wrong, and the weekly CronJob had been saying
+  so to a pod log nobody reads.** `study-check-models` fired Monday 06:00 and
+  found `deepseek-v4-pro` at $1.60/$3.20 against the $0.9553/$1.9105 on the
+  page — **67% more than a student choosing it for the price was told** — plus
+  `kimi-k3` 13% off. Refreshed with `check_models.py --update` and deployed.
+  The job failing IS the designed signal; what is missing is the loop that
+  carries it to the page, which is phase 1.5 of the bot design.
+
+- **Re-probed the whole catalogue: 16 of 18 models identical to Thursday**
+  (164 calls, $0.31). That is the result a deterministic probe should give when
+  nothing upstream moved. The free tier moved, and how it moved was the finding.
+
+- **`langs` was recording weather, not verdicts.** `nemotron-3-ultra:free` came
+  back empty in es/de/zh on 11-Sep and in pt/fr on 14-Sep — different languages
+  each run, so the model is unreliable in *any* language rather than lacking a
+  particular one. Publishing the first sample as a verdict told a Portuguese
+  student on Monday the opposite of Thursday. Fixed with the mechanism the
+  script already used for rate limits: **one bounded retry**. Two empty answers
+  in a row is evidence; one is weather. Re-probed for free: the model now holds
+  6 of 7 languages, and German — which failed twice running — is the only real
+  exclusion.
+
+- **A bug that would have hidden working models from every menu.**
+  `gemma-4-26b:free` answered the liveness probe and was then rate-limited on
+  all seven language calls — our shared probe key, not the model. The pass wrote
+  `langs: []`, meaning "proven in no language", which the page reads as "offer
+  it nowhere". It had recorded *we could not measure* as *it does not work*.
+  `probe_languages` now returns `None` for "nothing was asked" and `--update`
+  keeps the catalogue's previous answer; the run prints `langs=unknown` and
+  names why. Three states — passed, failed on merit, not measured — and
+  conflating any two of them publishes a false claim.
+
+- **`probe: flaky` split into `rate` and `empty`**, because they are facts about
+  different things. A 429 is our shared key: OpenRouter's own message says to
+  bring your own key for your own limits, and every student does, so it says
+  almost nothing about their experience. An empty 200 is the model and reaches
+  them. The page labelled both "often rate-limited" — wrong for half of them.
+  Two states, two labels, seven languages. The two Gemmas stay in the menu
+  marked *unverified* rather than being replaced: four passes of rate limits on
+  our key is not evidence about a student's.
+
+## 2026-09-11
+
+- **The study bot's models are now verified by calling them, not by reading the
+  catalogue.** Phase 1 feedback was that some models do not work and that the
+  reasoning control is not understandable. Both were true, and `check_models.py`
+  could not see either: it compares `models.yaml` against what OpenRouter
+  *publishes*, and all eighteen models publish `reasoning: true`.
+  `scripts/probe_models.py` (`make probe-models`) sends each one a fixed
+  one-word question through the same endpoint, headers and `max_tokens` the
+  browser uses, and grades the reply mechanically — `temperature: 0`, a seed,
+  one substring, no model judging anything. **A full pass is ~51 calls and cost
+  $0.0077**, on `LITELLM_API_KEY_BOT`: a second OpenRouter key with its own
+  limit, so a probe can never reach the translation budget. `--dry-run` prints
+  the worst case and sends nothing; a `--budget` stop (default $0.25) holds even
+  if a provider starts thinking for the whole cap.
+
+  What it found: 16 of 18 answered; two free models returned nothing on that run
+  and are marked `flaky` rather than dropped. **Twelve models think when
+  reasoning is switched off** — including `gpt-5-mini`, the bot's default, which
+  spent 64 thinking tokens on a request that never mentioned reasoning, under a
+  control labelled "No reasoning (cheapest)". Twelve stop when sent
+  `reasoning: {enabled: false}`; four cannot be stopped at all ("Reasoning is
+  mandatory for this endpoint and cannot be disabled"); and two — `sonnet-5`,
+  `gpt-5.6-sol` — ignore the effort setting at every level including `high`.
+  Two models classified differently on two runs, which is itself the finding:
+  they decide per question whether to think, so `always` is the conservative
+  verdict and the page sends the explicit off switch rather than trusting a
+  default.
+
+  The page now builds its menu and its effort selector from those verdicts:
+  broken models are not offered, "no reasoning" sends the explicit off switch
+  where that was proven to work, and where the setting does nothing the control
+  is disabled with a line saying so — in all seven languages. The catalogue
+  carries `probe`, `thinking`, `thinking_off` and `probed` per model, written by
+  `--update`; `max_tokens` is probed at the page's own value because OpenRouter
+  derives each provider's thinking budget from it. Findings table in
+  [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md).
+
+- **Second pass: can the model read the material, and in which languages?** The
+  first probe proved the models are alive. "Paris" says nothing about the thing
+  the bot actually does, so the probe now sends each model an excerpt of a REAL
+  topic of this corpus (`lpi-010-160/5.2`) with the page's own *use ONLY the
+  material* prompt, and asks — in each of the seven languages the site offers —
+  a question the excerpt answers. The expected answer is `/etc/passwd`: a path,
+  identical in every translation, so one substring grades all seven and nothing
+  is judged by a second model. The excerpt is read from the tree at probe time
+  rather than frozen into the fixture, so it always asks about the material the
+  site serves; `make verify` fails for free if that topic stops containing the
+  answer.
+
+  **164 calls, $0.27**: all fourteen paid models answered from the material in
+  all seven languages. The free tier is where it shows — `nemotron-3-ultra`
+  returns HTTP 200 with no content in Spanish, German and Chinese, `-super` in
+  French, and both Gemmas were rate-limited before they could be asked. So
+  `models.yaml` carries `langs:` per model and **the page offers a model only in
+  the languages where it was proven**, with a line saying how many were hidden.
+  A language with no proven model falls back to offering everything that answers
+  rather than an empty menu — the rule is never to claim what was not measured,
+  in either direction. The comprehension request also carries the reasoning off
+  switch where the model accepts one, which is both what the page sends by
+  default and most of why the pass costs cents.
+
+  Built and deployed twice: `2026-09-11-bot-models` (helm revision 61) for the
+  liveness and reasoning verdicts, then `2026-09-11-bot-langs` (revision 62) for
+  the per-language menu. Verified live on study.cybercirujas.club: eighteen
+  models, each carrying a probe date; 18 offered in English, Portuguese and
+  Japanese, 17 in Spanish, French, German and Chinese — the missing one is a
+  Nemotron that returns nothing in that language. No model had to be replaced:
+  every one still answers, and what changed is that the page stopped claiming
+  things about them that were never measured.
+
+## 2026-09-10
+
+- **Study bot, phase 1 — the platform's first feature that is not content.** A
+  Bot section where the student picks career → certification → topic, pastes
+  their **own OpenRouter key**, and asks questions against that material. The
+  key lives in `localStorage` and goes straight to openrouter.ai: no proxy, no
+  account, no server state, and therefore **zero platform inference cost** —
+  which is what makes it safe to offer on a public site after this project hit
+  its monthly spend limit twice in three days. Design, phases and full token
+  accounting in [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md).
+
+  Two design calls worth recording. **Explicit selection replaces retrieval**:
+  because the student names the topic, the exact file is known, so it is sent
+  whole (15–35k tokens, fits any modern model) instead of approximated by
+  embeddings — no pgvector, no embedder, no new pods, and better accuracy than
+  chunked search. And **the task harness ships in phase 1**: four intents with
+  specialised prompts that know this corpus' conventions (the exercise writer
+  follows the `<details>` solution format, the examiner weighs questions by
+  syllabus domain weight, the explainer may cite only references already in the
+  material). Without them the model improvises formats the corpus already
+  defines — which is what "dumping raw material at the model" actually looks
+  like.
+
+- **The model catalogue became data.** `models.yaml` freezes the ids and prices
+  the UI shows (top / mid / low / **free** tiers across Claude, OpenAI,
+  DeepSeek, Qwen, Kimi, MiniMax and Gemma), `/api/models` serves it, and the
+  page builds its selector from that — nothing about models is typed into
+  JavaScript any more. The first draft had **invented model ids**, caught by
+  the owner; the second had a free tier picked by context length alone, which
+  included two **domain-tuned** models (finance and health) that would have
+  answered IT questions from the wrong prior. The selection criteria now live
+  inside the file so the next replacement is made against a standard.
+
+- **`scripts/check_models.py`** compares that catalogue against OpenRouter's
+  live API and reports models that vanished, prices that moved, `:free` models
+  that started charging, and models that dropped `reasoning` support. It runs
+  inside `make check-updates` **and** as a weekly CronJob in the cluster — the
+  one part of the pipeline that belongs there, because it needs the network and
+  neither quota nor the owner's subscription.
+
+- **`make check-updates` + the `check-updates` skill**: one trigger that
+  refreshes every frozen syllabus against what its vendor publishes today and
+  rewrites the **Exam versions** table in STATUS.md. First run found lpi-devops
+  sitting on v1.0 while LPI had shipped a v2.0 overhaul.
+
+- **The site tells its own truth.** `/api/status` projects the *same functions*
+  STATUS.md renders from — versions via `check_versions.survey()`, language
+  coverage via the quality floor — so the public page and the repository cannot
+  disagree on definitions, only on timing, and every row carries its dates. The
+  **Status** section renders it in all seven languages.
+
+- **EU AI Act Article 50 disclosure reached the student.** Every topic page
+  names the model that produced what is being served, the date, whether it is a
+  translation, and links the vendor exam guide it derives from; the footer
+  links the repository. Certification pages link their official sources.
+
+- **Certifications**: cgoa, lpic-3-303, lpic-1 (42 objectives, replacing the
+  pre-resnapshot corpus), cca, lpi-devops v2.0 (re-snapshotted to the real 15
+  objectives), aws-clf, az-900 and gcp-cdl completed and published — the three
+  public-cloud careers now exist end to end. cks' Spanish was rebuilt from the
+  rich English (579 KB → 2.9 MB, parity 0.98x) after the review found it was
+  the old independently-authored sibling.
+
+- **Nine bugs found and fixed, each with its cost measured**: the CLI exiting 0
+  on failed translations (19 re-paid attempts on one topic), systemd killing
+  passes at a 40-minute ceiling (12 discarded translation cycles), the video
+  encoder present in the toolbox and absent on the host (136 silent render
+  failures), a placeholder pseudo-URL failing the translation verifier (20+
+  rejections of a correct translation), a bash comment satisfying the quality
+  floor's `starts_with: "#"` (a decapitated topic), prompts over ~128 KB
+  breaking `execve`, non-authoring languages being authored directly, the
+  secret scanner flagging `sk-ssh-` key types and substrings inside words, and
+  three API endpoints shipping broken because the container lacked data files
+  the toolbox had.
+
+## 2026-09-11
+
+- **`make clean-registry`** makes the 98 GB registry incident repeatable
+  instead of hand-fixed. Dry run by default; a deployed tag is never pruned
+  (deployments, statefulsets and daemonsets across all namespaces are read
+  first, and the run **aborts** if that list is unreadable rather than
+  guessing); keep-N on top so a rollback target survives. It prunes tags,
+  clears orphaned uploads, garbage-collects and reports usage before and
+  after. Also fixed reading `df`: the device name wraps onto two lines and
+  `--output` is coreutils-only, so positional parsing had reported free space
+  as used.
+
+- **`make verify` is green for the first time: 144 broken manifests → 0.** The
+  method, which is the point: **when a check fires en masse, verify the check
+  before repairing the content.** Of the 144, **116 were false positives** and
+  the checker was what needed fixing — CloudFormation intrinsic tags
+  (`!Ref`, `!Sub`, `!Equals`) that `safe_load` refuses by design, systemd unit
+  files and Terraform HCL tagged as `yaml`, `${...}` templating, and blocks
+  labelled `json` that held console output, JSON Lines, or several documents.
+  Two scripts now encode those rules: the vendor-tag loader in
+  `check_manifests.py`, and `scripts/fix_fences.py` (two narrow retag rules,
+  diff by default, `--apply` to write).
+
+  **28 were real**, and every one of them broke the actual tool rather than
+  just our parser: a missing space after a key, an unquoted `*.host` that YAML
+  reads as an alias, two mappings joined by a semicolon, a JMESPath expression
+  used as a mapping key, container indentation one level too deep, a JSON
+  comment inside a JSON document, and block scalars whose PromQL division sat
+  left of the scalar indent — the `pca` defect, found in four more places.
+
+- **`check_config.py` stopped reporting a designed decision as drift.** It
+  sampled translations, which deliberately run at the CLI default effort since
+  2026-08-24, and flagged them against the authoring pin. Authoring only now.
+
+- **DEVELOPERS.md — the platform is now usable by other people.** Two honest
+  disclaimers first (a beta API on a home cluster with no uptime guarantee, and
+  AI-generated content whose risk and Article 50 disclosure obligation travel
+  with anyone who redistributes it), then the licence split (Apache 2.0 for
+  code and material; the vendors' terms for the syllabi they derive from), how
+  to query the hosted API, how to run the whole platform or just the API or
+  just take the markdown, how to keep a fork in sync, how to build features on
+  it, and how the DevOps loop is measured — CALMS mapped to the commands that
+  implement it, and DORA mapped to where each metric is actually visible,
+  including where the loop is honest about its gaps.
+
+  **The endpoint table is generated from the running application**
+  (`scripts/gen_api_docs.py`, `--check` wired into `make verify`), because a
+  hand-written API table rots and gets believed anyway. Writing it exposed five
+  endpoints with no docstring and one documented in Spanish — fixed at the
+  source, which is the point of generating rather than writing.
+
+- **The generation prompt learned the conventions the corpus kept violating.**
+  Every repair before this was retroactive; this is the only change that stops
+  the class being produced. Five rules, each citing a defect that actually
+  happened rather than a precaution: quote values containing `: `, quote a
+  leading `*` (YAML reads it as an alias), keep block-scalar lines at one
+  indent, one JSON document per ```json fence with console output in a plain
+  fence, and never label systemd units or Terraform HCL as yaml.
+
+  **Deliberately unmeasured for now.** `scripts/manifest_rate.py` will answer
+  whether new topics arrive broken, comparing against the rate recorded at
+  repair time (14 of 1,225 topics, 1.1%) rather than against the repaired
+  corpus, which reads 0% and would flatter the change. It refuses to report a
+  rate below ten new topics — the next certification produces that sample for
+  free.
+
+- **Reviewed `.rejected/`, and it paid for itself again.** Of the seven
+  rejected translations kept there, **five were false positives** — correct
+  translations refused over presentation:
+  a legend label (`● = customer` → `● = cliente`), **one space** of re-padding
+  in a plain-text table, and **trailing whitespace** in a diagram. Two fixes,
+  both narrow: legend markers (`●◐○→✓…`) now count as diagram glyphs so their
+  labels are compared as prose, and off-diagram runs of internal spaces
+  collapse — the leading indent is untouched because in YAML it is structure,
+  and lines that *are* diagrams keep exact columns.
+
+  That last constraint came from a test, not from care: collapsing spaces
+  everywhere made `test_diagram_that_breaks_alignment` pass a diagram whose
+  borders no longer lined up. The fix is surgical because the test refused the
+  blunt one.
+
+  Two of the seven stay rejected on purpose: explanatory prose inside code
+  blocks with no comment marker (`j j j (down to line 4)`). Loosening further
+  would risk letting a translated command through, and the retry policy
+  already handles them — both topics are complete today.
+
+- **The 55 orphaned topic directories are gone** — 6.1 MB, 446 files, every
+  one committed so git keeps them retrievable. They were left when LPI syllabi
+  were re-snapshotted from chapter headings to real objectives and the ids
+  changed (`1.1` → `101.1`). Nothing read them: not the site, not the audits,
+  and not the generator, which authors from the syllabus and never from old
+  material — so they were not even usable as input. 32 belonged to
+  certifications since regenerated; the rest covered whole chapters that the
+  new syllabi split into several objectives, so there was no 1:1 salvage
+  available. `make verify` stayed green through the removal.
+
+- **Citation attribution: 80% → 91%**, in one batch of bookkeeping with no
+  quota. 70 domains catalogued (53 → 110 projects): BSD and Debian manuals,
+  Ansible, HashiCorp, Flux, cloud-init, Ceph, OpenSSL, systemd, OCI, SPIFFE,
+  Suricata and the rest — every one a project's own documentation, none a blog
+  or an aggregator, which is what the 2026-08-06 survey predicted. Government
+  and standards bodies went to `neutral_domains` instead: they are primary
+  sources but publish for many projects, so attributing them to one would lie.
+
+  **A bug this exposed, now checked**: adding a project key that already
+  existed made YAML keep the last and silently discard the first, taking its
+  domains with it (`debian`, `systemd`, `ubuntu`, `aws`, `azure` were all
+  duplicated). `check_sources.py` now refuses to report any number until
+  duplicates are merged — a catalogue that loses entries as it grows is worse
+  than one that refuses to grow.
+
+- **CI runs the free verification on every push and pull request**
+  (`.github/workflows/verify.yml`): nine checks plus a word-anchored secret
+  scan, no quota, no cluster. Its first run failed correctly —
+  `status_matrix --check` counts rendered videos and `media/**/*.mp4` is
+  gitignored for size, so a clean checkout has none. That check describes the
+  machine holding the media, like `check_units` and `check_config` describe the
+  workstation; all three are excluded with the reason written in the workflow.
+
+## 2026-08-20
+
+- **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](../MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
+
+## 2026-08-04
+
+- **English Is Now the Authoring Language; Everything Else Is a Translation.** Owner's decision. Content, exercises, labs, video scripts and validation are authored in English; Spanish is translated from it, and `pt fr de zh ja` stay on demand. `certs.DEFAULT_LANG` is `en`. The fallback had to become a **chain** (`FALLBACK_LANGS = [en, es]`) rather than a constant, because flipping it alone would have regressed the site: Spanish is complete for certifications whose English is unfinished (cks was 14 of 26), so a reader asking for German would have got a blank page next to a full Spanish version. Verified both directions — cks/5.1 (no English) still falls back to Spanish, cks/1.1 (English present) prefers English. Recorded honestly in `pipeline.yaml`: **no quality difference between authoring in English and in Spanish could be measured** (identical quality-floor pass rates across 7 languages, 100% of citations resolving in en/es/de/zh, 54/54 manifests parsing in both, comparable code-block and heading counts). The case for English is that the source material and the technical terms already are English, plus ~20% more material per token — not a demonstrated quality gain.
+- **A Topic That Could Never Pass Was Burning Entire Quota Windows.** `cks 4.1` was regenerated **six times across four windows** and rejected every time for "missing a references section". Each attempt costs ~7 min and two completions, and since nothing is written on rejection the topic came back pending and the next pass picked it up again — which is why the quota vanished within an hour of every renewal with no content to show. The material was fine: the prompt asks for sections numbered 1) to 6), so the model titled the last one `## 6) References`, and the quality pattern anchored the keyword immediately after the `#`. All 41 pre-existing files use a bare `## References`, which is why it had never surfaced. Pattern now allows an optional `6)` / `6.` prefix; 4.1 passed on the next attempt with no prompt change, confirming the diagnosis. **Rejected text is no longer discarded** either — it goes to `.rejected/` and the error names the file, because six identical failures left zero evidence of what the model had actually written.
+- **`_verify_translation` Was Rejecting Every Correct Translation** — found by the translation study, and it would have blocked translation on *any* model including Claude. Code blocks were compared byte-for-byte, but they hold prose too: **comments** (the authored English cks/1.1 has 12 English comments against 2 Spanish in its source) and **ASCII diagrams** (`cheap` translated `│ cloud-controller-manager (opcional) │` on 3 of 3 attempts — deterministic, so no retry policy could ever have got kcna/1.1 through). Comment text is now blanked with the `#` marker kept, so a *deleted* comment line is still caught; on box-drawing lines the labels are blanked but the box characters must keep their exact column positions, so a translation that breaks the alignment is still rejected. `+`, `-` and `|` are excluded from the box character set so an ordinary shell pipeline stays compared exactly.
+- **KCNA English Complete (13/13), Translated Rather Than Re-Authored** — the first certification produced by translation. Verified with the *same* checks as authored material, which is the point: 26/26 files clear the quality floor, 100% of citations resolve, 26/26 manifests parse, no removed Kubernetes APIs. 11 topics by `cheap`, 2 by `claude-sonnet` after `cheap` failed them deterministically. Escalating the model was the right fix rather than loosening the gate: 242 of the 351 untagged code blocks in the corpus are **not** prose — they hold terminal prompts and command synopses — so "untagged means prose" would have shipped corrupted output.
+- **The Audit Ignored Videos Entirely.** It is the work queue, and it only looked at content, exercises and labs, so a video declared in `pipeline.yaml` and never rendered was invisible: "0 pending" could be true of the text and silently wrong about the media. Same blind spot that hit content three times. Reports 4 today (`cks/en`, `kcna/en`, `cnpe/es`, `cnpa/es`). Kept out of `find_bad_combos` on purpose, since that set drives `teach cert generate --topic` and a video is per certification, not per topic.
+- **German Path Videos Re-Rendered** — they were still the 2026-07-17 renders narrated in Spanish by a German voice; the fix landed on 07-30 but nothing had been re-rendered, so the defect was live on the published site. Verified: the deterministic voiceover now reads "Du beginnst mit KCNA, danach folgt CKA oder CKAD." Costs no API quota. Note `media/**/*.mp4` is gitignored, so videos reach production only through `make image-cluster` (which tars the working directory); an image built by CI from git alone contains no video at all.
+- **README Rewritten.** Four real defects: the four header links were dead (`STATUS.MD` vs `STATUS.md`, on a case-sensitive filesystem), the Languages section still described Spanish as the default and presented `generate --lang <x>` as the way to add a language (now the documented way to get it wrong, with `teach cert translate` unmentioned), the timer section gave enable instructions with no warning that it spends quota unattended, and the whole file was in Spanish against the repo's own English-documentation rule. The CI claim was checked and is accurate.
+- **The Translation Tests Were Invisible to `make test`.** Written with pytest, so `unittest discover` skipped the file entirely — the project's own command reported 23 passing while 11 never ran, and the Makefile is explicit that the suite is stdlib with no extra dependencies. Rewritten as `unittest`, verified by uninstalling pytest first: 34 tests, OK.
+
+## 2026-08-03
+
+- **Translation Cost/Quality Study — Measured, Not Estimated** ([docs/TRANSLATION_STUDY.md](TRANSLATION_STUDY.md), reproducible with `scripts/translation_study.py`). Same topic, same prompts imported from `generator.py` so the study cannot drift from what the pipeline does, `temperature: 0`, six models through the LiteLLM proxy, every output through both gates. Result: **`cheap` (Qwen Turbo) is safe for translation and `claude` stays for authoring.** `cheap` passed 3/4 topics first try and 4/4 with one retry, at $0.0007/file against $0.05 for `claude-sonnet`, with prose read by hand and found indistinguishable. `free2` and `deepseek-free` were rejected on substance — one summarised 10 KB into 1.7 KB, the other dropped a citation URL — which is exactly the class of damage that must never ship silently. The saving that matters is **Claude quota, not dollars**: of 117 pending combos, 32 have a good Spanish source and translating them frees ~3.7 h of authoring quota for the 85 that have none.
+- **`_verify_translation` Was Rejecting Every Correct Translation** — found by the study, and it would have blocked translation on *any* model including Claude. It demanded code blocks be byte-identical, but comments inside them are prose that must be translated: the authored English cks/1.1 has 12 English comments against 2 Spanish ones in its source, so translating them is the standard the material itself sets. Fixed by blanking comment text before comparing while keeping the `#` marker, so a *deleted* comment line is still caught. Placeholders are deliberately left strict: `<none>` is real `kubectl` output and appears identically in both languages, no pattern separates it from `<pod-ip-destino>` reliably, and a false rejection costs one $0.0008 retry while a false acceptance ships corrupted output. New `tests/test_translation_verify.py` covers both directions (8 tests; suite 23 → 31, all passing).
+- **Cluster Access Fixed at the Source** (in `projects/leloir`, left uncommitted — a push there triggers CI + ArgoCD). `connect-cluster.sh` only knew how to reach the cluster from outside: it always built an SSH tunnel and always pointed the kubeconfig at `127.0.0.1:6443`, so on the LAN, with no tunnel up, kubectl simply failed. Added a `lan` mode (direct to node1, no tunnel or Tailscale) and made `status` read-only — it used to rewrite the kubeconfig back to `127.0.0.1`, so *checking* the state broke a working LAN connection. This is what unblocked the study: the LiteLLM key lives in the cluster.
+
+## 2026-07-29
+
+- **Third Instance of the Same Audit Blind Spot Found and Fixed** — and this one invalidated yesterday's fix. `find_bad_combos()` enumerated language directories with `cert_dir.glob("*/{lang}")`, which only sees directories that already exist. A topic never generated in a language has no directory at all, so it was skipped entirely and the audit reported **0 corrupt for `cks/en` while only 6 of 26 topics existed**. Adding `en` to `TARGETS` (done yesterday) was therefore necessary but not sufficient — the audit still could not see the gap. Fixed by enumerating topics from the syllabus frontmatter instead of from disk, the same approach the lab check has used since 2026-07-16; that fix closed the hole for files missing *inside* an existing directory, this one closes it for the missing directory itself. Re-audit now reports exactly the 20 missing `cks/en` topics and **zero false positives** across every other combo (lpi-010-160 ×7, ckad ×2, cka ×2, kcna, cks/es), which is what confirms the change is a real detection improvement and not just noise.
+- **CKS English Translation Started — 6/26, Incomplete.** Domain 1 complete (1.1–1.5) plus 2.1, all clean (well above the 1500-byte floor, correct `#` heading, exercises closing with the collapsible `<details>` answers section). The run stopped at topic 2.2 on **"You've hit your monthly spend limit"** from the `claude` CLI. Note the failure was silent at the shell level: the command is piped through `tee`, so the pipeline exited 0 and the background task reported success — the error was only visible in the log body and in the file count on disk. Resuming needs no special handling (`teach cert generate cks --lang en --backend claude` skips what exists, per-language), it just needs quota.
+
+## 2026-07-28
+
+- **Audit Blind Spot Closed in `scripts/fix_corrupted_content.py`**: `TARGETS` only listed `es` for `ckad`/`cka`, so the newly generated English content was never scanned — the same class of blind spot as the 2026-07-16 missing-files bug (the audit reports "0 corrupt" for what it does not look at). Added `en` to both. Re-audited with the widened targets: **0 corrupt combos** (no new findings, the English content was already clean). Certs still Spanish-only (`cks`, `kcna`) keep a single language until they are translated.
+- **Backlog Reconciled Against `STATUS.md`**: the blocking regeneration item and the CKA item were still listed as pending despite being done; moved here. `STATUS.md` re-generated from the filesystem — no diff, so the committed matrix was already current. Also corrected two stale claims: `LFCS`/`LFCA` do have snapshots (at domain granularity, not sub-topic), and the admin/admin auth stub described under Platform was already removed on 2026-07-19.
+- **RAG Study Bot Proposal Audited** (the untracked `chart/`, generated with Kimi AI on 2026-07-27) and written up as a backlog section with a phased split. Rendered rather than merely read, which surfaced blockers a review of the YAML would have missed: the chart does not `helm template` at all (`redis.service.port` is referenced but absent from values), and Go template expressions embedded in `values.yaml` are never expanded by Helm, so every service hostname (`POSTGRES_HOST`, `OLLAMA_HOST`, `REDIS_HOST`) reaches the pods as a literal `{{ .Release.Name }}-postgres` string. Also flagged: 4 subsystems configured with no manifests, default credentials, a 70b model that does not fit the stated 8 GB GPU, and a direct conflict with this repo's standing "no third-party labs on the home cluster" decision. Kept untracked pending fixes. The two `study-cybercirujas-full.zip` copies were byte-identical archives of `chart/` (`diff -r` clean) and were deleted.
+
+## 2026-07-27
+
+- **CKAD and CKA Translated to English**: both certs now have complete English content + exercises (ckad 24/24, cka 27/27 for both `content.md` and `exercises.md`), regenerated topic by topic across 8 commits. No file below 1500 bytes and no recap stubs — the `generator.py` fixes from 2026-07-12/16 (`--disallowedTools`, `_reject_if_recap` checking first *and* last line, `_strip_fence`) held for the whole run.
+- **Corrupted-Content Regeneration Closed (was the blocking backlog item)**: `fix_corrupted_content.py` reports 0 corrupt combos across lpi-010-160 (7 languages), ckad, cka, cks and kcna. The deploy freeze on translations/CKAD declared in the 2026-07-12 entry no longer applies.
+
+## 2026-07-19
+
+- **Repository Published on GitHub**: https://github.com/villadalmine/study-cybercirujas (public). Before publishing: generalized internal cluster hostnames in README/values-study.example.yaml (not secret, but home network topology), added `LICENSE` (Apache 2.0), and confirmed no tracked secrets (checked for api-key/token/password patterns, `.env`, `.pem`, `kubeconfig`, etc. — 0 real results, the only match was the placeholder in values example).
+- **Copyright Audit & AI Content Generation Verification**, requested before trusting the public release:
+  - **No scraped text is persisted**: `tracker.py` (`fetch_text`) loads official HTML/PDF content strictly in-memory for the LLM prompt and never saves it to disk/repo — the only thing frozen in `certs/*.md` is structured metadata (id/title/topic/weight), never third-party prose.
+  - **The generator forbids copying literal text** (`_system()` in `generator.py`: "Never copy literal text from third-party materials") and content is 100% generated via real calls to an AI backend (litellm/claude/codex/gemini) — also verified empirically: 0 `content.md`/`exercises.md`/`break_fix.sh` files are byte-for-byte duplicates across topics (any hardcoded templates would show up as exact duplicates).
+  - **CNCF (`github.com/cncf/curriculum`) is CC-BY 4.0** — verified against the actual repo README, matches what was already in the website footer. LPI does not publish an explicit license tag for its objectives pages, but the approach (metadata only + `robots.txt` allows scraping those routes + 100% original final content) is the same used by any third-party prep book/course — LPI prose is not copied anywhere.
+  - **No third-party logos/branding**: the only tracked binaries are 11 `thumbnail.png` rendered with Pillow (text on solid backgrounds, no external images embedded) — confirmed visually. TTS voices are Piper (open voices from `rhasspy/piper-voices`), no third-party audio.
+  - **Real bug found**: `certs/lpi-010-160/2.3/de/content.md` had full real content (186 lines) + an LLM meta-comment appended at the end ("Ich habe in dieser Session keinen Zugriff auf Datei-Tools... hier ist der vollständige Inhalt zum manuellen Einfügen") — same family of bug as the known recap-stub, but at the END of the file rather than the beginning, so it slipped past `_reject_if_recap` in `generator.py` and `fix_corrupted_content.py` which only checked the first line. Fixed in both files to check the last line as well; the file was regenerated clean. Full repo scan with the expanded pattern: **0 more cases** (it was an isolated case, 1 of 476 content `.md` files).
+
+## 2026-07-17
+
+- **Implemented Local Lab Provider (Docker), first step of SDD roadmap in PLAN.md** — until now, `labs.py` only had Terraform code, so `teach lab up` failed on 100% of existing labs (all declare `provider: local` in their `lab.yaml`, none `terraform`). Now it dispatches in two variants depending on what `break_fix.sh` needs (detected reading the script, without having to regenerate 100+ existing `lab.yaml` files): a `kind` cluster (Kubernetes-in-Docker) for labs using `kubectl` (all CKA/CKAD/CKS/KCNA), or a simple Debian/Ubuntu container for those that don't (LPI Linux Essentials). `teach lab status` now checks actual docker/kind process status instead of blindly trusting `status.yaml`. **Not verified against real Docker/kind** (not installed on the writing machine) — dry-run with mocked subprocess only. See BACKLOG.md before using with real students.
+- **Certification Videos Scaled to all 5 Content-Complete Certs** (cka, ckad, cks, kcna, lpi-010-160), in Spanish. Two real bugs found and fixed along the way:
+  - **Syllabus script YAML broken by unquoted `:` in sentences** (reproduced with `cks`: `"No es teoría: es defender..."` — a `: ` inside a plain scalar is ambiguous for the YAML parser and breaks it). This is a format issue, not a content or backend one; `_ask_scenes` now retries up to 3 times (asking the model explicitly to quote any sentence containing `:`) before failing.
+  - **`lpi-010-160` weights its domains in points summing to 40, not % summing to 100** (unlike CNCF temarios, which use %) — without normalization, the domain video scene would show "7%" for a domain that is actually "7 out of 40 points", which is incorrect. `_cert_domains()` now normalizes to percentage of total before displaying.
+- **CKS Added to Catalog**: snapshot of the official syllabus (`CKS_Curriculum v1.34` PDF, 26 topics, correct domain weights) + content/exercises/labs in Spanish, 26/26 clean. Survived an external process `kill` (at 14/26) and two Claude API quota cuts (at 19/26 and 24/26) — resumed each time without losing progress because `teach cert generate` skips already generated topics. 2 labs remained half-generated due to cuts; `fix_corrupted_content.py` detected them (now checks missing labs too) and completed them automatically.
+- **KCNA Added to Catalog**: same weight-by-domain bug as CKAD found when reviewing `STATUS.MD` (weights summed to 360 instead of 100, each sub-topic had the full domain weight) — re-snapshotted with the fixed `tracker.py`, now sums to 100 clean (44/16/28/12). Content generated, 13/13 in Spanish. **This completes the `kubernetes` career path (KCNA → CKA/CKAD → CKS) across all 4 certs.**
+- **Video in More Languages**: Piper does have German and Chinese voices (`de_DE-thorsten-high`, `zh_CN-huayan-medium` — verified against the supported list in `rhasspy/piper-voices` repo; Japanese has no Piper voice and remains blocked). Videos of `linux-admin` and `kubernetes` generated in English and German. `core/video.py` now chooses fonts per language (Noto Sans CJK for zh/ja if installed, falls back to Liberation Sans) so Chinese slides do not render square tofu blocks.
+- **STATUS.MD (New)** + `scripts/status_matrix.py`: matrix of completed cert/language/lab/video, generated from actual filesystem counts — run the script after any generation. Already helped spot the KCNA bug above.
+- **New Feature: Certification-Specific Video** (not just career paths). Same pipeline (Piper + Pillow + ffmpeg) as path videos, with a new deterministic "exam domains" scene (bars showing the real weight of each domain, summed from `cert.md` topics — never hallucinated by AI) replacing the certification map. `teach cert video-script`/`teach cert video` (new), `/api/certs/{id}/video` endpoint (new, same language fallback as paths), video visible on the cert page. Tested on `cka` (52s, 4 scenes) before scaling.
+- `cks` added to `TARGETS` in `scripts/fix_corrupted_content.py` and `scripts/resume-generation.sh` (same fence and missing files check as lpi-010-160/ckad/cka).
+
+## 2026-07-16
+
+- **Bug Found and Fixed in `scripts/fix_corrupted_content.py`: only detected corrupt files, not missing ones.** The script audited `cert_dir.glob(".../content.md")` — if the file did not exist, the glob simply skipped it, so a half-generated topic (process killed between the two completions, e.g. from an old session) went unnoticed even if the audit reported "0 corrupt combos". 3 real holes were found: `ckad/5.3/es/exercises.md` (and its entire lab) and labs for `ckad/2.3` and `ckad/3.4` were missing. The "19/19" / "24/24" checks in previous entries only counted `content.md` existence. Fix: the script now loops over language directories (detecting missing `content.md`/`exercises.md`) and the syllabus topic list — not disk — for labs (detecting missing `break_fix.sh`). Regenerated the 3 holes; audit now confirms 0 combos across the three certs. Redeployed.
+- **CKA Added to Catalog**: snapshot of the official syllabus (`CKA_Curriculum_v1.35.pdf`, 27 topics) + content/exercises/labs in Spanish, 27/27 clean. The weight-by-domain bug (seen in CKAD) was fixed at the code level in `teach/core/tracker.py::snapshot_topics`: explicit prompt requesting splitting domain weights among sub-topics, plus a validation check that rejects the snapshot (`TrackerError`, not saved) if weights do not sum to ~100. Correct on first attempt.
+- **Video of the `kubernetes` Career Path** (Kubernetes Engineer, es, 111s/7 scenes). Also fixed a PATH bug: `piper` (TTS) lives in `.venv/bin`, not system PATH, and failed in environments without the activated venv. `teach/core/video.py` now resolves it via `sys.executable`.
+- **New Bug Found and Fixed: Wrapping Code Fences.** The `claude` backend sometimes returns the entire content wrapped in markdown code fences (` ```markdown ` at the start, ` ``` ` at the end) despite prompt rules — not corruption, but breaks web rendering. Seen first in CKA (18 of 81 files). Fix in `teach/core/generator.py::_strip_fence` (applied before saving and before anti-recap validation); `scripts/fix_corrupted_content.py` gets an in-place cleanup step to fix already affected files without wasting AI quota.
+- **Confirmed Corrupted Content Cleaned**: `scripts/fix_corrupted_content.py` ran repeatedly via the systemd timer and converged to **0 corrupt combos**. Manual verification: lpi-010-160 complete 19/19 in all 7 languages, ckad 24/24 in es, no files below 1500 bytes. lpi-010-160 and CKAD enabled for deploy.
+
+## 2026-07-11/12
+
+- **Critical Bug Found and Fixed: Generator Saved Process Summaries Instead of Actual Content.** `teach cert generate --backend claude` runs `claude -p` without tool restrictions and with cwd in the repo — the model sometimes acted as a coding agent (explored the repo, tried writing files itself via its write tool) and returned a summary of that action ("Written complete study content to ja/content.md...") instead of the requested content — which the pipeline saved as-is. Deterministically reproduced. Audit found **~170 corrupt files** (73% of reviewed) among lpi-010-160 translations (pt/fr/de/zh/ja) and CKAD.
+  **Fix in `teach/core/generator.py`**: (1) `claude -p --disallowedTools "Write,Edit,Bash,Read,Glob,Grep,NotebookEdit,WebFetch,WebSearch,Task" --` forces the model to respond in plain text without tool use; (2) `_reject_if_recap()` validates each response before saving and rejects anything matching this bug.
+  `scripts/fix_corrupted_content.py` audits and regenerates (with `--force`) remaining corrupt files. **This invalidates the entry below** ("lpi-010-160 multilingual complete") — the file count (19/19) never measured quality, only existence.
+- ~~**lpi-010-160 Multilingual Complete**: content + exercises generated in the 7 supported languages, 19/19 topics each.~~ See entry above.
+- **Path Videos (New Feature)**: custom pipeline without external APIs — script written by AI and frozen in `script.yaml` (with the factual certification map always deterministic from `catalog.yaml`), Piper TTS narration, Pillow slides, and ffmpeg render (`libopenh264`). First video: `linux-admin` path in Spanish. Served via `/media` + `/api/paths/{slug}/video`. Module: `teach/core/video.py`.
+- **CKAD Added to Catalog**: snapshot of the official syllabus (PDF from `cncf/curriculum`, 24 topics) + content/exercises/labs in Spanish. Corrected snapshot bug: the CNCF PDF only gives weights per domain (20/20/15/25/20 = 100%), not per sub-topic; the snapshot copied the full domain weight to each sub-topic. Fixed by distributing the domain weight among its topics.
+
+## b7a8edb — Open Web
+
+Study content without login (previously required active session + paid plan) + complete English content (19/19) in lpi-010-160.
+
+## 32b929f — Landing Page
+
+Highlights organizations (LPI vs Linux Foundation) within the Linux category.
+
+## deca856 — Local Deploy
+
+`study.cluster.home` served from the cluster (home k3s).
+
+## 12e01a6 — Paths + Linux Foundation
+
+Paths i18n + separate Linux Foundation track (LFCA/LFCS) from LPI. Build without CI workflow.
+
+## 1d4bd14 — Multilingual + Deploy
+
+First multilingual version + style adjustments + Helm chart.
+
+## f6559b5 — Tracker/Scraper
+
+Catalog derived from official sources, nothing static.
+
+## 9302677 — Paths: Nodes with Cert Names
+
+Nodes display certification names in addition to exam codes.
+
+## 28314d8 — teach-plat
+
+Initial commit of the IT certification study platform.

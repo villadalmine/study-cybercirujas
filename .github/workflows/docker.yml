@@ -2,6 +2,14 @@ name: Build & Push Docker Image
 
 on:
   workflow_dispatch:
+  workflow_call:
+    # Called by release-please.yml when it creates a release: same build, plus the tag vX.Y.Z.
+    inputs:
+      version:
+        description: 'Release version without the v (e.g. 0.3.0); empty = the usual tags only'
+        type: string
+        required: false
+        default: ''
   push:
     branches: [main]
     paths:
@@ -48,6 +56,7 @@ jobs:
           tags: |
             type=sha,prefix=
             type=raw,value=latest
+            type=raw,value=v${{ inputs.version }},enable=${{ inputs.version && 'true' || 'false' }}
 
       - name: Build and push
         uses: docker/build-push-action@v6

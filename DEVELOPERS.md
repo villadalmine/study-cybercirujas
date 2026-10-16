@@ -18,8 +18,9 @@ project. Concretely, and honestly:
 - **No rate limiting today**, which means no protection either — if it starts
   being hammered, the answer will be a limit, not more capacity. Be reasonable:
   cache what you fetch, and do not poll what does not change.
-- **No versioning yet.** Paths and payloads can change. Watch
-  [CHANGELOG.md](CHANGELOG.md); breaking changes are recorded there.
+- **Versioned 0.x.** The repository is released as SemVer `v0.Y.Z` (GitHub Releases); while it is 0.x,
+  paths and payloads can still change. Watch [CHANGELOG.md](CHANGELOG.md); breaking changes are recorded
+  there under their release.
 - **No authentication** on the public endpoints, and none planned — the content
   is free by decision, not by oversight.
 - **If you need reliability, run your own copy.** That is what the rest of this
@@ -204,7 +205,7 @@ product rather than an afterthought. If you fork it, you inherit all of it.
 
 **Culture** — decisions and their reasoning live in the repository, not in
 someone's memory: [ROADMAP.md](ROADMAP.md) for where things are going,
-[CHANGELOG.md](CHANGELOG.md) for what happened, [AGENTS_SYNC.md](AGENTS_SYNC.md)
+[CHANGELOG.md](CHANGELOG.md) for what changed in each release ([docs/HISTORY.md](docs/HISTORY.md) before the first), [AGENTS_SYNC.md](AGENTS_SYNC.md)
 for coordination between the humans and agents working on it. Every rule that
 exists because something broke says what it cost.
 

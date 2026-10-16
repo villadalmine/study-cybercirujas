@@ -374,7 +374,7 @@ later and wastes more when it does.
 | What must exist, quality floor, budget | [pipeline.yaml](pipeline.yaml) |
 | Translate vs author, model choice, costs | [docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md) |
 | What is finished right now | [STATUS.md](STATUS.md) |
-| What went wrong before, and why a rule exists | [CHANGELOG.md](CHANGELOG.md) |
+| What went wrong before, and why a rule exists | [docs/HISTORY.md](docs/HISTORY.md) (up to 2026-10-16), then [CHANGELOG.md](CHANGELOG.md) |
 
 **8. Do not change a threshold, a budget or a rule to make your run succeed.**
 If the pipeline refuses your work, the pipeline is probably right — every one of

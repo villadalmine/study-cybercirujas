@@ -625,7 +625,7 @@ def _system(lang: str) -> str:
         # Cada regla de acá corresponde a un defecto REAL encontrado en el
         # corpus el 2026-09-11 (28 casos), no a una precaución teórica. El
         # estudiante copia el bloque y falla; el checker solo lo ve después.
-        # Ver CHANGELOG 2026-09-11 y scripts/check_manifests.py.
+        # Ver docs/HISTORY.md 2026-09-11 y scripts/check_manifests.py.
         "\n\nCONVENCIONES DE BLOQUES DE CÓDIGO (un bloque mal formado hace que "
         "el estudiante copie algo que no funciona):\n"
         "- Un bloque ```yaml TIENE que parsear como YAML. En particular: un "

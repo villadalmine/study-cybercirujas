@@ -3,7 +3,7 @@
 
 Originally written for one bug: the `claude` backend returning a process recap
 ("Escribí certs/.../content.md...") instead of the requested content, because a
-coding agent was running without tool restrictions (see CHANGELOG.md).
+coding agent was running without tool restrictions (see docs/HISTORY.md).
 teach/core/generator.py now blocks that at the source (--disallowedTools plus
 validation before writing), so the recap check here is only cleanup for what
 was saved before the fix.
@@ -189,7 +189,7 @@ def find_missing_videos() -> list[tuple[str, str]]:
     only looked at content, exercises and labs. A video declared in
     `pipeline.yaml` and never rendered was invisible here, so "0 pending" could
     be true of the text and silently wrong about the media — the same blind spot
-    that hit content three separate times (CHANGELOG 2026-07-16 / 07-28 / 07-29).
+    that hit content three separate times (docs/HISTORY.md 2026-07-16 / 07-28 / 07-29).
     """
     missing = []
     for cert, _ in TARGETS:

@@ -38,8 +38,16 @@ external service, or changing what the checks enforce.
    period, it is accepted. Otherwise the maintainers decide, and write down
    why in the discussion.
 4. **Record.** An accepted proposal lands as a pull request that changes the
-   relevant document, check or code, and links the discussion. CHANGELOG.md
-   records it.
+   relevant document, check or code, and links the discussion. The next release's
+   CHANGELOG.md records it (written by release-please from the PR title).
+
+## Releases
+
+Versions are SemVer 0.x, cut by release-please from the Conventional Commit titles of merged PRs. The
+maintainer decides **when** by merging the Release PR (about every 4 weeks, when the `vX.Y.0` milestone is
+done; patches on demand for wrong content, a broken lab or a security fix). Milestones plan a release, the
+Release PR records it. The full rules: [CONTRIBUTING.md -> Releases](CONTRIBUTING.md#releases). Moving to
+`1.0.0` is a decision under the RFC process above.
 
 ## Becoming a maintainer
 

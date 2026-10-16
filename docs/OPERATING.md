@@ -443,7 +443,7 @@ the selection criteria written into `models.yaml`.
 > **It spends API quota on its own.** Do not enable it without the owner's
 > explicit approval, and check `quota-history.jsonl` afterwards to see what it
 > actually did. A pass that repeatedly regenerates the same topic is burning a
-> whole window for nothing (this happened: see CHANGELOG 2026-08-04).
+> whole window for nothing (this happened: see docs/HISTORY.md, 2026-08-04).
 
 ```bash
 # Enable

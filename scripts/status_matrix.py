@@ -4,7 +4,7 @@
 It is always read from the actual filesystem (file counts), never manually
 updated — the lesson of this session is that "N/N topics" proves nothing unless
 content.md, exercises.md, and break_fix.sh are counted separately (see
-CHANGELOG.md 2026-07-16/17). Run again after any generation to keep the state updated:
+docs/HISTORY.md 2026-07-16/17). Run again after any generation to keep the state updated:
 
     .venv/bin/python3 scripts/status_matrix.py
 """

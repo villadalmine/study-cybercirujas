@@ -5,7 +5,7 @@
 # into a script's own list. Two hardcoded target lists used to live in
 # scripts/fix_corrupted_content.py and scripts/resume-generation.sh, and both
 # silently drifted out of sync with reality (three separate audit blind spots,
-# see CHANGELOG 2026-07-16 / 07-28 / 07-29). Add a language here, once.
+# see docs/HISTORY.md 2026-07-16 / 07-28 / 07-29). Add a language here, once.
 #
 # Full process: WORKFLOW.md
 

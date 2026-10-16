@@ -91,7 +91,7 @@ credits; the graph never does): [docs/DEVTOOLS.md](docs/DEVTOOLS.md).
 
 ## Rules
 
-- **English is the base language of the repository.** **ALL** code, scripts, comments, docstrings, variable and function names, log and error messages, CLI help text, documentation, BACKLOG, PLAN, CHANGELOG, STATUS, and commit messages MUST be written in English. This applies to new files and to any file you touch. The single exception is study content generated for the student, under `certs/<cert>/<topic>/<lang>/`, which is written in that topic's language.
+- **English is the base language of the repository.** **ALL** code, scripts, comments, docstrings, variable and function names, log and error messages, CLI help text, documentation, BACKLOG, PLAN, CHANGELOG, HISTORY, STATUS, and commit messages MUST be written in English. This applies to new files and to any file you touch. The single exception is study content generated for the student, under `certs/<cert>/<topic>/<lang>/`, which is written in that topic's language.
 - **Code Style**: Python 3.12, FastAPI backend, Vanilla CSS/JS single-page app frontend.
 - **Idempotency**: All CLI actions (snapshotting, generation, translation) must be idempotent. If interrupted, running the command again must safely skip already generated work.
 - **Copyright Guard**: Never persist scraped official syllabus text directly. Scraped texts are to be processed in-memory by the LLM and outputted as custom original summaries with correct source attributions.

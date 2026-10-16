@@ -52,6 +52,7 @@ COMMANDS_NOT_CHECKED = {
     "BACKLOG.md": "proposals",
     "PLAN.md": "the original design, kept as history",
     "CHANGELOG.md": "history",
+    "docs/HISTORY.md": "history",
 }
 
 FENCE = re.compile(r"^(\s*)(```|~~~)")

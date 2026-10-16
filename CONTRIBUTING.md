@@ -91,8 +91,10 @@ PR gets the full check; `git rebase --signoff origin/main` fixes it). Merged his
 The graph bot's PR is the one exemption, decided by who opened it, from which repository and branch and
 which files it touches, never by a commit's author email, which anyone can set.
 
-**Thanks.** When a pull request from someone outside the maintainers is merged, the
-maintainer adds a line to [CHANGELOG.md](CHANGELOG.md): `Thanks @user (#N)`.
+**Thanks.** When a pull request from someone outside the maintainers is merged, the maintainer
+credits them in the notes of the GitHub Release that ships it (`Thanks @user (#N)`; see
+[Releases](#releases)). `CHANGELOG.md` is written by release-please and is never edited by hand, so the
+thanks do not go there.
 
 <a id="no-braindumps"></a>
 
@@ -479,6 +481,55 @@ by the maintainer in a separate step: build the image on their machine or
 cluster, `helm upgrade` with an explicit tag ([docs/OPERATING.md](docs/OPERATING.md)),
 and tag the released commit `site-YYYY-MM-DD` so anyone can see what is
 published: `git tag -l 'site-*'`.
+The release it came from (`vX.Y.Z`) is named in that deploy, see [Releases](#releases).
+
+<a id="releases"></a>
+
+## Releases
+
+The repository is released as SemVer **0.x** (`v0.3.0`, `v0.3.1`, ...) with
+[release-please](https://github.com/googleapis/release-please); `1.0.0` waits for a stable lab contract
+and a deprecation policy. New content does not raise the MAJOR number.
+
+**How a release happens.** Every merged PR is one Conventional Commit on `main` (its title). After each merge
+release-please keeps **one open Release PR** (branch `release-please--branches--main`, title
+`chore(main): release X.Y.Z`) that bumps the version (`.release-please-manifest.json`, `version.txt`,
+`pyproject.toml`) and writes the new section of [CHANGELOG.md](CHANGELOG.md): `feat` is a minor bump, `fix` a
+patch, `!` or a `BREAKING CHANGE:` footer a breaking change (while 0.x, still a minor bump). Sections:
+Features (`feat`), Bug Fixes (`fix`), Documentation (`docs`), Internals (`ci`, `refactor`, `perf`);
+`chore`, `test` and `build` are not listed. **Merging the Release PR is the human gate**: the maintainer
+reads the changelog, picks the moment and merges (squash). That creates the tag `vX.Y.Z` and the GitHub
+Release, and the same workflow publishes the image `ghcr.io/villadalmine/study-cybercirujas:vX.Y.Z` (next to
+`:latest` and `:<sha>`). Nobody edits `CHANGELOG.md`, the manifest or the version files by hand; a PR that
+does is a bug in that PR (the Release PR itself is the one exemption in `scripts/check_pr.py`).
+
+**Cadence.** About every 4 weeks, when the milestone `vX.Y.0` is closed, and at least once a month if there
+is any `feat` or `fix` since the last one. A **patch** (`vX.Y.Z`) goes out on demand, right away, for wrong
+content, a broken lab or a security fix (`priority:high`). There are no `release-*` branches: only the latest
+version is maintained.
+
+**Milestones are releases.** A milestone named `vX.Y.0` (with a due date) is the planning unit for that
+release; the Release PR is what actually happened (the notes come from the commits, not from the milestone).
+The `<CERT> <version> upgrade` milestones are separate and stay as they are: `check_pr.py` reads them by
+name (see [Size and scope](#size-and-scope)).
+
+**Three versions, not one.**
+
+| What | Versioned as | Where |
+|---|---|---|
+| The platform and the content (this repository) | SemVer `vX.Y.Z` | tag, GitHub Release, `CHANGELOG.md`, image tag |
+| The published site | `site-YYYY-MM-DD` per `helm upgrade` (below) | `git tag -l 'site-*'` |
+| Each exam | `tracked_version` in `catalog.yaml` | the catalog and the site |
+
+**Thanks to contributors.** The maintainer adds the credit `Thanks @user (#N)` for every merged PR from
+someone outside the maintainers to the **notes of the GitHub Release** (`gh release edit vX.Y.Z`), right
+after merging the Release PR. Not in `CHANGELOG.md` (release-please owns it and rewrites it) and not in the
+Release PR description (rewritten on every push to `main`).
+
+**If something breaks.** The Release PR cannot be opened without the repository secrets `RELEASE_APP_ID` and
+`RELEASE_APP_PRIVATE_KEY` (the GitHub App `study-cybercirujas-releases`, needed so the required checks run on
+it); without them the `Release` workflow fails at its first step and nothing else changes. To skip a release,
+leave the Release PR open: it keeps collecting changes.
 
 ## Checks that must pass
 

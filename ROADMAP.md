@@ -1,7 +1,7 @@
 # Roadmap — where this is and where it goes
 
-Read this first after time away. [CHANGELOG.md](CHANGELOG.md) says what was
-delivered; this says what is **next and why**. Finished work is deleted from
+Read this first after time away. [CHANGELOG.md](CHANGELOG.md) says what each release
+changed ([docs/HISTORY.md](docs/HISTORY.md) is the dated record up to 2026-10-16); this says what is **next and why**. Finished work is deleted from
 this file rather than ticked — an item here means it is still open.
 
 Everything below is derived from the tree. Verify any line with `make status`,
@@ -41,7 +41,7 @@ starts it.
 
 **`ckne` is the first certification authored on `claude-opus-5-5` at default
 effort**, on the owner's call after a blind + executed comparison on two topics
-(the 2026-09-30 entry in CHANGELOG has the numbers).
+(the 2026-09-30 entry in docs/HISTORY.md has the numbers).
 Pinned by `TEACH_CLAUDE_MODEL` for this cert only — `pipeline.yaml` still says
 opus-5 xhigh until the owner decides the default. `ckne` stays `active: false`
 on purpose: `fix_corrupted_content.py` fills what is missing, and with `es`

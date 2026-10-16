@@ -6,7 +6,7 @@
 > and `teach/core/auth.py` is a deny-all placeholder (the admin/admin stub was
 > removed 2026-07-19); the default generator is whatever `pipeline.yaml →
 > generation` declares, not a cluster LiteLLM proxy; roadmap items 1–7 below
-> are delivered (see [CHANGELOG.md](CHANGELOG.md)) and what is next lives in
+> are delivered (see [docs/HISTORY.md](docs/HISTORY.md)) and what is next lives in
 > [ROADMAP.md](ROADMAP.md).
 
 ## Goal

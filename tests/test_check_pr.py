@@ -79,6 +79,83 @@ class CheckPrTests(unittest.TestCase):
         self.assertEqual(run("someone", "o/r")[0], 1)
         self.assertEqual(run("github-actions[bot]", "fork/r")[0], 1)
 
+    RELEASE = dict(head_ref="release-please--branches--main", author="study-cybercirujas-releases[bot]",
+                   same_repo=True)
+    RELEASE_FILES = ["CHANGELOG.md", ".release-please-manifest.json", "version.txt", "pyproject.toml"]
+    RELEASE_TITLE = "chore(main): release 0.3.0"
+
+    def test_the_release_pr_is_checked_by_title_author_branch_and_files_only(self):
+        files, title, rel = self.RELEASE_FILES, self.RELEASE_TITLE, self.RELEASE
+        self.assertEqual(check_pr.check(title, "", files, **rel), [])
+        self.assertEqual(check_pr.check(title, "", ["CHANGELOG.md"], **rel), [])
+        # a component suffix is the same branch family
+        self.assertEqual(check_pr.check(title, "", files, **{**rel, "head_ref": rel["head_ref"] + "--components--x"}), [])
+        # the title is still checked
+        self.assertTrue(check_pr.check("release 0.3.0", "", files, **rel))
+
+    def test_the_release_exemption_has_no_free_ride(self):
+        files, title, rel = self.RELEASE_FILES, self.RELEASE_TITLE, self.RELEASE
+        # any file release-please does not write, or none at all
+        self.assertTrue(check_pr.check(title, "", files + ["scripts/check_pr.py"], **rel))
+        self.assertTrue(check_pr.check(title, "", files + [".github/workflows/verify.yml"], **rel))
+        self.assertTrue(check_pr.check(title, "", ["docs/CHANGELOG.md"], **rel))
+        self.assertTrue(check_pr.check(title, "", [], **rel))
+        # another or look-alike branch, or none
+        for ref in ("bot/graph-refresh", "release-please--branches--main-x", "release-please--branches--dev",
+                    "my-release-please--branches--main", "", None):
+            with self.subTest(ref=ref):
+                self.assertTrue(check_pr.check(title, "", files, **{**rel, "head_ref": ref}))
+        # another author (the owner, the Actions bot, a look-alike App), or none
+        for author in ("villadalmine", "github-actions[bot]", "study-cybercirujas-releases",
+                       "study-cybercirujas-releases-evil[bot]", "mallory", "", None):
+            with self.subTest(author=author):
+                self.assertTrue(check_pr.check(title, "", files, **{**rel, "author": author}))
+        # a fork, even with the branch, the author and the files
+        self.assertTrue(check_pr.check(title, "", files, **{**rel, "same_repo": False}))
+        # the exemptions do not borrow each other's identity
+        graph = ["graphify-out/graph.json"]
+        self.assertTrue(check_pr.check("chore(graph): x", "", graph, **rel))
+        self.assertTrue(check_pr.check(title, "", files, head_ref=rel["head_ref"], author="github-actions[bot]",
+                                       same_repo=True))
+
+    def test_the_release_pr_dco_is_decided_by_the_same_facts_not_the_email(self):
+        files, rel = self.RELEASE_FILES, self.RELEASE
+        for email in ("study-cybercirujas-releases[bot]@users.noreply.github.com", "whoever@example.org"):
+            with self.subTest(email=email):
+                c = commit(email=email, trailer="")
+                self.assertEqual(check_pr.dco([c], pr_author=rel["author"], head_ref=rel["head_ref"],
+                                              files=files, same_repo=True), [])
+                # same commit, another author or a fork or another file: it needs its sign-off
+                self.assertEqual(len(check_pr.dco([c], pr_author="mallory", head_ref=rel["head_ref"],
+                                                  files=files, same_repo=True)), 1)
+                self.assertEqual(len(check_pr.dco([c], pr_author=rel["author"], head_ref=rel["head_ref"],
+                                                  files=files, same_repo=False)), 1)
+                self.assertEqual(len(check_pr.dco([c], pr_author=rel["author"], head_ref=rel["head_ref"],
+                                                  files=files + ["scripts/x.py"], same_repo=True)), 1)
+                self.assertEqual(len(check_pr.dco([c], pr_author=rel["author"], head_ref="bot/other",
+                                                  files=files, same_repo=True)), 1)
+
+    def test_the_release_exemption_reads_the_author_and_repo_from_the_event(self):
+        """Through main(): the event payload decides, and an exempt PR writes no runs file."""
+        def run(login, head_repo, ref="release-please--branches--main", files=("CHANGELOG.md",)):
+            event = {"pull_request": {"title": "chore(main): release 0.3.0", "body": "",
+                                      "user": {"login": login},
+                                      "head": {"ref": ref, "repo": {"full_name": head_repo}},
+                                      "base": {"repo": {"full_name": "o/r"}}}}
+            with tempfile.TemporaryDirectory() as tmp:
+                ev, runs = Path(tmp) / "e.json", Path(tmp) / "runs.txt"
+                ev.write_text(json.dumps(event))
+                argv = ["check_pr.py", "--event", str(ev), "--files", *files, "--runs-file", str(runs)]
+                with mock.patch.object(sys, "argv", argv), redirect_stdout(io.StringIO()):
+                    return check_pr.main(), runs.exists()
+        bot = "study-cybercirujas-releases[bot]"
+        self.assertEqual(run(bot, "o/r"), (0, False))
+        self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "pyproject.toml", "version.txt")), (0, False))
+        self.assertEqual(run("someone", "o/r")[0], 1)
+        self.assertEqual(run(bot, "fork/r")[0], 1)
+        self.assertEqual(run(bot, "o/r", ref="release-please--branches--main-x")[0], 1)
+        self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "teach/api.py"))[0], 1)
+
     def test_git_paths_are_read_unquoted(self):
         """core.quotePath=false: a quoted "graphify-out/... name cost #60 the exemption."""
         with tempfile.TemporaryDirectory() as tmp:

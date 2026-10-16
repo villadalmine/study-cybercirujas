@@ -1,6 +1,6 @@
 # Backlog
 
-Pending items, without strict ordering unless specified. Resolved items go to [CHANGELOG.md](CHANGELOG.md); design details live in [PLAN.md](PLAN.md).
+Pending items, without strict ordering unless specified. Resolved items are closed in their issue or PR and show up in the release notes ([CHANGELOG.md](CHANGELOG.md); the dated record up to 2026-10-16 is [docs/HISTORY.md](docs/HISTORY.md)); design details live in [PLAN.md](PLAN.md).
 
 ## In Progress / Next (Ordering)
 
@@ -150,7 +150,7 @@ Untracked design artifact in `chart/`: a Helm chart plus `CONTEXT.md`, generated
 1. **It does not render at all.** `helm template study ./chart` fails: `redis.yaml:51` dereferences `.Values.redis.service.port`, and the `redis:` block in `values.yaml` has no `service:` key. Hard stop before anything else.
 2. **Service hostnames are dead on arrival.** `values.yaml` sets `POSTGRES_HOST: "{{ .Release.Name }}-postgres"` (same for `OLLAMA_HOST`, `REDIS_HOST`), but **Helm does not template `values.yaml`** — templates consume it as literal data. Forcing a render confirms the pods receive the literal string `{{ .Release.Name }}-postgres` as a hostname, so bot-api could never reach Postgres, Ollama or Redis. Fix: resolve the names inside the templates, or wrap the value in `tpl`. The `ollama.initContainers` block in `values.yaml` has the same defect (`{{- range .Values.ollama.models }}` never expands), so no model would ever be pulled.
 3. **Four subsystems are values-only, with no templates**: `guacamole`, `kubevirt`, `vcluster`, `monitoring` all have configuration blocks and zero manifests. The chart advertises considerably more than it implements.
-4. **Default credentials baked in**: `POSTGRES_PASSWORD: "changeme"` ×3 and Grafana `adminPassword: "admin"`. This repo went through a pre-publication secrets audit (see CHANGELOG 2026-07-19); committing this as-is would walk default creds straight back into a public repo. Move to `existingSecret` before any commit.
+4. **Default credentials baked in**: `POSTGRES_PASSWORD: "changeme"` ×3 and Grafana `adminPassword: "admin"`. This repo went through a pre-publication secrets audit (see docs/HISTORY.md, 2026-07-19); committing this as-is would walk default creds straight back into a public repo. Move to `existingSecret` before any commit.
 5. **`llama3.1:70b` will not run on the stated hardware.** `CONTEXT.md` lists a Tesla P4 (8 GB VRAM) and the model list requests 8b *and* 70b. A 4-bit 70b needs roughly 40 GB; it would spill to CPU and be unusable for interactive chat. 8b quantized fits comfortably. Drop 70b or plan for different hardware.
 6. **Three images that do not exist**: `study-cybercirujas/bot-api`, `/embedder`, `/web`. The chart also assumes a static-site frontend and an embedder that clones content from `CONTENT_REPO_URL` into a PVC — whereas the real platform is a single FastAPI app serving markdown straight from `certs/` in the image. This is a v2 architecture, not an increment on `deploy/helm/`.
 
