@@ -6,5 +6,5 @@ prov=$(kubectl get storageclass -o jsonpath='{.items[?(@.metadata.annotations.st
 kubectl delete storageclass cka-lab-broken-sc
 printf 'apiVersion: storage.k8s.io/v1\nkind: StorageClass\nmetadata:\n  name: cka-lab-broken-sc\nprovisioner: %s\nreclaimPolicy: Delete\nvolumeBindingMode: WaitForFirstConsumer\n' "$prov" | kubectl apply -f -
 for i in $(seq 1 40); do kubectl get pod -n "$NS" cka-lab-writer -o jsonpath='{.status.phase}' | grep -q Running && exit 0; sleep 3; done
-kubectl get pvc,pod -A -o wide >&2; kubectl describe pvc,pod -n "$NS" 2>&1 | tail -40 >&2; kubectl -n local-path-storage logs deploy/local-path-provisioner --tail=20 >&2
+kubectl get pvc,pod -A -o wide >&2; kubectl describe pvc,pod -n "$NS" 2>&1 | tail -40 >&2; kubectl get events -A --sort-by=.lastTimestamp 2>&1 | tail -25 >&2
 exit 1
