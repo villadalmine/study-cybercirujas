@@ -61,6 +61,21 @@ detect_working_provisioner() {
   kubectl get storageclass "$sc_name" -o jsonpath='{.provisioner}'
 }
 
+# En un cluster recién creado (kubeadm) el controller de ServiceAccounts crea la
+# ServiceAccount "default" de un namespace nuevo unos instantes DESPUÉS de crear
+# el namespace; aplicar un Pod antes falla con 'serviceaccount "default" not
+# found'. kind lo esconde porque es rápido. Espera acotada, con error claro.
+wait_default_sa() {
+  local timeout="${DEFAULT_SA_TIMEOUT:-60}" waited=0
+  until kubectl -n "$NS" get serviceaccount default >/dev/null 2>&1; do
+    if (( waited >= timeout )); then
+      die "La ServiceAccount 'default' no apareció en el namespace '${NS}' tras ${timeout}s. Revisá que el kube-controller-manager esté sano (kubectl -n kube-system get pods) y volvé a correr el script."
+    fi
+    sleep 2
+    waited=$((waited + 2))
+  done
+}
+
 cmd_break() {
   require_kubectl
   confirm_disposable_vm
@@ -71,6 +86,7 @@ cmd_break() {
   info "Guardá ese nombre, lo vas a necesitar para arreglar el laboratorio."
 
   kubectl create namespace "$NS" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+  wait_default_sa
 
   info "Creando una StorageClass con el provisioner apuntando mal a propósito..."
   kubectl apply -f - <<EOF >/dev/null

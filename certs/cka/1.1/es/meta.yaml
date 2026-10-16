@@ -49,7 +49,7 @@ quality:
     version: '1'
     result: pass
     weight: 10
-    ran_at: '2026-10-15'
+    ran_at: '2026-10-16'
     evidence: 'study-lab runner: break -> check FAIL -> reference fix -> check PASS (scripts/prove_labs_cka_pilot.sh)'
   - name: independent_review
     version: '1'
