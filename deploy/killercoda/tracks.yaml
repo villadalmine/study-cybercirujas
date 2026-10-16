@@ -1,5 +1,8 @@
 # What study-lab export --target killercoda publishes by default (the pilot, issue #43).
-# Only verified labs whose environment Killercoda has: linux -> ubuntu, kind -> kubernetes-kubeadm-1node.
+# Only labs whose environment Killercoda has: linux -> ubuntu, kind -> kubernetes-kubeadm-1node.
 pilot:
   - cka/1.1
   - lpic-2/200.1
+# Setup a lab needs from the Killercoda host (capabilities defined in killercoda_envs.yaml), by lab.
+needs:
+  cka/1.1: [default-storageclass]

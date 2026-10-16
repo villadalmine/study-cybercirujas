@@ -1,0 +1,34 @@
+# What Killercoda runs, pinned in one place. The parity test (study-lab test --target killercoda) builds this
+# environment and the publish gate compares its versions with the evidence of each scenario.
+#
+# status: reported  = told to us by the owner, not in Killercoda's docs (killercoda.com/creators, /faq, /pricing say nothing
+#                     about images, versions or resources: checked 2026-10-16)
+#         unmeasured = unknown: run the probe scenario (probe/, published in the mirror) on Killercoda and paste its output here
+#         measured  = read from a real Killercoda session (who and when in `measured_by`)
+# While anything an image depends on is not `measured`, evidence records parity: assumed, never measured.
+schema: 1
+documented_limits:   # killercoda.com/faq, /pricing (2026-10-16); nothing numeric for creators is documented
+  session: "1 hour on the free plan, 4 hours with a paid membership (FAQ); no daily or monthly usage limits (FAQ)"
+  creators: "FREE can create public scenarios and share them (pricing); no limit on scenarios, repo size, assets or background-script time is documented: ask support"
+  terms: "commercial use, branding and links are not stated on the pages we can read (terms/AGB are a separate document): ask support before any banner"
+images:
+  ubuntu:
+    os: {name: Ubuntu, version: '24.04', status: reported}
+    resources: {status: unmeasured}
+  kubernetes-kubeadm-1node:
+    os: {name: Ubuntu, version: '24.04', status: reported}
+    kubernetes:        # the version Killercoda runs on a date; the gate picks the row that contains today
+      - {from: '2000-01-01', until: '2026-10-25', minor: '1.36', patch: '1.36.5', status: reported}
+      - {from: '2026-10-25', minor: '1.37', patch: '1.37.1', status: reported}
+    runtime: {name: containerd, status: unmeasured}
+    cni: {name: flannel, version: v0.28.10, status: unmeasured}   # assumed for the test; Killercoda's real CNI is not documented
+    node_name: {value: controlplane, status: unmeasured}
+    default_storageclass: {status: unmeasured}                     # does the image ship local-path? ask the probe
+    resources: {status: unmeasured}
+capabilities:          # setup a lab asks for (tracks.yaml: needs); added to background.sh only when missing
+  default-storageclass:
+    script: |
+      if ! kubectl get storageclass 2>/dev/null | grep -q .; then
+        kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.37/deploy/local-path-storage.yaml
+        kubectl patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+      fi

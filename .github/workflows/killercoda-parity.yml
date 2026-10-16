@@ -1,0 +1,50 @@
+name: Killercoda parity
+
+# Runs each generated scenario the way Killercoda does, on an Ubuntu 24.04 VM (a GitHub-hosted runner is one) where
+# the job is root, and uploads tested.json: the evidence the publish gate asks for (docs/RUN-A-LAB-ANYWHERE.md).
+# k8s family: a kubeadm cluster at the version Killercoda runs today (deploy/killercoda/killercoda_envs.yaml).
+
+on:
+  pull_request:
+    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'teach/lab/kc_test.py', 'deploy/killercoda/**', '.github/workflows/killercoda-parity.yml']
+  push:
+    branches: [main]
+    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'teach/lab/kc_test.py', 'deploy/killercoda/**', '.github/workflows/killercoda-parity.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  killercoda-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:   # keep in step with `pilot` in deploy/killercoda/tracks.yaml
+          - {lab: 'cka/1.1', image: kubernetes-kubeadm-1node}
+          - {lab: 'lpic-2/200.1', image: ubuntu}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q -e '.[lab]'
+      - name: kubeadm cluster like Killercoda's (k8s family)
+        if: matrix.image == 'kubernetes-kubeadm-1node'
+        run: |
+          read -r minor cni <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
+          sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$minor" "$cni"
+      - name: Prove the scenario (break, verify fails, fix, verify passes, cleanup)
+        run: sudo -E "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
+      - name: Evidence
+        if: always()
+        run: |
+          sudo chown -R "$USER" evidence 2>/dev/null || true
+          find evidence -name tested.json -exec sh -c 'echo "### $1" >> "$GITHUB_STEP_SUMMARY"; echo "\`\`\`json" >> "$GITHUB_STEP_SUMMARY"; cat "$1" >> "$GITHUB_STEP_SUMMARY"; echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"' _ {} \;
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tested-${{ strategy.job-index }}
+          path: evidence

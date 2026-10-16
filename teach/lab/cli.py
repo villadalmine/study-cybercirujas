@@ -206,15 +206,60 @@ def cmd_export(args) -> int:
         raise spec.SpecError("nothing to export: pass <cert>/<topic> or list a pilot in " + args.tracks)
     labs = labs if args.all else [spec.load(runner.REPO_ROOT / "certs" / w.partition("/")[0] / w.partition("/")[2] / "lab",
                                              "curated") for w in wanted]
+    evidence, gated, day = None, [], args.today or str(__import__("datetime").date.today())
+    if args.evidence:   # publish mode: only scenarios with a passing tested.json (study-lab test) for what Killercoda runs today
+        evidence = {str(f.parent.relative_to(args.evidence)).replace(os.sep, "/"): json.loads(f.read_text(encoding="utf-8"))
+                    for f in Path(args.evidence).rglob("tested.json")}
     try:
-        files = kc.tree(labs, kc.cert_names(runner.REPO_ROOT), args.include_unverified or args.all)
+        files = kc.tree(labs, kc.cert_names(runner.REPO_ROOT), args.include_unverified or args.all, tracks.get("needs") or {},
+                        evidence, day, gated)
     except kc.ExportError as exc:
         raise spec.SpecError(str(exc)) from exc
     kc.write(files, Path(args.out))
+    for why in gated:
+        print(f"not published: {why}")
     for lab_id, why in skipped:
         print(f"skipped {lab_id}: {why}")
     print(f"[study-lab] exported {len(labs)} lab(s), {len(files)} files to {args.out}")
     return 0
+
+
+def cmd_test(args) -> int:
+    """Run the GENERATED scenario the way Killercoda does (on an Ubuntu 24.04 VM, as root) and write tested.json."""
+    import tempfile
+    from . import export_killercoda as kc, kc_test
+    kd = runner.REPO_ROOT / "deploy" / "killercoda"
+    needs = (yaml.safe_load((kd / "tracks.yaml").read_text(encoding="utf-8")) or {}).get("needs") or {}
+    day = args.today or kc_test.today()
+    if args.print_env:
+        env = kc_test.resolve_env(args.print_env, day)
+        print(env.get("kubernetes", "").rpartition(".")[0], kc.load_envs()["images"][args.print_env].get("cni", {}).get("version", ""))
+        return 0
+    code = 0
+    for w in args.labs:
+        cert, _, topic = w.partition("/")
+        lab = spec.load(runner.REPO_ROOT / "certs" / cert / topic / "lab", "curated")
+        files = {k: v for k, v in kc.tree([lab], None, True, needs).items() if k.count("/") >= 2}
+        base = sorted(files)[0].rpartition("/")[0].split("/assets")[0]
+        scen = {k[len(base) + 1:]: v for k, v in files.items() if k.startswith(base + "/")}
+        image = json.loads(scen["index.json"])["backend"]["imageid"]
+        fix = kd / "fixes" / f"{cert}-{topic}.sh"
+        if not fix.is_file():
+            print(f"[study-lab] {w}: no reference fix at {fix}: it cannot be proven, so it will not be published")
+            code = 1
+            continue
+        with tempfile.TemporaryDirectory() as tmp:
+            kc.write(scen, Path(tmp))
+            stages = kc_test.run_scenario(Path(tmp), fix)
+        ev = kc_test.evidence(scen, image, stages, kc_test.runner_info(), day)
+        out = Path(args.evidence) / base / kc_test.EVIDENCE
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(ev, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"[study-lab] {w}: {ev['result'].upper()} on {image} ({ev['env']['parity']} parity) -> {out}")
+        for name, s in stages.items():
+            print(f"    {'ok  ' if s['ok'] else 'FAIL'} {name} ({s['seconds']}s)" + ("" if s["ok"] else "\n" + s.get("tail", "")))
+        code = code or (0 if ev["result"] == "pass" else 1)
+    return code
 
 
 def cmd_hint(lab: spec.Lab, n: int) -> int:
@@ -261,7 +306,15 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--all", action="store_true", help="every curated lab that fits (unverified ones are labelled as such)")
     e.add_argument("--cert", action="append", help="with --all: only this certification (repeatable)")
     e.add_argument("--include-unverified", action="store_true")
+    e.add_argument("--evidence", help="dir of tested.json files (study-lab test): publish only what passed today's environment")
+    e.add_argument("--today", help="YYYY-MM-DD, for the environment schedule (default: today)")
     e.add_argument("labs", nargs="*", help="<cert>/<topic>; default: the pilot in tracks.yaml")
+    tt = sub.add_parser("test", help="prove generated scenarios on a Killercoda-like host (root, Ubuntu 24.04)")
+    tt.add_argument("--target", required=True, choices=["killercoda"])
+    tt.add_argument("--evidence", default="build/killercoda-evidence")
+    tt.add_argument("--today")
+    tt.add_argument("--print-env", help="print '<k8s minor> <flannel tag>' for an imageid (used by bootstrap-kubeadm.sh)")
+    tt.add_argument("labs", nargs="*", help="<cert>/<topic>")
     b = sub.add_parser("build")
     b.add_argument("family", choices=["k8s", "linux"])
 
@@ -276,6 +329,8 @@ def main(argv: list[str] | None = None) -> int:
             return cmd_validate(args)
         if args.cmd == "migrate":
             return cmd_migrate(args)
+        if args.cmd == "test":
+            return cmd_test(args)
         if args.cmd == "export":
             return cmd_export(args)
         if args.cmd == "new":
