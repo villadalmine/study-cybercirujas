@@ -703,9 +703,17 @@ check_not() {
   fi
 }
 
+# Read one key with the same INI parser the aws shim uses, so any valid spacing
+# (`key = v`, `key=v`) grades the same way it works.
+ini_get() {
+  python3 -c 'import configparser, sys
+p = configparser.RawConfigParser(delimiters=("=",)); p.read(sys.argv[1], encoding="utf-8")
+print(p.get(sys.argv[2], sys.argv[3], fallback=""))' "$1" "$2" "$3"
+}
+
 source_profile_exists() {
   local src
-  src=$(awk '/^\[profile deploy\]/{f=1;next} /^\[/{f=0} f && $1=="source_profile"{print $3}' "$AWS_CONFIG_FILE")
+  src=$(ini_get "$AWS_CONFIG_FILE" "profile deploy" source_profile)
   [ -n "$src" ] && aws_lab configure list-profiles | grep -qx "$src"
 }
 
