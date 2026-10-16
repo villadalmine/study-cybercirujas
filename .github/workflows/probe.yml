@@ -1,0 +1,42 @@
+name: Probe
+on:
+  push:
+    branches: ['probe/**']
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+  actions: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: open the PR with GITHUB_TOKEN
+        run: |
+          gh pr create --base main --head "$GITHUB_REF_NAME" --title "chore(probe): throwaway, do not merge" --body "probe"
+      - name: API check runs named like the required ones
+        run: |
+          sha="$(git rev-parse HEAD)"
+          for n in verify e2e pr-format; do
+            gh api -X POST "repos/$GITHUB_REPOSITORY/check-runs" -f name="$n" -f head_sha="$sha" \
+              -f status=completed -f conclusion=success -f 'output[title]=probe' -f 'output[summary]=probe' --jq '.id,.app.slug'
+          done
+      - name: what does the PR see
+        run: |
+          sleep 10
+          pr="$(gh pr view "$GITHUB_REF_NAME" --json number,id --jq .number)"
+          id="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$pr" --jq .node_id)"
+          gh api graphql -F id="$id" -f query='query($id:ID!){ node(id:$id){ ... on PullRequest { mergeStateStatus commits(last:1){nodes{commit{oid statusCheckRollup{state contexts(first:50){nodes{... on CheckRun{name conclusion isRequired(pullRequestId:$id) checkSuite{app{slug} workflowRun{event}}}}}}}}}}}}' \
+            --jq '.data.node|.mergeStateStatus, (.commits.nodes[0].commit.statusCheckRollup.contexts.nodes[]|[.name,.conclusion,.isRequired,.checkSuite.app.slug,.checkSuite.workflowRun.event]|@tsv)'
+          gh pr view "$pr" --json mergeStateStatus,mergeable --jq .
+      - name: close and reopen with GITHUB_TOKEN
+        run: |
+          gh pr close "$GITHUB_REF_NAME"
+          sleep 5
+          gh pr reopen "$GITHUB_REF_NAME"
+          sleep 40
+          echo "runs on this branch after reopen:"
+          gh run list --branch "$GITHUB_REF_NAME" --json event,workflowName,createdAt --jq '.[]|[.event,.workflowName,.createdAt]|@tsv'
