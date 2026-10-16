@@ -386,6 +386,47 @@ To close without a label use GitHub's *not planned* reason, not `invalid` or `wo
 issues and PRs keep it. Retiring a label for good is a manual run (*Actions -> Sync labels -> Run workflow*,
 `dry-run` first, then `delete-other-labels`), after the issues that carry it were moved.
 
+### Triage and response times
+
+Best effort by one maintainer, not a contract; written down so nobody has to wonder.
+
+| What | When |
+| :--- | :--- |
+| First reply to an issue or a pull request from outside the project | 3 working days |
+| Decision: accepted, `triage:needs-info`, or closed with the reason | 7 days |
+| Review of an outside pull request with green CI | 7 days |
+| A security report (see SECURITY.md once it exists; until then, a private message to the maintainer) | 48 hours |
+| An issue marked `triage:needs-info`: how long the author has to answer | 14 days |
+
+**The queue.** An issue or a pull request from outside the project carries `triage:needed` from the moment it is opened
+(the forms add it; [`.github/workflows/triage.yml`](.github/workflows/triage.yml) covers pull requests and issues opened
+without a form). A maintainer looks at it and does one of four things, and removes `triage:needed` in all of them:
+
+1. **Accept it**: set `type:`, `area:` and `priority:`, a milestone if it enters a release, and `help wanted` or
+   `good first issue` when it fits the criteria above.
+2. **Ask for what is missing**: `triage:needs-info` and a comment that says *what* and *how to get it*. No answer in 14 days
+   means it goes stale (below).
+3. **Redirect it**: a question goes to Discussions, a rule change becomes a Proposal (RFC), an exam-version change goes to its
+   upgrade milestone.
+4. **Close it** with the reason (duplicate with a link, out of scope, not reproducible); use GitHub's *not planned*.
+
+Issues and pull requests of the maintainer and of the agents are born with their milestone and labels and skip the queue.
+Pull requests from outside follow the security-first list of the `triage-pr-externa` skill (anything touching `.github/`,
+the `Makefile` or `scripts/check_*` is the maintainer's decision alone).
+
+**Stale, kindly.** [`.github/workflows/stale.yml`](.github/workflows/stale.yml) runs daily. It marks `lifecycle:stale`, says so in
+a friendly comment, and closes later as *not planned*; a comment from anyone removes the label; a closed issue can be reopened.
+
+| What | Marked stale | Closed | Never touched |
+| :--- | :--- | :--- | :--- |
+| Issue with `triage:needs-info` | 14 days without a reply | 7 days later | `lifecycle:frozen` |
+| Any other issue | 90 days without activity | 30 days later | anything with a milestone, `help wanted`, `good first issue`, `priority:high`, `type:rfc`, `from-review`, `lifecycle:frozen` |
+| Pull request with `triage:needs-info` (waiting for its author) | 30 days | 14 days later | a milestone, `lifecycle:frozen` |
+
+Pull requests of the maintainer and of the agents never carry `triage:needs-info`, so they never go stale. The workflow
+starts in `debug-only` mode: it only lists, in its run log, what it would touch. After two weeks of reading that list, one
+PR turns it on.
+
 ### Agents
 
 AI agents (Claude Code, Codex, Gemini, …) open PRs exactly like people: the

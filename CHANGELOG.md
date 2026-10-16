@@ -4,6 +4,13 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-16
 
+- **Triage and stale** (ci): `.github/workflows/triage.yml` puts `triage:needed` on issues and pull requests from outside
+  the project (no checkout, never reads the title or body); `.github/workflows/stale.yml` (`actions/stale` v11.0.0
+  pinned by commit, **debug-only**: it only logs) marks and closes kindly: `triage:needs-info` issues 14+7 days, other
+  issues 90+30 (exempt: milestone, `help wanted`, `good first issue`, `priority:high`, `type:rfc`, `from-review`,
+  `lifecycle:frozen`), pull requests waiting for their author 30+14. CONTRIBUTING gains "Triage and response times"
+  (first reply 3 days, decision 7, `needs-info` 14).
+
 - **Issue forms** (ci, #75): every form opens its issue with `triage:needed`; new "Idea / feature" form
   (`type:feature`); `config.yml` links to Discussions (questions) and to the response times. A test fails if a form
   forgets `triage:needed`.

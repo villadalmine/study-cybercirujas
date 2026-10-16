@@ -1,0 +1,34 @@
+name: Triage label
+
+# A new issue or pull request from somebody outside the project gets `triage:needed`: it stays in the
+# maintainer's queue until someone looks at it (CONTRIBUTING -> Triage and response times). The issue
+# forms already add it; this also covers pull requests and issues opened by the API.
+#
+# pull_request_target so the label also lands on PRs from forks. Safe here: the job never checks out or
+# runs the PR's code and only passes the number, never the title or body, to the shell.
+on:
+  issues:
+    types: [opened, reopened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  needed:
+    # Not the owner, a member or a collaborator, and not a bot (graph bot, Dependabot, agents' PRs
+    # come from the owner's account or from bots).
+    if: >-
+      contains(fromJSON('["NONE","FIRST_TIMER","FIRST_TIME_CONTRIBUTOR","CONTRIBUTOR"]'),
+      github.event.issue.author_association || github.event.pull_request.author_association)
+      && (github.event.issue.user.type || github.event.pull_request.user.type) != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: gh issue edit "$NUMBER" --add-label "triage:needed"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}

@@ -1,0 +1,89 @@
+name: Stale
+
+# Kind, slow, and always reversible: an issue or PR with no activity is marked `lifecycle:stale`
+# and closed later; any comment un-stales it (remove-stale-when-updated is on by default), and a
+# closed one can be reopened. Rules and plazos: CONTRIBUTING -> Triage and response times.
+#
+# DEBUG-ONLY: while `debug-only` is true the job only LOGS what it would do (read the run log, it
+# lists every candidate) and changes nothing. After about two weeks of reading who it would touch,
+# one PR flips the three `debug-only` lines to false.
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: stale
+  cancel-in-progress: false
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # 1. An issue waiting for its author (`triage:needs-info`): 14 days, then 7 more.
+      - uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93  # v11.0.0
+        with:
+          debug-only: true
+          only-labels: triage:needs-info
+          days-before-issue-stale: 14
+          days-before-issue-close: 7
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          stale-issue-label: lifecycle:stale
+          exempt-issue-labels: lifecycle:frozen
+          close-issue-reason: not_planned
+          stale-issue-message: >
+            Hi, we asked for a bit more information on this issue and have not heard back, so we are
+            marking it stale. No problem at all: reply here whenever you can and it comes back to the
+            queue; if you got stuck on something, tell us where and we will help. Otherwise it closes
+            in 7 days, and you can reopen it any time.
+          close-issue-message: >
+            Closing for now because we could not continue without the missing information. This is not
+            a "no": reopen it or comment whenever you have it.
+      # 2. Any other issue: 90 days without activity, then 30 more. Never anything that is planned
+      #    (a milestone), asked for (help wanted, good first issue), urgent, an RFC (it has its own 14 days),
+      #    a review follow-up (it lives under an umbrella issue) or frozen by a maintainer.
+      - uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93  # v11.0.0
+        with:
+          debug-only: true
+          days-before-issue-stale: 90
+          days-before-issue-close: 30
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          stale-issue-label: lifecycle:stale
+          exempt-all-issue-milestones: true
+          exempt-issue-labels: help wanted,good first issue,priority:high,lifecycle:frozen,type:rfc,triage:needs-info,from-review
+          close-issue-reason: not_planned
+          stale-issue-message: >
+            Hi, nothing has happened on this issue for 90 days, so we are marking it stale to keep the
+            backlog honest. If it still matters, a comment is enough to keep it open; if you can take it on,
+            tell us and we will say where to start. Otherwise it closes in 30 days, and you can reopen it
+            whenever you like.
+          close-issue-message: >
+            Closing because there was no activity after the stale notice. Reopen it or open a new one
+            whenever it matters again; thank you for taking the time to report it.
+      # 3. A pull request waiting for its author (`triage:needs-info` set by a maintainer): 30 days, then 14.
+      #    Pull requests of the maintainer and of the agents never carry that label, so they never go stale.
+      - uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93  # v11.0.0
+        with:
+          debug-only: true
+          only-labels: triage:needs-info
+          days-before-issue-stale: -1
+          days-before-issue-close: -1
+          days-before-pr-stale: 30
+          days-before-pr-close: 14
+          stale-pr-label: lifecycle:stale
+          exempt-all-pr-milestones: true
+          exempt-pr-labels: lifecycle:frozen
+          stale-pr-message: >
+            Hi, thank you for this pull request. It has been waiting on a reply for 30 days, so we are
+            marking it stale. Nothing is lost: push a commit or comment and it is back in review, and if you
+            got stuck, tell us where. It closes in 14 days otherwise, and you can reopen it any time.
+          close-pr-message: >
+            Closing for now because the requested changes did not arrive. Your branch is untouched:
+            reopen this pull request whenever you want to continue.
