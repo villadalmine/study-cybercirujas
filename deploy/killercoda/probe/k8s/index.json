@@ -1,0 +1,22 @@
+{
+  "title": "Environment probe: kubernetes-kubeadm-1node",
+  "description": "Dumps the versions and resources of this Killercoda image",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "foreground": "foreground.sh"
+    },
+    "steps": [],
+    "assets": {
+      "host01": [
+        {
+          "file": "probe.sh",
+          "target": "/root"
+        }
+      ]
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-1node"
+  }
+}

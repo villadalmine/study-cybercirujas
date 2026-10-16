@@ -199,7 +199,14 @@ def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unveri
         out[f"{c}/README.md"] = (f"# {names.get(c, c)}\n\n{len(items)} break/fix labs for {names.get(c, c)}: something is "
                                  "broken on purpose, you fix it, the lab checks it. Study material, exercises and the tutor "
                                  f"for this certification: {SITE} (syllabus: {REPO}/blob/main/certs/{c}.md).\n")
-    out["structure.json"] = dump({"items": [{"path": c, "title": names.get(c, c)} for c in sorted(certs)]})
+    probe = Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "probe"
+    for f in sorted(probe.rglob("*")):   # the environment probe: how we learn what Killercoda's images really have
+        if f.is_file():
+            out["probe/" + f.relative_to(probe).as_posix()] = f.read_text(encoding="utf-8")
+    out["probe/structure.json"] = dump({"title": "Environment probe", "description": "What the Killercoda images really have",
+                                        "items": [{"path": "ubuntu"}, {"path": "k8s"}]})
+    out["structure.json"] = dump({"items": [{"path": c, "title": names.get(c, c)} for c in sorted(certs)] +
+                                 [{"path": "probe", "title": "Environment probe"}]})
     return out
 
 

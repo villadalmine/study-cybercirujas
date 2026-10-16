@@ -231,6 +231,13 @@ Killercoda, in the course of its certification: https://killercoda.com/itrestaur
 Docker and on your own cluster: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md). The Killercoda
 repository only receives the generated tree; labs are never edited there.
 
+### How a lab gets proven before it is published
+
+CI validates the lab contract and then runs the generated Killercoda scenario on an Ubuntu 24.04 VM (a kubeadm
+cluster for the k8s family): `verify` fails while it is broken, your reference fix makes it pass, `cleanup` is
+idempotent. Add the fix as `deploy/killercoda/fixes/<cert>-<topic>.sh`. Without that evidence nothing is published.
+Details and limits: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md).
+
 ## Pull requests
 
 One template per kind of change, in

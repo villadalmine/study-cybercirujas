@@ -3,6 +3,10 @@
     {
       "path": "democert",
       "title": "Demo Cert"
+    },
+    {
+      "path": "probe",
+      "title": "Environment probe"
     }
   ]
 }

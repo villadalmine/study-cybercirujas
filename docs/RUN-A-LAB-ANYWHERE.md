@@ -38,6 +38,40 @@ other than root, more workers than Killercoda has, labs without a full `break | 
 maintainer-only text (the guard that keeps the export clean). Labs not yet verified in the runner are exported
 too, marked "not yet verified" in their intro.
 
+### How a lab gets proven before it is published
+
+`kind` is not Killercoda: it runs Ubuntu 24.04 VMs with kubeadm. So a scenario is proven on a host like that.
+`study-lab test --target killercoda <cert>/<topic>` takes the GENERATED scenario and runs it as Killercoda does:
+assets to `/root`, `background.sh`, wait for `/tmp/finished`, **`verify.sh` must fail**, the reference fix
+(`deploy/killercoda/fixes/<cert>-<topic>.sh`), **`verify.sh` must pass**, `cleanup.sh` twice. It writes
+`tested.json`: the sha256 of the scenario, the environment (image, OS, Kubernetes patch version, CNI) and its
+`parity` (`assumed` until the values in `deploy/killercoda/killercoda_envs.yaml` are `measured` on Killercoda), the
+runner (CI run URL, or local host), the date and the result of each stage.
+
+- **CI:** `.github/workflows/killercoda-parity.yml` on a GitHub-hosted `ubuntu-24.04` runner (a VM). The k8s family
+  gets a kubeadm cluster at the version Killercoda runs today (`deploy/killercoda/bootstrap-kubeadm.sh`).
+- **Locally:** an Ubuntu 24.04 VM where you are root (multipass, Incus `--vm`, or a cloud VM), then
+  `make killercoda-test LAB=cka/1.1`. A WSL Ubuntu 24.04 works for the linux family.
+- **The gate:** `study-lab export --target killercoda --evidence DIR` keeps a scenario only if its `tested.json` is a
+  pass for the same scenario hash and for the environment Killercoda runs on that date (the schedule in
+  `killercoda_envs.yaml`: Kubernetes 1.36 until 2026-10-25, then 1.37). Change a lab, the exporter or the date past a
+  Killercoda bump and the evidence no longer matches: the scenario is retested or not published. No evidence, no publish.
+- A lab without a reference fix in `deploy/killercoda/fixes/` cannot be proven, so it is not published.
+
+Known limits of the proof: `parity: assumed` (the image details below are not documented by Killercoda); the
+scenario must still be run once by a human on Killercoda (`tested_on_killercoda`, later).
+
+### What Killercoda documents about limits (checked 2026-10-16)
+
+Sources: [FAQ](https://killercoda.com/faq), [pricing](https://killercoda.com/pricing),
+[creators](https://killercoda.com/creators/get-started), [contribute](https://killercoda.com/creators/contribute).
+Session: one hour on the free plan, four with a paid membership; no daily or monthly usage limits (FAQ). Free
+accounts can create public scenarios (pricing). **Not documented anywhere we can read:** number of scenarios or
+courses per creator, repository, asset or file sizes, background-script time limits, RAM/CPU/disk of each
+`imageid`, the Kubernetes version of the kubeadm images and when it changes, CNI and default StorageClass, and the
+terms for commercial use, branding and links (the Terms/AGB are a separate page). Ask Killercoda support, and
+meanwhile measure the images with the probe scenario (below) instead of guessing.
+
 ### Publish (manual on purpose)
 
 CI never writes to the mirror: that would need a secret with write access, which is the owner's call. The

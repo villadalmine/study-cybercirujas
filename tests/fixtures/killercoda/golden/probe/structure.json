@@ -1,0 +1,12 @@
+{
+  "title": "Environment probe",
+  "description": "What the Killercoda images really have",
+  "items": [
+    {
+      "path": "ubuntu"
+    },
+    {
+      "path": "k8s"
+    }
+  ]
+}
