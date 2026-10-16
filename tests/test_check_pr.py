@@ -585,38 +585,35 @@ class ExamVersionTests(unittest.TestCase):
         self.assertEqual(check_pr.exam_version_changes(added, CATALOG_BASE), ["ckad"])
         self.assertEqual(check_pr.exam_version_changes(None, CATALOG_BASE), ["cka", "lpic-1"])
 
+    UPGRADE = "CKA & CKAD v1.37 upgrade"
+
     def test_without_a_change_nothing_is_required(self):
-        self.assertEqual(check_pr.exam_version([], set(), ""), [])
+        self.assertEqual(check_pr.exam_version([], None, None), [])
 
     def test_a_change_with_nothing_fails_twice(self):
-        problems = check_pr.exam_version(["cka"], set(), "fix links")
-        self.assertEqual(len(problems), 2)
+        self.assertEqual(len(check_pr.exam_version(["cka"], None, "medium")), 2)
 
-    def test_the_label_alone_is_not_enough(self):
-        problems = check_pr.exam_version(["cka"], {"scope:exam-version"}, "fix links")
+    def test_the_declared_scope_alone_is_not_enough(self):
+        problems = check_pr.exam_version(["cka"], None, "exam-version")
         self.assertEqual(len(problems), 1)
         self.assertIn("milestone", problems[0])
 
     def test_the_milestone_alone_is_not_enough(self):
-        problems = check_pr.exam_version(["cka"], set(), "Milestone: CKA v1.37 upgrade")
+        problems = check_pr.exam_version(["cka"], self.UPGRADE, "medium")
         self.assertEqual(len(problems), 1)
-        self.assertIn("scope:exam-version", problems[0])
+        self.assertIn("Scope", problems[0])
 
-    def test_label_and_milestone_pass(self):
-        label = {"scope:exam-version", "type:feature"}
-        for body in ("Milestone: CKA & CKAD v1.37 upgrade",
-                     "- Milestone: CKA v1.37 upgrade",
-                     "https://github.com/villadalmine/study-cybercirujas/milestone/3"):
-            with self.subTest(body=body):
-                self.assertEqual(check_pr.exam_version(["cka"], label, body), [])
+    def test_only_an_upgrade_milestone_authorizes(self):
+        for milestone in ("F2 labs", "Quality & groundedness", "none", "", "v1.37 upgrade", "CKA v1.37 upgrades"):
+            with self.subTest(milestone=milestone):
+                self.assertTrue(check_pr.exam_version(["cka"], milestone, "exam-version"))
+        for milestone in (self.UPGRADE, "CKA v1.37 upgrade", "LPIC-1 v5.1 upgrade"):
+            with self.subTest(milestone=milestone):
+                self.assertEqual(check_pr.exam_version(["cka"], milestone, "exam-version"), [])
 
-    def test_a_milestone_in_a_comment_does_not_count(self):
-        label = {"scope:exam-version"}
-        self.assertTrue(check_pr.exam_version(["cka"], label, "<!-- Milestone: x -->"))
-
-    def test_the_template_text_is_not_a_milestone_reference(self):
-        template = (REPO / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
-        self.assertTrue(check_pr.exam_version(["cka"], {"scope:exam-version"}, template))
+    def test_the_label_and_the_description_text_authorize_nothing(self):
+        # the signature has no labels and no body: what #61 had (label scope:exam-version) cannot pass
+        self.assertTrue(check_pr.exam_version(["cka"], None, "small"))
 
 
 if __name__ == "__main__":

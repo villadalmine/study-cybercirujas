@@ -149,7 +149,11 @@ jobs:
           # original event, which may predate a waiver label.
           gh api "repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}/labels" \
             --jq '.[].name' > labels.txt || rm -f labels.txt
+          # Same for the milestone: it authorizes an exam-version change, so it is read live too.
+          gh api "repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}" \
+            --jq '.milestone.title // empty' > milestone.txt || rm -f milestone.txt
           python3 scripts/check_pr.py --event "${{ steps.pr.outputs.event }}" --labels-file labels.txt \
+            --milestone-file milestone.txt \
             --base "origin/${{ steps.pr.outputs.base }}" \
             --label-file site-label.txt --runs-file cited-runs.txt
       - name: Check the run cited under "Where it ran"

@@ -297,8 +297,9 @@ Pick the biggest line that applies:
 say which curriculum version the material was built against. Moving them means the whole cert must be re-evaluated
 (table of contents, every topic), so it only happens in the **final PR of an upgrade milestone**
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). `check_pr` fails any PR that changes them
-unless it carries the `scope:exam-version` label **and** references the milestone (a `Milestone: <name>` line or
-the milestone link). Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
+unless the PR's **real GitHub milestone** is an upgrade milestone (named like "CKA & CKAD v1.37 upgrade") **and**
+its description declares `Scope: exam-version`. The `scope:exam-version` label is only classification, and text
+in the description cannot authorize anything, so neither is enough. Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
 goes into the milestone. If the exam body published a new version, open the "New exam curriculum version" issue form.
 The labels are applied by a maintainer today; a script will compute them from the diff
 ([#62](https://github.com/villadalmine/study-cybercirujas/issues/62)).
