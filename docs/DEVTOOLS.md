@@ -94,10 +94,11 @@ Nothing to remember:
    with the built-in `GITHUB_TOKEN` starts no `pull_request` workflows (a
    close/reopen by that token only makes runs that stop at `action_required`), so the
    same job dispatches `verify.yml` on `bot/graph-refresh` (`workflow_dispatch` is the
-   exception to that rule), waits for it, and copies the verdict of its `verify`,
-   `e2e` and `pr-format` jobs onto the PR head as check runs of the same names
-   through the Checks API. The dispatched run's own check runs are not associated with
-   the PR (it stays BLOCKED with no checks); a check run created with `head_branch` is.
+   exception to that rule). The dispatched run's own check runs are not associated with
+   the PR (it stays BLOCKED with no checks); a Checks API check run created with
+   `head_branch` before the dispatch is. So the job opens `verify`, `e2e` and `pr-format`
+   as in-progress check runs on the PR head, dispatches, waits, and completes each with
+   the conclusion of the dispatched run's job of the same name.
    A missing job or anything but `success` is posted as `failure`. The PR is
    mergeable with no human step but the merge. No secret, PAT or extra tool: one
    repository setting, once (Settings > Actions > General > "Allow GitHub Actions

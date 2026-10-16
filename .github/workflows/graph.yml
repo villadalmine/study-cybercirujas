@@ -25,12 +25,14 @@ name: Graph
 # (measured: the PR's status rollup is empty). A check run created through the
 # Checks API with head_branch set IS associated with the PR and counts for
 # branch protection (app github-actions, the same app the required checks name;
-# measured: isRequired=true, mergeStateStatus UNSTABLE/CLEAN instead of
-# BLOCKED), also on a PR that already exists and on a new head after a force
-# push. So the last step copies the verdict of the dispatched run's own jobs
-# (verify, e2e, pr-format) onto the PR head as check runs of the same names. It
-# never invents a verdict: no run, a missing job or anything but success is
-# posted as failure. No PAT, no App, nothing for a developer to configure. One
+# measured: isRequired=true, mergeStateStatus UNSTABLE instead of BLOCKED),
+# also on a PR that already exists and on a new head after a force push, but
+# only if it is created BEFORE the dispatch: one created after joins the
+# dispatched run's suite and is not associated either. So the last step opens
+# verify, e2e and pr-format as in_progress, dispatches, waits, and completes
+# them with the conclusion of the dispatched run's own jobs of the same names.
+# It never invents a verdict: no run, a missing job, an error or anything but
+# success is completed as failure. No PAT, no App, nothing for a developer to configure. One
 # repository setting is needed once: Settings > Actions > General > "Allow
 # GitHub Actions to create and approve pull requests".
 
@@ -186,6 +188,32 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$SHA"
+          names="verify e2e pr-format"
+          here="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          api="repos/$GITHUB_REPOSITORY/check-runs"
+          declare -A id
+          # 1. Open the three required checks on the PR head BEFORE the dispatch:
+          #    created after it they would join the dispatched run's suite, which
+          #    the PR does not see. head_branch is what ties them to the PR.
+          for name in $names; do
+            id[$name]="$(gh api -X POST "$api" -f name="$name" -f head_sha="$SHA" -f head_branch="$BRANCH" \
+              -f status=in_progress -f details_url="$here" \
+              -f "output[title]=$name: waiting for the dispatched verify run" \
+              -f "output[summary]=Completed by the Graph workflow run $here from the same-named job of verify.yml dispatched on $SHA." \
+              --jq .id)"
+          done
+          closed=" "
+          finish() {  # name, conclusion, url, what the job said
+            gh api -X PATCH "$api/${id[$1]}" -f status=completed -f conclusion="$2" -f details_url="$3" \
+              -f "output[title]=$1: $4" \
+              -f "output[summary]=Copied from the job '$1' of the verify.yml run dispatched on $SHA ($3). The job result was '$4'." \
+              > /dev/null
+            closed="$closed$1 "
+          }
+          # Never leave a required check hanging: anything that goes wrong below
+          # completes the checks that are still open as failure.
+          trap 'for n in $names; do case "$closed" in *" $n "*) ;; *) finish "$n" failure "$here" "the Graph step ended before a verdict" || true ;; esac; done' EXIT
+          # 2. Dispatch verify.yml on the branch and wait for the run of this head.
           gh workflow run verify.yml --ref "$BRANCH"
           run=""
           for _ in $(seq 1 36); do
@@ -204,18 +232,14 @@ jobs:
             echo "::warning::no dispatched verify run found for $SHA"
             jobs='[]'
           fi
+          # 3. Complete each check with the conclusion of the job of the same name.
           status=0
-          for name in verify e2e pr-format; do
+          for name in $names; do
             conclusion="$(jq -r --arg n "$name" '[.[] | select(.name == $n)][0].conclusion // "missing"' <<< "$jobs")"
             url="$(jq -r --arg n "$name" '[.[] | select(.name == $n)][0].html_url // empty' <<< "$jobs")"
-            [ -n "$url" ] || url="https://github.com/$GITHUB_REPOSITORY/actions/runs/${run:-$GITHUB_RUN_ID}"
             result=failure
-            [ "$conclusion" = success ] && result=success || status=1
-            gh api -X POST "repos/$GITHUB_REPOSITORY/check-runs" \
-              -f name="$name" -f head_sha="$SHA" -f head_branch="$BRANCH" \
-              -f status=completed -f conclusion="$result" -f details_url="$url" \
-              -f "output[title]=$name: $conclusion" \
-              -f "output[summary]=Copied from the job '$name' of the verify.yml run dispatched on this head commit ($SHA): $url. The job result was '$conclusion'." \
-              --jq '"\(.name) -> \(.conclusion)"'
+            if [ "$conclusion" = success ]; then result=success; else status=1; fi
+            finish "$name" "$result" "${url:-$here}" "$conclusion"
+            echo "$name -> $result ($conclusion)"
           done
           exit $status
