@@ -1,0 +1,5 @@
+# What study-lab export --target killercoda publishes by default (the pilot, issue #43).
+# Only verified labs whose environment Killercoda has: linux -> ubuntu, kind -> kubernetes-kubeadm-1node.
+pilot:
+  - cka/1.1
+  - lpic-2/200.1

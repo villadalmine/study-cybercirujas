@@ -10,6 +10,7 @@
     study-lab migrate <path> [--write]          v1 lab.yaml -> v2
     study-lab new <dir> --cert --topic --title [--requires kind|linux]   scaffold from the template
     study-lab build k8s|linux                   build a runner image locally
+    study-lab export --target killercoda [--out DIR] [<cert>/<topic> ...]   scenario tree for Killercoda
 
 Only the standard library plus PyYAML and jsonschema, so a GitHub Action in
 another repository can run `validate` without installing teach-plat.
@@ -191,6 +192,31 @@ def cmd_new(args) -> int:
     return 0
 
 
+def cmd_export(args) -> int:
+    """Deterministic export of verified labs to a Killercoda scenario tree (an adapter: the lab stays the source)."""
+    from . import export_killercoda as kc
+    tf = Path(args.tracks)
+    tracks = (yaml.safe_load(tf.read_text(encoding="utf-8")) if tf.is_file() else None) or {}
+    wanted = args.labs or [str(x) for x in (tracks.get("pilot") or [])]
+    skipped = []
+    if args.all:
+        labs, skipped = kc.select(runner.REPO_ROOT, args.cert)
+        wanted = [lab.lab_id for lab in labs]
+    if not wanted:
+        raise spec.SpecError("nothing to export: pass <cert>/<topic> or list a pilot in " + args.tracks)
+    labs = labs if args.all else [spec.load(runner.REPO_ROOT / "certs" / w.partition("/")[0] / w.partition("/")[2] / "lab",
+                                             "curated") for w in wanted]
+    try:
+        files = kc.tree(labs, kc.cert_names(runner.REPO_ROOT), args.include_unverified or args.all)
+    except kc.ExportError as exc:
+        raise spec.SpecError(str(exc)) from exc
+    kc.write(files, Path(args.out))
+    for lab_id, why in skipped:
+        print(f"skipped {lab_id}: {why}")
+    print(f"[study-lab] exported {len(labs)} lab(s), {len(files)} files to {args.out}")
+    return 0
+
+
 def cmd_hint(lab: spec.Lab, n: int) -> int:
     hints = lab.spec.get("hints") or []
     if not hints:
@@ -228,6 +254,14 @@ def main(argv: list[str] | None = None) -> int:
     n.add_argument("--topic", required=True)
     n.add_argument("--title", required=True)
     n.add_argument("--requires", choices=["kind", "k3s", "linux"], default="linux")
+    e = sub.add_parser("export", help="export verified labs to another platform")
+    e.add_argument("--target", required=True, choices=["killercoda"])
+    e.add_argument("--out", default="build/killercoda")
+    e.add_argument("--tracks", default=str(runner.REPO_ROOT / "deploy" / "killercoda" / "tracks.yaml"))
+    e.add_argument("--all", action="store_true", help="every curated lab that fits (unverified ones are labelled as such)")
+    e.add_argument("--cert", action="append", help="with --all: only this certification (repeatable)")
+    e.add_argument("--include-unverified", action="store_true")
+    e.add_argument("labs", nargs="*", help="<cert>/<topic>; default: the pilot in tracks.yaml")
     b = sub.add_parser("build")
     b.add_argument("family", choices=["k8s", "linux"])
 
@@ -242,6 +276,8 @@ def main(argv: list[str] | None = None) -> int:
             return cmd_validate(args)
         if args.cmd == "migrate":
             return cmd_migrate(args)
+        if args.cmd == "export":
+            return cmd_export(args)
         if args.cmd == "new":
             return cmd_new(args)
         if args.cmd == "list":

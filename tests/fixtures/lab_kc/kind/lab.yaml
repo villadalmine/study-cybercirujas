@@ -1,0 +1,13 @@
+schema_version: 2
+cert: democert
+topic: '1.2'
+title: Demo kind lab
+requires: kind
+script: break_fix.sh
+modes:
+  break: {args: [break]}
+  verify: {args: [verify]}
+  cleanup: {args: [cleanup], stdin: "y\n"}
+level: beginner
+hints: ["Look at the symptom first.", "Read the log."]
+verified: {status: true, date: '2026-10-16', method: runner}

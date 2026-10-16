@@ -19,6 +19,8 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   only on `certs/` changes. CONTRIBUTING gains "Sign your commits (DCO)", the AI policy and the
   "Thanks @user (#N)" changelog rule; PR templates gain the checklist line; our agents use `git commit -s`.
 
+- **`study-lab export --target killercoda`** (refs #43): deterministic exporter from `lab.yaml` + the lab script to Killercoda scenarios, one course per certification (`structure.json`), `ubuntu` for linux labs and `kubernetes-kubeadm-1node` for kind ones; `verify` is the lab's own verify mode. `make killercoda-export`, workflow `killercoda.yml` (generates and compares, never pushes), page `docs/RUN-A-LAB-ANYWHERE.md`.
+
 ## 2026-10-15
 
 - **lpic-2 200.1 declares its source chain** (fix, `main` was red since #6): the Spanish

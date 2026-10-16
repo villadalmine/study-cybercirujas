@@ -1,0 +1,50 @@
+name: Killercoda export
+
+# Runs the exporter and reports whether the generated tree differs from the Killercoda mirror.
+# Read-only on purpose: it never pushes. Publishing is a manual step (docs/RUN-A-LAB-ANYWHERE.md).
+
+on:
+  push:
+    branches: [main]
+    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'deploy/killercoda/**', '.github/workflows/killercoda.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  killercoda-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MIRROR: ${{ vars.KILLERCODA_MIRROR || 'villadalmine/study-cybercirujas-killercoda' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q -e '.[lab]'
+      - name: Export twice, output must be byte-identical
+        run: |
+          scripts/study-lab export --target killercoda --all --out build/killercoda | tail -1
+          scripts/study-lab export --target killercoda --all --out build/killercoda-2 >/dev/null
+          diff -r build/killercoda build/killercoda-2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: killercoda-tree
+          path: build/killercoda
+      - name: Compare with the mirror
+        env:
+          TOKEN: ${{ secrets.KILLERCODA_MIRROR_READ_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::notice::No KILLERCODA_MIRROR_READ_TOKEN secret (read-only, optional): mirror not compared. Download the artifact, or run 'make killercoda-diff'."
+            exit 0
+          fi
+          git -c http.extraHeader="Authorization: Basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)" \
+            clone -q --depth 1 "https://github.com/$MIRROR.git" mirror
+          if diff -rq -x .git -x .github -x README.md -x CONTRIBUTING.md -x CODEOWNERS -x .gitattributes build/killercoda mirror > diff.txt; then
+            echo "Mirror is up to date." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "Mirror differs from the export (publish: make killercoda-export, then push; docs/RUN-A-LAB-ANYWHERE.md):"; head -50 diff.txt; } | tee -a "$GITHUB_STEP_SUMMARY"
+          fi

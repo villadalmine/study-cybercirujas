@@ -25,7 +25,7 @@ REGISTRY ?= registry.registry:5000
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
 .PHONY: groundedness groundedness-setup groundedness-deep
-.PHONY: preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
+.PHONY: killercoda-export killercoda-diff preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
 .PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci
 
 help:
@@ -134,6 +134,13 @@ test: ## every fast test: units, offline smoke of site/API/CLI, labs, determinis
 
 test-lab-e2e: ## study-lab runner end-to-end with Docker (STUDY_LAB_E2E_K8S=1 adds the kind lab)
 	$(VENV)/bin/python3 -m pytest tests/lab -m slow -v
+
+killercoda-export: ## generate the Killercoda scenario tree into build/killercoda (publish: docs/RUN-A-LAB-ANYWHERE.md)
+	rm -rf build/killercoda
+	scripts/study-lab export --target killercoda --all --out build/killercoda
+
+killercoda-diff: killercoda-export ## compare build/killercoda with a local clone of the mirror (MIRROR=path)
+	diff -rq -x .git -x .github -x README.md -x CONTRIBUTING.md -x CODEOWNERS -x .gitattributes build/killercoda $(or $(MIRROR),../study-cybercirujas-killercoda) && echo "mirror is up to date"
 
 lab-images: ## build the study-lab runner images (study-lab:k8s, study-lab:linux)
 	docker build -t study-lab:k8s deploy/study-lab/k8s

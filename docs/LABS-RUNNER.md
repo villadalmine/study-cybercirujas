@@ -238,6 +238,10 @@ kubectl `v1.35.8`, helm `v4.3.0` (all sha256-checked), node
 `debian:bookworm-20261005`. Bump them together, with the node table in
 `teach/lab/runner.py` (`KIND_NODES`, from the kind release notes).
 
+## Other places to run it
+
+`study-lab export --target killercoda` turns the verified labs into Killercoda scenarios, one course per certification. See [RUN-A-LAB-ANYWHERE.md](RUN-A-LAB-ANYWHERE.md).
+
 ## Not done yet
 
 - `requires: k3s` (the schema accepts it; the image only implements kind).

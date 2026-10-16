@@ -42,3 +42,4 @@ bot-stats.json
 
 # Groundedness check: downloaded citations and the pinned classifier weights.
 .cache/groundedness/
+build/

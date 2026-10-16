@@ -32,6 +32,7 @@ like an API key. It runs in under a second. Do not bypass it with
 | **fix a translation** | edit `certs/<cert>/<topic>/<lang>/content.md` or `exercises.md`; keep code blocks, commands, URLs and headings exactly as in English | PR (*Translation* issue optional) |
 | **fix content in English** | edit the `en` file, cite the official source in the PR; translations will follow from it | issue first if it is more than a typo |
 | **add or fix a lab** | `teach lab new <cert> <topic>` creates `lab.yaml` + a `break_fix.sh` template (no AI); fill in the TODOs, then `teach lab validate <cert> <topic>`. The runner and the full lab format: `docs/LABS-RUNNER.md` (arriving with the `labs-runner` branch) | *Lab* issue |
+| **run a lab somewhere else** | the same lab runs in Docker, on Killercoda or on your own cluster: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md). Export to Killercoda: `make killercoda-export` | issue |
 | **fix a bug or add a feature** | code in `teach/` or `scripts/`, with a test | *Bug* issue for bugs |
 | **change a rule, add a certification family or a language** | a proposal, see [GOVERNANCE.md](GOVERNANCE.md) | *Proposal (RFC)* issue |
 
@@ -220,6 +221,15 @@ The hook file, `.githooks/pre-push`, is part of the repository; it exits at
 once unless that config key is `true`. When on, every `git push` waits about a
 minute for `make pr-check QUICK=1` and is refused if it FAILs. Skip it once
 with `git push --no-verify`.
+
+### Run a lab anywhere, and get yours published
+
+Write your lab in `certs/<cert>/<topic>/lab/` (`study-lab new` scaffolds it), prove it locally with
+`study-lab run`, `study-lab check` (must FAIL), your fix, `study-lab check` (must PASS), and open a PR here.
+CI validates the lab contract (`labs.yml`). Once it is merged, the lab is exported and published on
+Killercoda, in the course of its certification: https://killercoda.com/itrestauracion. The same code also runs in
+Docker and on your own cluster: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md). The Killercoda
+repository only receives the generated tree; labs are never edited there.
 
 ## Pull requests
 
