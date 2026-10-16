@@ -657,9 +657,50 @@ class ExamVersionTests(unittest.TestCase):
     def test_tracked_version_change_is_detected(self):
         self.assertEqual(self.changes(CATALOG_BASE.replace("'1.35'", "'1.37'")), ["cka"])
 
-    def test_objectives_link_change_is_detected(self):
-        # what PR #61 did: a links fix that moved the objectives
+    GH = "https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf"
+    SHA = "008b73c0" + "a" * 32
+
+    def gh_base(self):
+        return CATALOG_BASE.replace("https://example.org/cka-1.35.pdf", self.GH)
+
+    def test_objectives_file_name_change_is_detected(self):
+        # v1.35 -> v1.37 is a new curriculum document
         self.assertEqual(self.changes(CATALOG_BASE.replace("cka-1.35.pdf", "cka-1.37.pdf")), ["cka"])
+        base = self.gh_base()
+        self.assertEqual(check_pr.exam_version_changes(base, base.replace("v1.35.pdf", "v1.37.pdf")), ["cka"])
+        # a new name even when the link is also pinned
+        pinned = base.replace("/raw/master/", f"/raw/{self.SHA}/").replace("v1.35.pdf", "v1.37.pdf")
+        self.assertEqual(check_pr.exam_version_changes(base, pinned), ["cka"])
+
+    def test_objectives_other_host_or_repo_is_detected(self):
+        self.assertEqual(self.changes(CATALOG_BASE.replace("example.org/cka", "example.com/cka")), ["cka"])
+        base = self.gh_base()
+        for other in ("https://github.com/someone-else/curriculum/raw/master/CKA_Curriculum_v1.35.pdf",
+                      "https://github.com/cncf/curriculum/raw/master/sub/CKA_Curriculum_v1.35.pdf",
+                      "https://raw.githubusercontent.com/cncf/curriculum/master/CKA_Curriculum_v1.35.pdf"):
+            self.assertEqual(check_pr.exam_version_changes(base, base.replace(self.GH, other)), ["cka"], other)
+
+    def test_pinning_the_same_file_to_a_commit_is_link_maintenance(self):
+        # PR #61: same name, same repo, master -> sha
+        base = self.gh_base()
+        pinned = base.replace("/raw/master/", f"/raw/{self.SHA}/")
+        self.assertEqual(check_pr.exam_version_changes(base, pinned), [])
+        # sha -> sha, and the raw.githubusercontent.com spelling
+        self.assertEqual(check_pr.exam_version_changes(pinned, pinned.replace(self.SHA, "b" * 40)), [])
+        raw = "https://raw.githubusercontent.com/cncf/curriculum/%s/CKA_Curriculum_v1.35.pdf"
+        self.assertEqual(check_pr.exam_version_changes(
+            base.replace(self.GH, raw % "master"), base.replace(self.GH, raw % self.SHA)), [])
+
+    def test_a_percent_encoded_name_is_the_same_document(self):
+        base = CATALOG_BASE.replace("https://example.org/cka-1.35.pdf",
+                                    "https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf")
+        head = base.replace("/raw/master/", "/raw/" + "c" * 40 + "/")
+        self.assertEqual(check_pr.exam_version_changes(base, head), [])
+
+    def test_pinning_does_not_hide_a_tracked_version_change(self):
+        base = self.gh_base()
+        head = base.replace("/raw/master/", f"/raw/{self.SHA}/").replace("'1.35'", "'1.37'")
+        self.assertEqual(check_pr.exam_version_changes(base, head), ["cka"])
 
     def test_a_new_or_removed_cert_is_a_change(self):
         added = CATALOG_BASE + "  ckad:\n    tracked_version: '1.35'\n    sources: {objectives: x}\n"

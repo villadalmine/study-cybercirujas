@@ -45,15 +45,16 @@ how #60 lost the exemption.)
 
 - the Scope section does not declare exactly one of small | medium | large |
   exam-version (CONTRIBUTING -> How big is my change?);
-- `catalog.yaml` changes a cert's `tracked_version` or `sources.objectives`
-  (the exam version the material is built against) and the PR's real GitHub
+- `catalog.yaml` changes a cert's `tracked_version`, or its `sources.objectives` names another
+  curriculum document (other file name, host or repo; re-pinning the same file to a commit or ref
+  is link maintenance and does not count), and the PR's real GitHub
   milestone is not the upgrade milestone of those certs and that version (title
   "<CERT> <version> upgrade", e.g. "CKA & CKAD v1.37 upgrade": it names every
   cert that changed and its last word before "upgrade", with an optional `v`, equals
   their new tracked_version or that value's last word) or the Scope
   section does not declare `Scope: exam-version`. The label is only
   classification and the description is author text: neither authorizes. A
-  links fix cannot move the version.
+  links fix that keeps the document cannot move the version.
 
 It also checks scope and size (one topic, one lab, material apart from code,
 <= 400 changed lines of code), waived by the scope-exception/size-exception
@@ -82,6 +83,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 import yaml
 
@@ -326,13 +328,37 @@ def head_catalog() -> str | None:
     return path.read_text(encoding="utf-8") if path.exists() else None
 
 
-def exam_version_changes(base_text: str | None, head_text: str | None) -> list[str]:
-    """Certs whose tracked_version or sources.objectives differ between two catalog.yaml texts.
+def objectives_document(url) -> tuple:
+    """Which curriculum DOCUMENT an objectives URL names, ignoring the commit or ref it is pinned to.
 
+    A GitHub file link (github.com/<owner>/<repo>/raw|blob/<ref>/<path>, or
+    raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>) is (host, owner/repo, path): the ref is
+    dropped, so master -> <sha> or <sha> -> <sha> is the same document. Any other URL is (host, path):
+    the host, the file name and the rest of the path must match; query and fragment are dropped.
+    A value that is not a URL is compared as it is. Pure: no network."""
+    text = str(url).strip()
+    parts = urlsplit(text)
+    if not parts.scheme or not parts.netloc:
+        return ("raw", text)
+    host = (parts.hostname or "").lower()
+    segs = [unquote(x) for x in parts.path.split("/") if x]
+    if host == "github.com" and len(segs) > 4 and segs[2] in ("raw", "blob"):
+        return (host, f"{segs[0]}/{segs[1]}".lower(), "/".join(segs[4:]))
+    if host == "raw.githubusercontent.com" and len(segs) > 3:
+        return (host, f"{segs[0]}/{segs[1]}".lower(), "/".join(segs[3:]))
+    return (host, "", "/".join(segs))
+
+
+def exam_version_changes(base_text: str | None, head_text: str | None) -> list[str]:
+    """Certs whose exam version differs between two catalog.yaml texts.
+
+    A change counts only if (a) tracked_version changes, or (b) sources.objectives names another
+    curriculum DOCUMENT (see objectives_document: another file name, host or repo). Re-pinning the
+    same file in the same repo to a commit or ref is link maintenance (Scope: small) and does not count.
     A cert that appears or disappears counts too. Pure: no git, no network."""
     def load(text):
         certs = (yaml.safe_load(text) or {}).get("certs") or {} if text else {}
-        return {key: (str(c.get("tracked_version")), str((c.get("sources") or {}).get("objectives")))
+        return {key: (str(c.get("tracked_version")), objectives_document((c.get("sources") or {}).get("objectives")))
                 for key, c in certs.items() if isinstance(c, dict)}
     before, after = load(base_text), load(head_text)
     return sorted(key for key in set(before) | set(after) if before.get(key) != after.get(key))

@@ -310,7 +310,7 @@ Pick the biggest line that applies:
 | `small` | docs, typos or links | normal flow: CI and an independent review |
 | `medium` | one topic's content or lab, or one script | normal flow |
 | `large` | `.github/`, `Makefile`, `scripts/check_*`, dependencies or weights; more than 1 topic; more than 400 code lines | the maintainer reads it; never merged from a fork without the maintainer's OK |
-| `exam-version` | `tracked_version`, `objectives` or a frozen syllabus changes | has its own milestone (see below) |
+| `exam-version` | `tracked_version`, the `objectives` document or a frozen syllabus changes | has its own milestone (see below) |
 
 **An exam version never changes by accident.** `tracked_version` and `sources.objectives` in `catalog.yaml`
 say which curriculum version the material was built against. Moving them means the whole cert must be re-evaluated
@@ -321,7 +321,10 @@ unless the PR's **real GitHub milestone** is the upgrade milestone of those cert
 their new `tracked_version`: the last word before "upgrade", with or without a leading `v`, so `v1.37`, `2025-11-24`,
 `unknown` or `beta`; for a value like `Terraform 1.12` its last word, `v1.12`) **and**
 its description declares `Scope: exam-version`. The `scope:exam-version` label is only classification, and text
-in the description cannot authorize anything, so neither is enough. Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
+in the description cannot authorize anything, so neither is enough. What counts as moving them is deterministic: `tracked_version` changes, or the objectives URL names another curriculum
+**document**: another file name (`CKA_Curriculum_v1.35.pdf` -> `..._v1.37.pdf`), host or repo. Re-pinning the same
+file name in the same repo to a commit or ref (`/raw/master/` -> `/raw/<sha>/`, or sha -> sha) is link maintenance:
+`Scope: small`, no milestone. A dead-link fix that points at a different document is blocked: it
 goes into the milestone. If the exam body published a new version, open the "New exam curriculum version" issue form.
 The labels are applied by a maintainer today; a script will compute them from the diff
 ([#62](https://github.com/villadalmine/study-cybercirujas/issues/62)).
