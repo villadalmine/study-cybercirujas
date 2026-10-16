@@ -1,34 +1,38 @@
 # Community 75
 
-> 7 nodes · cohesion 0.29
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **probe_languages()** (10 connections) — `scripts/probe_models.py`
-- **graded()** (4 connections) — `scripts/probe_models.py`
-- **detect_language()** (3 connections) — `scripts/probe_models.py`
-- **Re-probing, and two things the second run taught (2026-09-14)** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Best-effort language of a reply: one of MARKERS, 'zh', 'ja', or 'unclear'. Kana…** (1 connections) — `scripts/probe_models.py`
-- **(did it find the answer in the material, which language it replied in). Both…** (1 connections) — `scripts/probe_models.py`
-- **Ask the model, in each language, a question answered by real material. Returns…** (1 connections) — `scripts/probe_models.py`
+- **Principles** (8 connections) — `docs/PRINCIPLES.md`
+- **7. The source chain** (5 connections) — `docs/PRINCIPLES.md`
+- **fail()** (3 connections) — `tests/test_check_pr.py`
+- **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
+- **1. Information sovereignty** (1 connections) — `docs/PRINCIPLES.md`
+- **2. Curriculum-as-Code** (1 connections) — `docs/PRINCIPLES.md`
+- **3. Determinism** (1 connections) — `docs/PRINCIPLES.md`
+- **4. With AI or without AI: the same pipeline and the same validator** (1 connections) — `docs/PRINCIPLES.md`
+- **5. Honest about limits** (1 connections) — `docs/PRINCIPLES.md`
+- **6. Open by default** (1 connections) — `docs/PRINCIPLES.md`
 
 ## Relationships
 
-- [Community 37](Community_37.md) (6 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
-- [Community 93](Community_93.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [The phases](The_phases.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 148](Community_148.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/STUDY_BOT_DESIGN.md`
-- `scripts/probe_models.py`
+- `docs/PRINCIPLES.md`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (88%)
-- INFERRED: 2 (12%)
+- EXTRACTED: 9 (60%)
+- INFERRED: 6 (40%)
 - AMBIGUOUS: 0 (0%)
 
 ---

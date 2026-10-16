@@ -1,33 +1,35 @@
 # Community 155
 
-> 8 nodes · cohesion 0.25
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Content Workflow** (9 connections) — `WORKFLOW.md`
-- **Backends** (2 connections) — `WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
-- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
-- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
-- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
-- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
-- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
+- **fixture()** (7 connections) — `scripts/check_groundedness.py`
+- **new_lab()** (4 connections) — `tests/lab/conftest.py`
+- **fixture_repo()** (2 connections) — `tests/lab/test_kc_meta.py`
+- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **A labelled fixture's claims against their own sources: per-claim scores and the…** (1 connections) — `scripts/check_groundedness.py`
+- **Factory: scaffold a lab from the template with `study-lab new`.** (1 connections) — `tests/lab/conftest.py`
 
 ## Relationships
 
-- [Community 69](Community_69.md) (2 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 34](Community_34.md) (3 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
-- `WORKFLOW.md`
+- `scripts/check_groundedness.py`
+- `tests/lab/conftest.py`
+- `tests/lab/test_kc_meta.py`
+- `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (83%)
-- INFERRED: 2 (17%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

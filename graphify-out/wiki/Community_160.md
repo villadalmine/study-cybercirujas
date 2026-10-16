@@ -1,29 +1,30 @@
 # Community 160
 
-> 5 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **fix_fences.py** (8 connections) — `scripts/fix_fences.py`
-- **classify()** (4 connections) — `scripts/fix_fences.py`
-- **main()** (3 connections) — `scripts/fix_fences.py`
-- **Retag fenced blocks whose label promises something the content is not.…** (1 connections) — `scripts/fix_fences.py`
-- **console' | 'jsonl' | None — None means leave it alone.** (1 connections) — `scripts/fix_fences.py`
+- **_cli_env()** (7 connections) — `teach/core/generator.py`
+- **CliEnvTest** (4 connections) — `tests/test_split_answer.py`
+- **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
+- **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
+- **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
+- **Environment for the agent CLI: ours, plus the declared output ceiling. The…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 139](Community_139.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/fix_fences.py`
+- `teach/core/generator.py`
+- `tests/test_split_answer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

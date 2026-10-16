@@ -1,6 +1,6 @@
 # load()
 
-> God node · 25 connections · `teach/lab/spec.py`
+> God node · 37 connections · `teach/lab/spec.py`
 
 **Community:** [Community 29](Community_29.md)
 
@@ -9,25 +9,25 @@
 ### calls
 - yaml `EXTRACTED`
 - [Lab](Lab.md) `EXTRACTED`
+- cmd_test() `EXTRACTED`
+- cmd_export() `EXTRACTED`
 - resolve() `EXTRACTED`
 - SpecError `EXTRACTED`
+- select() `EXTRACTED`
+- _scenario() `EXTRACTED`
 - cmd_migrate() `EXTRACTED`
+- _lab() `EXTRACTED`
+- test_export_publishes_only_what_has_evidence() `EXTRACTED`
 - test_migrate_v1_to_v2_validates() `EXTRACTED`
 - schema_errors() `EXTRACTED`
+- test_refuses_what_does_not_fit() `EXTRACTED`
+- test_secret_guard() `EXTRACTED`
+- test_verify_wrapper_honours_regex() `EXTRACTED`
+- test_the_labs_own_provenance_wins_over_the_topics() `EXTRACTED`
 - cmd_list() `EXTRACTED`
 - cmd_validate() `EXTRACTED`
 - test_migrate_write_roundtrip() `EXTRACTED`
-- test_new_scaffold_passes_strict_validate() `EXTRACTED`
-- test_invalid_cases() `EXTRACTED`
-- normalize() `EXTRACTED`
-- test_curated_pilot_labs_are_strict_valid_and_verified() `EXTRACTED`
-- test_crlf_script_rejected() `EXTRACTED`
-- test_declared_modes_override_inference() `EXTRACTED`
-- test_full_v2_validates() `EXTRACTED`
-- test_missing_required_field() `EXTRACTED`
-- test_missing_script() `EXTRACTED`
-- test_numeric_topic_rejected() `EXTRACTED`
-- *…and 3 more `calls` connection(s) not listed (lowest-degree first to go)*
+- *…and 15 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - spec.py `EXTRACTED`

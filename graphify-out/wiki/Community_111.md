@@ -1,36 +1,42 @@
 # Community 111
 
-> 12 nodes · cohesion 0.29
+> 13 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
-- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
-- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
-- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **parametrize** (4 connections)
-- **pytest** (4 connections)
-- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
-- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
+- **test_export_killercoda.py** (19 connections) — `tests/lab/test_export_killercoda.py`
+- **pytest** (8 connections)
+- **test_golden_tree()** (5 connections) — `tests/lab/test_export_killercoda.py`
+- **test_refuses_what_does_not_fit()** (5 connections) — `tests/lab/test_export_killercoda.py`
+- **test_secret_guard()** (5 connections) — `tests/lab/test_export_killercoda.py`
+- **test_verify_wrapper_honours_regex()** (5 connections) — `tests/lab/test_export_killercoda.py`
+- **_labs()** (4 connections) — `tests/lab/test_export_killercoda.py`
+- **test_images_and_shape()** (4 connections) — `tests/lab/test_export_killercoda.py`
+- **test_kind_family_image()** (4 connections) — `tests/lab/test_export_killercoda.py`
+- **test_byte_identical_twice()** (2 connections) — `tests/lab/test_export_killercoda.py`
+- **run()** (1 connections) — `tests/lab/test_export_killercoda.py`
+- **skipif** (1 connections)
+- **study-lab export --target killercoda: fixture labs, golden tree, determinism,…** (1 connections) — `tests/lab/test_export_killercoda.py`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (8 shared connections)
+- [Community 18](Community_18.md) (8 shared connections)
+- [Community 61](Community_61.md) (8 shared connections)
+- [Community 29](Community_29.md) (6 shared connections)
 - [Community 1](Community_1.md) (3 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
+- [Community 139](Community_139.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/lab/test_runner_guard.py`
+- `tests/lab/test_export_killercoda.py`
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

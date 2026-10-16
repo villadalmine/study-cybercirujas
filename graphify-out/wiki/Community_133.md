@@ -1,12 +1,11 @@
 # Community 133
 
-> 9 nodes · cohesion 0.33
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
 - **window_budget.py** (12 connections) — `scripts/window_budget.py`
 - **main()** (6 connections) — `scripts/window_budget.py`
-- **statistics** (5 connections)
 - **_load()** (4 connections) — `scripts/window_budget.py`
 - **_kind()** (3 connections) — `scripts/window_budget.py`
 - **_week()** (2 connections) — `scripts/window_budget.py`
@@ -16,11 +15,11 @@
 
 ## Relationships
 
-- [Community 85](Community_85.md) (3 shared connections)
 - [Community 36](Community_36.md) (2 shared connections)
+- [Community 85](Community_85.md) (2 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
+- [Community 129](Community_129.md) (1 shared connections)
 - [Community 147](Community_147.md) (1 shared connections)
 
 ## Source Files
@@ -29,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

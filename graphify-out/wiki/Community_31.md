@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **re** (60 connections)
+- **re** (66 connections)
 - **check_docs.py** (19 connections) — `scripts/check_docs.py`
 - **check_file()** (7 connections) — `scripts/check_docs.py`
 - **main()** (7 connections) — `scripts/check_docs.py`
@@ -27,11 +27,11 @@
 ## Relationships
 
 - [Community 61](Community_61.md) (6 shared connections)
-- [Community 124](Community_124.md) (5 shared connections)
+- [Community 124](Community_124.md) (6 shared connections)
+- [Community 32](Community_32.md) (5 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
 - [Community 72](Community_72.md) (4 shared connections)
-- [Community 104](Community_104.md) (4 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
-- [Community 32](Community_32.md) (3 shared connections)
 - [Community 52](Community_52.md) (3 shared connections)
 - [Community 12](Community_12.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
@@ -45,7 +45,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 99 (100%)
+- EXTRACTED: 105 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

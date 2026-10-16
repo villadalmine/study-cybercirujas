@@ -26,11 +26,10 @@
 ## Relationships
 
 - [Community 8](Community_8.md) (9 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 73](Community_73.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [video.py](video.py.md) (2 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 139](Community_139.md) (1 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files

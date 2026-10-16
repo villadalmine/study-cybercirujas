@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **kind/break_fix.sh** (1 connections) — `teach/lab/template/kind/break_fix.sh`
+- **template/kind/break_fix.sh** (1 connections) — `teach/lab/template/kind/break_fix.sh`
 - **break_fix.sh script** (1 connections) — `teach/lab/template/kind/break_fix.sh`
 
 ## Relationships

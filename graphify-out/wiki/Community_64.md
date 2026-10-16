@@ -1,11 +1,10 @@
 # Community 64
 
-> 10 nodes · cohesion 0.27
+> 9 nodes · cohesion 0.31
 
 ## Key Concepts
 
 - **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **urllib_request** (6 connections)
 - **main()** (5 connections) — `scripts/check_syllabus.py`
 - **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
 - **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
@@ -18,15 +17,13 @@
 ## Relationships
 
 - [Community 52](Community_52.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 73](Community_73.md) (2 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 - [Community 31](Community_31.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 - [Community 158](Community_158.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
 
 ## Source Files
 
@@ -34,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

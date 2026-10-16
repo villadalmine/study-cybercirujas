@@ -1,28 +1,28 @@
 # Community 166
 
-> 6 nodes · cohesion 0.33
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **DisclosureTests** (6 connections) — `tests/test_check_pr.py`
-- **.test_ai_must_name_backend_and_model()** (1 connections) — `tests/test_check_pr.py`
-- **.test_human_needs_nothing_else()** (1 connections) — `tests/test_check_pr.py`
-- **.test_placeholder_author_fails_on_a_code_pr()** (1 connections) — `tests/test_check_pr.py`
-- **.test_the_certs_check_does_not_repeat_the_message()** (1 connections) — `tests/test_check_pr.py`
-- **The AI disclosure is checked on every PR, not only when certs/ changes (#68).** (1 connections) — `tests/test_check_pr.py`
+- **sitecustomize.py** (6 connections) — `tests/netguard/sitecustomize.py`
+- **_host()** (3 connections) — `tests/netguard/sitecustomize.py`
+- **_connect()** (2 connections) — `tests/netguard/sitecustomize.py`
+- **_connect_ex()** (2 connections) — `tests/netguard/sitecustomize.py`
+- **_getaddrinfo()** (1 connections) — `tests/netguard/sitecustomize.py`
+- **Block every network connection that does not go to this machine. Put this…** (1 connections) — `tests/netguard/sitecustomize.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `tests/netguard/sitecustomize.py`
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 5 (62%)
+- INFERRED: 3 (38%)
 - AMBIGUOUS: 0 (0%)
 
 ---

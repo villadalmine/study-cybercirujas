@@ -1,33 +1,35 @@
 # Community 148
 
-> 7 nodes · cohesion 0.43
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
-- **main()** (6 connections) — `scripts/topic_cost.py`
-- **by_topic()** (3 connections) — `scripts/topic_cost.py`
-- **records()** (3 connections) — `scripts/topic_cost.py`
-- **dominant()** (2 connections) — `scripts/topic_cost.py`
-- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
-- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
+- **What you can contribute** (5 connections) — `CONTRIBUTING.md`
+- **Raising a topic's quality score** (4 connections) — `CONTRIBUTING.md`
+- **.verified()** (3 connections) — `teach/lab/spec.py`
+- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
+- **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
+- **Provenance is mandatory** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
+- [Community 66](Community_66.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/topic_cost.py`
+- `CONTRIBUTING.md`
+- `docs/LABS-RUNNER.md`
+- `teach/lab/spec.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 7 (64%)
+- INFERRED: 4 (36%)
 - AMBIGUOUS: 0 (0%)
 
 ---

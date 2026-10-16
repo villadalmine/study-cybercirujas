@@ -1,6 +1,6 @@
 # Community 85
 
-> 15 nodes · cohesion 0.21
+> 16 nodes · cohesion 0.21
 
 ## Key Concepts
 
@@ -10,6 +10,7 @@
 - **main()** (6 connections) — `scripts/model_comparison.py`
 - **_stats()** (5 connections) — `scripts/model_comparison.py`
 - **write()** (5 connections) — `scripts/model_comparison.py`
+- **statistics** (5 connections)
 - **usage_by_topic()** (4 connections) — `scripts/model_comparison.py`
 - **_md_table()** (3 connections) — `scripts/model_comparison.py`
 - **Path** (1 connections)
@@ -23,17 +24,17 @@
 ## Relationships
 
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 133](Community_133.md) (3 shared connections)
 - [Community 102](Community_102.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
-- [Community 73](Community_73.md) (2 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
 - [Community 6](Community_6.md) (2 shared connections)
 - [Community 36](Community_36.md) (2 shared connections)
+- [Community 133](Community_133.md) (2 shared connections)
 - [Community 49](Community_49.md) (1 shared connections)
+- [Community 139](Community_139.md) (1 shared connections)
 - [Community 31](Community_31.md) (1 shared connections)
 - [Community 147](Community_147.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
-- [Community 168](Community_168.md) (1 shared connections)
 
 ## Source Files
 
@@ -41,7 +42,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 45 (100%)
+- EXTRACTED: 47 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

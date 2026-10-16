@@ -1,24 +1,33 @@
 # Community 116
 
-> 3 nodes · cohesion 0.67
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **LabRunnerLifecycleTests** (3 connections) — `tests/test_labs.py`
-- **.test_run_break_verify_cleanup()** (1 connections) — `tests/test_labs.py`
-- **skip** (1 connections)
+- **ext_os_release** (4 connections)
+- **killercoda/probe/k8s/assets/probe.sh** (2 connections) — `deploy/killercoda/probe/k8s/assets/probe.sh`
+- **killercoda/probe/ubuntu/assets/probe.sh** (2 connections) — `deploy/killercoda/probe/ubuntu/assets/probe.sh`
+- **golden/probe/k8s/assets/probe.sh** (2 connections) — `tests/fixtures/killercoda/golden/probe/k8s/assets/probe.sh`
+- **golden/probe/ubuntu/assets/probe.sh** (2 connections) — `tests/fixtures/killercoda/golden/probe/ubuntu/assets/probe.sh`
+- **probe.sh script** (1 connections) — `deploy/killercoda/probe/k8s/assets/probe.sh`
+- **probe.sh script** (1 connections) — `deploy/killercoda/probe/ubuntu/assets/probe.sh`
+- **probe.sh script** (1 connections) — `tests/fixtures/killercoda/golden/probe/k8s/assets/probe.sh`
+- **probe.sh script** (1 connections) — `tests/fixtures/killercoda/golden/probe/ubuntu/assets/probe.sh`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- No strong cross-community connections detected
 
 ## Source Files
 
-- `tests/test_labs.py`
+- `deploy/killercoda/probe/k8s/assets/probe.sh`
+- `deploy/killercoda/probe/ubuntu/assets/probe.sh`
+- `tests/fixtures/killercoda/golden/probe/k8s/assets/probe.sh`
+- `tests/fixtures/killercoda/golden/probe/ubuntu/assets/probe.sh`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

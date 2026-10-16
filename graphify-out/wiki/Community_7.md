@@ -1,6 +1,6 @@
 # Community 7
 
-> 27 nodes · cohesion 0.14
+> 29 nodes · cohesion 0.13
 
 ## Key Concepts
 
@@ -11,50 +11,50 @@
 - **_agent_completer()** (11 connections) — `teach/core/generator.py`
 - **complete()** (9 connections) — `teach/core/generator.py`
 - **_litellm_completer()** (9 connections) — `teach/core/generator.py`
-- **test_translation_verify.py** (8 connections) — `tests/test_translation_verify.py`
 - **complete()** (7 connections) — `teach/core/generator.py`
 - **_antigravity_completer()** (6 connections) — `teach/core/generator.py`
 - **_record_plain_usage()** (6 connections) — `teach/core/generator.py`
 - **_reject_if_substandard()** (6 connections) — `teach/core/generator.py`
 - **_record_usage()** (5 connections) — `teach/core/generator.py`
+- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `AGENTS_SYNC.md`
 - **Completer** (4 connections)
 - **_dominant_model()** (3 connections) — `teach/core/generator.py`
-- **shlex** (3 connections)
 - **complete()** (2 connections) — `teach/core/generator.py`
+- **German translation: working recipe found, blocked on timeout** (2 connections) — `AGENTS_SYNC.md`
+- **What I need from you** (2 connections) — `AGENTS_SYNC.md`
 - **Exception** (1 connections)
+- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `AGENTS_SYNC.md`
+- **What I finished** (1 connections) — `AGENTS_SYNC.md`
 - **Content generator — interchangeable backends. Backends (env TEACH_BACKEND or…** (1 connections) — `teach/core/generator.py`
 - **The model that actually wrote the answer. A single CLI call bills more than one…** (1 connections) — `teach/core/generator.py`
 - **Append one line per completion: what it was for, and what it cost. Never…** (1 connections) — `teach/core/generator.py`
 - **Usage line for backends without the claude JSON envelope. litellm reports exact…** (1 connections) — `teach/core/generator.py`
-- **Stop generation when material does not meet the pipeline.yaml floor.…** (1 connections) — `teach/core/generator.py`
-- **Backend for active Antigravity AI session (uses IDE session without external…** (1 connections) — `teach/core/generator.py`
-- **`effort` overrides the declared thinking level for THIS completer. "default"…** (1 connections) — `teach/core/generator.py`
-- *... and 2 more nodes in this community*
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
-- [Community 69](Community_69.md) (12 shared connections)
-- [Community 21](Community_21.md) (9 shared connections)
-- [Community 146](Community_146.md) (6 shared connections)
-- [Community 43](Community_43.md) (6 shared connections)
-- [video.py](video.py.md) (4 shared connections)
-- [Community 36](Community_36.md) (4 shared connections)
+- [Community 47](Community_47.md) (11 shared connections)
+- [Community 21](Community_21.md) (6 shared connections)
+- [video.py](video.py.md) (6 shared connections)
+- [Changelog](Changelog.md) (5 shared connections)
+- [Community 36](Community_36.md) (5 shared connections)
+- [Community 146](Community_146.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 - [Community 61](Community_61.md) (3 shared connections)
-- [Community 163](Community_163.md) (3 shared connections)
-- [Community 37](Community_37.md) (3 shared connections)
-- [Community 122](Community_122.md) (2 shared connections)
-- [Community 142](Community_142.md) (2 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (2 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
+- [Community 139](Community_139.md) (3 shared connections)
+- [Community 18](Community_18.md) (2 shared connections)
 
 ## Source Files
 
+- `AGENTS_SYNC.md`
 - `teach/core/generator.py`
-- `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 124 (93%)
-- INFERRED: 10 (7%)
+- EXTRACTED: 122 (92%)
+- INFERRED: 10 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,28 +1,32 @@
 # Community 121
 
-> 7 nodes · cohesion 0.29
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **ScopeTests** (7 connections) — `tests/test_check_pr.py`
-- **.test_docs_and_fixtures_are_not_code()** (1 connections) — `tests/test_check_pr.py`
-- **.test_generated_files_are_not_edited_by_hand()** (1 connections) — `tests/test_check_pr.py`
-- **.test_material_and_code_do_not_mix()** (1 connections) — `tests/test_check_pr.py`
-- **.test_one_lab_per_pr()** (1 connections) — `tests/test_check_pr.py`
-- **.test_one_topic_language_per_content_pr()** (1 connections) — `tests/test_check_pr.py`
-- **.test_size_limit_and_exception()** (1 connections) — `tests/test_check_pr.py`
+- **Killercoda is an export target, never the source** (6 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **RUN-A-LAB-ANYWHERE.md** (3 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **LABS-RUNNER.md** (2 connections) — `docs/LABS-RUNNER.md`
+- **Run a lab anywhere** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **How a lab gets proven before it is published** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Limits and open questions** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Publish (manual on purpose)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **What each scenario says about itself** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **What Killercoda documents about limits (checked 2026-10-16)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `docs/LABS-RUNNER.md`
+- `docs/RUN-A-LAB-ANYWHERE.md`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

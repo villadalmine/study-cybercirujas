@@ -1,25 +1,29 @@
 # Community 144
 
-> 3 nodes · cohesion 0.67
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **ContractTests** (3 connections) — `tests/test_mcp_server.py`
-- **.test_the_descriptions_cover_exactly_the_shared_contract()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_the_instructions_do_not_oversell_the_corpus()** (1 connections) — `tests/test_mcp_server.py`
+- **Pull requests** (6 connections) — `CONTRIBUTING.md`
+- **How issue forms work** (2 connections) — `CONTRIBUTING.md`
+- **Agents** (1 connections) — `CONTRIBUTING.md`
+- **How big is my change?** (1 connections) — `CONTRIBUTING.md`
+- **Labels** (1 connections) — `CONTRIBUTING.md`
+- **Size and scope** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_mcp_server.py`
+- `CONTRIBUTING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 6 (86%)
+- INFERRED: 1 (14%)
 - AMBIGUOUS: 0 (0%)
 
 ---

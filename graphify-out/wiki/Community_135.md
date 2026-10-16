@@ -1,30 +1,30 @@
 # Community 135
 
-> 6 nodes · cohesion 0.53
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **usage_report.py** (10 connections) — `scripts/usage_report.py`
-- **main()** (5 connections) — `scripts/usage_report.py`
-- **rows()** (3 connections) — `scripts/usage_report.py`
-- **_money()** (2 connections) — `scripts/usage_report.py`
-- **_tokens()** (2 connections) — `scripts/usage_report.py`
-- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
+- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
+- **.fetch()** (4 connections) — `tests/test_check_pr.py`
+- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
+- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
+- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/usage_report.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

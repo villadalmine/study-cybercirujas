@@ -1,50 +1,36 @@
 # Community 73
 
-> 15 nodes · cohesion 0.19
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **yaml** (85 connections)
-- **check_manifests.py** (12 connections) — `scripts/check_manifests.py`
-- **problems()** (9 connections) — `scripts/check_manifests.py`
-- **manifest_rate.py** (7 connections) — `scripts/manifest_rate.py`
-- **frozen()** (4 connections) — `scripts/check_versions.py`
-- **main()** (4 connections) — `scripts/manifest_rate.py`
-- **_skip()** (3 connections) — `scripts/check_manifests.py`
-- **_VendorTagLoader** (2 connections) — `scripts/check_manifests.py`
-- **main()** (2 connections) — `scripts/check_manifests.py`
-- **_vendor_tag()** (1 connections) — `scripts/check_manifests.py`
-- **Path** (1 connections)
-- **Check that manifests embedded in the material parse. A broken YAML manifest in…** (1 connections) — `scripts/check_manifests.py`
-- **SafeLoader that tolerates vendor YAML tags instead of failing on them.…** (1 connections) — `scripts/check_manifests.py`
-- **(version, snapshot_date) as the syllabus records them — what we built on.** (1 connections) — `scripts/check_versions.py`
-- **Broken-manifest rate per topic, split by when the topic was generated. The…** (1 connections) — `scripts/manifest_rate.py`
+- **Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)** (8 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **1. Graphify — measured pilot, 2026-08-18** (4 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **AGENTIC_TOOLING_STUDY.md** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **2. OpenWiki — studied, not yet run (every run spends)** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **3. LangSmith — optional visibility, narrow fit** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **4. The plan** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **5. Costs, summarized** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **7. Decisions that belong to the owner** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **Integration cautions (this repo specifically)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **Optional, costs completions (cheap, LiteLLM-able)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **What Graphify gives agents** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 
 ## Relationships
 
-- [Community 124](Community_124.md) (10 shared connections)
-- [Community 63](Community_63.md) (7 shared connections)
-- [Community 74](Community_74.md) (6 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 36](Community_36.md) (4 shared connections)
-- [Community 32](Community_32.md) (4 shared connections)
-- [Community 104](Community_104.md) (4 shared connections)
-- [Community 8](Community_8.md) (4 shared connections)
-- [Community 29](Community_29.md) (4 shared connections)
-- [Community 6](Community_6.md) (3 shared connections)
-- [Community 37](Community_37.md) (3 shared connections)
-- [Community 19](Community_19.md) (3 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_manifests.py`
-- `scripts/check_versions.py`
-- `scripts/manifest_rate.py`
+- `docs/AGENTIC_TOOLING_STUDY.md`
 
 ## Audit Trail
 
-- EXTRACTED: 114 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 12 (80%)
+- INFERRED: 3 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

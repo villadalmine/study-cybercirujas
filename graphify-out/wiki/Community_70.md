@@ -1,48 +1,46 @@
 # Community 70
 
-> 8 nodes · cohesion 0.43
+> 16 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **make()** (13 connections) — `tests/lab/conftest.py`
-- **.git()** (9 connections) — `tests/test_check_docs.py`
-- **Open — worth someone's time** (4 connections) — `AGENTS_SYNC.md`
-- **Unattended generation timer** (4 connections) — `docs/OPERATING.md`
-- **Standing decisions worth not re-litigating** (4 connections) — `ROADMAP.md`
-- **Set up, once** (3 connections) — `CONTRIBUTING.md`
-- **Running your own copy** (3 connections) — `DEVELOPERS.md`
-- **Use it in 2 minutes** (3 connections) — `README.md`
+- **test_kc_test.py** (14 connections) — `tests/lab/test_kc_test.py`
+- **resolve_env()** (8 connections) — `teach/lab/kc_test.py`
+- **sha256_of()** (7 connections) — `teach/lab/kc_test.py`
+- **valid_for()** (7 connections) — `teach/lab/kc_test.py`
+- **_ev()** (7 connections) — `tests/lab/test_kc_test.py`
+- **_scenario()** (7 connections) — `tests/lab/test_kc_test.py`
+- **evidence()** (6 connections) — `teach/lab/kc_test.py`
+- **test_export_publishes_only_what_has_evidence()** (6 connections) — `tests/lab/test_kc_test.py`
+- **test_gate_compares_what_was_measured_not_what_was_planned()** (4 connections) — `tests/lab/test_kc_test.py`
+- **test_gate_needs_the_same_scenario_and_todays_environment()** (4 connections) — `tests/lab/test_kc_test.py`
+- **test_hash_ignores_evidence_files()** (3 connections) — `tests/lab/test_kc_test.py`
+- **test_k8s_version_follows_the_schedule()** (2 connections) — `tests/lab/test_kc_test.py`
+- **`env` is what the host MEASURED; `expected` is what killercoda_envs.yaml said…** (1 connections) — `teach/lab/kc_test.py`
+- **The publish gate: a pass for THIS scenario and for the environment Killercoda…** (1 connections) — `teach/lab/kc_test.py`
+- **The environment Killercoda runs for `image` on `today`: pinned versions and how…** (1 connections) — `teach/lab/kc_test.py`
+- **The Killercoda publish gate: environment schedule, evidence tied to the…** (1 connections) — `tests/lab/test_kc_test.py`
 
 ## Relationships
 
-- [Community 83](Community_83.md) (3 shared connections)
-- [clean_registry.py](clean_registry.py.md) (3 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (2 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 61](Community_61.md) (7 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 143](Community_143.md) (2 shared connections)
+- [Community 104](Community_104.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
-- `CONTRIBUTING.md`
-- `DEVELOPERS.md`
-- `README.md`
-- `ROADMAP.md`
-- `docs/OPERATING.md`
-- `tests/lab/conftest.py`
-- `tests/test_check_docs.py`
+- `teach/lab/kc_test.py`
+- `tests/lab/test_kc_test.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (32%)
-- INFERRED: 21 (68%)
+- EXTRACTED: 49 (96%)
+- INFERRED: 2 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

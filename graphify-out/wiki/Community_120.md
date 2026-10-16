@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **linux/break_fix.sh** (1 connections) — `teach/lab/template/linux/break_fix.sh`
+- **template/linux/break_fix.sh** (1 connections) — `teach/lab/template/linux/break_fix.sh`
 - **break_fix.sh script** (1 connections) — `teach/lab/template/linux/break_fix.sh`
 
 ## Relationships

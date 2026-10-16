@@ -1,38 +1,40 @@
 # Community 59
 
-> 14 nodes · cohesion 0.16
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **verdict()** (8 connections) — `scripts/probe_models.py`
-- **off_switch()** (6 connections) — `scripts/probe_models.py`
-- **thinking_mode()** (6 connections) — `scripts/probe_models.py`
-- **tool_verdict()** (5 connections) — `scripts/probe_models.py`
-- **rejects_reasoning()** (4 connections) — `scripts/probe_models.py`
-- **thought()** (4 connections) — `scripts/probe_models.py`
-- **tool_call_of()** (4 connections) — `scripts/probe_models.py`
-- **The first tool call in a response, normalised, or None.** (1 connections) — `scripts/probe_models.py`
-- **How well this model drove one tool. calls asked for the tool with the right…** (1 connections) — `scripts/probe_models.py`
-- **Grade one response. Pure function of the dict — see the tests.** (1 connections) — `scripts/probe_models.py`
-- **Did the provider refuse BECAUSE of the `reasoning` field? A 400/422 naming the…** (1 connections) — `scripts/probe_models.py`
-- **Did this response involve thinking, in any of the three shapes?** (1 connections) — `scripts/probe_models.py`
-- **How the effort selector behaves for this model, from two probes. off = exactly…** (1 connections) — `scripts/probe_models.py`
-- **Does `reasoning: {enabled: false}` actually stop this model thinking? Asked of…** (1 connections) — `scripts/probe_models.py`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 37](Community_37.md) (12 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/probe_models.py`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 29 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

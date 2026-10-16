@@ -18,11 +18,10 @@
 
 ## Relationships
 
-- [Community 47](Community_47.md) (3 shared connections)
+- [Community 47](Community_47.md) (4 shared connections)
 - [Community 54](Community_54.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [certs.py](certs.py.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 - [Community 72](Community_72.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
@@ -30,6 +29,7 @@
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 157](Community_157.md) (1 shared connections)
 - [Changelog](Changelog.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
 
 ## Source Files
 

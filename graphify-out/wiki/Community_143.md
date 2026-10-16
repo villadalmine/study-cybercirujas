@@ -1,34 +1,36 @@
 # Community 143
 
-> 10 nodes · cohesion 0.29
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **accepted()** (9 connections) — `teach/core/bot_stats.py`
-- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
-- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
-- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
-- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
-- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
+- **cmd_test()** (15 connections) — `teach/lab/cli.py`
+- **measure()** (5 connections) — `teach/lab/kc_test.py`
+- **runner_info()** (3 connections) — `teach/lab/kc_test.py`
+- **today()** (2 connections) — `teach/lab/kc_test.py`
+- **run()** (1 connections) — `teach/lab/kc_test.py`
+- **Run the GENERATED scenario the way Killercoda does (on an Ubuntu 24.04 VM, as…** (1 connections) — `teach/lab/cli.py`
+- **What the host really is, read from the host: OS, and for the k8s image the…** (1 connections) — `teach/lab/kc_test.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Community 136](Community_136.md) (1 shared connections)
+- [Community 61](Community_61.md) (5 shared connections)
+- [Community 18](Community_18.md) (3 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 139](Community_139.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/bot_stats.py`
-- `tests/test_bot_stats.py`
+- `teach/lab/cli.py`
+- `teach/lab/kc_test.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
