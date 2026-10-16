@@ -31,6 +31,11 @@ class ExportError(Exception):
     pass
 
 
+def bash_n(text: str) -> int:
+    """Exit code of `bash -n` on the script, fed as bytes with LF endings whatever the platform's text mode."""
+    return subprocess.run(["bash", "-n"], input=text.replace("\r\n", "\n").encode("utf-8"), capture_output=True).returncode
+
+
 def split_solution(text: str) -> tuple[str, str]:
     """(script without its trailing commented solution, the solution as plain text)."""
     lines = text.split("\n")
@@ -93,7 +98,7 @@ def scenario(lab: spec.Lab, allow_unverified: bool = False, needs: tuple = ()) -
         if lab.directory.resolve() not in p.parents or not p.is_file():
             raise ExportError(f"{lab.lab_id}: {name} is not a file inside the lab")
         body, sol = split_solution(p.read_text(encoding="utf-8"))
-        if name.endswith(".sh") and subprocess.run(["bash", "-n"], input=body, capture_output=True, text=True).returncode:
+        if name.endswith(".sh") and bash_n(body):
             raise ExportError(f"{lab.lab_id}: {name} has a bash syntax error (bash -n)")
         assets[f"assets/{name}"] = body
         solution = solution or (sol if name == s["script"] else "")
@@ -254,7 +259,7 @@ def check_tree(files: dict[str, str]) -> list[str]:
         problems += [f"{rel}: references {r}, which does not exist" for r in refs if base + r not in files]
         for r in sorted(set(refs)):
             if r.endswith(".sh") and base + r in files and (not files[base + r].startswith("#!") or
-                    subprocess.run(["bash", "-n"], input=files[base + r], capture_output=True, text=True).returncode):
+                    bash_n(files[base + r])):
                 problems.append(f"{base + r}: not a valid bash script (shebang, bash -n)")
         if d.get("steps") and "verify" not in d["steps"][-1]:
             problems.append(f"{rel}: the last step has no verify script")

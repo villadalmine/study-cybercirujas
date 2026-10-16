@@ -1,0 +1,7 @@
+backend: claude
+model: opus
+quality:
+  level: ai-beta
+  score: 80.0
+  checks:
+  - {name: human_review, result: pass, evidence: a person read the topic, ran_at: '2026-10-01'}

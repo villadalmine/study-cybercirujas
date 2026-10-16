@@ -61,28 +61,34 @@ def lab_hash(lab: spec.Lab) -> str:
 def source_commit(lab: spec.Lab) -> str | None:
     """The last commit that touched the lab folder: it only changes when the lab does, so the export stays stable."""
     try:
-        out = subprocess.run(["git", "-C", str(runner.REPO_ROOT), "log", "-1", "--format=%h", "--", str(lab.directory)],
+        out = subprocess.run(["git", "-C", str(runner.REPO_ROOT), "log", "-1", "--format=%H", "--", str(lab.directory)],
                              capture_output=True, text=True, timeout=30).stdout.strip()
     except (OSError, subprocess.SubprocessError):
         return None
-    return out or None
+    return out[:12] or None
 
 
 def provenance(lab: spec.Lab) -> dict:
-    """Who wrote the lab and what reviewed it, from lab.yaml (origin) and the topic's meta.yaml (quality checks)."""
+    """Who wrote the lab and what reviewed it. lab.yaml (origin) decides; the topic's meta.yaml is only the fallback when the
+    lab declares nothing, and its review checks (they judge the topic's material, not the lab) are used only then."""
     o = lab.spec.get("origin") or {}
     cert, topic = lab.spec["cert"], lab.spec["topic"]
     meta = next((m for m in (_yaml(runner.REPO_ROOT / "certs" / cert / topic / lang / "meta.yaml") for lang in ("en", "es")) if m), {})
-    backend, model = str(meta.get("backend") or ""), str(meta.get("model") or "")
-    from_meta = backend + (f"/{model}" if model and model != backend else "")
-    who = " ".join(str(o.get(k)) for k in ("generated_by", "author") if o.get(k))
-    ai = bool(o.get("generated_by")) or o.get("kind") == "generated" or bool(AI_WORDS.search(who))  or backend not in ("", "none", "human")
-    human = not ai and (backend in ("none", "human") or (o.get("kind") == "community" and bool(who)))
     q = meta.get("quality") or {}
-    checks = {c["name"]: c for c in q.get("checks") or []}
-    rev = {k: checks[k] for k in ("independent_review", "human_review") if checks.get(k, {}).get("result") == "pass"}
-    return {"kind": "ai" if ai else "human" if human else "unknown", "tool": (from_meta or who or None), "level": q.get("level"), "score": q.get("score"),
-            "reviews": {k: {"evidence": v.get("evidence"), "date": v.get("ran_at")} for k, v in rev.items()}}
+    who = " ".join(str(o.get(k)) for k in ("generated_by", "author") if o.get(k))
+    declared = bool(who) or o.get("kind") in ("community", "generated")
+    if declared:
+        ai = bool(o.get("generated_by")) or o.get("kind") == "generated" or bool(AI_WORDS.search(who))
+        kind, tool, reviews = ("ai" if ai else "human"), (who.split(",")[0] or None), {}
+    else:
+        backend, model = str(meta.get("backend") or ""), str(meta.get("model") or "")
+        kind = "ai" if backend not in ("", "none", "human") else "human" if backend in ("none", "human") else "unknown"
+        tool = (backend + (f"/{model}" if model and model != backend else "")) or None
+        checks = {c["name"]: c for c in q.get("checks") or []}
+        reviews = {k: {"evidence": checks[k].get("evidence"), "date": checks[k].get("ran_at")}
+                   for k in ("independent_review", "human_review") if checks.get(k, {}).get("result") == "pass"}
+    return {"kind": kind, "tool": tool, "level": q.get("level"), "score": q.get("score"), "reviews": reviews,
+            "from": "lab.yaml" if declared else "topic meta.yaml"}
 
 
 def banner(prov: dict, ev: dict | None) -> str:
