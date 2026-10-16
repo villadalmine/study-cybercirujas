@@ -1,4 +1,4 @@
-"""aws-clf 2.3 grader: a correct repair passes, and the cheats found in review of
+"""aws-clf 2.3 grader self-test (run: pytest certs/aws-clf/2.3/lab/selftest_grader.py): a correct repair passes, and the cheats found in review of
 PR #107 (fable) do not. Each case runs the real break_fix.sh against a scratch
 sandbox, offline, in about a second."""
 import json
@@ -10,8 +10,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-SCRIPT = REPO / "certs" / "aws-clf" / "2.3" / "lab" / "break_fix.sh"
+HERE = Path(__file__).resolve().parent
+SCRIPT = HERE / "break_fix.sh"
 ACC = "123456789012"
 CI = f"arn:aws:iam::{ACC}:user/ci"
 
