@@ -21,6 +21,7 @@ IMAGES = {"linux": {0: "ubuntu"}, "kind": {0: "kubernetes-kubeadm-1node", 1: "ku
 IMAGES["k3s"] = IMAGES["kind"]
 RULE = re.compile(r"^\s*#\s*[-=]{5,}\s*$")
 SOLUTION = re.compile(r"^\s*#.*(SOLUCI[OÓ]N|SOLUTION)", re.I)
+RPM = re.compile(r"^[^#\n]*\b(dnf|yum|rpm|zypper)\s+(install|-i|-q|-e|-U|erase|remove|update)", re.M)
 FORBIDDEN = re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY|AKIA(?![0-9A-Z]*EXAMPLE)[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}"
                        r"|/home/(alumno|rino|dalmine)|/mnt/[a-z]/|C:\\Users|Nextcloud|\.super6c", re.I)
 
@@ -56,7 +57,8 @@ def _run_line(lab: spec.Lab, action: str) -> str:
     mode = (lab.spec.get("modes") or {}).get(action) or {}
     cmd = " ".join(["timeout", str(int(lab.spec["timeout"][action])), "bash", "./" + shlex.quote(lab.spec["script"]),
                     *[shlex.quote(a) for a in lab.contract[action]]])
-    return f"printf %b {shlex.quote(mode['stdin'])} | {cmd}" if mode.get("stdin") else cmd
+    # never interactive: a confirmation prompt without a TTY would exit silently under `set -e`
+    return f"printf %b {shlex.quote(mode['stdin'])} | {cmd}" if mode.get("stdin") else cmd + " </dev/null"
 
 
 def _env(lab: spec.Lab) -> str:
@@ -80,6 +82,8 @@ def scenario(lab: spec.Lab, allow_unverified: bool = False, needs: tuple = ()) -
     image = IMAGES.get(s["requires"], {}).get(int(s.get("nodes") or 0))
     if not image:
         raise ExportError(f"{lab.lab_id}: no Killercoda image for requires={s['requires']} nodes={s.get('nodes')}")
+    if RPM.search((lab.directory / s["script"]).read_text(encoding="utf-8")):
+        raise ExportError(f"{lab.lab_id}: installs with rpm/dnf (Killercoda is Ubuntu)")
     home = f"/opt/study-lab/{s['cert']}-{s['topic']}"
     files = [s["script"], *[f for f in (s.get("setup") or []) if f != s["script"]]]
     assets, solution = {}, ""
