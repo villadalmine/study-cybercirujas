@@ -26,7 +26,7 @@ GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKE
 
 .PHONY: groundedness groundedness-setup groundedness-deep
 .PHONY: killercoda-test killercoda-export killercoda-diff preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci
+.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci labels-check
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -264,6 +264,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_syllabus.py
+	$(VENV)/bin/python3 scripts/check_labels.py
 	$(VENV)/bin/python3 scripts/status_matrix.py --check
 	$(VENV)/bin/python3 scripts/check_units.py
 	$(VENV)/bin/python3 scripts/check_config.py
@@ -282,6 +283,9 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	@echo "Costs the bot key (\$$0.27 measured), never the subscription:"
 	@echo "  scripts/probe_models.py        do they answer, read our material, speak each language?"
 
+labels-check: ## every label a form, the labeler, a workflow or check_pr names exists in .github/labels.yml (free)
+	$(VENV)/bin/python3 scripts/check_labels.py
+
 verify-ci: ## the free checks that hold on ANY clean clone — what CI runs, and what a contributor runs
 	@# `make verify` minus three checks that describe the owner's workstation,
 	@# not the commit: check_units reads ~/.config/systemd, check_config reads
@@ -298,6 +302,7 @@ verify-ci: ## the free checks that hold on ANY clean clone — what CI runs, and
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_syllabus.py
+	$(VENV)/bin/python3 scripts/check_labels.py
 	$(VENV)/bin/python3 scripts/gen_api_docs.py --check
 	$(VENV)/bin/python3 scripts/gen_readme_table.py --check
 	$(VENV)/bin/python3 -m unittest discover tests

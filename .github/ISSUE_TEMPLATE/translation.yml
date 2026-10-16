@@ -1,6 +1,6 @@
 name: Translation
 description: A translation is wrong, unclear, or missing
-labels: [i18n]
+labels: ["type:content"]
 body:
   - type: input
     id: where

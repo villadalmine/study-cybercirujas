@@ -1,6 +1,6 @@
 name: Content error
 description: Something in the study material is wrong or outdated
-labels: [content]
+labels: ["type:content"]
 body:
   - type: dropdown
     id: exam_version

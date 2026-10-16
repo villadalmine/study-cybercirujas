@@ -4,6 +4,13 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-16
 
+- **Labels are code** (ci, #75): `.github/labels.yml` holds the 43 labels (colour, description, `aliases` for the
+  renames) and `scripts/check_labels.py` (`make labels-check`, in `make verify-ci`) fails when an issue form, the
+  labeler, a workflow or `check_pr.py` names a label that does not exist. The forms named four that did not
+  (`content`, `lab`, `proposal`, `i18n`); they now use `type:bug`, `type:content`, `type:lab` and `type:rfc`.
+  CONTRIBUTING "Labels" lists the families and the criteria for `help wanted` and `good first issue`. The sync
+  workflow and the triage labels follow in their own PRs.
+
 - **check_pr hardening** (ci, #85, #86, #90): the DCO check no longer grandfathers PRs by number (a
   reopened old PR could take new unsigned commits): every commit of base..HEAD needs its sign-off. The graph
   bot exemption no longer trusts the commit author email: it rests on the PR author login, head repository,

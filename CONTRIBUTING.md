@@ -339,10 +339,33 @@ they are plain Markdown, one is chosen with `?template=<name>.md` in the compare
 
 ### Labels
 
-Applied automatically, no external bot: `site:none` / `site:image-rebuild`
-by `pr-format`, and `type:content|lab|video|code|ci|docs` and
-`lang:en|es|other` by path ([`.github/labeler.yml`](.github/labeler.yml),
-`actions/labeler`).
+The labels are code: [`.github/labels.yml`](.github/labels.yml) is the single source (name, colour,
+description, and `aliases` so a rename keeps its issues). To add, rename or retire a label, change that
+file in a PR. `scripts/check_labels.py` (`make labels-check`, part of `make verify-ci` and so of
+`make pr-check`) fails when an issue form, `.github/labeler.yml`, a workflow or `scripts/check_pr.py`
+names a label that is not in it: GitHub drops an unknown label from a form without a word (issue #75).
+
+One label answers one question, and each family has a prefix:
+
+| Family | Question | Who sets it |
+| :--- | :--- | :--- |
+| `type:` | what kind of change | `bug`, `feature`, `question`, `rfc` by the form or a maintainer; `content`, `lab`, `video`, `docs`, `code`, `ci` by path ([`.github/labeler.yml`](.github/labeler.yml), `actions/labeler`) |
+| `area:` | which part (`cncf`, `linux`, `cloud`, `ai`, `site`, `labs-infra`, `quality`) | a maintainer |
+| `priority:` | when (`high` blocks the next release, `medium` is planned, `low` is backlog) | a maintainer |
+| `severity:` + `from-review` | a follow-up found by a code review | the reviewer |
+| `scope:`, `site:` | size and image impact | CI (`scripts/check_pr.py`), never by hand; `size-exception` / `scope-exception` are the maintainer's waivers |
+| `lang:` | language of the material | by path |
+| `triage:`, `status:`, `lifecycle:` | where an issue is in its life | `triage:needed` when an issue is opened (forms), then a maintainer; `triage:needs-info` waits for the author (14 days); `lifecycle:stale` is set by the stale workflow; `lifecycle:frozen` keeps an issue from going stale |
+
+`good first issue` and `help wanted` keep those exact names because GitHub's *Contribute* page reads them.
+
+- `help wanted`: the task is agreed (nothing left to debate), its priority is fair, it is still current, and it says
+  which official source or which check validates it.
+- `good first issue`: everything above, plus the solution is explained, the files to touch and an already merged example are
+  linked, there is **one verification command that runs without keys**, and a maintainer answers within the response
+  times of the triage rules. After one or two, invite the author to take `help wanted` work.
+
+To close without a label use GitHub's *not planned* reason, not `invalid` or `wontfix`.
 
 ### Agents
 
