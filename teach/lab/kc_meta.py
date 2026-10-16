@@ -128,6 +128,8 @@ def decorate(lab: spec.Lab, files: dict[str, str], ev: dict | None) -> dict[str,
             "objective_sha256": syl["objective_sha256"], "curriculum": syl["curriculum"],
             "source": {"path": f"certs/{lab.spec['cert']}/{lab.spec['topic']}/lab", "commit": source_commit(lab)},
             "lab_hash": lab_hash(lab), "license": lic, "provenance": prov,
+            "tested_on_killercoda": ((_yaml(Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "human_tested.yaml") or {})
+                                     .get(f"{lab.spec['cert']}/{lab.spec['topic']}")),
             "tested": ({"ci_run": ev["runner"].get("url"), "date": ev["date"], "result": ev["result"], "parity": ev["env"]["parity"]}
                        if ev else None)}
     out = dict(files)

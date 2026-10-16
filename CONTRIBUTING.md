@@ -224,12 +224,21 @@ with `git push --no-verify`.
 
 ### Run a lab anywhere, and get yours published
 
-Write your lab in `certs/<cert>/<topic>/lab/` (`study-lab new` scaffolds it), prove it locally with
-`study-lab run`, `study-lab check` (must FAIL), your fix, `study-lab check` (must PASS), and open a PR here.
-CI validates the lab contract (`labs.yml`). Once it is merged, the lab is exported and published on
-Killercoda, in the course of its certification: https://killercoda.com/itrestauracion. The same code also runs in
-Docker and on your own cluster: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md). The Killercoda
-repository only receives the generated tree; labs are never edited there.
+The same lab runs in Docker (`study-lab run`), on your own cluster and on Killercoda. End to end:
+
+1. Write it in `certs/<cert>/<topic>/lab/` (`study-lab new` scaffolds it). The topic must exist in the certification's
+   syllabus and the lab title must be the syllabus title.
+2. Prove it locally: `study-lab run`, `study-lab check` must FAIL, apply your fix, `study-lab check` must PASS.
+3. Add the reference fix as a script, `deploy/killercoda/fixes/<cert>-<topic>.sh`, and open a PR.
+4. On the PR, CI validates the lab contract (`labs.yml`), checks the generated Killercoda scenario (schema, files,
+   scripts, syllabus objective; the scenario diff is in the job summary of `killercoda.yml`) and proves it on an
+   Ubuntu 24.04 VM (`killercoda-parity.yml`).
+5. When it is merged, `killercoda-publish.yml` proves every scenario again, exports only those that passed and pushes
+   them to the Killercoda mirror, which syncs on its own. Each scenario starts with its certification, domain and
+   objective, says whether it was written by a person or by AI and who reviewed it, and shows where it was tested.
+   They appear in the course of their certification at https://killercoda.com/itrestauracion.
+
+Nobody edits the mirror by hand: labs live here. Details, limits and the manual path: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md).
 
 ### How a lab gets proven before it is published
 

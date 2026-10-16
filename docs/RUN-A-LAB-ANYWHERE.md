@@ -87,7 +87,16 @@ syllabus title. On every PR that touches labs, `killercoda.yml` runs `study-lab 
 (schema of `index.json`, referenced files, `bash -n` on every script, courses list real folders) and puts the scenario
 diff against the base branch in the job summary.
 
-### Publish (manual on purpose)
+### Publish: automatic on merge
+
+`.github/workflows/killercoda-publish.yml` runs on a push to `main` that changes labs, the exporter or
+`deploy/killercoda/`, and on demand. Jobs: `plan` (labs with a reference fix), `prove` (one VM per lab, evidence as an
+artifact), `publish` (export with `--evidence`, so only passing scenarios, then a commit `export: study@<sha>` on the
+mirror, none if the tree is identical). Concurrency group, actions pinned by commit, `contents: read`, and the deploy key
+(`KILLERCODA_DEPLOY_KEY`, write access to the mirror only) is visible to the last step of the last job. If the mirror's
+`main` is protected and the key cannot bypass it, the job pushes `export/study-<sha>` and says so in its summary.
+
+### Publish by hand (the same thing, when you want to see it)
 
 CI never writes to the mirror: that would need a secret with write access, which is the owner's call. The
 `killercoda-export` workflow only generates the tree, checks that two runs are byte-identical and, if a

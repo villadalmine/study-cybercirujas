@@ -224,7 +224,7 @@ def cmd_export(args) -> int:
         print(f"not published: {why}")
     for lab_id, why in skipped:
         print(f"skipped {lab_id}: {why}")
-    print(f"[study-lab] exported {len(labs)} lab(s), {len(files)} files to {args.out}")
+    print(f"[study-lab] exported {len(labs) - len(gated)} lab(s), {len(files)} files to {args.out}")
     return 0
 
 
@@ -238,6 +238,14 @@ def cmd_test(args) -> int:
     if args.print_env:
         env = kc_test.resolve_env(args.print_env, day)
         print(env.get("kubernetes", ""), kc.load_envs()["images"][args.print_env].get("cni", {}).get("version", ""))
+        return 0
+    if args.plan:   # the labs that have a reference fix, as a CI matrix
+        plan = []
+        for f in sorted((kd / "fixes").glob("*.sh")):
+            cert, _, topic = f.stem.rpartition("-")
+            lab = spec.load(runner.REPO_ROOT / "certs" / cert / topic / "lab", "curated")
+            plan.append({"lab": f"{cert}/{topic}", "image": kc.IMAGES[lab.spec["requires"]][int(lab.spec.get("nodes") or 0)]})
+        print(json.dumps(plan, separators=(",", ":")))
         return 0
     code = 0
     for w in args.labs:
@@ -318,6 +326,7 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--target", required=True, choices=["killercoda"])
     tt.add_argument("--evidence", default="build/killercoda-evidence")
     tt.add_argument("--today")
+    tt.add_argument("--plan", action="store_true", help="print the labs that have a reference fix, as JSON (CI matrix)")
     tt.add_argument("--print-env", help="print '<k8s patch> <flannel tag>' for an imageid (used by bootstrap-kubeadm.sh)")
     tt.add_argument("labs", nargs="*", help="<cert>/<topic>")
     b = sub.add_parser("build")
