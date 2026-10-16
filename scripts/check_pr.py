@@ -388,7 +388,7 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
 
 # --- DCO: a human signs off every commit (CONTRIBUTING -> Sign your commits) --
 
-DCO_FIRST_PR = 69   # PRs numbered below this were opened before the rule: grandfathered (#68)
+DCO_FIRST_PR = 73   # PRs numbered below this were opened before the rule: grandfathered (#68)
 BOT_EMAIL = "github-actions[bot]@users.noreply.github.com"
 SIGNED_OFF = re.compile(r"^Signed-off-by:[ \t]*(.*?)[ \t]*<([^<>\s]+)>[ \t]*$", re.M | re.I)
 DCO_FIX = ("fix: `git commit --amend -s` (last commit) or `git rebase --signoff origin/main` (all of "

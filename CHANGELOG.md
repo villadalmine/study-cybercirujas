@@ -8,7 +8,7 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   carry `Signed-off-by:` with the author's email (or the PR author's GitHub noreply address); the
   `DCO` file holds the Developer Certificate of Origin 1.1. `scripts/check_pr.py` fails with the fix
   (`git commit --amend -s` / `git rebase --signoff origin/main`). Exempt: the graph bot's PR.
-  Grandfathered: PRs numbered below `DCO_FIRST_PR` (69, so #61 and every PR opened earlier).
+  Grandfathered: PRs numbered below `DCO_FIRST_PR` (73, so #61 and every PR opened earlier).
   Provenance (`Author: human|ai`, and for ai the Backend and Model) is now validated on every PR, not
   only on `certs/` changes. CONTRIBUTING gains "Sign your commits (DCO)", the AI policy and the
   "Thanks @user (#N)" changelog rule; PR templates gain the checklist line; our agents use `git commit -s`.
