@@ -131,12 +131,16 @@ jobs:
               echo "event=$GITHUB_EVENT_PATH"
             } >> "$GITHUB_OUTPUT"
           else
-            gh pr view "$GITHUB_REF_NAME" --json number,title,body,headRefName,baseRefName,labels > pr.json
-            jq '{pull_request: {number, title, body, head: {ref: .headRefName}, labels}}' pr.json > "$RUNNER_TEMP/event.json"
+            # REST, not `gh pr view`: the exemption needs user.login ("github-actions[bot]")
+            # and head.repo, which `gh pr view` renders differently ("app/github-actions").
+            gh api "repos/$GITHUB_REPOSITORY/pulls" -f head="${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" \
+              -f state=open --jq '.[0]' > pr.json
+            test "$(jq -r .number pr.json)" != null
+            jq '{pull_request: {number, title, body, user: {login: .user.login}, head: {ref: .head.ref, repo: {full_name: .head.repo.full_name}}, base: {ref: .base.ref, repo: {full_name: .base.repo.full_name}}, labels: [.labels[] | {name}]}}' pr.json > "$RUNNER_TEMP/event.json"
             {
               echo "number=$(jq -r .number pr.json)"
               echo "head=$(git rev-parse HEAD)"
-              echo "base=$(jq -r .baseRefName pr.json)"
+              echo "base=$(jq -r .base.ref pr.json)"
               echo "event=$RUNNER_TEMP/event.json"
             } >> "$GITHUB_OUTPUT"
           fi

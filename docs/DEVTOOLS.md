@@ -91,12 +91,17 @@ Nothing to remember:
    there is no loop. A feature PR neither rebases nor rebuilds the graph and
    keeps `graphify-out/` out of its diff; a stale graph in a PR is a warning.
    main is protected, so the bot PR needs its checks like any other. A PR opened
-   with the built-in `GITHUB_TOKEN` starts no workflows, so the same job then
-   dispatches `verify.yml` on `bot/graph-refresh` (`workflow_dispatch` is the
-   exception to that rule); the `verify`, `e2e` and `pr-format` checks attach to
-   the PR head. No secret, PAT or extra tool: one repository setting, once
-   (Settings > Actions > General > "Allow GitHub Actions to create and approve
-   pull requests").
+   with the built-in `GITHUB_TOKEN` starts no `pull_request` workflows (a
+   close/reopen by that token only makes runs that stop at `action_required`), so the
+   same job dispatches `verify.yml` on `bot/graph-refresh` (`workflow_dispatch` is the
+   exception to that rule), waits for it, and copies the verdict of its `verify`,
+   `e2e` and `pr-format` jobs onto the PR head as check runs of the same names
+   through the Checks API. The dispatched run's own check runs are not associated with
+   the PR (it stays BLOCKED with no checks); a check run created with `head_branch` is.
+   A missing job or anything but `success` is posted as `failure`. The PR is
+   mergeable with no human step but the merge. No secret, PAT or extra tool: one
+   repository setting, once (Settings > Actions > General > "Allow GitHub Actions
+   to create and approve pull requests").
 
 The hook needs `git config core.hooksPath .githooks`, which `make setup`
 already sets — same switch that installs the pre-commit contract hook.

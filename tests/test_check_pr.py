@@ -42,17 +42,58 @@ class CheckPrTests(unittest.TestCase):
                                       ["certs/cka/1.1/en/content.md"], root=Path(tmp))
             self.assertTrue(any("no meta.yaml" in p for p in problems))
 
-    def test_the_graph_bot_pr_is_checked_by_title_and_files_only(self):
+    def test_the_graph_bot_pr_is_checked_by_title_author_and_files_only(self):
         graph = ["graphify-out/graph.json", "graphify-out/wiki/index.md"]
         title = "chore(graph): regenerate code graph"
-        ref = "bot/graph-refresh"
-        self.assertEqual(check_pr.check(title, "", graph, head_ref=ref), [])
+        bot = dict(head_ref="bot/graph-refresh", author="github-actions[bot]", same_repo=True)
+        self.assertEqual(check_pr.check(title, "", graph, **bot), [])
         # the title is still checked
-        self.assertTrue(check_pr.check("regenerate", "", graph, head_ref=ref))
+        self.assertTrue(check_pr.check("regenerate", "", graph, **bot))
         # another branch, or any file outside graphify-out/, gets the full check
-        self.assertTrue(check_pr.check(title, "", graph, head_ref="bot/other"))
-        self.assertTrue(check_pr.check(title, "", graph + ["scripts/check_pr.py"], head_ref=ref))
-        self.assertTrue(check_pr.check(title, "", [], head_ref=ref))
+        self.assertTrue(check_pr.check(title, "", graph, **{**bot, "head_ref": "bot/other"}))
+        self.assertTrue(check_pr.check(title, "", graph + ["scripts/check_pr.py"], **bot))
+        self.assertTrue(check_pr.check(title, "", [], **bot))
+        # the branch name alone is not an identity (#33): a person, or a fork, with
+        # the same branch name gets the full check
+        self.assertTrue(check_pr.check(title, "", graph, **{**bot, "author": "villadalmine"}))
+        self.assertTrue(check_pr.check(title, "", graph, **{**bot, "author": None}))
+        self.assertTrue(check_pr.check(title, "", graph, **{**bot, "same_repo": False}))
+        self.assertTrue(check_pr.check(title, "", graph, head_ref="bot/graph-refresh"))
+
+    def test_the_bot_exemption_reads_the_author_and_repo_from_the_event(self):
+        """Through main(): the event payload decides, and an exempt PR writes no runs file."""
+        def run(login, head_repo):
+            event = {"pull_request": {"title": "chore(graph): regenerate code graph", "body": "",
+                                      "user": {"login": login},
+                                      "head": {"ref": "bot/graph-refresh", "repo": {"full_name": head_repo}},
+                                      "base": {"repo": {"full_name": "o/r"}}}}
+            with tempfile.TemporaryDirectory() as tmp:
+                ev, runs = Path(tmp) / "e.json", Path(tmp) / "runs.txt"
+                ev.write_text(json.dumps(event))
+                argv = ["check_pr.py", "--event", str(ev), "--files", "graphify-out/a.md",
+                        "--runs-file", str(runs)]
+                with mock.patch.object(sys, "argv", argv), redirect_stdout(io.StringIO()):
+                    return check_pr.main(), runs.exists()
+        self.assertEqual(run("github-actions[bot]", "o/r"), (0, False))
+        self.assertEqual(run("someone", "o/r")[0], 1)
+        self.assertEqual(run("github-actions[bot]", "fork/r")[0], 1)
+
+    def test_git_paths_are_read_unquoted(self):
+        """core.quotePath=false: a quoted "graphify-out/... name cost #60 the exemption."""
+        with tempfile.TemporaryDirectory() as tmp:
+            def sh(*a):
+                subprocess.run(["git", "-C", tmp, *a], check=True, capture_output=True)
+            sh("init", "-q", "-b", "main")
+            sh("config", "user.email", "t@t")
+            sh("config", "user.name", "t")
+            sh("commit", "-q", "--allow-empty", "-m", "base")
+            (Path(tmp) / "graphify-out").mkdir()
+            (Path(tmp) / "graphify-out" / "Roadmap — where.md").write_text("x")
+            sh("add", ".")
+            sh("commit", "-q", "-m", "n")
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                files = check_pr.changed_files("HEAD~1")
+        self.assertEqual(files, ["graphify-out/Roadmap — where.md"])
 
     def test_title_must_be_a_conventional_commit(self):
         problems = check_pr.check("Fixed stuff", self.body("good.md"), [])
@@ -461,11 +502,17 @@ class DcoTests(unittest.TestCase):
         bot["email"] = "41898282+" + check_pr.BOT_EMAIL
         graph = ["graphify-out/graph.json"]
         ref = "bot/graph-refresh"
-        self.assertEqual(check_pr.dco([bot], number=500, head_ref=ref, files=graph), [])
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref="bot/other", files=graph)), 1)
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph + ["scripts/x.py"])), 1)
+        who = dict(pr_author="github-actions[bot]", same_repo=True)
+        self.assertEqual(check_pr.dco([bot], number=500, head_ref=ref, files=graph, **who), [])
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref="bot/other", files=graph, **who)), 1)
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph + ["scripts/x.py"], **who)), 1)
         human = commit(trailer="")
-        self.assertEqual(len(check_pr.dco([bot, human], number=500, head_ref=ref, files=graph)), 2)
+        self.assertEqual(len(check_pr.dco([bot, human], number=500, head_ref=ref, files=graph, **who)), 2)
+        # the branch name alone is not an identity (#33): another author, or a fork, is not exempt
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph,
+                                          pr_author="someone", same_repo=True)), 1)
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph,
+                                          pr_author="github-actions[bot]", same_repo=False)), 1)
 
     def test_commits_of_reads_git_without_merges(self):
         git = lambda *a: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True, text=True)  # noqa: E731
