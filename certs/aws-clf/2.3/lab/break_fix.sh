@@ -259,13 +259,19 @@ def evaluate(kind, name, action, resource):
 
 
 # ---- identity resolution (the credential chain) -------------------------------
+_MFA_CODE = {}
+
+
 def mfa_code(serial):
-    code = os.environ.get("AWS_LAB_MFA_CODE", "")
-    if not code:
-        sys.stderr.write("Enter MFA code for %s: " % serial)
-        sys.stderr.flush()
-        code = sys.stdin.readline().strip()
-    return code
+    """The token code, asked once per run: AWS_LAB_MFA_CODE, else a prompt on stdin."""
+    if serial not in _MFA_CODE:
+        code = os.environ.get("AWS_LAB_MFA_CODE", "")
+        if not code:
+            sys.stderr.write("Enter MFA code for %s: " % serial)
+            sys.stderr.flush()
+            code = sys.stdin.readline().strip()
+        _MFA_CODE[serial] = code.strip()
+    return _MFA_CODE[serial]
 
 
 def trust_allows(caller_arn, caller_name, prof):
@@ -301,6 +307,10 @@ def identity(name):
         if not source or (source not in CONFIG and source not in CREDS):
             die("\nThe config profile (%s) could not be found" % (source or "source_profile"), 255)
         caller = identity(source)
+        serial = prof.get("mfa_serial")
+        if serial and not mfa_code(serial):
+            die("\nAn error occurred (AccessDenied) when calling the AssumeRole operation: "
+                "MFA authentication is required and no MFA code was provided")
         if not trust_allows(caller["Arn"], caller["name"], prof):
             die("\nAn error occurred (AccessDenied) when calling the AssumeRole operation: "
                 "User: %s is not authorized to perform: sts:AssumeRole on resource: %s"
@@ -678,7 +688,7 @@ cmd_hint() {
 aws_lab() {
   (
     export AWS_LAB_ROOT="$LAB_ROOT" AWS_CONFIG_FILE AWS_SHARED_CREDENTIALS_FILE
-    export AWS_LAB_MFA_CODE="${AWS_LAB_MFA_CODE:-123456}" AWS_PAGER=""
+    export AWS_LAB_MFA_CODE="${AWS_LAB_MFA_CODE-123456}" AWS_PAGER=""
     python3 "$BIN/aws" "$@" </dev/null
   )
 }
@@ -744,7 +754,34 @@ for st in statements:
 PY
 }
 
-trust_keeps_mfa() { grep -q 'aws:MultiFactorAuthPresent' "$LAB_ROOT/iam/trust/LabDeployRole.json"; }
+# "MFA is still required" is a property of the EFFECTIVE policy: every Allow
+# statement that grants sts:AssumeRole must carry aws:MultiFactorAuthPresent=true.
+# A Condition parked in some other (dead) statement does not count.
+trust_mfa_effective() {
+  python3 - "$LAB_ROOT/iam/trust/LabDeployRole.json" <<'PY'
+import fnmatch, json, sys
+doc = json.load(open(sys.argv[1], encoding="utf-8"))
+statements = doc.get("Statement", [])
+statements = statements if isinstance(statements, list) else [statements]
+def grants_assume(st):
+    actions = st.get("Action", [])
+    actions = actions if isinstance(actions, list) else [actions]
+    return any(fnmatch.fnmatchcase("sts:assumerole", a.lower()) for a in actions)
+def requires_mfa(st):
+    for operator, block in (st.get("Condition") or {}).items():
+        if operator.lower() == "bool":
+            for key, value in block.items():
+                if key.lower() == "aws:multifactorauthpresent" and str(value).lower() == "true":
+                    return True
+    return False
+granting = [st for st in statements if st.get("Effect") == "Allow" and grants_assume(st)]
+sys.exit(0 if granting and all(requires_mfa(st) for st in granting) else 1)
+PY
+}
+
+deploy_has_mfa_serial() { [ -n "$(ini_get "$AWS_CONFIG_FILE" "profile deploy" mfa_serial)" ]; }
+no_assume_without_mfa_code() { AWS_LAB_MFA_CODE="" aws_lab --profile deploy sts get-caller-identity; }
+
 deploy_is_role() { aws_lab --profile deploy sts get-caller-identity | grep -q 'assumed-role/LabDeployRole/'; }
 
 upload_to() {
@@ -773,7 +810,9 @@ cmd_verify() {
   head1 "Objective 1 - the deploy profile can assume LabDeployRole"
   check     "the deploy profile's source_profile exists" source_profile_exists
   check     "the trust policy names the ci user" trust_names_ci
-  check     "the trust policy still demands MFA (the condition was kept)" trust_keeps_mfa
+  check     "the statement that grants sts:AssumeRole still requires MFA" trust_mfa_effective
+  check     "the deploy profile carries the mfa_serial" deploy_has_mfa_serial
+  check_not "the role cannot be assumed without an MFA code" no_assume_without_mfa_code
   check     "the deploy profile resolves to an assumed-role session" deploy_is_role
 
   head1 "Objective 2 - the pipeline can publish again"

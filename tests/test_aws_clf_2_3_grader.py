@@ -61,7 +61,7 @@ class Aws23GraderTests(unittest.TestCase):
     def assert_passes(self):
         rc, out = self.verify()
         self.assertEqual(rc, 0, out)
-        self.assertIn("ALL 11 CHECKS PASSED", out)
+        self.assertIn("ALL 13 CHECKS PASSED", out)
 
     def assert_fails(self):
         rc, out = self.verify()
@@ -96,3 +96,28 @@ class Aws23GraderTests(unittest.TestCase):
                 self.assert_fails()
         self.trust(lambda d: d["Statement"][0].update(Principal={"AWS": CI}))
         self.assert_passes()
+
+    def test_mfa_condition_moved_to_a_dead_statement(self):
+        """PR #107 finding 3: Condition moved out of the Allow, mfa_serial removed."""
+        self.reference_fix()
+
+        def move(doc):
+            allow = doc["Statement"][0]
+            condition = allow.pop("Condition")
+            doc["Statement"].append({"Sid": "Dead", "Effect": "Deny", "Action": "sts:AssumeRole",
+                                     "Principal": {"AWS": f"arn:aws:iam::{ACC}:user/ci-runner-legacy"},
+                                     "Condition": condition})
+        self.trust(move)
+        self.edit("aws/config", lambda t: re.sub(r"^mfa_serial.*\n", "", t, flags=re.M))
+        self.assert_fails()
+
+    def test_empty_mfa_code_cannot_assume_the_role(self):
+        self.reference_fix()
+        env = dict(self.env, AWS_LAB_MFA_CODE="", AWS_LAB_ROOT=str(self.root),
+                   AWS_CONFIG_FILE=str(self.root / "aws/config"),
+                   AWS_SHARED_CREDENTIALS_FILE=str(self.root / "aws/credentials"))
+        proc = subprocess.run(["python3", str(self.root / "bin/aws"), "--profile", "deploy",
+                               "sts", "get-caller-identity"], env=env, text=True,
+                              capture_output=True, stdin=subprocess.DEVNULL, timeout=60)
+        self.assertNotEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("AccessDenied", proc.stderr)
