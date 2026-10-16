@@ -616,5 +616,49 @@ class ExamVersionTests(unittest.TestCase):
         self.assertTrue(check_pr.exam_version(["cka"], None, "small"))
 
 
+class ExamVersionWiringTests(unittest.TestCase):
+    """main() reaches the guard: a #61-like PR (catalog links swapped, label present) fails in CI's path."""
+
+    TITLE = "fix(catalog): update CKA and CKAD curriculum links"
+
+    def body(self, scope):
+        text = (FIXTURES / "good.md").read_text(encoding="utf-8").replace("- Scope: medium", f"- Scope: {scope}")
+        return text.replace("Site: image-rebuild", f"Site: {check_pr.site_impact(['catalog.yaml'])}")
+
+    def run_main(self, tmp, scope, milestone=None, labels="triaged\nscope:exam-version\n"):
+        tmp = Path(tmp)
+        (tmp / "body.md").write_text(self.body(scope), encoding="utf-8")
+        (tmp / "labels.txt").write_text(labels, encoding="utf-8")
+        argv = ["check_pr.py", "--title", self.TITLE, "--body-file", str(tmp / "body.md"), "--base", "origin/main",
+                "--files", "catalog.yaml", "--labels-file", str(tmp / "labels.txt")]
+        if milestone is not None:
+            (tmp / "milestone.txt").write_text(milestone, encoding="utf-8")
+            argv += ["--milestone-file", str(tmp / "milestone.txt")]
+        head = CATALOG_BASE.replace("cka-1.35.pdf", "cka-1.37.pdf")
+        out = io.StringIO()
+        with mock.patch.object(sys, "argv", argv), redirect_stdout(out), \
+                mock.patch.object(check_pr, "base_texts", lambda paths, base: {p: CATALOG_BASE for p in paths}), \
+                mock.patch.object(check_pr, "commits_of", lambda base: []), \
+                mock.patch.object(check_pr, "head_catalog", lambda: head):
+            return check_pr.main(), out.getvalue()
+
+    def test_pr_61_fails_even_with_the_label(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self.run_main(tmp, "medium")
+        self.assertEqual(code, 1, out)
+        self.assertIn("exam version: catalog.yaml changes", out)
+
+    def test_the_label_and_a_declared_scope_without_a_milestone_fail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self.run_main(tmp, "exam-version", milestone="")
+        self.assertEqual(code, 1, out)
+        self.assertIn("milestone", out)
+
+    def test_an_upgrade_milestone_and_the_declared_scope_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self.run_main(tmp, "exam-version", milestone="CKA & CKAD v1.37 upgrade\n")
+        self.assertEqual(code, 0, out)
+
+
 if __name__ == "__main__":
     unittest.main()
