@@ -2,4 +2,3 @@
 # tests/test_labs.py fails if a lab NOT listed here breaks, and also if a
 # listed one starts passing — so fixing one means deleting its line.
 # These need regeneration (or a human rewrite), not a mechanical fix.
-certs/aws-clf/2.3/lab   # file starts mid-script (line 1 is a lone quote): the head of the generated script is missing

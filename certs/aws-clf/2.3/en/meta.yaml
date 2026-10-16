@@ -6,7 +6,7 @@ sources:
 - https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf
 quality:
   weights_version: 1
-  score: 75.0
+  score: 80.6
   level: ai-beta
   checks:
   - name: quality_floor
@@ -47,10 +47,10 @@ quality:
     evidence: declares its origin (sources + References)
   - name: lab
     version: '1'
-    result: fail
+    result: not_run
     weight: 10
     ran_at: null
-    evidence: listed in tests/fixtures/labs_known_broken.txt
+    evidence: not yet run in the study-lab runner
   - name: independent_review
     version: '1'
     result: not_run
