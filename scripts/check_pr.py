@@ -25,8 +25,11 @@ check instead of a request. It fails when:
   say which tool and model (the AI disclosure, CONTRIBUTING.md);
 - a non-merge commit of the PR has no `Signed-off-by:` trailer (Developer
   Certificate of Origin, the `DCO` file) whose email is the commit author's or
-  the PR author's GitHub noreply address. PRs numbered below DCO_FIRST_PR were
-  opened before the rule and are grandfathered; merged history is never checked.
+  the PR author's GitHub noreply address. EVERY commit of base..HEAD (the ones not
+  on the base branch yet) is checked, whatever the PR's number or the commit's
+  dates: a PR number can be reopened and author/committer dates are set by whoever
+  commits, while "not on main yet" is a fact of the history (#85). Merged history
+  is never checked.
 
 One exemption, and a narrow one: the graph refresh bot
 (.github/workflows/graph.yml) opens `chore(graph): ...` PRs from the branch
@@ -35,17 +38,18 @@ One exemption, and a narrow one: the graph refresh bot
 exactly that, the PR's author is github-actions[bot], its head repository is this
 one (not a fork), and EVERY changed file is under graphify-out/, only the title
 is checked. Any other file, author or branch gets the full check. The same PR is
-exempt from the sign-off check, and only while every commit is authored by
-github-actions[bot]. (Paths are read with core.quotePath=false: git quotes a
+exempt from the sign-off check, on those same facts and only on them: a commit's
+author email is set by whoever commits, so it is never trusted (#86). (Paths are read with core.quotePath=false: git quotes a
 non-ASCII name, and a quoted "graphify-out/... fails the prefix test, which is
 how #60 lost the exemption.)
 
 - the Scope section does not declare exactly one of small | medium | large |
   exam-version (CONTRIBUTING -> How big is my change?);
 - `catalog.yaml` changes a cert's `tracked_version` or `sources.objectives`
-  (the exam version the material is built against) and the PR is not labelled
-  the PR's real GitHub milestone is not an upgrade milestone (title
-  "<CERT> v<version> upgrade", e.g. "CKA & CKAD v1.37 upgrade") or the Scope
+  (the exam version the material is built against) and the PR's real GitHub
+  milestone is not the upgrade milestone of those certs and that version (title
+  "<CERT> v<version> upgrade", e.g. "CKA & CKAD v1.37 upgrade": it names every
+  cert that changed and its version equals their new tracked_version) or the Scope
   section does not declare `Scope: exam-version`. The label is only
   classification and the description is author text: neither authorizes. A
   links fix cannot move the version.
@@ -301,7 +305,8 @@ SCOPES = ("small", "medium", "large", "exam-version")
 SCOPE_LINE = re.compile(r"^\s*[-*]?\s*Scope:\s*(.*?)\s*$", re.M | re.I)
 # An upgrade milestone is named "<CERT> v<version> upgrade" ("CKA & CKAD v1.37 upgrade"). It is
 # read from the PR itself (the event, or live with --milestone-file), never from its description.
-UPGRADE_MILESTONE = re.compile(r"^.+ v\d+(\.\d+)* upgrade$")
+UPGRADE_MILESTONE = re.compile(r"^(?P<certs>.+) v(?P<version>\d+(\.\d+)*) upgrade$")
+CERT_SEPARATORS = re.compile(r"\s*(?:&|,|\band\b)\s*", re.I)
 CATALOG = "catalog.yaml"
 
 
@@ -332,19 +337,47 @@ def exam_version_changes(base_text: str | None, head_text: str | None) -> list[s
     return sorted(key for key in set(before) | set(after) if before.get(key) != after.get(key))
 
 
-def exam_version(changed: list[str], milestone: str | None, declared: str | None) -> list[str]:
+def tracked_versions(text: str | None) -> dict[str, str]:
+    """cert key -> tracked_version of a catalog.yaml text (the head's, for the milestone check)."""
+    certs = (yaml.safe_load(text) or {}).get("certs") or {} if text else {}
+    return {key: str(c.get("tracked_version")) for key, c in certs.items() if isinstance(c, dict)}
+
+
+def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict[str, str]) -> str | None:
+    """Why the milestone does not authorize this change, or None if it does.
+
+    It must be '<CERT>[ & <CERT>...] v<version> upgrade', name EVERY cert that changed, and its
+    version must equal the new tracked_version of each of them (a cert the PR removed has none)."""
+    match = UPGRADE_MILESTONE.match((milestone or "").strip())
+    if not match:
+        return (f"the PR's milestone is {milestone!r}, not an upgrade milestone "
+                "('<CERT> v<version> upgrade')")
+    named = {c.strip().lower() for c in CERT_SEPARATORS.split(match.group("certs")) if c.strip()}
+    missing = [c for c in changed if c.lower() not in named]
+    if missing:
+        return f"the milestone {milestone!r} does not name {', '.join(missing)}"
+    wrong = [f"{c} is at {versions[c]!r}" for c in changed
+             if c in versions and versions[c] != match.group("version")]
+    if wrong:
+        return f"the milestone {milestone!r} says v{match.group('version')} but {', '.join(wrong)}"
+    return None
+
+
+def exam_version(changed: list[str], milestone: str | None, declared: str | None,
+                 versions: dict[str, str] | None = None) -> list[str]:
     """Problems if the exam version moved outside its own milestone's PR.
 
-    `milestone` is the title of the PR's real milestone; `declared` is the scope its description declares."""
+    `milestone` is the title of the PR's real milestone; `declared` is the scope its description declares;
+    `versions` is the head catalog's tracked_version per cert."""
     if not changed:
         return []
     problems = []
     names = ", ".join(changed[:4]) + ("…" if len(changed) > 4 else "")
     head = f"exam version: {CATALOG} changes tracked_version or objectives of {names}, but "
-    if not (milestone and UPGRADE_MILESTONE.match(milestone.strip())):
-        problems.append(head + f"the PR's milestone is {milestone!r}, not an upgrade milestone "
-                        "('<CERT> v<version> upgrade'). Only that milestone's final PR may move the version; "
-                        "a links fix must not (CONTRIBUTING -> How big is my change?)")
+    why = milestone_mismatch(changed, milestone, versions or {})
+    if why:
+        problems.append(head + why + ". Only the final PR of that cert's upgrade milestone may move the "
+                        "version; a links fix must not (CONTRIBUTING -> How big is my change?)")
     if declared != "exam-version":
         problems.append(head + f"the Scope section declares {declared!r}: declare 'Scope: exam-version'")
     return problems
@@ -471,8 +504,6 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
 
 # --- DCO: a human signs off every commit (CONTRIBUTING -> Sign your commits) --
 
-DCO_FIRST_PR = 73   # PRs numbered below this were opened before the rule: grandfathered (#68)
-BOT_EMAIL = "github-actions[bot]@users.noreply.github.com"
 SIGNED_OFF = re.compile(r"^Signed-off-by:[ \t]*(.*?)[ \t]*<([^<>\s]+)>[ \t]*$", re.M | re.I)
 DCO_FIX = ("fix: `git commit --amend -s` (last commit) or `git rebase --signoff origin/main` (all of "
            "them), then `git push --force-with-lease`; see CONTRIBUTING.md -> Sign your commits (DCO)")
@@ -497,14 +528,15 @@ def noreply(email: str, login: str | None) -> bool:
     return re.fullmatch(rf"(\d+\+)?{re.escape(login)}@users\.noreply\.github\.com", email, re.I) is not None
 
 
-def dco(commits: list[dict], pr_author: str | None = None, number: int | None = None,
+def dco(commits: list[dict], pr_author: str | None = None,
         head_ref: str | None = None, files: list[str] | None = None,
         same_repo: bool = False) -> list[str]:
-    """One problem per commit without a valid Signed-off-by (empty: all signed, or exempt)."""
-    if number is not None and number < DCO_FIRST_PR:
-        return []  # grandfathered: opened before the rule (DCO_FIRST_PR)
-    if (is_graph_refresh(head_ref, files or [], pr_author, same_repo) and commits
-            and all(c["email"].lower().endswith(BOT_EMAIL) for c in commits)):
+    """One problem per commit without a valid Signed-off-by (empty: all signed, or exempt).
+
+    No grandfathering by PR number or by date (#85) and no trust in a commit's author email
+    (#86): `commits` is base..HEAD, and the only exemption is the graph bot's PR, decided by
+    facts GitHub supplies (its login, its head repository, its branch, its files)."""
+    if is_graph_refresh(head_ref, files or [], pr_author, same_repo):
         return []  # the graph bot, see the module docstring
     problems = []
     for c in commits:
@@ -638,12 +670,10 @@ def main() -> int:
     milestone = None
     head_ref = author = None
     same_repo = False
-    number = None
     if args.event:
         pr = json.loads(Path(args.event).read_text(encoding="utf-8"))["pull_request"]
         title, body = pr["title"], pr.get("body") or ""
         head_ref = pr.get("head", {}).get("ref")
-        number = pr.get("number")
         author = (pr.get("user") or {}).get("login")
         head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name") or ""
         base_repo = ((pr.get("base") or {}).get("repo") or {}).get("full_name") or "-"
@@ -667,10 +697,11 @@ def main() -> int:
     problems = check(title, body, authored, head_ref=head_ref, author=author,
                      same_repo=same_repo) + scope(authored, code_lines, labels, all_files=files)
     if args.base:
-        problems += dco(commits_of(args.base), author, number, head_ref, files, same_repo)
+        problems += dco(commits_of(args.base), author, head_ref, files, same_repo)
     if args.base and CATALOG in files and not is_graph_refresh(head_ref, files, author, same_repo):
         problems += exam_version(exam_version_changes(base_texts([CATALOG], args.base)[CATALOG], head_catalog()),
-                                 milestone, declared_scope(sections(body).get("Scope", ""))[0])
+                                 milestone, declared_scope(sections(body).get("Scope", ""))[0],
+                                 tracked_versions(head_catalog()))
     # The graph bot's PR cites no run, and an empty runs file would still make
     # the workflow's "cited run" step run and fail: write nothing for it.
     if args.runs_file and not is_graph_refresh(head_ref, files, author, same_repo):

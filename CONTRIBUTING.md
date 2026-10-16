@@ -85,8 +85,10 @@ You keep the copyright of what you wrote. No NDA material either (see below).
 is a human's: whoever signs takes responsibility for the change, whatever wrote it. Our own
 agents sign their commits too.
 
-Pull requests opened before this rule (numbered below `DCO_FIRST_PR` in
-`scripts/check_pr.py`) are grandfathered, and merged history is never rewritten.
+Every commit of the PR that is not on `main` yet needs it, whatever the PR's number (a reopened old
+PR gets the full check; `git rebase --signoff origin/main` fixes it). Merged history is never rewritten.
+The graph bot's PR is the one exemption, decided by who opened it, from which repository and branch and
+which files it touches, never by a commit's author email, which anyone can set.
 
 **Thanks.** When a pull request from someone outside the maintainers is merged, the
 maintainer adds a line to [CHANGELOG.md](CHANGELOG.md): `Thanks @user (#N)`.
@@ -297,7 +299,9 @@ Pick the biggest line that applies:
 say which curriculum version the material was built against. Moving them means the whole cert must be re-evaluated
 (table of contents, every topic), so it only happens in the **final PR of an upgrade milestone**
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). `check_pr` fails any PR that changes them
-unless the PR's **real GitHub milestone** is an upgrade milestone (named like "CKA & CKAD v1.37 upgrade") **and**
+unless the PR's **real GitHub milestone** is the upgrade milestone of those certs and that version (named like
+"CKA & CKAD v1.37 upgrade": it must name every cert whose version or objectives change, and its version must equal
+their new `tracked_version`) **and**
 its description declares `Scope: exam-version`. The `scope:exam-version` label is only classification, and text
 in the description cannot authorize anything, so neither is enough. Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
 goes into the milestone. If the exam body published a new version, open the "New exam curriculum version" issue form.

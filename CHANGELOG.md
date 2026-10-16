@@ -4,6 +4,12 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-16
 
+- **check_pr hardening** (ci, #85, #86, #90): the DCO check no longer grandfathers PRs by number (a
+  reopened old PR could take new unsigned commits): every commit of base..HEAD needs its sign-off. The graph
+  bot exemption no longer trusts the commit author email: it rests on the PR author login, head repository,
+  branch and files. The upgrade milestone must name every cert whose `tracked_version` or objectives change
+  and carry the new version ("CKA & CKAD v1.37 upgrade" authorizes cka and ckad at 1.37 only).
+
 - **DCO sign-off and AI disclosure on every PR** (ci, #68): every non-merge commit of a PR must
   carry `Signed-off-by:` with the author's email (or the PR author's GitHub noreply address); the
   `DCO` file holds the Developer Certificate of Origin 1.1. `scripts/check_pr.py` fails with the fix

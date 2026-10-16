@@ -1,6 +1,7 @@
 """scripts/check_pr.py: the PR format as a check, offline (fixtures in tests/fixtures/pr/)."""
 import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -459,10 +460,10 @@ def commit(sha="a" * 40, email="dev@example.org", trailer="Signed-off-by: Dev <d
 
 class DcoTests(unittest.TestCase):
     def test_a_signed_commit_passes(self):
-        self.assertEqual(check_pr.dco([commit()], number=check_pr.DCO_FIRST_PR), [])
+        self.assertEqual(check_pr.dco([commit()]), [])
 
     def test_an_unsigned_commit_fails_and_says_how_to_fix_it(self):
-        problems = check_pr.dco([commit(trailer="")], number=check_pr.DCO_FIRST_PR)
+        problems = check_pr.dco([commit(trailer="")])
         self.assertEqual(len(problems), 1)
         for text in ("aaaaaaa", "git commit --amend -s", "git rebase --signoff", "--force-with-lease"):
             self.assertIn(text, problems[0])
@@ -490,29 +491,62 @@ class DcoTests(unittest.TestCase):
         c = commit(trailer="I never wrote Signed-off-by: Dev <dev@example.org>")
         self.assertEqual(len(check_pr.dco([c])), 1)
 
-    def test_prs_opened_before_the_rule_are_grandfathered(self):
-        unsigned = [commit(trailer="")]
-        self.assertEqual(check_pr.dco(unsigned, number=61), [])
-        self.assertEqual(check_pr.dco(unsigned, number=check_pr.DCO_FIRST_PR - 1), [])
-        self.assertEqual(len(check_pr.dco(unsigned, number=check_pr.DCO_FIRST_PR)), 1)
-        self.assertEqual(len(check_pr.dco(unsigned)), 1)  # no number (a local run): enforced
+    def test_no_pr_is_grandfathered_by_its_number(self):
+        # #85: dco() has no PR number at all, so a reopened old PR cannot carry new unsigned code
+        self.assertFalse(hasattr(check_pr, "DCO_FIRST_PR"))
+        with self.assertRaises(TypeError):
+            check_pr.dco([commit(trailer="")], number=61)
+        self.assertEqual(len(check_pr.dco([commit(trailer="")])), 1)
+
+    def test_a_forged_commit_date_does_not_exempt_a_commit(self):
+        # #85: only base..HEAD decides (commits_of); dates and the PR number are never read
+        git = lambda *a, **kw: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True,  # noqa: E731
+                                              text=True, **kw)
+        with tempfile.TemporaryDirectory() as tmp:
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "Dev")
+            git("config", "user.email", "dev@example.org")
+            git("commit", "-q", "--allow-empty", "-m", "base")
+            git("checkout", "-q", "-b", "old-pr")
+            env = {**os.environ, "GIT_AUTHOR_DATE": "2020-01-01T00:00:00", "GIT_COMMITTER_DATE": "2020-01-01T00:00:00"}
+            git("commit", "-q", "--allow-empty", "-m", "unsigned, dated before the rule", env=env)
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                commits = check_pr.commits_of("main")
+            self.assertEqual(len(check_pr.dco(commits)), 1)
+
+    BOT = dict(pr_author="github-actions[bot]", same_repo=True)
+    GRAPH = ["graphify-out/graph.json"]
+    REF = "bot/graph-refresh"
 
     def test_the_graph_bot_is_exempt_only_on_its_branch_with_its_files_and_its_author(self):
-        bot = commit(email=check_pr.BOT_EMAIL, trailer="")
-        bot["email"] = "41898282+" + check_pr.BOT_EMAIL
-        graph = ["graphify-out/graph.json"]
-        ref = "bot/graph-refresh"
-        who = dict(pr_author="github-actions[bot]", same_repo=True)
-        self.assertEqual(check_pr.dco([bot], number=500, head_ref=ref, files=graph, **who), [])
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref="bot/other", files=graph, **who)), 1)
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph + ["scripts/x.py"], **who)), 1)
-        human = commit(trailer="")
-        self.assertEqual(len(check_pr.dco([bot, human], number=500, head_ref=ref, files=graph, **who)), 2)
+        bot = commit(email="41898282+github-actions[bot]@users.noreply.github.com", trailer="")
+        self.assertEqual(check_pr.dco([bot], head_ref=self.REF, files=self.GRAPH, **self.BOT), [])
+        self.assertEqual(len(check_pr.dco([bot], head_ref="bot/other", files=self.GRAPH, **self.BOT)), 1)
+        self.assertEqual(len(check_pr.dco([bot], head_ref=self.REF, files=self.GRAPH + ["scripts/x.py"],
+                                          **self.BOT)), 1)
+        self.assertEqual(len(check_pr.dco([bot], head_ref=self.REF, files=[], **self.BOT)), 1)
         # the branch name alone is not an identity (#33): another author, or a fork, is not exempt
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph,
+        self.assertEqual(len(check_pr.dco([bot], head_ref=self.REF, files=self.GRAPH,
                                           pr_author="someone", same_repo=True)), 1)
-        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph,
+        self.assertEqual(len(check_pr.dco([bot], head_ref=self.REF, files=self.GRAPH,
                                           pr_author="github-actions[bot]", same_repo=False)), 1)
+
+    def test_a_forged_bot_email_exempts_nobody(self):
+        # #86: mallory forks, names the branch bot/graph-refresh, touches only graphify-out/ and forges
+        # the author email on every commit: the PR's login and head repo, not the email, decide
+        forged = commit(email="github-actions[bot]@users.noreply.github.com", trailer="")
+        problems = check_pr.dco([forged], head_ref=self.REF, files=self.GRAPH, pr_author="mallory", same_repo=False)
+        self.assertEqual(len(problems), 1)
+        # ... also from a branch of this repo, if the opener is not the bot
+        self.assertEqual(len(check_pr.dco([forged], head_ref=self.REF, files=self.GRAPH,
+                                          pr_author="mallory", same_repo=True)), 1)
+
+    def test_the_bot_pr_is_exempt_whatever_the_commit_email_says(self):
+        # the email is not an input any more: neither required nor trusted
+        for email in ("github-actions[bot]@users.noreply.github.com", "whoever@example.org"):
+            with self.subTest(email=email):
+                c = commit(email=email, trailer="")
+                self.assertEqual(check_pr.dco([c], head_ref=self.REF, files=self.GRAPH, **self.BOT), [])
 
     def test_commits_of_reads_git_without_merges(self):
         git = lambda *a: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True, text=True)  # noqa: E731
@@ -550,16 +584,17 @@ class DcoMainTests(unittest.TestCase):
         return code, out.getvalue()
 
     def test_an_unsigned_commit_fails_the_pr(self):
-        code, out = self.run_main(check_pr.DCO_FIRST_PR, [commit(trailer="")])
+        code, out = self.run_main(500, [commit(trailer="")])
         self.assertEqual(code, 1)
         self.assertIn("PR: DCO:", out)
 
-    def test_the_same_commit_in_a_grandfathered_pr_passes(self):
+    def test_an_old_pr_number_gets_the_full_check(self):
         code, out = self.run_main(61, [commit(trailer="")])
-        self.assertEqual(code, 0, out)
+        self.assertEqual(code, 1, out)
+        self.assertIn("PR: DCO:", out)
 
     def test_signed_commits_pass(self):
-        code, out = self.run_main(check_pr.DCO_FIRST_PR, [commit()])
+        code, out = self.run_main(500, [commit()])
         self.assertEqual(code, 0, out)
 
 
@@ -651,12 +686,59 @@ class ExamVersionTests(unittest.TestCase):
         self.assertIn("Scope", problems[0])
 
     def test_only_an_upgrade_milestone_authorizes(self):
-        for milestone in ("F2 labs", "Quality & groundedness", "none", "", "v1.37 upgrade", "CKA v1.37 upgrades"):
+        for milestone in ("F2 labs", "Quality & groundedness", "none", "", "v1.37 upgrade", "CKA v1.37 upgrades", "CKAv1.37 upgrade"):
             with self.subTest(milestone=milestone):
-                self.assertTrue(check_pr.exam_version(["cka"], milestone, "exam-version"))
-        for milestone in (self.UPGRADE, "CKA v1.37 upgrade", "LPIC-1 v5.1 upgrade"):
+                self.assertTrue(check_pr.exam_version(["cka"], milestone, "exam-version", {"cka": "1.37"}))
+        for milestone in (self.UPGRADE, "CKA v1.37 upgrade", "cka v1.37 upgrade"):
             with self.subTest(milestone=milestone):
-                self.assertEqual(check_pr.exam_version(["cka"], milestone, "exam-version"), [])
+                self.assertEqual(check_pr.exam_version(["cka"], milestone, "exam-version", {"cka": "1.37"}), [])
+
+    def test_a_milestone_for_another_cert_does_not_authorize(self):
+        # #90: "CKAD v1.37 upgrade" must not authorize a change to lpic-1 (or to cka)
+        for changed, versions in ((["lpic-1"], {"lpic-1": "1.37"}), (["cka"], {"cka": "1.37"})):
+            with self.subTest(changed=changed):
+                problems = check_pr.exam_version(changed, "CKAD v1.37 upgrade", "exam-version", versions)
+                self.assertEqual(len(problems), 1)
+                self.assertIn("does not name", problems[0])
+        # shape-only titles that used to pass
+        for milestone in ("Foo v1 upgrade", "Q4 v2026 upgrade"):
+            with self.subTest(milestone=milestone):
+                self.assertEqual(len(check_pr.exam_version(["lpic-1"], milestone, "exam-version", {"lpic-1": "1"})), 1)
+
+    def test_every_changed_cert_must_be_named(self):
+        both = {"cka": "1.37", "ckad": "1.37"}
+        self.assertEqual(check_pr.exam_version(["cka", "ckad"], self.UPGRADE, "exam-version", both), [])
+        self.assertEqual(len(check_pr.exam_version(["cka", "ckad"], "CKA v1.37 upgrade", "exam-version", both)), 1)
+        self.assertEqual(len(check_pr.exam_version(["cka", "ckad", "cks"], self.UPGRADE, "exam-version",
+                                                   {**both, "cks": "1.37"})), 1)
+
+    def test_cert_separators_are_ampersand_comma_and_and(self):
+        both = {"cka": "1.37", "ckad": "1.37"}
+        for milestone in ("CKA, CKAD v1.37 upgrade", "CKA and CKAD v1.37 upgrade", "CKA&CKAD v1.37 upgrade"):
+            with self.subTest(milestone=milestone):
+                self.assertEqual(check_pr.exam_version(["cka", "ckad"], milestone, "exam-version", both), [])
+        # a substring is not a name: "ckad" does not authorize "cka"
+        self.assertEqual(len(check_pr.exam_version(["cka"], "CKAD v1.37 upgrade", "exam-version", {"cka": "1.37"})), 1)
+
+    def test_the_version_must_equal_the_new_tracked_version(self):
+        for milestone in ("CKA v1.36 upgrade", "CKA v1.3 upgrade", "CKA v1 upgrade"):
+            with self.subTest(milestone=milestone):
+                problems = check_pr.exam_version(["cka"], milestone, "exam-version", {"cka": "1.37"})
+                self.assertEqual(len(problems), 1)
+                self.assertIn("says v", problems[0])
+        # one of two certs at another version fails
+        problems = check_pr.exam_version(["cka", "ckad"], self.UPGRADE, "exam-version",
+                                         {"cka": "1.37", "ckad": "1.36"})
+        self.assertEqual(len(problems), 1)
+        self.assertIn("ckad", problems[0])
+
+    def test_a_removed_cert_needs_only_to_be_named(self):
+        self.assertEqual(check_pr.exam_version(["ckad"], "CKAD v1.37 upgrade", "exam-version", {}), [])
+        self.assertEqual(len(check_pr.exam_version(["ckad"], "CKA v1.37 upgrade", "exam-version", {})), 1)
+
+    def test_tracked_versions_reads_the_catalog(self):
+        self.assertEqual(check_pr.tracked_versions(CATALOG_BASE), {"cka": "1.35", "lpic-1": "5.0"})
+        self.assertEqual(check_pr.tracked_versions(None), {})
 
     def test_the_label_and_the_description_text_authorize_nothing(self):
         # the signature has no labels and no body: what #61 had (label scope:exam-version) cannot pass
@@ -681,7 +763,7 @@ class ExamVersionWiringTests(unittest.TestCase):
         if milestone is not None:
             (tmp / "milestone.txt").write_text(milestone, encoding="utf-8")
             argv += ["--milestone-file", str(tmp / "milestone.txt")]
-        head = CATALOG_BASE.replace("cka-1.35.pdf", "cka-1.37.pdf")
+        head = CATALOG_BASE.replace("cka-1.35.pdf", "cka-1.37.pdf").replace("'1.35'", "'1.37'")
         out = io.StringIO()
         with mock.patch.object(sys, "argv", argv), redirect_stdout(out), \
                 mock.patch.object(check_pr, "base_texts", lambda paths, base: {p: CATALOG_BASE for p in paths}), \
@@ -705,6 +787,13 @@ class ExamVersionWiringTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             code, out = self.run_main(tmp, "exam-version", milestone="CKA & CKAD v1.37 upgrade\n")
         self.assertEqual(code, 0, out)
+
+    def test_main_passes_the_head_versions_and_the_changed_certs_to_the_guard(self):
+        for milestone in ("CKA v1.36 upgrade\n", "LPIC-1 v1.37 upgrade\n"):
+            with self.subTest(milestone=milestone), tempfile.TemporaryDirectory() as tmp:
+                code, out = self.run_main(tmp, "exam-version", milestone=milestone)
+                self.assertEqual(code, 1, out)
+                self.assertIn("exam version:", out)
 
 
 if __name__ == "__main__":
