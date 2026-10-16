@@ -9,4 +9,9 @@ export I_UNDERSTAND_THIS_IS_A_DISPOSABLE_VM=yes
 export LAB_DISPOSABLE=yes
 export STUDY_LAB=1
 cd "$LAB" || exit 1
-timeout 300 bash ./break_fix.sh break > "$LAB/break.out" 2>&1 || { echo failed > /tmp/study-lab-setup-failed; cat "$LAB/break.out"; }
+# break is idempotent by contract; a fresh cluster can still be settling (e.g. the default ServiceAccount), so retry
+for attempt in 1 2 3; do
+  timeout 300 bash ./break_fix.sh break > "$LAB/break.out" 2>&1 && ok=1 && break
+  sleep 10
+done
+[ "${ok:-}" = 1 ] || { echo failed > /tmp/study-lab-setup-failed; cat "$LAB/break.out"; }

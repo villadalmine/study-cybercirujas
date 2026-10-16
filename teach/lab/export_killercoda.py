@@ -105,7 +105,12 @@ for i in $(seq 1 60); do [ -f /root/{shlex.quote(s['script'])} ] && break; sleep
 {mv}
 {wait}{setup}{_env(lab)}
 cd "$LAB" || exit 1
-{_run_line(lab, 'break')} > "$LAB/break.out" 2>&1 || {{ echo failed > /tmp/study-lab-setup-failed; cat "$LAB/break.out"; }}
+# break is idempotent by contract; a fresh cluster can still be settling (e.g. the default ServiceAccount), so retry
+for attempt in 1 2 3; do
+  {_run_line(lab, 'break')} > "$LAB/break.out" 2>&1 && ok=1 && break
+  sleep 10
+done
+[ "${{ok:-}}" = 1 ] || {{ echo failed > /tmp/study-lab-setup-failed; cat "$LAB/break.out"; }}
 """,
         "foreground.sh": f"""#!/bin/bash
 echo "Preparing the lab..."
