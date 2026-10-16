@@ -91,26 +91,26 @@ diff against the base branch in the job summary.
 
 `.github/workflows/killercoda-publish.yml` runs on a push to `main` that changes labs, the exporter or
 `deploy/killercoda/`, and on demand. Jobs: `plan` (labs with a reference fix), `prove` (one VM per lab, evidence as an
-artifact), `publish` (export with `--evidence`, so only passing scenarios, then a commit `export: study@<sha>` on the
-mirror, none if the tree is identical). Concurrency group, actions pinned by commit, `contents: read`, and the deploy key
+artifact), `publish` (runs only if every `prove` job ran to the end; evidence is the fresh one plus the `tested.json` the mirror
+already has, so scenarios that were not re-proven keep theirs; export with `--evidence`, so only passing scenarios; then
+`deploy/killercoda/publish.sh`: a commit `export: study@<sha>` on the mirror, none if the tree is identical, and nothing
+touched if no scenario has valid evidence). Concurrency group, actions pinned by commit, `contents: read`, and the deploy key
 (`KILLERCODA_DEPLOY_KEY`, write access to the mirror only) is visible to the last step of the last job. If the mirror's
 `main` is protected and the key cannot bypass it, the job pushes `export/study-<sha>` and says so in its summary.
 
 ### Publish by hand (the same thing, when you want to see it)
 
-CI never writes to the mirror: that would need a secret with write access, which is the owner's call. The
-`killercoda-export` workflow only generates the tree, checks that two runs are byte-identical and, if a
-read-only `KILLERCODA_MIRROR_READ_TOKEN` secret exists, reports whether the mirror differs.
-
 ```bash
-make killercoda-export                                  # build/killercoda
+make killercoda-export                                  # build/killercoda (add --evidence DIR to publish only proven scenarios)
 git clone git@github.com:villadalmine/study-cybercirujas-killercoda.git ../study-cybercirujas-killercoda
-rsync -a --delete --exclude .git --exclude .github --exclude README.md --exclude CONTRIBUTING.md \
-  --exclude CODEOWNERS --exclude .gitattributes build/killercoda/ ../study-cybercirujas-killercoda/
-cd ../study-cybercirujas-killercoda && git switch -c export-<sha> && git add -A \
-  && git commit -m "export: <study sha>" && git push -u origin HEAD   # then a PR, squash
+STUDY_SHA=<sha> bash deploy/killercoda/publish.sh build/killercoda ../study-cybercirujas-killercoda   # adds and updates, commits, never deletes
+cd ../study-cybercirujas-killercoda && git switch -c export-<sha> && git push -u origin HEAD   # then a PR, squash
 make killercoda-diff                                    # from the study checkout: "mirror is up to date"
 ```
+
+`publish.sh` refuses an export with no scenario (exit 3) and never deletes: a scenario that was not re-proven keeps its
+files, and `structure.json` of the export decides what Killercoda lists. A scenario whose lab was removed is cleaned from the
+mirror by hand.
 
 Killercoda syncs on every push through the webhook of the mirror repo.
 
