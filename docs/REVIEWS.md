@@ -130,10 +130,13 @@ Whoever merges first no longer makes the other rebase to refresh it:
 warning in `make verify` is fine; one that touches `graphify-out/` is asked to
 drop that from the diff. The bot PR is reviewed like any PR, minus the
 description: `scripts/check_pr.py` checks only its title when the branch is
-`bot/graph-refresh` and every changed file is under `graphify-out/`. Its
-required checks are started by the workflow itself (it dispatches `verify.yml` on the
-branch with `GITHUB_TOKEN`; no secret). The
-maintainer merges it; an agent never does.
+`bot/graph-refresh`, the PR's author is `github-actions[bot]`, its head is in this
+repository (not a fork) and every changed file is under `graphify-out/`; a person
+or a fork using the same branch name gets the full check (#33). Its required checks
+are started by the workflow itself: it dispatches `verify.yml` on the branch with
+`GITHUB_TOKEN` and reports the verdict of that run's jobs on the PR head through
+the Checks API (no secret, no PAT, no reopen by hand). The maintainer merges it;
+an agent never does.
 
 ## When a PR is ready
 

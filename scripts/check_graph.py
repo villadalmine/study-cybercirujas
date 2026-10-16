@@ -96,7 +96,7 @@ def rebuild_in_copy(graphify: str) -> dict:
 
 
 def touches_graph_sources(base: str) -> list[str]:
-    diff = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD"], cwd=REPO,
+    diff = subprocess.run(["git", "-c", "core.quotePath=false", "diff", "--name-only", f"{base}...HEAD"], cwd=REPO,
                           capture_output=True, text=True, check=True)
     return [f for f in diff.stdout.splitlines() if f.startswith(GRAPH_SOURCES)]
 
@@ -177,7 +177,7 @@ def main() -> int:
                       "no topology change since the last rebuild.")
                 return 0
             baseline = scanned
-    diff = subprocess.run(["git", "diff", "--name-only", f"{baseline}..HEAD"],
+    diff = subprocess.run(["git", "-c", "core.quotePath=false", "diff", "--name-only", f"{baseline}..HEAD"],
                           cwd=REPO, capture_output=True, text=True)
     if diff.returncode != 0:
         print(f"graph: baseline {baseline[:8]} is not in this history — "

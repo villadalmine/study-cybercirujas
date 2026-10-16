@@ -91,7 +91,7 @@ def groundedness_cached() -> bool:
 
 
 def changed(base: str) -> list[str]:
-    code, out = run(["git", "diff", "--name-only", f"{base}...HEAD"])
+    code, out = run(["git", "-c", "core.quotePath=false", "diff", "--name-only", f"{base}...HEAD"])
     return out.splitlines() if code == 0 else []
 
 

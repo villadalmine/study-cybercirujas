@@ -67,10 +67,11 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   Feature PRs no longer rebase or rebuild the graph and leave `graphify-out/`
   out of their diff; a stale graph in a PR is a warning. `check_pr.py` checks
   only the title of that bot PR (branch `bot/graph-refresh`, every file under
-  `graphify-out/`). No secret or PAT: the job opens the PR with `GITHUB_TOKEN`
-  and then dispatches `verify.yml` on the branch, which starts the required
-  checks (`pr-format` looks the PR up by branch when dispatched). One
-  repository setting, once: Actions may create pull requests.
+  `graphify-out/`, author `github-actions[bot]`, same-repository head). No secret
+  or PAT: the job opens the PR with `GITHUB_TOKEN`, dispatches `verify.yml` on the
+  branch and reports the verdict of its `verify`, `e2e` and `pr-format` jobs on the
+  PR head as check runs (`pr-format` looks the PR up by branch when dispatched).
+  One repository setting, once: Actions may create pull requests.
 - **`make pr-check`: the checks CI runs on a PR, on your machine** (CONTRIBUTING ->
   *Check before you push*). One OK/FAIL/WARN line per check, about a minute with
   `QUICK=1` and five with the full unit tests: the `make verify-ci` recipe read from the Makefile (so it cannot drift from

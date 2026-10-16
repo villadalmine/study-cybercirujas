@@ -15,14 +15,22 @@ name: Graph
 # bot PR touches only graphify-out/, which this trigger ignores, so there is
 # no loop.
 #
-# THE CHECKS ON THE BOT PR, WITH NO SECRET. A pull request opened with the
-# built-in GITHUB_TOKEN does not trigger pull_request/push workflows (GitHub's
-# rule, to stop loops), but workflow_dispatch is the documented exception. So
-# after opening or updating the PR, this same job dispatches verify.yml on
-# bot/graph-refresh with GITHUB_TOKEN (needs actions: write). The check runs
-# attach to the PR head commit under the names branch protection requires
-# (verify, e2e, pr-format; verify.yml's pr-format job looks the PR up by branch
-# when dispatched). No PAT, no App, nothing for a developer to configure. One
+# THE CHECKS ON THE BOT PR, WITH NO SECRET (#38, #42). A pull request opened
+# with the built-in GITHUB_TOKEN starts no pull_request/push workflows (GitHub's
+# rule, to stop loops; a close/reopen by the same token only creates runs that
+# stop at action_required, measured on a throwaway branch). workflow_dispatch is
+# the documented exception, so the last step dispatches verify.yml on
+# bot/graph-refresh and waits for it. But the check runs of a dispatched run are
+# not associated with the PR: the PR shows no checks and stays BLOCKED
+# (measured: the PR's status rollup is empty). A check run created through the
+# Checks API with head_branch set IS associated with the PR and counts for
+# branch protection (app github-actions, the same app the required checks name;
+# measured: isRequired=true, mergeStateStatus UNSTABLE/CLEAN instead of
+# BLOCKED), also on a PR that already exists and on a new head after a force
+# push. So the last step copies the verdict of the dispatched run's own jobs
+# (verify, e2e, pr-format) onto the PR head as check runs of the same names. It
+# never invents a verdict: no run, a missing job or anything but success is
+# posted as failure. No PAT, no App, nothing for a developer to configure. One
 # repository setting is needed once: Settings > Actions > General > "Allow
 # GitHub Actions to create and approve pull requests".
 
@@ -42,6 +50,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: write      # to dispatch verify.yml on the bot branch
+  checks: write       # to report its verdict on the PR head (Checks API)
 
 concurrency:
   # Queue, never cancel: a half-finished branch update is worse than waiting.
@@ -51,7 +60,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 40   # rebuild + the dispatched verify (about 7 min) it waits for
     steps:
       - uses: actions/checkout@v4
         with:
@@ -167,9 +176,46 @@ jobs:
 
             nothing
 
-      - name: Start the required checks on the bot branch
+      - name: Run the required checks on the bot branch and report them on the PR
         # Skipped when create-pull-request changed nothing (no PR or commit).
         if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run verify.yml --ref bot/graph-refresh
+          BRANCH: bot/graph-refresh
+          SHA: ${{ steps.cpr.outputs.pull-request-head-sha }}
+        run: |
+          set -euo pipefail
+          test -n "$SHA"
+          gh workflow run verify.yml --ref "$BRANCH"
+          run=""
+          for _ in $(seq 1 36); do
+            run="$(gh run list --workflow verify.yml --branch "$BRANCH" --event workflow_dispatch \
+                     --limit 20 --json databaseId,headSha \
+                     --jq "map(select(.headSha == \"$SHA\")) | .[0].databaseId // empty")"
+            [ -n "$run" ] && break
+            sleep 5
+          done
+          if [ -n "$run" ]; then
+            echo "dispatched verify run: $run"
+            gh run watch "$run" --interval 20 > /dev/null || true
+            jobs="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/jobs" --paginate \
+                      --jq '.jobs[] | {name, conclusion, html_url}' | jq -s .)"
+          else
+            echo "::warning::no dispatched verify run found for $SHA"
+            jobs='[]'
+          fi
+          status=0
+          for name in verify e2e pr-format; do
+            conclusion="$(jq -r --arg n "$name" '[.[] | select(.name == $n)][0].conclusion // "missing"' <<< "$jobs")"
+            url="$(jq -r --arg n "$name" '[.[] | select(.name == $n)][0].html_url // empty' <<< "$jobs")"
+            [ -n "$url" ] || url="https://github.com/$GITHUB_REPOSITORY/actions/runs/${run:-$GITHUB_RUN_ID}"
+            result=failure
+            [ "$conclusion" = success ] && result=success || status=1
+            gh api -X POST "repos/$GITHUB_REPOSITORY/check-runs" \
+              -f name="$name" -f head_sha="$SHA" -f head_branch="$BRANCH" \
+              -f status=completed -f conclusion="$result" -f details_url="$url" \
+              -f "output[title]=$name: $conclusion" \
+              -f "output[summary]=Copied from the job '$name' of the verify.yml run dispatched on this head commit ($SHA): $url. The job result was '$conclusion'." \
+              --jq '"\(.name) -> \(.conclusion)"'
+          done
+          exit $status

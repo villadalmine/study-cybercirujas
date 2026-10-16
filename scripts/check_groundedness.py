@@ -245,7 +245,7 @@ def fixture(path: Path, score, deep=None) -> dict:
 
 
 def changed(base: str) -> list[Path]:
-    out = subprocess.run(["git", "diff", "--name-only", "--diff-filter=AMR", f"{base}...HEAD"], cwd=REPO,
+    out = subprocess.run(["git", "-c", "core.quotePath=false", "diff", "--name-only", "--diff-filter=AMR", f"{base}...HEAD"], cwd=REPO,
                          capture_output=True, text=True, check=True).stdout.split()
     return sorted({REPO / Path(f).parent for f in out if TOPIC.match(f)})
 
