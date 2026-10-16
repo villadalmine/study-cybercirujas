@@ -73,7 +73,7 @@ class NoNetwork(unittest.TestCase):
             outs = []
             for n, extra in enumerate(([], ["--fetch"])):
                 r = run("--dry-run", *extra, "certs/cka/1.1/en", "--json", f"{tmp}/{n}.json", cache=tmp)
-                self.assertEqual(r.returncode, 0, r.stderr)
+                self.assertEqual((r.returncode, "not available" in r.stderr), (0, bool(extra)), r.stderr)
                 outs.append(Path(f"{tmp}/{n}.json").read_bytes())
         self.assertEqual(outs[0], outs[1])
         self.assertTrue(all(s.get("status") for s in json.loads(outs[0])[0]["sources"][1:]))
