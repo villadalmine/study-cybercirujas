@@ -4,11 +4,11 @@
   "items": [
     {
       "path": "1-1-demo-linux-lab",
-      "title": "1.1 Demo linux lab"
+      "title": "Demo linux lab"
     },
     {
       "path": "1-2-demo-kind-lab",
-      "title": "1.2 Demo kind lab"
+      "title": "Demo kind lab"
     }
   ]
 }

@@ -212,9 +212,13 @@ def cmd_export(args) -> int:
                     for f in Path(args.evidence).rglob("tested.json")}
     try:
         files = kc.tree(labs, kc.cert_names(runner.REPO_ROOT), args.include_unverified or args.all, tracks.get("needs") or {},
-                        evidence, day, gated)
+                        evidence, day, gated, decorate=True)
     except kc.ExportError as exc:
         raise spec.SpecError(str(exc)) from exc
+    if args.check:   # guardrails for PRs: validate what would be published, write nothing
+        bad = kc.check_tree(files)
+        print("\n".join(f"FAIL {b}" for b in bad) or f"[study-lab] scenario check OK: {len(labs)} lab(s), {len(files)} files")
+        return 1 if bad else 0
     kc.write(files, Path(args.out))
     for why in gated:
         print(f"not published: {why}")
@@ -306,6 +310,7 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--all", action="store_true", help="every curated lab that fits (unverified ones are labelled as such)")
     e.add_argument("--cert", action="append", help="with --all: only this certification (repeatable)")
     e.add_argument("--include-unverified", action="store_true")
+    e.add_argument("--check", action="store_true", help="validate the generated tree (schema, references, scripts); write nothing")
     e.add_argument("--evidence", help="dir of tested.json files (study-lab test): publish only what passed today's environment")
     e.add_argument("--today", help="YYYY-MM-DD, for the environment schedule (default: today)")
     e.add_argument("labs", nargs="*", help="<cert>/<topic>; default: the pilot in tracks.yaml")

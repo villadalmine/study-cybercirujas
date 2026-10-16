@@ -1,0 +1,6 @@
+certs:
+  democert:
+    name: Demo Cert
+    exam: DEMO
+    tracked_version: '2.0'
+    file: certs/democert.md

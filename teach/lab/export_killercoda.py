@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 import shlex
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -92,6 +93,8 @@ def scenario(lab: spec.Lab, allow_unverified: bool = False, needs: tuple = ()) -
         if lab.directory.resolve() not in p.parents or not p.is_file():
             raise ExportError(f"{lab.lab_id}: {name} is not a file inside the lab")
         body, sol = split_solution(p.read_text(encoding="utf-8"))
+        if name.endswith(".sh") and subprocess.run(["bash", "-n"], input=body, capture_output=True, text=True).returncode:
+            raise ExportError(f"{lab.lab_id}: {name} has a bash syntax error (bash -n)")
         assets[f"assets/{name}"] = body
         solution = solution or (sol if name == s["script"] else "")
     caps = load_envs()["capabilities"]
@@ -163,6 +166,10 @@ echo "$out"
     return out
 
 
+def natural(s: str) -> list:
+    return [int(x) if x.isdigit() else x for x in re.split(r"(\d+)", str(s))]
+
+
 def slug(topic: str, title: str = "") -> str:
     return re.sub(r"[^a-z0-9]+", "-", f"{topic} {title}".lower()).strip("-")[:48].strip("-")
 
@@ -174,13 +181,14 @@ def load_envs() -> dict:
 
 
 def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unverified: bool = False,
-         needs: dict | None = None, evidence: dict | None = None, day: str = "", gated: list | None = None) -> dict[str, str]:
+         needs: dict | None = None, evidence: dict | None = None, day: str = "", gated: list | None = None, decorate: bool = False) -> dict[str, str]:
     """The whole mirror: <cert>/<topic>/... per lab, a structure.json per cert (a Killercoda course) and one at the root."""
     names, out, certs = names or {}, {}, {}
-    for lab in sorted(labs, key=lambda x: (x.spec["cert"], x.spec["topic"])):
+    for lab in sorted(labs, key=lambda x: (x.spec["cert"], natural(x.spec["topic"]))):
         c, t = lab.spec["cert"], lab.spec["topic"]
         d = slug(t, lab.spec["title"])
         files = scenario(lab, allow_unverified, tuple((needs or {}).get(f"{c}/{t}", ())))
+        ev = None
         if evidence is not None:   # the publish gate: no passing evidence for THIS scenario and today's environment, no scenario
             from . import kc_test
             ev = evidence.get(f"{c}/{d}")
@@ -188,9 +196,12 @@ def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unveri
                 (gated if gated is not None else []).append(f"{c}/{t}: no passing tested.json for this scenario and today's environment")
                 continue
             files["tested.json"] = json.dumps(ev, indent=2, ensure_ascii=False) + "\n"
+        if decorate:   # certification header, provenance banner, metadata.json, syllabus-ordered titles (the hash was taken before)
+            from . import kc_meta
+            files = kc_meta.decorate(lab, files, ev)
         for rel, text in files.items():
             out[f"{c}/{d}/{rel}"] = text
-        certs.setdefault(c, []).append({"path": d, "title": f"{t} {lab.spec['title']}"})
+        certs.setdefault(c, []).append({"path": d, "title": json.loads(files["index.json"])["title"]})
     dump = lambda d: json.dumps(d, indent=2, ensure_ascii=False) + "\n"  # noqa: E731
     for c, items in certs.items():
         out[f"{c}/structure.json"] = dump({"title": names.get(c, c), "description": f"Break/fix labs for {names.get(c, c)}",
@@ -219,10 +230,39 @@ def select(root: Path, certs: list[str] | None = None) -> tuple[list[spec.Lab], 
         lab = spec.load(d, "curated")
         try:
             scenario(lab, True)
+            from . import kc_meta
+            kc_meta.syllabus(lab.spec["cert"], lab.spec["topic"], lab.spec["title"])   # R1, R3, R5: the objective exists, title exact
             fit.append(lab)
         except ExportError as exc:
             skipped.append((f"{d.parts[-3]}/{d.parts[-2]}", str(exc).split(": ", 1)[-1]))
     return fit, skipped
+
+
+def check_tree(files: dict[str, str]) -> list[str]:
+    """Guardrails on the GENERATED tree: schema of every index.json, referenced files exist, scripts parse, courses list real folders."""
+    import jsonschema
+    schema = json.loads((Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "index.schema.json").read_text(encoding="utf-8"))
+    problems = []
+    for rel in sorted(f for f in files if f.endswith("/index.json")):
+        base, idx = rel[: -len("index.json")], json.loads(files[rel])
+        for e in jsonschema.Draft202012Validator(schema).iter_errors(idx):
+            problems.append(f"{rel}: {'/'.join(map(str, e.path)) or '(root)'}: {e.message}")
+        d = idx.get("details", {})
+        pages = [d.get("intro", {}), d.get("finish", {}), *d.get("steps", [])]
+        refs = [p[k] for p in pages for k in ("text", "foreground", "background", "verify") if k in p]
+        refs += [f"assets/{a['file']}" for v in d.get("assets", {}).values() for a in v]
+        problems += [f"{rel}: references {r}, which does not exist" for r in refs if base + r not in files]
+        for r in sorted(set(refs)):
+            if r.endswith(".sh") and base + r in files and (not files[base + r].startswith("#!") or
+                    subprocess.run(["bash", "-n"], input=files[base + r], capture_output=True, text=True).returncode):
+                problems.append(f"{base + r}: not a valid bash script (shebang, bash -n)")
+        if d.get("steps") and "verify" not in d["steps"][-1]:
+            problems.append(f"{rel}: the last step has no verify script")
+    for rel in sorted(f for f in files if f.endswith("structure.json")):
+        base = rel[: -len("structure.json")]
+        problems += [f"{rel}: lists {i['path']}, which is not a folder" for i in json.loads(files[rel]).get("items", [])
+                     if not any(f.startswith(f"{base}{i['path']}/") for f in files)]
+    return problems
 
 
 def write(files: dict[str, str], out: Path) -> None:

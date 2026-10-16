@@ -72,6 +72,21 @@ courses per creator, repository, asset or file sizes, background-script time lim
 terms for commercial use, branding and links (the Terms/AGB are a separate page). Ask Killercoda support, and
 meanwhile measure the images with the probe scenario (below) instead of guessing.
 
+### What each scenario says about itself
+
+Every published scenario opens with its certification and syllabus objective, read from `catalog.yaml` and the frozen
+syllabus `certs/<cert>.md`: **CKA v1.35 · Domain 1: Storage · Objective 1.1: <exact syllabus title>**, with links to the
+site and the official curriculum, then a banner built from the lab's metadata (`meta.yaml` quality checks and
+`lab.yaml` origin): *AI-generated (tool/model), not independently reviewed yet*, *AI-assisted ... recorded review*,
+*Written by a human* or *Authorship not recorded*, with the quality level of the site (Verified, AI beta, Draft), and the
+"Tested" line from `tested.json`. Next to `index.json` goes a `metadata.json` (cert, exam_version, domain, objective,
+objective_sha256, curriculum, source path and commit, lab_hash, license, provenance, tested). The scenario title is
+`<domain id> | <domain title> - <objective id> <title>` and a course lists its scenarios in syllabus order. **The export
+fails** for a lab whose cert is not in the catalog, whose objective is not in the frozen syllabus or whose title is not the
+syllabus title. On every PR that touches labs, `killercoda.yml` runs `study-lab export --target killercoda --check`
+(schema of `index.json`, referenced files, `bash -n` on every script, courses list real folders) and puts the scenario
+diff against the base branch in the job summary.
+
 ### Publish (manual on purpose)
 
 CI never writes to the mirror: that would need a secret with write access, which is the owner's call. The

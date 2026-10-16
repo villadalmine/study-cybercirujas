@@ -4,9 +4,11 @@ name: Killercoda export
 # Read-only on purpose: it never pushes. Publishing is a manual step (docs/RUN-A-LAB-ANYWHERE.md).
 
 on:
+  pull_request:
+    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'teach/lab/kc_meta.py', 'deploy/killercoda/**', '.github/workflows/killercoda.yml']
   push:
     branches: [main]
-    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'deploy/killercoda/**', '.github/workflows/killercoda.yml']
+    paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'teach/lab/kc_meta.py', 'deploy/killercoda/**', '.github/workflows/killercoda.yml']
   workflow_dispatch:
 
 permissions:
@@ -20,10 +22,22 @@ jobs:
       MIRROR: ${{ vars.KILLERCODA_MIRROR || 'villadalmine/study-cybercirujas-killercoda' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the metadata records the last commit that touched each lab
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install -q -e '.[lab]'
+      - name: Guardrails on the generated scenarios (schema, references, scripts, syllabus objective)
+        run: scripts/study-lab export --target killercoda --all --check
+      - name: Scenario diff against the base branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git worktree add -q /tmp/base "origin/${{ github.base_ref }}"
+          # head's exporter on the base's labs and syllabus: the diff is what this PR changes in what Killercoda would show
+          STUDY_REPO=/tmp/base scripts/study-lab export --target killercoda --all --out /tmp/base-tree >/dev/null || true
+          scripts/study-lab export --target killercoda --all --out /tmp/head-tree >/dev/null
+          { echo "### Killercoda scenarios changed by this PR"; echo '```diff'; diff -ru /tmp/base-tree /tmp/head-tree | head -300 || true; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
       - name: Export twice, output must be byte-identical
         run: |
           scripts/study-lab export --target killercoda --all --out build/killercoda | tail -1
