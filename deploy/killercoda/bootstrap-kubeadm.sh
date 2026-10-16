@@ -18,7 +18,7 @@ systemctl restart containerd
 curl -fsSL "https://pkgs.k8s.io/core:/stable:/v${MINOR}/deb/Release.key" | gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v${MINOR}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list
 apt-get update -qq; # the exact patch release from killercoda_envs.yaml, never "whatever is newest" (the test records what it measured)
-apt-get install -y -qq "kubelet=${PATCH}-*" "kubeadm=${PATCH}-*" "kubectl=${PATCH}-*" >/dev/null
+apt-get install -y -qq --allow-downgrades "kubelet=${PATCH}-*" "kubeadm=${PATCH}-*" "kubectl=${PATCH}-*" >/dev/null
 apt-mark hold kubelet kubeadm kubectl >/dev/null
 kubeadm init --kubernetes-version "v${PATCH}" --pod-network-cidr=10.244.0.0/16 --node-name controlplane >/tmp/kubeadm-init.log 2>&1 || { tail -30 /tmp/kubeadm-init.log; exit 1; }
 mkdir -p /root/.kube; cp /etc/kubernetes/admin.conf /root/.kube/config
