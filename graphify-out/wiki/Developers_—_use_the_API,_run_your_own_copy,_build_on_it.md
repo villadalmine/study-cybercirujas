@@ -17,7 +17,7 @@
 
 ## Relationships
 
-- [Community 83](Community_83.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 

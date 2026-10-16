@@ -1,11 +1,12 @@
 # Community 13
 
-> 22 nodes · cohesion 0.13
+> 24 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **check()** (16 connections) — `teach/core/quality.py`
 - **QualityFloorTest** (8 connections) — `tests/test_quality.py`
+- **test_quality.py** (7 connections) — `tests/test_quality.py`
 - **rules()** (6 connections) — `teach/core/quality.py`
 - **QualityThresholdsTest** (5 connections) — `tests/test_quality.py`
 - **.test_without_a_quality_block_everything_passes()** (4 connections) — `tests/test_quality.py`
@@ -21,6 +22,7 @@
 - **.test_thresholds_are_declared()** (2 connections) — `tests/test_quality.py`
 - **Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…** (1 connections) — `teach/core/quality.py`
 - **Return the problems found. An empty list means the floor is met. `kind` is…** (1 connections) — `teach/core/quality.py`
+- **Quality floor: the same standard for every backend. Tested because a floor is…** (1 connections) — `tests/test_quality.py`
 - **The references section is explicitly requested by the prompt, and it is what…** (1 connections) — `tests/test_quality.py`
 - **The real case: CNPE produced 18 of 18 exercises with no collapsible answers…** (1 connections) — `tests/test_quality.py`
 - **Material is generated in seven languages; the heading changes and the floor…** (1 connections) — `tests/test_quality.py`
@@ -29,12 +31,13 @@
 
 ## Relationships
 
-- [Community 91](Community_91.md) (3 shared connections)
+- [Community 49](Community_49.md) (4 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 91](Community_91.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 - [Community 2](Community_2.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
 
 ## Source Files
 
@@ -44,7 +47,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 40 (100%)
+- EXTRACTED: 45 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,10 +1,9 @@
 # Community 150
 
-> 16 nodes · cohesion 0.17
+> 14 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **test_source_chain.py** (20 connections) — `tests/test_source_chain.py`
 - **test_check_pr.py** (18 connections) — `tests/test_check_pr.py`
 - **test_check_graph.py** (11 connections) — `tests/test_check_graph.py`
 - **io** (6 connections)
@@ -19,14 +18,11 @@
 - **.test_runs_are_read_from_the_subsection()** (1 connections) — `tests/test_check_pr.py`
 - **scripts/check_graph.py --regenerate: compare the committed graph with a rebuild…** (1 connections) — `tests/test_check_graph.py`
 - **scripts/check_pr.py: the PR format as a check, offline (fixtures in…** (1 connections) — `tests/test_check_pr.py`
-- **The source chain (docs/PRINCIPLES.md): every link declares its origin, and a…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (14 shared connections)
-- [Community 104](Community_104.md) (4 shared connections)
+- [Community 43](Community_43.md) (10 shared connections)
 - [Community 36](Community_36.md) (2 shared connections)
-- [Community 64](Community_64.md) (2 shared connections)
 - [Community 52](Community_52.md) (2 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
 - [Community 85](Community_85.md) (1 shared connections)
@@ -35,16 +31,17 @@
 - [Community 123](Community_123.md) (1 shared connections)
 - [Community 126](Community_126.md) (1 shared connections)
 - [Community 40](Community_40.md) (1 shared connections)
+- [Community 128](Community_128.md) (1 shared connections)
+- [Community 67](Community_67.md) (1 shared connections)
 
 ## Source Files
 
 - `tests/test_check_graph.py`
 - `tests/test_check_pr.py`
-- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 61 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

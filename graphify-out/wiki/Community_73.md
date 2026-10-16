@@ -1,11 +1,12 @@
 # Community 73
 
-> 13 nodes · cohesion 0.15
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
 - **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
 - **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **Generation backends** (2 connections) — `docs/OPERATING.md`
 - **Content process** (1 connections) — `docs/OPERATING.md`
 - **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
 - **Environment variables** (1 connections) — `docs/OPERATING.md`
@@ -20,10 +21,10 @@
 
 ## Relationships
 
+- [Community 146](Community_146.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
 - [Community 91](Community_91.md) (1 shared connections)
-- [Community 83](Community_83.md) (1 shared connections)
+- [Community 70](Community_70.md) (1 shared connections)
 
 ## Source Files
 
@@ -31,8 +32,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 16 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

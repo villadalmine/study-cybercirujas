@@ -1,6 +1,6 @@
 # Community 8
 
-> 77 nodes · cohesion 0.05
+> 79 nodes · cohesion 0.05
 
 ## Key Concepts
 
@@ -23,39 +23,40 @@
 - **_needs_cluster()** (8 connections) — `teach/core/labs.py`
 - **_exec_script_cmd()** (7 connections) — `teach/core/labs.py`
 - **_load_spec()** (7 connections) — `teach/core/labs.py`
+- **lab_up()** (6 connections) — `teach/cli.py`
 - **_break_args()** (6 connections) — `teach/core/labs.py`
 - **_terraform()** (6 connections) — `teach/core/labs.py`
 - **_write_status()** (6 connections) — `teach/core/labs.py`
 - **Labs — what an audit found, 2026-08-08 (design parked, not started)** (6 connections) — `BACKLOG.md`
 - **RunAsTests** (5 connections) — `tests/test_labs.py`
-- **_down_container()** (5 connections) — `teach/core/labs.py`
-- *... and 52 more nodes in this community*
+- *... and 54 more nodes in this community*
 
 ## Relationships
 
 - [Community 61](Community_61.md) (11 shared connections)
 - [Community 43](Community_43.md) (9 shared connections)
-- [Community 18](Community_18.md) (8 shared connections)
-- [Community 74](Community_74.md) (7 shared connections)
+- [Community 18](Community_18.md) (9 shared connections)
+- [Community 63](Community_63.md) (7 shared connections)
 - [certs.py](certs.py.md) (3 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
 - [Community 54](Community_54.md) (2 shared connections)
 - [Community 130](Community_130.md) (2 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 - [Platform Architecture Plan](Platform_Architecture_Plan.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
 - [Community 2](Community_2.md) (1 shared connections)
 
 ## Source Files
 
 - `BACKLOG.md`
+- `teach/cli.py`
 - `teach/core/labs.py`
 - `tests/test_labs.py`
 - `tests/test_labs_ownership.py`
 
 ## Audit Trail
 
-- EXTRACTED: 203 (97%)
+- EXTRACTED: 207 (97%)
 - INFERRED: 7 (3%)
 - AMBIGUOUS: 0 (0%)
 

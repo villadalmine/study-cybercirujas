@@ -1,12 +1,11 @@
 # Community 101
 
-> 11 nodes · cohesion 0.18
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
 - **Contributing** (9 connections) — `CONTRIBUTING.md`
 - **Pull requests** (4 connections) — `CONTRIBUTING.md`
-- **Checks that must pass** (3 connections) — `CONTRIBUTING.md`
 - **Set up, once** (3 connections) — `CONTRIBUTING.md`
 - **Agents** (1 connections) — `CONTRIBUTING.md`
 - **Conventions** (1 connections) — `CONTRIBUTING.md`
@@ -18,9 +17,9 @@
 
 ## Relationships
 
-- [Community 83](Community_83.md) (3 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [Community 107](Community_107.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 - [Community 126](Community_126.md) (1 shared connections)
 
 ## Source Files
@@ -29,8 +28,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (75%)
-- INFERRED: 4 (25%)
+- EXTRACTED: 12 (86%)
+- INFERRED: 2 (14%)
 - AMBIGUOUS: 0 (0%)
 
 ---

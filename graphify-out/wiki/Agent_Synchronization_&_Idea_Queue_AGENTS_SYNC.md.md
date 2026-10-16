@@ -34,10 +34,10 @@
 ## Relationships
 
 - [README.md](README.md.md) (1 shared connections)
-- [Community 83](Community_83.md) (1 shared connections)
-- [Community 155](Community_155.md) (1 shared connections)
+- [Community 70](Community_70.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
-- [Community 143](Community_143.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 
 ## Source Files

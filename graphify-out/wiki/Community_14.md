@@ -25,7 +25,7 @@
 ## Relationships
 
 - [Community 52](Community_52.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
+- [Community 69](Community_69.md) (2 shared connections)
 - [Changelog](Changelog.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)

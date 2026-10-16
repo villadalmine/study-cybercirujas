@@ -1,13 +1,15 @@
 # Community 31
 
-> 27 nodes · cohesion 0.13
+> 31 nodes · cohesion 0.11
 
 ## Key Concepts
 
 - **check_pr.py** (32 connections) — `scripts/check_pr.py`
 - **main()** (14 connections) — `scripts/check_pr.py`
 - **check()** (11 connections) — `scripts/check_pr.py`
+- **cited_runs()** (6 connections) — `scripts/check_pr.py`
 - **quality_only()** (5 connections) — `scripts/check_pr.py`
+- **sections()** (5 connections) — `scripts/check_pr.py`
 - **site_impact()** (5 connections) — `scripts/check_pr.py`
 - **base_texts()** (4 connections) — `scripts/check_pr.py`
 - **declared()** (4 connections) — `scripts/check_pr.py`
@@ -26,18 +28,15 @@
 - **Check a pull request's description: sections, title, and declared provenance.…** (1 connections) — `scripts/check_pr.py`
 - **What a PR touches, by kind: material (topic/lang dirs), labs, code, docs.** (1 connections) — `scripts/check_pr.py`
 - **Problems with the shape of a PR, independent of its description.** (1 connections) — `scripts/check_pr.py`
-- **Why a cited run does not prove this head, or None if it does. Jobs named…** (1 connections) — `scripts/check_pr.py`
-- **True if at least one cited run proves this head; prints why each one does or…** (1 connections) — `scripts/check_pr.py`
-- **One label per line, as `gh api .../labels --jq '.[].name'` writes them.** (1 connections) — `scripts/check_pr.py`
-- *... and 2 more nodes in this community*
+- **(repo, run id) linked under '### Where it ran' inside Evidence.** (1 connections) — `scripts/check_pr.py`
+- *... and 6 more nodes in this community*
 
 ## Relationships
 
-- [Community 159](Community_159.md) (5 shared connections)
+- [Community 2](Community_2.md) (5 shared connections)
 - [Community 61](Community_61.md) (4 shared connections)
 - [Community 157](Community_157.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 2](Community_2.md) (3 shared connections)
+- [Community 63](Community_63.md) (4 shared connections)
 - [Community 36](Community_36.md) (3 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
 - [Community 35](Community_35.md) (2 shared connections)
@@ -50,7 +49,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 76 (100%)
+- EXTRACTED: 81 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

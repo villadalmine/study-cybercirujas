@@ -21,7 +21,7 @@
 - [Community 0](Community_0.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
-- [Community 83](Community_83.md) (1 shared connections)
+- [Community 70](Community_70.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 52](Community_52.md) (1 shared connections)
 
