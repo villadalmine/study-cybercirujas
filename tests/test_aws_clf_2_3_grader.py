@@ -79,3 +79,20 @@ class Aws23GraderTests(unittest.TestCase):
         """PR #107 finding 1: `source_profile=ci` is valid INI for the CLI and the shim."""
         self.reference_fix(source_line="source_profile=ci")
         self.assert_passes()
+
+    def test_wildcard_next_to_ci_in_principal_list(self):
+        """PR #107 finding 2: {"AWS": [ci, "*"]} makes the role assumable by anyone."""
+        self.reference_fix()
+        self.trust(lambda d: d["Statement"][0].update(Principal={"AWS": [CI, "*"]}))
+        self.assert_fails()
+
+    def test_wildcard_variants_in_principal(self):
+        for principal in ("*", {"AWS": "*"}, {"AWS": [CI, "arn:aws:iam::*:root"]},
+                          {"AWS": CI, "Service": "*"}, {"AWS": CI, "Federated": ["*"]}):
+            with self.subTest(principal=principal):
+                self.reference_fix() if not hasattr(self, "_fixed") else None
+                self._fixed = True
+                self.trust(lambda d: d["Statement"][0].update(Principal=principal))
+                self.assert_fails()
+        self.trust(lambda d: d["Statement"][0].update(Principal={"AWS": CI}))
+        self.assert_passes()

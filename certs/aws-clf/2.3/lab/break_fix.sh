@@ -718,6 +718,32 @@ source_profile_exists() {
 }
 
 trust_names_ci() { grep -q "\"arn:aws:iam::${ACCOUNT_ID}:user/ci\"" "$LAB_ROOT/iam/trust/LabDeployRole.json"; }
+# Grade the trust DOCUMENT, not a string in it. Anything that grants sts:AssumeRole
+# to a wildcard principal - "*", {"AWS": "*"}, a list with "*" next to ci,
+# "arn:aws:iam::*:root", Service or Federated - opens the role to everyone.
+trust_no_wildcard() {
+  python3 - "$LAB_ROOT/iam/trust/LabDeployRole.json" <<'PY'
+import json, sys
+doc = json.load(open(sys.argv[1], encoding="utf-8"))
+def values(x):
+    if isinstance(x, dict):
+        for v in x.values():
+            yield from values(v)
+    elif isinstance(x, list):
+        for v in x:
+            yield from values(v)
+    else:
+        yield x
+statements = doc.get("Statement", [])
+statements = statements if isinstance(statements, list) else [statements]
+for st in statements:
+    if st.get("Effect") != "Allow":
+        continue
+    if "NotPrincipal" in st or any("*" in str(v) for v in values(st.get("Principal"))):
+        sys.exit(1)
+PY
+}
+
 trust_keeps_mfa() { grep -q 'aws:MultiFactorAuthPresent' "$LAB_ROOT/iam/trust/LabDeployRole.json"; }
 deploy_is_role() { aws_lab --profile deploy sts get-caller-identity | grep -q 'assumed-role/LabDeployRole/'; }
 
@@ -762,9 +788,7 @@ cmd_verify() {
             simulate_allows "iam:CreateUser" "arn:aws:iam::${ACCOUNT_ID}:user/newbie"
   check_not "the role STILL cannot delete the artifact bucket" \
             simulate_allows "s3:DeleteBucket" "arn:aws:s3:::$BUCKET"
-  check_not "the trust policy was not opened to every principal" \
-            grep -qE '"Principal"[[:space:]]*:[[:space:]]*"\*"' \
-                 "$LAB_ROOT/iam/trust/LabDeployRole.json"
+  check     "the trust policy was not opened to every principal" trust_no_wildcard
 
   head1 "Objective 4 - the audit finding"
   check     "no long-lived root credentials remain on this host" no_root_credentials
