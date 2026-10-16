@@ -2,6 +2,15 @@ name: Content error
 description: Something in the study material is wrong or outdated
 labels: [content]
 body:
+  - type: dropdown
+    id: exam_version
+    attributes:
+      label: Is this about a new exam curriculum version?
+      description: A new version of the exam (for example CKA 1.35 to 1.37) is not a content error. If it is, choose the second answer and open the "New exam curriculum version" form instead.
+      options:
+        - "No, one fact in the material is wrong or outdated"
+        - "Yes, the exam body published a new curriculum version (stop here and use the New exam curriculum version form)"
+    validations: {required: true}
   - type: input
     id: where
     attributes:

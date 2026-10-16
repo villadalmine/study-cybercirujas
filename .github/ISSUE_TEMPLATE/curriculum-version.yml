@@ -1,0 +1,46 @@
+name: New exam curriculum version
+description: The exam body published a new curriculum version (for example CKA 1.35 -> 1.37)
+labels: ["scope:exam-version", "type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when an exam changed to a **new curriculum version**. It is not for a typo or one wrong fact (use "Content error" for that).
+
+        **What happens next.** The material stays on the version we track until the upgrade milestone finishes
+        ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). The site keeps saying "built for <tracked version>"
+        and may show that a newer one is out, but nothing says the material is the new version until every topic was
+        rebuilt or revalidated against it and the catalog switch, the last PR of the milestone, is merged. A pull request
+        that only swaps links in `catalog.yaml` is not an upgrade and is rejected by `check_pr`.
+  - type: input
+    id: cert
+    attributes:
+      label: Certification
+      placeholder: "CKA, CKAD, LPIC-1..."
+    validations: {required: true}
+  - type: input
+    id: tracked
+    attributes:
+      label: Version we track today
+      description: The `tracked_version` of that cert in `catalog.yaml`.
+      placeholder: "1.35"
+    validations: {required: true}
+  - type: input
+    id: new_version
+    attributes:
+      label: New version
+      placeholder: "1.37"
+    validations: {required: true}
+  - type: input
+    id: source
+    attributes:
+      label: Official link to the new curriculum
+      description: The exam body's own page or PDF, not a blog or a forum.
+      placeholder: https://github.com/cncf/curriculum
+    validations: {required: true}
+  - type: textarea
+    id: changed
+    attributes:
+      label: What you noticed changed
+      description: Domains, objectives, weights, tools or exam format that are new, removed or moved. "I don't know" is fine; the diff script finds the rest.
+    validations: {required: true}

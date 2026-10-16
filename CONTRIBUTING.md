@@ -225,7 +225,7 @@ One template per kind of change, in
 [`.github/PULL_REQUEST_TEMPLATE/`](.github/PULL_REQUEST_TEMPLATE/):
 `content.md`, `translation.md`, `lab.md`, `video.md`, `code.md`, `docs.md`
 (pick one with `?template=<name>.md` on the compare URL). Every PR has the same
-required sections — **What and why · Kind · Provenance · Evidence · Authorship ·
+required sections — **What and why · Kind · Scope · Provenance · Evidence · Authorship ·
 How to test it from a clean clone · Risk and rollback · Depends on** — and each template
 adds only what its kind needs (a translation: the gate result and three
 paragraphs picked with a stated seed; a lab: break → verify fails, fix → verify
@@ -280,6 +280,39 @@ A maintainer can waive scope or size for one PR with the label
 `scope-exception` or `size-exception`, saying why in the PR. Setting or
 removing the label re-runs `pr-format` on its own (it reads the labels live),
 without re-running `verify` and `e2e`.
+
+### How big is my change?
+
+Every PR declares one **Scope** in its description (a required section, checked by `scripts/check_pr.py`).
+Pick the biggest line that applies:
+
+| Scope | It is | Why it matters |
+| :--- | :--- | :--- |
+| `small` | docs, typos or links | normal flow: CI and an independent review |
+| `medium` | one topic's content or lab, or one script | normal flow |
+| `large` | `.github/`, `Makefile`, `scripts/check_*`, dependencies or weights; more than 1 topic; more than 400 code lines | the maintainer reads it; never merged from a fork without the maintainer's OK |
+| `exam-version` | `tracked_version`, `objectives` or a frozen syllabus changes | has its own milestone (see below) |
+
+**An exam version never changes by accident.** `tracked_version` and `sources.objectives` in `catalog.yaml`
+say which curriculum version the material was built against. Moving them means the whole cert must be re-evaluated
+(table of contents, every topic), so it only happens in the **final PR of an upgrade milestone**
+([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). `check_pr` fails any PR that changes them
+unless it carries the `scope:exam-version` label **and** references the milestone (a `Milestone: <name>` line or
+the milestone link). Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
+goes into the milestone. If the exam body published a new version, open the "New exam curriculum version" issue form.
+The labels are applied by a maintainer today; a script will compute them from the diff
+([#62](https://github.com/villadalmine/study-cybercirujas/issues/62)).
+
+### How issue forms work
+
+For maintainers. Each file in `.github/ISSUE_TEMPLATE/*.yml` is a **GitHub issue form**: a YAML description of the
+fields (`input`, `textarea`, `dropdown`, `markdown` text) that GitHub draws as a web form on *New issue*. When someone
+submits it, GitHub writes the answers into the issue body under each field's `label`, and applies the `labels:` listed
+at the top (they must already exist in the repo). `validations: {required: true}` makes a field mandatory; a form
+cannot branch, so "if yes, use another form" is a sentence plus a dropdown answer, not a redirect.
+`config.yml` sets `blank_issues_enabled: false` (every issue comes through a form) and the contact links. A form is
+live as soon as the file is on the default branch; to try one, merge it and open *New issue*. PR templates are different:
+they are plain Markdown, one is chosen with `?template=<name>.md` in the compare URL, and `check_pr` reads the headings.
 
 ### Labels
 

@@ -37,6 +37,13 @@ checked. Any other file in that PR, or any other branch, gets the full check. Th
 exempt from the sign-off check, and only while every commit is authored by
 github-actions[bot].
 
+- the Scope section does not declare exactly one of small | medium | large |
+  exam-version (CONTRIBUTING -> How big is my change?);
+- `catalog.yaml` changes a cert's `tracked_version` or `sources.objectives`
+  (the exam version the material is built against) and the PR is not labelled
+  `scope:exam-version` AND does not reference the upgrade milestone (a
+  `Milestone:` line or a milestone link). A links fix cannot move the version.
+
 It also checks scope and size (one topic, one lab, material apart from code,
 <= 400 changed lines of code), waived by the scope-exception/size-exception
 labels.
@@ -69,7 +76,7 @@ import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 
-SECTIONS = ("What and why", "Kind", "Provenance", "Evidence", "Authorship",
+SECTIONS = ("What and why", "Kind", "Scope", "Provenance", "Evidence", "Authorship",
             "How to test it from a clean clone", "Risk and rollback", "Depends on")
 TYPES = ("feat", "fix", "docs", "test", "ci", "chore", "refactor", "perf", "build",
          "style", "revert", "i18n", "content", "lab", "video")
@@ -221,6 +228,8 @@ def check(title: str, body: str, files: list[str], root: Path = REPO,
             problems.append(f"missing section: ## {name}")
         elif not found[name]:
             problems.append(f"empty section: ## {name}")
+    if found.get("Scope"):
+        problems += declared_scope(found["Scope"])[1]
 
     if "Evidence" in found and not cited_runs(body):
         problems.append("Evidence: add a '### Where it ran' subsection linking the CI run on this "
@@ -269,6 +278,55 @@ def check(title: str, body: str, files: list[str], root: Path = REPO,
         elif not meta.get("human_edits"):
             problems.append(f"{directory}: Author is human but meta.yaml has no human_edits "
                             "entry (CONTRIBUTING.md → Provenance is mandatory)")
+    return problems
+
+
+# --- scope declared in the description, and exam-version changes -------------
+
+SCOPES = ("small", "medium", "large", "exam-version")
+SCOPE_LINE = re.compile(r"^\s*[-*]?\s*Scope:\s*(.*?)\s*$", re.M | re.I)
+EXAM_VERSION_LABEL = "scope:exam-version"
+MILESTONE = re.compile(r"(^\s*[-*]?\s*Milestone:\s*\S)|(github\.com/[\w.-]+/[\w.-]+/milestone/\d+)",
+                       re.M | re.I)
+CATALOG = "catalog.yaml"
+
+
+def declared_scope(text: str) -> tuple[str | None, list[str]]:
+    """The one scope the Scope section declares, and the problems if it is not exactly one."""
+    line = SCOPE_LINE.search(text)
+    value = line.group(1).strip("`").lower() if line else ""
+    if value in SCOPES:
+        return value, []
+    return None, [f"Scope: add a 'Scope: <one of {' | '.join(SCOPES)}>' line with exactly one value "
+                  "(CONTRIBUTING -> How big is my change?)"]
+
+
+def exam_version_changes(base_text: str | None, head_text: str | None) -> list[str]:
+    """Certs whose tracked_version or sources.objectives differ between two catalog.yaml texts.
+
+    A cert that appears or disappears counts too. Pure: no git, no network."""
+    def load(text):
+        certs = (yaml.safe_load(text) or {}).get("certs") or {} if text else {}
+        return {key: (str(c.get("tracked_version")), str((c.get("sources") or {}).get("objectives")))
+                for key, c in certs.items() if isinstance(c, dict)}
+    before, after = load(base_text), load(head_text)
+    return sorted(key for key in set(before) | set(after) if before.get(key) != after.get(key))
+
+
+def exam_version(changed: list[str], labels: set, body: str) -> list[str]:
+    """Problems if the exam version moved outside its own milestone's PR."""
+    if not changed:
+        return []
+    problems = []
+    names = ", ".join(changed[:4]) + ("…" if len(changed) > 4 else "")
+    if EXAM_VERSION_LABEL not in labels:
+        problems.append(f"exam version: {CATALOG} changes tracked_version or objectives of {names}, but the PR "
+                        f"is not labelled {EXAM_VERSION_LABEL}. Only the upgrade milestone's final PR may do "
+                        "that; a links fix must not (CONTRIBUTING -> How big is my change?)")
+    if not MILESTONE.search(re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)):
+        problems.append(f"exam version: {CATALOG} changes tracked_version or objectives of {names}, but the "
+                        "description does not reference the upgrade milestone (add a 'Milestone: <name>' "
+                        "line or the milestone link)")
     return problems
 
 
@@ -572,6 +630,12 @@ def main() -> int:
     problems = check(title, body, authored, head_ref=head_ref) + scope(authored, code_lines, labels, all_files=files)
     if args.base:
         problems += dco(commits_of(args.base), pr_author, number, head_ref, files)
+
+
+    if args.base and CATALOG in files and not is_graph_refresh(head_ref, files):
+        head_catalog = (REPO / CATALOG).read_text(encoding="utf-8") if (REPO / CATALOG).exists() else None
+        problems += exam_version(exam_version_changes(base_texts([CATALOG], args.base)[CATALOG], head_catalog),
+                                 labels, body)
     # The graph bot's PR cites no run, and an empty runs file would still make
     # the workflow's "cited run" step run and fail: write nothing for it.
     if args.runs_file and not is_graph_refresh(head_ref, files):

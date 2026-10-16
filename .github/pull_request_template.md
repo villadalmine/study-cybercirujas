@@ -21,6 +21,19 @@ The generic version below is fine for code and docs.
 code — area (api / cli / labs / pipeline / checks / ci): 
 - Site: none | image-rebuild  <!-- computed by scripts/check_pr.py from the changed files; see CONTRIBUTING → Merging and deploying the site -->
 
+## Scope
+
+<!-- How big is this change? Keep exactly ONE value on the first line, and delete the others.
+     scripts/check_pr.py fails the PR without it. Rules: CONTRIBUTING -> How big is my change? -->
+- Scope: small | medium | large | exam-version
+
+- `exam-version`: `tracked_version`, `objectives` or a frozen syllabus change in `catalog.yaml`.
+- `large`: `.github/`, `Makefile`, `scripts/check_*`, dependencies or weights; more than 1 topic; more than 400 code lines.
+- `medium`: one topic's content or lab, or one script.
+- `small`: docs, typos or links.
+
+An `exam-version` change only happens in its upgrade milestone's final PR. Never in a links fix, never mixed with anything else.
+
 ## Provenance
 
 <!-- Who or what wrote it. For AI, these must match meta.yaml of every topic you touch. -->

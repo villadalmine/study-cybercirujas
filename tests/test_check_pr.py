@@ -516,5 +516,108 @@ class DcoMainTests(unittest.TestCase):
         self.assertEqual(code, 0, out)
 
 
+class ScopeSectionTests(unittest.TestCase):
+    """## Scope: exactly one of the four values."""
+
+    def body(self):
+        return (FIXTURES / "good.md").read_text(encoding="utf-8")
+
+    def problems(self, body):
+        return [p for p in check_pr.check("fix(cka): x", body, TOUCHED) if "Scope" in p]
+
+    def test_each_scope_passes(self):
+        for value in check_pr.SCOPES:
+            with self.subTest(value=value):
+                self.assertEqual(self.problems(self.body().replace("- Scope: medium", f"- Scope: {value}")), [])
+
+    def test_the_section_is_required(self):
+        body = self.body().replace("## Scope", "## Size")
+        self.assertIn("missing section: ## Scope", check_pr.check("docs: x", body, []))
+
+    def test_the_unedited_template_line_fails(self):
+        body = self.body().replace("- Scope: medium", "- Scope: small | medium | large | exam-version")
+        self.assertTrue(self.problems(body))
+
+    def test_an_unknown_scope_fails(self):
+        self.assertTrue(self.problems(self.body().replace("- Scope: medium", "- Scope: huge")))
+
+    def test_a_missing_scope_line_fails(self):
+        self.assertTrue(self.problems(self.body().replace("- Scope: medium\n", "")))
+
+
+CATALOG_BASE = """
+certs:
+  cka:
+    tracked_version: '1.35'
+    last_checked: '2026-09-03'
+    sources:
+      objectives: https://example.org/cka-1.35.pdf
+  lpic-1:
+    tracked_version: '5.0'
+    sources:
+      objectives: https://example.org/lpic.html
+"""
+
+
+class ExamVersionTests(unittest.TestCase):
+    """catalog.yaml: tracked_version or objectives only move in the milestone's final PR."""
+
+    def changes(self, head):
+        return check_pr.exam_version_changes(CATALOG_BASE, head)
+
+    def test_an_identical_catalog_has_no_change(self):
+        self.assertEqual(self.changes(CATALOG_BASE), [])
+
+    def test_other_fields_are_free(self):
+        head = CATALOG_BASE.replace("2026-09-03", "2026-10-16")
+        self.assertEqual(self.changes(head), [])
+
+    def test_tracked_version_change_is_detected(self):
+        self.assertEqual(self.changes(CATALOG_BASE.replace("'1.35'", "'1.37'")), ["cka"])
+
+    def test_objectives_link_change_is_detected(self):
+        # what PR #61 did: a links fix that moved the objectives
+        self.assertEqual(self.changes(CATALOG_BASE.replace("cka-1.35.pdf", "cka-1.37.pdf")), ["cka"])
+
+    def test_a_new_or_removed_cert_is_a_change(self):
+        added = CATALOG_BASE + "  ckad:\n    tracked_version: '1.35'\n    sources: {objectives: x}\n"
+        self.assertEqual(self.changes(added), ["ckad"])
+        self.assertEqual(check_pr.exam_version_changes(added, CATALOG_BASE), ["ckad"])
+        self.assertEqual(check_pr.exam_version_changes(None, CATALOG_BASE), ["cka", "lpic-1"])
+
+    def test_without_a_change_nothing_is_required(self):
+        self.assertEqual(check_pr.exam_version([], set(), ""), [])
+
+    def test_a_change_with_nothing_fails_twice(self):
+        problems = check_pr.exam_version(["cka"], set(), "fix links")
+        self.assertEqual(len(problems), 2)
+
+    def test_the_label_alone_is_not_enough(self):
+        problems = check_pr.exam_version(["cka"], {"scope:exam-version"}, "fix links")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("milestone", problems[0])
+
+    def test_the_milestone_alone_is_not_enough(self):
+        problems = check_pr.exam_version(["cka"], set(), "Milestone: CKA v1.37 upgrade")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("scope:exam-version", problems[0])
+
+    def test_label_and_milestone_pass(self):
+        label = {"scope:exam-version", "type:feature"}
+        for body in ("Milestone: CKA & CKAD v1.37 upgrade",
+                     "- Milestone: CKA v1.37 upgrade",
+                     "https://github.com/villadalmine/study-cybercirujas/milestone/3"):
+            with self.subTest(body=body):
+                self.assertEqual(check_pr.exam_version(["cka"], label, body), [])
+
+    def test_a_milestone_in_a_comment_does_not_count(self):
+        label = {"scope:exam-version"}
+        self.assertTrue(check_pr.exam_version(["cka"], label, "<!-- Milestone: x -->"))
+
+    def test_the_template_text_is_not_a_milestone_reference(self):
+        template = (REPO / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+        self.assertTrue(check_pr.exam_version(["cka"], {"scope:exam-version"}, template))
+
+
 if __name__ == "__main__":
     unittest.main()
