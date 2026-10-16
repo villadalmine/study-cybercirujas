@@ -144,7 +144,8 @@ maintainer merges it; an agent never does.
 - *Authorship* and its *Findings ledger* list every review and every finding
   of the last round.
 - docs are consistent (`make check-docs` green, CI job `docs-consistency`),
-  and the code graph is regenerated (`make graph`) when the PR touches
-  `teach/` or `scripts/` — or the PR says why not.
+  (the code graph is not part of this: `make graph` is optional locally, the PR
+  leaves `graphify-out/` out, and a stale graph is only a warning because
+  `main` refreshes it through the bot PR, see *The graph refresh PR*).
 
 Then the maintainer merges. An agent never does.
