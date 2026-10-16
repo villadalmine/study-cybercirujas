@@ -95,7 +95,8 @@ To raise a topic's score, turn its `not_run` and `fail` entries into `pass`:
 | `lab` | the topic's lab ran in the study-lab runner and its `lab.yaml` records `verified` |
 | `independent_review` | a `reviews:` entry in meta.yaml: `{by, link, date, result: pass}` — `fable (revisor-pr)` or Copilot, with the review's link |
 | `human_review` | a `human_edits:` entry (see *Provenance is mandatory*) |
-| `citations_resolve`, `groundedness` | not run in CI today (network, and a model to be chosen); they stay `not_run` |
+| `citations_resolve` | not run in CI today (network); it stays `not_run` |
+| `groundedness` | `make groundedness DIRS=certs/<cert>/<topic>/<lang>` and commit the `meta.yaml` it writes (see *Groundedness (advisory)* below); CI reports the same run but does not commit, so the entry stays `not_run` until you run it |
 
 *Verified* needs a score of 85 or more **and** a passed lab and independent
 review; a high score from automatic checks alone stops at *AI beta*.

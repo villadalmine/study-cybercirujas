@@ -141,7 +141,7 @@ carries, in its `meta.yaml`, a `quality:` block written by
 `scripts/quality_score.py` (`make quality`; `--check` in CI): one entry per
 check — quality floor, provenance, sources, citations, Kubernetes manifests,
 translation gate, source chain, the lab in the runner, independent review,
-human review, and a reserved place for groundedness — each `pass`, `fail` or
+human review, and groundedness (advisory, below) — each `pass`, `fail` or
 `not_run`, with its weight, date and evidence. The weights and the level
 thresholds (*Verified*, *AI beta*, *Draft*) live in `quality_weights.yaml`. A
 check that did not run costs part of its weight and a failed one all of it:

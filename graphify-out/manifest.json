@@ -984,9 +984,9 @@
     "semantic_hash": ""
   },
   "CONTRIBUTING.md": {
-    "mtime": 1792114424.4561102,
-    "seen": 1792114456.3055928,
-    "ast_hash": "4eb5f107d57697432e7ed8d6d6e8ba6f",
+    "mtime": 1792116391.9337623,
+    "seen": 1792116395.7633858,
+    "ast_hash": "b5b4baf2a47e6db1e1470629d398c536",
     "semantic_hash": ""
   },
   "GOVERNANCE.md": {
@@ -1008,9 +1008,9 @@
     "semantic_hash": ""
   },
   "docs/PRINCIPLES.md": {
-    "mtime": 1792114424.4588907,
-    "seen": 1792114456.305626,
-    "ast_hash": "dc8c824febed1a508ab984aa77d3c080",
+    "mtime": 1792116391.9342246,
+    "seen": 1792116395.7634182,
+    "ast_hash": "0b1d1491f9563b397fc432ec6b08f23a",
     "semantic_hash": ""
   },
   "tests/fixtures/labs_known_broken.txt": {
