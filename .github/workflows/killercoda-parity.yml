@@ -37,7 +37,7 @@ jobs:
           read -r minor cni <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
           sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$minor" "$cni"
       - name: Prove the scenario (break, verify fails, fix, verify passes, cleanup)
-        run: sudo -E "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
+        run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
       - name: Evidence
         if: always()
         run: |

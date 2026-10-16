@@ -30,13 +30,13 @@ def test_golden_tree():
 
 def test_images_and_shape():
     files = kc.tree(_labs())
-    idx = json.loads(files["democert/t-1-1/index.json"])
+    idx = json.loads(files["democert/1-1-demo-linux-lab/index.json"])
     assert idx["backend"]["imageid"] == "ubuntu"
     assert idx["details"]["steps"][-1]["verify"] == "verify.sh"
     assert json.loads(files["structure.json"])["items"][0]["path"] == "democert"
-    assert "SOLUTION" not in files["democert/t-1-1/assets/break_fix.sh"]
-    assert "echo fixed" in files["democert/t-1-1/finish.md"]
-    assert all("study.cybercirujas.club" in files[f"democert/t-1-1/{n}"] for n in ("intro.md", "finish.md"))
+    assert "SOLUTION" not in files["democert/1-1-demo-linux-lab/assets/break_fix.sh"]
+    assert "echo fixed" in files["democert/1-1-demo-linux-lab/finish.md"]
+    assert all("study.cybercirujas.club" in files[f"democert/1-1-demo-linux-lab/{n}"] for n in ("intro.md", "finish.md"))
 
 
 def test_kind_family_image(tmp_path):
