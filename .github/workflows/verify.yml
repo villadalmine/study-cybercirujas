@@ -133,7 +133,7 @@ jobs:
           else
             # REST, not `gh pr view`: the exemption needs user.login ("github-actions[bot]")
             # and head.repo, which `gh pr view` renders differently ("app/github-actions").
-            gh api "repos/$GITHUB_REPOSITORY/pulls" -f head="${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" \
+            gh api -X GET "repos/$GITHUB_REPOSITORY/pulls" -f head="${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" \
               -f state=open --jq '.[0]' > pr.json
             test "$(jq -r .number pr.json)" != null
             jq '{pull_request: {number, title, body, user: {login: .user.login}, head: {ref: .head.ref, repo: {full_name: .head.repo.full_name}}, base: {ref: .base.ref, repo: {full_name: .base.repo.full_name}}, labels: [.labels[] | {name}]}}' pr.json > "$RUNNER_TEMP/event.json"
