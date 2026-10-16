@@ -45,7 +45,21 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   `meta.yaml` files. It never fails on a finding and is not a required check.
   Locally: `make groundedness-setup`, `make groundedness` and
   `make groundedness-deep` (CONTRIBUTING → *Groundedness (advisory)*).
-
+- **The code graph is refreshed on `main`, not in every PR**
+  (`.github/workflows/graph.yml`). After a merge that touches `teach/`,
+  `scripts/`, `tests/` or the graph config, the job asks
+  `scripts/check_graph.py --regenerate --strict` and, only if the graph is stale, rebuilds
+  it with `make graph` (tree-sitter, no LLM, no cost; graphify pinned as
+  `GRAPHIFY_VERSION` in the Makefile) and opens or updates one PR,
+  `chore(graph): regenerate code graph`, from `bot/graph-refresh`
+  (`peter-evans/create-pull-request`, pinned by SHA; main stays protected).
+  Feature PRs no longer rebase or rebuild the graph and leave `graphify-out/`
+  out of their diff; a stale graph in a PR is a warning. `check_pr.py` checks
+  only the title of that bot PR (branch `bot/graph-refresh`, every file under
+  `graphify-out/`). No secret or PAT: the job opens the PR with `GITHUB_TOKEN`
+  and then dispatches `verify.yml` on the branch, which starts the required
+  checks (`pr-format` looks the PR up by branch when dispatched). One
+  repository setting, once: Actions may create pull requests.
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The
   source chain*): syllabus → content → exercises and labs → translations →
   video, each link resting only on the one before and saying which.

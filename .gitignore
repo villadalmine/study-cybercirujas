@@ -23,6 +23,9 @@ graphify-out/graph.html
 graphify-out/20*/
 # Written by the post-commit hook: the last commit the scanner ran at.
 graphify-out/.last-scan
+# Names for communities that appeared since the curated labels; per-run, and
+# the graph.yml bot must not commit it.
+graphify-out/.graphify_labels.pending.json
 
 # Credentials never live in the repo: this one is public, and until now the only
 # ignore rule was .venv/ — so a .env dropped in here would have been committed

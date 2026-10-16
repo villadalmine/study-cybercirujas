@@ -8,6 +8,12 @@ acting on a cached idea of the code instead of the code. The build is
 tree-sitter AST only, so keeping it fresh costs no quota; there is no excuse
 for it to be stale except nobody noticing.
 
+Who keeps it fresh: main, not each PR. After a merge that touches what the
+graph covers, .github/workflows/graph.yml runs this script with
+--regenerate --strict and, if the graph is stale, opens ONE bot PR (bot/graph-refresh) with the rebuilt
+graph. A feature PR therefore never needs `make graph` or a rebase to refresh
+it: for a PR a stale graph is a warning, never a failure.
+
 Warn-only by default so `make verify` keeps proving content soundness even on
 a clone that never built a graph. --strict turns both findings into failures
 (for anything that is about to RELY on the graph, e.g. serving it over MCP).
@@ -95,7 +101,7 @@ def touches_graph_sources(base: str) -> list[str]:
     return [f for f in diff.stdout.splitlines() if f.startswith(GRAPH_SOURCES)]
 
 
-def regenerate(base: str | None) -> int:
+def regenerate(base: str | None, strict: bool = False) -> int:
     graphify = graphify_bin()
     if not graphify:
         print("graph: graphify is not installed — `make graph-setup` (free), then rerun.")
@@ -112,6 +118,9 @@ def regenerate(base: str | None) -> int:
     touched = touches_graph_sources(base) if base else []
     msg = (f"graph: STALE — the committed graph ({len(committed.get('nodes', []))} nodes) is not what this tree "
            f"builds ({len(rebuilt.get('nodes', []))} nodes). Run `make graph` (free, no LLM) and commit graphify-out/.")
+    if strict:
+        print(f"{msg}\n       --strict: any difference counts (graph.yml opens the refresh PR on this).")
+        return 1
     if touched:
         print(f"{msg}\n       This change touches the code the graph maps: {', '.join(touched[:5])}"
               + (" …" if len(touched) > 5 else ""))
@@ -129,7 +138,7 @@ def main() -> int:
     parser.add_argument("--base", help="with --regenerate: fail only if the diff from BASE touches teach/ or scripts/")
     args = parser.parse_args()
     if args.regenerate:
-        return regenerate(args.base)
+        return regenerate(args.base, args.strict)
     fail = 1 if args.strict else 0
 
     if not GRAPH.exists() or not REPORT.exists():
@@ -184,7 +193,8 @@ def main() -> int:
         print(f"graph: OK — nothing it covers changed since {baseline[:8]}.")
         return 0
     print(f"graph: possibly STALE — {len(covered)} covered file(s) changed since "
-          f"{baseline[:8]} (e.g. {covered[0]}). Run `make graph` (free) to settle it.")
+          f"{baseline[:8]} (e.g. {covered[0]}). Run `make graph` (free) to settle it locally; "
+          "CI refreshes the committed one on main, so a PR need not.")
     return fail
 
 

@@ -111,6 +111,13 @@ review; a high score from automatic checks alone stops at *AI beta*.
 - **Language:** English is the standard for PRs, commits and code; a PR
   description in your own language is welcome too — everything gets
   translated. Study material in the language it is written for.
+- **Do not commit `graphify-out/`** (the code graph) and do not rebase just to
+  refresh it: CI rebuilds it on `main` and opens a bot PR
+  (`bot/graph-refresh`). **Nothing changes for you locally:** `make graph`
+  stays optional, no secret, token or extra tool is needed, and the graph is
+  refreshed after merge. The post-commit hook may dirty `graphify-out/`; run
+  `git restore graphify-out` before you stage. A stale graph in a PR is a
+  warning, not a failure ([docs/DEVTOOLS.md](docs/DEVTOOLS.md)).
 - **Small pull requests**, one concern each. Generated files (STATUS.md,
   MODELS.md, the README table, the API table) are regenerated, never edited
   by hand: `teach status`, `scripts/gen_readme_table.py`, `scripts/gen_api_docs.py`.
@@ -250,7 +257,7 @@ installing dependencies. CI runs the same targets.
 | translation: the structural gate a translation must pass (code blocks, URLs, headings, length) | `tests/test_translation_verify.py` | `make test` |
 | content: quality floor, manifests, Kubernetes APIs, provenance, sources, syllabus, versions; README/API tables up to date | `scripts/check_*.py`, `gen_*.py --check` | `make verify-ci` |
 | docs consistent with the repo: relative links and anchors, paths in code, `make` targets and `teach` commands exist, generated files fresh | `scripts/check_docs.py`, `tests/test_check_docs.py` | `make check-docs` (CI: job `docs-consistency`) |
-| the code graph is what the tree builds (fails when a PR touches `teach/` or `scripts/` and did not run `make graph`) | `scripts/check_graph.py --regenerate` | `make graph-setup && make graph` (free, tree-sitter only; CI: job `docs-consistency`) |
+| the code graph is what the tree builds (a warning on a PR, never a failure: CI refreshes it on `main` through a bot PR, `make graph` stays optional) | `scripts/check_graph.py --regenerate` | `make graph-setup && make graph` (free, tree-sitter only; CI: job `docs-consistency`) |
 | the quality score: every topic's `quality:` block is what the files give (after generating or editing material) | `scripts/quality_score.py --check`, `tests/test_quality_score.py` | `make quality CERT=<cert>`, then commit the meta.yaml it changed |
 | the PR description: required sections, Conventional Commit title, declared provenance = `meta.yaml`, Where it ran on the head commit, size and scope | `scripts/check_pr.py`, `tests/test_check_pr.py` | `scripts/check_pr.py --title "<title>" --body-file <body.md> --base origin/main` (CI runs it on every PR) |
 | everything fast above, in one go | `tests/` | `make test` |

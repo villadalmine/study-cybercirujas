@@ -42,7 +42,9 @@ make determinism
 
 ### Known gaps
 
-<!-- What this evidence does NOT cover. Always present; 'none' is a claim, not a default. -->
+<!-- What this evidence does NOT cover. Always present; 'none' is a claim, not a default.
+     A stale code graph is not a gap and not a reason to rebase: leave graphify-out/ out of the diff,
+     CI refreshes it on main through the bot PR (docs/DEVTOOLS.md). -->
 
 ## Authorship
 

@@ -38,7 +38,7 @@ class IncrementalContractTests(unittest.TestCase):
 
 
 class RegenerateTests(unittest.TestCase):
-    def run_regenerate(self, rebuilt, touched):
+    def run_regenerate(self, rebuilt, touched, strict=False):
         with tempfile.TemporaryDirectory() as tmp:
             committed = Path(tmp) / "graph.json"
             committed.write_text(json.dumps(GRAPH), encoding="utf-8")
@@ -48,7 +48,7 @@ class RegenerateTests(unittest.TestCase):
                  mock.patch.object(check_graph, "rebuild_in_copy", lambda g: rebuilt), \
                  mock.patch.object(check_graph, "touches_graph_sources", lambda base: touched), \
                  redirect_stdout(out):
-                code = check_graph.regenerate("origin/main")
+                code = check_graph.regenerate("origin/main", strict)
         return code, out.getvalue()
 
     def test_same_graph_from_another_commit_is_fresh(self):
@@ -65,6 +65,14 @@ class RegenerateTests(unittest.TestCase):
         code, out = self.run_regenerate(dict(GRAPH, nodes=[]), [])
         self.assertEqual(code, 0)
         self.assertIn("Warning only", out)
+
+    def test_strict_makes_any_difference_a_failure_even_with_no_base_change(self):
+        # graph.yml opens the refresh PR on this exit code
+        code, out = self.run_regenerate(dict(GRAPH, nodes=[]), [], strict=True)
+        self.assertEqual(code, 1)
+        self.assertIn("--strict", out)
+        code, _ = self.run_regenerate(dict(GRAPH, built_at_commit="bbbb"), [], strict=True)
+        self.assertEqual(code, 0)
 
     def test_without_graphify_it_says_how_to_get_it(self):
         out = io.StringIO()

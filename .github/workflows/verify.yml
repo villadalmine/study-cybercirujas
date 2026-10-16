@@ -98,7 +98,11 @@ jobs:
     # declared in the PR), and declared provenance that matches the meta.yaml
     # of every topic the PR touches. Offline, no model. Labels the PR
     # site:none or site:image-rebuild with the built-in token — no bot.
-    if: github.event_name == 'pull_request'
+    # Also on workflow_dispatch, but only for the graph bot's branch: a PR
+    # opened with GITHUB_TOKEN starts no workflows, so graph.yml dispatches this
+    # file on bot/graph-refresh, and the check runs land on that head commit
+    # under the same names branch protection requires (verify, e2e, pr-format).
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref_name == 'bot/graph-refresh')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -112,6 +116,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Which pull request
+        # pull_request: the event says. workflow_dispatch (graph bot only):
+        # look the PR up by its branch and rebuild the event payload from it.
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            {
+              echo "number=${{ github.event.pull_request.number }}"
+              echo "head=${{ github.event.pull_request.head.sha }}"
+              echo "base=${{ github.base_ref }}"
+              echo "event=$GITHUB_EVENT_PATH"
+            } >> "$GITHUB_OUTPUT"
+          else
+            gh pr view "$GITHUB_REF_NAME" --json number,title,body,headRefName,baseRefName,labels > pr.json
+            jq '{pull_request: {number, title, body, head: {ref: .headRefName}, labels}}' pr.json > "$RUNNER_TEMP/event.json"
+            {
+              echo "number=$(jq -r .number pr.json)"
+              echo "head=$(git rev-parse HEAD)"
+              echo "base=$(jq -r .baseRefName pr.json)"
+              echo "event=$RUNNER_TEMP/event.json"
+            } >> "$GITHUB_OUTPUT"
+          fi
       - name: Check the PR description
         env:
           GH_TOKEN: ${{ github.token }}
@@ -119,10 +147,10 @@ jobs:
           pip install -q pyyaml
           # Labels read live, not from the payload: "Re-run jobs" replays the
           # original event, which may predate a waiver label.
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels" \
+          gh api "repos/${{ github.repository }}/issues/${{ steps.pr.outputs.number }}/labels" \
             --jq '.[].name' > labels.txt || rm -f labels.txt
-          python3 scripts/check_pr.py --event "$GITHUB_EVENT_PATH" --labels-file labels.txt \
-            --base "origin/${{ github.base_ref }}" \
+          python3 scripts/check_pr.py --event "${{ steps.pr.outputs.event }}" --labels-file labels.txt \
+            --base "origin/${{ steps.pr.outputs.base }}" \
             --label-file site-label.txt --runs-file cited-runs.txt
       - name: Check the run cited under "Where it ran"
         # check_pr.py stays offline; this step is its one networked mode, with
@@ -140,7 +168,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 scripts/check_pr.py --verify-runs cited-runs.txt \
-            --repo "${{ github.repository }}" --head "${{ github.event.pull_request.head.sha }}"
+            --repo "${{ github.repository }}" --head "${{ steps.pr.outputs.head }}"
       - name: Label the site impact
         # Runs even when the description check fails: the label is a fact
         # about the files. A fork's token cannot write labels; that is fine.
@@ -152,7 +180,7 @@ jobs:
           label="$(cat site-label.txt)"
           other=$([ "$label" = "site:none" ] && echo "site:image-rebuild" || echo "site:none")
           gh label create "$label" --force --color "$([ "$label" = "site:none" ] && echo 0e8a16 || echo d93f0b)"             --description "set by scripts/check_pr.py from the changed files"
-          gh pr edit "${{ github.event.pull_request.number }}" --add-label "$label" --remove-label "$other" ||             gh pr edit "${{ github.event.pull_request.number }}" --add-label "$label"
+          gh pr edit "${{ steps.pr.outputs.number }}" --add-label "$label" --remove-label "$other" ||             gh pr edit "${{ steps.pr.outputs.number }}" --add-label "$label"
 
   where-it-ran:
     # After verify and e2e pass on a new head, post (or update) one comment

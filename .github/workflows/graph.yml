@@ -1,0 +1,175 @@
+name: Graph
+
+# Keeps the committed code graph (graphify-out/) in step with main, so a PR
+# never has to rebase or rebuild it just to refresh the map.
+#
+# After a push to main that touches what the graph covers, this job asks
+# scripts/check_graph.py whether the graph is stale. Only if it is does it
+# rebuild (`make graph`: tree-sitter AST + derived wiki — no LLM, no quota, no
+# network beyond pip) and open or update ONE pull request from the fixed
+# branch bot/graph-refresh. main is protected (required checks, linear
+# history, PRs only), so nothing is ever pushed to it directly.
+#
+# Idempotent: a fresh graph does nothing; a second run on the same commit
+# finds nothing to change, so no new PR and no new commit. The merge of the
+# bot PR touches only graphify-out/, which this trigger ignores, so there is
+# no loop.
+#
+# THE CHECKS ON THE BOT PR, WITH NO SECRET. A pull request opened with the
+# built-in GITHUB_TOKEN does not trigger pull_request/push workflows (GitHub's
+# rule, to stop loops), but workflow_dispatch is the documented exception. So
+# after opening or updating the PR, this same job dispatches verify.yml on
+# bot/graph-refresh with GITHUB_TOKEN (needs actions: write). The check runs
+# attach to the PR head commit under the names branch protection requires
+# (verify, e2e, pr-format; verify.yml's pr-format job looks the PR up by branch
+# when dispatched). No PAT, no App, nothing for a developer to configure. One
+# repository setting is needed once: Settings > Actions > General > "Allow
+# GitHub Actions to create and approve pull requests".
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'teach/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.graphifyignore'
+      - 'Makefile'
+      - '.github/workflows/graph.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write      # to dispatch verify.yml on the bot branch
+
+concurrency:
+  # Queue, never cancel: a half-finished branch update is worse than waiting.
+  group: graph-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # check_graph diffs against the commit the graph was built from
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install graphify (the version pinned in the Makefile)
+        run: |
+          version="$(sed -n 's/^GRAPHIFY_VERSION *:= *//p' Makefile)"
+          test -n "$version"
+          python3 -m venv .venv
+          .venv/bin/pip install -q "graphifyy==$version"
+          .venv/bin/graphify --help >/dev/null
+
+      - name: Is the graph stale?
+        id: stale
+        # --regenerate --strict: rebuild in a temp copy and compare with the
+        # committed graph; exit 1 on any difference (or a missing graph).
+        run: |
+          if .venv/bin/python3 scripts/check_graph.py --regenerate --strict; then
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Rebuild the graph
+        if: steps.stale.outputs.stale == 'true'
+        run: make graph
+
+      - name: Open or update the pull request
+        if: steps.stale.outputs.stale == 'true'
+        # peter-evans/create-pull-request v8.1.1, pinned by commit SHA.
+        # It force-updates the branch and the open PR, and does nothing when
+        # the rebuilt files equal what is on main.
+        id: cpr
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
+        with:
+          token: ${{ github.token }}
+          branch: bot/graph-refresh
+          base: main
+          add-paths: graphify-out/
+          commit-message: |
+            chore(graph): regenerate code graph
+
+            Agent: graph-bot
+            Model: none
+          title: 'chore(graph): regenerate code graph'
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          body: |
+            ## What and why
+
+            Regenerates `graphify-out/` (graph, report, wiki) from main, because
+            `scripts/check_graph.py` reported it stale. Opened by
+            `.github/workflows/graph.yml`; one PR, updated in place on every
+            later push to main. Tree-sitter AST only: no LLM, no cost.
+
+            ## Kind
+
+            code — area (ci)
+            - Site: none
+
+            ## Provenance
+
+            - Author: ai
+            - Backend: none
+            - Model: none
+            - Date: generated
+            - Cost: none
+            - Official source: graphifyy, the version pinned as GRAPHIFY_VERSION in the Makefile
+
+            ## Evidence
+
+            `make graph` on main, in the workflow run that opened this PR.
+
+            ### Where it ran
+
+            - CI: the verify run on this PR's head commit (the Graph workflow run that opened it is linked from the Actions tab)
+
+            ### Known gaps
+
+            Generated files are reviewed by their generator, not by line. Curated community names
+            are kept; new communities arrive unnamed until a maintainer names them.
+
+            ## Authorship
+
+            | Role | Who | What | Link |
+            | :--- | :--- | :--- | :--- |
+            | Author | AI: graph-bot · none | generated by `make graph` | |
+            | Approval and merge | maintainer (human) | pending | |
+
+            ### Findings ledger
+
+            | # | Found by | Head | Severity | Finding | Fixed by | Fix | Verified by | Status |
+            | :- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+
+            ## How to test it from a clean clone
+
+            ```bash
+            git fetch origin bot/graph-refresh && git checkout bot/graph-refresh
+            python3 scripts/check_graph.py --regenerate --strict
+            ```
+
+            ## Risk and rollback
+
+            Only `graphify-out/` changes. Revert this PR to go back.
+
+            ## Depends on
+
+            nothing
+
+      - name: Start the required checks on the bot branch
+        # Skipped when create-pull-request changed nothing (no PR or commit).
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run verify.yml --ref bot/graph-refresh
