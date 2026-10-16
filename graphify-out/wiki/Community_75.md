@@ -20,9 +20,9 @@
 - [Community 135](Community_135.md) (1 shared connections)
 - [Community 148](Community_148.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 145](Community_145.md) (1 shared connections)
 
 ## Source Files
 

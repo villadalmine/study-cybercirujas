@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **check_pr.py** (47 connections) — `scripts/check_pr.py`
+- **check_pr.py** (49 connections) — `scripts/check_pr.py`
 - **main()** (24 connections) — `scripts/check_pr.py`
 - **check()** (14 connections) — `scripts/check_pr.py`
 - **cited_runs()** (6 connections) — `scripts/check_pr.py`
@@ -33,18 +33,18 @@
 
 ## Relationships
 
-- [Community 165](Community_165.md) (6 shared connections)
+- [Community 165](Community_165.md) (8 shared connections)
+- [Community 156](Community_156.md) (7 shared connections)
 - [Community 61](Community_61.md) (5 shared connections)
 - [Community 172](Community_172.md) (5 shared connections)
 - [Community 31](Community_31.md) (5 shared connections)
 - [Community 167](Community_167.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 156](Community_156.md) (4 shared connections)
-- [Community 182](Community_182.md) (3 shared connections)
+- [Community 129](Community_129.md) (4 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
 - [Community 170](Community_170.md) (3 shared connections)
 - [Community 173](Community_173.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
 
 ## Source Files
 
@@ -52,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 107 (100%)
+- EXTRACTED: 109 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

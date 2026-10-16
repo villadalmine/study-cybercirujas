@@ -10,11 +10,11 @@
 - json `EXTRACTED`
 - argparse `EXTRACTED`
 - check() `EXTRACTED`
+- is_bot_pr() `EXTRACTED`
 - sections() `EXTRACTED`
 - cited_runs() `EXTRACTED`
 - quality_only() `EXTRACTED`
 - dco() `EXTRACTED`
-- is_graph_refresh() `EXTRACTED`
 - site_impact() `EXTRACTED`
 - verify_runs() `EXTRACTED`
 - read_labels() `EXTRACTED`

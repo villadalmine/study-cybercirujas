@@ -1,6 +1,6 @@
 # Community 8
 
-> 34 nodes · cohesion 0.14
+> 30 nodes · cohesion 0.17
 
 ## Key Concepts
 
@@ -17,7 +17,6 @@
 - **LabError** (8 connections) — `teach/core/labs.py`
 - **_needs_cluster()** (8 connections) — `teach/core/labs.py`
 - **_load_spec()** (7 connections) — `teach/core/labs.py`
-- **lab_up()** (6 connections) — `teach/cli.py`
 - **_break_args()** (6 connections) — `teach/core/labs.py`
 - **_terraform()** (6 connections) — `teach/core/labs.py`
 - **_write_status()** (6 connections) — `teach/core/labs.py`
@@ -27,35 +26,34 @@
 - **_down_cluster()** (3 connections) — `teach/core/labs.py`
 - **_status_cluster()** (3 connections) — `teach/core/labs.py`
 - **_status_container()** (3 connections) — `teach/core/labs.py`
-- **EnterHintTests** (2 connections) — `tests/test_labs.py`
-- **.test_container_lab_names_the_shell()** (2 connections) — `tests/test_labs.py`
-- *... and 9 more nodes in this community*
+- **CompletedProcess** (1 connections)
+- **Exception** (1 connections)
+- **Lab execution — v1 using local subprocesses. Two providers: terraform Lab IaC…** (1 connections) — `teach/core/labs.py`
+- *... and 5 more nodes in this community*
 
 ## Relationships
 
 - [Community 2](Community_2.md) (9 shared connections)
 - [Community 61](Community_61.md) (8 shared connections)
-- [video.py](video.py.md) (7 shared connections)
+- [Community 0](Community_0.md) (6 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
 - [Community 149](Community_149.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 139](Community_139.md) (3 shared connections)
+- [Community 129](Community_129.md) (4 shared connections)
 - [Community 157](Community_157.md) (3 shared connections)
 - [Community 134](Community_134.md) (3 shared connections)
-- [Community 47](Community_47.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
+- [certs.py](certs.py.md) (2 shared connections)
 - [Community 130](Community_130.md) (2 shared connections)
 - [Community 161](Community_161.md) (2 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
 
 ## Source Files
 
 - `BACKLOG.md`
-- `teach/cli.py`
 - `teach/core/labs.py`
-- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 134 (96%)
+- EXTRACTED: 128 (96%)
 - INFERRED: 6 (4%)
 - AMBIGUOUS: 0 (0%)
 

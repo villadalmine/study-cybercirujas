@@ -1,6 +1,6 @@
 # Community 65
 
-> 16 nodes · cohesion 0.19
+> 15 nodes · cohesion 0.21
 
 ## Key Concepts
 
@@ -14,7 +14,6 @@
 - **.test_dropped_code_block()** (2 connections) — `tests/test_translation_verify.py`
 - **.test_dropped_heading()** (2 connections) — `tests/test_translation_verify.py`
 - **.test_dropped_url()** (2 connections) — `tests/test_translation_verify.py`
-- **2026-09-11** (2 connections) — `CHANGELOG.md`
 - **Blanking comment text must not let a model drop the line entirely: the '#'…** (1 connections) — `tests/test_translation_verify.py`
 - **Re-padding is the model's job: a diagram whose borders no longer line up is…** (1 connections) — `tests/test_translation_verify.py`
 - **|' and '-' are excluded from the box character set on purpose, so an ordinary…** (1 connections) — `tests/test_translation_verify.py`
@@ -23,19 +22,18 @@
 
 ## Relationships
 
-- [Community 21](Community_21.md) (2 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 15](Community_15.md) (1 shared connections)
 
 ## Source Files
 
-- `CHANGELOG.md`
 - `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (93%)
-- INFERRED: 2 (7%)
+- EXTRACTED: 24 (92%)
+- INFERRED: 2 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

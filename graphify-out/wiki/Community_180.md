@@ -1,25 +1,24 @@
 # Community 180
 
-> 4 nodes · cohesion 0.50
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (earlier)** (4 connections) — `AGENTS_SYNC.md`
-- **Open for you — take any of these** (1 connections) — `AGENTS_SYNC.md`
-- **What I changed because of your work, so you do not redo it** (1 connections) — `AGENTS_SYNC.md`
-- **What I got wrong about your work, corrected** (1 connections) — `AGENTS_SYNC.md`
+- **LabRunnerLifecycleTests** (3 connections) — `tests/test_labs.py`
+- **.test_run_break_verify_cleanup()** (1 connections) — `tests/test_labs.py`
+- **skip** (1 connections)
 
 ## Relationships
 
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

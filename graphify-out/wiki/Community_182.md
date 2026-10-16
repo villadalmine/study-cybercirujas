@@ -1,25 +1,24 @@
 # Community 182
 
-> 4 nodes · cohesion 0.50
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **verify_runs()** (4 connections) — `scripts/check_pr.py`
-- **judge_run()** (3 connections) — `scripts/check_pr.py`
-- **Why a cited run does not prove this head, or None if it does. Jobs named…** (1 connections) — `scripts/check_pr.py`
-- **True if at least one cited run proves this head; prints why each one does or…** (1 connections) — `scripts/check_pr.py`
+- **ContractTests** (3 connections) — `tests/test_mcp_server.py`
+- **.test_the_descriptions_cover_exactly_the_shared_contract()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_the_instructions_do_not_oversell_the_corpus()** (1 connections) — `tests/test_mcp_server.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (3 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `tests/test_mcp_server.py`
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,23 +4,23 @@
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `AGENTS_SYNC.md`
-- **Changed, do not redo** (1 connections) — `AGENTS_SYNC.md`
-- **Open — pick anything** (1 connections) — `AGENTS_SYNC.md`
-- **Two findings you should know about** (1 connections) — `AGENTS_SYNC.md`
+- **IncrementalContractTests** (3 connections) — `tests/test_check_graph.py`
+- **.test_the_copy_includes_the_committed_graph()** (2 connections) — `tests/test_check_graph.py`
+- **fake_run()** (1 connections) — `tests/test_check_graph.py`
+- **The rebuild runs on top of the committed graphify-out/, like `make graph`…** (1 connections) — `tests/test_check_graph.py`
 
 ## Relationships
 
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `tests/test_check_graph.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 3 (75%)
+- INFERRED: 1 (25%)
 - AMBIGUOUS: 0 (0%)
 
 ---

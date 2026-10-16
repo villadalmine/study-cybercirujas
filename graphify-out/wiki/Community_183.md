@@ -1,24 +1,23 @@
 # Community 183
 
-> 3 nodes · cohesion 0.67
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
-- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
-- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
+- **publish.sh** (1 connections) — `deploy/killercoda/publish.sh`
+- **publish.sh script** (1 connections) — `deploy/killercoda/publish.sh`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (1 shared connections)
+- No strong cross-community connections detected
 
 ## Source Files
 
-- `teach/core/catalog.py`
+- `deploy/killercoda/publish.sh`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 1 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

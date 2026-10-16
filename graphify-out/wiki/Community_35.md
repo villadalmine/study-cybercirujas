@@ -1,30 +1,36 @@
 # Community 35
 
-> 6 nodes · cohesion 0.47
+> 15 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
-- **table()** (4 connections) — `scripts/gen_readme_table.py`
-- **main()** (3 connections) — `scripts/gen_readme_table.py`
-- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
-- **Regenerate the certification table in README.md from STATUS.md. STATUS.md is…** (1 connections) — `scripts/gen_readme_table.py`
-- **The `## Certifications` table of STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
+- **CheckLabelsTests** (12 connections) — `tests/test_check_labels.py`
+- **.problems()** (6 connections) — `tests/test_check_labels.py`
+- **tree()** (5 connections) — `tests/test_check_labels.py`
+- **.setUp()** (2 connections) — `tests/test_check_labels.py`
+- **.test_form_with_unknown_label_fails()** (2 connections) — `tests/test_check_labels.py`
+- **.test_label_file_rules()** (2 connections) — `tests/test_check_labels.py`
+- **.test_labeler_workflow_and_check_pr_references_fail()** (2 connections) — `tests/test_check_labels.py`
+- **.test_stale_action_inputs_are_read()** (2 connections) — `tests/test_check_labels.py`
+- **.test_switches_named_like_labels_are_not_labels()** (2 connections) — `tests/test_check_labels.py`
+- **.tearDown()** (1 connections) — `tests/test_check_labels.py`
+- **.test_current_tree_passes()** (1 connections) — `tests/test_check_labels.py`
+- **.test_every_form_opens_with_triage_needed()** (1 connections) — `tests/test_check_labels.py`
+- **.test_forms_and_config_are_valid_yaml()** (1 connections) — `tests/test_check_labels.py`
+- **Path** (1 connections)
+- **A copy of the files the check reads, so a test can break it.** (1 connections) — `tests/test_check_labels.py`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
+- [Community 61](Community_61.md) (3 shared connections)
 
 ## Source Files
 
-- `scripts/gen_readme_table.py`
+- `tests/test_check_labels.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

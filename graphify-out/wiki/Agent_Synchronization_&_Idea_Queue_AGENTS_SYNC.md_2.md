@@ -12,11 +12,11 @@
 - Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09) `EXTRACTED`
 - Start here: how to do a day's work in this repo `EXTRACTED`
 - The rules in detail, and what each one cost when it was broken `EXTRACTED`
-- Open — worth someone's time `EXTRACTED`
 - Queue — Claude to Antigravity, 2026-08-06 (evening) `EXTRACTED`
 - Queue — Claude to Antigravity, 2026-08-06 (earlier) `EXTRACTED`
 - From claude — 2026-08-18: the repo has a code graph, an MCP server, and full spend metrics `EXTRACTED`
 - From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives `EXTRACTED`
+- Open — worth someone's time `EXTRACTED`
 - From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix `EXTRACTED`
 - Pull requests from agents `EXTRACTED`
 - What is fixed, and what is yours `EXTRACTED`

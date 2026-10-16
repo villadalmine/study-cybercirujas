@@ -1,50 +1,47 @@
 # Community 37
 
-> 40 nodes · cohesion 0.09
+> 23 nodes · cohesion 0.14
 
 ## Key Concepts
 
 - **probe_models.py** (35 connections) — `scripts/probe_models.py`
+- **time** (16 connections)
 - **probe_one()** (12 connections) — `scripts/probe_models.py`
 - **main()** (11 connections) — `scripts/probe_models.py`
-- **probe_languages()** (10 connections) — `scripts/probe_models.py`
 - **ask_retrying()** (9 connections) — `scripts/probe_models.py`
 - **probe_tools()** (8 connections) — `scripts/probe_models.py`
-- **verdict()** (8 connections) — `scripts/probe_models.py`
-- **off_switch()** (6 connections) — `scripts/probe_models.py`
-- **thinking_mode()** (6 connections) — `scripts/probe_models.py`
-- **tool_verdict()** (5 connections) — `scripts/probe_models.py`
-- **graded()** (4 connections) — `scripts/probe_models.py`
+- **ask()** (5 connections) — `scripts/probe_models.py`
 - **material()** (4 connections) — `scripts/probe_models.py`
-- **rejects_reasoning()** (4 connections) — `scripts/probe_models.py`
-- **thought()** (4 connections) — `scripts/probe_models.py`
-- **tool_call_of()** (4 connections) — `scripts/probe_models.py`
 - **worst_case()** (4 connections) — `scripts/probe_models.py`
 - **catalogue_state()** (3 connections) — `scripts/probe_models.py`
-- **detect_language()** (3 connections) — `scripts/probe_models.py`
 - **reasoning_mandatory()** (3 connections) — `scripts/probe_models.py`
 - **tally()** (3 connections) — `scripts/probe_models.py`
 - **_price()** (2 connections) — `scripts/probe_models.py`
-- **The first tool call in a response, normalised, or None.** (1 connections) — `scripts/probe_models.py`
-- **How well this model drove one tool. calls asked for the tool with the right…** (1 connections) — `scripts/probe_models.py`
 - **Two turns: does it ask for the tool, and can it use what comes back? The second…** (1 connections) — `scripts/probe_models.py`
 - **Do the bot's models answer, read the material, and speak each language?…** (1 connections) — `scripts/probe_models.py`
-- *... and 15 more nodes in this community*
+- **The excerpt sent to the model: real corpus text, cut deterministically. Read…** (1 connections) — `scripts/probe_models.py`
+- **Upper bound in USD, assuming every model burns every cap it is offered. Printed…** (1 connections) — `scripts/probe_models.py`
+- **One completion. Returns a plain dict; never raises for an HTTP error.…** (1 connections) — `scripts/probe_models.py`
+- **`ask` plus one retry for a transient failure. Returns (response, calls). A…** (1 connections) — `scripts/probe_models.py`
+- **Did the endpoint say, in so many words, that it will not stop thinking?…** (1 connections) — `scripts/probe_models.py`
+- **The verdict as models.yaml records it. See the note at the call site. `rate`…** (1 connections) — `scripts/probe_models.py`
+- **Add one response's real token counts to the row. Exact numbers, from the…** (1 connections) — `scripts/probe_models.py`
+- **Three calls for a model that answers, one for a model that does not. Order…** (1 connections) — `scripts/probe_models.py`
 
 ## Relationships
 
-- [Community 93](Community_93.md) (6 shared connections)
-- [Community 36](Community_36.md) (5 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 136](Community_136.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 52](Community_52.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
-- [The phases](The_phases.md) (1 shared connections)
-- [Community 129](Community_129.md) (1 shared connections)
-- [Community 139](Community_139.md) (1 shared connections)
+- [Community 45](Community_45.md) (12 shared connections)
+- [Community 143](Community_143.md) (6 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 93](Community_93.md) (4 shared connections)
+- [Community 89](Community_89.md) (4 shared connections)
+- [Community 36](Community_36.md) (4 shared connections)
+- [Community 136](Community_136.md) (3 shared connections)
+- [Community 129](Community_129.md) (3 shared connections)
+- [Community 7](Community_7.md) (3 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
+- [Community 26](Community_26.md) (2 shared connections)
 
 ## Source Files
 
@@ -52,8 +49,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 97 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 90 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

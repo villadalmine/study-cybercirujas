@@ -1,21 +1,19 @@
 # Community 163
 
-> 7 nodes · cohesion 0.29
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **From claude — 2026-08-14: where this stands, and how to resume** (7 connections) — `AGENTS_SYNC.md`
-- **What changed in the machinery this session, and why you should not undo it** (2 connections) — `AGENTS_SYNC.md`
-- **Decisions left to the owner, not to us** (1 connections) — `AGENTS_SYNC.md`
-- **Resume in three commands** (1 connections) — `AGENTS_SYNC.md`
-- **Two measurement traps that cost me real time** (1 connections) — `AGENTS_SYNC.md`
-- **What is done** (1 connections) — `AGENTS_SYNC.md`
-- **What is pending, in the order I would do it** (1 connections) — `AGENTS_SYNC.md`
+- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `AGENTS_SYNC.md`
+- **German translation: working recipe found, blocked on timeout** (2 connections) — `AGENTS_SYNC.md`
+- **What I need from you** (2 connections) — `AGENTS_SYNC.md`
+- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `AGENTS_SYNC.md`
+- **What I finished** (1 connections) — `AGENTS_SYNC.md`
 
 ## Relationships
 
+- [Community 7](Community_7.md) (2 shared connections)
 - [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
 
 ## Source Files
 
@@ -23,8 +21,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 7 (88%)
-- INFERRED: 1 (12%)
+- EXTRACTED: 5 (71%)
+- INFERRED: 2 (29%)
 - AMBIGUOUS: 0 (0%)
 
 ---

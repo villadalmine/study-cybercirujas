@@ -1,35 +1,29 @@
 # Community 155
 
-> 6 nodes · cohesion 0.33
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **fixture()** (7 connections) — `scripts/check_groundedness.py`
-- **new_lab()** (4 connections) — `tests/lab/conftest.py`
-- **fixture_repo()** (2 connections) — `tests/lab/test_kc_meta.py`
-- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **A labelled fixture's claims against their own sources: per-claim scores and the…** (1 connections) — `scripts/check_groundedness.py`
-- **Factory: scaffold a lab from the template with `study-lab new`.** (1 connections) — `tests/lab/conftest.py`
+- **ScopeTests** (7 connections) — `tests/test_check_pr.py`
+- **.test_docs_and_fixtures_are_not_code()** (1 connections) — `tests/test_check_pr.py`
+- **.test_generated_files_are_not_edited_by_hand()** (1 connections) — `tests/test_check_pr.py`
+- **.test_material_and_code_do_not_mix()** (1 connections) — `tests/test_check_pr.py`
+- **.test_one_lab_per_pr()** (1 connections) — `tests/test_check_pr.py`
+- **.test_one_topic_language_per_content_pr()** (1 connections) — `tests/test_check_pr.py`
+- **.test_size_limit_and_exception()** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 34](Community_34.md) (3 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_groundedness.py`
-- `tests/lab/conftest.py`
-- `tests/lab/test_kc_meta.py`
-- `tests/lab/test_runner_guard.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 7 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

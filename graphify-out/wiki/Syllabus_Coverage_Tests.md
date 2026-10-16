@@ -1,6 +1,6 @@
 # Syllabus Coverage Tests
 
-> 24 nodes · cohesion 0.12
+> 22 nodes · cohesion 0.13
 
 ## Key Concepts
 
@@ -8,7 +8,7 @@
 - **_reject_unreadable_syllabus()** (12 connections) — `teach/core/tracker.py`
 - **objective_ids()** (8 connections) — `teach/core/tracker.py`
 - **normalise_weights()** (7 connections) — `teach/core/tracker.py`
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `AGENTS_SYNC.md`
+- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
 - **.test_normalising_does_not_disguise_weights_taken_from_the_count()** (3 connections) — `tests/test_tracker.py`
 - **.test_accepts_a_full_extraction()** (2 connections) — `tests/test_tracker.py`
 - **.test_accepts_an_even_split_when_the_vendor_publishes_no_weights()** (2 connections) — `tests/test_tracker.py`
@@ -20,10 +20,8 @@
 - **.test_rejects_chapter_headings_extracted_from_a_numbered_document()** (2 connections) — `tests/test_tracker.py`
 - **.test_rejects_weights_computed_from_the_topic_count()** (2 connections) — `tests/test_tracker.py`
 - **.test_unnumbered_document_yields_nothing_rather_than_a_pass()** (2 connections) — `tests/test_tracker.py`
-- **What is now enforced, so this cannot recur** (2 connections) — `AGENTS_SYNC.md`
 - **.test_strips_backend_diagnostics_that_are_not_the_answer()** (1 connections) — `tests/test_tracker.py`
-- **What I need from you** (1 connections) — `AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `AGENTS_SYNC.md`
+- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
 - **Numbered objectives present in a syllabus document. Empty when the document…** (1 connections) — `teach/core/tracker.py`
 - **Scale the published weights to percentages summing to exactly 100. Syllabi…** (1 connections) — `teach/core/tracker.py`
 - **Refuse a topic list that the source document does not support. Both checks…** (1 connections) — `teach/core/tracker.py`
@@ -31,14 +29,15 @@
 
 ## Relationships
 
-- [Community 52](Community_52.md) (7 shared connections)
-- [Community 64](Community_64.md) (2 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 14](Community_14.md) (4 shared connections)
+- [Community 127](Community_127.md) (3 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `scripts/check_syllabus.py`
 - `teach/core/tracker.py`
 - `tests/test_tracker.py`
 

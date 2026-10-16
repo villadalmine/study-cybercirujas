@@ -1,12 +1,13 @@
 # Community 101
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **Contributing** (10 connections) — `CONTRIBUTING.md`
+- **Contributing** (11 connections) — `CONTRIBUTING.md`
 - **Check before you push** (4 connections) — `CONTRIBUTING.md`
-- **Set up, once** (3 connections) — `CONTRIBUTING.md`
+- **Releases** (2 connections) — `CONTRIBUTING.md`
+- **Set up, once** (2 connections) — `CONTRIBUTING.md`
 - **Conventions** (1 connections) — `CONTRIBUTING.md`
 - **How a lab gets proven before it is published** (1 connections) — `CONTRIBUTING.md`
 - **Licence and conduct** (1 connections) — `CONTRIBUTING.md`
@@ -17,11 +18,11 @@
 
 ## Relationships
 
-- [Community 130](Community_130.md) (2 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 138](Community_138.md) (2 shared connections)
+- [Community 145](Community_145.md) (1 shared connections)
 - [Community 144](Community_144.md) (1 shared connections)
 - [Community 148](Community_148.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
@@ -29,8 +30,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 13 (87%)
-- INFERRED: 2 (13%)
+- EXTRACTED: 14 (88%)
+- INFERRED: 2 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

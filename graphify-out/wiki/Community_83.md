@@ -1,11 +1,13 @@
 # Community 83
 
-> 10 nodes · cohesion 0.33
+> 12 nodes · cohesion 0.29
 
 ## Key Concepts
 
 - **CheckDocsTests** (12 connections) — `tests/test_check_docs.py`
 - **.problems()** (8 connections) — `tests/test_check_docs.py`
+- **.git()** (3 connections) — `tests/test_check_docs.py`
+- **.setUp()** (2 connections) — `tests/test_check_docs.py`
 - **.test_a_missing_file_or_anchor_fails()** (2 connections) — `tests/test_check_docs.py`
 - **.test_a_missing_path_in_code_fails()** (2 connections) — `tests/test_check_docs.py`
 - **.test_existence_is_asked_of_git_case_exact_and_tracked_only()** (2 connections) — `tests/test_check_docs.py`
@@ -17,8 +19,7 @@
 
 ## Relationships
 
-- [Community 130](Community_130.md) (3 shared connections)
-- [Community 171](Community_171.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
@@ -26,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

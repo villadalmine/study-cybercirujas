@@ -1,45 +1,34 @@
 # Community 132
 
-> 13 nodes · cohesion 0.24
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **tempfile** (20 connections)
-- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
-- **test_claims.py** (9 connections) — `tests/test_claims.py`
-- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
-- **main()** (6 connections) — `scripts/ocr_pdf.py`
-- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
-- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
-- **Path** (3 connections)
-- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
-- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
-- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
-- **Per-topic claims: several agents at once, never the same topic twice. The…** (1 connections) — `tests/test_claims.py`
-- **multiprocessing** (1 connections)
+- **Study bot — design** (8 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Operating it** (4 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Tools / function calling — evaluated 2026-09-09** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Alternatives considered** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Effort** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **How a student uses it** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **How it is maintained** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Is it all API?** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **The insight: explicit selection replaces retrieval** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Two harnesses, not one (the distinction that sets the phases)** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (9 shared connections)
-- [Community 61](Community_61.md) (6 shared connections)
-- [Community 139](Community_139.md) (4 shared connections)
-- [Community 6](Community_6.md) (3 shared connections)
-- [Community 171](Community_171.md) (3 shared connections)
-- [Community 52](Community_52.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 106](Community_106.md) (1 shared connections)
-- [Community 150](Community_150.md) (1 shared connections)
-- [Community 66](Community_66.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [The phases](The_phases.md) (1 shared connections)
+- [Community 93](Community_93.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/ocr_pdf.py`
-- `tests/test_claims.py`
+- `docs/STUDY_BOT_DESIGN.md`
 
 ## Audit Trail
 
-- EXTRACTED: 51 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

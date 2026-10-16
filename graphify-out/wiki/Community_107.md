@@ -1,31 +1,28 @@
 # Community 107
 
-> 9 nodes · cohesion 0.22
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **Governance** (6 connections) — `GOVERNANCE.md`
-- **GOVERNANCE.md** (5 connections) — `GOVERNANCE.md`
-- **CODE_OF_CONDUCT.md** (4 connections) — `CODE_OF_CONDUCT.md`
-- **Code of Conduct** (1 connections) — `CODE_OF_CONDUCT.md`
+- **Governance** (7 connections) — `GOVERNANCE.md`
 - **Becoming a maintainer** (1 connections) — `GOVERNANCE.md`
 - **Code of conduct** (1 connections) — `GOVERNANCE.md`
 - **Day-to-day changes** (1 connections) — `GOVERNANCE.md`
 - **Proposals (RFCs) — for anything that changes how the project works** (1 connections) — `GOVERNANCE.md`
+- **Releases** (1 connections) — `GOVERNANCE.md`
 - **Who maintains what, today** (1 connections) — `GOVERNANCE.md`
 
 ## Relationships
 
-- [README.md](README.md.md) (5 shared connections)
+- [Community 145](Community_145.md) (1 shared connections)
 
 ## Source Files
 
-- `CODE_OF_CONDUCT.md`
 - `GOVERNANCE.md`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

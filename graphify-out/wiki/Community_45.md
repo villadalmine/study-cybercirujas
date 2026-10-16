@@ -1,42 +1,37 @@
 # Community 45
 
-> 21 nodes · cohesion 0.17
+> 14 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **commit()** (15 connections) — `tests/test_check_pr.py`
-- **DcoTests** (14 connections) — `tests/test_check_pr.py`
-- **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
-- **.run_main()** (4 connections) — `tests/test_check_pr.py`
-- **.test_an_old_pr_number_gets_the_full_check()** (3 connections) — `tests/test_check_pr.py`
-- **.test_an_unsigned_commit_fails_the_pr()** (3 connections) — `tests/test_check_pr.py`
-- **.test_signed_commits_pass()** (3 connections) — `tests/test_check_pr.py`
-- **.test_a_forged_bot_email_exempts_nobody()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_sign_off_buried_in_a_line_is_not_a_trailer()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_signed_commit_passes()** (2 connections) — `tests/test_check_pr.py`
-- **.test_an_unsigned_commit_fails_and_says_how_to_fix_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_email_case_does_not_matter()** (2 connections) — `tests/test_check_pr.py`
-- **.test_no_pr_is_grandfathered_by_its_number()** (2 connections) — `tests/test_check_pr.py`
-- **.test_one_problem_per_unsigned_commit()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_bot_pr_is_exempt_whatever_the_commit_email_says()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_graph_bot_is_exempt_only_on_its_branch_with_its_files_and_its_author()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_prs_github_noreply_address_counts()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_sign_off_must_be_the_authors_email()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_forged_commit_date_does_not_exempt_a_commit()** (1 connections) — `tests/test_check_pr.py`
-- **.test_commits_of_reads_git_without_merges()** (1 connections) — `tests/test_check_pr.py`
-- **main() wires the commits of --base..HEAD, the event's number and author into…** (1 connections) — `tests/test_check_pr.py`
+- **verdict()** (8 connections) — `scripts/probe_models.py`
+- **off_switch()** (6 connections) — `scripts/probe_models.py`
+- **thinking_mode()** (6 connections) — `scripts/probe_models.py`
+- **tool_verdict()** (5 connections) — `scripts/probe_models.py`
+- **rejects_reasoning()** (4 connections) — `scripts/probe_models.py`
+- **thought()** (4 connections) — `scripts/probe_models.py`
+- **tool_call_of()** (4 connections) — `scripts/probe_models.py`
+- **The first tool call in a response, normalised, or None.** (1 connections) — `scripts/probe_models.py`
+- **How well this model drove one tool. calls asked for the tool with the right…** (1 connections) — `scripts/probe_models.py`
+- **Grade one response. Pure function of the dict — see the tests.** (1 connections) — `scripts/probe_models.py`
+- **Did the provider refuse BECAUSE of the `reasoning` field? A 400/422 naming the…** (1 connections) — `scripts/probe_models.py`
+- **Did this response involve thinking, in any of the three shapes?** (1 connections) — `scripts/probe_models.py`
+- **How the effort selector behaves for this model, from two probes. off = exactly…** (1 connections) — `scripts/probe_models.py`
+- **Does `reasoning: {enabled: false}` actually stop this model thinking? Asked of…** (1 connections) — `scripts/probe_models.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (3 shared connections)
+- [Community 37](Community_37.md) (12 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 143](Community_143.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `scripts/probe_models.py`
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
+- EXTRACTED: 29 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

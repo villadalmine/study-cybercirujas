@@ -15,9 +15,8 @@
 
 ## Relationships
 
+- [Community 74](Community_74.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 52](Community_52.md) (1 shared connections)
 
 ## Source Files
 

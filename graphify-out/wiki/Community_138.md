@@ -1,35 +1,45 @@
 # Community 138
 
-> 8 nodes · cohesion 0.43
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **metrics_report.py** (15 connections) — `scripts/metrics_report.py`
-- **main()** (9 connections) — `scripts/metrics_report.py`
-- **rows()** (3 connections) — `scripts/metrics_report.py`
-- **session_windows()** (3 connections) — `scripts/metrics_report.py`
-- **backend_of()** (2 connections) — `scripts/metrics_report.py`
-- **_fmt()** (2 connections) — `scripts/metrics_report.py`
-- **in_tokens()** (2 connections) — `scripts/metrics_report.py`
-- **Real metrics for the whole pipeline: per stage, per day, per quota window.…** (1 connections) — `scripts/metrics_report.py`
+- **make()** (13 connections) — `tests/lab/conftest.py`
+- **Checks that must pass** (4 connections) — `CONTRIBUTING.md`
+- **Open — worth someone's time** (3 connections) — `AGENTS_SYNC.md`
+- **Unattended generation timer** (3 connections) — `docs/OPERATING.md`
+- **Running your own copy** (2 connections) — `DEVELOPERS.md`
+- **Use it in 2 minutes** (2 connections) — `README.md`
+- **Groundedness (advisory)** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 102](Community_102.md) (4 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 129](Community_129.md) (1 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 101](Community_101.md) (2 shared connections)
+- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (2 shared connections)
+- [clean_registry.py](clean_registry.py.md) (2 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 73](Community_73.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Roadmap — where this is and where it goes](Roadmap_—_where_this_is_and_where_it_goes.md) (1 shared connections)
+- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/metrics_report.py`
+- `AGENTS_SYNC.md`
+- `CONTRIBUTING.md`
+- `DEVELOPERS.md`
+- `README.md`
+- `docs/OPERATING.md`
+- `tests/lab/conftest.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 7 (32%)
+- INFERRED: 15 (68%)
 - AMBIGUOUS: 0 (0%)
 
 ---
