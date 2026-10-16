@@ -1,28 +1,31 @@
 # Community 157
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **authorship()** (5 connections) — `scripts/check_pr.py`
-- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
-- **_cells()** (2 connections) — `scripts/check_pr.py`
-- **The data rows of '### Findings ledger' (None if the subsection is missing).** (1 connections) — `scripts/check_pr.py`
-- **Who is declared as author agrees with Provenance; the findings ledger is well…** (1 connections) — `scripts/check_pr.py`
+- **_exec_script_cmd()** (7 connections) — `teach/core/labs.py`
+- **ExecScriptCmdTests** (4 connections) — `tests/test_labs.py`
+- **.test_subcommand_scripts_get_break()** (3 connections) — `tests/test_labs.py`
+- **.test_stdin_is_attached()** (2 connections) — `tests/test_labs.py`
+- **.test_terminal_gets_a_tty()** (2 connections) — `tests/test_labs.py`
+- **`docker exec` for break_fix.sh, with the student's stdin attached. Most scripts…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [Community 31](Community_31.md) (4 shared connections)
-- [Community 2](Community_2.md) (2 shared connections)
+- [Community 8](Community_8.md) (3 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `teach/core/labs.py`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -27,10 +27,11 @@
 ## Relationships
 
 - [Community 12](Community_12.md) (10 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
 - [Community 1](Community_1.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 
 ## Source Files
 

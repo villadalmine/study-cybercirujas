@@ -4,24 +4,25 @@
 
 ## Key Concepts
 
-- **Determinism** (3 connections) — `tests/test_groundedness.py`
-- **overlap()** (3 connections) — `tests/test_groundedness.py`
-- **.test_same_tree_same_cache_same_bytes()** (2 connections) — `tests/test_groundedness.py`
-- **.test_written_entry_agrees_with_quality_score()** (1 connections) — `tests/test_groundedness.py`
-- **A stand-in scorer with no model: the share of the claim's words found in the…** (1 connections) — `tests/test_groundedness.py`
+- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `AGENTS_SYNC.md`
+- **German translation: working recipe found, blocked on timeout** (2 connections) — `AGENTS_SYNC.md`
+- **What I need from you** (2 connections) — `AGENTS_SYNC.md`
+- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `AGENTS_SYNC.md`
+- **What I finished** (1 connections) — `AGENTS_SYNC.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_groundedness.py`
+- `AGENTS_SYNC.md`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (83%)
-- INFERRED: 1 (17%)
+- EXTRACTED: 5 (71%)
+- INFERRED: 2 (29%)
 - AMBIGUOUS: 0 (0%)
 
 ---

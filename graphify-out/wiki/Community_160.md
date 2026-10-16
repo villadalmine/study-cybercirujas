@@ -1,25 +1,29 @@
 # Community 160
 
-> 3 nodes · cohesion 0.67
+> 5 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **_glob()** (5 connections) — `scripts/check_pr.py`
-- **Pattern** (1 connections)
-- **GitHub path filter semantics: `**` crosses directories, `*` does not.** (1 connections) — `scripts/check_pr.py`
+- **fix_fences.py** (8 connections) — `scripts/fix_fences.py`
+- **classify()** (4 connections) — `scripts/fix_fences.py`
+- **main()** (3 connections) — `scripts/fix_fences.py`
+- **Retag fenced blocks whose label promises something the content is not.…** (1 connections) — `scripts/fix_fences.py`
+- **console' | 'jsonl' | None — None means leave it alone.** (1 connections) — `scripts/fix_fences.py`
 
 ## Relationships
 
-- [Community 31](Community_31.md) (2 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `scripts/fix_fences.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

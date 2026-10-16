@@ -1,26 +1,47 @@
 # Community 85
 
-> 4 nodes · cohesion 0.50
+> 15 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **IncrementalContractTests** (3 connections) — `tests/test_check_graph.py`
-- **.test_the_copy_includes_the_committed_graph()** (2 connections) — `tests/test_check_graph.py`
-- **fake_run()** (1 connections) — `tests/test_check_graph.py`
-- **The rebuild runs on top of the committed graphify-out/, like `make graph`…** (1 connections) — `tests/test_check_graph.py`
+- **model_comparison.py** (22 connections) — `scripts/model_comparison.py`
+- **observations()** (8 connections) — `scripts/model_comparison.py`
+- **render_markdown()** (7 connections) — `scripts/model_comparison.py`
+- **main()** (6 connections) — `scripts/model_comparison.py`
+- **_stats()** (5 connections) — `scripts/model_comparison.py`
+- **write()** (5 connections) — `scripts/model_comparison.py`
+- **usage_by_topic()** (4 connections) — `scripts/model_comparison.py`
+- **_md_table()** (3 connections) — `scripts/model_comparison.py`
+- **Path** (1 connections)
+- **The same numbers main() prints, as a dict — shared by the MODELS.md renderer.** (1 connections) — `scripts/model_comparison.py`
+- **MODELS.md: the model-comparison dashboard, derived and deterministic. Same…** (1 connections) — `scripts/model_comparison.py`
+- **Is one model better than another, and what does it cost to find out? Comparing…** (1 connections) — `scripts/model_comparison.py`
+- **Write MODELS.md; True if it changed. Importable, like status_matrix.refresh.** (1 connections) — `scripts/model_comparison.py`
+- **(cert, topic, lang) -> tokens and minutes, from the recorded completions.** (1 connections) — `scripts/model_comparison.py`
+- **One row per generated topic/language, attributed to the model in meta.yaml.…** (1 connections) — `scripts/model_comparison.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 133](Community_133.md) (3 shared connections)
+- [Community 102](Community_102.md) (3 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 129](Community_129.md) (2 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 6](Community_6.md) (2 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_graph.py`
+- `scripts/model_comparison.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (75%)
-- INFERRED: 1 (25%)
+- EXTRACTED: 45 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

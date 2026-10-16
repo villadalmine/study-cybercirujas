@@ -1,6 +1,6 @@
 # Community 1
 
-> 38 nodes · cohesion 0.11
+> 41 nodes · cohesion 0.10
 
 ## Key Concepts
 
@@ -16,6 +16,7 @@
 - **test_linux_lab_from_git_repo()** (5 connections) — `tests/lab/test_e2e.py`
 - **docker_ok()** (4 connections) — `tests/lab/conftest.py`
 - **image_ok()** (4 connections) — `tests/lab/conftest.py`
+- **new_lab()** (4 connections) — `tests/lab/conftest.py`
 - **test_all_curated_labs_pass_the_schema()** (4 connections) — `tests/lab/test_cli.py`
 - **test_from_repo_path_cannot_escape()** (4 connections) — `tests/lab/test_cli.py`
 - **test_migrate_write_roundtrip()** (4 connections) — `tests/lab/test_cli.py`
@@ -28,23 +29,22 @@
 - **docker_set()** (3 connections) — `tests/lab/test_e2e.py`
 - **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
-- **skipif** (3 connections)
-- *... and 13 more nodes in this community*
+- *... and 16 more nodes in this community*
 
 ## Relationships
 
 - [Community 19](Community_19.md) (8 shared connections)
+- [Community 29](Community_29.md) (8 shared connections)
 - [Community 61](Community_61.md) (7 shared connections)
-- [Community 29](Community_29.md) (7 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [Community 12](Community_12.md) (2 shared connections)
 - [Community 111](Community_111.md) (2 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
+- [Community 129](Community_129.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
@@ -56,8 +56,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 112 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 115 (97%)
+- INFERRED: 3 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

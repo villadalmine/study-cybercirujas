@@ -1,13 +1,22 @@
 # Community 80
 
-> 21 nodes · cohesion 0.13
+> 46 nodes · cohesion 0.05
 
 ## Key Concepts
 
+- **translation_study.py** (16 connections) — `scripts/translation_study.py`
 - **response()** (14 connections) — `tests/test_model_probe.py`
+- **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
 - **ThinkingTests** (8 connections) — `tests/test_model_probe.py`
+- **translate()** (8 connections) — `scripts/translation_study.py`
+- **main()** (7 connections) — `scripts/translation_study.py`
 - **VerdictTests** (6 connections) — `tests/test_model_probe.py`
 - **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
+- **evaluate()** (5 connections) — `scripts/translation_study.py`
+- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **master_key()** (4 connections) — `scripts/translation_study.py`
+- **urllib_error** (4 connections)
+- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
 - **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
 - **.test_a_refused_parameter_is_none()** (2 connections) — `tests/test_model_probe.py`
@@ -19,26 +28,35 @@
 - **.test_a_different_answer_is_alive_but_not_obedient()** (2 connections) — `tests/test_model_probe.py`
 - **.test_the_expected_word_is_ok()** (2 connections) — `tests/test_model_probe.py`
 - **.test_two_hundred_with_no_content_is_empty()** (2 connections) — `tests/test_model_probe.py`
-- **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
-- **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
-- **.test_a_generic_error_is_not_read_as_a_refused_parameter()** (1 connections) — `tests/test_model_probe.py`
-- **.test_each_failure_keeps_its_own_name()** (1 connections) — `tests/test_model_probe.py`
-- **.test_rate_limited_is_not_dead()** (1 connections) — `tests/test_model_probe.py`
-- **A successful completion, overridden field by field.** (1 connections) — `tests/test_model_probe.py`
+- **Languages** (2 connections) — `docs/OPERATING.md`
+- *... and 21 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 29](Community_29.md) (3 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 34](Community_34.md) (2 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 13](Community_13.md) (1 shared connections)
 - [Community 91](Community_91.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/AGENTIC_TOOLING_STUDY.md`
+- `docs/OPERATING.md`
+- `scripts/translation_study.py`
 - `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 32 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 82 (95%)
+- INFERRED: 4 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,6 +1,6 @@
 # Community 146
 
-> 15 nodes · cohesion 0.19
+> 16 nodes · cohesion 0.17
 
 ## Key Concepts
 
@@ -15,6 +15,7 @@
 - **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
 - **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
 - **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
+- **Generation backends** (2 connections) — `docs/OPERATING.md`
 - **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
 - **(model, effort, notes) as the generator would resolve them right now. Resolved…** (1 connections) — `scripts/check_config.py`
 - **Environment for the agent CLI: ours, plus the declared output ceiling. The…** (1 connections) — `teach/core/generator.py`
@@ -24,14 +25,15 @@
 
 - [Community 7](Community_7.md) (6 shared connections)
 - [Community 43](Community_43.md) (5 shared connections)
-- [Community 62](Community_62.md) (3 shared connections)
-- [Community 35](Community_35.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/OPERATING.md`
 - `scripts/check_config.py`
 - `teach/core/generator.py`
 - `teach/core/pipeline.py`
@@ -39,7 +41,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 39 (98%)
+- EXTRACTED: 40 (98%)
 - INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 

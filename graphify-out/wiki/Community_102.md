@@ -1,63 +1,48 @@
 # Community 102
 
-> 54 nodes · cohesion 0.06
+> 15 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **model_comparison.py** (22 connections) — `scripts/model_comparison.py`
-- **metrics_report.py** (15 connections) — `scripts/metrics_report.py`
 - **quota_facts.py** (14 connections) — `teach/core/quota_facts.py`
 - **datetime** (12 connections)
-- **window_budget.py** (12 connections) — `scripts/window_budget.py`
-- **collections** (12 connections)
-- **main()** (9 connections) — `scripts/metrics_report.py`
 - **tokens_per_window()** (9 connections) — `teach/core/quota_facts.py`
-- **test_images.py** (9 connections) — `tests/lab/test_images.py`
-- **observations()** (8 connections) — `scripts/model_comparison.py`
 - **exhaustions()** (8 connections) — `teach/core/quota_facts.py`
-- **render_markdown()** (7 connections) — `scripts/model_comparison.py`
 - **_rows()** (7 connections) — `teach/core/quota_facts.py`
-- **main()** (6 connections) — `scripts/model_comparison.py`
 - **_spend_section()** (6 connections) — `scripts/status_matrix.py`
-- **main()** (6 connections) — `scripts/window_budget.py`
-- **_stats()** (5 connections) — `scripts/model_comparison.py`
-- **write()** (5 connections) — `scripts/model_comparison.py`
-- **_cmd()** (5 connections) — `tests/lab/test_images.py`
-- **statistics** (5 connections)
-- **usage_by_topic()** (4 connections) — `scripts/model_comparison.py`
-- **_load()** (4 connections) — `scripts/window_budget.py`
 - **cooldown_until()** (4 connections) — `teach/core/quota_facts.py`
-- **rows()** (3 connections) — `scripts/metrics_report.py`
-- **session_windows()** (3 connections) — `scripts/metrics_report.py`
-- *... and 29 more nodes in this community*
+- **limit_kind()** (3 connections) — `teach/core/quota_facts.py`
+- **Path** (1 connections)
+- **The budget footer: what generation has actually consumed, from records.…** (1 connections) — `scripts/status_matrix.py`
+- **Facts about quota, derived from what was recorded — never estimated. Three…** (1 connections) — `teach/core/quota_facts.py`
+- **When it is worth attempting generation again, or None to attempt now. A spend…** (1 connections) — `teach/core/quota_facts.py`
+- **What the API said the limit was: spend | weekly | session. Read from the…** (1 connections) — `teach/core/quota_facts.py`
+- **Every recorded block, with its kind and when it started and ended.…** (1 connections) — `teach/core/quota_facts.py`
+- **Output tokens produced between one exhaustion and the next. Median. This is…** (1 connections) — `teach/core/quota_facts.py`
 
 ## Relationships
 
-- [Community 36](Community_36.md) (14 shared connections)
-- [Community 43](Community_43.md) (12 shared connections)
-- [Community 63](Community_63.md) (8 shared connections)
-- [Community 35](Community_35.md) (6 shared connections)
-- [Community 2](Community_2.md) (3 shared connections)
-- [Community 49](Community_49.md) (2 shared connections)
-- [Community 6](Community_6.md) (2 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
+- [Community 138](Community_138.md) (5 shared connections)
+- [Community 63](Community_63.md) (3 shared connections)
+- [Community 85](Community_85.md) (3 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 148](Community_148.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 129](Community_129.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
 - [Community 26](Community_26.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 133](Community_133.md) (1 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/metrics_report.py`
-- `scripts/model_comparison.py`
 - `scripts/status_matrix.py`
-- `scripts/window_budget.py`
 - `teach/core/quota_facts.py`
-- `tests/lab/test_images.py`
 
 ## Audit Trail
 
-- EXTRACTED: 151 (100%)
+- EXTRACTED: 48 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

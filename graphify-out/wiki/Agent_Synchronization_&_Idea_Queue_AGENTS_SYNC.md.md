@@ -1,6 +1,6 @@
 # Agent Synchronization & Idea Queue (AGENTS_SYNC.md)
 
-> 37 nodes · cohesion 0.05
+> 38 nodes · cohesion 0.05
 
 ## Key Concepts
 
@@ -12,6 +12,7 @@
 - **Start here: how to do a day's work in this repo** (4 connections) — `AGENTS_SYNC.md`
 - **The rules in detail, and what each one cost when it was broken** (4 connections) — `AGENTS_SYNC.md`
 - **From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix** (2 connections) — `AGENTS_SYNC.md`
+- **What changed in the machinery this session, and why you should not undo it** (2 connections) — `AGENTS_SYNC.md`
 - **Changed, do not redo** (1 connections) — `AGENTS_SYNC.md`
 - **Checks that cost no quota — run them, they are free** (1 connections) — `AGENTS_SYNC.md`
 - **Decisions left to the owner, not to us** (1 connections) — `AGENTS_SYNC.md`
@@ -28,17 +29,16 @@
 - **Settled — do not re-investigate or re-litigate these** (1 connections) — `AGENTS_SYNC.md`
 - **Several agents at once: yes, and you do not have to coordinate** (1 connections) — `AGENTS_SYNC.md`
 - **The mental model** (1 connections) — `AGENTS_SYNC.md`
-- **There is ONE entry point. Use it.** (1 connections) — `AGENTS_SYNC.md`
-- *... and 12 more nodes in this community*
+- *... and 13 more nodes in this community*
 
 ## Relationships
 
 - [README.md](README.md.md) (1 shared connections)
 - [Community 70](Community_70.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 
 ## Source Files
 
@@ -46,8 +46,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 41 (98%)
-- INFERRED: 1 (2%)
+- EXTRACTED: 41 (95%)
+- INFERRED: 2 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

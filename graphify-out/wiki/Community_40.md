@@ -1,10 +1,10 @@
 # Community 40
 
-> 15 nodes · cohesion 0.24
+> 16 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **CheckPrTests** (15 connections) — `tests/test_check_pr.py`
+- **CheckPrTests** (16 connections) — `tests/test_check_pr.py`
 - **.body()** (12 connections) — `tests/test_check_pr.py`
 - **.test_a_complete_pr_passes()** (2 connections) — `tests/test_check_pr.py`
 - **.test_declared_site_must_match()** (2 connections) — `tests/test_check_pr.py`
@@ -18,6 +18,7 @@
 - **.test_title_must_be_a_conventional_commit()** (2 connections) — `tests/test_check_pr.py`
 - **.test_where_it_ran_outside_evidence_is_not_evidence()** (2 connections) — `tests/test_check_pr.py`
 - **.test_site_impact_is_computed_from_docker_yml_paths()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_graph_bot_pr_is_checked_by_title_and_files_only()** (1 connections) — `tests/test_check_pr.py`
 - **.test_the_templates_carry_every_required_section()** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
@@ -30,7 +31,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

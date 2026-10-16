@@ -1,31 +1,33 @@
 # Community 132
 
-> 9 nodes · cohesion 0.33
+> 9 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **test_legal_notice.py** (7 connections) — `tests/test_legal_notice.py`
-- **LegalNoticeTests** (5 connections) — `tests/test_legal_notice.py`
-- **legal_section()** (3 connections) — `tests/test_legal_notice.py`
-- **.test_both_languages_name_every_owner()** (3 connections) — `tests/test_legal_notice.py`
-- **owner()** (3 connections) — `tests/test_legal_notice.py`
-- **.test_every_certification_has_a_known_owner()** (2 connections) — `tests/test_legal_notice.py`
-- **.test_the_no_braindumps_promise_rests_on_a_contribution_rule()** (2 connections) — `tests/test_legal_notice.py`
-- **.test_the_site_footer_summarises_and_links_it_in_every_language()** (1 connections) — `tests/test_legal_notice.py`
-- **The legal & trademark disclaimer names every vendor whose exams the repo…** (1 connections) — `tests/test_legal_notice.py`
+- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
+- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
+- **main()** (6 connections) — `scripts/ocr_pdf.py`
+- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
+- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
+- **Path** (3 connections)
+- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
+- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
+- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 61](Community_61.md) (4 shared connections)
+- [Community 52](Community_52.md) (2 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
 
 ## Source Files
 
-- `tests/test_legal_notice.py`
+- `scripts/ocr_pdf.py`
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

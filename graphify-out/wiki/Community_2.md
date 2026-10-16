@@ -1,51 +1,46 @@
 # Community 2
 
-> 19 nodes · cohesion 0.19
+> 18 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **re** (59 connections)
-- **check_docs.py** (19 connections) — `scripts/check_docs.py`
-- **check_file()** (7 connections) — `scripts/check_docs.py`
-- **main()** (7 connections) — `scripts/check_docs.py`
-- **anchors()** (5 connections) — `scripts/check_docs.py`
-- **slug()** (5 connections) — `scripts/check_docs.py`
-- **prose_lines()** (4 connections) — `scripts/check_docs.py`
-- **teach_commands()** (4 connections) — `scripts/check_docs.py`
-- **tracked_paths()** (4 connections) — `scripts/check_docs.py`
-- **generated_checks()** (3 connections) — `scripts/check_docs.py`
-- **make_targets()** (3 connections) — `scripts/check_docs.py`
-- **tracked_markdown()** (3 connections) — `scripts/check_docs.py`
-- **posixpath** (2 connections)
-- **Path** (1 connections)
-- **GitHub's heading anchor: markup stripped, lower-cased, punctuation dropped,…** (1 connections) — `scripts/check_docs.py`
-- **Top-level commands and {group: subcommands}, read statically from teach/cli.py.** (1 connections) — `scripts/check_docs.py`
-- **Are the docs consistent with the repository they describe? Deterministic,…** (1 connections) — `scripts/check_docs.py`
-- **Every tracked file and every directory that holds one, exactly as git spells…** (1 connections) — `scripts/check_docs.py`
-- **(line number, line, in_code_block) for every line.** (1 connections) — `scripts/check_docs.py`
+- **scaffold()** (15 connections) — `teach/core/labs.py`
+- **validate_spec()** (13 connections) — `teach/core/labs.py`
+- **ContractTests** (11 connections) — `tests/test_labs.py`
+- **default_spec()** (4 connections) — `teach/core/labs.py`
+- **.test_malformed_nested_fields_are_reported_not_raised()** (4 connections) — `tests/test_labs.py`
+- **.test_a_broken_lab_is_reported()** (3 connections) — `tests/test_labs.py`
+- **.test_a_script_that_does_not_parse_is_reported()** (3 connections) — `tests/test_labs.py`
+- **.test_new_lab_from_the_template_validates()** (3 connections) — `tests/test_labs.py`
+- **.test_new_lab_never_overwrites_a_lone_break_fix_script()** (3 connections) — `tests/test_labs.py`
+- **.test_unhashable_os_is_reported_not_raised()** (3 connections) — `tests/test_labs.py`
+- **.test_every_lab_in_the_repo_honours_the_contract()** (2 connections) — `tests/test_labs.py`
+- **.setUp()** (1 connections) — `tests/test_labs.py`
+- **.tearDown()** (1 connections) — `tests/test_labs.py`
+- **skipUnless** (1 connections)
+- **The lab.yaml every topic starts from — one definition, used by the AI generator…** (1 connections) — `teach/core/labs.py`
+- **Problems with a lab directory, [] when it honours the contract. Deterministic…** (1 connections) — `teach/core/labs.py`
+- **Write a lab from the template, no model involved. Returns its directory.** (1 connections) — `teach/core/labs.py`
+- **The lab contract (lab.yaml + setup scripts), checked offline.** (1 connections) — `tests/test_labs.py`
 
 ## Relationships
 
-- [Community 61](Community_61.md) (6 shared connections)
-- [Community 124](Community_124.md) (6 shared connections)
-- [Community 31](Community_31.md) (5 shared connections)
-- [Community 52](Community_52.md) (5 shared connections)
-- [Community 35](Community_35.md) (4 shared connections)
-- [Community 45](Community_45.md) (4 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 12](Community_12.md) (3 shared connections)
-- [Community 102](Community_102.md) (3 shared connections)
-- [Community 64](Community_64.md) (3 shared connections)
-- [Community 148](Community_148.md) (2 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
+- [Community 8](Community_8.md) (9 shared connections)
+- [Community 18](Community_18.md) (2 shared connections)
+- [Community 129](Community_129.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_docs.py`
+- `teach/core/labs.py`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 98 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

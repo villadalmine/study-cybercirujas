@@ -1,38 +1,39 @@
 # Community 73
 
-> 14 nodes · cohesion 0.14
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
-- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
-- **Generation backends** (2 connections) — `docs/OPERATING.md`
-- **Content process** (1 connections) — `docs/OPERATING.md`
-- **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
-- **Environment variables** (1 connections) — `docs/OPERATING.md`
-- **Keeping it honest over time** (1 connections) — `docs/OPERATING.md`
-- **Quality** (1 connections) — `docs/OPERATING.md`
-- **Quickstart (maintainers)** (1 connections) — `docs/OPERATING.md`
-- **Reading the "Exam versions" table in STATUS.md** (1 connections) — `docs/OPERATING.md`
-- **Reporting it, most severe first** (1 connections) — `docs/OPERATING.md`
-- **Running it yourself, without guessing** (1 connections) — `docs/OPERATING.md`
-- **The rule** (1 connections) — `docs/OPERATING.md`
-- **What `make check-updates` does** (1 connections) — `docs/OPERATING.md`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 146](Community_146.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 91](Community_91.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/OPERATING.md`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 16 (94%)
+- EXTRACTED: 17 (94%)
 - INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 

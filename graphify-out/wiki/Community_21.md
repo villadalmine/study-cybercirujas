@@ -33,17 +33,17 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (6 shared connections)
-- [Changelog](Changelog.md) (3 shared connections)
 - [Community 32](Community_32.md) (2 shared connections)
+- [Changelog](Changelog.md) (2 shared connections)
 - [clean_registry.py](clean_registry.py.md) (2 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 - [Community 91](Community_91.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
 - [Community 14](Community_14.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 49](Community_49.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
