@@ -1,0 +1,32 @@
+name: Idea / feature
+description: Something the site, the API, the CLI or the labs could do, or do better
+labels: ["type:feature", "triage:needed"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the idea. A maintainer answers within 3 days and decides within 7
+        ([how issues are handled](https://github.com/villadalmine/study-cybercirujas/blob/main/CONTRIBUTING.md#triage-and-response-times)).
+        An idea that changes **how the project works** (a rule, a format, a new certification family or language) is a
+        Proposal (RFC): use that form. A question ("how do I...?") goes to Discussions.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do, and what gets in the way today?
+    validations: {required: true}
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+    validations: {required: true}
+  - type: textarea
+    id: verify
+    attributes:
+      label: How would we know it works?
+      description: A command to run, a page to open, or an official source that says so.
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Pull request
+      options:
+        - label: I can send a pull request for this (see CONTRIBUTING.md)

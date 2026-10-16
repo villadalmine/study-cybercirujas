@@ -343,7 +343,8 @@ The labels are applied by a maintainer today; a script will compute them from th
 For maintainers. Each file in `.github/ISSUE_TEMPLATE/*.yml` is a **GitHub issue form**: a YAML description of the
 fields (`input`, `textarea`, `dropdown`, `markdown` text) that GitHub draws as a web form on *New issue*. When someone
 submits it, GitHub writes the answers into the issue body under each field's `label`, and applies the `labels:` listed
-at the top (they must already exist in the repo). `validations: {required: true}` makes a field mandatory; a form
+at the top (they must already exist in the repo; `make labels-check` fails if one does not). Every form lists
+`triage:needed`, so a new issue is in the maintainer's queue until someone looks at it. `validations: {required: true}` makes a field mandatory; a form
 cannot branch, so "if yes, use another form" is a sentence plus a dropdown answer, not a redirect.
 `config.yml` sets `blank_issues_enabled: false` (every issue comes through a form) and the contact links. A form is
 live as soon as the file is on the default branch; to try one, merge it and open *New issue*. PR templates are different:

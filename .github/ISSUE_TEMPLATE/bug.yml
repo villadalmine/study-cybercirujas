@@ -1,6 +1,6 @@
 name: Bug
 description: The site, the API, the CLI or a check misbehaves
-labels: ["type:bug"]
+labels: ["type:bug", "triage:needed"]
 body:
   - type: textarea
     id: what

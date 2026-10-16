@@ -1,6 +1,6 @@
 name: Translation
 description: A translation is wrong, unclear, or missing
-labels: ["type:content"]
+labels: ["type:content", "triage:needed"]
 body:
   - type: input
     id: where

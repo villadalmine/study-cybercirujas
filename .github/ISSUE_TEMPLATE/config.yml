@@ -3,3 +3,9 @@ contact_links:
   - name: How decisions are made (GOVERNANCE.md)
     url: https://github.com/villadalmine/study-cybercirujas/blob/main/GOVERNANCE.md
     about: Read this before opening a Proposal (RFC).
+  - name: Ask a question (Discussions)
+    url: https://github.com/villadalmine/study-cybercirujas/discussions/categories/q-a
+    about: "How do I...? Not a bug and not a proposal: ask here, the answers help the next person."
+  - name: How issues are handled (response times)
+    url: https://github.com/villadalmine/study-cybercirujas/blob/main/CONTRIBUTING.md#triage-and-response-times
+    about: "First reply in 3 days, a decision in 7, and what needs-info and stale mean."

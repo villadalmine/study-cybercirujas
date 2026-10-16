@@ -4,6 +4,10 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-16
 
+- **Issue forms** (ci, #75): every form opens its issue with `triage:needed`; new "Idea / feature" form
+  (`type:feature`); `config.yml` links to Discussions (questions) and to the response times. A test fails if a form
+  forgets `triage:needed`.
+
 - **Label sync** (ci): `.github/workflows/sync-labels.yml` applies `.github/labels.yml` to the repo with
   `EndBug/label-sync` pinned by commit: on a push to main that changes the file (create and update only) and on
   a manual dispatch (`dry-run` on by default, `delete-other-labels` off). Renames go through `aliases`, so

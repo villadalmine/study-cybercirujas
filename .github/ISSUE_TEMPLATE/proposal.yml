@@ -1,7 +1,7 @@
 name: Proposal (RFC)
 description: Change how the project works — a rule, the lab or provenance format, a certification family, a language, a new external dependency
 title: "RFC: "
-labels: ["type:rfc"]
+labels: ["type:rfc", "triage:needed"]
 body:
   - type: markdown
     attributes:

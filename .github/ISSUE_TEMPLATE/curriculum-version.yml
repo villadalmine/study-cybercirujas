@@ -1,6 +1,6 @@
 name: New exam curriculum version
 description: The exam body published a new curriculum version (for example CKA 1.35 -> 1.37)
-labels: ["scope:exam-version", "type:feature"]
+labels: ["scope:exam-version", "type:feature", "triage:needed"]
 body:
   - type: markdown
     attributes:

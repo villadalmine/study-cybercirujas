@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
 import check_labels  # noqa: E402
@@ -71,6 +73,17 @@ class CheckLabelsTests(unittest.TestCase):
             "      - uses: x/y@z\n        with:\n          delete-other-labels: 'false'\n          sync-labels: true\n",
             encoding="utf-8")
         self.assertEqual(self.problems(), [])
+
+    def test_every_form_opens_with_triage_needed(self):
+        for form in sorted((REPO / ".github/ISSUE_TEMPLATE").glob("*.yml")):
+            if form.name == "config.yml":
+                continue
+            labels = yaml.safe_load(form.read_text(encoding="utf-8")).get("labels") or []
+            self.assertIn("triage:needed", labels, f"{form.name} does not add triage:needed")
+
+    def test_forms_and_config_are_valid_yaml(self):
+        for form in sorted((REPO / ".github/ISSUE_TEMPLATE").glob("*.yml")):
+            self.assertIsInstance(yaml.safe_load(form.read_text(encoding="utf-8")), dict, form.name)
 
     def test_label_file_rules(self):
         lab = self.root / ".github/labels.yml"

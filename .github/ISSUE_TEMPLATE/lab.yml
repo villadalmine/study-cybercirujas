@@ -1,6 +1,6 @@
 name: Lab
 description: A break-and-fix lab does not work, or a new lab idea
-labels: ["type:lab"]
+labels: ["type:lab", "triage:needed"]
 body:
   - type: input
     id: where
