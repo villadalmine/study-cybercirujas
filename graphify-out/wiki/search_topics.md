@@ -2,7 +2,7 @@
 
 > God node · 19 connections · `teach/core/corpus.py`
 
-**Community:** [Community 45](Community_45.md)
+**Community:** [Community 72](Community_72.md)
 
 ## Connections by Relation
 

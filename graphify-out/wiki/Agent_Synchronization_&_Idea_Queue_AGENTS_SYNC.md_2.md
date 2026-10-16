@@ -1,6 +1,6 @@
 # Agent Synchronization & Idea Queue (AGENTS_SYNC.md)
 
-> God node · 20 connections · `AGENTS_SYNC.md`
+> God node · 21 connections · `AGENTS_SYNC.md`
 
 **Community:** [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md)
 
@@ -20,13 +20,14 @@
 - From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix `EXTRACTED`
 - Pull requests from agents `EXTRACTED`
 - What is fixed, and what is yours `EXTRACTED`
-- First: install the hook. It is the only rule that does not depend on you. `EXTRACTED`
+- Every commit is signed off (DCO) `EXTRACTED`
 - Several agents at once: yes, and you do not have to coordinate `EXTRACTED`
+- First: install the hook. It is the only rule that does not depend on you. `EXTRACTED`
 - There is ONE entry point. Use it. `EXTRACTED`
 - Division of work — owner's call, 2026-08-07 `EXTRACTED`
 - Settled — do not re-investigate or re-litigate these `EXTRACTED`
 - Workflow Rules for Agents `EXTRACTED`
-- Who decides what — read this first `EXTRACTED`
+- *…and 1 more `contains` connection(s) not listed (lowest-degree first to go)*
 
 ---
 

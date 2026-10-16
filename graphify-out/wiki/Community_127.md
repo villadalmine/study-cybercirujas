@@ -1,35 +1,45 @@
 # Community 127
 
-> 5 nodes · cohesion 0.50
+> 11 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **mcp_server.py** (8 connections) — `teach/mcp_server.py`
-- **functools** (5 connections)
-- **_readable()** (4 connections) — `teach/mcp_server.py`
-- **Study against this corpus from any agent — the same four functions, over MCP.…** (1 connections) — `teach/mcp_server.py`
-- **Turn a lookup failure into something the agent can act on. The SDK's own…** (1 connections) — `teach/mcp_server.py`
+- **translation_study.py** (16 connections) — `scripts/translation_study.py`
+- **translate()** (8 connections) — `scripts/translation_study.py`
+- **main()** (7 connections) — `scripts/translation_study.py`
+- **evaluate()** (5 connections) — `scripts/translation_study.py`
+- **master_key()** (4 connections) — `scripts/translation_study.py`
+- **urllib_error** (4 connections)
+- **Languages** (2 connections) — `docs/OPERATING.md`
+- **Run the pipeline's own two gates. Verdict plus the reasons it failed.** (1 connections) — `scripts/translation_study.py`
+- **Measure what a translation actually costs, and whether it survives…** (1 connections) — `scripts/translation_study.py`
+- **Read the proxy key from the cluster rather than from a file on disk. It is only…** (1 connections) — `scripts/translation_study.py`
+- **One completion through the proxy. Returns text plus what it cost.** (1 connections) — `scripts/translation_study.py`
 
 ## Relationships
 
-- [Community 93](Community_93.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [Community 143](Community_143.md) (1 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
-- [Community 72](Community_72.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 124](Community_124.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 64](Community_64.md) (2 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 13](Community_13.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/mcp_server.py`
+- `docs/OPERATING.md`
+- `scripts/translation_study.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (93%)
-- INFERRED: 1 (7%)
+- EXTRACTED: 34 (92%)
+- INFERRED: 3 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

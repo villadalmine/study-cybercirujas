@@ -1,41 +1,59 @@
 # Community 32
 
-> 16 nodes · cohesion 0.19
+> 36 nodes · cohesion 0.10
 
 ## Key Concepts
 
-- **RejectsDamagedTranslations** (11 connections) — `tests/test_translation_verify.py`
-- **.assertRejected()** (10 connections) — `tests/test_translation_verify.py`
-- **.test_diagram_that_breaks_alignment()** (4 connections) — `tests/test_translation_verify.py`
-- **.test_command_is_not_covered_by_the_diagram_rule()** (3 connections) — `tests/test_translation_verify.py`
-- **.test_deleted_comment_line()** (3 connections) — `tests/test_translation_verify.py`
-- **.test_summary_instead_of_translation()** (3 connections) — `tests/test_translation_verify.py`
-- **.test_translated_yaml_key()** (3 connections) — `tests/test_translation_verify.py`
-- **.test_dropped_code_block()** (2 connections) — `tests/test_translation_verify.py`
-- **.test_dropped_heading()** (2 connections) — `tests/test_translation_verify.py`
-- **.test_dropped_url()** (2 connections) — `tests/test_translation_verify.py`
-- **2026-09-11** (2 connections) — `CHANGELOG.md`
-- **Blanking comment text must not let a model drop the line entirely: the '#'…** (1 connections) — `tests/test_translation_verify.py`
-- **Re-padding is the model's job: a diagram whose borders no longer line up is…** (1 connections) — `tests/test_translation_verify.py`
-- **|' and '-' are excluded from the box character set on purpose, so an ordinary…** (1 connections) — `tests/test_translation_verify.py`
-- **The cheap-model failure the length band exists for.** (1 connections) — `tests/test_translation_verify.py`
-- **The failure that silently breaks every example: the model translates the…** (1 connections) — `tests/test_translation_verify.py`
+- **check_pr.py** (42 connections) — `scripts/check_pr.py`
+- **main()** (23 connections) — `scripts/check_pr.py`
+- **check()** (14 connections) — `scripts/check_pr.py`
+- **quality_only()** (5 connections) — `scripts/check_pr.py`
+- **site_impact()** (5 connections) — `scripts/check_pr.py`
+- **Path** (5 connections)
+- **base_texts()** (4 connections) — `scripts/check_pr.py`
+- **commits_of()** (4 connections) — `scripts/check_pr.py`
+- **declared()** (4 connections) — `scripts/check_pr.py`
+- **declared_scope()** (4 connections) — `scripts/check_pr.py`
+- **gh_api()** (4 connections) — `scripts/check_pr.py`
+- **image_paths()** (4 connections) — `scripts/check_pr.py`
+- **material_dirs()** (4 connections) — `scripts/check_pr.py`
+- **read_labels()** (4 connections) — `scripts/check_pr.py`
+- **read_milestone()** (4 connections) — `scripts/check_pr.py`
+- **verify_runs()** (4 connections) — `scripts/check_pr.py`
+- **changed_files()** (3 connections) — `scripts/check_pr.py`
+- **code_lines_changed()** (3 connections) — `scripts/check_pr.py`
+- **disclosure()** (3 connections) — `scripts/check_pr.py`
+- **exam_version()** (3 connections) — `scripts/check_pr.py`
+- **judge_run()** (3 connections) — `scripts/check_pr.py`
+- **head_catalog()** (2 connections) — `scripts/check_pr.py`
+- **`- Key: value` lines of the Provenance section, lower-cased keys.** (1 connections) — `scripts/check_pr.py`
+- **What triggers an image rebuild: docker.yml's push paths, read, not copied.** (1 connections) — `scripts/check_pr.py`
+- **{path: its text at `base`} (None when it did not exist), in one `git cat-file…** (1 connections) — `scripts/check_pr.py`
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
-- [Community 21](Community_21.md) (2 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
+- [Community 61](Community_61.md) (6 shared connections)
+- [Community 165](Community_165.md) (6 shared connections)
+- [Community 169](Community_169.md) (6 shared connections)
+- [Community 167](Community_167.md) (4 shared connections)
+- [Community 73](Community_73.md) (4 shared connections)
+- [Community 31](Community_31.md) (3 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
+- [Community 170](Community_170.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 173](Community_173.md) (2 shared connections)
+- [Community 172](Community_172.md) (2 shared connections)
 
 ## Source Files
 
-- `CHANGELOG.md`
-- `tests/test_translation_verify.py`
+- `scripts/check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (93%)
-- INFERRED: 2 (7%)
+- EXTRACTED: 105 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,40 +1,50 @@
 # Community 73
 
-> 17 nodes · cohesion 0.12
+> 15 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
-- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
-- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
-- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
-- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
-- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
-- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
-- **Check first** (1 connections) — `docs/CLEANUP.md`
-- **Delete** (1 connections) — `docs/CLEANUP.md`
-- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
-- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
-- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
-- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
-- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
-- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
-- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
-- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
+- **yaml** (85 connections)
+- **check_manifests.py** (12 connections) — `scripts/check_manifests.py`
+- **problems()** (9 connections) — `scripts/check_manifests.py`
+- **manifest_rate.py** (7 connections) — `scripts/manifest_rate.py`
+- **frozen()** (4 connections) — `scripts/check_versions.py`
+- **main()** (4 connections) — `scripts/manifest_rate.py`
+- **_skip()** (3 connections) — `scripts/check_manifests.py`
+- **_VendorTagLoader** (2 connections) — `scripts/check_manifests.py`
+- **main()** (2 connections) — `scripts/check_manifests.py`
+- **_vendor_tag()** (1 connections) — `scripts/check_manifests.py`
+- **Path** (1 connections)
+- **Check that manifests embedded in the material parse. A broken YAML manifest in…** (1 connections) — `scripts/check_manifests.py`
+- **SafeLoader that tolerates vendor YAML tags instead of failing on them.…** (1 connections) — `scripts/check_manifests.py`
+- **(version, snapshot_date) as the syllabus records them — what we built on.** (1 connections) — `scripts/check_versions.py`
+- **Broken-manifest rate per topic, split by when the topic was generated. The…** (1 connections) — `scripts/manifest_rate.py`
 
 ## Relationships
 
-- [Community 6](Community_6.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 124](Community_124.md) (10 shared connections)
+- [Community 63](Community_63.md) (7 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 36](Community_36.md) (4 shared connections)
+- [Community 32](Community_32.md) (4 shared connections)
+- [Community 104](Community_104.md) (4 shared connections)
+- [Community 8](Community_8.md) (4 shared connections)
+- [Community 29](Community_29.md) (4 shared connections)
+- [Community 6](Community_6.md) (3 shared connections)
+- [Community 37](Community_37.md) (3 shared connections)
+- [Community 19](Community_19.md) (3 shared connections)
 
 ## Source Files
 
-- `docs/CLEANUP.md`
+- `scripts/check_manifests.py`
+- `scripts/check_versions.py`
+- `scripts/manifest_rate.py`
 
 ## Audit Trail
 
-- EXTRACTED: 17 (94%)
-- INFERRED: 1 (6%)
+- EXTRACTED: 114 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

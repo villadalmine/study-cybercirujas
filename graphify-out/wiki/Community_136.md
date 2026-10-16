@@ -1,36 +1,40 @@
 # Community 136
 
-> 8 nodes · cohesion 0.32
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **models_live.py** (11 connections) — `teach/core/models_live.py`
-- **check_models.py** (8 connections) — `scripts/check_models.py`
+- **load_models()** (10 connections) — `teach/core/catalog.py`
+- **save_models()** (8 connections) — `teach/core/catalog.py`
 - **main()** (6 connections) — `scripts/check_models.py`
-- **moved()** (3 connections) — `teach/core/models_live.py`
-- **per_million()** (3 connections) — `teach/core/models_live.py`
-- **copy** (2 connections)
-- **Did the models the study bot offers change price, or stop existing?…** (1 connections) — `scripts/check_models.py`
-- **Is the catalogue still true right now? — checked out of band, never in the…** (1 connections) — `teach/core/models_live.py`
+- **models_path()** (6 connections) — `teach/core/catalog.py`
+- **Path** (5 connections)
+- **CatalogueWriterTests** (3 connections) — `tests/test_model_probe.py`
+- **.test_the_header_and_the_shape_survive_a_rewrite()** (3 connections) — `tests/test_model_probe.py`
+- **The study bot's model catalogue.** (1 connections) — `teach/core/catalog.py`
+- **Rewrite models.yaml, keeping the header comments above it. Those comments are…** (1 connections) — `teach/core/catalog.py`
+- **models.yaml is rewritten by two scripts; both must leave it readable.** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (6 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 52](Community_52.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 22](Community_22.md) (2 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 143](Community_143.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/check_models.py`
-- `teach/core/models_live.py`
+- `teach/core/catalog.py`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

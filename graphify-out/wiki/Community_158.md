@@ -1,28 +1,34 @@
 # Community 158
 
-> 5 nodes · cohesion 0.40
+> 7 nodes · cohesion 0.43
 
 ## Key Concepts
 
-- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `AGENTS_SYNC.md`
-- **German translation: working recipe found, blocked on timeout** (2 connections) — `AGENTS_SYNC.md`
-- **What I need from you** (2 connections) — `AGENTS_SYNC.md`
-- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `AGENTS_SYNC.md`
-- **What I finished** (1 connections) — `AGENTS_SYNC.md`
+- **check_api_facts.py** (12 connections) — `scripts/check_api_facts.py`
+- **main()** (4 connections) — `scripts/check_api_facts.py`
+- **spec_kinds()** (4 connections) — `scripts/check_api_facts.py`
+- **tracked_versions()** (4 connections) — `scripts/check_api_facts.py`
+- **check()** (3 connections) — `scripts/check_api_facts.py`
+- **Do the manifests use apiVersion/kind pairs that exist in the tracked release?…** (1 connections) — `scripts/check_api_facts.py`
+- **{(apiVersion, kind)} served by that release, from the published spec.** (1 connections) — `scripts/check_api_facts.py`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (2 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 64](Community_64.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `scripts/check_api_facts.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (71%)
-- INFERRED: 2 (29%)
+- EXTRACTED: 20 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,17 +1,15 @@
 # Community 62
 
-> 18 nodes · cohesion 0.16
+> 15 nodes · cohesion 0.18
 
 ## Key Concepts
 
 - **steer.py** (14 connections) — `scripts/steer.py`
-- **languages_for()** (12 connections) — `teach/core/pipeline.py`
 - **main()** (9 connections) — `scripts/steer.py`
 - **targets()** (8 connections) — `teach/core/pipeline.py`
 - **certs()** (7 connections) — `teach/core/pipeline.py`
 - **2026-10-15** (6 connections) — `CHANGELOG.md`
 - **show()** (5 connections) — `scripts/steer.py`
-- **main()** (4 connections) — `scripts/quality_report.py`
 - **set_key()** (4 connections) — `scripts/steer.py`
 - **_cert_block()** (3 connections) — `scripts/steer.py`
 - **create_block()** (3 connections) — `scripts/steer.py`
@@ -20,35 +18,33 @@
 - **Add a certification to pipeline.yaml that is not there yet. `activate` used to…** (1 connections) — `scripts/steer.py`
 - **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
 - **Certifications declared in the pipeline, as {cert_id: config}.** (1 connections) — `teach/core/pipeline.py`
-- **Languages a certification is expected to have. A per-cert `languages` key…** (1 connections) — `teach/core/pipeline.py`
 - **[(cert_id, [langs]), ...] — what the audit and the unattended resume script…** (1 connections) — `teach/core/pipeline.py`
 
 ## Relationships
 
-- [Community 50](Community_50.md) (9 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
+- [Community 163](Community_163.md) (8 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 26](Community_26.md) (2 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 163](Community_163.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
 - [Community 6](Community_6.md) (1 shared connections)
 - [Community 141](Community_141.md) (1 shared connections)
+- [Community 168](Community_168.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
+- [Changelog](Changelog.md) (1 shared connections)
 
 ## Source Files
 
 - `CHANGELOG.md`
-- `scripts/quality_report.py`
 - `scripts/steer.py`
 - `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 52 (91%)
-- INFERRED: 5 (9%)
+- EXTRACTED: 41 (89%)
+- INFERRED: 5 (11%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,6 +1,6 @@
 # Changelog
 
-> God node · 27 connections · `CHANGELOG.md`
+> God node · 28 connections · `CHANGELOG.md`
 
 **Community:** [Changelog](Changelog.md)
 
@@ -25,9 +25,9 @@
 - 2026-07-11/12 `EXTRACTED`
 - 2026-09-30 `EXTRACTED`
 - 2026-09-15 `EXTRACTED`
+- 2026-10-16 `EXTRACTED`
 - 2026-07-28 `EXTRACTED`
-- b7a8edb — Open Web `EXTRACTED`
-- *…and 7 more `contains` connection(s) not listed (lowest-degree first to go)*
+- *…and 8 more `contains` connection(s) not listed (lowest-degree first to go)*
 
 ---
 

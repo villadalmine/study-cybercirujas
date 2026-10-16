@@ -1,47 +1,36 @@
 # Community 91
 
-> 13 nodes · cohesion 0.17
+> 14 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **_reject_if_recap()** (10 connections) — `teach/core/generator.py`
-- **_strip_fence()** (8 connections) — `teach/core/generator.py`
-- **Development Guidelines for teach-plat** (7 connections) — `CLAUDE.md`
-- **2026-07-27** (3 connections) — `CHANGELOG.md`
-- **Rules** (3 connections) — `CLAUDE.md`
-- **2026-07-11/12** (2 connections) — `CHANGELOG.md`
-- **Verification: what is proven, and what is only assumed** (2 connections) — `CLAUDE.md`
-- **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
-- **Agent Idea Synchronization (AGENTS_SYNC.md)** (1 connections) — `CLAUDE.md`
-- **Commands** (1 connections) — `CLAUDE.md`
-- **Content Workflow** (1 connections) — `CLAUDE.md`
-- **Pull requests from agents** (1 connections) — `CLAUDE.md`
-- **Backends sometimes wrap the whole response in a ```markdown ... ``` fence even…** (1 connections) — `teach/core/generator.py`
+- **ExamVersionTests** (14 connections) — `tests/test_check_pr.py`
+- **.changes()** (6 connections) — `tests/test_check_pr.py`
+- **.test_a_new_or_removed_cert_is_a_change()** (2 connections) — `tests/test_check_pr.py`
+- **.test_an_identical_catalog_has_no_change()** (2 connections) — `tests/test_check_pr.py`
+- **.test_objectives_link_change_is_detected()** (2 connections) — `tests/test_check_pr.py`
+- **.test_other_fields_are_free()** (2 connections) — `tests/test_check_pr.py`
+- **.test_tracked_version_change_is_detected()** (2 connections) — `tests/test_check_pr.py`
+- **.test_a_change_with_nothing_fails_twice()** (1 connections) — `tests/test_check_pr.py`
+- **.test_only_an_upgrade_milestone_authorizes()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_declared_scope_alone_is_not_enough()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_label_and_the_description_text_authorize_nothing()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_milestone_alone_is_not_enough()** (1 connections) — `tests/test_check_pr.py`
+- **.test_without_a_change_nothing_is_required()** (1 connections) — `tests/test_check_pr.py`
+- **catalog.yaml: tracked_version or objectives only move in the milestone's final…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (4 shared connections)
-- [Community 69](Community_69.md) (2 shared connections)
-- [Community 14](Community_14.md) (2 shared connections)
-- [Changelog](Changelog.md) (2 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
-- [Community 52](Community_52.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `CHANGELOG.md`
-- `CLAUDE.md`
-- `WORKFLOW.md`
-- `teach/core/generator.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (69%)
-- INFERRED: 9 (31%)
+- EXTRACTED: 19 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

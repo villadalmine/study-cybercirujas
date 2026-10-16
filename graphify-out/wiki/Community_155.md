@@ -1,29 +1,33 @@
 # Community 155
 
-> 6 nodes · cohesion 0.33
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **_video_info()** (5 connections) — `teach/api.py`
-- **get_cert_video()** (4 connections) — `teach/api.py`
-- **get_path_video()** (4 connections) — `teach/api.py`
-- **Info about a video (path or cert) if it has been generated: URL of the mp4…** (1 connections) — `teach/api.py`
-- **A path's video (if it has been generated).** (1 connections) — `teach/api.py`
-- **A single certification's video (if it has been generated).** (1 connections) — `teach/api.py`
+- **Content Workflow** (9 connections) — `WORKFLOW.md`
+- **Backends** (2 connections) — `WORKFLOW.md`
+- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
+- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
+- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
+- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
+- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
+- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
 
 ## Relationships
 
-- [Community 54](Community_54.md) (3 shared connections)
-- [Community 125](Community_125.md) (3 shared connections)
+- [Community 69](Community_69.md) (2 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/api.py`
+- `WORKFLOW.md`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 10 (83%)
+- INFERRED: 2 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

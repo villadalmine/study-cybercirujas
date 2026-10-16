@@ -27,18 +27,18 @@
 
 ## Relationships
 
-- [Community 54](Community_54.md) (12 shared connections)
+- [Community 54](Community_54.md) (14 shared connections)
 - [Community 46](Community_46.md) (5 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 155](Community_155.md) (3 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
+- [Community 72](Community_72.md) (2 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
 - [Community 22](Community_22.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [PathLanguageTests](PathLanguageTests.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
-- [Community 143](Community_143.md) (1 shared connections)
 - [Community 8](Community_8.md) (1 shared connections)
+- [Community 168](Community_168.md) (1 shared connections)
+- [Community 156](Community_156.md) (1 shared connections)
 
 ## Source Files
 

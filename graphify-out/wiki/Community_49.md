@@ -1,12 +1,11 @@
 # Community 49
 
-> 27 nodes · cohesion 0.12
+> 25 nodes · cohesion 0.13
 
 ## Key Concepts
 
 - **fix_corrupted_content.py** (29 connections) — `scripts/fix_corrupted_content.py`
 - **main()** (17 connections) — `scripts/fix_corrupted_content.py`
-- **quality.py** (17 connections) — `teach/core/quality.py`
 - **check_file()** (14 connections) — `teach/core/quality.py`
 - **find_bad_combos()** (9 connections) — `scripts/fix_corrupted_content.py`
 - **video_languages()** (9 connections) — `teach/core/pipeline.py`
@@ -29,22 +28,22 @@
 - **Ship a certification the moment it is finished, without being asked. Finishing…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **Regenerate STATUS.md here, in the thing that does the work. It used to live…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **TRANSLATE_BACKEND if it can actually answer, else claude. A misconfigured…** (1 connections) — `scripts/fix_corrupted_content.py`
-- *... and 2 more nodes in this community*
+- **Same as `check`, resolving the kind from the filename. A file that cannot be…** (1 connections) — `teach/core/quality.py`
 
 ## Relationships
 
-- [Community 50](Community_50.md) (11 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 63](Community_63.md) (6 shared connections)
+- [Community 163](Community_163.md) (7 shared connections)
+- [Community 50](Community_50.md) (5 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 - [Community 141](Community_141.md) (3 shared connections)
 - [Community 6](Community_6.md) (3 shared connections)
 - [Community 61](Community_61.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
-- [Community 26](Community_26.md) (3 shared connections)
-- [Community 13](Community_13.md) (3 shared connections)
-- [Community 129](Community_129.md) (2 shared connections)
+- [Community 168](Community_168.md) (3 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
 - [Community 162](Community_162.md) (2 shared connections)
-- [Community 163](Community_163.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
 
 ## Source Files
 
@@ -54,7 +53,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 103 (97%)
+- EXTRACTED: 88 (97%)
 - INFERRED: 3 (3%)
 - AMBIGUOUS: 0 (0%)
 

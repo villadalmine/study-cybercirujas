@@ -1,12 +1,11 @@
 # Community 56
 
-> 19 nodes · cohesion 0.15
+> 17 nodes · cohesion 0.17
 
 ## Key Concepts
 
 - **_stream()** (14 connections) — `teach/lab/runner.py`
 - **test_stream.py** (14 connections) — `tests/lab/test_stream.py`
-- **_why()** (5 connections) — `teach/lab/runner.py`
 - **Lab** (4 connections) — `tests/lab/test_stream.py`
 - **test_a_child_that_exits_124_is_not_reported_as_a_timeout()** (3 connections) — `tests/lab/test_stream.py`
 - **test_scripts_run_under_timeout_inside_the_container()** (3 connections) — `tests/lab/test_stream.py`
@@ -21,17 +20,15 @@
 - **stop()** (1 connections) — `teach/lab/runner.py`
 - **.__init__()** (1 connections) — `tests/lab/test_stream.py`
 - **Run, echo output live, and return (exit code, full output). `timeout` is the…** (1 connections) — `teach/lab/runner.py`
-- **`exit N`, plus what 124 most likely means (coreutils timeout's status).** (1 connections) — `teach/lab/runner.py`
 - **Per-phase timeouts hold even when the lab prints nothing (review of PR #2). The…** (1 connections) — `tests/lab/test_stream.py`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (10 shared connections)
+- [Community 12](Community_12.md) (8 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
 - [Community 1](Community_1.md) (1 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 
 ## Source Files
 
@@ -40,8 +37,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (95%)
-- INFERRED: 2 (5%)
+- EXTRACTED: 34 (94%)
+- INFERRED: 2 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

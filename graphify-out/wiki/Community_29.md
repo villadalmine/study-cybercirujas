@@ -1,10 +1,9 @@
 # Community 29
 
-> 32 nodes · cohesion 0.13
+> 31 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **json** (67 connections)
 - **load()** (25 connections) — `teach/lab/spec.py`
 - **spec.py** (22 connections) — `teach/lab/spec.py`
 - **test_schema.py** (18 connections) — `tests/lab/test_schema.py`
@@ -29,22 +28,23 @@
 - **test_v1_without_kubectl_is_linux()** (3 connections) — `tests/lab/test_schema.py`
 - **test_verbs_detected_in_existing_styles()** (2 connections) — `tests/lab/test_schema.py`
 - **Path** (2 connections)
-- *... and 7 more nodes in this community*
+- **parametrize** (1 connections)
+- *... and 6 more nodes in this community*
 
 ## Relationships
 
-- [Community 19](Community_19.md) (12 shared connections)
-- [Community 1](Community_1.md) (8 shared connections)
-- [Community 12](Community_12.md) (6 shared connections)
-- [Community 31](Community_31.md) (5 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 34](Community_34.md) (5 shared connections)
-- [Community 129](Community_129.md) (4 shared connections)
+- [Community 19](Community_19.md) (10 shared connections)
+- [Community 1](Community_1.md) (6 shared connections)
+- [Community 73](Community_73.md) (4 shared connections)
+- [Community 12](Community_12.md) (4 shared connections)
 - [Community 104](Community_104.md) (3 shared connections)
-- [Community 61](Community_61.md) (3 shared connections)
-- [Community 26](Community_26.md) (3 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 80](Community_80.md) (3 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 
 ## Source Files
 
@@ -53,8 +53,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 161 (99%)
-- INFERRED: 2 (1%)
+- EXTRACTED: 96 (98%)
+- INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

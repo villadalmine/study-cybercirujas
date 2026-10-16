@@ -5,7 +5,7 @@
 ## Key Concepts
 
 - **probe_models.py** (35 connections) — `scripts/probe_models.py`
-- **time** (14 connections)
+- **time** (15 connections)
 - **probe_one()** (12 connections) — `scripts/probe_models.py`
 - **main()** (11 connections) — `scripts/probe_models.py`
 - **ask_retrying()** (9 connections) — `scripts/probe_models.py`
@@ -34,14 +34,14 @@
 - [Community 75](Community_75.md) (6 shared connections)
 - [Community 43](Community_43.md) (6 shared connections)
 - [Community 93](Community_93.md) (4 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 129](Community_129.md) (3 shared connections)
+- [Community 36](Community_36.md) (4 shared connections)
+- [Community 73](Community_73.md) (3 shared connections)
 - [Community 7](Community_7.md) (3 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
+- [Community 136](Community_136.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 - [Community 52](Community_52.md) (2 shared connections)
-- [Community 29](Community_29.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
 - [Community 50](Community_50.md) (2 shared connections)
+- [Community 162](Community_162.md) (2 shared connections)
 
 ## Source Files
 
@@ -49,7 +49,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 88 (100%)
+- EXTRACTED: 89 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

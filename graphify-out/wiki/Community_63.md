@@ -1,11 +1,12 @@
 # Community 63
 
-> 16 nodes · cohesion 0.20
+> 17 nodes · cohesion 0.19
 
 ## Key Concepts
 
 - **status_matrix.py** (21 connections) — `scripts/status_matrix.py`
 - **_render()** (15 connections) — `scripts/status_matrix.py`
+- **survey()** (8 connections) — `scripts/check_versions.py`
 - **load_weights()** (7 connections) — `teach/core/scoring.py`
 - **refresh()** (6 connections) — `scripts/status_matrix.py`
 - **lang_cell()** (5 connections) — `scripts/status_matrix.py`
@@ -23,28 +24,29 @@
 
 ## Relationships
 
-- [Community 129](Community_129.md) (7 shared connections)
-- [Community 49](Community_49.md) (6 shared connections)
+- [Community 73](Community_73.md) (7 shared connections)
+- [Community 49](Community_49.md) (5 shared connections)
+- [Community 163](Community_163.md) (4 shared connections)
 - [Community 102](Community_102.md) (3 shared connections)
 - [Community 124](Community_124.md) (3 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
+- [Community 129](Community_129.md) (2 shared connections)
+- [Community 52](Community_52.md) (1 shared connections)
+- [Changelog](Changelog.md) (1 shared connections)
 - [Community 18](Community_18.md) (1 shared connections)
-- [Community 163](Community_163.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
 
 ## Source Files
 
+- `scripts/check_versions.py`
 - `scripts/status_matrix.py`
 - `teach/core/scoring.py`
 
 ## Audit Trail
 
-- EXTRACTED: 53 (98%)
-- INFERRED: 1 (2%)
+- EXTRACTED: 58 (97%)
+- INFERRED: 2 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

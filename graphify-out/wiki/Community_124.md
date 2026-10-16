@@ -1,6 +1,6 @@
 # Community 124
 
-> 67 nodes · cohesion 0.06
+> 58 nodes · cohesion 0.07
 
 ## Key Concepts
 
@@ -8,9 +8,7 @@
 - **block_for()** (18 connections) — `scripts/quality_score.py`
 - **check_sources.py** (14 connections) — `scripts/check_sources.py`
 - **entry()** (12 connections) — `scripts/quality_score.py`
-- **check_manifests.py** (12 connections) — `scripts/check_manifests.py`
 - **scoring.py** (11 connections) — `teach/core/scoring.py`
-- **problems()** (9 connections) — `scripts/check_manifests.py`
 - **check_k8s_apis.py** (9 connections) — `scripts/check_k8s_apis.py`
 - **Path** (9 connections)
 - **Context** (8 connections) — `scripts/quality_score.py`
@@ -29,27 +27,28 @@
 - **main()** (5 connections) — `scripts/check_sources.py`
 - **floor_check()** (5 connections) — `scripts/quality_score.py`
 - **rel()** (5 connections) — `scripts/quality_score.py`
-- *... and 42 more nodes in this community*
+- **check()** (5 connections) — `tests/test_quality_score.py`
+- **duplicate_keys()** (4 connections) — `scripts/check_sources.py`
+- *... and 33 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (16 shared connections)
-- [Community 129](Community_129.md) (9 shared connections)
-- [Community 131](Community_131.md) (6 shared connections)
-- [Community 31](Community_31.md) (6 shared connections)
+- [Community 43](Community_43.md) (14 shared connections)
+- [Community 73](Community_73.md) (10 shared connections)
+- [Community 31](Community_31.md) (5 shared connections)
+- [Community 89](Community_89.md) (4 shared connections)
 - [Community 63](Community_63.md) (3 shared connections)
-- [Community 29](Community_29.md) (2 shared connections)
-- [Community 104](Community_104.md) (2 shared connections)
-- [Community 49](Community_49.md) (2 shared connections)
+- [Community 104](Community_104.md) (3 shared connections)
 - [Community 147](Community_147.md) (2 shared connections)
 - [Community 7](Community_7.md) (2 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
+- [Community 168](Community_168.md) (1 shared connections)
+- [Community 72](Community_72.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/check_k8s_apis.py`
-- `scripts/check_manifests.py`
 - `scripts/check_sources.py`
 - `scripts/quality_score.py`
 - `teach/core/scoring.py`
@@ -57,7 +56,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 183 (100%)
+- EXTRACTED: 164 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

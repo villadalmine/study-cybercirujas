@@ -1,10 +1,10 @@
 # Community 87
 
-> 13 nodes · cohesion 0.15
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **translation.md** (9 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
+- **translation.md** (10 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Evidence** (3 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Authorship** (2 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Depends on** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
@@ -14,6 +14,7 @@
 - **Known gaps** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Provenance** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Risk and rollback** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
+- **Scope** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Translation review** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **What and why** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
 - **Where it ran** (1 connections) — `.github/PULL_REQUEST_TEMPLATE/translation.md`
@@ -28,7 +29,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 13 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

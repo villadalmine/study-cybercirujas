@@ -1,25 +1,30 @@
 # Community 165
 
-> 2 nodes · cohesion 1.00
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **EnterHintTests** (2 connections) — `tests/test_labs.py`
-- **.test_container_lab_names_the_shell()** (2 connections) — `tests/test_labs.py`
+- **dco()** (5 connections) — `scripts/check_pr.py`
+- **is_graph_refresh()** (5 connections) — `scripts/check_pr.py`
+- **noreply()** (5 connections) — `scripts/check_pr.py`
+- **The graph bot's PR: its fixed branch, opened by the Actions bot from this…** (1 connections) — `scripts/check_pr.py`
+- **`<id>+<login>@users.noreply.github.com` or `<login>@users.noreply.github.com`.** (1 connections) — `scripts/check_pr.py`
+- **One problem per commit without a valid Signed-off-by (empty: all signed, or…** (1 connections) — `scripts/check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 8](Community_8.md) (1 shared connections)
+- [Community 32](Community_32.md) (6 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_labs.py`
+- `scripts/check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 12 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

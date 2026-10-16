@@ -1,6 +1,6 @@
 # Community 8
 
-> 30 nodes · cohesion 0.17
+> 32 nodes · cohesion 0.16
 
 ## Key Concepts
 
@@ -26,34 +26,35 @@
 - **_down_cluster()** (3 connections) — `teach/core/labs.py`
 - **_status_cluster()** (3 connections) — `teach/core/labs.py`
 - **_status_container()** (3 connections) — `teach/core/labs.py`
+- **EnterHintTests** (2 connections) — `tests/test_labs.py`
+- **.test_container_lab_names_the_shell()** (2 connections) — `tests/test_labs.py`
 - **CompletedProcess** (1 connections)
-- **Exception** (1 connections)
-- **Lab execution — v1 using local subprocesses. Two providers: terraform Lab IaC…** (1 connections) — `teach/core/labs.py`
-- *... and 5 more nodes in this community*
+- *... and 7 more nodes in this community*
 
 ## Relationships
 
 - [Community 2](Community_2.md) (9 shared connections)
 - [Community 61](Community_61.md) (8 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
 - [Community 18](Community_18.md) (6 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
 - [Community 149](Community_149.md) (4 shared connections)
-- [Community 129](Community_129.md) (4 shared connections)
+- [Community 73](Community_73.md) (4 shared connections)
 - [Community 157](Community_157.md) (3 shared connections)
 - [Community 134](Community_134.md) (3 shared connections)
 - [certs.py](certs.py.md) (2 shared connections)
 - [Community 130](Community_130.md) (2 shared connections)
 - [Community 161](Community_161.md) (2 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 
 ## Source Files
 
 - `BACKLOG.md`
 - `teach/core/labs.py`
+- `tests/test_labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 128 (96%)
+- EXTRACTED: 130 (96%)
 - INFERRED: 6 (4%)
 - AMBIGUOUS: 0 (0%)
 

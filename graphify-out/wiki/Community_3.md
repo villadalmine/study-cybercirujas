@@ -1,9 +1,10 @@
 # Community 3
 
-> 19 nodes · cohesion 0.21
+> 24 nodes · cohesion 0.17
 
 ## Key Concepts
 
+- **models_live.py** (11 connections) — `teach/core/models_live.py`
 - **compare()** (10 connections) — `teach/core/models_live.py`
 - **test_models_live.py** (10 connections) — `tests/test_models_live.py`
 - **catalogue()** (9 connections) — `tests/test_models_live.py`
@@ -15,10 +16,14 @@
 - **.test_a_free_model_that_starts_charging_is_a_finding()** (4 connections) — `tests/test_models_live.py`
 - **.test_fourth_decimal_wobble_is_not_a_finding()** (4 connections) — `tests/test_models_live.py`
 - **.test_the_real_drift_is_caught()** (4 connections) — `tests/test_models_live.py`
+- **moved()** (3 connections) — `teach/core/models_live.py`
+- **per_million()** (3 connections) — `teach/core/models_live.py`
 - **.test_no_findings_serves_the_catalogue_unchanged()** (3 connections) — `tests/test_models_live.py`
 - **.test_the_catalogue_passed_in_is_not_mutated()** (3 connections) — `tests/test_models_live.py`
 - **.test_the_frozen_numbers_are_never_overwritten()** (3 connections) — `tests/test_models_live.py`
 - **.test_a_model_that_vanished_is_flagged_not_priced()** (3 connections) — `tests/test_models_live.py`
+- **copy** (2 connections)
+- **Is the catalogue still true right now? — checked out of band, never in the…** (1 connections) — `teach/core/models_live.py`
 - **{model id: what upstream says that the catalogue does not}. An entry appears…** (1 connections) — `teach/core/models_live.py`
 - **The catalogue as the page should see it. Never mutates the input. The frozen…** (1 connections) — `teach/core/models_live.py`
 - **The out-of-band guard: what the page is told when the catalogue goes stale.…** (1 connections) — `tests/test_models_live.py`
@@ -26,10 +31,11 @@
 
 ## Relationships
 
-- [Community 136](Community_136.md) (6 shared connections)
-- [Community 22](Community_22.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
+- [Community 22](Community_22.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 136](Community_136.md) (2 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
+- [Community 52](Community_52.md) (1 shared connections)
 - [Community 140](Community_140.md) (1 shared connections)
 
 ## Source Files
@@ -39,7 +45,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 48 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

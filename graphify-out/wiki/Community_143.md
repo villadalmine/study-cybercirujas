@@ -1,38 +1,34 @@
 # Community 143
 
-> 8 nodes · cohesion 0.32
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **corpus.py** (17 connections) — `teach/core/corpus.py`
-- **_fold()** (5 connections) — `teach/core/corpus.py`
-- **_terms()** (4 connections) — `teach/core/corpus.py`
-- **unicodedata** (4 connections)
-- **_informative()** (3 connections) — `teach/core/corpus.py`
-- **The four functions a study agent needs, and the only four it gets. Phase 2 of…** (1 connections) — `teach/core/corpus.py`
-- **Lowercase, accent-stripped, so `Kubernetes` finds `kubernetes` and…** (1 connections) — `teach/core/corpus.py`
-- **Drop the terms that match so much of the corpus they cannot rank it. All of…** (1 connections) — `teach/core/corpus.py`
+- **accepted()** (9 connections) — `teach/core/bot_stats.py`
+- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
+- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
+- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
+- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
+- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
 
 ## Relationships
 
-- [Community 45](Community_45.md) (4 shared connections)
-- [Community 31](Community_31.md) (4 shared connections)
-- [Community 114](Community_114.md) (2 shared connections)
-- [Community 72](Community_72.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
+- `teach/core/bot_stats.py`
+- `tests/test_bot_stats.py`
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

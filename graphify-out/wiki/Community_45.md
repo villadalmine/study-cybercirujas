@@ -1,38 +1,39 @@
 # Community 45
 
-> 13 nodes · cohesion 0.27
+> 18 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **search_topics()** (19 connections) — `teach/core/corpus.py`
-- **SearchTests** (11 connections) — `tests/test_corpus.py`
-- **.test_a_query_of_nothing_but_filler_still_answers()** (2 connections) — `tests/test_corpus.py`
-- **.test_a_query_that_matches_nothing_returns_nothing()** (2 connections) — `tests/test_corpus.py`
-- **.test_a_title_hit_outranks_a_domain_hit()** (2 connections) — `tests/test_corpus.py`
-- **.test_accents_and_case_do_not_matter()** (2 connections) — `tests/test_corpus.py`
-- **.test_an_exact_topic_id_wins()** (2 connections) — `tests/test_corpus.py`
-- **.test_every_hit_explains_itself()** (2 connections) — `tests/test_corpus.py`
-- **.test_filler_words_are_dropped_by_measurement_not_by_a_list()** (2 connections) — `tests/test_corpus.py`
-- **.test_material_breaks_a_tie()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_cert_filter_is_honoured()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_limit_is_bounded_however_it_is_asked_for()** (2 connections) — `tests/test_corpus.py`
-- **Which topics mention this, ranked, with the reason for each hit. Scores a term…** (1 connections) — `teach/core/corpus.py`
+- **commit()** (13 connections) — `tests/test_check_pr.py`
+- **DcoTests** (11 connections) — `tests/test_check_pr.py`
+- **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
+- **.run_main()** (4 connections) — `tests/test_check_pr.py`
+- **.test_an_unsigned_commit_fails_the_pr()** (3 connections) — `tests/test_check_pr.py`
+- **.test_signed_commits_pass()** (3 connections) — `tests/test_check_pr.py`
+- **.test_the_same_commit_in_a_grandfathered_pr_passes()** (3 connections) — `tests/test_check_pr.py`
+- **.test_a_sign_off_buried_in_a_line_is_not_a_trailer()** (2 connections) — `tests/test_check_pr.py`
+- **.test_a_signed_commit_passes()** (2 connections) — `tests/test_check_pr.py`
+- **.test_an_unsigned_commit_fails_and_says_how_to_fix_it()** (2 connections) — `tests/test_check_pr.py`
+- **.test_email_case_does_not_matter()** (2 connections) — `tests/test_check_pr.py`
+- **.test_one_problem_per_unsigned_commit()** (2 connections) — `tests/test_check_pr.py`
+- **.test_prs_opened_before_the_rule_are_grandfathered()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_graph_bot_is_exempt_only_on_its_branch_with_its_files_and_its_author()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_prs_github_noreply_address_counts()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_sign_off_must_be_the_authors_email()** (2 connections) — `tests/test_check_pr.py`
+- **.test_commits_of_reads_git_without_merges()** (1 connections) — `tests/test_check_pr.py`
+- **main() wires the commits of --base..HEAD, the event's number and author into…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 143](Community_143.md) (4 shared connections)
-- [Community 72](Community_72.md) (3 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
+- [Community 150](Community_150.md) (3 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
-- `tests/test_corpus.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

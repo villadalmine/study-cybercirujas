@@ -13,8 +13,8 @@
 
 ## Relationships
 
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 129](Community_129.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
 - [Community 31](Community_31.md) (1 shared connections)
 

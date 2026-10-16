@@ -31,7 +31,8 @@
 
 ## Relationships
 
-- [Community 52](Community_52.md) (7 shared connections)
+- [Community 52](Community_52.md) (5 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
 - [Community 64](Community_64.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)

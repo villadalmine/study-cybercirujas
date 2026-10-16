@@ -1,29 +1,28 @@
 # Community 159
 
-> 5 nodes · cohesion 0.50
+> 7 nodes · cohesion 0.48
 
 ## Key Concepts
 
-- **backfill_model.py** (8 connections) — `scripts/backfill_model.py`
-- **evidence()** (4 connections) — `scripts/backfill_model.py`
-- **main()** (4 connections) — `scripts/backfill_model.py`
-- **Repair `model:` in meta.yaml where usage.jsonl can prove which model answered.…** (1 connections) — `scripts/backfill_model.py`
-- **(cert, topic, lang) -> model, from the most recent completion for it.** (1 connections) — `scripts/backfill_model.py`
+- **ExamVersionWiringTests** (7 connections) — `tests/test_check_pr.py`
+- **.run_main()** (5 connections) — `tests/test_check_pr.py`
+- **.body()** (2 connections) — `tests/test_check_pr.py`
+- **.test_an_upgrade_milestone_and_the_declared_scope_pass()** (2 connections) — `tests/test_check_pr.py`
+- **.test_pr_61_fails_even_with_the_label()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_label_and_a_declared_scope_without_a_milestone_fail()** (2 connections) — `tests/test_check_pr.py`
+- **main() reaches the guard: a #61-like PR (catalog links swapped, label present)…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 29](Community_29.md) (2 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 129](Community_129.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/backfill_model.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

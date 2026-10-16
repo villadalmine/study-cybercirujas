@@ -1,10 +1,10 @@
 # Community 99
 
-> 11 nodes · cohesion 0.18
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **bad.md** (8 connections) — `tests/fixtures/pr/bad.md`
+- **bad.md** (9 connections) — `tests/fixtures/pr/bad.md`
 - **Authorship** (2 connections) — `tests/fixtures/pr/bad.md`
 - **Evidence** (2 connections) — `tests/fixtures/pr/bad.md`
 - **Depends on** (1 connections) — `tests/fixtures/pr/bad.md`
@@ -13,6 +13,7 @@
 - **Kind** (1 connections) — `tests/fixtures/pr/bad.md`
 - **Provenance** (1 connections) — `tests/fixtures/pr/bad.md`
 - **Risk and rollback** (1 connections) — `tests/fixtures/pr/bad.md`
+- **Scope** (1 connections) — `tests/fixtures/pr/bad.md`
 - **What and why** (1 connections) — `tests/fixtures/pr/bad.md`
 - **Where it ran** (1 connections) — `tests/fixtures/pr/bad.md`
 
@@ -26,7 +27,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

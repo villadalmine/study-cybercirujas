@@ -1,36 +1,38 @@
 # Community 103
 
-> 11 nodes · cohesion 0.18
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)** (8 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **1. Graphify — measured pilot, 2026-08-18** (4 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **AGENTIC_TOOLING_STUDY.md** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **2. OpenWiki — studied, not yet run (every run spends)** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **3. LangSmith — optional visibility, narrow fit** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **4. The plan** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **5. Costs, summarized** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **7. Decisions that belong to the owner** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **Integration cautions (this repo specifically)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **Optional, costs completions (cheap, LiteLLM-able)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **What Graphify gives agents** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
+- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **Content process** (1 connections) — `docs/OPERATING.md`
+- **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
+- **Environment variables** (1 connections) — `docs/OPERATING.md`
+- **Keeping it honest over time** (1 connections) — `docs/OPERATING.md`
+- **Quality** (1 connections) — `docs/OPERATING.md`
+- **Quickstart (maintainers)** (1 connections) — `docs/OPERATING.md`
+- **Reading the "Exam versions" table in STATUS.md** (1 connections) — `docs/OPERATING.md`
+- **Reporting it, most severe first** (1 connections) — `docs/OPERATING.md`
+- **Running it yourself, without guessing** (1 connections) — `docs/OPERATING.md`
+- **The rule** (1 connections) — `docs/OPERATING.md`
+- **What `make check-updates` does** (1 connections) — `docs/OPERATING.md`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 145](Community_145.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 - [Community 70](Community_70.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTIC_TOOLING_STUDY.md`
+- `docs/OPERATING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (80%)
-- INFERRED: 3 (20%)
+- EXTRACTED: 16 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---
