@@ -1,0 +1,44 @@
+name: Sync labels
+
+# .github/labels.yml is the single source of the repo's labels (CONTRIBUTING -> Labels).
+# This applies it: creates what is missing, fixes colours and descriptions, and RENAMES through
+# `aliases` (so `bug` becomes `type:bug` with its issues and PRs). It never reads or runs
+# anything from a pull request: it runs on main and on a manual dispatch only.
+#
+# Order of a rename (the first time): dry-run -> run without deleting -> move the data -> delete the
+# labels the file does not know. Push to main never deletes: only a manual run can.
+on:
+  push:
+    branches: [main]
+    paths: [".github/labels.yml"]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Only print what would change"
+        type: boolean
+        default: true
+      delete-other-labels:
+        description: "Also delete every label that is not in labels.yml (after the data is moved)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sync-labels
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      # EndBug/label-sync v2.3.3, pinned by commit (tags move; commits do not).
+      - uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a
+        with:
+          config-file: .github/labels.yml
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
+          delete-other-labels: ${{ github.event_name == 'workflow_dispatch' && inputs.delete-other-labels }}

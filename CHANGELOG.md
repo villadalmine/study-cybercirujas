@@ -4,6 +4,11 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
 
 ## 2026-10-16
 
+- **Label sync** (ci): `.github/workflows/sync-labels.yml` applies `.github/labels.yml` to the repo with
+  `EndBug/label-sync` pinned by commit: on a push to main that changes the file (create and update only) and on
+  a manual dispatch (`dry-run` on by default, `delete-other-labels` off). Renames go through `aliases`, so
+  `bug`, `enhancement`, `documentation`, `question` and `needs-info` keep their issues.
+
 - **Labels are code** (ci, #75): `.github/labels.yml` holds the 43 labels (colour, description, `aliases` for the
   renames) and `scripts/check_labels.py` (`make labels-check`, in `make verify-ci`) fails when an issue form, the
   labeler, a workflow or `check_pr.py` names a label that does not exist. The forms named four that did not

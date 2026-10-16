@@ -65,6 +65,13 @@ class CheckLabelsTests(unittest.TestCase):
         self.assertEqual(len(found), 1, found)
         self.assertIn("missing-one", found[0])
 
+    def test_switches_named_like_labels_are_not_labels(self):
+        (self.root / ".github/workflows/sync.yml").write_text(
+            "on: workflow_dispatch\njobs:\n  s:\n    runs-on: ubuntu-latest\n    steps:\n"
+            "      - uses: x/y@z\n        with:\n          delete-other-labels: 'false'\n          sync-labels: true\n",
+            encoding="utf-8")
+        self.assertEqual(self.problems(), [])
+
     def test_label_file_rules(self):
         lab = self.root / ".github/labels.yml"
         lab.write_text('- {name: a, color: zzz, description: ""}\n- {name: a, color: "123456", description: "ok"}\n'

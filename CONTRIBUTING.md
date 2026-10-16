@@ -379,6 +379,12 @@ One label answers one question, and each family has a prefix:
 
 To close without a label use GitHub's *not planned* reason, not `invalid` or `wontfix`.
 
+**Changing a label.** Edit `.github/labels.yml` in a PR. When it merges, the *Sync labels* workflow
+([`.github/workflows/sync-labels.yml`](.github/workflows/sync-labels.yml)) creates and updates the labels in the repo
+(it never deletes). To rename one, keep the old name under `aliases:`: the sync renames the existing label, so its
+issues and PRs keep it. Retiring a label for good is a manual run (*Actions -> Sync labels -> Run workflow*,
+`dry-run` first, then `delete-other-labels`), after the issues that carry it were moved.
+
 ### Agents
 
 AI agents (Claude Code, Codex, Gemini, …) open PRs exactly like people: the

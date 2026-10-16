@@ -33,6 +33,8 @@ PREFIXED = re.compile(r"(?<![\w/.-])((?:%s):[a-z][a-z0-9-]*)(?![\w:/-])" % "|".j
 SHELL_LABEL = re.compile(r"""(?:--(?:add|remove)-label[ =]+|gh\s+label\s+create\s+)["']?([^"'\s$\\]+)""")
 HEX = re.compile(r"^[0-9a-fA-F]{6}$")
 DESC_MAX = 100
+# Inputs whose name ends in "labels" but that are switches, not label names.
+NOT_LABELS = {"sync-labels", "delete-other-labels"}
 CHECK_PR = Path("scripts/check_pr.py")
 
 
@@ -77,7 +79,7 @@ def _walk_label_inputs(node, out: list[str]) -> None:
     """Workflow inputs named like `stale-issue-label` or `exempt-issue-labels`."""
     if isinstance(node, dict):
         for key, value in node.items():
-            if isinstance(key, str) and re.search(r"labels?$", key) and key != "sync-labels" and isinstance(value, str):
+            if isinstance(key, str) and re.search(r"labels?$", key) and key not in NOT_LABELS and isinstance(value, str):
                 out += [v for v in _split(value) if v]
             else:
                 _walk_label_inputs(value, out)
