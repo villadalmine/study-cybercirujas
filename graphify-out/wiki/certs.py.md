@@ -1,11 +1,13 @@
 # certs.py
 
-> 14 nodes · cohesion 0.24
+> 17 nodes · cohesion 0.21
 
 ## Key Concepts
 
+- **content_dir()** (11 connections) — `teach/core/certs.py`
 - **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
 - **get_topic()** (10 connections) — `teach/core/certs.py`
+- **topic_outdated_langs()** (9 connections) — `teach/core/certs.py`
 - **._outdated()** (7 connections) — `tests/test_stale_cycle.py`
 - **._regenerate()** (5 connections) — `tests/test_stale_cycle.py`
 - **.test_cycle_closes_when_none_are_left()** (5 connections) — `tests/test_stale_cycle.py`
@@ -15,18 +17,21 @@
 - **.test_content_older_than_the_change_is_flagged()** (2 connections) — `tests/test_stale_cycle.py`
 - **.setUp()** (1 connections) — `tests/test_stale_cycle.py`
 - **.tearDown()** (1 connections) — `tests/test_stale_cycle.py`
+- **Languages whose content predates the last syllabus change. A topic goes 'stale'…** (1 connections) — `teach/core/certs.py`
 - **A topic that never changed reports no outdated languages, however old its…** (1 connections) — `tests/test_stale_cycle.py`
 - **When in doubt, regenerate: if freshness cannot be proven, it is not assumed.** (1 connections) — `tests/test_stale_cycle.py`
 - **The case that drove the design: rebuilding Spanish cannot mark the topic…** (1 connections) — `tests/test_stale_cycle.py`
 
 ## Relationships
 
-- [Community 47](Community_47.md) (8 shared connections)
+- [Community 47](Community_47.md) (6 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 72](Community_72.md) (3 shared connections)
+- [Community 8](Community_8.md) (3 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
 - [Community 54](Community_54.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 45](Community_45.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
 
 ## Source Files
 
@@ -35,8 +40,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 50 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

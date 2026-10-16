@@ -1,31 +1,31 @@
 # Community 132
 
-> 7 nodes · cohesion 0.38
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **_script_user()** (9 connections) — `teach/core/labs.py`
-- **RunAsTests** (5 connections) — `tests/test_labs.py`
-- **.test_lab_yaml_wins()** (2 connections) — `tests/test_labs.py`
-- **.test_linux_essentials_runs_as_student()** (2 connections) — `tests/test_labs.py`
-- **.test_lpic_runs_as_root()** (2 connections) — `tests/test_labs.py`
-- **Who runs break_fix.sh inside the container. Two families want opposite things:…** (1 connections) — `teach/core/labs.py`
-- **break_fix.sh runs as the user its own guard asks for.** (1 connections) — `tests/test_labs.py`
+- **test_legal_notice.py** (7 connections) — `tests/test_legal_notice.py`
+- **LegalNoticeTests** (5 connections) — `tests/test_legal_notice.py`
+- **legal_section()** (3 connections) — `tests/test_legal_notice.py`
+- **.test_both_languages_name_every_owner()** (3 connections) — `tests/test_legal_notice.py`
+- **owner()** (3 connections) — `tests/test_legal_notice.py`
+- **.test_every_certification_has_a_known_owner()** (2 connections) — `tests/test_legal_notice.py`
+- **.test_the_no_braindumps_promise_rests_on_a_contribution_rule()** (2 connections) — `tests/test_legal_notice.py`
+- **.test_the_site_footer_summarises_and_links_it_in_every_language()** (1 connections) — `tests/test_legal_notice.py`
+- **The legal & trademark disclaimer names every vendor whose exams the repo…** (1 connections) — `tests/test_legal_notice.py`
 
 ## Relationships
 
-- [Community 8](Community_8.md) (4 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 2](Community_2.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/labs.py`
-- `tests/test_labs.py`
+- `tests/test_legal_notice.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

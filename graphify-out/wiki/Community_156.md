@@ -1,4 +1,4 @@
-# OpenWiki scope for teach-plat
+# Community 156
 
 > 5 nodes · cohesion 0.40
 

@@ -2,7 +2,7 @@
 
 > God node · 24 connections · `teach/core/generator.py`
 
-**Community:** [Community 47](Community_47.md)
+**Community:** [Community 7](Community_7.md)
 
 ## Connections by Relation
 
@@ -11,9 +11,9 @@
 - make_completer() `EXTRACTED`
 - GeneratorConfigError `EXTRACTED`
 - content_dir() `EXTRACTED`
+- [load()](load.md) `EXTRACTED`
 - get_topic() `EXTRACTED`
 - _reject_if_recap() `EXTRACTED`
-- [load()](load.md) `EXTRACTED`
 - topic_outdated_langs() `EXTRACTED`
 - topic_langs() `EXTRACTED`
 - complete() `EXTRACTED`

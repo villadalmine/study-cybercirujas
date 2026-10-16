@@ -1,30 +1,38 @@
 # Community 73
 
-> 8 nodes · cohesion 0.25
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **EndpointTests** (7 connections) — `tests/test_models_live.py`
-- **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
-- **.setUp()** (1 connections) — `tests/test_models_live.py`
-- **.tearDown()** (1 connections) — `tests/test_models_live.py`
-- **.test_a_fresh_check_is_not_repeated_on_every_request()** (1 connections) — `tests/test_models_live.py`
-- **explode()** (1 connections) — `tests/test_models_live.py`
-- **.test_findings_reach_the_page()** (1 connections) — `tests/test_models_live.py`
-- **The guard must never be able to break the page it protects.** (1 connections) — `tests/test_models_live.py`
+- **Operating the pipeline — for maintainers** (12 connections) — `docs/OPERATING.md`
+- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **Content process** (1 connections) — `docs/OPERATING.md`
+- **Deploying to Kubernetes** (1 connections) — `docs/OPERATING.md`
+- **Environment variables** (1 connections) — `docs/OPERATING.md`
+- **Keeping it honest over time** (1 connections) — `docs/OPERATING.md`
+- **Quality** (1 connections) — `docs/OPERATING.md`
+- **Quickstart (maintainers)** (1 connections) — `docs/OPERATING.md`
+- **Reading the "Exam versions" table in STATUS.md** (1 connections) — `docs/OPERATING.md`
+- **Reporting it, most severe first** (1 connections) — `docs/OPERATING.md`
+- **Running it yourself, without guessing** (1 connections) — `docs/OPERATING.md`
+- **The rule** (1 connections) — `docs/OPERATING.md`
+- **What `make check-updates` does** (1 connections) — `docs/OPERATING.md`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [Community 91](Community_91.md) (1 shared connections)
+- [Community 83](Community_83.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_models_live.py`
+- `docs/OPERATING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (88%)
-- INFERRED: 1 (12%)
+- EXTRACTED: 16 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

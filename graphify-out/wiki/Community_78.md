@@ -23,7 +23,7 @@
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
+- [Community 83](Community_83.md) (1 shared connections)
 
 ## Source Files
 

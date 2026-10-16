@@ -53,14 +53,18 @@ class Determinism(unittest.TestCase):
         self.assertEqual(report["sources"][0]["source"], "syllabus")
         self.assertTrue(report["unsupported"] and report["result"] == "fail")
 
-    def test_quality_entry_is_upserted_once(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            meta = Path(tmp) / "meta.yaml"
-            meta.write_text("model: x\nquality:\n  checks:\n  - name: groundedness\n    result: not_run\n", "utf-8")
-            for _ in range(2):
-                g.write_quality(Path(tmp), {"result": "pass", "evidence": "0 of 3 claims unsupported"})
-            checks = g.yaml.safe_load(meta.read_text("utf-8"))["quality"]["checks"]
-        self.assertEqual([(c["name"], c["result"], c["weight"]) for c in checks], [("groundedness", "pass", 5)])
+    def test_written_entry_agrees_with_quality_score(self):
+        import quality_score as qs
+        before = (meta := TOPIC / "meta.yaml").read_bytes()
+        try:
+            for result in ("pass", "pass", "fail"):
+                g.write_quality(TOPIC, {"result": result, "evidence": "0 of 3 claims unsupported"})
+                data = g.yaml.safe_load(meta.read_text("utf-8"))["quality"]
+                self.assertEqual([(c["result"], c["weight"], c["ran_at"]) for c in data["checks"] if c["name"] == "groundedness"],
+                                 [(result, 5, None)])
+                self.assertEqual(qs.main(["--check", str(TOPIC)]), 0)
+        finally:
+            meta.write_bytes(before)
 
 
 class NoNetwork(unittest.TestCase):

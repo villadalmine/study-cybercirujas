@@ -34,11 +34,12 @@
 ## Relationships
 
 - [Community 12](Community_12.md) (2 shared connections)
-- [Community 1](Community_1.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 - [Community 101](Community_101.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
 - [Community 107](Community_107.md) (1 shared connections)
 

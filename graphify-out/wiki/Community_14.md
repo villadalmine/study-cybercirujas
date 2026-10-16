@@ -1,6 +1,6 @@
 # Community 14
 
-> 16 nodes · cohesion 0.12
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
@@ -8,6 +8,7 @@
 - **Content Workflow** (9 connections) — `WORKFLOW.md`
 - **1. Snapshot the syllabus — once per certification** (2 connections) — `WORKFLOW.md`
 - **2. Generate** (2 connections) — `WORKFLOW.md`
+- **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
 - **Backends** (2 connections) — `WORKFLOW.md`
 - **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
 - **The syllabus-change trigger** (2 connections) — `WORKFLOW.md`
@@ -23,8 +24,8 @@
 
 ## Relationships
 
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 47](Community_47.md) (2 shared connections)
+- [Community 52](Community_52.md) (2 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
 - [Changelog](Changelog.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
@@ -36,8 +37,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (83%)
-- INFERRED: 4 (17%)
+- EXTRACTED: 20 (80%)
+- INFERRED: 5 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

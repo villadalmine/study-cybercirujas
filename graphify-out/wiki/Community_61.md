@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **subprocess** (73 connections)
+- **subprocess** (76 connections)
 - **shutil** (21 connections)
 - **check_graph.py** (16 connections) — `scripts/check_graph.py`
 - **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
@@ -34,17 +34,17 @@
 ## Relationships
 
 - [Community 43](Community_43.md) (23 shared connections)
-- [Community 35](Community_35.md) (8 shared connections)
-- [Community 131](Community_131.md) (8 shared connections)
-- [Community 8](Community_8.md) (8 shared connections)
+- [Community 8](Community_8.md) (11 shared connections)
+- [Community 35](Community_35.md) (10 shared connections)
+- [Community 36](Community_36.md) (8 shared connections)
 - [Community 1](Community_1.md) (7 shared connections)
-- [Community 36](Community_36.md) (6 shared connections)
-- [Community 12](Community_12.md) (6 shared connections)
-- [Community 49](Community_49.md) (5 shared connections)
-- [Community 70](Community_70.md) (4 shared connections)
+- [Community 2](Community_2.md) (6 shared connections)
+- [Community 12](Community_12.md) (5 shared connections)
+- [Community 52](Community_52.md) (4 shared connections)
 - [Community 31](Community_31.md) (4 shared connections)
 - [Community 7](Community_7.md) (3 shared connections)
-- [video.py](video.py.md) (2 shared connections)
+- [Community 49](Community_49.md) (3 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
 
 ## Source Files
 
@@ -55,7 +55,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 156 (100%)
+- EXTRACTED: 159 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

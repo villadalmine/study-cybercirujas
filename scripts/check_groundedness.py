@@ -7,7 +7,6 @@ entry and the documents it cites, downloaded once into .cache/groundedness/
 the windows of those documents sharing the most words with it; under the
 threshold it is "unsupported". --deep sends the suspects to Granite Guardian on
 a llama-server you run. Models, hashes, thresholds and mode: groundedness.yaml.
-It finds "a number, list or output the source does not say", not a bad design.
 
     scripts/check_groundedness.py --download                  # once: pinned weights (network)
     scripts/check_groundedness.py --base origin/main --fetch  # topics changed against main
@@ -215,14 +214,18 @@ def check_topic(lang_dir: Path, score=None, deep=None, fetch_missing: bool = Fal
 
 
 def write_quality(lang_dir: Path, report: dict) -> None:
-    """Upsert the `groundedness` entry of meta.yaml `quality.checks` (the shape of PR #11)."""
+    """Upsert the `groundedness` entry in meta.yaml, then re-render the block as quality_score.py gives it."""
+    import quality_score as qs
     path = lang_dir / "meta.yaml"
-    meta = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    q = meta.setdefault("quality", {})
-    q["checks"] = [c for c in q.get("checks") or [] if c.get("name") != "groundedness"] + [
-        {"name": "groundedness", "version": str(CFG["version"]), "result": report["result"],
+    text = path.read_text(encoding="utf-8")
+    block = (yaml.safe_load(text) or {}).get("quality") or {}
+    block["checks"] = [c for c in block.get("checks") or [] if c.get("name") != "groundedness"] + [
+        {"name": "groundedness", "version": qs.CHECK_VERSION, "result": report["result"],
          "weight": CFG["quality"]["weight"], "ran_at": None, "evidence": report["evidence"]}]
-    path.write_text(yaml.safe_dump(meta, sort_keys=False, allow_unicode=True, width=1000), encoding="utf-8")
+    for rescore in (False, True):  # 2nd pass: score the tree with the entry now recorded
+        block = qs.block_for(lang_dir, qs.Context()) if rescore else block
+        with open(path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(qs.render(text, block))
 
 
 def fixture(path: Path, score, deep=None) -> dict:
@@ -293,8 +296,7 @@ def main() -> int:
                 f.write(summary(reports))
     if a.json:
         a.json.write_text(json.dumps(reports, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-    failed = any(r.get("result") == "fail" for r in reports)
-    return 1 if failed and CFG["mode"] == "block" and not a.fixture else 0
+    return 1 if any(r.get("result") == "fail" for r in reports) and CFG["mode"] == "block" and not a.fixture else 0
 
 
 if __name__ == "__main__":

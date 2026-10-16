@@ -1,50 +1,60 @@
 # Community 34
 
-> 11 nodes · cohesion 0.25
+> 34 nodes · cohesion 0.10
 
 ## Key Concepts
 
-- **make()** (13 connections) — `tests/lab/conftest.py`
-- **.git()** (9 connections) — `tests/test_check_docs.py`
+- **check_groundedness.py** (34 connections) — `scripts/check_groundedness.py`
+- **check_topic()** (11 connections) — `scripts/check_groundedness.py`
+- **main()** (8 connections) — `scripts/check_groundedness.py`
+- **cited()** (6 connections) — `scripts/check_groundedness.py`
+- **fixture()** (6 connections) — `scripts/check_groundedness.py`
+- **syllabus()** (6 connections) — `scripts/check_groundedness.py`
+- **Prefilter** (5 connections) — `scripts/check_groundedness.py`
+- **Path** (5 connections)
+- **claims()** (4 connections) — `scripts/check_groundedness.py`
+- **fetch()** (4 connections) — `scripts/check_groundedness.py`
+- **sha()** (4 connections) — `scripts/check_groundedness.py`
+- **write_quality()** (4 connections) — `scripts/check_groundedness.py`
 - **new_lab()** (4 connections) — `tests/lab/conftest.py`
-- **Open — worth someone's time** (4 connections) — `AGENTS_SYNC.md`
-- **Unattended generation timer** (4 connections) — `docs/OPERATING.md`
-- **Set up, once** (3 connections) — `CONTRIBUTING.md`
-- **Running your own copy** (3 connections) — `DEVELOPERS.md`
-- **Use it in 2 minutes** (3 connections) — `README.md`
-- **.setUp()** (2 connections) — `tests/test_check_docs.py`
-- **fixture** (1 connections)
-- **Factory: scaffold a lab from the template with `study-lab new`.** (1 connections) — `tests/lab/conftest.py`
+- **best_windows()** (3 connections) — `scripts/check_groundedness.py`
+- **changed()** (3 connections) — `scripts/check_groundedness.py`
+- **download()** (3 connections) — `scripts/check_groundedness.py`
+- **guardian()** (2 connections) — `scripts/check_groundedness.py`
+- **.score()** (2 connections) — `scripts/check_groundedness.py`
+- **summary()** (2 connections) — `scripts/check_groundedness.py`
+- **windows()** (2 connections) — `scripts/check_groundedness.py`
+- **flush()** (1 connections) — `scripts/check_groundedness.py`
+- **.__init__()** (1 connections) — `scripts/check_groundedness.py`
+- **The top_k windows sharing the most words with the claim; ties keep source order.** (1 connections) — `scripts/check_groundedness.py`
+- **GLiClass as NLI: premise = the source window, label = the claim; score =…** (1 connections) — `scripts/check_groundedness.py`
+- **P("yes" = ungrounded) from Granite Guardian on the llama-server at GUARDIAN_URL.** (1 connections) — `scripts/check_groundedness.py`
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [Community 83](Community_83.md) (3 shared connections)
-- [Community 1](Community_1.md) (2 shared connections)
-- [Community 101](Community_101.md) (2 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (2 shared connections)
-- [Roadmap — where this is and where it goes](Roadmap_—_where_this_is_and_where_it_goes.md) (2 shared connections)
-- [clean_registry.py](clean_registry.py.md) (2 shared connections)
-- [Community 0](Community_0.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
-- [Community 78](Community_78.md) (1 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 64](Community_64.md) (3 shared connections)
+- [Community 47](Community_47.md) (2 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
+- [Community 72](Community_72.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 83](Community_83.md) (1 shared connections)
+- [Community 35](Community_35.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 52](Community_52.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
-- `CONTRIBUTING.md`
-- `DEVELOPERS.md`
-- `README.md`
-- `docs/OPERATING.md`
+- `scripts/check_groundedness.py`
 - `tests/lab/conftest.py`
-- `tests/test_check_docs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (39%)
-- INFERRED: 20 (61%)
+- EXTRACTED: 76 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

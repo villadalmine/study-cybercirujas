@@ -36,7 +36,8 @@ Record of what has been delivered. Free-form, reverse chronological order (most 
   On the 50 labelled claims in `tests/fixtures/groundedness` (13 of them the
   real errors found on PR #6) the prefilter gives accuracy 0.96, 13/13 traps
   and 1 false alarm in 25, the same bytes twice, with the network blocked.
-  It is advisory (`mode: warn`). The CI job and the `make` targets come in the
+  `--write` records the `groundedness` entry in the shape `quality_score.py` keeps and re-renders
+  the whole quality block, so `quality_score.py --check` stays OK. It is advisory (`mode: warn`). The CI job and the `make` targets come in the
   next PR.
 
 - **The source chain is declared and enforced** (docs/PRINCIPLES.md → *The

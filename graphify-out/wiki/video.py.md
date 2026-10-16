@@ -33,18 +33,18 @@
 
 ## Relationships
 
+- [Community 74](Community_74.md) (8 shared connections)
 - [Community 18](Community_18.md) (5 shared connections)
 - [Community 7](Community_7.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 22](Community_22.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 45](Community_45.md) (1 shared connections)
+- [Community 72](Community_72.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
 - [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 131](Community_131.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
+- [Community 2](Community_2.md) (1 shared connections)
+- [Community 52](Community_52.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
 
 ## Source Files
 

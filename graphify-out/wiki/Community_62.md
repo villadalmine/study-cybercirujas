@@ -1,6 +1,6 @@
 # Community 62
 
-> 18 nodes · cohesion 0.16
+> 19 nodes · cohesion 0.15
 
 ## Key Concepts
 
@@ -15,6 +15,7 @@
 - **set_key()** (4 connections) — `scripts/steer.py`
 - **_cert_block()** (3 connections) — `scripts/steer.py`
 - **create_block()** (3 connections) — `scripts/steer.py`
+- **default_languages()** (3 connections) — `teach/core/pipeline.py`
 - **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
 - **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
 - **Add a certification to pipeline.yaml that is not there yet. `activate` used to…** (1 connections) — `scripts/steer.py`
@@ -25,18 +26,18 @@
 
 ## Relationships
 
-- [Community 50](Community_50.md) (9 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
+- [Community 50](Community_50.md) (10 shared connections)
 - [Community 35](Community_35.md) (3 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [publish_if_complete.py](publish_if_complete.py.md) (2 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [Community 143](Community_143.md) (1 shared connections)
 - [Community 89](Community_89.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
-- [Changelog](Changelog.md) (1 shared connections)
 
 ## Source Files
 
@@ -47,8 +48,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 52 (91%)
-- INFERRED: 5 (9%)
+- EXTRACTED: 54 (92%)
+- INFERRED: 5 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

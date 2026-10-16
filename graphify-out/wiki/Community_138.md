@@ -1,28 +1,37 @@
 # Community 138
 
-> 5 nodes · cohesion 0.50
+> 8 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **_owner_label()** (5 connections) — `teach/core/labs.py`
-- **OwnerLabelTests** (3 connections) — `tests/test_labs_ownership.py`
-- **.test_no_token_no_label()** (2 connections) — `tests/test_labs_ownership.py`
-- **.test_token_becomes_a_label()** (2 connections) — `tests/test_labs_ownership.py`
-- **`--label` that stamps who created the container, when that is known.…** (1 connections) — `teach/core/labs.py`
+- **corpus.py** (17 connections) — `teach/core/corpus.py`
+- **_fold()** (5 connections) — `teach/core/corpus.py`
+- **_terms()** (4 connections) — `teach/core/corpus.py`
+- **unicodedata** (4 connections)
+- **_informative()** (3 connections) — `teach/core/corpus.py`
+- **The four functions a study agent needs, and the only four it gets. Phase 2 of…** (1 connections) — `teach/core/corpus.py`
+- **Lowercase, accent-stripped, so `Kubernetes` finds `kubernetes` and…** (1 connections) — `teach/core/corpus.py`
+- **Drop the terms that match so much of the corpus they cannot rank it. All of…** (1 connections) — `teach/core/corpus.py`
 
 ## Relationships
 
-- [Community 8](Community_8.md) (2 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 45](Community_45.md) (4 shared connections)
+- [Community 2](Community_2.md) (4 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 114](Community_114.md) (2 shared connections)
+- [Community 72](Community_72.md) (2 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/labs.py`
-- `tests/test_labs_ownership.py`
+- `teach/core/corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

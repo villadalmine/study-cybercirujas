@@ -20,8 +20,8 @@
 
 - [Community 7](Community_7.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
+- [Community 83](Community_83.md) (1 shared connections)
+- [Community 91](Community_91.md) (1 shared connections)
 
 ## Source Files
 
