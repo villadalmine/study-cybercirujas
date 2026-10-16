@@ -100,9 +100,9 @@ jobs:
     # site:none or site:image-rebuild with the built-in token — no bot.
     # Also on workflow_dispatch, but only for the graph bot's branch: a PR
     # opened with GITHUB_TOKEN starts no workflows, so graph.yml dispatches this
-    # file on bot/graph-refresh, and the check runs land on that head commit
+    # file on bot/probe-refresh, and the check runs land on that head commit
     # under the same names branch protection requires (verify, e2e, pr-format).
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref_name == 'bot/graph-refresh')
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref_name == 'bot/probe-refresh')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

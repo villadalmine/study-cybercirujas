@@ -30,7 +30,7 @@ check instead of a request. It fails when:
 
 One exemption, and a narrow one: the graph refresh bot
 (.github/workflows/graph.yml) opens `chore(graph): ...` PRs from the branch
-`bot/graph-refresh`. Such a PR cannot cite a CI run in its own description
+`bot/probe-refresh`. Such a PR cannot cite a CI run in its own description
 (the run does not exist yet when the bot writes it), so when the head branch is
 exactly that, the PR's author is github-actions[bot], its head repository is this
 one (not a fork), and EVERY changed file is under graphify-out/, only the title
@@ -186,7 +186,7 @@ def material_dirs(files: list[str]) -> list[Path]:
     return sorted(dirs)
 
 
-GRAPH_BOT_BRANCH = "bot/graph-refresh"
+GRAPH_BOT_BRANCH = "bot/probe-refresh"
 GRAPH_DIR = "graphify-out/"
 
 
