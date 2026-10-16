@@ -1,6 +1,7 @@
 """scripts/check_pr.py: the PR format as a check, offline (fixtures in tests/fixtures/pr/)."""
 import io
 import json
+import subprocess
 import sys
 import tempfile
 from contextlib import redirect_stdout
@@ -384,6 +385,135 @@ class ScopeTests(unittest.TestCase):
     def test_docs_and_fixtures_are_not_code(self):
         k = check_pr.kinds(["README.md", "docs/x.md", "tests/fixtures/pr/good.md", "tests/test_x.py"])
         self.assertEqual(k["code"], {"tests/test_x.py"})
+
+
+class DisclosureTests(unittest.TestCase):
+    """The AI disclosure is checked on every PR, not only when certs/ changes (#68)."""
+
+    def test_placeholder_author_fails_on_a_code_pr(self):
+        body = (FIXTURES / "good.md").read_text(encoding="utf-8").replace("- Author: ai", "- Author: human | ai")
+        problems = check_pr.check("fix(api): x", body, ["scripts/x.py"])
+        self.assertTrue(any("'Author:' must be exactly" in p for p in problems), problems)
+
+    def test_ai_must_name_backend_and_model(self):
+        self.assertEqual(check_pr.disclosure({"author": "ai", "backend": "claude", "model": "claude-x"}), [])
+        for prov in ({"author": "ai", "backend": "none", "model": "claude-x"},
+                     {"author": "ai", "backend": "claude", "model": ""},
+                     {"author": "ai"}):
+            with self.subTest(prov=prov):
+                self.assertEqual(len(check_pr.disclosure(prov)), 1)
+
+    def test_human_needs_nothing_else(self):
+        self.assertEqual(check_pr.disclosure({"author": "human", "backend": "none", "model": "none"}), [])
+
+    def test_the_certs_check_does_not_repeat_the_message(self):
+        body = (FIXTURES / "good.md").read_text(encoding="utf-8").replace("- Author: ai", "- Author: maybe")
+        problems = check_pr.check("fix(cka): x", body, TOUCHED)
+        self.assertEqual(sum("'Author:'" in p for p in problems), 1, problems)
+
+
+def commit(sha="a" * 40, email="dev@example.org", trailer="Signed-off-by: Dev <dev@example.org>", subject="fix: x"):
+    return {"sha": sha, "email": email, "message": f"{subject}\n\nbody\n\n{trailer}\n" if trailer else f"{subject}\n"}
+
+
+class DcoTests(unittest.TestCase):
+    def test_a_signed_commit_passes(self):
+        self.assertEqual(check_pr.dco([commit()], number=check_pr.DCO_FIRST_PR), [])
+
+    def test_an_unsigned_commit_fails_and_says_how_to_fix_it(self):
+        problems = check_pr.dco([commit(trailer="")], number=check_pr.DCO_FIRST_PR)
+        self.assertEqual(len(problems), 1)
+        for text in ("aaaaaaa", "git commit --amend -s", "git rebase --signoff", "--force-with-lease"):
+            self.assertIn(text, problems[0])
+
+    def test_one_problem_per_unsigned_commit(self):
+        commits = [commit(), commit("b" * 40, trailer=""), commit("c" * 40, trailer="")]
+        self.assertEqual(len(check_pr.dco(commits)), 2)
+
+    def test_the_sign_off_must_be_the_authors_email(self):
+        other = commit(trailer="Signed-off-by: Someone Else <other@example.org>")
+        self.assertEqual(len(check_pr.dco([other])), 1)
+
+    def test_email_case_does_not_matter(self):
+        self.assertEqual(check_pr.dco([commit(trailer="signed-off-by: Dev <DEV@Example.org>")]), [])
+
+    def test_the_prs_github_noreply_address_counts(self):
+        for noreply in ("1070184+octo@users.noreply.github.com", "octo@users.noreply.github.com"):
+            with self.subTest(noreply=noreply):
+                c = commit(email="octo@laptop.local", trailer=f"Signed-off-by: Octo <{noreply}>")
+                self.assertEqual(check_pr.dco([c], pr_author="octo"), [])
+        c = commit(email="octo@laptop.local", trailer="Signed-off-by: Octo <1+someoneelse@users.noreply.github.com>")
+        self.assertEqual(len(check_pr.dco([c], pr_author="octo")), 1)
+
+    def test_a_sign_off_buried_in_a_line_is_not_a_trailer(self):
+        c = commit(trailer="I never wrote Signed-off-by: Dev <dev@example.org>")
+        self.assertEqual(len(check_pr.dco([c])), 1)
+
+    def test_prs_opened_before_the_rule_are_grandfathered(self):
+        unsigned = [commit(trailer="")]
+        self.assertEqual(check_pr.dco(unsigned, number=61), [])
+        self.assertEqual(check_pr.dco(unsigned, number=check_pr.DCO_FIRST_PR - 1), [])
+        self.assertEqual(len(check_pr.dco(unsigned, number=check_pr.DCO_FIRST_PR)), 1)
+        self.assertEqual(len(check_pr.dco(unsigned)), 1)  # no number (a local run): enforced
+
+    def test_the_graph_bot_is_exempt_only_on_its_branch_with_its_files_and_its_author(self):
+        bot = commit(email=check_pr.BOT_EMAIL, trailer="")
+        bot["email"] = "41898282+" + check_pr.BOT_EMAIL
+        graph = ["graphify-out/graph.json"]
+        ref = "bot/graph-refresh"
+        self.assertEqual(check_pr.dco([bot], number=500, head_ref=ref, files=graph), [])
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref="bot/other", files=graph)), 1)
+        self.assertEqual(len(check_pr.dco([bot], number=500, head_ref=ref, files=graph + ["scripts/x.py"])), 1)
+        human = commit(trailer="")
+        self.assertEqual(len(check_pr.dco([bot, human], number=500, head_ref=ref, files=graph)), 2)
+
+    def test_commits_of_reads_git_without_merges(self):
+        git = lambda *a: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True, text=True)  # noqa: E731
+        with tempfile.TemporaryDirectory() as tmp:
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "Dev")
+            git("config", "user.email", "dev@example.org")
+            git("commit", "-q", "--allow-empty", "-m", "base")
+            git("checkout", "-q", "-b", "topic")
+            git("commit", "-q", "--allow-empty", "-s", "-m", "signed")
+            git("commit", "-q", "--allow-empty", "-m", "unsigned")
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                commits = check_pr.commits_of("main")
+            self.assertEqual(len(commits), 2)
+            problems = check_pr.dco(commits)
+            self.assertEqual(len(problems), 1)
+            self.assertIn("unsigned", problems[0])
+
+
+class DcoMainTests(unittest.TestCase):
+    """main() wires the commits of --base..HEAD, the event's number and author into dco()."""
+
+    def run_main(self, number, commits):
+        with tempfile.TemporaryDirectory() as tmp:
+            ev = Path(tmp) / "event.json"
+            ev.write_text(json.dumps({"pull_request": {
+                "number": number, "user": {"login": "dev"}, "title": "fix(cka): reclaim policy",
+                "body": (FIXTURES / "good.md").read_text(encoding="utf-8")}}), encoding="utf-8")
+            out = io.StringIO()
+            argv = ["check_pr.py", "--event", str(ev), "--base", "origin/main", "--files", *TOUCHED]
+            with mock.patch.object(sys, "argv", argv), mock.patch.object(check_pr, "commits_of", return_value=commits), \
+                    mock.patch.object(check_pr, "code_lines_changed", return_value=0), \
+                    mock.patch.object(check_pr, "base_texts", return_value={}), redirect_stdout(out):
+                code = check_pr.main()
+        return code, out.getvalue()
+
+    def test_an_unsigned_commit_fails_the_pr(self):
+        code, out = self.run_main(check_pr.DCO_FIRST_PR, [commit(trailer="")])
+        self.assertEqual(code, 1)
+        self.assertIn("PR: DCO:", out)
+
+    def test_the_same_commit_in_a_grandfathered_pr_passes(self):
+        code, out = self.run_main(61, [commit(trailer="")])
+        self.assertEqual(code, 0, out)
+
+    def test_signed_commits_pass(self):
+        code, out = self.run_main(check_pr.DCO_FIRST_PR, [commit()])
+        self.assertEqual(code, 0, out)
 
 
 if __name__ == "__main__":

@@ -20,12 +20,22 @@ check instead of a request. It fails when:
   declared backend and model must be the ones meta.yaml records; for
   `Author: human`, every touched meta.yaml must carry a `human_edits` entry.
 
+- the provenance is not declared: `Author:` must be `human` or `ai` on every PR
+  (not only when certs/ changes), and for `ai` the `Backend:` and `Model:` must
+  say which tool and model (the AI disclosure, CONTRIBUTING.md);
+- a non-merge commit of the PR has no `Signed-off-by:` trailer (Developer
+  Certificate of Origin, the `DCO` file) whose email is the commit author's or
+  the PR author's GitHub noreply address. PRs numbered below DCO_FIRST_PR were
+  opened before the rule and are grandfathered; merged history is never checked.
+
 One exemption, and a narrow one: the graph refresh bot
 (.github/workflows/graph.yml) opens `chore(graph): ...` PRs from the branch
 `bot/graph-refresh`. Such a PR cannot cite a CI run in its own description
 (the run does not exist yet when the bot writes it), so when the head branch is
 exactly that and EVERY changed file is under graphify-out/, only the title is
-checked. Any other file in that PR, or any other branch, gets the full check.
+checked. Any other file in that PR, or any other branch, gets the full check. The same PR is
+exempt from the sign-off check, and only while every commit is authored by
+github-actions[bot].
 
 It also checks scope and size (one topic, one lab, material apart from code,
 <= 400 changed lines of code), waived by the scope-exception/size-exception
@@ -183,6 +193,21 @@ def is_graph_refresh(head_ref: str | None, files: list[str]) -> bool:
             and all(f.replace("\\", "/").startswith(GRAPH_DIR) for f in files))
 
 
+def disclosure(prov: dict[str, str]) -> list[str]:
+    """The AI disclosure, on every PR: `Author: human|ai`, and for ai the tool and the model."""
+    author = prov.get("author", "").strip().lower()
+    if author not in ("ai", "human"):
+        return ["Provenance: 'Author:' must be exactly 'ai' or 'human' (also 'ai' when an AI helped write "
+                "it), then say which Backend and Model"]
+    if author == "ai":
+        empty = [k.capitalize() for k in ("backend", "model")
+                 if prov.get(k, "").strip().lower() in ("", "none", "n/a")]
+        if empty:
+            return [f"Provenance: Author is ai, so name the tool and model ({' and '.join(empty)} "
+                    "is empty or 'none')"]
+    return []
+
+
 def check(title: str, body: str, files: list[str], root: Path = REPO,
           head_ref: str | None = None) -> list[str]:
     problems: list[str] = []
@@ -202,6 +227,9 @@ def check(title: str, body: str, files: list[str], root: Path = REPO,
                         "PR's head commit (github.com/<owner>/<repo>/actions/runs/<id>); the "
                         "'where-it-ran' comment CI posts has the line ready to paste")
 
+    if "Provenance" in found:
+        problems += disclosure(declared(found["Provenance"]))
+
     if "Authorship" in found and "Provenance" in found:
         problems += authorship(found["Authorship"], declared(found["Provenance"]))
 
@@ -219,8 +247,7 @@ def check(title: str, body: str, files: list[str], root: Path = REPO,
     prov = declared(found["Provenance"])
     author = prov.get("author", "").lower()
     if author not in ("ai", "human"):
-        problems.append("Provenance: 'Author:' must be 'ai' or 'human' when certs/ material changes")
-        return problems
+        return problems  # disclosure() already reported it
     for directory in dirs:
         if not (root / directory).is_dir():
             # The PR removed (or renamed away) this topic/language: there is
@@ -359,6 +386,53 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
     return problems
 
 
+# --- DCO: a human signs off every commit (CONTRIBUTING -> Sign your commits) --
+
+DCO_FIRST_PR = 69   # PRs numbered below this were opened before the rule: grandfathered (#68)
+BOT_EMAIL = "github-actions[bot]@users.noreply.github.com"
+SIGNED_OFF = re.compile(r"^Signed-off-by:[ \t]*(.*?)[ \t]*<([^<>\s]+)>[ \t]*$", re.M | re.I)
+DCO_FIX = ("fix: `git commit --amend -s` (last commit) or `git rebase --signoff origin/main` (all of "
+           "them), then `git push --force-with-lease`; see CONTRIBUTING.md -> Sign your commits (DCO)")
+
+
+def commits_of(base: str) -> list[dict]:
+    """The non-merge commits of base..HEAD: sha, author email, message."""
+    result = subprocess.run(["git", "log", "--no-merges", "--format=%H%x1f%ae%x1f%B%x1e", f"{base}..HEAD"],
+                            cwd=REPO, capture_output=True, text=True, check=True)
+    out = []
+    for record in result.stdout.split("\x1e"):
+        if record.strip():
+            sha, email, message = record.strip("\n").split("\x1f", 2)
+            out.append({"sha": sha.strip(), "email": email.strip(), "message": message})
+    return out
+
+
+def noreply(email: str, login: str | None) -> bool:
+    """`<id>+<login>@users.noreply.github.com` or `<login>@users.noreply.github.com`."""
+    if not login:
+        return False
+    return re.fullmatch(rf"(\d+\+)?{re.escape(login)}@users\.noreply\.github\.com", email, re.I) is not None
+
+
+def dco(commits: list[dict], pr_author: str | None = None, number: int | None = None,
+        head_ref: str | None = None, files: list[str] | None = None) -> list[str]:
+    """One problem per commit without a valid Signed-off-by (empty: all signed, or exempt)."""
+    if number is not None and number < DCO_FIRST_PR:
+        return []  # grandfathered: opened before the rule (DCO_FIRST_PR)
+    if (is_graph_refresh(head_ref, files or []) and commits
+            and all(c["email"].lower().endswith(BOT_EMAIL) for c in commits)):
+        return []  # the graph bot, see the module docstring
+    problems = []
+    for c in commits:
+        emails = {m.group(2).lower() for m in SIGNED_OFF.finditer(c["message"])}
+        if c["email"].lower() in emails or any(noreply(e, pr_author) for e in emails):
+            continue
+        subject = c["message"].strip().splitlines()[0] if c["message"].strip() else ""
+        problems.append(f"DCO: commit {c['sha'][:7]} ({subject[:60]!r}) has no 'Signed-off-by: Name <email>' "
+                        f"for its author <{c['email']}>; {DCO_FIX}")
+    return problems
+
+
 RUN_LINK = re.compile(r"github\.com/([\w.-]+/[\w.-]+)/actions/runs/(\d+)")
 
 
@@ -475,10 +549,13 @@ def main() -> int:
 
     labels: set = set()
     head_ref = None
+    number = pr_author = None
     if args.event:
         pr = json.loads(Path(args.event).read_text(encoding="utf-8"))["pull_request"]
         title, body = pr["title"], pr.get("body") or ""
         head_ref = pr.get("head", {}).get("ref")
+        number = pr.get("number")
+        pr_author = (pr.get("user") or {}).get("login")
         labels = {label["name"] for label in pr.get("labels") or []}
     else:
         title = args.title or ""
@@ -493,6 +570,8 @@ def main() -> int:
         print(f"{len(generated)} meta.yaml change only their generated quality block: not counted as material")
     authored = [f for f in files if f.replace("\\", "/") not in generated]
     problems = check(title, body, authored, head_ref=head_ref) + scope(authored, code_lines, labels, all_files=files)
+    if args.base:
+        problems += dco(commits_of(args.base), pr_author, number, head_ref, files)
     # The graph bot's PR cites no run, and an empty runs file would still make
     # the workflow's "cited run" step run and fail: write nothing for it.
     if args.runs_file and not is_graph_refresh(head_ref, files):
