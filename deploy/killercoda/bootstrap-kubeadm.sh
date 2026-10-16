@@ -10,8 +10,8 @@ export DEBIAN_FRONTEND=noninteractive
 swapoff -a
 modprobe overlay; modprobe br_netfilter
 printf 'net.bridge.bridge-nf-call-iptables=1\nnet.ipv4.ip_forward=1\n' > /etc/sysctl.d/k8s.conf; sysctl --system >/dev/null
-apt-get update -qq; apt-get install -y -qq apt-transport-https ca-certificates curl gpg containerd containernetworking-plugins >/dev/null
-mkdir -p /opt/cni/bin; cp -n /usr/lib/cni/* /opt/cni/bin/
+apt-get update -qq; apt-get install -y -qq apt-transport-https ca-certificates curl gpg containerd >/dev/null
+mkdir -p /opt/cni/bin; curl -fsSL https://github.com/containernetworking/plugins/releases/download/v1.9.1/cni-plugins-linux-amd64-v1.9.1.tgz | tar -xz -C /opt/cni/bin
 mkdir -p /etc/containerd /etc/apt/keyrings
 containerd config default | sed 's/SystemdCgroup = false/SystemdCgroup = true/' > /etc/containerd/config.toml
 systemctl restart containerd
