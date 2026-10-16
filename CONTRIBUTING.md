@@ -301,7 +301,8 @@ say which curriculum version the material was built against. Moving them means t
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). `check_pr` fails any PR that changes them
 unless the PR's **real GitHub milestone** is the upgrade milestone of those certs and that version (named like
 "CKA & CKAD v1.37 upgrade": it must name every cert whose version or objectives change, and its version must equal
-their new `tracked_version`) **and**
+their new `tracked_version`: the last word before "upgrade", with or without a leading `v`, so `v1.37`, `2025-11-24`,
+`unknown` or `beta`; for a value like `Terraform 1.12` its last word, `v1.12`) **and**
 its description declares `Scope: exam-version`. The `scope:exam-version` label is only classification, and text
 in the description cannot authorize anything, so neither is enough. Even a fix to a dead curriculum link is blocked when it changes the objectives link: it
 goes into the milestone. If the exam body published a new version, open the "New exam curriculum version" issue form.

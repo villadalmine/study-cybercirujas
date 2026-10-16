@@ -725,7 +725,7 @@ class ExamVersionTests(unittest.TestCase):
             with self.subTest(milestone=milestone):
                 problems = check_pr.exam_version(["cka"], milestone, "exam-version", {"cka": "1.37"})
                 self.assertEqual(len(problems), 1)
-                self.assertIn("says v", problems[0])
+                self.assertIn("says '", problems[0])
         # one of two certs at another version fails
         problems = check_pr.exam_version(["cka", "ckad"], self.UPGRADE, "exam-version",
                                          {"cka": "1.37", "ckad": "1.36"})
@@ -735,6 +735,34 @@ class ExamVersionTests(unittest.TestCase):
     def test_a_removed_cert_needs_only_to_be_named(self):
         self.assertEqual(check_pr.exam_version(["ckad"], "CKAD v1.37 upgrade", "exam-version", {}), [])
         self.assertEqual(len(check_pr.exam_version(["ckad"], "CKA v1.37 upgrade", "exam-version", {})), 1)
+
+    def test_every_version_shape_of_the_real_catalog_can_be_authorized(self):
+        # the catalog holds dates, 'unknown', 'beta', 'AZ-900' and 'Terraform 1.12', not only x.y:
+        # for every cert a title built from its own tracked_version authorizes it, a wrong one does not
+        versions = check_pr.tracked_versions((REPO / "catalog.yaml").read_text(encoding="utf-8"))
+        self.assertGreater(len(versions), 30)
+        for key, tracked in versions.items():
+            last = tracked.split()[-1]
+            for title in (f"{key} v{last} upgrade", f"{key} {last} upgrade", f"{key.upper()} & CKAD v{last} upgrade"):
+                with self.subTest(title=title):
+                    self.assertEqual(check_pr.exam_version([key], title, "exam-version", versions), [])
+            for title in (f"{key} v{last}x upgrade", f"{key} v upgrade", f"{key} v{last}.1 upgrade",
+                          f"{key} 0{last} upgrade"):
+                with self.subTest(title=title):
+                    self.assertEqual(len(check_pr.exam_version([key], title, "exam-version", versions)), 1)
+
+    def test_non_numeric_versions_are_compared_as_strings(self):
+        v = {"kcna": "2025-11-24", "terraform-associate": "Terraform 1.12", "lfcs": "unknown", "ckne": "beta"}
+        for key, title in (("kcna", "KCNA v2025-11-24 upgrade"), ("kcna", "KCNA 2025-11-24 upgrade"),
+                           ("terraform-associate", "terraform-associate v1.12 upgrade"),
+                           ("lfcs", "LFCS unknown upgrade"), ("ckne", "CKNE beta upgrade")):
+            with self.subTest(title=title):
+                self.assertEqual(check_pr.exam_version([key], title, "exam-version", v), [])
+        for key, title in (("kcna", "KCNA v2025 upgrade"), ("kcna", "KCNA v2025-11-25 upgrade"),
+                           ("terraform-associate", "terraform-associate v1.13 upgrade"),
+                           ("lfcs", "LFCS known upgrade")):
+            with self.subTest(title=title):
+                self.assertEqual(len(check_pr.exam_version([key], title, "exam-version", v)), 1)
 
     def test_tracked_versions_reads_the_catalog(self):
         self.assertEqual(check_pr.tracked_versions(CATALOG_BASE), {"cka": "1.35", "lpic-1": "5.0"})

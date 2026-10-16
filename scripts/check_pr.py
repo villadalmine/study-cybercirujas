@@ -48,8 +48,9 @@ how #60 lost the exemption.)
 - `catalog.yaml` changes a cert's `tracked_version` or `sources.objectives`
   (the exam version the material is built against) and the PR's real GitHub
   milestone is not the upgrade milestone of those certs and that version (title
-  "<CERT> v<version> upgrade", e.g. "CKA & CKAD v1.37 upgrade": it names every
-  cert that changed and its version equals their new tracked_version) or the Scope
+  "<CERT> <version> upgrade", e.g. "CKA & CKAD v1.37 upgrade": it names every
+  cert that changed and its last word before "upgrade", with an optional `v`, equals
+  their new tracked_version or that value's last word) or the Scope
   section does not declare `Scope: exam-version`. The label is only
   classification and the description is author text: neither authorizes. A
   links fix cannot move the version.
@@ -305,7 +306,7 @@ SCOPES = ("small", "medium", "large", "exam-version")
 SCOPE_LINE = re.compile(r"^\s*[-*]?\s*Scope:\s*(.*?)\s*$", re.M | re.I)
 # An upgrade milestone is named "<CERT> v<version> upgrade" ("CKA & CKAD v1.37 upgrade"). It is
 # read from the PR itself (the event, or live with --milestone-file), never from its description.
-UPGRADE_MILESTONE = re.compile(r"^(?P<certs>.+) v(?P<version>\d+(\.\d+)*) upgrade$")
+UPGRADE_MILESTONE = re.compile(r"^(?P<certs>.+) (?P<version>\S+) upgrade$")
 CERT_SEPARATORS = re.compile(r"\s*(?:&|,|\band\b)\s*", re.I)
 CATALOG = "catalog.yaml"
 
@@ -343,6 +344,14 @@ def tracked_versions(text: str | None) -> dict[str, str]:
     return {key: str(c.get("tracked_version")) for key, c in certs.items() if isinstance(c, dict)}
 
 
+def version_matches(token: str, tracked: str) -> bool:
+    """The title's version token (the last word before 'upgrade', optionally prefixed with `v`)
+    equals the tracked_version as a string, or its last word ('Terraform 1.12' <- '1.12'; dates,
+    'unknown', 'beta' and 'AZ-900' are versions too: the catalog does not only hold x.y)."""
+    wanted = {tracked, tracked.split()[-1]} if tracked.split() else {tracked}
+    return token in wanted or (token[:1] in ("v", "V") and token[1:] in wanted)
+
+
 def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict[str, str]) -> str | None:
     """Why the milestone does not authorize this change, or None if it does.
 
@@ -357,9 +366,9 @@ def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict
     if missing:
         return f"the milestone {milestone!r} does not name {', '.join(missing)}"
     wrong = [f"{c} is at {versions[c]!r}" for c in changed
-             if c in versions and versions[c] != match.group("version")]
+             if c in versions and not version_matches(match.group("version"), versions[c])]
     if wrong:
-        return f"the milestone {milestone!r} says v{match.group('version')} but {', '.join(wrong)}"
+        return f"the milestone {milestone!r} says {match.group('version')!r} but {', '.join(wrong)}"
     return None
 
 
