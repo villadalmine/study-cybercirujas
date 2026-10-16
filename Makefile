@@ -102,7 +102,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 		git add catalog.yaml STATUS.md certs/; \
 	fi
 	@git diff --cached --quiet && echo "Nothing new to publish" || \
-		(git commit -m "$(MSG)" && git push)
+		(git commit -s -m "$(MSG)" && git push)
 
 image-cluster: ## build the image in-cluster: Kaniko as a plain pod, local context over stdin (no git/workflow)
 	@# Remove a pod left behind by an interrupted build. `kubectl run --rm` only

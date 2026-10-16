@@ -14,7 +14,7 @@ translation — certification / topic / from → to:
 ## Provenance
 
 <!-- Who or what wrote it. For AI, these must match meta.yaml of every topic you touch. -->
-- Author: human | ai
+- Author: human | ai  <!-- 'ai' also when an AI helped write it; then Backend and Model are required -->
 - Backend: none | claude | litellm | ...
 - Model: none | <exact model id from meta.yaml>
 - Date: YYYY-MM-DD
@@ -82,6 +82,7 @@ python3 -m unittest tests.test_translation_verify
 ## Risk and rollback
 
 - [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+- [ ] Commits signed off (DCO): `git commit -s`; fix a missing one with `git rebase --signoff origin/main`
 
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->
 

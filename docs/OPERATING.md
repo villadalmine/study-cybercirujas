@@ -63,7 +63,7 @@ into the queue overnight. STATUS.md shows the goal and how far it is.
 ```bash
 scripts/steer.py milestone kca en es   # 1. declare the goal
 make milestone                         # 2. work it to completion, then stop
-git add -A certs media STATUS.md && git commit && git push
+git add -A certs media STATUS.md && git commit -s && git push
 ```
 
 Step 2 is a loop around the single pass, because one pass generates

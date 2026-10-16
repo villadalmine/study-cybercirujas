@@ -53,6 +53,44 @@ human_edits:
 With AI or without it, the same rule: nothing enters the corpus without
 saying where it came from.
 
+### Sign your commits (DCO)
+
+Every commit in a pull request carries a `Signed-off-by:` line:
+
+```bash
+git commit -s -m "fix(api): ..."      # adds: Signed-off-by: Your Name <you@example.org>
+```
+
+**What it means.** The line is your word that you wrote the change, or have the right to
+send it, under this project's licence (Apache 2.0). It is the
+[Developer Certificate of Origin](DCO) 1.1, the same one the Linux kernel uses. It is not
+a paper to sign and nobody reviews it: `scripts/check_pr.py` only checks that the line is
+there and that the email is the commit author's (or your GitHub `noreply` address).
+
+**You forgot it.** The check tells you which commits:
+
+```bash
+git commit --amend -s                  # only the last commit
+git rebase --signoff origin/main       # every commit of your branch
+git push --force-with-lease            # update the PR
+```
+
+**Why no CLA.** The project is open source and its licence is not going to change, so we
+do not ask anyone to assign rights, sign an agreement or promise anything beyond the DCO.
+You keep the copyright of what you wrote. No NDA material either (see below).
+
+**AI policy.** AI-assisted work is welcome **when it is declared**. In the PR's
+*Provenance* section write `Author: ai` (also when an AI only helped) and name the
+`Backend` and `Model`; `check_pr.py` fails the PR if that is missing. The `Signed-off-by:`
+is a human's: whoever signs takes responsibility for the change, whatever wrote it. Our own
+agents sign their commits too.
+
+Pull requests opened before this rule (numbered below `DCO_FIRST_PR` in
+`scripts/check_pr.py`) are grandfathered, and merged history is never rewritten.
+
+**Thanks.** When a pull request from someone outside the maintainers is merged, the
+maintainer adds a line to [CHANGELOG.md](CHANGELOG.md): `Thanks @user (#N)`.
+
 <a id="no-braindumps"></a>
 
 ### No braindumps, no NDA material
@@ -255,7 +293,8 @@ by `pr-format`, and `type:content|lab|video|code|ci|docs` and
 AI agents (Claude Code, Codex, Gemini, …) open PRs exactly like people: the
 same templates, the same required sections, provenance that names the model,
 "Where it ran" on the head commit, the commit trailers their tool adds
-(`Co-Authored-By:` and a session link), plus `Agent: <role>` and
+(`Co-Authored-By:` and a session link), a `Signed-off-by:` (`git commit -s`, see
+[Sign your commits (DCO)](#sign-your-commits-dco)), plus `Agent: <role>` and
 `Model: <model id>` on every commit, and on a commit that fixes a finding
 `Found-by: <reviewer> <link>`, `Fixed-by: <agent>/<model>` and
 `Fixes-review: <link>` ([docs/REVIEWS.md](docs/REVIEWS.md) → Authorship). The checks do not care who wrote the
@@ -318,7 +357,7 @@ installing dependencies. CI runs the same targets.
 | docs consistent with the repo: relative links and anchors, paths in code, `make` targets and `teach` commands exist, generated files fresh | `scripts/check_docs.py`, `tests/test_check_docs.py` | `make check-docs` (CI: job `docs-consistency`) |
 | the code graph is what the tree builds (a warning on a PR, never a failure: CI refreshes it on `main` through a bot PR, `make graph` stays optional) | `scripts/check_graph.py --regenerate` | `make graph-setup && make graph` (free, tree-sitter only; CI: job `docs-consistency`) |
 | the quality score: every topic's `quality:` block is what the files give (after generating or editing material) | `scripts/quality_score.py --check`, `tests/test_quality_score.py` | `make quality CERT=<cert>`, then commit the meta.yaml it changed |
-| the PR description: required sections, Conventional Commit title, declared provenance = `meta.yaml`, Where it ran on the head commit, size and scope | `scripts/check_pr.py`, `tests/test_check_pr.py` | `scripts/check_pr.py --title "<title>" --body-file <body.md> --base origin/main` (CI runs it on every PR) |
+| the PR description: required sections, Conventional Commit title, declared provenance (human or AI, with the model) = `meta.yaml`, Where it ran on the head commit, size and scope; every commit signed off (DCO) | `scripts/check_pr.py`, `tests/test_check_pr.py` | `scripts/check_pr.py --title "<title>" --body-file <body.md> --base origin/main` (CI runs it on every PR) |
 | the checks CI runs on a PR, before you push (one line each) | `scripts/pr_check.py`, `tests/test_pr_check.py` | `make pr-check` (see *Check before you push*) |
 | everything fast above, in one go | `tests/` | `make test` |
 
@@ -355,4 +394,5 @@ classifier is wrong.
 ## Licence and conduct
 
 By contributing you agree your contribution is licensed under
-[Apache 2.0](LICENSE), and you follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+[Apache 2.0](LICENSE), certify the [DCO](DCO) with a `Signed-off-by:` on each commit
+([Sign your commits](#sign-your-commits-dco)), and you follow the [Code of Conduct](CODE_OF_CONDUCT.md).

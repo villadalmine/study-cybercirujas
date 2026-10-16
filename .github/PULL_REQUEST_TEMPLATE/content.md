@@ -14,7 +14,7 @@ content — certification / topic / language:
 ## Provenance
 
 <!-- Who or what wrote it. For AI, these must match meta.yaml of every topic you touch. -->
-- Author: human | ai
+- Author: human | ai  <!-- 'ai' also when an AI helped write it; then Backend and Model are required -->
 - Backend: none | claude | litellm | gemini | codex | custom
 - Model: none | <exact model id from meta.yaml>
 - Date: YYYY-MM-DD
@@ -74,6 +74,7 @@ scripts/check_provenance.py && make quality CERT=<cert> && .venv/bin/python3 scr
 ## Risk and rollback
 
 - [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+- [ ] Commits signed off (DCO): `git commit -s`; fix a missing one with `git rebase --signoff origin/main`
 
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->
 

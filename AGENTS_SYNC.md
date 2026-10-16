@@ -12,6 +12,10 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ---
 
+## Every commit is signed off (DCO)
+
+Agents commit with `git commit -s` (a `Signed-off-by:` line; the [DCO](DCO) text is in the repo root). `scripts/check_pr.py` fails a PR with an unsigned commit; fix it with `git commit --amend -s` or `git rebase --signoff origin/main`. Declare the AI in the PR's *Provenance* (`Author: ai`, Backend, Model). See [CONTRIBUTING.md](CONTRIBUTING.md#sign-your-commits-dco).
+
 ## First: install the hook. It is the only rule that does not depend on you.
 
 ```bash
@@ -227,7 +231,7 @@ Then record it:
 
 ```bash
 .venv/bin/python3 scripts/status_matrix.py     # refresh STATUS.md
-git add … && git commit                        # one topic per commit is fine
+git add … && git commit -s                     # one topic per commit is fine; -s = DCO sign-off, always
 ```
 
 **Is the material still current?** `make check-updates`, then follow
@@ -946,7 +950,7 @@ half-written: every certification is either complete or at zero.
 ```bash
 scripts/steer.py milestone <cert> en es   # declare the goal
 make milestone                            # work it to completion, then stop
-git add -A certs media STATUS.md && git commit && git push
+git add -A certs media STATUS.md && git commit -s && git push
 ```
 
 Video, STATUS.md and the image build+deploy happen **inside the pass** when a
