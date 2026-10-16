@@ -49,6 +49,23 @@ def resolve_env(image: str, today: str) -> dict:
     return env
 
 
+def measure(image: str) -> dict:
+    """What the host really is, read from the host: OS, and for the k8s image the server version, runtime and CNI."""
+    osr = dict(l.split("=", 1) for l in Path("/etc/os-release").read_text().splitlines() if "=" in l)
+    env = {"image": image, "os": osr.get("VERSION_ID", "").strip('"')}
+    if image.startswith("kubernetes"):
+        def run(*cmd):
+            p = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            return p.stdout if p.returncode == 0 else ""
+        server = (json.loads(run("kubectl", "version", "-o", "json") or "{}").get("serverVersion") or {}).get("gitVersion", "")
+        env["kubernetes"] = server.lstrip("v")
+        env["runtime"] = "containerd" if run("containerd", "--version").startswith("containerd") else ""
+        images = run("kubectl", "get", "ds", "-A", "-o", "jsonpath={range .items[*]}{.spec.template.spec.containers[0].image}{\"\\n\"}{end}")
+        flannel = next((i for i in images.split() if "flannel" in i), "")
+        env["cni"] = f"flannel {flannel.rpartition(':')[2]}" if flannel else ""
+    return env
+
+
 def _sh(cmd: list[str], timeout: int, extra_env: dict | None = None) -> tuple[int, str]:
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, env={**os.environ, **(extra_env or {})})
@@ -87,8 +104,10 @@ def run_scenario(scen: Path, fix: Path, root: Path = Path("/root")) -> dict:
     return stages
 
 
-def evidence(files: dict[str, str], image: str, stages: dict, runner: dict, today: str) -> dict:
-    return {"scenario_sha256": sha256_of(files), "env": resolve_env(image, today), "runner": runner, "date": today,
+def evidence(files: dict[str, str], image: str, stages: dict, runner: dict, today: str, measured: dict) -> dict:
+    """`env` is what the host MEASURED; `expected` is what killercoda_envs.yaml said it should be on that date."""
+    expected = resolve_env(image, today)
+    return {"scenario_sha256": sha256_of(files), "env": {**measured, "parity": expected["parity"]}, "expected": expected, "runner": runner, "date": today,
             "tool": TOOL, "result": "pass" if stages and all(s["ok"] for s in stages.values()) and len(stages) == 6 else "fail",
             "stages": stages}
 
@@ -103,8 +122,10 @@ def valid_for(ev: dict | None, files: dict[str, str], image: str, today: str) ->
     """The publish gate: a pass for THIS scenario and for the environment Killercoda runs today, on a measured basis or not."""
     if not ev or ev.get("result") != "pass" or ev.get("scenario_sha256") != sha256_of(files):
         return False
-    now = resolve_env(image, today)
-    return all(ev["env"].get(k) == v for k, v in now.items() if k != "parity")
+    now, got = resolve_env(image, today), ev.get("env") or {}
+    # the MEASURED versions must be the ones Killercoda runs today (the runtime is compared by name only)
+    return all((got.get(k) or "").split(" ")[0] == v.split(" ")[0] if k == "runtime" else got.get(k) == v
+               for k, v in now.items() if k != "parity")
 
 
 def today() -> str:

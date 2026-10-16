@@ -233,7 +233,7 @@ def cmd_test(args) -> int:
     day = args.today or kc_test.today()
     if args.print_env:
         env = kc_test.resolve_env(args.print_env, day)
-        print(env.get("kubernetes", "").rpartition(".")[0], kc.load_envs()["images"][args.print_env].get("cni", {}).get("version", ""))
+        print(env.get("kubernetes", ""), kc.load_envs()["images"][args.print_env].get("cni", {}).get("version", ""))
         return 0
     code = 0
     for w in args.labs:
@@ -251,7 +251,7 @@ def cmd_test(args) -> int:
         with tempfile.TemporaryDirectory() as tmp:
             kc.write(scen, Path(tmp))
             stages = kc_test.run_scenario(Path(tmp), fix)
-        ev = kc_test.evidence(scen, image, stages, kc_test.runner_info(), day)
+        ev = kc_test.evidence(scen, image, stages, kc_test.runner_info(), day, kc_test.measure(image))
         out = Path(args.evidence) / base / kc_test.EVIDENCE
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(ev, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -313,7 +313,7 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--target", required=True, choices=["killercoda"])
     tt.add_argument("--evidence", default="build/killercoda-evidence")
     tt.add_argument("--today")
-    tt.add_argument("--print-env", help="print '<k8s minor> <flannel tag>' for an imageid (used by bootstrap-kubeadm.sh)")
+    tt.add_argument("--print-env", help="print '<k8s patch> <flannel tag>' for an imageid (used by bootstrap-kubeadm.sh)")
     tt.add_argument("labs", nargs="*", help="<cert>/<topic>")
     b = sub.add_parser("build")
     b.add_argument("family", choices=["k8s", "linux"])

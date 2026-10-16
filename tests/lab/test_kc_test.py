@@ -16,7 +16,8 @@ def _scenario():
 def _ev(files, day, result="pass"):
     image = json.loads(files["index.json"])["backend"]["imageid"]
     stages = {n: {"ok": True} for n in "abcdef"}
-    return kc_test.evidence(files, image, stages, {"kind": "local"}, day) | {"result": result}
+    measured = {k: v for k, v in kc_test.resolve_env(image, day).items() if k != "parity"}
+    return kc_test.evidence(files, image, stages, {"kind": "local"}, day, measured) | {"result": result}
 
 
 def test_k8s_version_follows_the_schedule():
@@ -34,6 +35,16 @@ def test_gate_needs_the_same_scenario_and_todays_environment():
     assert not kc_test.valid_for(None, files, "kubernetes-kubeadm-1node", "2026-10-16")
     changed = dict(files, **{"verify.sh": files["verify.sh"] + "\n# edited\n"})
     assert not kc_test.valid_for(ev, changed, "kubernetes-kubeadm-1node", "2026-10-16")
+
+
+def test_gate_compares_what_was_measured_not_what_was_planned():
+    files = _scenario()
+    ev = _ev(files, "2026-10-16")
+    assert kc_test.valid_for(ev, files, "kubernetes-kubeadm-1node", "2026-10-16")
+    drift = dict(ev, env=dict(ev["env"], kubernetes="1.37.1"))   # the cluster that really ran was newer than the plan
+    assert not kc_test.valid_for(drift, files, "kubernetes-kubeadm-1node", "2026-10-16")
+    assert not kc_test.valid_for(dict(ev, env={k: v for k, v in ev["env"].items() if k != "cni"}), files, "kubernetes-kubeadm-1node", "2026-10-16")
+    assert ev["expected"]["kubernetes"] == "1.36.5" and ev["env"]["kubernetes"] == "1.36.5"
 
 
 def test_hash_ignores_evidence_files():
