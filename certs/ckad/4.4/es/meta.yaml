@@ -6,7 +6,7 @@ sources:
 - https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
 quality:
   weights_version: 1
-  score: 80.6
+  score: 86.1
   level: ai-beta
   checks:
   - name: quality_floor
@@ -47,10 +47,10 @@ quality:
     evidence: declares its origin (sources + References)
   - name: lab
     version: '1'
-    result: not_run
+    result: pass
     weight: 10
-    ran_at: null
-    evidence: not yet run in the study-lab runner
+    ran_at: '2026-10-19'
+    evidence: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
   - name: independent_review
     version: '1'
     result: not_run

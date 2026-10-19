@@ -14,6 +14,7 @@
 #   ./break-fix.sh          -> prepara el escenario roto
 #   ./break-fix.sh verify   -> comprueba si ya arreglaste los tres incidentes
 #   ./break-fix.sh clean    -> borra los namespaces del laboratorio
+#   ./break-fix.sh fix      -> aplica la solución de referencia (la del final)
 #
 # Fuentes consultadas como referencia (contenido original, no copiado):
 # - Curriculum CKAD v1.35:
@@ -75,8 +76,11 @@ verify_lab() {
   # Incidente 2: cache-worker debe estar Running y SIN reiniciarse por OOM.
   # Medimos el restartCount dos veces con 30s de diferencia.
   local pod2 restarts_a restarts_b
+  # Solo un pod vivo: tras el arreglo el pod viejo (el que se reiniciaba) sigue un rato
+  # en Terminating y, si fuera el primero de la lista, verify lo juzgaría en su lugar.
   pod2=$(kubectl get pod -l app=cache-worker -n "${NS_LAB}" \
-    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+    -o jsonpath='{range .items[*]}{.metadata.name}|{.metadata.deletionTimestamp}{"\n"}{end}' 2>/dev/null \
+    | awk -F'|' '$2=="" {print $1; exit}' || true)
   if [[ -n "${pod2}" ]]; then
     restarts_a=$(kubectl get pod "${pod2}" -n "${NS_LAB}" \
       -o jsonpath='{.status.containerStatuses[0].restartCount}' 2>/dev/null || echo -1)
@@ -120,7 +124,23 @@ verify_lab() {
     echo "Limpieza final: ./break-fix.sh clean"
   else
     echo "Todavía quedan ${fallos} incidente(s) por resolver. Seguí investigando."
+    return 1   # exit != 0 mientras algo siga roto (antes salía 0 siempre: falso OK)
   fi
+}
+
+#-------------------------------------------------------------------------------
+# Solución de referencia: aplica los tres arreglos de la guía del final (idempotente)
+#-------------------------------------------------------------------------------
+fix_lab() {
+  kubectl set resources deployment/web-frontend -n "${NS_LAB}" \
+    --requests=cpu=100m,memory=128Mi --limits=cpu=500m,memory=256Mi
+  kubectl set resources deployment/cache-worker -n "${NS_LAB}" \
+    --requests=memory=150Mi --limits=memory=250Mi
+  kubectl set resources deployment/api-backend -n "${NS_QUOTA}" \
+    --requests=cpu=250m
+  kubectl rollout status deployment/web-frontend -n "${NS_LAB}" --timeout=120s
+  kubectl rollout status deployment/cache-worker -n "${NS_LAB}" --timeout=120s
+  kubectl rollout status deployment/api-backend -n "${NS_QUOTA}" --timeout=120s
 }
 
 #-------------------------------------------------------------------------------
@@ -295,8 +315,9 @@ case "${1:-setup}" in
   setup)  setup_lab ;;
   verify) verify_lab ;;
   clean)  clean_lab ;;
+  fix)    fix_lab ;;
   *)
-    echo "Uso: $0 [setup|verify|clean]" >&2
+    echo "Uso: $0 [setup|verify|clean|fix]" >&2
     exit 1
     ;;
 esac
