@@ -23,7 +23,9 @@ def _ev(files, day, result="pass"):
 def test_k8s_version_follows_the_schedule():
     assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-16")["kubernetes"].startswith("1.36")
     assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-25")["kubernetes"].startswith("1.37")
-    assert kc_test.resolve_env("ubuntu", "2026-10-16")["parity"] == "assumed"   # nothing is `measured` yet
+    assert kc_test.resolve_env("ubuntu", "2026-10-16")["parity"] == "measured"   # probe of 2026-10-19
+    assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-16")["parity"] == "measured"
+    assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-26")["parity"] == "assumed"   # the 1.37 switch is only reported
 
 
 def test_gate_needs_the_same_scenario_and_todays_environment():
@@ -44,7 +46,8 @@ def test_gate_compares_what_was_measured_not_what_was_planned():
     drift = dict(ev, env=dict(ev["env"], kubernetes="1.37.1"))   # the cluster that really ran was newer than the plan
     assert not kc_test.valid_for(drift, files, "kubernetes-kubeadm-1node", "2026-10-16")
     assert not kc_test.valid_for(dict(ev, env={k: v for k, v in ev["env"].items() if k != "cni"}), files, "kubernetes-kubeadm-1node", "2026-10-16")
-    assert ev["expected"]["kubernetes"] == "1.36.5" and ev["env"]["kubernetes"] == "1.36.5"
+    assert ev["expected"]["kubernetes"] == "1.36.1" and ev["env"]["kubernetes"] == "1.36.1"
+    assert ev["env"]["cni"].startswith("cilium ") and ev["env"]["runtime"] == "containerd 2.2.1"   # measured, not flannel
 
 
 def test_hash_ignores_evidence_files():

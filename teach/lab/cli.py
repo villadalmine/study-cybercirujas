@@ -237,7 +237,8 @@ def cmd_test(args) -> int:
     day = args.today or kc_test.today()
     if args.print_env:
         env = kc_test.resolve_env(args.print_env, day)
-        print(env.get("kubernetes", ""), kc.load_envs()["images"][args.print_env].get("cni", {}).get("version", ""))
+        img = kc.load_envs()["images"][args.print_env]
+        print(env.get("kubernetes", ""), img.get("cni", {}).get("version", ""), img.get("runtime", {}).get("version", ""))
         return 0
     if args.plan:   # the labs that have a reference fix, as a CI matrix
         plan = []
@@ -327,7 +328,7 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--evidence", default="build/killercoda-evidence")
     tt.add_argument("--today")
     tt.add_argument("--plan", action="store_true", help="print the labs that have a reference fix, as JSON (CI matrix)")
-    tt.add_argument("--print-env", help="print '<k8s patch> <flannel tag>' for an imageid (used by bootstrap-kubeadm.sh)")
+    tt.add_argument("--print-env", help="print '<k8s patch> <cilium tag> <containerd version>' for an imageid (used by bootstrap-kubeadm.sh)")
     tt.add_argument("labs", nargs="*", help="<cert>/<topic>")
     b = sub.add_parser("build")
     b.add_argument("family", choices=["k8s", "linux"])

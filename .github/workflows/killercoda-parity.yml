@@ -2,7 +2,8 @@ name: Killercoda parity
 
 # Runs each generated scenario the way Killercoda does, on an Ubuntu 24.04 VM (a GitHub-hosted runner is one) where
 # the job is root, and uploads tested.json: the evidence the publish gate asks for (docs/RUN-A-LAB-ANYWHERE.md).
-# k8s family: a kubeadm cluster at the version Killercoda runs today (deploy/killercoda/killercoda_envs.yaml).
+# k8s family: a kubeadm cluster like the one measured on Killercoda (kubeadm 1.36.1, Cilium, containerd 2.2, local-path;
+# deploy/killercoda/killercoda_envs.yaml), limited to 1 CPU like the real image.
 
 on:
   pull_request:
@@ -31,11 +32,15 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -q -e '.[lab]'
+      - name: One CPU like Killercoda (measured 1 CPU, 2.2 GB; a runner has 4 CPU, 16 GB and its RAM cannot be lowered)
+        run: |
+          for c in /sys/devices/system/cpu/cpu[1-9]*/online; do echo 0 | sudo tee "$c" >/dev/null || true; done
+          nproc
       - name: kubeadm cluster like Killercoda's (k8s family)
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
-          read -r patch cni <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
-          sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cni"
+          read -r patch cilium containerd <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
+          sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario (break, verify fails, fix, verify passes, cleanup)
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
       - name: Evidence
