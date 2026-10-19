@@ -1,3 +1,4 @@
+schema_version: 2
 cert: cnpa
 topic: '2.5'
 title: Security Integration in CI/CD Pipelines
@@ -10,3 +11,29 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: linux
+modes:
+  break:
+    args:
+    - break
+  verify:
+    args:
+    - verify
+  cleanup:
+    args:
+    - cleanup
+env:
+  CNPA_LAB_ASSUME_YES: '1'
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+derived_from:
+  syllabus: certs/cnpa.md#2.5
+  content: certs/cnpa/2.5/en/content.md
+  content_sha256: 522f4a211d29feef3894af668124d29b2a2485eafcaf1e1ee8276b6a4f03fa85
+verified:
+  status: true
+  date: '2026-10-19'
+  by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+  method: runner
+  runner_image: study-lab:linux (debian:bookworm, systemd)
