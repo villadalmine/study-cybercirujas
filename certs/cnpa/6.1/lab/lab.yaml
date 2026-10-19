@@ -1,3 +1,4 @@
+schema_version: 2
 cert: cnpa
 topic: '6.1'
 title: Platform Efficiency, Product Value, and Team Productivity
@@ -10,3 +11,27 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: linux
+modes:
+  break:
+    args:
+    - break
+  verify:
+    args:
+    - verify
+  cleanup:
+    args:
+    - cleanup
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+derived_from:
+  syllabus: certs/cnpa.md#6.1
+  content: certs/cnpa/6.1/en/content.md
+  content_sha256: c98748cbeb4a8ee0d524779a432597afec438d4aab9f726491192f1974ffba41
+verified:
+  status: true
+  date: '2026-10-19'
+  by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+  method: runner
+  runner_image: study-lab:linux (debian:bookworm, systemd)
