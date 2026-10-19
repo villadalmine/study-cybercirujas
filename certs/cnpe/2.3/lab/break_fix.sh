@@ -233,12 +233,20 @@ verify() {
     echo "   RESULT: PASS ✔  Service restored — incident resolved."
   else
     echo "   RESULT: FAIL �’  Still broken. Keep triaging (see the briefing)."
+    return 1   # exit != 0 while the Service is still down (it used to exit 0 always: false OK)
   fi
 }
 
 # ------------------------------------------------------------------------------
 # Dispatch
 # ------------------------------------------------------------------------------
+# Reference fix: the fastest safe path of the incident is to roll back the bad hotfix (revision 2).
+fix() {
+  echo ">> Rolling back the readiness-probe hotfix..."
+  kubectl rollout undo "deployment/${APP}" -n "${NS}"
+  kubectl rollout status "deployment/${APP}" -n "${NS}" --timeout=120s
+}
+
 main() {
   case "${1:-break}" in
     break)
@@ -251,13 +259,17 @@ main() {
       require kubectl
       verify
       ;;
+    fix)
+      require kubectl
+      fix
+      ;;
     cleanup)
       require kubectl
       kubectl delete namespace "${NS}" --ignore-not-found
       echo "Lab namespace '${NS}' removed."
       ;;
     *)
-      echo "Usage: $0 [break|verify|cleanup]" >&2
+      echo "Usage: $0 [break|verify|cleanup|fix]" >&2
       exit 2
       ;;
   esac
