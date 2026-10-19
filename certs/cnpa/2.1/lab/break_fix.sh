@@ -874,6 +874,38 @@ cleanup() {
   ok "Namespace deletion requested; state dir removed."
 }
 
+# Reference fix: the same four repairs the SOLUTION section below walks through, non-interactive.
+fix() {
+  banner "REFERENCE FIX  -  ns/${NS}"
+  local tmp="${LAB_STATE_DIR}/fix"
+  mkdir -p "$tmp"
+  # Faults 1+2: collector config (undefined processor in traces; prometheus exporter missing in metrics)
+  "$KUBECTL" -n "$NS" get cm otel-collector-config -o jsonpath='{.data.collector\.yaml}' > "$tmp/collector.yaml"
+  sed -i 's/nonexistent_sampler/resource/' "$tmp/collector.yaml"
+  # (only the metrics pipeline: `service.telemetry.metrics` also has a `metrics:` key, hence the range under `pipelines:`)
+  # (indentation as in the ConfigMap's own data: the manifest's block-scalar indent is already stripped)
+  sed -i '/^  pipelines:$/,${/^    metrics:$/,/exporters:/ s/exporters: \[debug\]/exporters: [prometheus, debug]/}' "$tmp/collector.yaml"
+  "$KUBECTL" -n "$NS" create cm otel-collector-config --from-file=collector.yaml="$tmp/collector.yaml" \
+    --dry-run=client -o yaml | "$KUBECTL" apply -f - >/dev/null
+  "$KUBECTL" -n "$NS" rollout restart deploy/otel-collector >/dev/null
+  # Fault 3: Prometheus scrapes a dead port
+  "$KUBECTL" -n "$NS" get cm prometheus-config -o jsonpath='{.data.prometheus\.yml}' > "$tmp/prometheus.yml"
+  sed -i 's/:8899/:8889/' "$tmp/prometheus.yml"
+  "$KUBECTL" -n "$NS" create cm prometheus-config --from-file=prometheus.yml="$tmp/prometheus.yml" \
+    --dry-run=client -o yaml | "$KUBECTL" apply -f - >/dev/null
+  "$KUBECTL" -n "$NS" rollout restart deploy/prometheus >/dev/null
+  # Fault 4: the workload that only emits Warning Events
+  "$KUBECTL" -n "$NS" delete deploy event-storm --ignore-not-found >/dev/null
+  "$KUBECTL" -n "$NS" rollout status deploy/otel-collector --timeout="$TIMEOUT"
+  "$KUBECTL" -n "$NS" rollout status deploy/prometheus --timeout="$TIMEOUT"
+  cat > "${LAB_STATE_DIR}/ANSWER.txt" <<'TXT'
+Kubernetes Events are control-plane records about the lifecycle of API objects (scheduling, image pulls,
+probe failures), kept in the API server with a short TTL; logs are what a running process writes to stdout.
+A container that never starts produces events and no logs, so a platform must ship both.
+TXT
+  ok "Reference fix applied."
+}
+
 usage() {
   cat <<USAGE
 CNPA 2.1 - Observability Fundamentals - Break & Fix lab
@@ -886,6 +918,7 @@ Usage: $0 <command>
   debrief   Print the teaching notes (read AFTER you pass)
   solution  Print the step-by-step solution (last resort)
   cleanup   Delete namespace ${NS} and lab state
+  fix       Apply the reference fix (what the SOLUTION section describes)
 
 Environment overrides:
   LAB_NAMESPACE (default: obs-lab)   KUBECTL (default: kubectl)
@@ -908,13 +941,14 @@ main() {
     debrief)  debrief ;;
     solution) sed -n '/^# =\{10,\}$/,$p' "$0" | sed -n '/SOLUTION/,$p' | sed 's/^# \{0,1\}//' ;;
     cleanup)  cleanup ;;
+    fix)      fix ;;
     -h|--help|help) usage ;;
     *) usage; exit 1 ;;
   esac
 }
 
 main "$@"
-exit 0
+exit $?   # propagate verify's exit status (it used to be `exit 0`: verify printed FAIL and still exited 0)
 
 # ============================================================================
 # SOLUTION  -  do not read until you have genuinely tried, or after passing.
