@@ -229,14 +229,32 @@ verify_fix() {
   else
     echo "   FAIL ❌  /v1/logs returned HTTP ${code} and/or no LogRecord in the log."
     echo "   Re-check that a 'logs:' pipeline exists under service.pipelines."
+    return 1   # exit != 0 while the logs signal is dead (it used to exit 0 always: false OK)
   fi
+}
+
+# Reference fix: the logs pipeline back in service.pipelines (the baseline config), collector restarted.
+fix_lab() {
+  write_good_config
+  start_collector
+  echo "   Reference fix applied: logs pipeline restored in $CONFIG"
+}
+
+# Remove everything the lab created (collector, binary, config, logs).
+cleanup_lab() {
+  stop_collector
+  case "$LAB_DIR" in ""|"/"|"$HOME") echo "Refusing to remove unsafe LAB_DIR '$LAB_DIR'." >&2; return 1 ;; esac
+  rm -rf "$LAB_DIR"
+  echo "Lab directory removed."
 }
 
 # ============================================================================
 #  Main
 # ============================================================================
 case "${1:-run}" in
-  verify) require_lab; verify_fix; exit 0 ;;
+  verify) require_lab; verify_fix; exit $? ;;
+  fix)    require_lab; fix_lab; exit $? ;;
+  cleanup) cleanup_lab; exit $? ;;
   stop)   stop_collector; echo "Collector stopped."; exit 0 ;;
 esac
 

@@ -1,3 +1,4 @@
+schema_version: 2
 cert: otca
 topic: '2.4'
 title: Signals (Tracing, Metric, Log)
@@ -10,3 +11,29 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: linux
+modes:
+  break:
+    args:
+    - run
+  verify:
+    args:
+    - verify
+  cleanup:
+    args:
+    - cleanup
+env:
+  OTCA_LAB_CONFIRM: 'yes'
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+derived_from:
+  syllabus: certs/otca.md#2.4
+  content: certs/otca/2.4/en/content.md
+  content_sha256: 1f9f97fd36e088794445487592714943886b2036e820cfa105ef3a26a2b63627
+verified:
+  status: true
+  date: '2026-10-19'
+  by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+  method: runner
+  runner_image: study-lab:linux (debian:bookworm, systemd)
