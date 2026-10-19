@@ -30,6 +30,9 @@ concurrency:
 
 jobs:
   release-please:
+    # workflow_dispatch can be started on any branch from the Actions tab; the Release PR and the
+    # tag belong to main only (the `image` job needs this one, so it is skipped too).
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
