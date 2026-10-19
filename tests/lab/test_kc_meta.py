@@ -85,6 +85,44 @@ def test_banner_wording():
     assert "not yet measured on Killercoda" in kc_meta.banner(p, ev)
 
 
+def test_banner_human_tested_line():
+    p = {"kind": "ai", "tool": "claude/opus", "level": None, "score": None, "reviews": {}}
+    assert "Tested on Killercoda" not in kc_meta.banner(p, None)
+    assert "Tested on Killercoda" not in kc_meta.banner(p, None, None)
+    line = kc_meta.banner(p, None, {"by": "ana", "date": "2026-10-19"})
+    assert "> **Tested on Killercoda** by @ana on 2026-10-19" in line
+    assert line.count(chr(10)) == 2   # one About line, one Tested line, each a quote line
+
+
+def _record(tmp_path, text):
+    f = tmp_path / "h.yaml"
+    f.write_text(text)
+    return kc_meta.human_record("cka/1.1", f)
+
+
+def test_human_record_accepts_a_good_entry_and_an_unquoted_date(tmp_path):
+    assert _record(tmp_path, "cka/1.1: {by: ana-b, date: '2026-10-19'}\n") == {"by": "ana-b", "date": "2026-10-19"}
+    assert _record(tmp_path, "cka/1.1: {by: ana, date: 2026-10-19}\n") == {"by": "ana", "date": "2026-10-19"}
+    assert _record(tmp_path, "lpic/1: {by: ana, date: '2026-10-19'}\n") is None
+
+
+def test_human_record_rejects_a_malicious_handle(tmp_path):
+    with pytest.raises(kc.ExportError, match="GitHub login"):
+        _record(tmp_path, "cka/1.1: {by: 'ana](https://evil.example) <img src=x>', date: '2026-10-19'}\n")
+
+
+def test_human_record_rejects_a_bad_date(tmp_path):
+    with pytest.raises(kc.ExportError, match="YYYY-MM-DD"):
+        _record(tmp_path, "cka/1.1: {by: ana, date: 'yesterday'}\n")
+
+
+def test_human_record_rejects_a_non_dict_or_extra_keys(tmp_path):
+    with pytest.raises(kc.ExportError, match="exactly the keys"):
+        _record(tmp_path, "cka/1.1: ana\n")
+    with pytest.raises(kc.ExportError, match="exactly the keys"):
+        _record(tmp_path, "cka/1.1: {by: ana, date: '2026-10-19', note: x}\n")
+
+
 def test_tree_guardrails(tmp_path):
     files = kc.tree([_lab(), _lab("kind")], None, decorate=True)
     assert kc.check_tree(files) == []
