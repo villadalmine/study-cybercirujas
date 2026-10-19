@@ -54,8 +54,8 @@ jobs:
       - name: kubeadm cluster like Killercoda's (k8s family)
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
-          read -r minor cni <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
-          sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$minor" "$cni"
+          read -r patch cilium containerd <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
+          sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
         continue-on-error: true   # a failing lab is simply not published; the other scenarios still are

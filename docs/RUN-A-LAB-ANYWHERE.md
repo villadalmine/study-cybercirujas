@@ -66,7 +66,7 @@ showed Kubernetes 1.36.1, **Cilium** (not flannel), containerd 2.2.1, local-path
 2 GB. Two assumptions, two errors, and every green parity run was proving a cluster that Killercoda does not run. Rule:
 before pinning any fact about a third-party environment, measure it with a probe and record who ran it and when
 (`source: measured`); anything not measured stays `reported` or `assumed`, and only a fully measured image yields
-`parity: measured`. Still assumed: the Cilium version (the probe did not print it; v1.20.3 is the newest that supports
+`parity: measured` (`partially-measured` while the Cilium version, pinned per Kubernetes row, is assumed; a row whose minor no pinned Cilium lists fails loudly, which is the case of the 1.37 row today). Still assumed: the Cilium version (the probe did not print it; v1.20.3 is the newest that supports
 Kubernetes 1.36) and the 1.37 switch date (as reported).
 
 Known limits of the proof: the Cilium version and the 1.37 switch are not measured; RAM is not constrained in CI; the

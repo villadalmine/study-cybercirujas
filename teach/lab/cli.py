@@ -238,7 +238,7 @@ def cmd_test(args) -> int:
     if args.print_env:
         env = kc_test.resolve_env(args.print_env, day)
         img = kc.load_envs()["images"][args.print_env]
-        print(env.get("kubernetes", ""), img.get("cni", {}).get("version", ""), img.get("runtime", {}).get("version", ""))
+        print(env.get("kubernetes", ""), env.get("cni", "").rpartition(" ")[2], img.get("runtime", {}).get("version", ""))
         return 0
     if args.plan:   # the labs that have a reference fix, as a CI matrix
         plan = []
