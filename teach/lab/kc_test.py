@@ -39,7 +39,9 @@ def resolve_env(image: str, today: str) -> dict:
     spec_ = kc.load_envs()["images"][image]
     env = {"image": image, "os": spec_["os"]["version"]}
     if "kubernetes" in spec_:
-        row = next(r for r in spec_["kubernetes"] if r["from"] <= today < r.get("until", "9999-12-31"))
+        row = next((r for r in spec_["kubernetes"] if r["from"] <= today < r.get("until", "9999-12-31")), None)
+        if row is None:
+            raise ValueError(f"killercoda_envs.yaml: no kubernetes schedule row of image {image!r} covers {today}; add or extend one")
         env["kubernetes"] = row["patch"]
     for k in ("runtime", "cni"):
         if k in spec_:
