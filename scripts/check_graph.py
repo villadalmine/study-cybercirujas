@@ -20,7 +20,8 @@ a clone that never built a graph. --strict turns both findings into failures
 
     scripts/check_graph.py             # warn and exit 0
     scripts/check_graph.py --strict    # missing or stale graph exits 1
-    scripts/check_graph.py --regenerate --base origin/main   # CI (docs job)
+    scripts/check_graph.py --regenerate           # CI docs job on a PR: warns, exit 0
+    scripts/check_graph.py --regenerate --strict  # graph.yml on main: any difference fails, a bot PR refreshes it
 
 --regenerate settles "stale" for certain instead of guessing from commit
 stamps: it rebuilds the graph with graphify (pinned in the Makefile; free,
