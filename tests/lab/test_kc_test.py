@@ -1,6 +1,8 @@
 """The Killercoda publish gate: environment schedule, evidence tied to the scenario hash and to today's versions."""
 import json
 
+import pytest
+
 from teach.lab import export_killercoda as kc
 from teach.lab import kc_test, spec
 
@@ -24,6 +26,11 @@ def test_k8s_version_follows_the_schedule():
     assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-16")["kubernetes"].startswith("1.36")
     assert kc_test.resolve_env("kubernetes-kubeadm-1node", "2026-10-25")["kubernetes"].startswith("1.37")
     assert kc_test.resolve_env("ubuntu", "2026-10-16")["parity"] == "assumed"   # nothing is `measured` yet
+
+
+def test_a_date_no_schedule_row_covers_is_a_clear_error_not_a_stopiteration():
+    with pytest.raises(ValueError, match="no kubernetes schedule row of image 'kubernetes-kubeadm-1node' covers 1999-01-01"):
+        kc_test.resolve_env("kubernetes-kubeadm-1node", "1999-01-01")
 
 
 def test_gate_needs_the_same_scenario_and_todays_environment():
