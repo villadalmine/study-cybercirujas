@@ -32,8 +32,10 @@ jobs:
         run: scripts/study-lab export --target killercoda --all --check
       - name: Scenario diff against the base branch
         if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}   # through the environment, never interpolated into the script text
         run: |
-          git worktree add -q /tmp/base "origin/${{ github.base_ref }}"
+          git worktree add -q /tmp/base "origin/${BASE_REF}"
           # head's exporter on the base's labs and syllabus: the diff is what this PR changes in what Killercoda would show
           STUDY_REPO=/tmp/base scripts/study-lab export --target killercoda --all --out /tmp/base-tree >/dev/null || true
           scripts/study-lab export --target killercoda --all --out /tmp/head-tree >/dev/null
