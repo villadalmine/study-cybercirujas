@@ -33,18 +33,15 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (7 shared connections)
+- [Community 74](Community_74.md) (11 shared connections)
+- [video.py](video.py.md) (6 shared connections)
 - [Community 8](Community_8.md) (6 shared connections)
-- [video.py](video.py.md) (5 shared connections)
-- [Community 69](Community_69.md) (3 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
 - [Community 47](Community_47.md) (2 shared connections)
-- [Community 111](Community_111.md) (2 shared connections)
 - [Community 72](Community_72.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
 - [Community 2](Community_2.md) (2 shared connections)
-- [Community 136](Community_136.md) (2 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 

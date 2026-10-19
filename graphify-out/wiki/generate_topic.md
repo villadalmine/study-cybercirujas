@@ -2,7 +2,7 @@
 
 > God node · 24 connections · `teach/core/generator.py`
 
-**Community:** [Community 69](Community_69.md)
+**Community:** [Community 7](Community_7.md)
 
 ## Connections by Relation
 

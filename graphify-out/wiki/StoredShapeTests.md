@@ -1,14 +1,17 @@
 # StoredShapeTests
 
-> 28 nodes · cohesion 0.12
+> 34 nodes · cohesion 0.10
 
 ## Key Concepts
 
+- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
 - **StoredShapeTests** (13 connections) — `tests/test_bot_stats.py`
 - **record()** (13 connections) — `teach/core/bot_stats.py`
 - **load()** (10 connections) — `teach/core/bot_stats.py`
 - **accepted()** (9 connections) — `teach/core/bot_stats.py`
+- **path()** (8 connections) — `teach/core/bot_stats.py`
 - **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
+- **_write()** (5 connections) — `teach/core/bot_stats.py`
 - **.test_the_file_does_not_grow_with_the_number_of_answers()** (5 connections) — `tests/test_bot_stats.py`
 - **_known_models()** (3 connections) — `teach/core/bot_stats.py`
 - **._shape()** (3 connections) — `tests/test_bot_stats.py`
@@ -26,19 +29,21 @@
 - **.test_a_refused_event_writes_nothing_at_all()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_an_unwritable_path_is_swallowed()** (2 connections) — `tests/test_bot_stats.py`
 - **.setUp()** (1 connections) — `tests/test_bot_stats.py`
-- **.tearDown()** (1 connections) — `tests/test_bot_stats.py`
-- **Count one answer. Returns whether it was accepted. Never raises. `today` is the…** (1 connections) — `teach/core/bot_stats.py`
-- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
-- *... and 3 more nodes in this community*
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 26](Community_26.md) (2 shared connections)
-- [Community 136](Community_136.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
+- [video.py](video.py.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 - [Community 125](Community_125.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
 
 ## Source Files
 
@@ -47,8 +52,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 57 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 74 (96%)
+- INFERRED: 3 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

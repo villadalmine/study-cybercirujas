@@ -18,12 +18,12 @@
 - [Community 8](Community_8.md) (2 shared connections)
 - [README.md](README.md.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
+- [Community 133](Community_133.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
