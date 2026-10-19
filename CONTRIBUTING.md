@@ -493,8 +493,8 @@ and a deprecation policy. New content does not raise the MAJOR number.
 
 **How a release happens.** Every merged PR is one Conventional Commit on `main` (its title). After each merge
 release-please keeps **one open Release PR** (branch `release-please--branches--main`, title
-`chore(main): release X.Y.Z`) that bumps the version (`.release-please-manifest.json`, `version.txt`,
-`pyproject.toml`) and writes the new section of [CHANGELOG.md](CHANGELOG.md): `feat` is a minor bump, `fix` a
+`chore(main): release X.Y.Z`) that bumps the version (`.release-please-manifest.json` and
+`pyproject.toml`, the version file) and writes the new section of [CHANGELOG.md](CHANGELOG.md): `feat` is a minor bump, `fix` a
 patch, `!` or a `BREAKING CHANGE:` footer a breaking change (while 0.x, still a minor bump). Sections:
 Features (`feat`), Bug Fixes (`fix`), Documentation (`docs`), Internals (`ci`, `refactor`, `perf`);
 `chore`, `test` and `build` are not listed. **Merging the Release PR is the human gate**: the maintainer

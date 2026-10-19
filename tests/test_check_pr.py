@@ -81,7 +81,7 @@ class CheckPrTests(unittest.TestCase):
 
     RELEASE = dict(head_ref="release-please--branches--main", author="study-cybercirujas-releases[bot]",
                    same_repo=True)
-    RELEASE_FILES = ["CHANGELOG.md", ".release-please-manifest.json", "version.txt", "pyproject.toml"]
+    RELEASE_FILES = ["CHANGELOG.md", ".release-please-manifest.json", "pyproject.toml"]
     RELEASE_TITLE = "chore(main): release 0.3.0"
 
     def test_the_release_pr_is_checked_by_title_author_branch_and_files_only(self):
@@ -150,7 +150,9 @@ class CheckPrTests(unittest.TestCase):
                     return check_pr.main(), runs.exists()
         bot = "study-cybercirujas-releases[bot]"
         self.assertEqual(run(bot, "o/r"), (0, False))
-        self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "pyproject.toml", "version.txt")), (0, False))
+        self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "pyproject.toml")), (0, False))
+        # version.txt is not a release file (release-type simple does not create it): full check applies
+        self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "version.txt"))[0], 1)
         self.assertEqual(run("someone", "o/r")[0], 1)
         self.assertEqual(run(bot, "fork/r")[0], 1)
         self.assertEqual(run(bot, "o/r", ref="release-please--branches--main-x")[0], 1)

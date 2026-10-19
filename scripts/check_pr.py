@@ -47,7 +47,7 @@ The second exemption is the same shape for the release-please PR (.github/workfl
 CONTRIBUTING.md -> Releases): its title is checked, and its description and sign-off are not, when
 the author is the GitHub App's bot login (study-cybercirujas-releases[bot]), its head repository is this
 one, its branch is release-please--branches--main, and EVERY changed file is one release-please
-writes (CHANGELOG.md, the manifest, version.txt, pyproject.toml). Any other author, fork, branch or
+writes (CHANGELOG.md, the manifest, pyproject.toml). Any other author, fork, branch or
 file gets the full check, and a commit's author email is never trusted here either.
 
 - the Scope section does not declare exactly one of small | medium | large |
@@ -229,7 +229,7 @@ def is_graph_refresh(head_ref: str | None, files: list[str], author: str | None 
 
 RELEASE_BOT_AUTHOR = "study-cybercirujas-releases[bot]"
 RELEASE_BRANCH = re.compile(r"release-please--branches--main(--components--[\w.-]+)?")
-RELEASE_FILES = frozenset({"CHANGELOG.md", ".release-please-manifest.json", "version.txt", "pyproject.toml"})
+RELEASE_FILES = frozenset({"CHANGELOG.md", ".release-please-manifest.json", "pyproject.toml"})
 
 
 def is_release_please(head_ref: str | None, files: list[str], author: str | None = None,
