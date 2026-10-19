@@ -4,7 +4,7 @@ backend: unknown
 model: unknown
 quality:
   weights_version: 1
-  score: 63.9
+  score: 69.4
   level: draft
   checks:
   - name: quality_floor
@@ -45,10 +45,10 @@ quality:
     evidence: made before origins were recorded (source_chain_baseline.txt)
   - name: lab
     version: '1'
-    result: not_run
+    result: pass
     weight: 10
-    ran_at: null
-    evidence: not yet run in the study-lab runner
+    ran_at: '2026-10-19'
+    evidence: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
   - name: independent_review
     version: '1'
     result: not_run
