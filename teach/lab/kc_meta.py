@@ -7,6 +7,7 @@ rendered deterministically: the same inputs give the same words. The wording of 
 
 from __future__ import annotations
 
+import datetime
 import hashlib
 import json
 import re
@@ -91,7 +92,30 @@ def provenance(lab: spec.Lab) -> dict:
             "from": "lab.yaml" if declared else "topic meta.yaml"}
 
 
-def banner(prov: dict, ev: dict | None) -> str:
+HUMAN_TESTED = Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "human_tested.yaml"
+GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def human_record(key: str, path: Path | None = None) -> dict | None:
+    """The validated human_tested.yaml entry of `key` ('cert/topic'), or None. It is rendered into published text, so a bad
+    entry stops the export instead of landing on the page: {by: GitHub login, date: ISO date}, exactly those keys."""
+    if key not in (_yaml(path or HUMAN_TESTED) or {}):
+        return None
+    e = _yaml(path or HUMAN_TESTED)[key]
+    if not isinstance(e, dict) or set(e) != {"by", "date"}:
+        raise kc.ExportError(f"human_tested.yaml {key}: must be a mapping with exactly the keys by and date")
+    by, date = e["by"], e["date"]
+    if isinstance(date, datetime.date):   # an unquoted YYYY-MM-DD is read by YAML as a date
+        date = date.isoformat()
+    if not isinstance(by, str) or not GITHUB_LOGIN.match(by):
+        raise kc.ExportError(f"human_tested.yaml {key}: by must be a GitHub login (letters, digits, hyphens), got {by!r}")
+    if not isinstance(date, str) or not ISO_DATE.match(date):
+        raise kc.ExportError(f"human_tested.yaml {key}: date must be YYYY-MM-DD, got {date!r}")
+    return {"by": by, "date": date}
+
+
+def banner(prov: dict, ev: dict | None, human: dict | None = None) -> str:
     lvl = LEVELS.get(prov["level"], prov["level"])
     q = f" Quality level: *{lvl}*" + (f" ({prov['score']}/100)." if prov["score"] is not None else ".") if lvl else ""
     r = prov["reviews"]
@@ -113,6 +137,8 @@ def banner(prov: dict, ev: dict | None) -> str:
         link = f" ([run]({ev['runner']['url']}))" if ev["runner"].get("url") else ""
         note = "" if e.get("parity") == "measured" else " Environment assumed from public reports, not yet measured on Killercoda."
         out += f"> **Tested:** {e['image']}, Ubuntu {e['os']}{k8s} on {ev['date']}{link}: break, verify fails, fix, verify passes, cleanup.{note}\n"
+    if human:
+        out += f"> **Tested on Killercoda** by @{human['by']} on {human['date']}: a person ran this scenario there and it behaved.\n"
     return out
 
 
@@ -124,12 +150,12 @@ def decorate(lab: spec.Lab, files: dict[str, str], ev: dict | None) -> dict[str,
     head = (f"**{syl['label']} · Domain {syl['domain']['id']}: {syl['domain']['title']} · Objective {syl['objective']['id']}: "
             f"{syl['objective']['title']}**\n\n[Topic on study.cybercirujas.club]({kc.SITE}) · "
             f"[Official curriculum]({syl['curriculum']['url']})\n\n")
+    human = human_record(f"{lab.spec['cert']}/{lab.spec['topic']}")
     meta = {"cert": syl["cert"], "exam_version": syl["exam_version"], "domain": syl["domain"], "objective": syl["objective"],
             "objective_sha256": syl["objective_sha256"], "curriculum": syl["curriculum"],
             "source": {"path": f"certs/{lab.spec['cert']}/{lab.spec['topic']}/lab", "commit": source_commit(lab)},
             "lab_hash": lab_hash(lab), "license": lic, "provenance": prov,
-            "tested_on_killercoda": ((_yaml(Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "human_tested.yaml") or {})
-                                     .get(f"{lab.spec['cert']}/{lab.spec['topic']}")),
+            "tested_on_killercoda": human,
             "tested": ({"ci_run": ev["runner"].get("url"), "date": ev["date"], "result": ev["result"], "parity": ev["env"]["parity"]}
                        if ev else None)}
     out = dict(files)
@@ -140,6 +166,6 @@ def decorate(lab: spec.Lab, files: dict[str, str], ev: dict | None) -> dict[str,
     intro = files["intro.md"]
     title, _, rest = intro.partition("\n\n")
     foot = f"\nLicense: {lic}. Source commit: {meta['source']['commit']}.\n" if lic and meta["source"]["commit"] else ""
-    out["intro.md"] = f"{title}\n\n{head}{banner(prov, ev)}\n{rest}{foot}"
+    out["intro.md"] = f"{title}\n\n{head}{banner(prov, ev, human)}\n{rest}{foot}"
     out["metadata.json"] = json.dumps(meta, indent=2, ensure_ascii=False) + "\n"
     return out
