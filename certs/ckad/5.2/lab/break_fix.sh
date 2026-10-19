@@ -76,6 +76,14 @@ inject_fault() {
   faults=(fault_selector_mismatch fault_targetport_mismatch fault_scaled_to_zero fault_broken_readiness)
   pick="${faults[$((RANDOM % ${#faults[@]}))]}"
   "$pick"
+  # Que "setup" termine con la falla ya observable: kube-proxy tarda unos segundos en aplicar un
+  # cambio de selector o de targetPort, y un check inmediato todavía veía el Service sano (falso OK).
+  local _ code
+  for _ in $(seq 1 30); do
+    code="$(kubectl -n "$NS" exec "$TESTER" -- curl -s -o /dev/null -w '%{http_code}' --max-time 3 "http://${SVC}/" 2>/dev/null || true)"
+    [[ "$code" != "200" ]] && break
+    sleep 2
+  done
 }
 
 cmd_setup() {
@@ -228,7 +236,26 @@ cmd_check() {
     echo "RESULTADO: PASS - arreglaste el acceso a la app via el Service."
   else
     echo "RESULTADO: FAIL - todavía hay un problema. Seguí diagnosticando."
+    return 1   # exit != 0 mientras siga roto (antes salía 0 siempre: falso OK)
   fi
+}
+
+# Solución de referencia: deja las cuatro fallas posibles en su valor sano (idempotente),
+# así sirve sea cual sea la que "setup" eligió al azar.
+cmd_fix() {
+  kubectl -n "$NS" patch service "$SVC" --type=merge \
+    -p '{"spec":{"selector":{"app":"web"}}}'
+  kubectl -n "$NS" patch service "$SVC" --type=json \
+    -p '[{"op":"replace","path":"/spec/ports/0/targetPort","value":80}]'
+  kubectl -n "$NS" scale deployment "$DEPLOY" --replicas=2
+  kubectl -n "$NS" patch deployment "$DEPLOY" --type=json \
+    -p '[{"op":"replace","path":"/spec/template/spec/containers/0/readinessProbe/httpGet/path","value":"/"}]'
+  kubectl -n "$NS" rollout status deployment/"$DEPLOY" --timeout=120s
+  # kube-proxy tarda unos segundos en publicar los endpoints nuevos: esperar a que el Service responda.
+  for _ in $(seq 1 30); do
+    [[ "$(kubectl -n "$NS" exec "$TESTER" -- curl -s -o /dev/null -w '%{http_code}' --max-time 3 "http://${SVC}/" 2>/dev/null)" == "200" ]] && break
+    sleep 2
+  done
 }
 
 cmd_cleanup() {
@@ -242,8 +269,9 @@ main() {
     setup) cmd_setup ;;
     check) cmd_check ;;
     cleanup) cmd_cleanup ;;
+    fix) cmd_fix ;;
     *)
-      echo "Uso: $0 [setup|check|cleanup]" >&2
+      echo "Uso: $0 [setup|check|cleanup|fix]" >&2
       exit 1
       ;;
   esac
