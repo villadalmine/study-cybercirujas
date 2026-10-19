@@ -19,6 +19,7 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:   # the maintainer can re-run it by hand (e.g. after a label or token fix)
 
 permissions: {}   # each job asks for what it needs
 
@@ -46,6 +47,8 @@ jobs:
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: release-please
         id: release
