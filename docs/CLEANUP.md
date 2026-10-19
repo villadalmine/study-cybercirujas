@@ -301,11 +301,14 @@ the docs), so agents can query it over MCP. graphify is a free pip install
 (no LLM, no key), pinned in `make graph-setup`.
 
 **Decided (2026-10-15, Rino: "dale la a"): `graphify-out/` stays committed.**
-Every PR that touches code (`teach/`, `scripts/`) runs `make graph` and commits
-`graphify-out/`; CI's `docs-consistency` job rebuilds the graph and fails the
-PR when the committed one is not what the tree builds
-(`scripts/check_graph.py --regenerate`). The rejected alternative was to stop
-committing it and build it in CI or on demand.
+Main keeps it fresh, not each PR: after a merge that touches what the graph covers
+(`teach/`, `scripts/`, `tests/`, `Makefile`), `.github/workflows/graph.yml` runs
+`scripts/check_graph.py --regenerate --strict` and, if the graph is stale, opens one
+bot PR (`bot/graph-refresh`) with the rebuilt graph. A feature PR does not run
+`make graph` and does not rebase for it: CI's `docs-consistency` job rebuilds the graph and
+only warns when the committed one is not what the tree builds (`--regenerate` without
+`--strict` exits 0). The rejected alternative was to stop committing it and build it in CI
+or on demand.
 
 **`openwiki/`** holds only `INSTRUCTIONS.md`: the scope file for an OpenWiki run
 that costs API credits and has never produced a committed wiki. It is a
