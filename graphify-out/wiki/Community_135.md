@@ -1,30 +1,35 @@
 # Community 135
 
-> 8 nodes · cohesion 0.36
+> 9 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **.fetch()** (4 connections) — `tests/test_check_pr.py`
-- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
+- **check_graph.py** (16 connections) — `scripts/check_graph.py`
+- **rebuild_in_copy()** (7 connections) — `scripts/check_graph.py`
+- **regenerate()** (7 connections) — `scripts/check_graph.py`
+- **main()** (5 connections) — `scripts/check_graph.py`
+- **graphify_bin()** (3 connections) — `scripts/check_graph.py`
+- **touches_graph_sources()** (3 connections) — `scripts/check_graph.py`
+- **normalized()** (2 connections) — `scripts/check_graph.py`
+- **Is the code graph present and built from the commit we are standing on? The…** (1 connections) — `scripts/check_graph.py`
+- **graph.json rebuilt from the tracked files (as they are on disk), in a temp dir.** (1 connections) — `scripts/check_graph.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 131](Community_131.md) (4 shared connections)
+- [Community 59](Community_59.md) (3 shared connections)
+- [Community 36](Community_36.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `scripts/check_graph.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

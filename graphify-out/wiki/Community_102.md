@@ -5,8 +5,8 @@
 ## Key Concepts
 
 - **metrics_report.py** (15 connections) — `scripts/metrics_report.py`
+- **datetime** (14 connections)
 - **quota_facts.py** (14 connections) — `teach/core/quota_facts.py`
-- **datetime** (13 connections)
 - **main()** (9 connections) — `scripts/metrics_report.py`
 - **tokens_per_window()** (9 connections) — `teach/core/quota_facts.py`
 - **exhaustions()** (8 connections) — `teach/core/quota_facts.py`
@@ -30,18 +30,18 @@
 
 ## Relationships
 
-- [Community 36](Community_36.md) (6 shared connections)
-- [Community 85](Community_85.md) (5 shared connections)
+- [Community 36](Community_36.md) (5 shared connections)
 - [Community 43](Community_43.md) (5 shared connections)
 - [Community 63](Community_63.md) (3 shared connections)
+- [Community 85](Community_85.md) (3 shared connections)
+- [Community 147](Community_147.md) (3 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
-- [Community 147](Community_147.md) (2 shared connections)
-- [Community 129](Community_129.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
-- [Community 136](Community_136.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
+- [Community 206](Community_206.md) (1 shared connections)
 - [Community 7](Community_7.md) (1 shared connections)
 - [Community 8](Community_8.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
@@ -51,7 +51,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 69 (100%)
+- EXTRACTED: 70 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

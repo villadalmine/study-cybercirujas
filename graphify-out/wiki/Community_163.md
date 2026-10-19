@@ -13,7 +13,7 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (2 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
+- [Community 5](Community_5.md) (1 shared connections)
 
 ## Source Files
 

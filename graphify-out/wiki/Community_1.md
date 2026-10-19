@@ -1,21 +1,17 @@
 # Community 1
 
-> 38 nodes · cohesion 0.11
+> 32 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **test_cli.py** (23 connections) — `tests/lab/test_cli.py`
-- **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
-- **lab/__init__.py** (15 connections) — `teach/lab/__init__.py`
 - **Tests** (10 connections) — `docs/LABS-RUNNER.md`
 - **git_repo()** (9 connections) — `tests/lab/conftest.py`
 - **flow()** (9 connections) — `tests/lab/test_e2e.py`
 - **test_kind_lab_from_template()** (5 connections) — `tests/lab/test_e2e.py`
 - **test_linux_lab_from_git_repo()** (5 connections) — `tests/lab/test_e2e.py`
-- **docker_ok()** (4 connections) — `tests/lab/conftest.py`
-- **image_ok()** (4 connections) — `tests/lab/conftest.py`
 - **test_all_curated_labs_pass_the_schema()** (4 connections) — `tests/lab/test_cli.py`
 - **test_from_repo_path_cannot_escape()** (4 connections) — `tests/lab/test_cli.py`
 - **test_migrate_write_roundtrip()** (4 connections) — `tests/lab/test_cli.py`
@@ -29,34 +25,37 @@
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
 - **skipif** (3 connections)
 - **test_hint_and_list()** (2 connections) — `tests/lab/test_cli.py`
-- *... and 13 more nodes in this community*
+- **test_new_never_overwrites()** (2 connections) — `tests/lab/test_cli.py`
+- **test_resolve_curated_and_local()** (2 connections) — `tests/lab/test_cli.py`
+- **test_validate_strict_fails_without_verify()** (2 connections) — `tests/lab/test_cli.py`
+- **test_validate_tree_report()** (2 connections) — `tests/lab/test_cli.py`
+- *... and 7 more nodes in this community*
 
 ## Relationships
 
-- [Community 19](Community_19.md) (8 shared connections)
-- [Community 61](Community_61.md) (7 shared connections)
-- [Community 18](Community_18.md) (7 shared connections)
-- [Community 29](Community_29.md) (6 shared connections)
-- [Community 12](Community_12.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 56](Community_56.md) (3 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
-- [Community 34](Community_34.md) (2 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Community 59](Community_59.md) (10 shared connections)
+- [Community 19](Community_19.md) (6 shared connections)
+- [Community 29](Community_29.md) (5 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
+- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
 - [Community 36](Community_36.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/LABS-RUNNER.md`
-- `teach/lab/__init__.py`
 - `tests/lab/conftest.py`
 - `tests/lab/test_cli.py`
 - `tests/lab/test_e2e.py`
 
 ## Audit Trail
 
-- EXTRACTED: 123 (98%)
+- EXTRACTED: 92 (98%)
 - INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 

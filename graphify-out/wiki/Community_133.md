@@ -1,34 +1,47 @@
 # Community 133
 
-> 8 nodes · cohesion 0.25
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **Content Workflow** (9 connections) — `WORKFLOW.md`
-- **Backends** (2 connections) — `WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
-- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
-- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
-- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
-- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
-- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
+- **topic_content()** (13 connections) — `teach/core/certs.py`
+- **summary()** (5 connections) — `teach/core/scoring.py`
+- **VisibleTests** (4 connections) — `tests/test_quality_score.py`
+- **In Progress / Next (Ordering)** (4 connections) — `BACKLOG.md`
+- **.test_the_api_serves_the_summary()** (2 connections) — `tests/test_quality_score.py`
+- **2026-08-20** (2 connections) — `docs/HISTORY.md`
+- **.test_status_md_has_the_quality_table()** (1 connections) — `tests/test_quality_score.py`
+- **.test_the_site_shows_a_badge_in_every_language()** (1 connections) — `tests/test_quality_score.py`
+- **Contenido generado de un tema en un idioma (fallback al default).** (1 connections) — `teach/core/certs.py`
+- **What the API and the site show: score, level and the checks, from a meta.yaml…** (1 connections) — `teach/core/scoring.py`
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
+- [Community 47](Community_47.md) (3 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [certs.py](certs.py.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 - [Community 14](Community_14.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 157](Community_157.md) (1 shared connections)
 
 ## Source Files
 
-- `WORKFLOW.md`
+- `BACKLOG.md`
+- `docs/HISTORY.md`
+- `teach/core/certs.py`
+- `teach/core/scoring.py`
+- `tests/test_quality_score.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (83%)
-- INFERRED: 2 (17%)
+- EXTRACTED: 22 (88%)
+- INFERRED: 3 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,45 +1,36 @@
 # Community 138
 
-> 7 nodes · cohesion 0.29
+> 9 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **make()** (13 connections) — `tests/lab/conftest.py`
-- **Checks that must pass** (4 connections) — `CONTRIBUTING.md`
-- **Open — worth someone's time** (3 connections) — `AGENTS_SYNC.md`
-- **Unattended generation timer** (3 connections) — `docs/OPERATING.md`
-- **Running your own copy** (2 connections) — `DEVELOPERS.md`
-- **Use it in 2 minutes** (2 connections) — `README.md`
-- **Groundedness (advisory)** (1 connections) — `CONTRIBUTING.md`
+- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
+- **main()** (5 connections) — `scripts/check_syllabus.py`
+- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
+- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
+- **smells()** (3 connections) — `scripts/check_syllabus.py`
+- **Path** (1 connections)
+- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
+- **Does the frozen syllabus cover the exam, or only its table of contents? The…** (1 connections) — `scripts/check_syllabus.py`
+- **Structural signs the topic list was computed rather than read. Offline.…** (1 connections) — `scripts/check_syllabus.py`
 
 ## Relationships
 
-- [Community 101](Community_101.md) (2 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (2 shared connections)
-- [clean_registry.py](clean_registry.py.md) (2 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
-- [Community 130](Community_130.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
-- [Roadmap — where this is and where it goes](Roadmap_—_where_this_is_and_where_it_goes.md) (1 shared connections)
-- [Agent Synchronization & Idea Queue (AGENTS_SYNC.md)](Agent_Synchronization_&_Idea_Queue_AGENTS_SYNC.md.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 74](Community_74.md) (5 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 127](Community_127.md) (2 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
-- `CONTRIBUTING.md`
-- `DEVELOPERS.md`
-- `README.md`
-- `docs/OPERATING.md`
-- `tests/lab/conftest.py`
+- `scripts/check_syllabus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (32%)
-- INFERRED: 15 (68%)
+- EXTRACTED: 25 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

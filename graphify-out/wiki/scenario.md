@@ -14,6 +14,7 @@
 - bash_n() `EXTRACTED`
 - _scenario() `EXTRACTED`
 - load_envs() `EXTRACTED`
+- ExportError `EXTRACTED`
 - test_refuses_what_does_not_fit() `EXTRACTED`
 - test_secret_guard() `EXTRACTED`
 - test_verify_wrapper_honours_regex() `EXTRACTED`
@@ -21,7 +22,6 @@
 - _env() `EXTRACTED`
 - _run_line() `EXTRACTED`
 - _verify_test() `EXTRACTED`
-- ExportError `EXTRACTED`
 - test_kind_family_image() `EXTRACTED`
 - test_decorated_scenario_shows_certification_provenance_and_metadata() `EXTRACTED`
 - _footer() `EXTRACTED`

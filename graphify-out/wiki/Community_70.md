@@ -1,13 +1,13 @@
 # Community 70
 
-> 30 nodes · cohesion 0.12
+> 31 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **kc_test.py** (22 connections) — `teach/lab/kc_test.py`
+- **test_kc_test.py** (16 connections) — `tests/lab/test_kc_test.py`
 - **cmd_test()** (15 connections) — `teach/lab/cli.py`
-- **test_kc_test.py** (14 connections) — `tests/lab/test_kc_test.py`
-- **resolve_env()** (8 connections) — `teach/lab/kc_test.py`
+- **resolve_env()** (9 connections) — `teach/lab/kc_test.py`
 - **sha256_of()** (7 connections) — `teach/lab/kc_test.py`
 - **valid_for()** (7 connections) — `teach/lab/kc_test.py`
 - **_ev()** (7 connections) — `tests/lab/test_kc_test.py`
@@ -20,6 +20,7 @@
 - **test_gate_needs_the_same_scenario_and_todays_environment()** (4 connections) — `tests/lab/test_kc_test.py`
 - **runner_info()** (3 connections) — `teach/lab/kc_test.py`
 - **_sh()** (3 connections) — `teach/lab/kc_test.py`
+- **test_a_date_no_schedule_row_covers_is_a_clear_error_not_a_stopiteration()** (3 connections) — `tests/lab/test_kc_test.py`
 - **test_hash_ignores_evidence_files()** (3 connections) — `tests/lab/test_kc_test.py`
 - **stage()** (2 connections) — `teach/lab/kc_test.py`
 - **today()** (2 connections) — `teach/lab/kc_test.py`
@@ -28,21 +29,20 @@
 - **Path** (1 connections)
 - **Run the GENERATED scenario the way Killercoda does (on an Ubuntu 24.04 VM, as…** (1 connections) — `teach/lab/cli.py`
 - **study-lab test --target killercoda: run a GENERATED scenario the way Killercoda…** (1 connections) — `teach/lab/kc_test.py`
-- **`env` is what the host MEASURED; `expected` is what killercoda_envs.yaml said…** (1 connections) — `teach/lab/kc_test.py`
-- *... and 5 more nodes in this community*
+- *... and 6 more nodes in this community*
 
 ## Relationships
 
 - [Community 18](Community_18.md) (10 shared connections)
+- [Community 59](Community_59.md) (7 shared connections)
 - [Community 36](Community_36.md) (5 shared connections)
 - [Community 29](Community_29.md) (4 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
 - [Community 19](Community_19.md) (3 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
-- [Community 1](Community_1.md) (3 shared connections)
-- [Community 56](Community_56.md) (2 shared connections)
+- [Community 131](Community_131.md) (2 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
 - [Community 104](Community_104.md) (2 shared connections)
-- [Community 129](Community_129.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 - [Community 102](Community_102.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
 
@@ -54,7 +54,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 89 (98%)
+- EXTRACTED: 93 (98%)
 - INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 

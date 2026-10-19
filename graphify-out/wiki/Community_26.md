@@ -1,53 +1,46 @@
 # Community 26
 
-> 16 nodes · cohesion 0.15
+> 13 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **translation_study.py** (16 connections) — `scripts/translation_study.py`
-- **translate()** (8 connections) — `scripts/translation_study.py`
-- **path()** (8 connections) — `teach/core/bot_stats.py`
-- **main()** (7 connections) — `scripts/translation_study.py`
-- **evaluate()** (5 connections) — `scripts/translation_study.py`
-- **_write()** (5 connections) — `teach/core/bot_stats.py`
-- **master_key()** (4 connections) — `scripts/translation_study.py`
-- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **_reject_if_recap()** (10 connections) — `teach/core/generator.py`
+- **_strip_fence()** (8 connections) — `teach/core/generator.py`
+- **Development Guidelines for teach-plat** (7 connections) — `CLAUDE.md`
+- **Rules** (3 connections) — `CLAUDE.md`
+- **2026-07-27** (3 connections) — `docs/HISTORY.md`
 - **Verification: what is proven, and what is only assumed** (2 connections) — `CLAUDE.md`
-- **Languages** (2 connections) — `docs/OPERATING.md`
-- **Run the pipeline's own two gates. Verdict plus the reasons it failed.** (1 connections) — `scripts/translation_study.py`
-- **Measure what a translation actually costs, and whether it survives…** (1 connections) — `scripts/translation_study.py`
-- **Read the proxy key from the cluster rather than from a file on disk. It is only…** (1 connections) — `scripts/translation_study.py`
-- **One completion through the proxy. Returns text plus what it cost.** (1 connections) — `scripts/translation_study.py`
-- **Atomic replace, so a crash mid-write cannot leave a truncated file.** (1 connections) — `teach/core/bot_stats.py`
-- **Where the counters live. A PVC in the cluster, the repo root locally.** (1 connections) — `teach/core/bot_stats.py`
+- **2026-07-11/12** (2 connections) — `docs/HISTORY.md`
+- **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
+- **Agent Idea Synchronization (AGENTS_SYNC.md)** (1 connections) — `CLAUDE.md`
+- **Commands** (1 connections) — `CLAUDE.md`
+- **Content Workflow** (1 connections) — `CLAUDE.md`
+- **Pull requests from agents** (1 connections) — `CLAUDE.md`
+- **Backends sometimes wrap the whole response in a ```markdown ... ``` fence even…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 36](Community_36.md) (4 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 21](Community_21.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 37](Community_37.md) (2 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (2 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
-- [Community 13](Community_13.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
-- [Community 136](Community_136.md) (1 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 15](Community_15.md) (3 shared connections)
+- [Community 14](Community_14.md) (2 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 
 ## Source Files
 
 - `CLAUDE.md`
-- `docs/AGENTIC_TOOLING_STUDY.md`
-- `docs/OPERATING.md`
-- `scripts/translation_study.py`
-- `teach/core/bot_stats.py`
+- `WORKFLOW.md`
+- `docs/HISTORY.md`
+- `teach/core/generator.py`
 
 ## Audit Trail
 
-- EXTRACTED: 42 (88%)
-- INFERRED: 6 (12%)
+- EXTRACTED: 20 (69%)
+- INFERRED: 9 (31%)
 - AMBIGUOUS: 0 (0%)
 
 ---
