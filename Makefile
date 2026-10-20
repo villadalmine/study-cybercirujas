@@ -26,7 +26,7 @@ GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKE
 
 .PHONY: groundedness groundedness-setup groundedness-deep
 .PHONY: killercoda-test killercoda-export killercoda-diff preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
-.PHONY: help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci labels-check
+.PHONY: lock help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci labels-check
 
 help:
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -40,8 +40,13 @@ preflight: ## check what make setup needs (python3 >= 3.11 with venv, git) and s
 
 install: preflight ## create the venv and install the CLI
 	python3 -m venv $(VENV)
-	$(VENV)/bin/pip install -q -e '.[lab]'
+	$(VENV)/bin/pip install -q --require-hashes -r requirements.lock
+	$(VENV)/bin/pip install -q --no-deps -e .
 	@echo "OK: $(TEACH)"
+
+lock: ## regenerate requirements.lock from pyproject.toml (needs uv; keeps the current pins unless pyproject.toml asks for others)
+	uv pip compile pyproject.toml --extra lab --universal --python-version 3.11 --generate-hashes \
+		--custom-compile-command 'make lock' -o requirements.lock
 
 list: ## certification catalog
 	$(TEACH) cert list
