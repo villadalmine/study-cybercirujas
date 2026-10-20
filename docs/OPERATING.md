@@ -368,6 +368,8 @@ ClusterIssuer for TLS.
 # 1. Your values, once: domain, gateway, issuer. values-local.yaml is gitignored.
 cp deploy/helm/values-study.example.yaml deploy/helm/values-local.yaml
 $EDITOR deploy/helm/values-local.yaml
+# `env.TEACH_SECRET` is required (at least 32 characters, e.g. `openssl rand -hex 32`);
+# the chart refuses to render without a real one. Changing it logs every session out.
 
 # 2a. With the public GHCR image (built by GitHub Actions from main):
 helm upgrade --install study deploy/helm -n teach-plat --create-namespace   -f deploy/helm/values-local.yaml   --set image.repository=ghcr.io/villadalmine/study-cybercirujas   --set image.tag=latest
@@ -393,7 +395,7 @@ image-cluster` from a working copy that has rendered them includes them.
 | Variable | Use | Default |
 |----------|-----|---------|
 | `TEACH_ROOT` | Data repo root | `.` (cwd) |
-| `TEACH_SECRET` | Session signing key | random |
+| `TEACH_SECRET` | Session signing key | random; required in the chart (>= 32 chars, not a placeholder) |
 | `TEACH_OFFLINE` | `1` = the API never calls out (no live OpenRouter price check); what the determinism tests use | unset |
 | `TEACH_SITE_URL` | Hostname in the video watermark | `study.cybercirujas.club` |
 | `TEACH_BACKEND` | Generation backend | `litellm` |

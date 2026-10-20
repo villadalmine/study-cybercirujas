@@ -29,6 +29,11 @@ class HelmSecretTests(unittest.TestCase):
                 self.assertNotEqual(res.returncode, 0)
                 self.assertIn("TEACH_SECRET", res.stderr)
 
+    def test_digits_only_value_gets_the_intended_message(self):
+        res = render("env.TEACH_SECRET=1234567890")
+        self.assertNotEqual(res.returncode, 0)
+        self.assertIn("placeholder or shorter", res.stderr)
+
     def test_a_real_secret_renders(self):
         res = render("env.TEACH_SECRET=" + "a1" * 20)
         self.assertEqual(res.returncode, 0, res.stderr)
