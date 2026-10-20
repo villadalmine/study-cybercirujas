@@ -37,11 +37,21 @@ jobs:
           for c in /sys/devices/system/cpu/cpu[1-9]*/online; do echo 0 | sudo tee "$c" >/dev/null || true; done
           nproc
       - name: kubeadm cluster like Killercoda's (k8s family)
+        id: env
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
-          read -r patch cilium containerd <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
+          # never a here-string of a command substitution into `read`: it hides a failing --print-env. Exit 2 = no Cilium release validated for today's
+          # Kubernetes: the k8s family is skipped with a warning (it is not published either); any other failure fails.
+          rc=0; envline=$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }} 2>env.err) || rc=$?
+          if [ "$rc" -eq 2 ]; then
+            echo "::warning title=${{ matrix.lab }} not proven::$(cat env.err)" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          [ "$rc" -eq 0 ] || { cat env.err; exit "$rc"; }
+          read -r patch cilium containerd <<<"$envline"
           sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario (break, verify fails, fix, verify passes, cleanup)
+        if: steps.env.outputs.skip != 'true'
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
       - name: Evidence
         if: always()

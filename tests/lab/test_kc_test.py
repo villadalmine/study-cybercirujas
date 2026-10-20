@@ -99,3 +99,47 @@ def test_measure_parsing_of_real_kubectl_output():
     assert kc_test.parse_cni("quay.io/flannel/flannel:v0.28.10\n") == ""
     # kubectl's jsonpath wants backslash-n inside the quotes; a real newline is "unterminated quoted string"
     assert chr(10) not in kc_test.DS_IMAGES and kc_test.DS_IMAGES.endswith("{'" + chr(92) + "n'}{end}")
+
+
+AFTER_137 = "2026-10-26"   # Kubernetes 1.37 on Killercoda from 2026-10-25; no Cilium release lists it yet
+
+
+def test_print_env_after_137_exits_2_with_the_reason(capsys):
+    from teach.lab import cli
+    rc = cli.main(["test", "--target", "killercoda", "--print-env", "kubernetes-kubeadm-1node", "--today", AFTER_137])
+    out = capsys.readouterr()
+    assert rc == 2 and out.out == ""   # nothing on stdout: a caller cannot read three empty fields as a success
+    assert "no Cilium release validated" in out.err and "1.37" in out.err
+
+
+def test_plan_dry_run_after_137_keeps_linux_and_skips_k8s_with_a_warning(capsys):
+    """Dry run of the publish plan on a date after the 1.37 switch: linux is proven (so published), k8s is skipped loudly."""
+    from teach.lab import cli
+    assert cli.main(["test", "--target", "killercoda", "--plan", "--today", "2026-10-16"]) == 0
+    before = json.loads(capsys.readouterr().out)
+    assert {m["image"] for m in before} == {"ubuntu", "kubernetes-kubeadm-1node"}
+    assert cli.main(["test", "--target", "killercoda", "--plan", "--today", AFTER_137]) == 0
+    out = capsys.readouterr()
+    after = json.loads(out.out)
+    assert after and after == [m for m in before if m["image"] == "ubuntu"]   # the linux family is still proven
+    warn = [line for line in out.err.splitlines() if line.startswith("::warning")]
+    assert len(warn) == 1 and "kubernetes-kubeadm-1node" in warn[0] and "no Cilium release validated" in warn[0]
+    assert "1.37" in warn[0] and "cka/1.1" in warn[0] and "mirror keeps" in warn[0]
+
+
+def test_export_after_137_gates_k8s_but_not_linux():
+    """The export of that run: a k8s scenario is gated (not published; publish.sh keeps the mirror's files), linux is not."""
+    files = _scenario()
+    image = json.loads(files["index.json"])["backend"]["imageid"]
+    assert image == "kubernetes-kubeadm-1node"
+    assert not kc_test.valid_for(_ev(files, "2026-10-16"), files, image, AFTER_137)
+    assert "kubernetes" not in kc_test.resolve_env("ubuntu", AFTER_137)   # no Kubernetes row: unaffected by 1.37
+
+
+def test_no_workflow_swallows_a_failure_inside_command_substitution():
+    import re
+    for wf in (REPO / ".github" / "workflows").glob("*.yml"):
+        text = wf.read_text(encoding="utf-8")
+        # `read <<<"$(cmd)"` and `echo "x=$(cmd)"` keep rc 0 when cmd fails (found in review of #162)
+        assert '<<<"$(' not in text, wf.name
+        assert not re.search(r'echo "[^"\n]*\$\(python', text), wf.name

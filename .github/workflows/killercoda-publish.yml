@@ -10,6 +10,10 @@ on:
     branches: [main]
     paths: ['certs/**/lab/**', 'teach/lab/export_killercoda.py', 'teach/lab/kc_meta.py', 'teach/lab/kc_test.py', 'deploy/killercoda/**', '.github/workflows/killercoda-publish.yml']
   workflow_dispatch:
+    inputs:
+      today:
+        description: 'YYYY-MM-DD: plan as if it were that day (dry run of the environment schedule, e.g. after the 1.37 switch)'
+        required: false
 
 permissions:
   contents: read
@@ -34,7 +38,16 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -q -e '.[lab]'
       - id: plan
-        run: echo "labs=$(python -m teach.lab test --target killercoda --plan)" >> "$GITHUB_OUTPUT"
+        # A family that cannot be proven today (e.g. Kubernetes 1.37 before a Cilium release lists it) is left out of the
+        # matrix with a ::warning:: naming the reason; the other families are proven and published as usual. `labs=$(...)`
+        # on its own line so a failure of the planner fails the step (inside `echo "$(...)"` it would be swallowed).
+        run: |
+          labs=$(python -m teach.lab test --target killercoda --plan ${TODAY:+--today "$TODAY"} 2>plan.err) || { cat plan.err; exit 1; }
+          cat plan.err
+          grep '^::warning' plan.err | sed 's/^::warning title=/- /' >> "$GITHUB_STEP_SUMMARY" || true
+          echo "labs=$labs" >> "$GITHUB_OUTPUT"
+        env:
+          TODAY: ${{ inputs.today }}
 
   prove:
     needs: plan
@@ -54,7 +67,9 @@ jobs:
       - name: kubeadm cluster like Killercoda's (k8s family)
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
-          read -r patch cilium containerd <<<"$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})"
+          # never a here-string of a command substitution into `read`: it hides a failing --print-env and the bootstrap dies later on an empty argument
+          envline=$(python -m teach.lab test --target killercoda --print-env ${{ matrix.image }})
+          read -r patch cilium containerd <<<"$envline"
           sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}

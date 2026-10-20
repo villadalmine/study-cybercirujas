@@ -228,6 +228,9 @@ def cmd_export(args) -> int:
     return 0
 
 
+_UNPROVABLE = "no Cilium release validated for this Kubernetes version"
+
+
 def cmd_test(args) -> int:
     """Run the GENERATED scenario the way Killercoda does (on an Ubuntu 24.04 VM, as root) and write tested.json."""
     import tempfile
@@ -236,16 +239,29 @@ def cmd_test(args) -> int:
     needs = (yaml.safe_load((kd / "tracks.yaml").read_text(encoding="utf-8")) or {}).get("needs") or {}
     day = args.today or kc_test.today()
     if args.print_env:
-        env = kc_test.resolve_env(args.print_env, day)
+        try:
+            env = kc_test.resolve_env(args.print_env, day)
+        except LookupError as exc:   # exit 2 = this family cannot be proven today; the caller decides to skip it, loudly
+            print(f"{args.print_env}: {_UNPROVABLE}: {exc}", file=sys.stderr)
+            return 2
         img = kc.load_envs()["images"][args.print_env]
         print(env.get("kubernetes", ""), env.get("cni", "").rpartition(" ")[2], img.get("runtime", {}).get("version", ""))
         return 0
     if args.plan:   # the labs that have a reference fix, as a CI matrix
-        plan = []
+        plan, unprovable = [], {}
         for f in sorted((kd / "fixes").glob("*.sh")):
             cert, _, topic = f.stem.rpartition("-")
             lab = spec.load(runner.REPO_ROOT / "certs" / cert / topic / "lab", "curated")
-            plan.append({"lab": f"{cert}/{topic}", "image": kc.IMAGES[lab.spec["requires"]][int(lab.spec.get("nodes") or 0)]})
+            image = kc.IMAGES[lab.spec["requires"]][int(lab.spec.get("nodes") or 0)]
+            try:
+                kc_test.resolve_env(image, day)
+            except LookupError as exc:   # e.g. Kubernetes 1.37 with no Cilium release that lists it: skip that family only
+                unprovable.setdefault(image, (str(exc), []))[1].append(f"{cert}/{topic}")
+                continue
+            plan.append({"lab": f"{cert}/{topic}", "image": image})
+        for image, (why, labs) in unprovable.items():   # GitHub workflow command, on stderr so stdout stays the JSON matrix
+            print(f"::warning title={image} not proven nor published::{_UNPROVABLE} on {day}: {why}. Skipped: "
+                  f"{', '.join(labs)}. The mirror keeps its current scenarios (publish is additive).", file=sys.stderr)
         print(json.dumps(plan, separators=(",", ":")))
         return 0
     code = 0
