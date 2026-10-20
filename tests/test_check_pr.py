@@ -123,6 +123,21 @@ class CheckPrTests(unittest.TestCase):
         self.assertTrue(check_pr.check(title, "", files, head_ref=rel["head_ref"], author="github-actions[bot]",
                                        same_repo=True))
 
+    def test_the_notes_reset_pr_is_exempt_only_on_its_branch_with_only_next_md(self):
+        rel = dict(head_ref="release-notes-reset--v0.5.0", author="study-cybercirujas-releases[bot]", same_repo=True)
+        nxt, title = ["docs/release-notes/NEXT.md"], "chore(release-notes): reset NEXT.md after v0.5.0"
+        self.assertEqual(check_pr.check(title, "", nxt, **rel), [])
+        self.assertTrue(check_pr.check(title, "", nxt + ["scripts/check_pr.py"], **rel))
+        self.assertTrue(check_pr.check(title, "", ["CHANGELOG.md"], **rel))
+        for ref in ("release-notes-reset--v0.5", "release-notes-reset--v0.5.0-x", "bot/graph-refresh", None):
+            with self.subTest(ref=ref):
+                self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "head_ref": ref}))
+        self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "author": "mallory"}))
+        self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "same_repo": False}))
+        # the Release PR branch cannot carry NEXT.md
+        self.assertTrue(check_pr.check("chore(main): release 0.5.0", "", nxt,
+                                       **{**rel, "head_ref": "release-please--branches--main"}))
+
     def test_the_release_pr_dco_is_decided_by_the_same_facts_not_the_email(self):
         files, rel = self.RELEASE_FILES, self.RELEASE
         for email in ("study-cybercirujas-releases[bot]@users.noreply.github.com", "whoever@example.org"):

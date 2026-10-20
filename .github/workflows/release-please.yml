@@ -75,3 +75,31 @@ jobs:
     uses: ./.github/workflows/docker.yml
     with:
       version: ${{ needs.release-please.outputs.version }}
+
+  notes:
+    # The human summary on top of the Release: docs/release-notes/NEXT.md (as of the tag) plus the Thanks
+    # found from the merged PRs, release-please's changelog kept below a `---`; then a small PR empties
+    # NEXT.md (App token, so its required checks run). Runs only when this run created the release, from
+    # main's own checkout (no PR code), and is idempotent. scripts/release_notes.py; CONTRIBUTING -> Releases.
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read   # the App token does the writing
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Token of the releases GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write         # the release body, the reset branch and file
+          permission-pull-requests: write    # the reset PR
+      - run: python3 scripts/release_notes.py publish --tag "$TAG"
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}

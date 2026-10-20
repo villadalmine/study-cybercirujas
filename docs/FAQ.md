@@ -390,6 +390,12 @@ release-please keeps one open Release PR from the Conventional Commit titles;
 merging it is the human gate that tags `vX.Y.Z` and publishes the image
 ([CONTRIBUTING → Releases](../CONTRIBUTING.md#releases)).
 
+**Who writes the release notes?**
+The changelog is release-please's. The Highlights, Upgrade notes and Thanks
+on top of a GitHub Release come from `docs/release-notes/NEXT.md` (PR authors add lines) plus the authors of the
+merged PRs, found by `scripts/release_notes.py` when the release is created; a small PR then empties NEXT.md
+([CONTRIBUTING → Releases](../CONTRIBUTING.md#releases)).
+
 **How does a curriculum upgrade work?**
 When a vendor publishes a new curriculum version, the cert gets an upgrade milestone
 (`<CERT> v<version> upgrade`) and the process of

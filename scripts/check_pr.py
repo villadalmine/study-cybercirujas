@@ -233,16 +233,22 @@ def is_graph_refresh(head_ref: str | None, files: list[str], author: str | None 
 RELEASE_BOT_AUTHOR = "study-cybercirujas-releases[bot]"
 RELEASE_BRANCH = re.compile(r"release-please--branches--main(--components--[\w.-]+)?")
 RELEASE_FILES = frozenset({"CHANGELOG.md", ".release-please-manifest.json", "pyproject.toml"})
+# The small PR scripts/release_notes.py opens after a release to empty the next-release notes.
+NOTES_RESET_BRANCH = re.compile(r"release-notes-reset--v\d+\.\d+\.\d+")
+NOTES_RESET_FILES = frozenset({"docs/release-notes/NEXT.md"})
 
 
 def is_release_please(head_ref: str | None, files: list[str], author: str | None = None,
                       same_repo: bool = False) -> bool:
     """The Release PR: opened by the releases GitHub App from a branch of this repository (not a
-    fork), on release-please's branch, touching only the files release-please writes. Like the
+    fork), on release-please's branch, touching only the files release-please writes (or, on the notes-reset
+    branch, only docs/release-notes/NEXT.md). Like the
     graph bot's, no single fact is an identity (a branch name or a file list can be copied)."""
-    return (author == RELEASE_BOT_AUTHOR and same_repo
-            and bool(head_ref) and RELEASE_BRANCH.fullmatch(head_ref) is not None
-            and bool(files) and all(f.replace("\\", "/") in RELEASE_FILES for f in files))
+    if not (author == RELEASE_BOT_AUTHOR and same_repo and head_ref and files):
+        return False
+    names = [f.replace("\\", "/") for f in files]
+    return ((RELEASE_BRANCH.fullmatch(head_ref) is not None and all(f in RELEASE_FILES for f in names))
+            or (NOTES_RESET_BRANCH.fullmatch(head_ref) is not None and all(f in NOTES_RESET_FILES for f in names)))
 
 
 def is_bot_pr(head_ref: str | None, files: list[str], author: str | None = None,
