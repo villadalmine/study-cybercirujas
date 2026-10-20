@@ -49,8 +49,16 @@ OTLP_HTTP="http://127.0.0.1:4318"
 HEALTH="http://127.0.0.1:13133"
 
 # ---- Safety gate ------------------------------------------------------------
+# `require_lab runner-ok` (used by `fix`) skips the confirmation when the script
+# runs inside the study-lab runner's throwaway container: the runner sets
+# STUDY_LAB_ID there on every call, also on `study-lab exec`, which does not
+# pass lab.yaml's env. Anywhere else the explicit OTCA_LAB_CONFIRM=yes is required.
 require_lab() {
-  if [[ "${OTCA_LAB_CONFIRM:-}" != "yes" ]]; then
+  local gate=yes
+  if [[ "${1:-}" == "runner-ok" && -n "${STUDY_LAB_ID:-}" ]]; then
+    gate=no
+  fi
+  if [[ "$gate" == "yes" && "${OTCA_LAB_CONFIRM:-}" != "yes" ]]; then
     echo "This lab starts a collector and rewrites a config under $LAB_DIR."
     echo "Run it ONLY on a disposable VM, then re-run with:"
     echo "    OTCA_LAB_CONFIRM=yes $0"
@@ -229,14 +237,32 @@ verify_fix() {
   else
     echo "   FAIL ❌  /v1/logs returned HTTP ${code} and/or no LogRecord in the log."
     echo "   Re-check that a 'logs:' pipeline exists under service.pipelines."
+    return 1   # exit != 0 while the logs signal is dead (it used to exit 0 always: false OK)
   fi
+}
+
+# Reference fix: the logs pipeline back in service.pipelines (the baseline config), collector restarted.
+fix_lab() {
+  write_good_config
+  start_collector
+  echo "   Reference fix applied: logs pipeline restored in $CONFIG"
+}
+
+# Remove everything the lab created (collector, binary, config, logs).
+cleanup_lab() {
+  stop_collector
+  case "$LAB_DIR" in ""|"/"|"$HOME") echo "Refusing to remove unsafe LAB_DIR '$LAB_DIR'." >&2; return 1 ;; esac
+  rm -rf "$LAB_DIR"
+  echo "Lab directory removed."
 }
 
 # ============================================================================
 #  Main
 # ============================================================================
 case "${1:-run}" in
-  verify) require_lab; verify_fix; exit 0 ;;
+  verify) require_lab; verify_fix; exit $? ;;
+  fix)    require_lab runner-ok; fix_lab; exit $? ;;
+  cleanup) cleanup_lab; exit $? ;;
   stop)   stop_collector; echo "Collector stopped."; exit 0 ;;
 esac
 
