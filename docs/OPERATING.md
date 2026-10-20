@@ -396,12 +396,27 @@ image-cluster` from a working copy that has rendered them includes them.
 |----------|-----|---------|
 | `TEACH_ROOT` | Data repo root | `.` (cwd) |
 | `TEACH_SECRET` | Session signing key | random; required in the chart (>= 32 chars, not a placeholder) |
+| `TEACH_RATE_API` | Requests per minute per client on `/api` (0 = off) | `300` in the app; `0` in the chart |
+| `TEACH_RATE_SEARCH` | Requests per minute per client on `/api/search` (0 = off) | `30` in the app; `0` in the chart |
+| `TEACH_TRUST_PROXY` | `1` = identify the client from the end of `X-Forwarded-For`. Only behind a proxy you control that appends the peer address | unset; `0` in the chart |
+| `TEACH_TRUSTED_HOPS` | With `TEACH_TRUST_PROXY=1`: how many entries from the right are proxy-appended | `1` |
 | `TEACH_OFFLINE` | `1` = the API never calls out (no live OpenRouter price check); what the determinism tests use | unset |
 | `TEACH_SITE_URL` | Hostname in the video watermark | `study.cybercirujas.club` |
 | `TEACH_BACKEND` | Generation backend | `litellm` |
 | `LITELLM_BASE_URL` | LiteLLM proxy URL | — |
 | `LITELLM_API_KEY` | API key for LiteLLM | — |
 | `LITELLM_MODEL` | Model to use through LiteLLM | — |
+
+### Rate limit (off by default in the chart)
+
+The API has a small per-client rate limit (`teach/core/ratelimit.py`). The chart ships it **off**
+(`TEACH_RATE_API` and `TEACH_RATE_SEARCH` = `"0"`): behind a TCP-passthrough edge (HAProxy without
+PROXY protocol) every visitor reaches the pod from the same address, so they would all share one
+bucket and a single heavy client could answer 429 to the whole site. To turn it on, first give the
+pod the real client address: enable PROXY protocol at the edge and on the Gateway
+(`gatewayAPI.enableProxyProtocol`), check that the app sees distinct addresses, then set
+`TEACH_TRUST_PROXY: "1"` and the limits in `values-local.yaml` (for example `TEACH_RATE_API: "300"`,
+`TEACH_RATE_SEARCH: "30"`). Never set `TEACH_TRUST_PROXY` when the pod can be reached without that proxy.
 
 ## Unattended generation timer
 
