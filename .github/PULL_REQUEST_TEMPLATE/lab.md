@@ -93,6 +93,7 @@ teach lab validate <cert> <topic> && study-lab run <cert> <topic>   # Linux labs
 ## Risk and rollback
 
 - [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
+- [ ] FAQ updated in this PR if it changes how something in `docs/FAQ.md` works, or not affected
 - [ ] Commits signed off (DCO): `git commit -s`; fix a missing one with `git rebase --signoff origin/main`
 
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->

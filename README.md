@@ -340,7 +340,8 @@ calls a model and is for maintainers: [docs/OPERATING.md](docs/OPERATING.md).
   ([how](CONTRIBUTING.md#check-before-you-push)).
 
 Everything else — conventions, provenance for hand edits, new labs, the test
-matrix — is in **[CONTRIBUTING.md](CONTRIBUTING.md)**. How decisions are made:
+matrix — is in **[CONTRIBUTING.md](CONTRIBUTING.md)**. How each part works, in short answers:
+[docs/FAQ.md](docs/FAQ.md). How decisions are made:
 [GOVERNANCE.md](GOVERNANCE.md). [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Contributors
@@ -377,6 +378,9 @@ confident, well-cited, wrong paragraph passes them all
 ([docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md)). Use it as a study aid; the
 official documentation each topic cites is the authority.
 
+How each topic is generated and checked, what "deterministic" means here, and
+what no check covers yet: **[docs/FAQ.md](docs/FAQ.md)**.
+
 Which model wrote what is recorded per topic in its `meta.yaml`, shown on every
 page of the site and in the API's `generated_by`, and aggregated in
 [MODELS.md](MODELS.md). That per-topic provenance and this notice are the
@@ -387,6 +391,7 @@ project's transparency layer under
 
 | Document | What it is |
 |---|---|
+| [docs/FAQ.md](docs/FAQ.md) | how each part works, with links to the code that proves it: generation, determinism, groundedness, sources, translations, labs, Killercoda, the bot, the quality score, reviews, releases, deployment, and the known gaps |
 | [CONTRIBUTING.md](CONTRIBUTING.md) · [GOVERNANCE.md](GOVERNANCE.md) · [docs/PRINCIPLES.md](docs/PRINCIPLES.md) | how to contribute and which tests must pass · how decisions are made · the rules the project holds itself to |
 | [docs/OPERATING.md](docs/OPERATING.md) | generating, checking and publishing: `make next`, milestones, backends, `.env`, the quality ladder, the unattended timer |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | deploying the site to Kubernetes with Helm: image per architecture, preflight, verify, rollback, upgrade notes |
