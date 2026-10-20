@@ -12,9 +12,10 @@
 #   - botStats (on by default): a StorageClass for a 128Mi ReadWriteOnce PVC
 
 image:
-  # Public image (linux/amd64 only):  ghcr.io/villadalmine/study-cybercirujas
-  # arm64 nodes or a private registry: build in-cluster with `make image-cluster`
-  # and point this at <your-registry>/teach-plat
+  # Public image: ghcr.io/villadalmine/study-cybercirujas. Tags up to v0.3.0 are amd64 only;
+  # check a tag with `docker buildx imagetools inspect` (docs/DEPLOY.md, Path A).
+  # No image for your nodes' architecture, or a private registry: build in-cluster with
+  # `make image-cluster` and point this at <your-registry>/teach-plat
   repository: ghcr.io/villadalmine/study-cybercirujas
   # Leave the tag to the command line (--set image.tag=vX.Y.Z); never "latest".
   tag: ""

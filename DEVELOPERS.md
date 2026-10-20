@@ -123,7 +123,7 @@ is no database and no build step for the site.
 .venv/bin/uvicorn teach.api:app --host 0.0.0.0 --port 8000
 ```
 
-**In Kubernetes**, with the chart used in production:
+**In Kubernetes**, with the chart used in production (the full procedure, with preflight, verification and rollback, is [docs/DEPLOY.md](docs/DEPLOY.md)):
 
 ```bash
 make image-cluster TAG=mine        # build in-cluster with Kaniko

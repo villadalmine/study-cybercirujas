@@ -132,11 +132,14 @@ helm install study deploy/helm -n teach-plat --create-namespace \
   --set-string env.TEACH_SECRET="$(openssl rand -hex 32)" \
   --wait --timeout 5m
 kubectl -n teach-plat port-forward svc/study-app 8080:80 &
-curl -fsS localhost:8080/healthz
+until curl -fsS localhost:8080/healthz; do sleep 1; done   # the port-forward needs a moment
+kill %1
 kind delete cluster --name study          # when you are done
 ```
 
-`gateway.enabled` is already `false` by default; kind's default StorageClass serves the PVC.
+`gateway.enabled` is already `false` by default; kind's default StorageClass serves the PVC. The same
+check, scripted and kept green by CI (rollout, PVC, `/healthz`, `/api/catalog`, uninstall), is
+`IMAGE=study:dev deploy/helm-smoke/smoke.sh` right after `kind load`.
 
 ## 3. Preflight
 
@@ -153,8 +156,8 @@ Then check the change without applying it:
 
 ```bash
 helm lint deploy/helm -f deploy/helm/values-local.yaml --set image.tag=$TAG
-helm template study deploy/helm -n $NS -f deploy/helm/values-local.yaml --set image.tag=$TAG > /tmp/study.yaml
-grep -n 'image:' /tmp/study.yaml          # the tag you meant, in the Deployment and the CronJob
+# piped, never written to a file: the render includes the Secret with TEACH_SECRET
+helm template study deploy/helm -n $NS -f deploy/helm/values-local.yaml --set image.tag=$TAG   | grep -n 'image:'                      # the tag you meant, in the Deployment and the CronJob
 helm upgrade --install study deploy/helm -n $NS -f deploy/helm/values-local.yaml \
   --set image.tag=$TAG --dry-run=server   # the API server validates every object, nothing is created
 ```
@@ -182,7 +185,7 @@ kubectl -n $NS get pods -l app=study-app -o wide
 kubectl -n $NS get deploy study-app -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
 
 kubectl -n $NS port-forward svc/study-app 8080:80 &
-curl -fsS localhost:8080/healthz          # {"ok":true,"certs":N}, N > 0
+until curl -fsS localhost:8080/healthz; do sleep 1; done   # {"ok":true,"certs":N}, N > 0
 curl -fsS localhost:8080/api/catalog | head -c 200; echo
 kill %1
 
@@ -251,9 +254,12 @@ open PR are marked **pending**; they apply from the first release that contains 
   without a value of 32+ characters that is not a placeholder (`change-me`, the example's). Set a real one
   in `deploy/helm/values-local.yaml` before upgrading, and use `--set-string`, not `--set`, if you pass it
   on the command line (a digits-only value would become a number).
-- **pending: proxy trust for the rate limit**
-  ([#173](https://github.com/villadalmine/study-cybercirujas/pull/173)). `/api` gets a per-client rate
-  limit, and the chart sets `env.TEACH_TRUST_PROXY: "1"` so the client is read from `X-Forwarded-For` as
-  appended by the Gateway. Keep it only when the pod is reachable exclusively through a proxy you control;
-  set `"0"` if it is exposed any other way (NodePort, a LoadBalancer Service). The limits are
-  `TEACH_RATE_API` and `TEACH_RATE_SEARCH` ([OPERATING → Environment variables](OPERATING.md#environment-variables)).
+- **A per-client rate limit on `/api`, off in the chart**
+  ([#173](https://github.com/villadalmine/study-cybercirujas/pull/173), merged). The chart ships
+  `TEACH_RATE_API`, `TEACH_RATE_SEARCH` and `TEACH_TRUST_PROXY` all `"0"`: behind a TCP-passthrough edge
+  (no PROXY protocol) every visitor reaches the pod from the same address and would share one bucket.
+  Nothing to do on upgrade. To turn it on, first enable PROXY protocol at the edge and on the Gateway
+  (`enableProxyProtocol`), then set `TEACH_TRUST_PROXY: "1"` and the limits (e.g. `"300"` / `"30"`) in
+  `deploy/helm/values-local.yaml`. Never set `TEACH_TRUST_PROXY` when the pod can be reached without that
+  proxy (NodePort, a LoadBalancer Service). Details:
+  [OPERATING → Rate limit](OPERATING.md#rate-limit-off-by-default-in-the-chart).
