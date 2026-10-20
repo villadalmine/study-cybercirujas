@@ -110,7 +110,7 @@ def main() -> int:
     # Ownership is advisory and skippable, not a lock — the claim system is what
     # prevents collisions. This only stops two agents spending two quota windows
     # on the same certification, which is what happened when the split lived in
-    # prose: a stale line in AGENTS_SYNC.md outlived the split that replaced it.
+    # prose: a stale line in docs/AGENTS_SYNC.md outlived the split that replaced it.
     if not pipeline.mine(args.cert) and not args.anyway:
         print(f"{args.cert} belongs to '{pipeline.owner(args.cert)}' and you are "
               f"'{pipeline.me()}' (pipeline.yaml -> certs.{args.cert}.owner).\n"

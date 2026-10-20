@@ -53,7 +53,7 @@ fi
 
     # Refresh the matrix here too. `make cert` and `make publish` already do it,
     # but THIS is the path that does most of the generating, so leaving it out
-    # meant the dashboard drifted exactly when nobody was watching — STATUS.md
+    # meant the dashboard drifted exactly when nobody was watching — docs/STATUS.md
     # sat a day stale reporting kcsa at 2/42 when it was 42/42. A report that is
     # only right when a human remembers to refresh it is worse than no report,
     # because it is believed.

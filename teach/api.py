@@ -230,12 +230,12 @@ def get_models(background: BackgroundTasks) -> dict:
 def get_status() -> list:
     """Per-certification overview: exam versions, coverage, videos, freshness.
 
-    The tree is the single source of truth; this endpoint and STATUS.md are
+    The tree is the single source of truth; this endpoint and docs/STATUS.md are
     two projections of the SAME functions, so they cannot disagree on
     definitions — only on timing, which the dates in each row make visible:
     versions come from `check_versions.survey()` (the function that renders
-    STATUS.md's "Exam versions" table), and a language counts only when every
-    topic's content passes the same quality floor STATUS.md counts with.
+    docs/STATUS.md's "Exam versions" table), and a language counts only when every
+    topic's content passes the same quality floor docs/STATUS.md counts with.
     Cached after the first request: the tree inside a deployed image is
     immutable, so recomputing would only re-prove the same answer.
     """

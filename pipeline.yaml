@@ -7,7 +7,7 @@
 # silently drifted out of sync with reality (three separate audit blind spots,
 # see docs/HISTORY.md 2026-07-16 / 07-28 / 07-29). Add a language here, once.
 #
-# Full process: WORKFLOW.md
+# Full process: docs/WORKFLOW.md
 
 # Languages every active certification is expected to have. Order is the order
 # work is done in: Spanish first (source language), English second, and only
@@ -175,7 +175,7 @@ quality:
 #                     is NOT a lock: the per-topic claim system is what prevents
 #                     two runs colliding. This is about not spending two quota
 #                     windows on the same work, and it exists because prose did
-#                     not hold — a stale line in AGENTS_SYNC.md ("the other 40 are
+#                     not hold — a stale line in docs/AGENTS_SYNC.md ("the other 40 are
 #                     yours") outlived the split that replaced it, and the other
 #                     agent correctly followed what was written. `any` means
 #                     whoever gets there. Override with TEACH_AGENT=<name>.
@@ -183,7 +183,7 @@ quality:
 #                     means no video yet. Piper has voices for es, en, de and zh
 #                     only (teach/core/video.py VOICES); `ja` and the rest have
 #                     none, so a video in those languages is not just untranslated,
-#                     it cannot be rendered at all (see BACKLOG.md).
+#                     it cannot be rendered at all (see docs/BACKLOG.md).
 #                     English goes first here for the same reason it does above:
 #                     it is what gets authored, and the rest is translated.
 # What the unattended timer is working toward — and the ONLY thing it may work
@@ -323,7 +323,7 @@ certs:
   lfcs:
     # Syllabus snapshotted, but only at domain granularity (5 topics, one per
     # domain) unlike the sub-topic granularity of the CNCF certs. Decide that
-    # before generating — see BACKLOG.md.
+    # before generating — see docs/BACKLOG.md.
     active: false
     video: []
   lfca:

@@ -348,7 +348,7 @@ function renderChrome() {
   document.querySelector('[data-nav="models"]').textContent = t('models');
   // innerHTML on purpose: the strings are our own constants (escaped anyway)
   // and the EU AI Act Art. 50 disclosure needs a real link to the provenance
-  // (the repo carries meta.yaml per topic, MODELS.md, and the full pipeline).
+  // (the repo carries meta.yaml per topic, docs/MODELS.md, and the full pipeline).
   $('foot').innerHTML = esc(t('foot')) +
     ' · <a href="https://github.com/villadalmine/study-cybercirujas" target="_blank" rel="noopener">GitHub</a>' +
     ' <span style="opacity:.7">(EU AI Act Art. 50)</span>' +
@@ -1303,7 +1303,7 @@ async function showTopic(certId, topicId) {
     <h2>${data.topic.id} — ${data.topic.title}</h2>
     ${data.lang_fallback ? `<p class="note">${t('fallback')}</p>` : ''}
     ${data.generated_by && data.generated_by.model ? `<p class="note" title="EU AI Act, Art. 50">🤖 ${t('aiGen')} <code>${esc(data.generated_by.model)}</code>${data.generated_by.translated_from ? ` · ${t('aiTrans')} ${esc(data.generated_by.translated_from.toUpperCase())}` : ''} · ${esc((data.generated_by.generated_at || '').slice(0, 10))} · <a href="https://github.com/villadalmine/study-cybercirujas" target="_blank" rel="noopener">GitHub</a>${(data.generated_by.sources || []).length ? ` · ${t('srcOfficial')}: ` + data.generated_by.sources.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener">${esc(new URL(s).hostname)}</a>`).join(' ') : ''}</p>` : ''}
-    ${data.quality && data.quality.level ? `<p class="note quality-badge" title="${esc((data.quality.checks || []).map((c) => c.name + ': ' + c.result).join(' · '))}">🧪 ${t('qLabel')}: <strong>${esc(t('q' + data.quality.level))}</strong> · ${esc(String(data.quality.score))}/100 · <a href="https://github.com/villadalmine/study-cybercirujas/blob/main/STATUS.md#quality" target="_blank" rel="noopener">STATUS.md</a></p>` : ''}
+    ${data.quality && data.quality.level ? `<p class="note quality-badge" title="${esc((data.quality.checks || []).map((c) => c.name + ': ' + c.result).join(' · '))}">🧪 ${t('qLabel')}: <strong>${esc(t('q' + data.quality.level))}</strong> · ${esc(String(data.quality.score))}/100 · <a href="https://github.com/villadalmine/study-cybercirujas/blob/main/docs/STATUS.md#quality" target="_blank" rel="noopener">docs/STATUS.md</a></p>` : ''}
     <div class="md">${md(data.content || '')}
       ${section(t('exercises'), data.exercises)}
       ${section(t('lab'), data.break_fix, true)}</div>`;

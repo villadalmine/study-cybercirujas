@@ -466,11 +466,11 @@ def _publish_if_complete() -> None:
 
 
 def _refresh_status() -> None:
-    """Regenerate STATUS.md here, in the thing that does the work.
+    """Regenerate docs/STATUS.md here, in the thing that does the work.
 
     It used to live only in `resume-generation.sh`, so any other caller of this
     script left the dashboard stale — and the timer's own comment records what
-    that costs: STATUS.md sat a day reporting kcsa at 2/42 when it was 42/42,
+    that costs: docs/STATUS.md sat a day reporting kcsa at 2/42 when it was 42/42,
     because the path doing most of the generating did not call it. That is
     exactly what happened again while writing this: an ad-hoc runner calling
     this script directly generated for an hour against a dashboard that never
@@ -487,10 +487,10 @@ def _refresh_status() -> None:
     try:
         sys.path.insert(0, str(REPO / "scripts"))
         from status_matrix import refresh
-        print("STATUS.md updated" if refresh() else "STATUS.md already current",
+        print("docs/STATUS.md updated" if refresh() else "docs/STATUS.md already current",
               flush=True)
     except Exception as error:
-        print(f"    STATUS.md not refreshed ({error}); the content is fine, "
+        print(f"    docs/STATUS.md not refreshed ({error}); the content is fine, "
               f"run `teach status` to catch the dashboard up", flush=True)
 
 

@@ -95,7 +95,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 	@if [ -z "$(ALL)" ]; then \
 		echo "staging certs/$(CERT) and its syllabus only"; \
 		$(TEACH) status; \
-		git add catalog.yaml STATUS.md certs/$(CERT) certs/$(CERT).md 2>/dev/null || true; \
+		git add catalog.yaml docs/STATUS.md certs/$(CERT) certs/$(CERT).md 2>/dev/null || true; \
 		$(VENV)/bin/python3 scripts/unstage_inflight.py; \
 	else \
 		echo "WARNING: ALL=1 — staging every certification. If another agent is"; \
@@ -104,7 +104,7 @@ publish: ## commit + push ONE certification (MSG= CERT=<id>; ALL=1 to stage ever
 		print('  in flight right now: ' + (', '.join('/'.join(c) for c in a) if a else 'nothing')); \
 		import sys; sys.exit(0)"; \
 		$(TEACH) status; \
-		git add catalog.yaml STATUS.md certs/; \
+		git add catalog.yaml docs/STATUS.md certs/; \
 	fi
 	@git diff --cached --quiet && echo "Nothing new to publish" || \
 		(git commit -s -m "$(MSG)" && git push)
@@ -224,7 +224,7 @@ metrics: ## real spend per stage/day/window from usage.jsonl + quota-history (fr
 check-updates: ## refresh upstream curriculum facts and report drift (spends a few completions)
 	@# Chain: sync scrapes what each vendor CURRENTLY publishes (AI-assisted,
 	@# writes catalog.yaml upstream fields only) -> the matrix regenerates the
-	@# "Exam versions" table in STATUS.md -> check_versions prints the verdict
+	@# "Exam versions" table in docs/STATUS.md -> check_versions prints the verdict
 	@# per cert. Found in practice 2026-09-03: lpi-devops was assumed "one
 	@# objective behind" and upstream had shipped a full v2.0 overhaul.
 	@# --backend claude explicitly: without it the sync falls to the litellm
@@ -281,6 +281,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_provenance.py
 	$(VENV)/bin/python3 scripts/check_source_chain.py
 	$(VENV)/bin/python3 scripts/quality_score.py --check
+	$(VENV)/bin/python3 scripts/status_matrix.py --check
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_curriculum_consistency.py
@@ -308,11 +309,11 @@ labels-check: ## every label a form, the labeler, a workflow or check_pr names e
 	$(VENV)/bin/python3 scripts/check_labels.py
 
 verify-ci: ## the free checks that hold on ANY clean clone — what CI runs, and what a contributor runs
-	@# `make verify` minus three checks that describe the owner's workstation,
-	@# not the commit: check_units reads ~/.config/systemd, check_config reads
-	@# the local usage log, and status_matrix --check counts rendered videos,
-	@# which are gitignored, so on a fresh clone every video column reads as
-	@# missing and the check fails (found by cloning fresh on 2026-10-14).
+	@# `make verify` minus two checks that describe the owner's workstation,
+	@# not the commit: check_units reads ~/.config/systemd and check_config reads
+	@# the local usage log. status_matrix --check is IN: it was left out on
+	@# 2026-10-14 because it counted gitignored videos, but it passes on a fresh
+	@# clone now (measured 2026-10-21), and docs/STATUS.md must be what the tree gives.
 	@# check_graph is skipped too: graphify is an optional install.
 	$(VENV)/bin/python3 scripts/quality_report.py
 	$(VENV)/bin/python3 scripts/check_manifests.py
@@ -369,7 +370,7 @@ cert: ## take ONE certification from wherever it is to finished (CERT= [BACKEND=
 	  $(if $(TRANSLATE_BACKEND),--translate-backend $(TRANSLATE_BACKEND),) \
 	  $(if $(DRY),--dry-run,)
 	@# Refresh the matrix here rather than relying on someone remembering.
-	@# STATUS.md is generated from disk, so it is always truthful about the moment
+	@# docs/STATUS.md is generated from disk, so it is always truthful about the moment
 	@# it ran — including mid-flight work by another agent, which is correct: a
 	@# topic being generated genuinely is not finished yet.
 	@test -n "$(DRY)" || $(TEACH) status

@@ -14,7 +14,7 @@ as its code of conduct. In short:
 **Scope:** the repository, its issues, pull requests and discussions, and any
 space where someone represents the project.
 
-**Reporting:** contact a maintainer listed in [GOVERNANCE.md](GOVERNANCE.md)
+**Reporting:** contact a maintainer listed in [docs/GOVERNANCE.md](docs/GOVERNANCE.md)
 privately through their GitHub profile. Reports are handled confidentially.
 Maintainers who do not follow this code may be removed from their role.
 

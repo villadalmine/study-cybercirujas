@@ -75,7 +75,7 @@ the provenance culture. Nothing leaves the machine.
 ### Optional, costs completions (cheap, LiteLLM-able)
 
 - `graphify label` — LLM names for the 45 communities (one batched call).
-- Semantic enrichment of `docs/*.md`, `WORKFLOW.md`, `pipeline.yaml`
+- Semantic enrichment of `docs/*.md`, `docs/WORKFLOW.md`, `pipeline.yaml`
   commentary into the graph (`--backend openai` + `OPENAI_BASE_URL` pointed
   at the LiteLLM proxy — same route as translation, fractions of a cent).
 - `--wiki` / `export callflow-html` — Markdown wiki and Mermaid architecture
@@ -93,7 +93,7 @@ and can export static HTML. It only rewrites its own
 `openwiki/INSTRUCTIONS.md` for scope.
 
 Why it is interesting here: the repo's real documentation surface
-(WORKFLOW.md, AGENTS_SYNC.md, docs/HISTORY.md, pipeline.yaml comments) is rich
+(docs/WORKFLOW.md, docs/AGENTS_SYNC.md, docs/HISTORY.md, pipeline.yaml comments) is rich
 but hand-maintained and drift-prone; an agent-maintained wiki that re-reads
 `teach/` and `scripts/` on change would give every future agent a current
 map, and the visualizer gives the owner the "see the whole system" view.
@@ -208,8 +208,8 @@ directly. Avoiding one duplicated run per month pays for everything else in
 this study combined.
 
 **2. Cheaper session orientation — measured.** The process docs an agent
-reads to orient (CLAUDE.md + WORKFLOW.md + AGENTS_SYNC.md + STATUS.md +
-PLAN.md + BACKLOG.md) total **126 KB ≈ ~32k tokens**, plus ~15k more for the
+reads to orient (CLAUDE.md + docs/WORKFLOW.md + docs/AGENTS_SYNC.md + docs/STATUS.md +
+docs/ORIGINAL_DESIGN.md + docs/BACKLOG.md) total **126 KB ≈ ~32k tokens**, plus ~15k more for the
 core sources (`generator.py`, `pipeline.py`, `cli.py`) — roughly **45–50k
 input tokens per session before any work happens**, spent again every
 session, plus the grep/read fan-out during the task. A graph query returns a
@@ -229,12 +229,12 @@ complementary: graph = structure, wiki = narrative.
 - *Refactor signals*: the report ranks god nodes and surprising
   cross-module connections — a standing answer to "what is too coupled".
 - *Docs that cannot lie silently*: a wiki regenerated from code, diffed
-  against hand-written WORKFLOW.md, surfaces drift mechanically — the same
+  against hand-written docs/WORKFLOW.md, surfaces drift mechanically — the same
   class of failure as the syllabus that was secretly a table of contents.
 - *Blast-radius before touching process code*: `path` / `get_pr_impact`
   show what a change reaches — cheap insurance given process changes here
   apply to every future topic.
-- *Onboarding the next agent*: AGENTS_SYNC.md is 46 KB because orientation
+- *Onboarding the next agent*: docs/AGENTS_SYNC.md is 46 KB because orientation
   is expensive today; a queryable map makes adding a third backend/agent
   nearly free.
 - *Optionally, mapping the corpus itself*: a per-cert semantic graph over

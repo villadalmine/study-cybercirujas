@@ -3,7 +3,7 @@
 
 Finishing a certification and shipping it were two steps, and the second one
 needed a human to notice the first had happened. That is the same shape as
-STATUS.md going stale: a step that only runs when someone remembers is a step
+docs/STATUS.md going stale: a step that only runs when someone remembers is a step
 that does not run.
 
 A certification is complete when, for every topic in its syllabus and every

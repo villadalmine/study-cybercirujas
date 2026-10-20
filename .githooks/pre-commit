@@ -128,7 +128,7 @@ PYCODE
 
 if [ "$fail" -ne 0 ]; then
     echo
-    echo "Commit blocked. See AGENTS_SYNC.md for what each rule is and why."
+    echo "Commit blocked. See docs/AGENTS_SYNC.md for what each rule is and why."
     exit 1
 fi
 exit 0

@@ -1,12 +1,12 @@
-# Agent Synchronization & Idea Queue (AGENTS_SYNC.md)
+# Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)
 
 This file serves as an asynchronous idea queue and coordination buffer between AI agents (e.g. Antigravity, Claude) working on the `teach-plat` codebase.
 
 ## Workflow Rules for Agents
 
 1. **Check Queue**: Any AI agent starting a work session or evaluating next steps MUST inspect this file.
-2. **Evaluate & Act**: Read pending proposals, evaluate their technical feasibility and alignment with [PLAN.md](PLAN.md) and [WORKFLOW.md](WORKFLOW.md), and implement or integrate approved items.
-3. **Clean Up**: Once an idea has been evaluated and implemented (or integrated into `BACKLOG.md`/`PLAN.md`), remove it from this file so the queue remains clean for future proposals.
+2. **Evaluate & Act**: Read pending proposals, evaluate their technical feasibility and alignment with [docs/ORIGINAL_DESIGN.md](ORIGINAL_DESIGN.md) and [docs/WORKFLOW.md](WORKFLOW.md), and implement or integrate approved items.
+3. **Clean Up**: Once an idea has been evaluated and implemented (or integrated into `docs/BACKLOG.md`/`docs/ORIGINAL_DESIGN.md`), remove it from this file so the queue remains clean for future proposals.
 
 When rejecting or amending a proposal, record the reasoning in the destination document rather than leaving the entry here — this queue is for undecided items only.
 
@@ -14,7 +14,7 @@ When rejecting or amending a proposal, record the reasoning in the destination d
 
 ## Every commit is signed off (DCO)
 
-Agents commit with `git commit -s` (a `Signed-off-by:` line; the [DCO](DCO) text is in the repo root). `scripts/check_pr.py` fails a PR with an unsigned commit; fix it with `git commit --amend -s` or `git rebase --signoff origin/main`. Declare the AI in the PR's *Provenance* (`Author: ai`, Backend, Model). See [CONTRIBUTING.md](CONTRIBUTING.md#sign-your-commits-dco).
+Agents commit with `git commit -s` (a `Signed-off-by:` line; the [DCO](../DCO) text is in the repo root). `scripts/check_pr.py` fails a PR with an unsigned commit; fix it with `git commit --amend -s` or `git rebase --signoff origin/main`. Declare the AI in the PR's *Provenance* (`Author: ai`, Backend, Model). See [CONTRIBUTING.md](../CONTRIBUTING.md#sign-your-commits-dco).
 
 ## First: install the hook. It is the only rule that does not depend on you.
 
@@ -230,12 +230,12 @@ make cert CERT=lpic-2 DRY=1
 Then record it:
 
 ```bash
-.venv/bin/python3 scripts/status_matrix.py     # refresh STATUS.md
+.venv/bin/python3 scripts/status_matrix.py     # refresh docs/STATUS.md
 git add … && git commit -s                     # one topic per commit is fine; -s = DCO sign-off, always
 ```
 
 **Is the material still current?** `make check-updates`, then follow
-[docs/OPERATING.md → Checking curriculum updates](docs/OPERATING.md#checking-curriculum-updates):
+[docs/OPERATING.md → Checking curriculum updates](OPERATING.md#checking-curriculum-updates):
 outdated first, *unknown* is not *fine*, and never re-snapshot without the
 owner's decision.
 
@@ -337,7 +337,7 @@ turns out to have been weak. Violated on 2026-08-05 by `lpic-2/1.1` and `1.2`.
 
 **2. Update the syllabus status in the same step.** After writing a topic, set its
 `status` in `certs/<cert>.md` to `generated`. Files on disk with `status: pending`
-make `STATUS.md` under-report and make the work queue keep offering finished work
+make `docs/STATUS.md` under-report and make the work queue keep offering finished work
 as work to redo — quota spent regenerating what already exists.
 
 **3. Order is content → verify → video, topic by topic, then translate.** A video
@@ -370,11 +370,11 @@ later and wastes more when it does.
 
 | Question | File |
 |---|---|
-| Full pipeline, failure modes | [WORKFLOW.md](WORKFLOW.md) |
-| What must exist, quality floor, budget | [pipeline.yaml](pipeline.yaml) |
-| Translate vs author, model choice, costs | [docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md) |
-| What is finished right now | [STATUS.md](STATUS.md) |
-| What went wrong before, and why a rule exists | [docs/HISTORY.md](docs/HISTORY.md) (up to 2026-10-16), then [CHANGELOG.md](CHANGELOG.md) |
+| Full pipeline, failure modes | [docs/WORKFLOW.md](WORKFLOW.md) |
+| What must exist, quality floor, budget | [pipeline.yaml](../pipeline.yaml) |
+| Translate vs author, model choice, costs | [docs/TRANSLATION_STUDY.md](TRANSLATION_STUDY.md) |
+| What is finished right now | [docs/STATUS.md](STATUS.md) |
+| What went wrong before, and why a rule exists | [docs/HISTORY.md](HISTORY.md) (up to 2026-10-16), then [CHANGELOG.md](../CHANGELOG.md) |
 
 **8. Do not change a threshold, a budget or a rule to make your run succeed.**
 If the pipeline refuses your work, the pipeline is probably right — every one of
@@ -432,7 +432,7 @@ document instead; the numbers are there and the reasoning with them.
   `gemini`: both 0% below the floor, 100% of citations resolving, all manifests
   parsing, no removed Kubernetes APIs. `gemini` writes 3.3x more per topic (29 KB
   vs 9 KB) with twice the code blocks; `claude` uses comparison tables, `gemini`
-  does not. Full numbers and caveats: [docs/BACKEND_COMPARISON.md](docs/BACKEND_COMPARISON.md).
+  does not. Full numbers and caveats: [docs/BACKEND_COMPARISON.md](BACKEND_COMPARISON.md).
   **Use whichever you like** — that is why the rule is traceability, not provider.
 - **The "62% of antigravity content is substandard" figure is wrong as stated.**
   It is 87% for the 2026-07-30 run — the one that motivated creating the quality
@@ -446,7 +446,7 @@ document instead; the numbers are there and the reasoning with them.
 - **Translation on a cheap model does not degrade the material**, and the right
   model depends on the direction: `gemma4-paid` 5/5 on en→es, `cheap` 5/6 on
   es→en. `zh` and `de` are NOT solved — 0/6 from either source.
-  See [docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md).
+  See [docs/TRANSLATION_STUDY.md](TRANSLATION_STUDY.md).
 - **What things cost**, so nobody has to re-derive it: ~$2.10–2.75 and 40–80k
   output tokens per authored topic, ~$0.12 per video script, ~$0.002 per
   translated topic, ~$0.01 per quota probe, roughly four authored topics per
@@ -588,19 +588,19 @@ nothing. `check_claims.py` catches this class; nothing free does.
 5. **637 citations from 269 uncatalogued domains.** Run
    `scripts/check_sources.py --unknown-only`, add the legitimate ones to
    `docs/sources.yaml`. Pure bookkeeping, no completions, immediately useful.
-6. ~~Auto-updating `STATUS.md` on generation completion.~~ **Accepted and shipped
+6. ~~Auto-updating `docs/STATUS.md` on generation completion.~~ **Accepted and shipped
    2026-08-07, exactly as you proposed.** `make cert` now runs
    `scripts/status_matrix.py` when it finishes, and `make publish` regenerates and
-   stages `STATUS.md` on both the `CERT=` and `ALL=1` paths. Good catch — the
+   stages `docs/STATUS.md` on both the `CERT=` and `ALL=1` paths. Good catch — the
    matrix drifting is the failure that makes every other report untrustworthy,
-   since STATUS.md is what anyone reads first.
+   since docs/STATUS.md is what anyone reads first.
 
    Two notes on the edges, neither of which changes the design:
    - It is skipped under `DRY=1`, so a dry run does not rewrite the dashboard.
    - Regenerating during another agent's in-flight work is *correct*, not a race.
      The matrix is derived from disk and counts only material that clears the
      quality floor, so a topic being generated genuinely is not finished yet. If
-     two agents commit a regenerated `STATUS.md` you may get a conflict — resolve
+     two agents commit a regenerated `docs/STATUS.md` you may get a conflict — resolve
      it by running `scripts/status_matrix.py` again rather than by merging, since
      it is generated, never edited.
 
@@ -821,10 +821,10 @@ Owner-requested, tested end-to-end. What changed under you, in one minute:
    subscription route exists). Scope is committed (`.openwikiignore`,
    `openwiki/INSTRUCTIONS.md`); `make wiki` updates it manually. Do not
    schedule it; same policy as the disabled timer.
-5. Full developer guide: [docs/DEVTOOLS.md](docs/DEVTOOLS.md). Do not run
+5. Full developer guide: [docs/DEVTOOLS.md](DEVTOOLS.md). Do not run
    `graphify hook install` or `graphify claude install` — the hook path and
    the contract files are managed by hand here; both cases are covered.
-6. **STATUS.md now ends with a "Spend (measured)" footer** (completions,
+6. **docs/STATUS.md now ends with a "Spend (measured)" footer** (completions,
    output tokens, session windows, per-stage counts), regenerated by every
    refresh and deliberately excluded from `--check` — spend moves without
    content moving, and that gate must only fail when the ledger lies.
@@ -950,10 +950,10 @@ half-written: every certification is either complete or at zero.
 ```bash
 scripts/steer.py milestone <cert> en es   # declare the goal
 make milestone                            # work it to completion, then stop
-git add -A certs media STATUS.md && git commit -s && git push
+git add -A certs media docs/STATUS.md && git commit -s && git push
 ```
 
-Video, STATUS.md and the image build+deploy happen **inside the pass** when a
+Video, docs/STATUS.md and the image build+deploy happen **inside the pass** when a
 certification becomes complete. There is no separate publish step to remember.
 
 ### What is done
@@ -1031,4 +1031,4 @@ quality, so opus-5 at `effort: xhigh` is the setting.
 
 ## Pull requests from agents
 
-Agents open PRs exactly like people: one template per kind (`.github/PULL_REQUEST_TEMPLATE/`), every required section, provenance that names the model, `### Where it ran` linking the green CI run on the head commit, `### Known gaps`, `## Authorship` with its `### Findings ledger`, and the commit trailers the tool adds plus `Agent:`/`Model:` (and `Found-by:`/`Fixed-by:`/`Fixes-review:` on a fix). Copilot review findings are triaged in a comment and fixed one commit each ([docs/REVIEWS.md](docs/REVIEWS.md)). An agent never merges. Full rules: [CONTRIBUTING.md](CONTRIBUTING.md).
+Agents open PRs exactly like people: one template per kind (`.github/PULL_REQUEST_TEMPLATE/`), every required section, provenance that names the model, `### Where it ran` linking the green CI run on the head commit, `### Known gaps`, `## Authorship` with its `### Findings ledger`, and the commit trailers the tool adds plus `Agent:`/`Model:` (and `Found-by:`/`Fixed-by:`/`Fixes-review:` on a fix). Copilot review findings are triaged in a comment and fixed one commit each ([docs/REVIEWS.md](REVIEWS.md)). An agent never merges. Full rules: [CONTRIBUTING.md](../CONTRIBUTING.md).

@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Proposals follow [GOVERNANCE.md](https://github.com/villadalmine/study-cybercirujas/blob/main/GOVERNANCE.md#proposals-rfcs--for-anything-that-changes-how-the-project-works): 14 days of comments, then lazy consensus. Day-to-day fixes do not need one — open a pull request.
+        Proposals follow [docs/GOVERNANCE.md](https://github.com/villadalmine/study-cybercirujas/blob/main/docs/GOVERNANCE.md#proposals-rfcs--for-anything-that-changes-how-the-project-works): 14 days of comments, then lazy consensus. Day-to-day fixes do not need one — open a pull request.
   - type: textarea
     id: problem
     attributes:

@@ -528,7 +528,7 @@ def authorship(text: str, prov: dict[str, str]) -> list[str]:
 # --- scope: one concern per PR (CONTRIBUTING → Size and scope) ---------------
 
 CODE_LIMIT = 400                     # changed lines of code, generated files excluded
-GENERATED = ("STATUS.md", "MODELS.md")
+GENERATED = ("docs/STATUS.md", "docs/MODELS.md")
 LAB = re.compile(r"^certs/([^/]+)/([^/]+)/lab/")
 CODE = re.compile(r"^(teach/|scripts/|tests/(?!fixtures/)|deploy/|\.github/|Makefile$|pyproject\.toml$)")
 SCOPE_LABEL = "scope-exception"      # set by a maintainer, never by the check
@@ -550,8 +550,26 @@ def kinds(files: list[str]) -> dict[str, set]:
     return out
 
 
+def generated_current(paths: list[str]) -> bool:
+    """True when every touched generated file is exactly what its generator produces now.
+
+    That is a move or a generator change, not a hand edit: the file can only be this text if the generator wrote it."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    try:
+        import model_comparison
+        import status_matrix
+    except ImportError:   # the project's dependencies are not installed here: cannot prove it, so it is treated as a hand edit
+        return False
+    ok = True
+    if "docs/STATUS.md" in paths:
+        ok = ok and not status_matrix.check()
+    if "docs/MODELS.md" in paths:
+        ok = ok and (REPO / "docs" / "MODELS.md").read_text(encoding="utf-8") == model_comparison.render_markdown()
+    return ok
+
+
 def scope(files: list[str], code_lines: int | None = None, labels: set | None = None,
-          all_files: list[str] | None = None) -> list[str]:
+          all_files: list[str] | None = None, generated_current=None) -> list[str]:
     """Problems with the shape of a PR, independent of its description."""
     labels = labels or set()
     k = kinds(files)
@@ -568,9 +586,11 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
                             f"(code: {', '.join(sorted(k['code'])[:3])}…)")
     touched_generated = [f for f in files if f in GENERATED]
     # A rescored meta.yaml (left out of `files` as not authored) is still a certs/ change.
-    if touched_generated and not any(f.startswith("certs/") for f in (all_files or files)):
-        problems.append(f"generated file changed without any certs/ change ({', '.join(touched_generated)}): "
-                        "regenerate it with `teach status`, never edit it by hand")
+    # ...and a generated file that is exactly its generator's output (moved, or the generator changed) is not a hand edit either.
+    if touched_generated and not any(f.startswith("certs/") for f in (all_files or files)) \
+            and not (generated_current is not None and generated_current(touched_generated)):
+        problems.append(f"generated file changed without any certs/ change ({', '.join(touched_generated)}) and it is not what its "
+                        "generator produces: regenerate it with `teach status`, never edit it by hand")
     if code_lines is not None and code_lines > CODE_LIMIT and SIZE_LABEL not in labels:
         problems.append(f"size: {code_lines} changed lines of code (limit {CODE_LIMIT}, generated files "
                         "excluded); split it into stacked PRs ('Depends on: #N')")
@@ -772,7 +792,7 @@ def main() -> int:
         print(f"{len(generated)} meta.yaml change only their generated quality block: not counted as material")
     authored = [f for f in files if f.replace("\\", "/") not in generated]
     problems = check(title, body, authored, head_ref=head_ref, author=author,
-                     same_repo=same_repo) + scope(authored, code_lines, labels, all_files=files)
+                     same_repo=same_repo) + scope(authored, code_lines, labels, all_files=files, generated_current=generated_current)
     if args.base:
         problems += dco(commits_of(args.base), author, head_ref, files, same_repo)
     if args.base and CATALOG in files and not is_bot_pr(head_ref, files, author, same_repo):

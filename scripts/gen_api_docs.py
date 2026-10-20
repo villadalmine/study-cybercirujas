@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate the API reference inside DEVELOPERS.md from the running app.
+"""Regenerate the API reference inside docs/DEVELOPERS.md from the running app.
 
 Hand-written endpoint tables rot: a parameter changes, the table does not, and
 the reader trusts it anyway. This reads the FastAPI application object — the
@@ -20,7 +20,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-DOC = REPO / "DEVELOPERS.md"
+DOC = REPO / "docs/DEVELOPERS.md"
 START = "<!-- API-REFERENCE:START -->"
 END = "<!-- API-REFERENCE:END -->"
 
@@ -69,16 +69,16 @@ def main() -> int:
 
     if args.check:
         if updated != text:
-            print("DEVELOPERS.md API reference is stale — run scripts/gen_api_docs.py")
+            print("docs/DEVELOPERS.md API reference is stale — run scripts/gen_api_docs.py")
             return 1
-        print("DEVELOPERS.md API reference matches the application.")
+        print("docs/DEVELOPERS.md API reference matches the application.")
         return 0
 
     if updated == text:
-        print("DEVELOPERS.md already current.")
+        print("docs/DEVELOPERS.md already current.")
         return 0
     DOC.write_text(updated)
-    print("DEVELOPERS.md API reference regenerated.")
+    print("docs/DEVELOPERS.md API reference regenerated.")
     return 0
 
 

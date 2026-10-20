@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates STATUS.md: cert x language x lab matrix, and path x video language matrix.
+"""Generates docs/STATUS.md: cert x language x lab matrix, and path x video language matrix.
 
 It is always read from the actual filesystem (file counts), never manually
 updated — the lesson of this session is that "N/N topics" proves nothing unless
@@ -16,7 +16,7 @@ import yaml
 from teach.core import certs, pipeline, quality, quota_facts, video
 
 REPO = Path(__file__).resolve().parent.parent
-STATUS = REPO / "STATUS.md"
+STATUS = REPO / "docs/STATUS.md"
 # Everything above this marker is the content ledger and stays under proof
 # (check() compares it against the tree). Everything below is the measured
 # spend, which moves without content moving — a rejected completion bills and
@@ -97,7 +97,7 @@ def lab_cell(cert_dir: Path, n: int, topic_ids: list[str] | None = None) -> str:
 
 
 def refresh() -> bool:
-    """Regenerate STATUS.md from disk. True if it changed.
+    """Regenerate docs/STATUS.md from disk. True if it changed.
 
     The single implementation every caller shares — `make cert`, `make publish`,
     the unattended timer and the CLI all land here rather than each shelling out
@@ -108,12 +108,12 @@ def refresh() -> bool:
 
     Idempotent by construction: it derives everything from the filesystem, so
     running it twice produces the same bytes and running it never is the only way
-    to be wrong. STATUS.md sat a day stale reporting kcsa at 2/42 when it was
+    to be wrong. docs/STATUS.md sat a day stale reporting kcsa at 2/42 when it was
     42/42, because the one path that does most of the generating did not call it.
     """
     before = STATUS.read_text(encoding="utf-8") if STATUS.exists() else None
     _write()
-    # MODELS.md rides along: same triggers, same philosophy (derived from disk
+    # docs/MODELS.md rides along: same triggers, same philosophy (derived from disk
     # and records, deterministic, never edited). Guarded like _record_usage —
     # a dashboard that can break a generation pass is worse than a stale one.
     try:
@@ -121,12 +121,12 @@ def refresh() -> bool:
         import model_comparison
         model_comparison.write()
     except Exception as error:  # noqa: BLE001
-        print(f"warning: MODELS.md not refreshed ({error})")
+        print(f"warning: docs/MODELS.md not refreshed ({error})")
     return STATUS.read_text(encoding="utf-8") != before
 
 
 def check() -> list[str]:
-    """[] if STATUS.md matches the filesystem; the differing lines otherwise.
+    """[] if docs/STATUS.md matches the filesystem; the differing lines otherwise.
 
     `refresh()` keeps it current, but nothing proved it WAS current, so the file
     could drift for two reasons that look identical in a diff: a work path that
@@ -135,7 +135,7 @@ def check() -> list[str]:
     a report that is only right when someone remembers is worse than none,
     because it is believed.
 
-    Reads nothing but the tree: STATUS.md is derived from what is on disk, never
+    Reads nothing but the tree: docs/STATUS.md is derived from what is on disk, never
     from what a process said it did. A generator that crashes after writing half
     a topic cannot produce a green dashboard, because nobody asked it.
 
@@ -148,7 +148,7 @@ def check() -> list[str]:
     import difflib
     return [l for l in difflib.unified_diff(
         current.splitlines(), expected.splitlines(),
-        fromfile="STATUS.md (committed)", tofile="STATUS.md (from disk)", lineterm="")]
+        fromfile="docs/STATUS.md (committed)", tofile="docs/STATUS.md (from disk)", lineterm="")]
 
 
 def _write() -> None:
@@ -322,7 +322,7 @@ def _quality_section(catalog: dict) -> list[str]:
 def _spend_section() -> list[str]:
     """The budget footer: what generation has actually consumed, from records.
 
-    STATUS.md is the first thing anyone reads, and on a subscription the real
+    docs/STATUS.md is the first thing anyone reads, and on a subscription the real
     budget is windows, not dollars — so the dashboard carries both, derived
     from usage.jsonl and quota-history.jsonl exactly like `make metrics`.
     Below SPEND_MARKER, therefore outside check() — see the marker's comment.
@@ -360,10 +360,10 @@ if __name__ == "__main__":
         # Gate mode: prove the dashboard matches the tree instead of assuming it.
         drift = check()
         if drift:
-            print("STATUS.md does not match the filesystem. It is generated, never "
+            print("docs/STATUS.md does not match the filesystem. It is generated, never "
                   "written by hand — run `teach status`:\n")
             print("\n".join(drift[:40]))
             sys.exit(1)
-        print("STATUS.md matches the filesystem.")
+        print("docs/STATUS.md matches the filesystem.")
         sys.exit(0)
-    print("STATUS.md updated" if refresh() else "STATUS.md already current")
+    print("docs/STATUS.md updated" if refresh() else "docs/STATUS.md already current")

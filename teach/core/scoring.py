@@ -2,7 +2,7 @@
 
 The checks themselves run in scripts/quality_score.py, which writes a
 `quality:` block into each meta.yaml. This module is the part the API, the
-site and STATUS.md share: the weights file, the formula, and reading a block.
+site and docs/STATUS.md share: the weights file, the formula, and reading a block.
 """
 from __future__ import annotations
 

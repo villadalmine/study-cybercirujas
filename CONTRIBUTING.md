@@ -39,7 +39,7 @@ like an API key. It runs in under a second. Do not bypass it with
 | **add or fix a lab** | `teach lab new <cert> <topic>` creates `lab.yaml` + a `break_fix.sh` template (no AI); fill in the TODOs, then `teach lab validate <cert> <topic>`. The runner and the full lab format: `docs/LABS-RUNNER.md` (arriving with the `labs-runner` branch) | *Lab* issue |
 | **run a lab somewhere else** | the same lab runs in Docker, on Killercoda or on your own cluster: [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md). Export to Killercoda: `make killercoda-export` | issue |
 | **fix a bug or add a feature** | code in `teach/` or `scripts/`, with a test | *Bug* issue for bugs |
-| **change a rule, add a certification family or a language** | a proposal, see [GOVERNANCE.md](GOVERNANCE.md) | *Proposal (RFC)* issue |
+| **change a rule, add a certification family or a language** | a proposal, see [docs/GOVERNANCE.md](docs/GOVERNANCE.md) | *Proposal (RFC)* issue |
 
 ### Provenance is mandatory
 
@@ -175,8 +175,8 @@ review; a high score from automatic checks alone stops at *AI beta*.
   refreshed after merge. The post-commit hook may dirty `graphify-out/`; run
   `git restore graphify-out` before you stage. A stale graph in a PR is a
   warning, not a failure ([docs/DEVTOOLS.md](docs/DEVTOOLS.md)).
-- **Small pull requests**, one concern each. Generated files (STATUS.md,
-  MODELS.md, the README table, the API table) are regenerated, never edited
+- **Small pull requests**, one concern each. Generated files (docs/STATUS.md,
+  docs/MODELS.md, the README table, the API table) are regenerated, never edited
   by hand: `teach status`, `scripts/gen_readme_table.py`, `scripts/gen_api_docs.py`.
 
 ## Check before you push
@@ -325,7 +325,7 @@ and for AI the model). Details and an example: [docs/REVIEWS.md](docs/REVIEWS.md
 | content or translation | **one topic in one language** | more than one `certs/<cert>/<topic>/<lang>/` fails |
 | lab | **one lab** | more than one `certs/<cert>/<topic>/lab/` fails |
 | code | **≤ ~400 changed lines** (generated files excluded) | over 400 fails; split into stacked PRs, each saying `Depends on: #N` |
-| any | material and code are never mixed; generated files (`STATUS.md`, `MODELS.md`) are regenerated, never edited by hand | fails |
+| any | material and code are never mixed; generated files (`docs/STATUS.md`, `docs/MODELS.md`) are regenerated, never edited by hand | fails |
 
 A maintainer can waive scope or size for one PR with the label
 `scope-exception` or `size-exception`, saying why in the PR. Setting or
@@ -491,7 +491,7 @@ PR — that is the point.
 
 [`.github/CODEOWNERS`](.github/CODEOWNERS) requests the right reviewer
 automatically; today every path belongs to the one maintainer, and areas get
-their own owners as maintainers join ([GOVERNANCE.md](GOVERNANCE.md)).
+their own owners as maintainers join ([docs/GOVERNANCE.md](docs/GOVERNANCE.md)).
 
 Automated review by Copilot runs alongside and has its own rules:
 [docs/REVIEWS.md](docs/REVIEWS.md).

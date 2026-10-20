@@ -29,7 +29,7 @@ REPO = Path(__file__).resolve().parent.parent
 # site or the CLI ever needs the internet to work, this test says so.
 OFFLINE_ENV = {**os.environ, "TEACH_ROOT": str(REPO), "TEACH_OFFLINE": "1",
                "PYTHONPATH": os.pathsep.join([str(REPO / "tests" / "netguard"), str(REPO)])}
-# A certification that is complete in en and es (STATUS.md) and has a topic 1.1.
+# A certification that is complete in en and es (docs/STATUS.md) and has a topic 1.1.
 CERT, TOPIC = "cka", "1.1"
 
 

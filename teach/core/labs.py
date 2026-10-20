@@ -2,7 +2,7 @@
 
 Two providers:
   terraform  Lab IaC under certs/<cert>/<topic>/lab/terraform/ (BYO-cloud, see
-             the SDD section of PLAN.md) — not used by any generated lab yet,
+             the SDD section of docs/ORIGINAL_DESIGN.md) — not used by any generated lab yet,
              it is the roadmap's "step 3" mode.
   local      Docker on the student's machine (free, the roadmap's "step 1") —
              what generate_topic() writes into EVERY lab.yaml today. Two

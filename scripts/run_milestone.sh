@@ -19,7 +19,7 @@
 #     scripts/run_milestone.sh                 # or: make milestone
 #
 # Everything a finished certification needs happens inside the pass — video,
-# STATUS.md, and building and deploying the image when the set of complete
+# docs/STATUS.md, and building and deploying the image when the set of complete
 # certifications changes. There is no separate "now publish" step to remember.
 #
 # Safe to run twice: each pass rescans from disk and claims per topic, so a

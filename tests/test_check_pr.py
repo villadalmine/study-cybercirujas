@@ -485,9 +485,9 @@ class QualityOnlyTests(unittest.TestCase):
             self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), set())
 
     def test_status_md_with_only_rescored_metadata_is_not_a_hand_edit(self):
-        rescored = ["STATUS.md", "certs/cka/1.1/en/meta.yaml"]
-        self.assertEqual(check_pr.scope(["STATUS.md"], all_files=rescored), [])
-        self.assertTrue(any("generated file" in p for p in check_pr.scope(["STATUS.md"])))
+        rescored = ["docs/STATUS.md", "certs/cka/1.1/en/meta.yaml"]
+        self.assertEqual(check_pr.scope(["docs/STATUS.md"], all_files=rescored), [])
+        self.assertTrue(any("generated file" in p for p in check_pr.scope(["docs/STATUS.md"])))
 
     def test_base_texts_reads_git(self):
         texts = check_pr.base_texts(["README.md", "no/such/file.md"], "HEAD")
@@ -510,9 +510,16 @@ class ScopeTests(unittest.TestCase):
         self.assertTrue(any("material and code" in p for p in check_pr.scope(files)))
         self.assertEqual(check_pr.scope(files, labels={"scope-exception"}), [])
 
+    def test_a_generated_file_that_is_its_generators_output_is_not_a_hand_edit(self):
+        """A move of docs/STATUS.md with its generator, or a generator change: the file equals what the generator writes."""
+        moved = ["docs/STATUS.md", "docs/MODELS.md", "scripts/status_matrix.py"]
+        self.assertEqual(check_pr.scope(moved, generated_current=lambda paths: True), [])
+        self.assertTrue(any("generated file" in p for p in check_pr.scope(moved, generated_current=lambda paths: False)))
+        self.assertTrue(check_pr.generated_current(["docs/STATUS.md", "docs/MODELS.md"]))   # the committed files are current
+
     def test_generated_files_are_not_edited_by_hand(self):
-        self.assertTrue(any("generated file" in p for p in check_pr.scope(["STATUS.md"])))
-        self.assertEqual(check_pr.scope(["STATUS.md", "certs/cka/1.1/en/content.md"]), [])
+        self.assertTrue(any("generated file" in p for p in check_pr.scope(["docs/STATUS.md"])))
+        self.assertEqual(check_pr.scope(["docs/STATUS.md", "certs/cka/1.1/en/content.md"]), [])
 
     def test_size_limit_and_exception(self):
         self.assertTrue(any("size:" in p for p in check_pr.scope(["teach/api.py"], code_lines=401)))

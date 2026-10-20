@@ -6,7 +6,7 @@ and they can ask things like *"give me an exercise on this"*. Inference runs
 against **OpenRouter with the student's own API key**, loaded into their
 session — no accounts, no login, no session management on our side.
 
-This supersedes the `chart/` RAG proposal audited in BACKLOG.md. That audit
+This supersedes the `chart/` RAG proposal (a rejected Helm chart for a self-hosted RAG assistant, removed from the repository; its audit was deleted from docs/BACKLOG.md on 2026-10-21 and stays in git history). That audit
 found the idea sound and the corpus ready, but listed blockers that the
 owner's variant **removes rather than solves**:
 
@@ -608,7 +608,7 @@ throws on access, and the page shows nothing rather than breaking.
 
 **Entry**: an owner decision on persistence. Everything above is ephemeral
 by design, which is what keeps it free of accounts and of server state.
-The anonymous `X-Session-ID` route already proposed in BACKLOG.md is how it
+The anonymous `X-Session-ID` route already proposed in docs/BACKLOG.md is how it
 would work, and the deployment's lack of persistent storage is what it
 would have to solve first.
 

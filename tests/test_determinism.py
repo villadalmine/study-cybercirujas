@@ -47,8 +47,8 @@ import status_matrix, model_comparison, gen_readme_table, gen_api_docs
 from fastapi.testclient import TestClient
 from teach.api import app
 out = {
-    "STATUS.md": status_matrix._render(),
-    "MODELS.md": model_comparison.render_markdown(),
+    "docs/STATUS.md": status_matrix._render(),
+    "docs/MODELS.md": model_comparison.render_markdown(),
     "README table": gen_readme_table.table(),
     "API table": gen_api_docs.table(),
 }

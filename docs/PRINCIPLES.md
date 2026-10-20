@@ -1,5 +1,7 @@
 # Principles
 
+*[The charter](CHARTER.md) is the short version of this page: eleven rules, each with the check that enforces it. This page keeps the reasoning.*
+
 > **Knowledge has no owner and no borders. We build it together, for everyone.**
 >
 > *El conocimiento no tiene dueño ni fronteras. Lo construimos entre todos, para todos.*
@@ -9,7 +11,7 @@ on your own hardware — with AI or without it.
 
 These are the rules the project holds itself to. Each one is enforced by a
 test or a check where it can be; where it cannot, it says so. Changing them
-follows [GOVERNANCE.md](../GOVERNANCE.md).
+follows [docs/GOVERNANCE.md](GOVERNANCE.md).
 
 ## 1. Information sovereignty
 
@@ -32,7 +34,7 @@ The curriculum is a repository, and it is treated like software:
 | declarative configuration | `pipeline.yaml` — which certifications and languages must exist, the quality floor, the budget |
 | tests and linters | the check ladder (`make verify-ci`): quality floor, citations, manifests, Kubernetes APIs, provenance, lab contract |
 | build metadata | `meta.yaml` per topic: model, date, official sources |
-| build artefacts | the site, the API, the Docker image, STATUS.md, the README table — all derived, never hand-kept |
+| build artefacts | the site, the API, the Docker image, docs/STATUS.md, the README table — all derived, never hand-kept |
 | CI | `.github/workflows/verify.yml` runs the same targets a contributor runs |
 
 Inputs are public and attributable: the corpus is derived from the public
@@ -47,7 +49,7 @@ gives the same result every time and needs no model. The same tree produces
 the same bytes.
 
 *Enforced by:* `make determinism` (`tests/test_determinism.py`) derives
-STATUS.md, MODELS.md, the README and API tables and the API responses twice,
+docs/STATUS.md, docs/MODELS.md, the README and API tables and the API responses twice,
 in fresh processes, and compares them byte for byte; it runs every validator
 twice and compares the verdicts; and it does all of it with the network
 blocked, model credentials removed and the model CLIs replaced by tripwires
@@ -82,7 +84,7 @@ than hidden.
 
 Code and material under Apache 2.0. Decisions in the repository, not in
 someone's head. Anyone can propose a change to any of this, including to these
-principles ([GOVERNANCE.md](../GOVERNANCE.md)).
+principles ([docs/GOVERNANCE.md](GOVERNANCE.md)).
 
 ## 7. The source chain
 
@@ -146,7 +148,7 @@ human review, and groundedness (advisory, below) — each `pass`, `fail` or
 thresholds (*Verified*, *AI beta*, *Draft*) live in `quality_weights.yaml`. A
 check that did not run costs part of its weight and a failed one all of it:
 what was not measured is never counted as fine. The score is visible in
-STATUS.md, on the site and in the API.
+docs/STATUS.md, on the site and in the API.
 
 *Not enforced:* that a sentence is *true* to the source it cites. The chain
 proves where each link comes from and when its origin moved; correctness is

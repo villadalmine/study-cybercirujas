@@ -194,7 +194,7 @@ reported) and the parity bootstrap uses Cilium (PR #162). Checked live on 2026-1
 **v1.20.3**, lists Kubernetes 1.33 to 1.36; only `main` and the pre-release **v1.21.0-pre.3** list 1.37. So the
 Killercoda parity cannot prove 1.37 until Cilium v1.21.0.
 
-**Decision (Rino, 2026-10-21): the syllabus does not depend on Killercoda.** The switch of `tracked_version` waits for the
+**Decision (maintainer, 2026-10-21): the syllabus does not depend on Killercoda.** The switch of `tracked_version` waits for the
 material and for the runner and lab proofs on kind 1.37, not for Cilium and not for Killercoda. The Killercoda k8s labs
 stay `loaded-untested` on the mirror side until their own parity passes, independently of this upgrade.
 

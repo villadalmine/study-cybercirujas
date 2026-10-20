@@ -1,13 +1,13 @@
 # Educational Platform
 
 > **Original design (July 2026), kept for its reasoning.** Where it and the
-> code disagree, the code and [README.md](README.md) win. Superseded on
+> code disagree, the code and [README.md](../README.md) win. Superseded on
 > purpose: there is no paid study zone — all content is public and login-free,
 > and `teach/core/auth.py` is a deny-all placeholder (the admin/admin stub was
 > removed 2026-07-19); the default generator is whatever `pipeline.yaml →
 > generation` declares, not a cluster LiteLLM proxy; roadmap items 1–7 below
-> are delivered (see [docs/HISTORY.md](docs/HISTORY.md)) and what is next lives in
-> [ROADMAP.md](ROADMAP.md).
+> are delivered (see [docs/HISTORY.md](HISTORY.md)) and what is next lives in
+> [docs/ROADMAP.md](ROADMAP.md).
 
 ## Goal
 

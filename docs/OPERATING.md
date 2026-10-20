@@ -2,8 +2,8 @@
 
 Everything here is for whoever **generates, checks and publishes** the
 material. To study, or to run your own copy, you do not need any of it: see
-[README.md](../README.md) and [DEVELOPERS.md](../DEVELOPERS.md). The full
-content cycle and its failure modes are in [WORKFLOW.md](../WORKFLOW.md).
+[README.md](../README.md) and [docs/DEVELOPERS.md](DEVELOPERS.md). The full
+content cycle and its failure modes are in [docs/WORKFLOW.md](WORKFLOW.md).
 
 ## Quickstart (maintainers)
 
@@ -56,14 +56,14 @@ scripts/steer.py milestone --clear          # timer idles
 declared goal and stops when it is met; with none declared it generates nothing.
 That asymmetry is deliberate — an unattended process that reads "unspecified" as
 "everything" is how a single commit re-snapshotting seven syllabi put 162 topics
-into the queue overnight. STATUS.md shows the goal and how far it is.
+into the queue overnight. docs/STATUS.md shows the goal and how far it is.
 
 **Finishing one certification, start to published**, is three commands:
 
 ```bash
 scripts/steer.py milestone kca en es   # 1. declare the goal
 make milestone                         # 2. work it to completion, then stop
-git add -A certs media STATUS.md && git commit -s && git push
+git add -A certs media docs/STATUS.md && git commit -s && git push
 ```
 
 Step 2 is a loop around the single pass, because one pass generates
@@ -75,7 +75,7 @@ second copy takes different topics.
 
 **There is no separate publish step.** When a certification becomes complete —
 every topic, every declared language, above the quality floor, videos rendered —
-the pass renders the video, refreshes STATUS.md, and builds and deploys the
+the pass renders the video, refreshes docs/STATUS.md, and builds and deploys the
 image. Completeness is derived from the tree, not from a status field, so a run
 that dies half way through cannot produce a publishable state. It fires only when
 the set of complete certifications changes, so a pass that finishes nothing
@@ -89,7 +89,7 @@ make publish-complete                       # force it, or DRY=1 to see the plan
 
 ```bash
 make audit                                  # pending/corrupt combos + unrendered videos
-teach status                                # regenerate STATUS.md from disk
+teach status                                # regenerate docs/STATUS.md from disk
 scripts/check_config.py                     # is it running on what it says it runs on?
 scripts/check_units.py                      # installed systemd units vs the repo
 scripts/check_provenance.py                 # traceable? bookkeeping right? order right?
@@ -202,11 +202,11 @@ The distinction matters and is easy to get wrong: `generate --lang <x>` does
 syllabus metadata alone, never reading existing content — so it costs a full
 authoring pass and produces a sibling that drifts from its source. Use it only
 for the authoring language. `translate` reuses the source and verifies that code
-blocks, URLs, headings and length survive. See [WORKFLOW.md](../WORKFLOW.md).
+blocks, URLs, headings and length survive. See [docs/WORKFLOW.md](WORKFLOW.md).
 
 ## Content process
 
-[WORKFLOW.md](../WORKFLOW.md) documents the full cycle (snapshot → generate →
+[docs/WORKFLOW.md](WORKFLOW.md) documents the full cycle (snapshot → generate →
 audit → status → commit → publish), how to switch backends mid-way, and the
 known failure modes.
 
@@ -219,7 +219,7 @@ single run may generate, and the quality floor. No script keeps its own list.
 The standard does not depend on which model produced the material. The floor
 lives in `pipeline.yaml → quality` and three places apply it from that single
 definition: the generator **before writing** (weak material fails and is not
-saved), the audit, and `STATUS.md` — which counts only what meets the floor, not
+saved), the audit, and `docs/STATUS.md` — which counts only what meets the floor, not
 files that merely exist.
 
 ```bash
@@ -237,7 +237,7 @@ scripts/check_source_chain.py     # does every link declare its origin? (PRINCIP
 scripts/quality_score.py --check  # is every topic's quality block what the files give?
 scripts/check_syllabus.py         # does the syllabus cover the exam, or its index?
 scripts/check_versions.py         # what we built on vs what the exam publishes now
-scripts/status_matrix.py --check  # is STATUS.md still what the filesystem says?
+scripts/status_matrix.py --check  # is docs/STATUS.md still what the filesystem says?
 ```
 
 **A syllabus is the list of everything that will be written, so it is checked
@@ -279,7 +279,7 @@ list rather than first.
 
 None of these costs API quota. And none of them proves an explanation is
 correct: the floor catches stubs and missing structure, the citation check
-catches invented sources. [WORKFLOW.md](../WORKFLOW.md) explains what each check
+catches invented sources. [docs/WORKFLOW.md](WORKFLOW.md) explains what each check
 proves, what it does not, and what real correctness verification would take.
 
 ## Keeping it honest over time
@@ -295,7 +295,7 @@ make metrics            # tokens and quota windows spent, per stage and per day
 ```
 
 `make check-updates` is the quarterly habit: it refreshes the **Exam versions**
-table in STATUS.md and prints what drifted ([how to read and report it](#checking-curriculum-updates)). The same information is served at
+table in docs/STATUS.md and prints what drifted ([how to read and report it](#checking-curriculum-updates)). The same information is served at
 `/api/status` and rendered in the site's **Status** section, so the public page
 and the repository cannot disagree — they are two projections of the same
 functions over the same tree.
@@ -320,7 +320,7 @@ make check-updates
 | Step | What it is | Cost |
 |---|---|---|
 | `teach tracker sync --backend claude` | the **AI part**: scrapes what each vendor currently publishes and writes only the upstream fields of `catalog.yaml`. It can never touch a frozen syllabus (a sync once overwrote the very comparison it was meant to enable). | a few completions |
-| `scripts/status_matrix.py` | regenerates `STATUS.md`, including the **Exam versions** table | free |
+| `scripts/status_matrix.py` | regenerates `docs/STATUS.md`, including the **Exam versions** table | free |
 | `scripts/check_versions.py` | the **deterministic part**: the verdict per certification, built-on version vs upstream version | free |
 
 The **study bot's model catalogue** (`models.yaml`) is a separate target,
@@ -330,7 +330,7 @@ moved, `:free` models that started charging, and models that dropped
 `reasoning`. `make check-updates` does not run it. A `GONE` or `PAID` line
 means the bot is showing students something untrue.
 
-### Reading the "Exam versions" table in STATUS.md
+### Reading the "Exam versions" table in docs/STATUS.md
 
 It is the record of the check, one row per certification: the version the
 material is built on, the snapshot date, the upstream version, when upstream
@@ -354,7 +354,7 @@ changed, when it was last checked, and the verdict — ✅ current · ⚠️ out
 scope of the content; whoever runs the check presents the table and the
 recommendation and stops there — person or agent.
 
-Afterwards, **commit the refreshed `catalog.yaml` and `STATUS.md`**, so the
+Afterwards, **commit the refreshed `catalog.yaml` and `docs/STATUS.md`**, so the
 table on GitHub reflects the latest check.
 
 This section replaces the `check-updates` Claude Code skill that used to live
