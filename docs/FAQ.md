@@ -388,6 +388,10 @@ merging it is the human gate that tags `vX.Y.Z` and publishes the image
 `vX.Y.0` milestones plan a release. `<CERT> <version> upgrade` milestones are
 the only place a tracked exam version may change, enforced by `check_pr.py`
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)).
+`.github/workflows/milestone.yml` keeps them current: a merged PR or a completed issue without a
+milestone gets the open `v*` one due first, and publishing `vX.Y.Z` moves what is still open to the
+next milestone and closes it. The living "Follow-ups" umbrella issues (#120-#124) carry no release
+milestone on purpose, so they never block a release.
 
 **Where is the plan?**
 Epics and follow-ups are issues: start at

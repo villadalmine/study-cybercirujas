@@ -536,6 +536,11 @@ version is maintained.
 
 **Milestones are releases.** A milestone named `vX.Y.0` (with a due date) is the planning unit for that
 release; the Release PR is what actually happened (the notes come from the commits, not from the milestone).
+`.github/workflows/milestone.yml` keeps them current without hand edits: a PR merged into `main` without a
+milestone, and an issue closed as completed without one, get the open `v*` milestone due first (Release PRs are
+skipped; a PR whose description has no `Closes #N`, `Fixes #N` or `Part of #N` gets a warning in the job
+summary, never a failure). When release `vX.Y.Z` is published, whatever is still open in milestone `vX.Y.Z`
+moves to the next `v*` milestone by due date, with a comment, and `vX.Y.Z` is closed (`scripts/milestone_sync.py`).
 The `<CERT> <version> upgrade` milestones are separate and stay as they are: `check_pr.py` reads them by
 name (see [Size and scope](#size-and-scope)).
 

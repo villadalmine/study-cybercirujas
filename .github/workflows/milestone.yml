@@ -1,0 +1,78 @@
+name: Milestones
+
+# Milestones are releases (CONTRIBUTING -> Releases); scripts/milestone_sync.py keeps them current.
+# pull_request_target so merged fork PRs get a write token. Safe: the checkout is `main`, never the PR head;
+# the script only calls the REST API and reads the event JSON itself (no title or body in the shell).
+# GITHUB_TOKEN only. release-please's App-token releases do trigger `release: published`.
+
+on:
+  pull_request_target:
+    types: [closed]
+  issues:
+    types: [closed]
+  release:
+    types: [published]
+
+permissions: {}
+
+concurrency:
+  # Per item: one shared group lets GitHub cancel pending runs in a burst (items left without milestone).
+  group: milestone-${{ github.event.pull_request.number || github.event.issue.number || github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  pr-merged:
+    if: >-
+      github.event_name == 'pull_request_target'
+      && github.event.pull_request.merged == true
+      && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: main
+          persist-credentials: false
+      - run: python3 scripts/milestone_sync.py pr-merged
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  issue-closed:
+    if: >-
+      github.event_name == 'issues'
+      && github.event.issue.state_reason == 'completed'
+      && github.event.issue.milestone == null
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: main
+          persist-credentials: false
+      - run: python3 scripts/milestone_sync.py issue-closed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: main
+          persist-credentials: false
+      - run: python3 scripts/milestone_sync.py release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

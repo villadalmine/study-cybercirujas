@@ -105,6 +105,9 @@ TITLE = re.compile(rf"^({'|'.join(TYPES)})(\([\w./,-]+\))?!?: \S.*$")
 MATERIAL = re.compile(r"^certs/([^/]+)/([^/]+)/([a-z]{2})/[^/]+$")
 
 
+PLACEHOLDER = re.compile(r"(?im)^\s*(?:closes|fixes|part of)\s*#\s*$")
+
+
 def sections(body: str) -> dict[str, str]:
     """`## Heading` → its text, with HTML comments removed."""
     body = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
@@ -276,7 +279,7 @@ def check(title: str, body: str, files: list[str], root: Path = REPO,
     for name in SECTIONS:
         if name not in found:
             problems.append(f"missing section: ## {name}")
-        elif not found[name]:
+        elif not PLACEHOLDER.sub("", found[name]).strip():   # the templates' bare `Closes #` is not content
             problems.append(f"empty section: ## {name}")
     if found.get("Scope"):
         problems += declared_scope(found["Scope"])[1]
