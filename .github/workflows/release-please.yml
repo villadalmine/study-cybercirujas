@@ -77,10 +77,9 @@ jobs:
       version: ${{ needs.release-please.outputs.version }}
 
   notes:
-    # The human summary on top of the Release: docs/release-notes/NEXT.md (as of the tag) plus the Thanks
-    # found from the merged PRs, release-please's changelog kept below a `---`; then a small PR empties
-    # NEXT.md (App token, so its required checks run). Runs only when this run created the release, from
-    # main's own checkout (no PR code), and is idempotent. scripts/release_notes.py; CONTRIBUTING -> Releases.
+    # Human summary on top of the Release (NEXT.md + generated Thanks), then a PR empties NEXT.md with the
+    # App token so its required checks run. Only when this run created the release; no PR code; idempotent.
+    # scripts/release_notes.py; CONTRIBUTING -> Releases.
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest

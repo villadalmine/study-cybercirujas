@@ -102,7 +102,6 @@ def remove_published(current: str, published: str) -> str:
 
 
 def previous_tag(tags: list[str], tag: str) -> str | None:
-    """The highest vX.Y.Z below `tag`."""
     if not SEMVER_TAG.match(tag):
         return None
 
@@ -116,7 +115,6 @@ def previous_tag(tags: list[str], tag: str) -> str | None:
 # ---- the GitHub side -------------------------------------------------------------------------
 
 def file_at(gh: GitHub, path: str, ref: str) -> tuple[str | None, str | None]:
-    """(text, blob sha) of a file at a ref, or (None, None) when it is not there."""
     try:
         data = gh.call("GET", f"/contents/{path}?ref={ref}")
     except urllib.error.HTTPError as e:

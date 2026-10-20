@@ -52,12 +52,14 @@ class PureTests(unittest.TestCase):
         once = rn.merge_body(block, changelog)
         self.assertEqual(once, f"{block}\n---\n\n{changelog}")
         self.assertEqual(rn.merge_body(block, once), once)
+        self.assertEqual(rn.merge_body("", changelog), changelog)
 
     def test_reset_removes_published_lines_keeps_new_ones_and_comments(self):
         current = NEXT.replace("## Upgrade notes", "- **New:** added after the tag.\n\n## Upgrade notes")
         got = rn.remove_published(current, NEXT)
         self.assertTrue("nine labs" not in got and "@reviewer" not in got)
         self.assertIn("- **New:** added after the tag.", got)
+        self.assertIn("<!-- hint -->", got)
         self.assertEqual(rn.remove_published(got, NEXT), got)
 
 
@@ -113,8 +115,8 @@ class PublishTests(unittest.TestCase):
         first = FakeGitHub()
         rn.publish(first, "v0.5.0")
         body = next(w for w in first.writes if w[0] == "PATCH")[2]["body"]
-        for branch_exists in (True, False):   # reset PR still open, or merged and main already empty
-            done = FakeGitHub(body=body, branch_exists=branch_exists, main_next=EMPTY)
+        for branch_exists, main_next in ((True, NEXT), (False, EMPTY)):   # reset PR open; reset merged
+            done = FakeGitHub(body=body, branch_exists=branch_exists, main_next=main_next)
             rn.publish(done, "v0.5.0")
             self.assertEqual(done.writes, [])
 
