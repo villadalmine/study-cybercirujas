@@ -50,7 +50,7 @@ jobs:
           python3 -m venv .venv
           .venv/bin/pip install -q --require-hashes -r requirements.lock
           .venv/bin/pip install -q --no-deps -e .
-          .venv/bin/pip install -q -c requirements.lock -r requirements-groundedness.txt
+          .venv/bin/pip install -q -r requirements-groundedness.txt
           .venv/bin/python3 scripts/check_groundedness.py --download
       - name: Tests, the model on the PR 6 fixture, network blocked
         run: .venv/bin/python3 -m unittest tests.test_groundedness -v
