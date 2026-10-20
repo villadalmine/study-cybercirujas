@@ -2,7 +2,7 @@
 
 > God node · 24 connections · `teach/core/generator.py`
 
-**Community:** [Community 7](Community_7.md)
+**Community:** [Community 166](Community_166.md)
 
 ## Connections by Relation
 
@@ -22,10 +22,10 @@
 - _reject_if_substandard() `EXTRACTED`
 - _write_meta() `EXTRACTED`
 - generate_cert() `EXTRACTED`
+- _topic_context() `EXTRACTED`
 - default_spec() `EXTRACTED`
 - set_topic_status() `EXTRACTED`
 - _system() `EXTRACTED`
-- _topic_context() `EXTRACTED`
 
 ### contains
 - generator.py `EXTRACTED`

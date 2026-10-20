@@ -1,29 +1,38 @@
 # Community 138
 
-> 4 nodes · cohesion 0.50
+> 15 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **milestone_targets()** (7 connections) — `teach/core/pipeline.py`
-- **in_milestone()** (4 connections) — `teach/core/pipeline.py`
-- **Is this cert/language part of the declared goal?** (1 connections) — `teach/core/pipeline.py`
-- **[(cert, [langs])] for the milestone, or None when none is declared. None and []…** (1 connections) — `teach/core/pipeline.py`
+- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
+- **.run_check()** (8 connections) — `tests/test_source_chain.py`
+- **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.meta()** (4 connections) — `tests/test_source_chain.py`
+- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
+- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
+- **.setUp()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
+- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
+- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
+- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 62](Community_62.md) (3 shared connections)
-- [Community 49](Community_49.md) (2 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/core/pipeline.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 25 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

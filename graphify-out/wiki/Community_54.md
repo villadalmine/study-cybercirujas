@@ -1,49 +1,43 @@
 # Community 54
 
-> 21 nodes · cohesion 0.10
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **get** (15 connections)
-- **_video_info()** (5 connections) — `teach/api.py`
-- **get_bot_stats()** (4 connections) — `teach/api.py`
-- **get_catalog()** (4 connections) — `teach/api.py`
-- **get_cert_video()** (4 connections) — `teach/api.py`
-- **get_path_video()** (4 connections) — `teach/api.py`
-- **get_search()** (4 connections) — `teach/api.py`
-- **get_status()** (4 connections) — `teach/api.py`
-- **healthz()** (4 connections) — `teach/api.py`
-- **get_langs()** (3 connections) — `teach/api.py`
-- **index()** (3 connections) — `teach/api.py`
-- **FileResponse** (1 connections)
-- **Info about a video (path or cert) if it has been generated: URL of the mp4…** (1 connections) — `teach/api.py`
-- **A path's video (if it has been generated).** (1 connections) — `teach/api.py`
-- **A single certification's video (if it has been generated).** (1 connections) — `teach/api.py`
-- **Languages the platform supports, and which one material is authored in.** (1 connections) — `teach/api.py`
-- **Per-certification overview: exam versions, coverage, videos, freshness. The…** (1 connections) — `teach/api.py`
-- **Which topics mention this — the fourth function of the study contract. The…** (1 connections) — `teach/api.py`
-- **The counters, as they are. Public, because the page that shows them is. Soft…** (1 connections) — `teach/api.py`
-- **Liveness/readiness para Kubernetes.** (1 connections) — `teach/api.py`
-- **Every certification: name, exam, vendor, level, validity and official sources.** (1 connections) — `teach/api.py`
+- **FAQ — how the ecosystem works, honestly** (17 connections) — `docs/FAQ.md`
+- **Content generation** (2 connections) — `docs/FAQ.md`
+- **Determinism and provenance** (2 connections) — `docs/FAQ.md`
+- **Known gaps** (2 connections) — `docs/FAQ.md`
+- **Translations** (2 connections) — `docs/FAQ.md`
+- **Deployment** (1 connections) — `docs/FAQ.md`
+- **Hallucination and groundedness** (1 connections) — `docs/FAQ.md`
+- **Killercoda** (1 connections) — `docs/FAQ.md`
+- **Labs and the runner** (1 connections) — `docs/FAQ.md`
+- **Releases, milestones and the board** (1 connections) — `docs/FAQ.md`
+- **Reviews: AI and human** (1 connections) — `docs/FAQ.md`
+- **Security** (1 connections) — `docs/FAQ.md`
+- **Sources and licensing** (1 connections) — `docs/FAQ.md`
+- **The generation pipeline in one picture** (1 connections) — `docs/FAQ.md`
+- **The web app and the study bot** (1 connections) — `docs/FAQ.md`
 
 ## Relationships
 
-- [Community 125](Community_125.md) (10 shared connections)
-- [Community 47](Community_47.md) (5 shared connections)
-- [Community 59](Community_59.md) (3 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
+- [Community 166](Community_166.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
+- [Community 32](Community_32.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/api.py`
+- `docs/FAQ.md`
 
 ## Audit Trail
 
-- EXTRACTED: 43 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (81%)
+- INFERRED: 4 (19%)
 - AMBIGUOUS: 0 (0%)
 
 ---

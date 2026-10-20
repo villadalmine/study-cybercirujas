@@ -5,7 +5,7 @@
 ## Key Concepts
 
 - **Roadmap — where this is and where it goes** (8 connections) — `ROADMAP.md`
-- **Standing decisions worth not re-litigating** (3 connections) — `ROADMAP.md`
+- **Standing decisions worth not re-litigating** (2 connections) — `ROADMAP.md`
 - **Current focus — set 2026-09-11** (1 connections) — `ROADMAP.md`
 - **Smaller things, when there is an appetite** (1 connections) — `ROADMAP.md`
 - **Study bot — the phases after this one** (1 connections) — `ROADMAP.md`
@@ -17,7 +17,6 @@
 
 - [README.md](README.md.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
 
 ## Source Files
 
@@ -25,8 +24,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (80%)
-- INFERRED: 2 (20%)
+- EXTRACTED: 8 (89%)
+- INFERRED: 1 (11%)
 - AMBIGUOUS: 0 (0%)
 
 ---

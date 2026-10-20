@@ -12,7 +12,7 @@
 
 ## Relationships
 
-- [Community 107](Community_107.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 

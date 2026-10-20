@@ -7,9 +7,9 @@
 - **Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)** (8 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **1. Graphify — measured pilot, 2026-08-18** (4 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **AGENTIC_TOOLING_STUDY.md** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **2. OpenWiki — studied, not yet run (every run spends)** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **3. LangSmith — optional visibility, narrow fit** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **4. The plan** (2 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **2. OpenWiki — studied, not yet run (every run spends)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **5. Costs, summarized** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **7. Decisions that belong to the owner** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
 - **Integration cautions (this repo specifically)** (1 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
@@ -19,8 +19,7 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (2 shared connections)
-- [Community 107](Community_107.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 - [Community 50](Community_50.md) (1 shared connections)
 
 ## Source Files
@@ -29,8 +28,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 12 (80%)
-- INFERRED: 3 (20%)
+- EXTRACTED: 12 (86%)
+- INFERRED: 2 (14%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,6 +1,6 @@
 # Community 111
 
-> 18 nodes · cohesion 0.25
+> 19 nodes · cohesion 0.24
 
 ## Key Concepts
 
@@ -9,6 +9,7 @@
 - **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
 - **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
 - **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **copy** (6 connections)
 - **url_allowed()** (5 connections) — `teach/lab/export_killercoda.py`
 - **test_bad_cilium_tag_reaching_cilium_install()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
 - **test_bad_kubernetes_patch()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
@@ -28,14 +29,15 @@
 - [Community 18](Community_18.md) (6 shared connections)
 - [Community 70](Community_70.md) (4 shared connections)
 - [Community 1](Community_1.md) (3 shared connections)
-- [Community 3](Community_3.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
 - [Community 129](Community_129.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 
 ## Source Files
 
@@ -44,7 +46,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 62 (100%)
+- EXTRACTED: 66 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,41 +1,38 @@
 # Community 47
 
-> 13 nodes · cohesion 0.17
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **get_topic()** (8 connections) — `teach/api.py`
-- **get_cert()** (7 connections) — `teach/api.py`
-- **get_topic_preview()** (7 connections) — `teach/api.py`
-- **_not_found()** (7 connections) — `teach/api.py`
-- **get_paths()** (5 connections) — `teach/api.py`
-- **_valid_lang()** (5 connections) — `teach/api.py`
-- **HTTPException** (1 connections)
-- **Exception** (1 connections)
-- **One certification: catalogue entry, syllabus and which topics have material.** (1 connections) — `teach/api.py`
-- **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
-- **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
-- **A 404 that never carries a filesystem path: FileNotFoundError text names the…** (1 connections) — `teach/api.py`
-- **Career paths with their steps, in the requested language. The base fields of a…** (1 connections) — `teach/api.py`
+- **Deploying study to Kubernetes with Helm** (11 connections) — `docs/DEPLOY.md`
+- **2. Pick the image** (4 connections) — `docs/DEPLOY.md`
+- **Prerequisites** (2 connections) — `docs/DEPLOY.md`
+- **Upgrade notes** (2 connections) — `docs/DEPLOY.md`
+- **1. Your values file** (1 connections) — `docs/DEPLOY.md`
+- **3. Preflight** (1 connections) — `docs/DEPLOY.md`
+- **4. Deploy with an explicit tag** (1 connections) — `docs/DEPLOY.md`
+- **5. Verify** (1 connections) — `docs/DEPLOY.md`
+- **6. Roll back** (1 connections) — `docs/DEPLOY.md`
+- **7. Tag what is published** (1 connections) — `docs/DEPLOY.md`
+- **First release after v0.3.0** (1 connections) — `docs/DEPLOY.md`
+- **Path A: the public GHCR image, by version tag** (1 connections) — `docs/DEPLOY.md`
+- **Path B: build in your cluster (no image for your architecture, or a private registry)** (1 connections) — `docs/DEPLOY.md`
+- **Path C: try it locally with kind** (1 connections) — `docs/DEPLOY.md`
+- **The bot-stats volume is ReadWriteOnce** (1 connections) — `docs/DEPLOY.md`
 
 ## Relationships
 
-- [Community 125](Community_125.md) (6 shared connections)
-- [Community 54](Community_54.md) (5 shared connections)
-- [Community 10](Community_10.md) (3 shared connections)
-- [Community 59](Community_59.md) (2 shared connections)
-- [Community 133](Community_133.md) (2 shared connections)
-- [Community 72](Community_72.md) (1 shared connections)
-- [Community 112](Community_112.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/api.py`
+- `docs/DEPLOY.md`
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 15 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

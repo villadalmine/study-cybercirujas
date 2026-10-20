@@ -1,6 +1,6 @@
 # scenario()
 
-> God node · 22 connections · `teach/lab/export_killercoda.py`
+> God node · 26 connections · `teach/lab/export_killercoda.py`
 
 **Community:** [Community 18](Community_18.md)
 
@@ -14,6 +14,8 @@
 - shlex `EXTRACTED`
 - select() `EXTRACTED`
 - bash_n() `EXTRACTED`
+- markdown() `EXTRACTED`
+- of() `EXTRACTED`
 - ExportError `EXTRACTED`
 - test_refuses_what_does_not_fit() `EXTRACTED`
 - test_secret_guard() `EXTRACTED`
@@ -24,8 +26,8 @@
 - _verify_test() `EXTRACTED`
 - test_kind_family_image() `EXTRACTED`
 - test_decorated_scenario_shows_certification_provenance_and_metadata() `EXTRACTED`
-- _footer() `EXTRACTED`
-- _fence() `EXTRACTED`
+- .test_a_lab_without_safety_exports_as_before() `EXTRACTED`
+- *…and 3 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - export_killercoda.py `EXTRACTED`
