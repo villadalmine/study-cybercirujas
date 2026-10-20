@@ -13,9 +13,11 @@ vendor, an exam or a page layout.
 """
 from __future__ import annotations
 
+import hashlib
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -116,6 +118,29 @@ class SyllabusCoverageTests(unittest.TestCase):
         topics = [{"id": f"351.{i}", "weight": w} for i, w in
                   enumerate([10, 5, 7, 15, 5, 12, 10, 15, 5, 4, 4, 4, 4], 1)]
         tracker._reject_unreadable_syllabus(topics, self.PAGE, "u")
+
+
+class SnapshotDocumentTests(unittest.TestCase):
+    """The snapshot reads the whole objectives document and records its hash (#63; audit 2026-10-20, item 5)."""
+
+    def fetch(self, body: bytes, limit: int = 20000):
+        with mock.patch.object(tracker, "_get_bytes", return_value=(body, "text/html")):
+            return tracker.fetch_document("https://example.org/objectives", limit=limit)
+
+    def test_returns_the_full_text_and_the_sha256_of_the_bytes(self):
+        body = b"<html><body><h1>Objectives</h1><p>1.1 Install</p></body></html>"
+        text, digest = self.fetch(body)
+        self.assertEqual(text, "Objectives 1.1 Install")
+        self.assertEqual(digest, hashlib.sha256(body).hexdigest())
+
+    def test_refuses_a_document_longer_than_the_limit_instead_of_truncating(self):
+        with self.assertRaises(tracker.TrackerError) as raised:
+            self.fetch(b"<p>" + b"objective " * 50 + b"</p>", limit=100)
+        self.assertIn("refused rather than truncated", str(raised.exception).lower())
+
+    def test_fetch_text_still_cuts_for_its_other_callers(self):
+        with mock.patch.object(tracker, "_get_bytes", return_value=(b"<p>abcdef</p>", "text/html")):
+            self.assertEqual(tracker.fetch_text("https://example.org/x", limit=3), "abc")
 
 
 if __name__ == "__main__":

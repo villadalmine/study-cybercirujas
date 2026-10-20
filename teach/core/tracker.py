@@ -17,6 +17,7 @@ in generator.py. They are model input, not comments.
 """
 
 import datetime
+import hashlib
 import html as html_lib
 import io
 import re
@@ -91,8 +92,33 @@ def _get_bytes(url: str) -> tuple[bytes, str]:
 
 
 def fetch_text(url: str, limit: int = 20000) -> str:
-    """Plain text from a URL: PDF (pypdf) or HTML (tags stripped)."""
+    """Plain text from a URL: PDF (pypdf) or HTML (tags stripped), cut at `limit` characters.
+
+    Fine for a version banner or a summary page. A syllabus snapshot must not be
+    cut: it uses `fetch_document`, which refuses instead."""
     body, content_type = _get_bytes(url)
+    return document_text(url, body, content_type)[:limit]
+
+
+def fetch_document(url: str, limit: int = 20000) -> tuple[str, str]:
+    """(full text, sha256 of the bytes served) of an objectives document, for a snapshot.
+
+    The snapshot used to read `fetch_text(url)`, cut at 20,000 characters: a longer
+    document lost its tail silently and the model was asked for the objectives of a
+    fragment. Here a longer text is refused, and the hash of the vendor's bytes is
+    returned so the frozen syllabus records exactly which document it came from."""
+    body, content_type = _get_bytes(url)
+    text = document_text(url, body, content_type)
+    if len(text) > limit:
+        raise TrackerError(
+            f"{url}: the extracted text is {len(text)} characters, over the {limit} a snapshot reads. "
+            "Refused rather than truncated: point sources.objectives at the objectives document itself, "
+            "or raise the limit deliberately.")
+    return text, hashlib.sha256(body).hexdigest()
+
+
+def document_text(url: str, body: bytes, content_type: str) -> str:
+    """The text of a fetched PDF or HTML body, whitespace collapsed, never cut."""
     if url.lower().endswith(".pdf") or "pdf" in content_type:
         from pypdf import PdfReader
 
@@ -103,7 +129,7 @@ def fetch_text(url: str, limit: int = 20000) -> str:
         text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", decoded, flags=re.S)
         text = re.sub(r"<[^>]+>", " ", text)
         text = html_lib.unescape(text)
-    return re.sub(r"\s+", " ", text).strip()[:limit]
+    return re.sub(r"\s+", " ", text).strip()
 
 
 # Lines a CLI backend prints about itself, which are not the answer. Seen on a
@@ -528,7 +554,7 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
             f"'{cert_id}' already has a syllabus ({len(existing)} topics). Use --force to re-snapshot."
         )
 
-    text = fetch_text(url)
+    text, source_sha256 = fetch_document(url)
     result = _ai_yaml(
         backend,
         usage={"op": "snapshot", "cert": cert_id},
@@ -604,6 +630,8 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         post.metadata["weights"] = "unpublished"
     post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))
     post.metadata["snapshot_date"] = datetime.date.today().isoformat()
+    # The bytes the vendor served, so "which document was this frozen from" has an exact answer.
+    post.metadata["source_sha256"] = source_sha256
     sources = post.metadata.get("sources") or []
     if url not in sources:
         post.metadata["sources"] = [*sources, url]
