@@ -24,7 +24,7 @@ APP_SVC="internal-api-svc"
 NODEPORT=30531
 
 usage() {
-  echo "Uso: $0 {break|verify|clean}"
+  echo "Uso: $0 {break|verify|clean|fix}"
   exit 1
 }
 
@@ -185,7 +185,39 @@ do_verify() {
     echo "Todo correcto. Escenario resuelto."
   else
     echo "Todavía falta algo. Revisá los puntos marcados [FALTA]."
+    return 1   # exit != 0 mientras falte algo (antes salía 0 siempre: falso OK)
   fi
+}
+
+# Solución de referencia: ClusterIP + default-deny + permitir solo a frontend-client (idempotente).
+do_fix() {
+  kubectl -n "$NS" patch svc "$APP_SVC" --type=json \
+    -p '[{"op":"replace","path":"/spec/type","value":"ClusterIP"},{"op":"remove","path":"/spec/ports/0/nodePort"}]' \
+    2>/dev/null || kubectl -n "$NS" patch svc "$APP_SVC" --type=merge -p '{"spec":{"type":"ClusterIP"}}'
+  kubectl -n "$NS" apply -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-api
+spec:
+  podSelector:
+    matchLabels:
+      app: $APP_DEPLOY
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend-client
+EOF
 }
 
 do_clean() {
@@ -198,6 +230,7 @@ case "${1:-}" in
   break) do_break ;;
   verify) do_verify ;;
   clean) do_clean ;;
+  fix) do_fix ;;
   *) usage ;;
 esac
 
