@@ -294,9 +294,9 @@ def cmd_test(args) -> int:
             code = 1
             continue
         with tempfile.TemporaryDirectory() as tmp:
-            if not fix.is_file():   # the script's own `fix` verb is the reference fix, run as a student would: from /root
+            if not fix.is_file():   # the script's own `fix` verb is the reference fix, run from where background.sh put the script
                 fix = Path(tmp) / "fix.sh"
-                fix.write_text(f"#!/usr/bin/env bash\nset -euo pipefail\ncd /root\n{kc._env(lab)}\n"
+                fix.write_text(f"#!/usr/bin/env bash\nset -euo pipefail\ncd /opt/study-lab/{cert}-{topic}\n{kc._env(lab)}\n"
                                f"timeout 600 bash ./{shlex.quote(lab.spec['script'])} fix </dev/null\n", encoding="utf-8")
             kc.write(scen, Path(tmp) / "scenario")
             stages = kc_test.run_scenario(Path(tmp) / "scenario", fix)

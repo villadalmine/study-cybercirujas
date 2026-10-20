@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  plan:
+  parity-plan:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     outputs:
@@ -38,8 +38,8 @@ jobs:
           echo "labs=$labs" >> "$GITHUB_OUTPUT"
 
   killercoda-parity:
-    needs: plan
-    if: needs.plan.outputs.labs != '[]'
+    needs: parity-plan
+    if: needs.parity-plan.outputs.labs != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     # A lab that is not in the allowlist (loaded-untested) never fails the PR; a required (tested) one does.
@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.plan.outputs.labs) }}
+        include: ${{ fromJSON(needs.parity-plan.outputs.labs) }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0

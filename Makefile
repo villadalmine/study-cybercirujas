@@ -25,7 +25,7 @@ REGISTRY ?= registry.registry:5000
 GEN_FLAGS := $(if $(TOPIC),--topic $(TOPIC)) $(if $(FORCE),--force) $(if $(BACKEND),--backend $(BACKEND)) $(if $(LANG),--lang $(LANG))
 
 .PHONY: groundedness groundedness-setup groundedness-deep
-.PHONY: killercoda-test killercoda-export killercoda-diff preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
+.PHONY: lab-evidence-doc killercoda-test killercoda-export killercoda-diff preflight docker-run smoke determinism test-e2e test-lab-e2e lab-images lab-validate
 .PHONY: lock help setup status cert next install list show generate serve lab-up lab-down lab-status git-init publish clean image-cluster deploy-local test audit batch quality verify metrics clean-registry check-models probe-models mcp-setup mcp-check graph graph-setup wiki verify-ci labels-check
 
 help:
@@ -245,6 +245,9 @@ probe-models: ## do the bot's models ANSWER, read the material, and speak each l
 	@# it found into models.yaml, which is what the page builds its model menu,
 	@# its effort selector and its per-language filtering from.
 	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),) $(if $(LANGS),--langs "$(LANGS)",)
+
+lab-evidence-doc: ## regenerate docs/LAB-EVIDENCE.md from deploy/lab-targets.yaml, lab-evidence.yaml and killercoda/tracks.yaml (CI: --check)
+	$(VENV)/bin/python3 scripts/lab_evidence_doc.py
 
 check-docs: ## docs consistent with the repo: links, anchors, paths, make/teach commands, generated files (free)
 	$(VENV)/bin/python3 scripts/check_docs.py

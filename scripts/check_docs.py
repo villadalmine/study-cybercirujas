@@ -12,7 +12,7 @@ certs/ or graphify-out/) and fails when:
 - a `make <target>` mentioned in the docs is not a Makefile target, or a
   `teach <command>` is not a command of teach/cli.py;
 - a generated file is stale: the same `--check` the generators already have
-  (gen_api_docs.py, gen_readme_table.py).
+  (gen_api_docs.py, gen_readme_table.py, lab_evidence_doc.py).
 
 A reference that is meant to point at something that does not exist (a
 placeholder, a file a reader creates, a historical name) goes in
@@ -214,7 +214,7 @@ def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: di
 
 def generated_checks() -> list[str]:
     problems = []
-    for script in ("gen_api_docs.py", "gen_readme_table.py"):
+    for script in ("gen_api_docs.py", "gen_readme_table.py", "lab_evidence_doc.py"):
         res = subprocess.run([sys.executable, str(REPO / "scripts" / script), "--check"],
                              cwd=REPO, capture_output=True, text=True)
         if res.returncode != 0:
