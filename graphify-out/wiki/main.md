@@ -2,7 +2,7 @@
 
 > God node · 24 connections · `scripts/check_pr.py`
 
-**Community:** [Community 32](Community_32.md)
+**Community:** [Community 50](Community_50.md)
 
 ## Connections by Relation
 

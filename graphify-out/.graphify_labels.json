@@ -1,7 +1,6 @@
 {
   "4": "video.py",
   "9": "Which backend authors better material?",
-  "10": "certs.py",
   "16": "Platform Architecture Plan",
   "17": "Removed K8s API Checks",
   "20": "Syllabus Coverage Tests",
@@ -23,6 +22,5 @@
   "71": "bot_loop_check.js",
   "79": "CatalogueStateTests",
   "81": "FixtureTests",
-  "82": "LanguageTests",
-  "88": "PathLanguageTests"
+  "82": "LanguageTests"
 }

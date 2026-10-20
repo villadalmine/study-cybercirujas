@@ -34,8 +34,8 @@
 
 - [Community 43](Community_43.md) (4 shared connections)
 - [Community 22](Community_22.md) (3 shared connections)
-- [video.py](video.py.md) (2 shared connections)
-- [Community 54](Community_54.md) (2 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
 - [Community 89](Community_89.md) (1 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
 - [Community 140](Community_140.md) (1 shared connections)

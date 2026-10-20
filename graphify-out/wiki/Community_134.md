@@ -1,33 +1,30 @@
 # Community 134
 
-> 9 nodes · cohesion 0.36
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **OwnedTeardownTests** (8 connections) — `tests/test_labs_ownership.py`
-- **_down_container()** (5 connections) — `teach/core/labs.py`
-- **.test_a_foreign_container_under_the_name_survives()** (4 connections) — `tests/test_labs_ownership.py`
-- **.test_our_container_is_removed()** (4 connections) — `tests/test_labs_ownership.py`
-- **.run_container()** (3 connections) — `tests/test_labs_ownership.py`
-- **.running()** (3 connections) — `tests/test_labs_ownership.py`
-- **.setUp()** (1 connections) — `tests/test_labs_ownership.py`
-- **.tearDown()** (1 connections) — `tests/test_labs_ownership.py`
-- **skipUnless** (1 connections)
+- **Pull requests** (7 connections) — `CONTRIBUTING.md`
+- **How issue forms work** (2 connections) — `CONTRIBUTING.md`
+- **Agents** (1 connections) — `CONTRIBUTING.md`
+- **How big is my change?** (1 connections) — `CONTRIBUTING.md`
+- **Labels** (1 connections) — `CONTRIBUTING.md`
+- **Size and scope** (1 connections) — `CONTRIBUTING.md`
+- **Triage and response times** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 8](Community_8.md) (3 shared connections)
-- [Community 131](Community_131.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/labs.py`
-- `tests/test_labs_ownership.py`
+- `CONTRIBUTING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 17 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 7 (88%)
+- INFERRED: 1 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

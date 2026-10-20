@@ -1,6 +1,6 @@
 # Community 148
 
-> 10 nodes · cohesion 0.20
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
@@ -9,7 +9,6 @@
 - **Raising a topic's quality score** (4 connections) — `CONTRIBUTING.md`
 - **.verified()** (3 connections) — `teach/lab/spec.py`
 - **Sign your commits (DCO)** (3 connections) — `CONTRIBUTING.md`
-- **.test_pr6_traps_caught_offline_and_byte_for_byte()** (2 connections) — `tests/test_groundedness.py`
 - **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
 - **skipUnless** (1 connections)
 - **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
@@ -17,7 +16,8 @@
 
 ## Relationships
 
-- [Community 66](Community_66.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
@@ -34,8 +34,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 11 (65%)
-- INFERRED: 6 (35%)
+- EXTRACTED: 10 (62%)
+- INFERRED: 6 (38%)
 - AMBIGUOUS: 0 (0%)
 
 ---

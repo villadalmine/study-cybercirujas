@@ -1,33 +1,27 @@
 # Community 146
 
-> 7 nodes · cohesion 0.43
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **check_config.py** (14 connections) — `scripts/check_config.py`
-- **main()** (6 connections) — `scripts/check_config.py`
-- **effective()** (5 connections) — `scripts/check_config.py`
-- **recent()** (3 connections) — `scripts/check_config.py`
-- **dominant()** (2 connections) — `scripts/check_config.py`
-- **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
-- **(model, effort, notes) as the generator would resolve them right now. Resolved…** (1 connections) — `scripts/check_config.py`
+- **run()** (4 connections) — `tests/test_groundedness.py`
+- **NoNetwork** (2 connections) — `tests/test_groundedness.py`
+- **.test_pr6_traps_caught_offline_and_byte_for_byte()** (2 connections) — `tests/test_groundedness.py`
+- **.test_dry_run_and_fetch_with_the_network_blocked()** (2 connections) — `tests/test_groundedness.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 62](Community_62.md) (3 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 148](Community_148.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_config.py`
+- `tests/test_groundedness.py`
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

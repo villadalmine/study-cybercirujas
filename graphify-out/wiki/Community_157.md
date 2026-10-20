@@ -1,31 +1,27 @@
 # Community 157
 
-> 6 nodes · cohesion 0.47
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **_exec_script_cmd()** (7 connections) — `teach/core/labs.py`
-- **ExecScriptCmdTests** (4 connections) — `tests/test_labs.py`
-- **.test_subcommand_scripts_get_break()** (3 connections) — `tests/test_labs.py`
-- **.test_stdin_is_attached()** (2 connections) — `tests/test_labs.py`
-- **.test_terminal_gets_a_tty()** (2 connections) — `tests/test_labs.py`
-- **`docker exec` for break_fix.sh, with the student's stdin attached. Most scripts…** (1 connections) — `teach/core/labs.py`
+- **_write_meta()** (5 connections) — `teach/core/generator.py`
+- **Path** (1 connections)
+- **Provenance for one language directory: who made it, with what, when. Written…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 8](Community_8.md) (3 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 133](Community_133.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/labs.py`
-- `tests/test_labs.py`
+- `teach/core/generator.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 5 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

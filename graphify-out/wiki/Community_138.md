@@ -1,36 +1,32 @@
 # Community 138
 
-> 9 nodes · cohesion 0.31
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **main()** (5 connections) — `scripts/check_syllabus.py`
-- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
-- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
-- **smells()** (3 connections) — `scripts/check_syllabus.py`
-- **Path** (1 connections)
-- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
-- **Does the frozen syllabus cover the exam, or only its table of contents? The…** (1 connections) — `scripts/check_syllabus.py`
-- **Structural signs the topic list was computed rather than read. Offline.…** (1 connections) — `scripts/check_syllabus.py`
+- **milestone()** (7 connections) — `teach/core/pipeline.py`
+- **milestone_targets()** (7 connections) — `teach/core/pipeline.py`
+- **in_milestone()** (4 connections) — `teach/core/pipeline.py`
+- **Is this cert/language part of the declared goal?** (1 connections) — `teach/core/pipeline.py`
+- **The bounded goal the unattended timer is working toward, or {}. The timer used…** (1 connections) — `teach/core/pipeline.py`
+- **[(cert, [langs])] for the milestone, or None when none is declared. None and []…** (1 connections) — `teach/core/pipeline.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (5 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
+- [Community 62](Community_62.md) (4 shared connections)
+- [Community 49](Community_49.md) (3 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 5](Community_5.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_syllabus.py`
+- `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 15 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---
