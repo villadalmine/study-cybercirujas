@@ -24,6 +24,7 @@ on:
       - 'media/**'
       - 'deploy/Dockerfile'
       - 'pyproject.toml'
+      - 'requirements.lock'
       - '.github/workflows/docker.yml'
   # A PR that changes the Dockerfile, the dependencies, the app code or this workflow
   # builds both platforms without pushing, so a broken arm64 build (typically a new

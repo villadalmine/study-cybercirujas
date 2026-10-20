@@ -121,7 +121,8 @@ make serve        # site + API on http://127.0.0.1:8000
 
 ```powershell
 py -m venv .venv
-.venv\Scripts\pip install -e .
+.venv\Scripts\pip install --require-hashes -r requirements.lock
+.venv\Scripts\pip install --no-deps -e .
 .venv\Scripts\teach serve        # http://127.0.0.1:8000
 ```
 

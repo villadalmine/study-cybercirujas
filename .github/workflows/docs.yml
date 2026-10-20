@@ -36,7 +36,8 @@ jobs:
       - name: Install
         run: |
           python3 -m venv .venv
-          .venv/bin/pip install -q -e .
+          .venv/bin/pip install -q --require-hashes -r requirements.lock
+          .venv/bin/pip install -q --no-deps -e .
           .venv/bin/pip install -q "graphifyy==$(sed -n 's/^GRAPHIFY_VERSION *:= *//p' Makefile)"
       - name: Links, anchors, paths, make targets, teach commands, generated files
         run: .venv/bin/python3 scripts/check_docs.py

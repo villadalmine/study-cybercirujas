@@ -10,9 +10,13 @@ ENV TEACH_ROOT=/app PYTHONUNBUFFERED=1
 # while docker.yml did not rebuild for it. What the image contains and what
 # triggers a rebuild are now the same list (docker.yml → paths), which is
 # also what scripts/check_pr.py reads to label a PR site:image-rebuild.
-COPY pyproject.toml ./
+# Dependencies come from requirements.lock (exact versions, sha256 hashes), then the project with
+# --no-deps, the same two steps as `make install` and CI. The build backend (hatchling) still
+# arrives through pip's build isolation without a hash, as in the venv path.
+COPY pyproject.toml requirements.lock ./
 COPY teach/ teach/
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --require-hashes -r requirements.lock \
+ && pip install --no-cache-dir --no-deps .
 
 # Every root-level data file the API reads, in one line. Listing them
 # individually is how three endpoints shipped broken in a row: /api/status

@@ -562,6 +562,10 @@ leave the Release PR open: it keeps collecting changes.
 All of them run without keys, without a model, and without network beyond
 installing dependencies (and pulling base images for the chart smoke test). CI runs the same targets.
 
+Dependencies install from `requirements.lock` (exact versions, sha256 hashes), then the project
+with `--no-deps`. After changing `dependencies` in `pyproject.toml`, run `make lock` (needs `uv`)
+and commit the lock in the same PR; `tests/test_lockfile.py` fails if a dependency is missing from it.
+
 | Flow | Test | Command |
 |---|---|---|
 | clone → setup → serve → site, API, CLI → Docker lab → cleanup | `tests/e2e/clone_and_run.sh` | `make test-e2e` (needs Docker for the lab step; clones your **committed** HEAD) |
