@@ -3,6 +3,7 @@
 import typer
 
 from .core import catalog, certs, generator, labs
+from .lab import safety as lab_safety
 
 app = typer.Typer(help="Self-service education platform", no_args_is_help=True)
 cert_app = typer.Typer(help="Catalog certifications", no_args_is_help=True)
@@ -97,6 +98,8 @@ def lab_up(
                               "instead of the container runner (study-lab run). At your own risk."),
 ) -> None:
     """Bring up a topic lab (local Docker, or terraform if lab.yaml asks for it)."""
+    if not lab_safety.confirm(labs.load_spec_for(cert_id, topic_id), f"Lab {cert_id}/{topic_id}", echo=typer.echo):
+        raise typer.Exit(1)
     try:
         result = labs.up(cert_id, topic_id, host=host)
     except labs.LabError as error:

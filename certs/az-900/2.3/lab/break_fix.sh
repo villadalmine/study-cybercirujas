@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# WARNING: this lab does more than break a throwaway container.
+#   - It creates real cloud resources that cost money until you delete them.
+# Creates a real, billable Azure Storage account and resource group in your subscription. Use a
+# sandbox or free-credit subscription and run `break_fix.sh cleanup` when you finish: until then
+# it keeps costing money.
 #
 # ==============================================================================
 # AZ-900 | Domain 2 - Describe Azure architecture and services
