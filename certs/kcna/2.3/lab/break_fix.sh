@@ -167,12 +167,32 @@ do_verify() {
   if kubectl rollout status "deployment/${DEPLOY_NAME}" -n "${NAMESPACE}" --timeout=60s; then
     ready="$(kubectl get deployment "${DEPLOY_NAME}" -n "${NAMESPACE}" -o jsonpath='{.status.readyReplicas}')"
     echo "Deployment estable. readyReplicas=${ready:-0}"
+    # "rollout status" solo mira la readiness: con el liveness roto el pod llega a Ready y
+    # recién después lo mata el kubelet. Hay que observar los reinicios (antes: falso OK).
+    echo "Observando 25 s que el pod no se reinicie por el liveness probe..."
+    sleep 25
+    restarts="$(kubectl get pods -n "${NAMESPACE}" -l "app=${DEPLOY_NAME}" \
+      -o jsonpath='{range .items[*]}{.metadata.deletionTimestamp}|{.status.containerStatuses[0].restartCount}{"\n"}{end}' \
+      | awk -F'|' '$1=="" {n+=$2; c++} END {if (c==0) print "none"; else print n}')"
+    if [[ "${restarts}" != "0" ]]; then
+      echo "Sigue reiniciándose (restarts=${restarts}): el liveness probe todavía apunta mal."
+      echo "Revisá: kubectl describe pod -l app=${DEPLOY_NAME} -n ${NAMESPACE}"
+      exit 1
+    fi
     echo "Resuelto: el pod ya no reinicia por el liveness probe."
   else
     echo "Todavía no está estable."
     echo "Revisá: kubectl describe pod -l app=${DEPLOY_NAME} -n ${NAMESPACE}"
     exit 1
   fi
+}
+
+# Solución de referencia: el liveness probe tiene que apuntar al puerto donde escucha nginx.
+do_fix() {
+  require_kubectl
+  kubectl patch deployment "${DEPLOY_NAME}" -n "${NAMESPACE}" --type=json \
+    -p='[{"op":"replace","path":"/spec/template/spec/containers/0/livenessProbe/httpGet/port","value":80}]'
+  kubectl rollout status "deployment/${DEPLOY_NAME}" -n "${NAMESPACE}" --timeout=90s
 }
 
 do_cleanup() {
@@ -182,7 +202,7 @@ do_cleanup() {
 }
 
 usage() {
-  echo "Uso: $0 {break|hint|verify|cleanup}"
+  echo "Uso: $0 {break|hint|verify|cleanup|fix}"
   exit 1
 }
 
@@ -191,6 +211,7 @@ case "${1:-}" in
   hint)    do_hint ;;
   verify)  do_verify ;;
   cleanup) do_cleanup ;;
+  fix)     do_fix ;;
   *)       usage ;;
 esac
 
