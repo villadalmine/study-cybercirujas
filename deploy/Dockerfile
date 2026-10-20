@@ -1,6 +1,6 @@
 # El contenido (catalog.yaml + certs/) va HORNEADO en la imagen: publicar =
 # regenerar/commitear contenido -> rebuild -> helm upgrade. Sin estado en el pod.
-FROM python:3.12-slim
+FROM python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
 
 WORKDIR /app
 ENV TEACH_ROOT=/app PYTHONUNBUFFERED=1
@@ -27,6 +27,11 @@ COPY media/ media/
 # STATUS.md's table, on purpose (one implementation, two projections). The
 # cleaner home for it is teach/core; until that refactor, ship the scripts.
 COPY scripts/ scripts/
+
+# The app only reads /app and writes where TEACH_BOT_STATS points (a mounted volume the chart
+# gives group 10001): no reason to run as root.
+RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin app
+USER 10001
 
 EXPOSE 8000
 # TEACH_SECRET/LITELLM_* llegan por env desde el chart (Secret)

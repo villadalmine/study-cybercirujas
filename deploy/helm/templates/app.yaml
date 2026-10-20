@@ -18,6 +18,8 @@ spec:
         - name: {{ . }}
         {{- end }}
       {{- end }}
+      securityContext:
+        fsGroup: 10001   # the image runs as uid 10001; the bot-stats volume must be writable by it
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
