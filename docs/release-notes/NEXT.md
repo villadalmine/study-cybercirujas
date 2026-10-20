@@ -9,6 +9,7 @@
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 - **Self-audit:** `docs/audit/` publishes the rubric we check this repo with, `scripts/audit_compare.py` compares auditors, and anyone can submit a result or propose a criterion.
+- **CKA and CKAD on Kubernetes v1.37:** the catalog now tracks the v1.37 exam (the vendor's objectives are unchanged, byte for byte). The material, the labs and the lab runner image moved to 1.37 by script (220 version lines, no model call), and every lab that runs something was proved on kind and k3s v1.37.
 
 ## Upgrade notes
 
