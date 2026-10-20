@@ -3,7 +3,7 @@
 # labs that break and fix services (systemctl, journald, units) behave as on a
 # real VM. Runs without --privileged: cgroup v2, a private cgroup namespace
 # made writable with --security-opt writable-cgroups=true, and tmpfs on /run.
-FROM debian:bookworm-20261005
+FROM debian:bookworm-20261005@sha256:2c037a04925515fdd6ea85ea14a682d0e79931f5e9f5d07b6dbfc6ba12f9e858
 
 ENV container=docker DEBIAN_FRONTEND=noninteractive STUDY_LAB_FAMILY=linux
 

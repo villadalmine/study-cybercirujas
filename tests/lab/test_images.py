@@ -33,3 +33,34 @@ def test_job_ids_are_unique_across_workflows():
     for wf in sorted((REPO / ".github" / "workflows").glob("*.y*ml")):
         ids.update(list((yaml.safe_load(wf.read_text(encoding="utf-8")) or {}).get("jobs") or {}))
     assert [j for j, n in ids.items() if n > 1] == []
+
+
+def test_runner_base_images_are_pinned_by_digest():
+    for fam in ("k8s", "linux"):
+        text = (REPO / "deploy" / "study-lab" / fam / "Dockerfile").read_text(encoding="utf-8")
+        froms = re.findall(r"^FROM\s+(\S+)", text, re.M)
+        assert froms and all(re.search(r"@sha256:[0-9a-f]{64}$", f) for f in froms), (fam, froms)
+
+
+def test_ensure_image_builds_locally_and_never_pulls(monkeypatch):
+    from teach.lab import runner
+
+    calls = []
+
+    class R:
+        def __init__(self, rc):
+            self.returncode = rc
+
+    def fake(*args, **kw):
+        calls.append(args)
+        return R(1 if args[:2] == ("image", "inspect") else 0)
+
+    monkeypatch.setattr(runner, "_docker", fake)
+    monkeypatch.setattr(runner, "build", lambda fam: calls.append(("build", fam)))
+
+    class L:
+        spec = {"requires": "linux"}
+
+    runner.ensure_image(L())
+    assert ("build", "linux") in calls
+    assert not any(c and c[0] == "pull" for c in calls)
