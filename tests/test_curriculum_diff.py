@@ -214,5 +214,70 @@ class Diff(unittest.TestCase):
         self.assertFalse(json.loads(a)["identical"])
 
 
+# ==== plan ====
+
+class Classes(unittest.TestCase):
+    def classes(self, new):
+        return {tid: c[0] for tid, c in cd.classify(cd.diff(BASE, new), BASE).items()}
+
+    def test_unchanged_is_keep(self):
+        self.assertEqual(set(self.classes(copy.deepcopy(BASE)).values()), {"keep"})
+
+    def test_rules(self):
+        new = tree(("Storage", 40, ["Implement storage classes and dynamic volume provisioning",
+                                    "Manage persistent volumes, persistent volume claims and snapshots"]),
+                   ("Networking", 50, ["Define and enforce Network Policies",
+                                       "Use the Gateway API to manage Ingress traffic."]),
+                   ("DNS", 10, ["Understand and use CoreDNS", "Operate etcd backups"]))
+        self.assertEqual(self.classes(new), {
+            "1.1": "keep",            # same text, same domain, same domain weight
+            "1.2": "regenerate",      # changed: MATCH <= similarity < REWORD
+            "2.1": "revalidate",      # its domain's weight went 60 -> 50
+            "2.2": "revalidate",      # moved to DNS (and its old domain's weight changed)
+            "2.3": "revalidate",      # domain weight changed (the trailing dot is not a change)
+        })
+
+    def test_reworded_and_retired(self):
+        new = copy.deepcopy(BASE)
+        new["domains"][1]["objectives"][2]["text"] = "Use the Gateway API to manage ingress traffics"
+        new["domains"][1]["objectives"][1]["text"] = "Operate etcd backups"
+        got = self.classes(new)
+        self.assertEqual((got["2.3"], got["2.2"]), ("revalidate", "retire"))
+
+    def test_rules_table_names_every_class(self):
+        self.assertEqual(sorted(r[0] for r in cd.CLASS_RULES), sorted(cd.CLASSES))
+        self.assertEqual(sorted(cd.PLANNED_FILES), sorted(cd.CLASSES))
+        self.assertEqual(cd.PLANNED_FILES["keep"], [])
+
+
+DOC = textwrap.dedent("""\
+    # 2.4 Understand API deprecations
+
+    Intro.
+
+    ## Removed APIs
+
+    Run `kubeadm upgrade apply v1.35.1` on the node.
+
+    ## References
+
+    - [CKAD Curriculum v1.35](https://example.org)
+    """)
+
+
+class BelowTopicLevel(unittest.TestCase):
+    def test_sections_and_version_lines(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs/ckad/2.4/en").mkdir(parents=True)
+            (root / "certs/ckad/2.4/en/content.md").write_text(DOC, encoding="utf-8")
+            found = cd.scan(root, "ckad", "2.4", ["en"], "1.35",
+                            [("old objective title", "Understand API deprecations"), ("weight", "weight")])
+        self.assertEqual([(s["line"], s["heading"], s["why"]) for s in found["sections"]],
+                         [(1, "2.4 Understand API deprecations", ["old objective title"])])
+        self.assertEqual(found["version_lines"], {"curriculum": 1, "label": 0,
+                                                  "technical": ["certs/ckad/2.4/en/content.md:7"]})
+
+
 if __name__ == "__main__":
     unittest.main()
