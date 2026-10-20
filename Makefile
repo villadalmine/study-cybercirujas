@@ -189,7 +189,7 @@ quality: ## floor report, then score every topic and write its meta.yaml quality
 GROUND := $(VENV)/bin/python3 scripts/check_groundedness.py --fetch --write $(if $(DIRS),$(DIRS),--base $(if $(BASE),$(BASE),origin/main))
 
 groundedness-setup: ## install the groundedness classifier (torch CPU, GLiClass) and download its pinned weights
-	$(VENV)/bin/pip install -q -r requirements-groundedness.txt
+	$(VENV)/bin/pip install -q -c requirements.lock -r requirements-groundedness.txt
 	$(VENV)/bin/python3 scripts/check_groundedness.py --download
 
 groundedness: ## claims not supported by their sources, GLiClass prefilter (topics changed vs BASE=origin/main, or DIRS=)

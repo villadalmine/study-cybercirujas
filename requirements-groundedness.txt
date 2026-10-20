@@ -1,4 +1,6 @@
-# The groundedness prefilter (scripts/check_groundedness.py), on top of `pip install -e .`.
+# The groundedness prefilter (scripts/check_groundedness.py), on top of the locked install
+# (`make install`: requirements.lock, then the project with --no-deps). Installed with
+# `-c requirements.lock` so it cannot move a locked version.
 # Pinned to the versions it was measured with on 2026-10-15 (groundedness.yaml).
 # torch comes from PyTorch's CPU index: the PyPI wheel for Linux pulls CUDA (~2 GB).
 --extra-index-url https://download.pytorch.org/whl/cpu

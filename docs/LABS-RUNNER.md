@@ -13,7 +13,7 @@ Status (2026-10-15): prototype. Pilot on CKA 1.1, 3.3, 3.4 and 3.5, all four
 ## Quick start
 
 ```bash
-make install                        # or: pip install -e '.[lab]'
+make install                        # or: pip install --require-hashes -r requirements.lock && pip install --no-deps -e .
 make lab-images                     # builds study-lab:k8s and study-lab:linux (once)
 
 study-lab run cka 1.1               # environment + break (idempotent: run it again, nothing changes)

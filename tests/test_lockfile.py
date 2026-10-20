@@ -47,15 +47,17 @@ class LockfileTests(unittest.TestCase):
         # Each place that installs the project installs the lock first and the project with --no-deps,
         # so pip cannot resolve a newer version behind the lock's back. The optional `[mcp]` extra
         # (`make mcp-setup`, a workstation tool outside the app and CI) is not in the lock.
-        files = [REPO / "Makefile"] + sorted((REPO / ".github/workflows").glob("*.yml"))
+        files = [REPO / "Makefile", REPO / "deploy/Dockerfile"] + sorted((REPO / ".github/workflows").glob("*.yml"))
         loose = []
         for f in files:
             for n, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
                 if "[mcp]" in line:
                     continue
-                if re.search(r"pip install\b.*\s-e\s+['\"]?\.", line) and "--no-deps" not in line:
+                editable = re.search(r"pip install\b.*\s-e\s+['\"]?\.", line)
+                plain = re.search(r"pip install\b[^#]*\s\.(\[[\w,]+\])?\s*$", line)   # Dockerfile: `pip install .`
+                if (editable or plain) and "--no-deps" not in line:
                     loose.append(f"{f.relative_to(REPO)}:{n}: {line.strip()}")
-                if "--no-deps -e ." in line and "requirements.lock" not in line:
+                if re.search(r"--no-deps (-e )?\.", line) and "requirements.lock" not in line:
                     prev = f.read_text(encoding="utf-8").splitlines()[n - 2]
                     if "--require-hashes -r requirements.lock" not in prev:
                         loose.append(f"{f.relative_to(REPO)}:{n}: lock not installed first")
