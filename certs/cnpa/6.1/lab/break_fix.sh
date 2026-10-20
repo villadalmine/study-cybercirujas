@@ -298,6 +298,21 @@ break_template() {
 if [ -z "$LAB_DIR" ] || [ "$LAB_DIR" = "/" ]; then
   echo "Refusing to run: LAB_DIR is unsafe ('$LAB_DIR')." >&2; exit 1
 fi
+# --- verbs: verify | fix | cleanup (default: break). Before this every verb re-ran the break and
+# exited 0, so "verify" could never fail. verify = the scorecard, which exits 0 only at 100%.
+case "${1:-break}" in
+  verify)
+    [ -x "$BIN/scorecard" ] || { echo "The lab is not provisioned: run it with no argument first." >&2; exit 1; }
+    "$BIN/scorecard"; exit $? ;;
+  fix)
+    [ -e "$LAB_DIR/.lab-active" ] || { echo "The lab is not provisioned: run it with no argument first." >&2; exit 1; }
+    provision   # the reference fix: the platform template gets its guardrails back
+    "$BIN/scorecard"; exit $? ;;
+  cleanup) rm -rf "$LAB_DIR"; echo "Lab directory removed."; exit 0 ;;
+  break) ;;
+  *) echo "usage: $0 [break|verify|fix|cleanup]" >&2; exit 2 ;;
+esac
+
 if [ -e "$LAB_DIR/.lab-active" ] && [ "${LAB_RESET:-0}" != "1" ]; then
   echo "Lab already provisioned at $LAB_DIR."
   echo "Keep working on your fix, or set LAB_RESET=1 to rebuild the broken state from scratch."
