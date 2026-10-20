@@ -1,0 +1,73 @@
+name: Chart smoke test
+
+# Proves the Helm chart installs and serves: build the image from this checkout, load it
+# into a throwaway kind cluster, `helm install` with deploy/helm-smoke/values.yaml and a
+# generated TEACH_SECRET, wait for the rollout, curl /healthz and /api/catalog through a
+# port-forward, write the bot-stats volume as the app user, and `helm uninstall`.
+#
+# Same thing locally (docs/DEPLOY.md → Path C), then delete the cluster:
+#   docker build -t study:ci -f deploy/Dockerfile .
+#   kind create cluster --name chart-smoke --image "$KIND_NODE_IMAGE"
+#   kind load docker-image study:ci --name chart-smoke
+#   IMAGE=study:ci deploy/helm-smoke/smoke.sh
+#   kind delete cluster --name chart-smoke
+
+on:
+  pull_request:
+    paths:
+      - 'deploy/**'
+      - '.github/workflows/chart-smoke.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'deploy/**'
+      - '.github/workflows/chart-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chart-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HELM_VERSION: v3.22.0
+  KIND_VERSION: v0.33.0
+  KIND_NODE_IMAGE: kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5
+  IMAGE: study:ci
+
+jobs:
+  install:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Helm
+        uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310   # v5.0.1
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Build the image
+        timeout-minutes: 10
+        run: docker build -t "$IMAGE" -f deploy/Dockerfile .
+
+      - name: Create the kind cluster
+        uses: helm/kind-action@1544676c07bb3570fcb70166beaa07c4528fd4aa   # v1.15.1
+        with:
+          version: ${{ env.KIND_VERSION }}
+          node_image: ${{ env.KIND_NODE_IMAGE }}
+          cluster_name: chart-smoke
+          wait: 120s
+
+      - name: Load the image into kind
+        timeout-minutes: 5
+        run: kind load docker-image "$IMAGE" --name chart-smoke
+
+      - name: Install, verify, uninstall
+        timeout-minutes: 10
+        run: deploy/helm-smoke/smoke.sh
