@@ -143,3 +143,19 @@ def test_no_workflow_swallows_a_failure_inside_command_substitution():
         # `read <<<"$(cmd)"` and `echo "x=$(cmd)"` keep rc 0 when cmd fails (found in review of #162)
         assert '<<<"$(' not in text, wf.name
         assert not re.search(r'echo "[^"\n]*\$\(python', text), wf.name
+
+
+def test_a_skipped_k8s_lab_does_not_break_the_evidence_or_publish_steps():
+    """Exit 2 of --print-env skips Prove: nothing after it may assume evidence/ exists (review #6 of #162)."""
+    import yaml
+    wfs = REPO / ".github" / "workflows"
+    parity = yaml.safe_load((wfs / "killercoda-parity.yml").read_text(encoding="utf-8"))["jobs"]["killercoda-parity"]["steps"]
+    publish = yaml.safe_load((wfs / "killercoda-publish.yml").read_text(encoding="utf-8"))["jobs"]["prove"]["steps"]
+    for steps in (parity, publish):
+        env = next(s for s in steps if s.get("id") == "env")
+        assert '"$rc" -eq 2' in env["run"] and "skip=true" in env["run"] and "::warning" in env["run"]
+        prove = next(s for s in steps if str(s.get("name", "")).startswith("Prove the scenario"))
+        assert prove.get("if") == "steps.env.outputs.skip != 'true'"
+    ev = next(s for s in parity if s.get("name") == "Evidence")
+    first = ev["run"].strip().splitlines()[0]
+    assert first.startswith("[ -d evidence ] ||") and "exit 0" in first   # the guard runs before any `find evidence`
