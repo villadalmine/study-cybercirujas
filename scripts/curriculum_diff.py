@@ -627,8 +627,14 @@ COMMANDS["plan"] = ("classify every topic of an upgrade spec", _plan_args, _plan
 #
 # A changed file under certs/<cert>/<topic>/ of a cert in the plan must be one of
 # that topic's planned files; a directory that is not a topic yet is allowed only
-# when the plan has a `new` objective for that cert. Everything else (certs/<cert>.md,
-# catalog.yaml, code, docs) is not this guard's business: check_pr covers it.
+# when the plan has a `new` objective for that cert. A topic with listed sections or
+# version lines may also update its <lang>/meta.yaml, where the provenance of the edit
+# goes. Everything else (certs/<cert>.md, catalog.yaml, code, docs) is not this guard's
+# business: check_pr covers it.
+#
+# The allowlist is the plan as committed on the BASE (`git show <merge-base>:<plan>`), so
+# a PR cannot widen its own scope by editing plan.json. Only the PR that adds the plan
+# reads it from the head, and then it must be exactly what its inputs produce.
 
 def allowed(path: str, plan_data: dict) -> bool:
     for cert, c in plan_data["certs"].items():
@@ -639,7 +645,12 @@ def allowed(path: str, plan_data: dict) -> bool:
         known = {t["topic"]: t for t in c["topics"]}
         if topic not in known:
             return bool(c["new"])
-        return any(_glob(path, g) for g in known[topic]["planned_files"])
+        t = known[topic]
+        scoped = t["class"] in ("keep", "revalidate") and (t["sections"] or t["version_lines"]["technical"])
+        rest = path[len(prefix) + len(topic) + 1:].split("/")
+        if scoped and len(rest) == 2 and rest[1] == "meta.yaml":
+            return True
+        return any(_glob(path, g) for g in t["planned_files"])
     return True
 
 
@@ -684,6 +695,8 @@ def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text) ->
     lines: dict[str, set] = {}
     for c in plan_data["certs"].values():
         for t in c["topics"]:
+            if t["class"] not in ("keep", "revalidate"):
+                continue           # regenerate / retire / new own the whole directory
             if t["class"] == "revalidate":
                 for s in t["sections"]:
                     sections.setdefault(s["file"], set()).add(s["heading"])
@@ -726,7 +739,9 @@ def _git_text(ref: str | None, path: str) -> str | None:
 def _guard_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("plan", type=Path)
     p.add_argument("--base", default="origin/main")
-    p.add_argument("--files", nargs="*", help="changed files (default: git diff --name-only BASE...HEAD)")
+    p.add_argument("--files", nargs="*",
+                   help="changed files (default: git diff --name-only BASE...HEAD, so commit first: "
+                        "uncommitted edits are not seen)")
 
 
 def _guard_run(args) -> int:
@@ -734,12 +749,22 @@ def _guard_run(args) -> int:
     if files is None:
         files = subprocess.run(["git", "diff", "--name-only", f"{args.base}...HEAD"], cwd=REPO, check=True,
                                capture_output=True, text=True).stdout.split()
-    plan_data = json.loads(args.plan.read_text(encoding="utf-8"))
+    base = subprocess.run(["git", "merge-base", args.base, "HEAD"], cwd=REPO, capture_output=True,
+                          text=True).stdout.strip() or args.base
+    rel = args.plan.resolve().relative_to(REPO).as_posix()
+    committed = _git_text(base, rel)
+    if committed is None:      # the PR that adds the plan: it must be what its inputs produce
+        committed = args.plan.read_text(encoding="utf-8")
+        if dump_json(plan(REPO, json.loads(committed)["spec"])) != committed:
+            print(f"STALE: {rel} is not what its spec and inputs produce; regenerate it with `plan`")
+            return 1
+        print(f"plan: {rel} from the head (new in this PR, verified against its inputs)")
+    else:
+        print(f"plan: {rel} as committed on {base[:12]} (the base), not the head's copy")
+    plan_data = json.loads(committed)
     bad = guard(plan_data, files)
     for f in bad:
         print(f"NOT PLANNED: {f}")
-    base = subprocess.run(["git", "merge-base", args.base, "HEAD"], cwd=REPO, capture_output=True,
-                          text=True).stdout.strip() or args.base
     scoped = unlisted_edits(plan_data, files, lambda f: _git_text(base, f), lambda f: _git_text(None, f))
     weak = provenance(REPO, plan_data, files)
     for p in scoped:

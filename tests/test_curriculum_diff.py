@@ -328,6 +328,23 @@ class Guard(unittest.TestCase):
         self.assertEqual(len(self.check(DOC.replace("(https://example.org)", "(https://example.com)"))), 1)
         self.assertEqual(len(self.check(DOC + "\nextra line\n")), 1)
 
+    def test_a_scoped_topic_may_record_provenance_in_its_meta(self):
+        plan = self.plan()
+        plan["certs"]["ckad"]["topics"][1]["version_lines"]["technical"] = ["certs/ckad/1.1/en/content.md:3"]
+        self.assertEqual(cd.guard(plan, ["certs/ckad/1.1/en/meta.yaml", "certs/ckad/2.4/es/meta.yaml"]), [])
+        plan["certs"]["ckad"]["topics"][1]["version_lines"]["technical"] = []
+        self.assertEqual(cd.guard(plan, ["certs/ckad/1.1/en/meta.yaml"]), ["certs/ckad/1.1/en/meta.yaml"])
+
+    def test_regenerate_and_retire_own_their_directory(self):
+        for cls in ("regenerate", "retire"):
+            plan = self.plan()
+            plan["certs"]["ckad"]["topics"][0]["class"] = cls
+            self.assertEqual(self.unlisted(plan, DOC + "\nrewritten\n"), [])
+            self.assertEqual(self.unlisted(plan, None), [])
+
+    def unlisted(self, plan, new_text):
+        return cd.unlisted_edits(plan, ["certs/ckad/2.4/en/content.md"], lambda _: DOC, lambda _: new_text)
+
     def test_provenance_of_a_rewritten_topic(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
