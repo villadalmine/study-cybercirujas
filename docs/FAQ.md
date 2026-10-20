@@ -361,8 +361,9 @@ A person's edit is a `human_edits:` entry and feeds `human_review`.
 ## Contributing
 
 **Do I need an AI key?**
-No. Every check runs without keys, models or network
-([CONTRIBUTING](../CONTRIBUTING.md)).
+No. Every check runs without keys or models, and without network beyond
+installing dependencies and pulling base images for the chart smoke test
+([CONTRIBUTING → Checks that must pass](../CONTRIBUTING.md#checks-that-must-pass)).
 
 **What do I have to declare?**
 Every commit is signed off (`git commit -s`, the [DCO](../DCO)). The PR's
@@ -412,8 +413,9 @@ Yes: `make setup && make serve`, or the public image
 
 **High level, what protects the project?**
 A pre-commit hook refuses committed keys; the chart refuses to render without
-a real session secret; workflows run with read-only tokens and pinned actions
-where they hold secrets; the Killercoda deploy key reaches only the mirror;
+a real session secret; every action in every workflow is pinned to a full commit
+SHA (`tests/test_actions_pinned.py` enforces it) and workflows run with
+read-only tokens where they can; the Killercoda deploy key reaches only the mirror;
 changes to `.github/`, the `Makefile` and `scripts/check_*` are the
 maintainer's decision; external PRs are triaged security-first
 ([OPERATING → Generation backends](OPERATING.md#generation-backends), [Deploying to Kubernetes](OPERATING.md#deploying-to-kubernetes),

@@ -150,5 +150,8 @@ an agent never does.
   (the code graph is not part of this: `make graph` is optional locally, the PR
   leaves `graphify-out/` out, and a stale graph is only a warning because
   `main` refreshes it through the bot PR, see *The graph refresh PR*).
+- if the PR changes how something described in [FAQ.md](FAQ.md) works, the FAQ
+  is updated in the same PR, including its *Known gaps*
+  ([CONTRIBUTING → Pull requests](../CONTRIBUTING.md#pull-requests)).
 
 Then the maintainer merges. An agent never does.
