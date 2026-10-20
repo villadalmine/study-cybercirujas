@@ -5,3 +5,7 @@ __pycache__
 deploy
 Makefile
 PLAN.MD
+.env
+.env.*
+*.env
+
