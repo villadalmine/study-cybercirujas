@@ -4,6 +4,9 @@ Thank you. This project is a curriculum maintained like software
 ([docs/PRINCIPLES.md](docs/PRINCIPLES.md)), so contributing works like it does
 in a code repository: a branch, a change, checks that pass, a review. You do
 not need an AI key or any paid service for any of it.
+How each part of the ecosystem works (generation, determinism, groundedness,
+labs, reviews, releases), in short answers with links to the code:
+[docs/FAQ.md](docs/FAQ.md).
 
 ## Set up, once
 
@@ -269,6 +272,13 @@ How to test it from a clean clone · Risk and rollback · Depends on** — and e
 adds only what its kind needs (a translation: the gate result and three
 paragraphs picked with a stated seed; a lab: break → verify fails, fix → verify
 passes; a video: duration, a frame, the audio language).
+
+**The FAQ stays true.** [docs/FAQ.md](docs/FAQ.md) explains how each part works
+and links to the code that does it. A PR that changes how something described
+there works (generation, a check or gate, provenance, translation, labs,
+Killercoda, the bot, the score, reviews, releases, deployment) updates the FAQ
+in the same PR, including its *Known gaps* when it closes or opens one. The
+templates carry a checkbox for it under *Risk and rollback*.
 
 **Provenance** says *human* or *AI*; for AI, the backend, the model, the date
 and the cost, plus the official source. It is verified, not trusted:
