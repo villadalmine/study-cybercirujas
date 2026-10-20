@@ -14,18 +14,34 @@ from functools import lru_cache
 from pathlib import Path
 
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict
 from starlette.middleware.sessions import SessionMiddleware
 
-from .core import auth, bot_stats, catalog, certs, corpus, labs, models_live
+from .core import auth, bot_stats, catalog, certs, corpus, labs, models_live, ratelimit
 
 app = FastAPI(title="teach-plat", version="0.1.0")
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.environ.get("TEACH_SECRET", secrets.token_hex(32)),
 )
+
+
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    """Per-client request budget on /api (in-process, per worker; see core/ratelimit.py)."""
+    if request.url.path.startswith("/api/"):
+        who = ratelimit.client_id(request)
+        bucket, limit = (("search", ratelimit.SEARCH_LIMIT) if request.url.path == "/api/search"
+                         else ("api", ratelimit.API_LIMIT))
+        retry = ratelimit.LIMITER.hit(f"{who}:{bucket}", limit)
+        if retry:
+            return JSONResponse({"detail": "Too many requests"}, status_code=429,
+                                headers={"Retry-After": str(retry)})
+    return await call_next(request)
+
 
 WEB_DIR = Path(__file__).parent / "web"
 MEDIA_DIR = catalog.root() / "media"

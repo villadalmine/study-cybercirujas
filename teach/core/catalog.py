@@ -4,6 +4,7 @@ Written by the tracker (and `cert add`); the generator and the web/CLI only
 read it.
 """
 
+import copy
 import datetime
 import os
 from pathlib import Path
@@ -20,19 +21,33 @@ def catalog_path() -> Path:
     return root() / "catalog.yaml"
 
 
+_CACHE: dict = {}
+
+
 def load() -> dict:
+    """catalog.yaml as a dict. Parsed once per file version (path, mtime, size).
+
+    A request used to re-parse the file dozens of times. Callers get their own copy,
+    so one that edits the dict and calls save() cannot change what the next one reads.
+    """
     path = catalog_path()
-    if not path.exists():
+    try:
+        st = path.stat()
+    except FileNotFoundError:
         return {"certs": {}}
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    data.setdefault("certs", {})
-    return data
+    key = (str(path), st.st_mtime_ns, st.st_size)
+    if _CACHE.get("key") != key:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        data.setdefault("certs", {})
+        _CACHE.update(key=key, data=data)
+    return copy.deepcopy(_CACHE["data"])
 
 
 def save(data: dict) -> None:
     catalog_path().write_text(
         yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
     )
+    _CACHE.clear()
 
 
 class _BlockDumper(yaml.SafeDumper):
