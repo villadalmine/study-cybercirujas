@@ -1,33 +1,36 @@
-# EJEMPLO del values-local.yaml para el cluster real (copiar a values-local.yaml,
-# completar secretos; values-local.yaml está gitignored). Deploy:
+# Example values-local.yaml: copy it, replace every placeholder, keep the copy out of git
+# (deploy/helm/values-local.yaml is gitignored). The full procedure, with preflight,
+# verification and rollback, is docs/DEPLOY.md:
+#   cp deploy/helm/values-study.example.yaml deploy/helm/values-local.yaml
 #   helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
-#     -f deploy/helm/values-local.yaml
+#     -f deploy/helm/values-local.yaml --set image.tag=vX.Y.Z
 #
-# Pre-requisitos en el cluster (ya existen, mismos que online-game):
-#   - Gateway `cluster-gateway` en ns `gateway` (Cilium) con listener HTTPS para
-#     study.cybercirujas.club (cert study-tls; igual que cruzdelsur)
-#   - ClusterIssuer letsencrypt-prod (acme-dns) + registro DNS
-#     study.cybercirujas.club → IP pública (HAProxy)
-#   - study.cluster.home → resolución local al LB del Gateway
-#   - Registry interno + Kaniko para buildear la imagen
+# What the cluster needs (only for the parts you enable):
+#   - gateway.enabled: Gateway API CRDs and an existing Gateway with an HTTPS listener
+#     for your host (the chart only adds an HTTPRoute to it)
+#   - gateway.tls.enabled: cert-manager and a ClusterIssuer; DNS for the host
+#   - botStats (on by default): a StorageClass for a 128Mi ReadWriteOnce PVC
 
 image:
-  repository: registry.registry:5000/teach-plat
-  tag: "0.1.0"
-  pullPolicy: Always
+  # Public image: ghcr.io/villadalmine/study-cybercirujas. Tags up to v0.3.0 are amd64 only;
+  # check a tag with `docker buildx imagetools inspect` (docs/DEPLOY.md, Path A).
+  # No image for your nodes' architecture, or a private registry: build in-cluster with
+  # `make image-cluster` and point this at <your-registry>/teach-plat
+  repository: ghcr.io/villadalmine/study-cybercirujas
+  # Leave the tag to the command line (--set image.tag=vX.Y.Z); never "latest".
+  tag: ""
+  pullPolicy: IfNotPresent
 
 # nodeSelector:
-#   kubernetes.io/hostname: <nombre-del-nodo>
-#   # o, si etiquetaste los nodos con acceso al registry interno:
-#   # registry-access: "true"
+#   kubernetes.io/hostname: <node-name>
+#   # or a label you gave the nodes that can pull from your registry
 
 gateway:
   enabled: true
-  name: cluster-gateway
-  namespace: gateway
-  host: study.cybercirujas.club
-  extraHosts:
-    - study.cluster.home
+  name: <your-gateway>
+  namespace: <gateway-namespace>
+  host: study.example.com
+  extraHosts: []            # e.g. an internal name served by the same route
   tls:
     enabled: true
     secretName: study-tls
@@ -35,11 +38,15 @@ gateway:
 
 env:
   ENVIRONMENT: production
-  # obligatorio, minimo 32 caracteres: generalo con  openssl rand -hex 32
+  # Required, 32+ characters, not a placeholder: openssl rand -hex 32 (the render fails otherwise)
   TEACH_SECRET: "PONER-UN-SECRETO-FUERTE-DE-32-BYTES"
 
-# opcional: generar contenido desde el pod con el LiteLLM del cluster
+# botStats:
+#   storageClass: ""        # "" = the cluster's default StorageClass
+#   enabled: false          # no PVC; counters reset on restart (fine for a try-out)
+
+# Optional: generate content from the pod through a LiteLLM proxy
 # llm:
 #   baseUrl: http://litellm.litellm:4000/v1
-#   model: <modelo-en-litellm>
+#   model: <model-name-in-litellm>
 #   apiKey: <key>

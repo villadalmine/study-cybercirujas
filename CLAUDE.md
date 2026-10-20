@@ -8,7 +8,7 @@
 - **Show Certification Details**: `make show CERT=<cert_id>` (e.g. `make show CERT=lpi-010-160`)
 - **Generate Content for Certification**: `make generate CERT=<cert_id> [TOPIC=<topic_id>] [BACKEND=<backend_id>] [LANG=<lang_id>]` (e.g. `make generate CERT=lpi-010-160 TOPIC=1.1 BACKEND=claude`)
 - **Build Docker Image**: `make image-cluster TAG=<tag>`
-- **Deploy to Kubernetes**: `make deploy-local TAG=<tag>`
+- **Deploy to Kubernetes**: `make deploy-local TAG=<tag>` (full procedure, preflight, verify and rollback: [docs/DEPLOY.md](docs/DEPLOY.md))
 - **Run Status Matrix Script**: `.venv/bin/python3 scripts/status_matrix.py`
 - **Run Corruption Fix Script**: `.venv/bin/python3 scripts/fix_corrupted_content.py`
 - **Model Comparison Dashboard**: [MODELS.md](MODELS.md) — generated, regenerates with STATUS.md; per-cert tables are the only fair model comparisons

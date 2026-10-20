@@ -388,7 +388,8 @@ project's transparency layer under
 | Document | What it is |
 |---|---|
 | [CONTRIBUTING.md](CONTRIBUTING.md) · [GOVERNANCE.md](GOVERNANCE.md) · [docs/PRINCIPLES.md](docs/PRINCIPLES.md) | how to contribute and which tests must pass · how decisions are made · the rules the project holds itself to |
-| [docs/OPERATING.md](docs/OPERATING.md) | generating, checking and publishing: `make next`, milestones, backends, `.env`, the quality ladder, deploy to Kubernetes, the unattended timer |
+| [docs/OPERATING.md](docs/OPERATING.md) | generating, checking and publishing: `make next`, milestones, backends, `.env`, the quality ladder, the unattended timer |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | deploying the site to Kubernetes with Helm: image per architecture, preflight, verify, rollback, upgrade notes |
 | [WORKFLOW.md](WORKFLOW.md) | the content cycle (snapshot → generate → audit → publish) and its failure modes |
 | [DEVELOPERS.md](DEVELOPERS.md) | the API, running your own copy, building on the corpus |
 | [ROADMAP.md](ROADMAP.md) · [BACKLOG.md](BACKLOG.md) | what is next and why · open design questions |
