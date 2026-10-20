@@ -1,0 +1,63 @@
+# The ONE definition of where a lab can be proven (issue #103, evidence-based trust per target).
+# A lab is agnostic: it never knows where it runs. Evidence is recorded per target in deploy/lab-evidence.yaml, as
+#   <cert>/<topic>: {<target id>: {date, lab_hash, evidence, runner}}
+# and the id MUST be one of the keys below (teach/lab/kc_scope.py rejects any other; tests/lab/test_kc_scope.py runs in CI).
+# No entry for a target means "not tested there", NEVER "does not work".
+# Fields of every evidence entry (all required):
+#   date      YYYY-MM-DD the proof ran
+#   lab_hash  sha256 of the lab folder at that time (teach/lab/kc_meta.py lab_hash); evidence for another hash is stale
+#   evidence  link to the CI run or log, or the sha256 of a log kept by the maintainer; for a person: "by <github login>"
+#   runner    what ran it, with its version (e.g. "github-hosted ubuntu-24.04 20260901.1", "incus 6.0.5 k3s v1.36.1")
+# role: `primary` = where a lab is really proven (our own infra: kind, k3s-incus, docker-linux; RFC #210, tier A).
+#       `optional-channel` = a publishing channel (Killercoda): never required, a failure there never fails a PR, and it is
+#       the only kind whose evidence allows pushing a scenario to the Killercoda mirror.
+# Add a target here (and nowhere else) when a new kind of environment is used; do not invent ids in other files.
+targets:
+  kind:
+    role: primary
+    environment: A kind cluster in Docker (the study-lab default and the CI labs job).
+    pinned: The kind node image and the Kubernetes minor of the exam version, in the lab's lab.yaml and its scripts.
+    runner_kind: CI (labs.yml) or the maintainer, on a PC with Docker.
+    proves: break, then verify FAILS, the reference fix, then verify PASSES, cleanup twice, on a kind cluster of that Kubernetes.
+    not_proves: Behaviour on kubeadm, on the Killercoda image, with Cilium or with 1 CPU and 2 GB.
+    publishes_to_killercoda: false
+  k3s-incus:
+    role: primary
+    environment: A multi-node k3s cluster on Incus VMs on the maintainer's Dell (closest to a real cluster we own).
+    pinned: The k3s version and the Incus image, recorded in the runner field.
+    runner_kind: The maintainer, by hand or by script on the Dell.
+    proves: The lab works on a real multi-node cluster with a real kubelet, CNI and storage.
+    not_proves: That the generated Killercoda scenario works, or anything about Killercoda's image.
+    publishes_to_killercoda: false
+  docker-linux:
+    role: primary
+    environment: A Debian or Ubuntu container or VM image, for labs that need only a shell (the linux family).
+    pinned: The image tag in the lab's lab.yaml.
+    runner_kind: CI (labs.yml) or the maintainer.
+    proves: break, verify FAILS, fix, verify PASSES, cleanup twice, on that image.
+    not_proves: Behaviour on the Killercoda ubuntu image.
+    publishes_to_killercoda: false
+  killercoda-kubeadm:
+    role: optional-channel
+    environment: An Ubuntu 24.04 VM with a kubeadm cluster like the one measured on Killercoda (deploy/killercoda/killercoda_envs.yaml), 1 CPU.
+    pinned: Kubernetes patch, Cilium and containerd of killercoda_envs.yaml for that date.
+    runner_kind: CI (killercoda-parity.yml, killercoda-publish.yml), on a GitHub-hosted ubuntu-24.04 runner.
+    proves: The GENERATED scenario (same hash) breaks, verify fails, the reference fix passes, cleanup is idempotent, on Killercoda's measured environment.
+    not_proves: Out-of-memory behaviour (a runner has 16 GB, Killercoda about 2.2 GB) and that a person finds the scenario clear.
+    publishes_to_killercoda: true
+  killercoda-ubuntu:
+    role: optional-channel
+    environment: An Ubuntu 24.04 VM like Killercoda's ubuntu image.
+    pinned: The image entry in deploy/killercoda/killercoda_envs.yaml.
+    runner_kind: CI (killercoda-parity.yml), on a GitHub-hosted ubuntu-24.04 runner.
+    proves: The generated scenario works on a plain Ubuntu 24.04 VM as root.
+    not_proves: RAM and CPU limits of Killercoda itself.
+    publishes_to_killercoda: true
+  human-killercoda:
+    role: optional-channel
+    environment: Killercoda itself, in a browser.
+    pinned: Whatever Killercoda ran that day (not controllable).
+    runner_kind: A person, who adds the entry after running the published scenario.
+    proves: The scenario behaves on the real service (break, verify fails, fix, verify passes).
+    not_proves: Anything about a later lab or a later Killercoda change; it is a dated observation.
+    publishes_to_killercoda: true

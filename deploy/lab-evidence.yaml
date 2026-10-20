@@ -1,0 +1,32 @@
+# Where each lab was proven (issue #103). Targets and their meaning: deploy/lab-targets.yaml (the only list of ids).
+# One entry per lab and target: {date, lab_hash, evidence, runner}. No entry = "not tested there", never "does not work".
+# lab_hash of a lab now: teach.lab.kc_meta.lab_hash(spec.load(Path("certs/<cert>/<topic>/lab"), "curated"))
+# A human entry carries the hash of the lab as that person ran it; if the lab changed since, the table shows "stale".
+cka/1.1:
+  killercoda-kubeadm:
+    date: '2026-10-20'
+    lab_hash: 1bf8b0a86113fa15a54162552efe0ad33c6a1352a93cd94d62be3c097138ac36
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39510067609
+    runner: github-hosted ubuntu-24.04, kubeadm 1.36.1, cilium v1.20.3, containerd 2.2.1, 1 CPU
+  human-killercoda:
+    date: '2026-10-19'
+    lab_hash: 1bf8b0a86113fa15a54162552efe0ad33c6a1352a93cd94d62be3c097138ac36
+    evidence: by villadalmine (deploy/killercoda/human_tested.yaml)
+    runner: killercoda.com, kubernetes-kubeadm-1node image of that day
+lpic-2/200.1:
+  killercoda-ubuntu:
+    date: '2026-10-20'
+    lab_hash: 48bf6acd73477754dcc8f5a4a47c4fb4f10016551fdac41f40615feceb43dc3c
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39510067609
+    runner: github-hosted ubuntu-24.04, 1 CPU
+  human-killercoda:
+    date: '2026-10-19'
+    lab_hash: 7c2e93e28e3cf74960b3155219ce9f65874e632a47c5ff651fda491c23471047
+    evidence: by villadalmine (deploy/killercoda/human_tested.yaml)
+    runner: killercoda.com, ubuntu image of that day
+ckad/5.2:
+  killercoda-kubeadm:
+    date: '2026-10-20'
+    lab_hash: 215eaea57bc7c863e8d6d559d74d7a0c83ea17efad24bf83e1fa4a142f6883e9
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39511161118
+    runner: github-hosted ubuntu-24.04, kubeadm 1.36.1, cilium v1.20.3, containerd 2.2.1, 1 CPU
