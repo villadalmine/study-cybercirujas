@@ -42,6 +42,18 @@ class DockerWorkflowTests(unittest.TestCase):
                          "${{ github.event_name != 'pull_request' }}")
         self.assertEqual(self.step("docker/login-action")["if"], "github.event_name != 'pull_request'")
 
+    def test_a_pull_request_touching_deps_or_code_builds_both_platforms(self):
+        for path in ("deploy/Dockerfile", "pyproject.toml", "teach/**", ".github/workflows/docker.yml"):
+            with self.subTest(path=path):
+                self.assertIn(path, self.on["pull_request"]["paths"])
+
+    def test_binfmt_is_pinned_by_digest(self):
+        image = self.step("docker/setup-qemu-action")["with"]["image"]
+        self.assertRegex(image, r"^docker\.io/tonistiigi/binfmt:[\w.-]+@sha256:[0-9a-f]{64}$")
+
+    def test_main_publishes_in_order(self):
+        self.assertIn("concurrency", self.wf)
+
     def test_the_job_is_time_bounded(self):
         self.assertLessEqual(self.wf["jobs"]["build-and-push"]["timeout-minutes"], 60)
 
