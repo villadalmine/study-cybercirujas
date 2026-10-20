@@ -49,8 +49,16 @@ OTLP_HTTP="http://127.0.0.1:4318"
 HEALTH="http://127.0.0.1:13133"
 
 # ---- Safety gate ------------------------------------------------------------
+# `require_lab runner-ok` (used by `fix`) skips the confirmation when the script
+# runs inside the study-lab runner's throwaway container: the runner sets
+# STUDY_LAB_ID there on every call, also on `study-lab exec`, which does not
+# pass lab.yaml's env. Anywhere else the explicit OTCA_LAB_CONFIRM=yes is required.
 require_lab() {
-  if [[ "${OTCA_LAB_CONFIRM:-}" != "yes" ]]; then
+  local gate=yes
+  if [[ "${1:-}" == "runner-ok" && -n "${STUDY_LAB_ID:-}" ]]; then
+    gate=no
+  fi
+  if [[ "$gate" == "yes" && "${OTCA_LAB_CONFIRM:-}" != "yes" ]]; then
     echo "This lab starts a collector and rewrites a config under $LAB_DIR."
     echo "Run it ONLY on a disposable VM, then re-run with:"
     echo "    OTCA_LAB_CONFIRM=yes $0"
@@ -253,7 +261,7 @@ cleanup_lab() {
 # ============================================================================
 case "${1:-run}" in
   verify) require_lab; verify_fix; exit $? ;;
-  fix)    require_lab; fix_lab; exit $? ;;
+  fix)    require_lab runner-ok; fix_lab; exit $? ;;
   cleanup) cleanup_lab; exit $? ;;
   stop)   stop_collector; echo "Collector stopped."; exit 0 ;;
 esac

@@ -49,7 +49,7 @@ quality:
     version: '1'
     result: pass
     weight: 10
-    ran_at: '2026-10-19'
+    ran_at: '2026-10-20'
     evidence: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
   - name: independent_review
     version: '1'

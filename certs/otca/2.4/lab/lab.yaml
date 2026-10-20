@@ -33,7 +33,7 @@ derived_from:
   content_sha256: 1f9f97fd36e088794445487592714943886b2036e820cfa105ef3a26a2b63627
 verified:
   status: true
-  date: '2026-10-19'
+  date: '2026-10-20'
   by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
   method: runner
   runner_image: study-lab:linux (debian:bookworm, systemd)
