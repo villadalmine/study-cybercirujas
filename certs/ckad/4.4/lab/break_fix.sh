@@ -55,6 +55,15 @@ clean_lab() {
 }
 
 #-------------------------------------------------------------------------------
+# Estado del contenedor de cache-worker:
+#   fase|ready|waiting.reason|lastState.terminated.reason|restartCount
+#-------------------------------------------------------------------------------
+estado_cache_worker() {
+  kubectl get pod "$1" -n "${NS_LAB}" -o jsonpath='{.status.phase}|{.status.containerStatuses[0].ready}|{.status.containerStatuses[0].state.waiting.reason}|{.status.containerStatuses[0].lastState.terminated.reason}|{.status.containerStatuses[0].restartCount}' 2>/dev/null \
+    || echo "Unknown|false|||-1"
+}
+
+#-------------------------------------------------------------------------------
 # Verificación: la usás cuando creas que ya arreglaste todo
 #-------------------------------------------------------------------------------
 verify_lab() {
@@ -73,28 +82,42 @@ verify_lab() {
     fallos=$((fallos + 1))
   fi
 
-  # Incidente 2: cache-worker debe estar Running y SIN reiniciarse por OOM.
-  # Medimos el restartCount dos veces con 30s de diferencia.
-  local pod2 restarts_a restarts_b
+  # Incidente 2: cache-worker debe estar Running, Ready y SIN reiniciarse por OOM.
+  # Se juzga por el ESTADO del contenedor (ready, waiting=CrashLoopBackOff, último
+  # término OOMKilled) y además por el restartCount en una ventana de 30s: solo la
+  # ventana no alcanza, porque cuando el backoff de kubelet supera 30s el contador
+  # no se mueve y un pod en CrashLoopBackOff parecía "estable" (falso OK).
+  local pod2
   # Solo un pod vivo: tras el arreglo el pod viejo (el que se reiniciaba) sigue un rato
   # en Terminating y, si fuera el primero de la lista, verify lo juzgaría en su lugar.
   pod2=$(kubectl get pod -l app=cache-worker -n "${NS_LAB}" \
     -o jsonpath='{range .items[*]}{.metadata.name}|{.metadata.deletionTimestamp}{"\n"}{end}' 2>/dev/null \
     | awk -F'|' '$2=="" {print $1; exit}' || true)
   if [[ -n "${pod2}" ]]; then
-    restarts_a=$(kubectl get pod "${pod2}" -n "${NS_LAB}" \
-      -o jsonpath='{.status.containerStatuses[0].restartCount}' 2>/dev/null || echo -1)
+    local estado_a estado_b motivo2=""
+    local phase_b ready_b waiting_b last_b restarts_b restarts_a
+    estado_a=$(estado_cache_worker "${pod2}")
     echo "       Incidente 2: observando estabilidad de ${pod2} durante 30s..."
     sleep 30
-    restarts_b=$(kubectl get pod "${pod2}" -n "${NS_LAB}" \
-      -o jsonpath='{.status.containerStatuses[0].restartCount}' 2>/dev/null || echo -2)
-    local phase2
-    phase2=$(kubectl get pod "${pod2}" -n "${NS_LAB}" \
-      -o jsonpath='{.status.phase}' 2>/dev/null || echo Unknown)
-    if [[ "${phase2}" == "Running" && "${restarts_a}" == "${restarts_b}" ]]; then
-      echo "[OK]   Incidente 2: cache-worker corre estable (sin nuevos OOMKilled)."
+    estado_b=$(estado_cache_worker "${pod2}")
+    # estado = fase|ready|waiting.reason|lastState.terminated.reason|restartCount
+    IFS='|' read -r phase_b ready_b waiting_b last_b restarts_b <<<"${estado_b}"
+    restarts_a=${estado_a##*|}
+    if [[ "${phase_b}" != "Running" ]]; then
+      motivo2="el pod está en fase ${phase_b:-desconocida}"
+    elif [[ -n "${waiting_b}" ]]; then
+      motivo2="el contenedor está esperando (${waiting_b})"
+    elif [[ "${ready_b}" != "true" ]]; then
+      motivo2="el contenedor no está Ready"
+    elif [[ "${last_b}" == "OOMKilled" ]]; then
+      motivo2="su último término fue OOMKilled"
+    elif [[ "${restarts_a}" != "${restarts_b}" ]]; then
+      motivo2="se reinició durante la observación (${restarts_a} -> ${restarts_b})"
+    fi
+    if [[ -z "${motivo2}" ]]; then
+      echo "[OK]   Incidente 2: cache-worker corre estable (Ready, sin OOMKilled)."
     else
-      echo "[FAIL] Incidente 2: cache-worker sigue reiniciándose o no está Running."
+      echo "[FAIL] Incidente 2: cache-worker no está estable: ${motivo2}."
       fallos=$((fallos + 1))
     fi
   else
@@ -313,7 +336,7 @@ EOF
 require_cluster
 case "${1:-setup}" in
   setup)  setup_lab ;;
-  verify) verify_lab ;;
+  verify) verify_lab || exit 1 ;;
   clean)  clean_lab ;;
   fix)    fix_lab ;;
   *)
