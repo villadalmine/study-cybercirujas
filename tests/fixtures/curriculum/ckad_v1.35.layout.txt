@@ -1,0 +1,60 @@
+Certified Kubernetes
+Application Developer (CKAD)
+Exam Curriculum
+A Cloud Native Computing Foundation (CNCF) Publication
+cncf.io
+Certified Kubernetes Application Developer (CKAD) Exam Curriculum
+
+ This document provides the curriculum outline of the Knowledge, Skills and Abilities that
+ a Certified Kubernetes Application Developer (CKAD) can be expected to demonstrate.
+
+
+ CKAD Curriculum
+
+   20% - Application Design and Build                25% - Application Environment,
+                                                           Configuration and Security
+    • Define, build and modify container images
+    • Choose and use the right workload              • Discover and use resources that extend
+      resource (Deployment, DaemonSet,                 Kubernetes (CRD, Operators)
+      CronJob, etc.)                                 • Understand authentication, authorization
+    • Understand multi-container Pod design            and admission control
+      patterns (e.g. sidecar, init and others)       • Understand requests, limits, quotas
+    • Utilize persistent and ephemeral volumes       • Define resource requirements
+                                                     • Understand ConfigMaps
+   20% - Application Deployment                      • Create & consume Secrets
+                                                     • Understand ServiceAccounts
+    • Use Kubernetes primitives to implement         • Understand Application Security
+      common deployment strategies (e.g. blue/         (SecurityContexts, Capabilities, etc.)
+      green or canary)
+    • Understand Deployments and how to
+      perform rolling updates                        20% - Services and Networking
+    • Use the Helm package manager to deploy
+      existing packages                              • Demonstrate basic understanding of
+    • Kustomize                                        NetworkPolicies
+                                                     • Provide and troubleshoot access to
+                                                       applications via services
+   15% - Application Observability                   • Use Ingress rules to expose applications
+         and Maintenance
+
+    • Understand API depreciations
+    • Implement probes and health checks
+    • Use built-in CLI tools to monitor Kubernetes
+      applications
+    • Utilize container logs
+    • Debugging in Kubernetes
+
+
+
+
+                                                                                                  2
+Cloud native computing uses an open source software stack to
+deploy applications as microservices, packaging each part into its
+own container, and dynamically orchestrating those containers to
+optimize resource utilization. The Cloud Native Computing Foundation
+(CNCF) hosts critical components of those software stacks including
+Kubernetes, Fluentd, Linkerd, Prometheus, OpenTracing and gRPC;
+brings together the industry’s top developers, end users, and vendors;
+and serves as a neutral home for collaboration. CNCF is part of The
+Linux Foundation, a nonprofit organization. For more information
+about CNCF, please visit: https://cncf.io/.
+

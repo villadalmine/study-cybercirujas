@@ -1,0 +1,70 @@
+Certiﬁed Kubernetes
+Administrator (CKA)
+Exam Curriculum
+A Cloud Native Computing Foundation (CNCF) Publication
+cncf.io
+Certiﬁed Kubernetes Administrator (CKA) Exam Curriculum
+
+ This document provides the curriculum outline of the Knowledge, Skills and Abilities
+ that a Certiﬁed Kubernetes Administrator (CKA) can be expected to demonstrate.
+
+
+ CKA Curriculum
+
+   10% - Storage                                    30% - Troubleshooting
+
+    • Implement storage classes and dynamic         • Troubleshoot clusters and nodes
+      volume provisioning                           • Troubleshoot cluster components
+    • Configure volume types, access modes          • Monitor cluster and application resource
+      and reclaim policies                            usage
+    • Manage persistent volumes and persistent      • Manage and evaluate container output
+      volume claims                                   streams
+                                                    • Troubleshoot services and networking
+   15% - Workloads and Scheduling
+
+    • Understand application deployments and
+      how to perform rolling update and rollbacks   25% - Cluster Architecture,
+    • Use ConfigMaps and Secrets to configure       Installation and Configuration
+      applications
+    • Configure workload autoscaling                • Manage role based access control (RBAC)
+    • Understand the primitives used to create      • Prepare underlying infrastructure for installing
+      robust, self-healing, application deploy-       a Kubernetes cluster
+      ments
+                                                    • Create and manage Kubernetes clusters us-
+    • Configure Pod admission and scheduling          ing kubeadm
+      (limits, node affinity, etc.)
+                                                    • Manage the lifecycle of Kubernetes clusters
+                                                    • Implement and configure a highly-available
+                                                      control plane
+   20% - Servicing and Networking
+                                                    • Use Helm and Kustomize to install cluster
+                                                      components
+    • Understand connectivity between Pods
+                                                    • Understand extension interfaces (CNI, CSI,
+    • Define and enforce Network Policies
+                                                      CRI, etc.)
+    • Use ClusterIP, NodePort, LoadBalancer
+                                                    • Understand CRDs, install and configure
+      service types and endpoints
+                                                      operators
+    • Use the Gateway API to manage Ingress
+      traffic
+    • Know how to use Ingress controllers and
+      Ingress resources
+    • Understand and use CoreDNS
+
+
+
+
+                                                                                                         2
+Cloud native computing uses an open source software stack to
+deploy applications as microservices, packaging each part into its
+own container, and dynamically orchestrating those containers to
+optimize resource utilization. The Cloud Native Computing Foundation
+(CNCF) hosts critical components of those software stacks including
+Kubernetes, Fluentd, Linkerd, Prometheus, OpenTracing and gRPC;
+brings together the industry’s top developers, end users, and vendors;
+and serves as a neutral home for collaboration. CNCF is part of The
+Linux Foundation, a nonprofit organization. For more information
+about CNCF, please visit: https://cncf.io/.
+
