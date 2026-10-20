@@ -1,0 +1,14 @@
+rubric_version: 3
+auditor: carol
+date: 2026-10-21
+commit: ccccccc1111111
+criteria:
+  D1:
+    score: 2
+    evidence: "looks fine"
+    note: "no proposal on purpose"
+  D2:
+    score: 0
+    evidence: "not verified"
+    note: "not verified"
+    proposal: {what_to_change: "", implies: "", how_to_improve: ""}

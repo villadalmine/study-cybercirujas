@@ -7,6 +7,8 @@ not need an AI key or any paid service for any of it.
 How each part of the ecosystem works (generation, determinism, groundedness,
 labs, reviews, releases), in short answers with links to the code:
 [docs/FAQ.md](docs/FAQ.md).
+To check the repo against its own principles, see
+[Run the audit or propose a criterion](#run-the-audit-or-propose-a-criterion).
 
 ## Set up, once
 
@@ -465,6 +467,17 @@ same templates, the same required sections, provenance that names the model,
 `Found-by: <reviewer> <link>`, `Fixed-by: <agent>/<model>` and
 `Fixes-review: <link>` ([docs/REVIEWS.md](docs/REVIEWS.md) → Authorship). The checks do not care who wrote the
 PR — that is the point.
+
+## Run the audit or propose a criterion
+
+[`docs/audit/`](docs/audit/README.md) is the repo's self-audit, published so anyone can check it.
+
+- **Run it.** Score every criterion of [`rubric.yml`](docs/audit/rubric.yml) `0`, `1` or `2` with verifiable
+  evidence and always a proposal, then open a PR that adds only
+  `docs/audit/results/<YYYY-MM-DD>-<auditor>.yml`. An AI agent may do it; name its model in `auditor`.
+  `python3 scripts/audit_compare.py` compares several auditors.
+- **Propose a criterion.** Open an *Audit criterion* issue, or send a PR to `rubric.yml`. A new criterion gets a
+  **new id**; an existing id is never renamed or repurposed.
 
 ## Reviews and merging
 

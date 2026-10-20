@@ -1,0 +1,8 @@
+version: 3
+foundations:
+  F1: {weight: 5, name: "true"}
+  F3: {weight: 4, name: "deterministic"}
+areas:
+  determinism:
+    - {id: D1, question: "pinned inputs?", how_to_verify: "read the snapshot scripts"}
+    - {id: D2, question: "same result twice?", how_to_verify: "run it twice"}

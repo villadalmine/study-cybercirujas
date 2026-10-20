@@ -382,6 +382,10 @@ official documentation each topic cites is the authority.
 How each topic is generated and checked, what "deterministic" means here, and
 what no check covers yet: **[docs/FAQ.md](docs/FAQ.md)**.
 
+**Trust & audit.** Do not take our word for it: [docs/audit/](docs/audit/README.md) is the self-audit template
+we check this repo with. Run it yourself (a person or an AI agent), compare auditors with
+`scripts/audit_compare.py`, and [propose a criterion](docs/audit/README.md#propose-a-new-criterion).
+
 Which model wrote what is recorded per topic in its `meta.yaml`, shown on every
 page of the site and in the API's `generated_by`, and aggregated in
 [MODELS.md](MODELS.md). That per-topic provenance and this notice are the

@@ -1,0 +1,55 @@
+name: Audit criterion
+description: Propose a new criterion for the repo's self-audit (docs/audit/rubric.yml)
+labels: ["type:feature", "triage:needed"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The [self-audit](https://github.com/villadalmine/study-cybercirujas/blob/main/docs/audit/README.md) scores the repo against
+        a fixed list of criteria. A new criterion gets a **new id**; existing ids are never renamed or repurposed, so results from
+        different days stay comparable. A maintainer answers within 3 days.
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: "An existing area (purpose, determinism, content, labs, code, docs_as_code, management, security) or a new one."
+    validations: {required: true}
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: A yes/no-able question an auditor answers with a score 0 (stated or missing), 1 (partial or manual) or 2 (enforced).
+    validations: {required: true}
+  - type: textarea
+    id: verify
+    attributes:
+      label: How to verify it
+      description: Files to read or commands to run, with a seed if it asks for a sample. Two auditors should reach the same score.
+    validations: {required: true}
+  - type: dropdown
+    id: foundation
+    attributes:
+      label: Foundation it serves
+      description: From the foundations in docs/audit/rubric.yml.
+      options:
+        - "F1 what is taught is true"
+        - "F2 labs work and test the objective"
+        - "F3 deterministic and reproducible"
+        - "F4 visible provenance"
+        - "F5 code and commands are valid"
+        - "F6 documentation as code"
+        - "F7 contributing is easy and safe"
+        - "F8 sovereign and cheap"
+    validations: {required: true}
+  - type: textarea
+    id: why
+    attributes:
+      label: Why the current criteria miss it
+      description: Which existing id comes closest, and what it does not catch.
+    validations: {required: true}
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Pull request
+      options:
+        - label: I can send a pull request adding it to docs/audit/rubric.yml (see CONTRIBUTING.md)

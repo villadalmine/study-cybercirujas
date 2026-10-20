@@ -1,0 +1,15 @@
+rubric_version: 3
+auditor: alice
+date: 2026-10-21
+commit: aaaaaaa1234567
+criteria:
+  D1:
+    score: 2
+    evidence: "scripts/snapshot.py:10"
+    note: "pinned"
+    proposal: {what_to_change: "pin the prompt hash too", implies: "1 h, low risk, no credits", how_to_improve: "hash it in meta.yaml", foundations: [F1, F3], automatable: yes, effort: S, priority: high}
+  D2:
+    score: 1
+    evidence: "make gen-check"
+    note: "one generator is not checked"
+    proposal: {what_to_change: "add --check to the last generator", implies: "1 h, low risk", how_to_improve: "wire it in CI", foundations: [F3], automatable: no, effort: S, priority: low}
