@@ -1,11 +1,9 @@
 name: Milestones
 
-# Milestones are releases (CONTRIBUTING -> Releases); scripts/milestone_sync.py keeps them current:
-# merged PRs and completed issues without a milestone get the open `v*` one due first, and a published
-# vX.Y.Z moves what is left in its milestone to the next one and closes it.
-# pull_request_target so merged fork PRs get a write token. Safe: the checkout is `main`, never the PR
-# head; the script only calls the REST API and reads the event JSON itself (no title or body in the
-# shell). GITHUB_TOKEN only. release-please's App-token releases do trigger `release: published`.
+# Milestones are releases (CONTRIBUTING -> Releases); scripts/milestone_sync.py keeps them current.
+# pull_request_target so merged fork PRs get a write token. Safe: the checkout is `main`, never the PR head;
+# the script only calls the REST API and reads the event JSON itself (no title or body in the shell).
+# GITHUB_TOKEN only. release-please's App-token releases do trigger `release: published`.
 
 on:
   pull_request_target:
@@ -18,7 +16,8 @@ on:
 permissions: {}
 
 concurrency:
-  group: milestones
+  # Per item: one shared group lets GitHub cancel pending runs in a burst (items left without milestone).
+  group: milestone-${{ github.event.pull_request.number || github.event.issue.number || github.event.release.tag_name }}
   cancel-in-progress: false
 
 jobs:

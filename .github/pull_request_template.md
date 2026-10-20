@@ -15,6 +15,7 @@ The generic version below is fine for code and docs.
 ## What and why
 
 <!-- One concern per PR. Link the issue or RFC it answers. -->
+Closes #  <!-- or "Part of #N"; a merged PR without one gets a warning (milestone.yml) -->
 
 ## Kind
 

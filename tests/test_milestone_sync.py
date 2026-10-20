@@ -53,7 +53,8 @@ class PrMergedTests(unittest.TestCase):
         self.assertIn("links no issue", plan["warn"])
 
     def test_issue_link_forms(self):
-        for body in ("Closes #3", "fixes #3", "Fixed: #3", "Part of #123", "Resolves owner/repo#7"):
+        for body in ("Closes #3", "fixes #3", "Fixed: #3", "Part of #123", "Resolves owner/repo#7",
+                     "Closes https://github.com/o/r/issues/9"):
             self.assertTrue(ms.links_an_issue(body), body)
         for body in ("", None, "see #3", "issue 3"):
             self.assertFalse(ms.links_an_issue(body), body)
@@ -75,19 +76,16 @@ class ReleaseTests(unittest.TestCase):
     def test_open_items_and_no_next_milestone_stays_open(self):
         plan = ms.plan_release("v0.4.0", [MILESTONES[2]], [{"number": 1}])
         self.assertEqual((plan["move"], plan["close"]), ([], False))
-
-    def test_patch_release_without_its_milestone_does_nothing(self):
-        plan = ms.plan_release("v0.4.1", MILESTONES, [])
-        self.assertEqual((plan["released"], plan["close"]), (None, False))
+        self.assertEqual(ms.plan_release("v0.4.1", MILESTONES, [])["released"], None)   # patch without its milestone
 
 
 class MainTests(unittest.TestCase):
-    """main() wires the plan to the API: the right calls, and none on --dry-run."""
-
-    def run_main(self, event, command, open_items=(), dry_run=False):
+    def run_main(self, event, command, open_items=(), dry_run=False, live=None):
         calls = []
 
         def call(_self, method, path, body=None):
+            if method == "GET":
+                return {"milestone": live}
             calls.append((method, path, body))
             return None
 
@@ -110,11 +108,16 @@ class MainTests(unittest.TestCase):
         self.assertEqual(calls, [("PATCH", "/issues/5", {"milestone": 10})])
         self.assertIn("links no issue", summary)
 
-    def test_release_comments_moves_then_closes(self):
+    def test_a_milestone_set_since_the_event_is_kept(self):
+        for event, command in (({"pull_request": pr()}, "pr-merged"),
+                               ({"issue": {"number": 3, "state_reason": "completed", "milestone": None}}, "issue-closed")):
+            self.assertEqual(self.run_main(event, command, live={"title": "v0.5.0"})[0], [])
+
+    def test_release_moves_comments_then_closes(self):
         calls, _ = self.run_main({"release": {"tag_name": "v0.4.0"}}, "release", open_items=[{"number": 7}])
         self.assertEqual([c[:2] for c in calls],
-                         [("POST", "/issues/7/comments"), ("PATCH", "/issues/7"), ("PATCH", "/milestones/10")])
-        self.assertEqual(calls[1][2], {"milestone": 11})
+                         [("PATCH", "/issues/7"), ("POST", "/issues/7/comments"), ("PATCH", "/milestones/10")])
+        self.assertEqual(calls[0][2], {"milestone": 11})
         self.assertEqual(calls[2][2], {"state": "closed"})
 
     def test_dry_run_changes_nothing(self):

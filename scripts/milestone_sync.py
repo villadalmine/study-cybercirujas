@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Keep release milestones (`vX.Y.Z`, CONTRIBUTING -> Releases) in step with the work.
-
 Run by .github/workflows/milestone.yml: `pr-merged` and `issue-closed` give work without a milestone the
 open `v*` milestone due first (Release PRs skipped; a PR without "Closes/Fixes/Part of #N" gets a summary
 warning); `release` moves what is still open in milestone `vX.Y.Z` to the next one and closes it.
@@ -16,7 +15,8 @@ import sys
 import urllib.request
 
 RELEASE_TITLE = re.compile(r"^v\d+(\.\d+)*$")
-ISSUE_LINK = re.compile(r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|part\s+of)\s*:?\s+(?:[\w.-]+/[\w.-]+)?#\d+", re.I)
+ISSUE_LINK = re.compile(r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|part\s+of)\s*:?\s+"
+                        r"(?:(?:[\w.-]+/[\w.-]+)?#|https://github\.com/[\w.-]+/[\w.-]+/(?:issues|pull)/)\d+", re.I)
 RELEASE_BRANCH_PREFIX = "release-please--"
 RELEASE_LABELS = {"autorelease: pending", "autorelease: tagged"}
 
@@ -35,26 +35,22 @@ def release_milestones(milestones: list[dict], exclude: str | None = None) -> li
 
 
 def pick_milestone(milestones: list[dict], exclude: str | None = None) -> dict | None:
-    """The current release milestone: the open `v*` one due first, or None."""
     ordered = release_milestones(milestones, exclude)
     return ordered[0] if ordered else None
 
 
 def is_release_pr(pr: dict) -> bool:
-    """A release-please Release PR: its own branch or its `autorelease:` label."""
     head = (pr.get("head") or {}).get("ref", "")
     labels = {label.get("name", "") for label in pr.get("labels") or []}
     return head.startswith(RELEASE_BRANCH_PREFIX) or bool(labels & RELEASE_LABELS)
 
 
 def links_an_issue(body: str | None) -> bool:
-    """Whether the PR body says which issue it answers ("Closes #N", "Fixes #N", "Part of #N")."""
     text = re.sub(r"<!--.*?-->", "", body or "", flags=re.DOTALL)
     return bool(ISSUE_LINK.search(text))
 
 
 def plan_pr_merged(pr: dict, milestones: list[dict]) -> dict:
-    """What to do for a merged PR: {'milestone': number|None, 'reason': str, 'warn': str|None}."""
     warn = None if links_an_issue(pr.get("body")) else (
         f"PR #{pr.get('number')} links no issue: add 'Closes #N', 'Fixes #N' or 'Part of #N' "
         "to the description so the issue and the milestone follow the work."
@@ -74,7 +70,6 @@ def plan_pr_merged(pr: dict, milestones: list[dict]) -> dict:
 
 
 def plan_issue_closed(issue: dict, milestones: list[dict]) -> dict:
-    """What to do for a closed issue: {'milestone': number|None, 'reason': str}."""
     if issue.get("pull_request"):
         return {"milestone": None, "reason": "a pull request, not an issue"}
     if issue.get("state_reason") != "completed":
@@ -131,14 +126,15 @@ class GitHub:
     def milestones(self) -> list[dict]:
         return self.paged("/milestones?state=open")
 
+    def issue(self, number: int) -> dict:
+        return self.call("GET", f"/issues/{number}") or {}
+
 
 def summary(lines: list[str]) -> None:
     text = "\n".join(lines) + "\n"
     print(text, end="")
-    path = os.environ.get("GITHUB_STEP_SUMMARY")
-    if path:
-        with open(path, "a", encoding="utf-8") as fh:
-            fh.write(text)
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8").write(text)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -153,7 +149,7 @@ def main(argv: list[str] | None = None) -> int:
     milestones = gh.milestones()
 
     if args.command == "pr-merged":
-        pr = event["pull_request"]
+        pr = {**event["pull_request"], "milestone": gh.issue(event["pull_request"]["number"]).get("milestone")}
         plan = plan_pr_merged(pr, milestones)
         lines = [f"### Milestone for PR #{pr['number']}", f"- {plan['reason']}"]
         if plan["warn"]:
@@ -162,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
             gh.call("PATCH", f"/issues/{pr['number']}", {"milestone": plan["milestone"]})
         summary(lines)
     elif args.command == "issue-closed":
-        issue = event["issue"]
+        issue = {**event["issue"], "milestone": gh.issue(event["issue"]["number"]).get("milestone")}
         plan = plan_issue_closed(issue, milestones)
         if plan["milestone"] and not args.dry_run:
             gh.call("PATCH", f"/issues/{issue['number']}", {"milestone": plan["milestone"]})
@@ -174,13 +170,11 @@ def main(argv: list[str] | None = None) -> int:
         plan = plan_release(tag, milestones, items)
         lines = [f"### Milestones after release {tag}", f"- {plan['reason']}"]
         if not args.dry_run:
-            for number in plan["move"]:
-                gh.call("POST", f"/issues/{number}/comments", {"body": (
-                    f"Release {tag} is out and this was still open, so it moves to milestone "
-                    f"{plan['next']['title']} (the next release by due date). Done automatically by "
-                    "`.github/workflows/milestone.yml`."
-                )})
+            for number in plan["move"]:   # move first, then comment: a failed move never leaves a comment behind
                 gh.call("PATCH", f"/issues/{number}", {"milestone": plan["next"]["number"]})
+                gh.call("POST", f"/issues/{number}/comments", {"body": (
+                    f"Release {tag} is out and this was still open, so it moved to milestone {plan['next']['title']} "
+                    "(the next release by due date). Done automatically by `.github/workflows/milestone.yml`.")})
             if plan["close"]:
                 gh.call("PATCH", f"/milestones/{plan['released']}", {"state": "closed"})
         lines += [f"- moved #{n}" for n in plan["move"]]
