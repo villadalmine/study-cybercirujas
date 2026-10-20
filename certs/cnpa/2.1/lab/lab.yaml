@@ -1,3 +1,4 @@
+schema_version: 2
 cert: cnpa
 topic: '2.1'
 title: Observability Fundamentals (Traces, Metrics, Logs, and Events)
@@ -10,3 +11,34 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: kind
+modes:
+  break:
+    args:
+    - break
+  verify:
+    args:
+    - verify
+  cleanup:
+    args:
+    - cleanup
+    stdin: 'DELETE
+
+      '
+env:
+  I_UNDERSTAND_THIS_BREAKS_THINGS: 'yes'
+timeout:
+  break: 600
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+derived_from:
+  syllabus: certs/cnpa.md#2.1
+  content: certs/cnpa/2.1/en/content.md
+  content_sha256: 91036f46e10346568e5b8835027a1f86ab792a1d23a2afbc930e53317e8b45cb
+verified:
+  status: true
+  date: '2026-10-19'
+  by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+  method: runner
+  runner_image: study-lab:k8s (kind v0.33.0, kindest/node v1.35.8)
