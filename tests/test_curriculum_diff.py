@@ -295,5 +295,70 @@ class BelowTopicLevel(unittest.TestCase):
                           "certs/cka/4.2/lab/lab.yaml:1", "certs/cka/4.2/lab/lab.yaml:2"])
 
 
+# ==== guard ====
+
+class Guard(unittest.TestCase):
+    def plan(self, **extra):
+        topic = {"topic": "2.4", "class": "revalidate", "planned_files": ["certs/ckad/2.4/en/content.md"],
+                 "sections": [{"file": "certs/ckad/2.4/en/content.md", "heading": "2.4 Understand API deprecations"}],
+                 "version_lines": {"technical": ["certs/ckad/2.4/en/content.md:7"]}}
+        keep = {"topic": "1.1", "class": "keep", "planned_files": [], "sections": [],
+                "version_lines": {"technical": []}}
+        return {"certs": {"ckad": {"new": [], "topics": [topic, keep], **extra}}}
+
+    def test_only_planned_files_pass(self):
+        changed = ["certs/ckad/2.4/en/content.md", "certs/ckad/1.1/en/content.md", "certs/ckad/9.9/en/content.md",
+                   "docs/x.md", "certs/ckad.md"]
+        self.assertEqual(cd.guard(self.plan(), changed), ["certs/ckad/1.1/en/content.md",
+                                                           "certs/ckad/9.9/en/content.md"])
+
+    def test_new_topic_directory_needs_a_new_objective(self):
+        plan = self.plan(new=[{"objective": "5.7"}])
+        self.assertEqual(cd.guard(plan, ["certs/ckad/5.7/en/content.md"]), [])
+
+    def check(self, new_text):
+        f = "certs/ckad/2.4/en/content.md"
+        return cd.unlisted_edits(self.plan(), [f], lambda _: DOC, lambda _: new_text)
+
+    def test_listed_section_and_version_line_may_change(self):
+        edited = DOC.replace("# 2.4 Understand API deprecations\n\nIntro.", "# 2.4 Understand API deprecations\n\nNew.")
+        self.assertEqual(self.check(edited.replace("v1.35.1", "v1.37.1")), [])
+
+    def test_an_unlisted_line_may_not(self):
+        self.assertEqual(len(self.check(DOC.replace("(https://example.org)", "(https://example.com)"))), 1)
+        self.assertEqual(len(self.check(DOC + "\nextra line\n")), 1)
+
+    def test_a_scoped_topic_may_record_provenance_in_its_meta(self):
+        plan = self.plan()
+        plan["certs"]["ckad"]["topics"][1]["version_lines"]["technical"] = ["certs/ckad/1.1/en/content.md:3"]
+        self.assertEqual(cd.guard(plan, ["certs/ckad/1.1/en/meta.yaml", "certs/ckad/2.4/es/meta.yaml"]), [])
+        plan["certs"]["ckad"]["topics"][1]["version_lines"]["technical"] = []
+        self.assertEqual(cd.guard(plan, ["certs/ckad/1.1/en/meta.yaml"]), ["certs/ckad/1.1/en/meta.yaml"])
+
+    def test_regenerate_and_retire_own_their_directory(self):
+        for cls in ("regenerate", "retire"):
+            plan = self.plan()
+            plan["certs"]["ckad"]["topics"][0]["class"] = cls
+            self.assertEqual(self.unlisted(plan, DOC + "\nrewritten\n"), [])
+            self.assertEqual(self.unlisted(plan, None), [])
+
+    def unlisted(self, plan, new_text):
+        return cd.unlisted_edits(plan, ["certs/ckad/2.4/en/content.md"], lambda _: DOC, lambda _: new_text)
+
+    def test_provenance_of_a_rewritten_topic(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            d = root / "certs/ckad/2.4/es"
+            d.mkdir(parents=True)
+            (d / "meta.yaml").write_text("model: claude\nlang: en\n", encoding="utf-8")
+            plan = self.plan()
+            weak = cd.provenance(root, plan, ["certs/ckad/2.4/es/content.md"])
+            self.assertEqual(len(weak), 4)   # alias model, no effort, no prompt hash, lang en in es/
+            (d / "meta.yaml").write_text("model: claude-opus-5\nlang: es\neffort: xhigh\nprompt_sha256: "
+                                         + "a" * 64 + "\n", encoding="utf-8")
+            self.assertEqual(cd.provenance(root, plan, ["certs/ckad/2.4/es/content.md"]), [])
+            self.assertEqual(cd.provenance(root, plan, ["certs/ckad/2.4/es/meta.yaml"]), [])
+
+
 if __name__ == "__main__":
     unittest.main()
