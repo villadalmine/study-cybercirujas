@@ -3,6 +3,7 @@
 az-900 2.4 edits the host (~/.azure, /etc/hosts, a route); 2.2 and 2.3 create billable Azure
 resources, 2.2 with a public IP. Found by an external security review.
 """
+import importlib.util
 import io
 import os
 import unittest
@@ -16,6 +17,9 @@ from teach import cli
 from teach.lab import export_killercoda, safety, spec
 
 REPO = Path(__file__).resolve().parent.parent
+# spec.load validates against the JSON Schema; jsonschema comes with the `lab` extra (make install, the labs
+# workflow), not with the bare `pip install -e .` of the verify job.
+needs_jsonschema = unittest.skipUnless(importlib.util.find_spec("jsonschema"), "jsonschema not installed (lab extra)")
 RISKY = {
     "2.2": {"billable-cloud", "public-exposure"},
     "2.3": {"billable-cloud"},
@@ -34,6 +38,7 @@ class Tty(io.StringIO):
         return True
 
 
+@needs_jsonschema
 class SchemaTests(unittest.TestCase):
     def test_the_az900_labs_declare_their_risks(self):
         for topic, risks in RISKY.items():
@@ -62,12 +67,14 @@ class VisibleWhereStudentsLookTests(unittest.TestCase):
             self.assertIn("WARNING: this lab does more than break a throwaway container.", head, d)
             self.assertIn(" ".join(words.split()[:6]), " ".join(head.replace("#", " ").split()), d)
 
+    @needs_jsonschema
     def test_killercoda_intro_carries_the_warning(self):
         lab = spec.load(REPO / "certs/az-900/2.4/lab")
         intro = export_killercoda.scenario(lab, allow_unverified=True)["intro.md"]
         self.assertIn("Warning: this lab does more than break a throwaway container.", intro)
         self.assertIn("/etc/hosts", intro)
 
+    @needs_jsonschema
     def test_a_lab_without_safety_exports_as_before(self):
         lab = spec.load(REPO / "certs/cka/1.1/lab")
         self.assertNotIn("Warning:", export_killercoda.scenario(lab, allow_unverified=True)["intro.md"])
