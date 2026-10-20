@@ -5,9 +5,13 @@ CKA_Curriculum_v1.35.pdf @ cncf/curriculum 008b73c and CKAD_Curriculum_v1.35.pdf
 Cloud Native Computing Foundation), kept as text so the parser is tested without poppler.
 """
 import copy
+import hashlib
+import json
 import os
 import subprocess
 import sys
+import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -135,6 +139,79 @@ class Extraction(unittest.TestCase):
         a, b = run_twice(args)
         self.assertEqual(a, b)
         self.assertIn(b"Manage role based access control (RBAC)", a)
+
+
+# ==== diff ====
+
+class Diff(unittest.TestCase):
+    def test_identical(self):
+        d = cd.diff(BASE, copy.deepcopy(BASE))
+        self.assertTrue(d["identical"])
+        self.assertEqual(len(d["objectives"]["unchanged"]), 5)
+
+    def test_each_kind_of_change(self):
+        new = tree(("Storage", 30, ["Implement storage classes and dynamic volume provisioning",
+                                    "Manage persistent volumes, persistent volume claims and snapshots",
+                                    "Understand and use CoreDNS"]),
+                   ("Networking and Gateways", 70, ["Define and enforce Network Policies",
+                                                    "Use the Gateway API to manage Ingress and GRPC traffic",
+                                                    "Configure workload autoscaling"]))
+        d = cd.diff(BASE, new)
+        o, dom = d["objectives"], d["domains"]
+        self.assertFalse(d["identical"])
+        self.assertEqual([(m["old_id"], m["new_id"]) for m in o["moved"]], [("2.2", "1.3")])
+        self.assertEqual([(r["old_id"], r["new_id"]) for r in o["reworded"]], [("2.3", "2.2")])
+        self.assertEqual([(c["old_id"], c["new_id"]) for c in o["changed"]], [("1.2", "1.2")])
+        self.assertEqual([a["text"] for a in o["added"]], ["Configure workload autoscaling"])
+        self.assertEqual(o["removed"], [])
+        self.assertEqual([(w["domain"], w["old"], w["new"]) for w in dom["weight_changed"]],
+                         [("Storage", 40, 30), ("Networking and Gateways", 60, 70)])
+        self.assertEqual([(r["old"], r["new"]) for r in dom["renamed"]], [("Networking", "Networking and Gateways")])
+
+    def test_removed_below_match(self):
+        new = copy.deepcopy(BASE)
+        new["domains"][1]["objectives"][1]["text"] = "Operate etcd backups"
+        d = cd.diff(BASE, new)
+        self.assertEqual([r["old_id"] for r in d["objectives"]["removed"]], ["2.2"])
+        self.assertEqual([a["new_id"] for a in d["objectives"]["added"]], ["2.2"])
+
+    def test_case_and_space_are_not_a_change(self):
+        new = copy.deepcopy(BASE)
+        new["domains"][0]["objectives"][0]["text"] = "implement storage classes and  dynamic volume provisioning."
+        self.assertTrue(cd.diff(BASE, new)["identical"])
+
+    def test_per_objective_weights_are_never_compared(self):
+        """certs/<cert>.md splits the domain weight over its objectives; only the domain total counts."""
+        frozen = textwrap.dedent("""\
+            ---
+            cert: demo
+            version: '1.0'
+            topics:
+            - {id: '1.1', title: Implement storage classes and dynamic volume provisioning, topic: 1 - Storage, weight: 13.33}
+            - {id: '1.2', title: Manage persistent volumes and persistent volume claims, topic: 1 - Storage, weight: 26.67}
+            - {id: '2.1', title: Define and enforce Network Policies, topic: 2 - Networking, weight: 20}
+            - {id: '2.2', title: Understand and use CoreDNS, topic: 2 - Networking, weight: 20}
+            - {id: '2.3', title: Use the Gateway API to manage Ingress traffic, topic: 2 - Networking, weight: 20}
+            ---
+            """)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "demo.md"
+            path.write_text(frozen, encoding="utf-8")
+            old = cd.load_syllabus(path)
+        self.assertEqual([d["weight"] for d in old["domains"]], [40, 60])
+        self.assertTrue(cd.diff(old, BASE)["identical"])
+
+    def test_diff_is_byte_identical(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old, new = Path(tmp) / "old.yaml", Path(tmp) / "new.yaml"
+            old.write_text(cd.dump_yaml(BASE), encoding="utf-8")
+            changed = copy.deepcopy(BASE)
+            changed["domains"][1]["objectives"].reverse()
+            changed["domains"][0]["objectives"][1]["text"] = "Manage persistent volumes and claims"
+            new.write_text(cd.dump_yaml(changed), encoding="utf-8")
+            a, b = run_twice(["diff", str(old), str(new)])
+        self.assertEqual(hashlib.sha256(a).hexdigest(), hashlib.sha256(b).hexdigest())
+        self.assertFalse(json.loads(a)["identical"])
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@ below; `--help` lists the subcommands and `<subcommand> --help` their flags.
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import json
 import re
@@ -232,6 +233,144 @@ def _extract_run(args) -> int:
 
 
 COMMANDS["extract"] = ("freeze an official PDF as a syllabus snapshot", _extract_args, _extract_run)
+
+
+# ==== diff ====
+#
+#   scripts/curriculum_diff.py diff certs/cka.md syllabi/cka/v1.37.yaml     # JSON on stdout
+#
+# Either side is a snapshot (syllabi/<cert>/v<ver>.yaml) or a frozen
+# certs/<cert>.md, whose `topic: "N - Name"` gives the domain. CNCF publishes a
+# weight per domain only; the per-objective weights in certs/<cert>.md are that
+# weight split over the objectives, so they are never compared: a domain's weight
+# is the sum of its objectives'. Matching, old tree to new tree, in this order:
+# 1. Domains match by normalized name, the rest by similarity >= MATCH.
+# 2. Objectives match by normalized text (see `normalize`).
+# 3. The remaining pairs are scored with difflib's ratio (autojunk off) and taken
+#    greedily, highest first, ties by position: ratio >= REWORD is `reworded`,
+#    MATCH <= ratio < REWORD is `changed`, below MATCH they are `removed` + `added`.
+# 4. A matched objective whose domain is not its old domain's match is `moved`.
+
+REWORD = 0.90   # at or above: the same objective, new wording
+MATCH = 0.60    # at or above (and below REWORD): the same slot, substantively changed
+FROZEN_DOMAIN = re.compile(r"^\s*(\d+)\s*-\s*(.+?)\s*$")
+
+
+def similarity(a: str, b: str) -> float:
+    return round(difflib.SequenceMatcher(None, normalize(a), normalize(b), autojunk=False).ratio(), 4)
+
+
+def load_syllabus(path: Path) -> dict:
+    """A syllabus as {version, domains, file_sha256}: a snapshot YAML, or a frozen certs/<cert>.md."""
+    text = path.read_text(encoding="utf-8")
+    if path.suffix != ".md":
+        return dict(yaml.safe_load(text), file_sha256=sha256_text(text))
+    front = yaml.safe_load(text.split("---", 2)[1])
+    domains: dict[str, dict] = {}
+    for t in front.get("topics") or []:
+        m = FROZEN_DOMAIN.match(str(t.get("topic") or ""))
+        did, name = (m.group(1), m.group(2)) if m else ("0", str(t.get("topic") or ""))
+        d = domains.setdefault(did, {"id": did, "name": name, "weight": 0.0, "objectives": []})
+        d["weight"] += float(t.get("weight") or 0)
+        d["objectives"].append({"id": str(t["id"]), "text": tidy(str(t.get("title") or ""))})
+    return {"cert": front.get("cert"), "version": str(front.get("version")), "file_sha256": sha256_text(text),
+            "domains": [dict(d, weight=number(d["weight"])) for d in domains.values()]}
+
+
+def _match_domains(old: list[dict], new: list[dict]) -> dict[str, str]:
+    """old domain id -> new domain id."""
+    by_name = {normalize(d["name"]): d["id"] for d in new}
+    pairs = {d["id"]: by_name[normalize(d["name"])] for d in old if normalize(d["name"]) in by_name}
+    taken = set(pairs.values())
+    scored = sorted((-similarity(a["name"], b["name"]), i, j, a["id"], b["id"])
+                    for i, a in enumerate(old) if a["id"] not in pairs
+                    for j, b in enumerate(new) if b["id"] not in taken)
+    for score, _, _, a, b in scored:
+        if -score >= MATCH and a not in pairs and b not in taken:
+            pairs[a] = b
+            taken.add(b)
+    return pairs
+
+
+def _match_objectives(oobj: list, nobj: list) -> list[tuple[int, int, float]]:
+    """(old index, new index, similarity): exact normalized text first, then greedy by ratio >= MATCH."""
+    pairs, used_o, used_n = [], set(), set()
+    index: dict[str, list[int]] = {}
+    for j, (o, _) in enumerate(nobj):
+        index.setdefault(normalize(o["text"]), []).append(j)
+    for i, (o, _) in enumerate(oobj):
+        j = next((j for j in index.get(normalize(o["text"]), []) if j not in used_n), None)
+        if j is not None:
+            pairs.append((i, j, 1.0))
+            used_o.add(i)
+            used_n.add(j)
+    scored = sorted((-similarity(a["text"], b["text"]), i, j)
+                    for i, (a, _) in enumerate(oobj) if i not in used_o
+                    for j, (b, _) in enumerate(nobj) if j not in used_n)
+    for score, i, j in scored:
+        if -score >= MATCH and i not in used_o and j not in used_n:
+            pairs.append((i, j, -score))
+            used_o.add(i)
+            used_n.add(j)
+    return sorted(pairs)
+
+
+def diff(old: dict, new: dict) -> dict:
+    """The machine-readable difference between two syllabi. Pure: same inputs, same output."""
+    odom = {d["id"]: d for d in old["domains"]}
+    ndom = {d["id"]: d for d in new["domains"]}
+    dmap = _match_domains(old["domains"], new["domains"])
+    oobj = [(o, d) for d in old["domains"] for o in d["objectives"]]
+    nobj = [(o, d) for d in new["domains"] for o in d["objectives"]]
+    pairs = _match_objectives(oobj, nobj)
+
+    out = {"unchanged": [], "reworded": [], "changed": [], "moved": [], "added": [], "removed": []}
+    for i, j, score in pairs:
+        (o, od), (n, nd) = oobj[i], nobj[j]
+        entry = {"old_id": o["id"], "new_id": n["id"], "similarity": score}
+        if dmap.get(od["id"]) != nd["id"]:
+            out["moved"].append(dict(entry, text=n["text"], from_domain=od["name"], to_domain=nd["name"]))
+        if score == 1.0:
+            if dmap.get(od["id"]) == nd["id"]:
+                out["unchanged"].append(dict(entry, text=n["text"]))
+        else:
+            out["reworded" if score >= REWORD else "changed"].append(dict(entry, old=o["text"], new=n["text"]))
+    matched_o, matched_n = {i for i, _, _ in pairs}, {j for _, j, _ in pairs}
+    out["removed"] = [{"old_id": o["id"], "text": o["text"], "domain": d["name"]}
+                      for i, (o, d) in enumerate(oobj) if i not in matched_o]
+    out["added"] = [{"new_id": n["id"], "text": n["text"], "domain": d["name"]}
+                    for j, (n, d) in enumerate(nobj) if j not in matched_n]
+
+    domains = {"renamed": [], "weight_changed": [], "added": [], "removed": []}
+    for oid, nid in sorted(dmap.items()):
+        if normalize(odom[oid]["name"]) != normalize(ndom[nid]["name"]):
+            domains["renamed"].append({"old_id": oid, "new_id": nid, "old": odom[oid]["name"],
+                                       "new": ndom[nid]["name"]})
+        if number(odom[oid]["weight"]) != number(ndom[nid]["weight"]):
+            domains["weight_changed"].append({"old_id": oid, "new_id": nid, "domain": ndom[nid]["name"],
+                                              "old": number(odom[oid]["weight"]),
+                                              "new": number(ndom[nid]["weight"])})
+    domains["removed"] = [{"old_id": d["id"], "name": d["name"]} for d in old["domains"] if d["id"] not in dmap]
+    mapped = set(dmap.values())
+    domains["added"] = [{"new_id": d["id"], "name": d["name"]} for d in new["domains"] if d["id"] not in mapped]
+
+    changes = sum(len(v) for k, v in out.items() if k != "unchanged") + sum(len(v) for v in domains.values())
+    return {"identical": changes == 0, "thresholds": {"match": MATCH, "reword": REWORD},
+            "old": {"version": str(old.get("version")), "objectives": len(oobj), "domains": len(odom)},
+            "new": {"version": str(new.get("version")), "objectives": len(nobj), "domains": len(ndom)},
+            "domains": domains, "objectives": out}
+
+
+def _diff_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("old", type=Path)
+    p.add_argument("new", type=Path)
+
+
+def _diff_run(args) -> int:
+    return write(dump_json(diff(load_syllabus(args.old), load_syllabus(args.new))), None, False)
+
+
+COMMANDS["diff"] = ("diff two syllabi (snapshot .yaml or frozen certs/<cert>.md) as JSON", _diff_args, _diff_run)
 
 
 # ==== main ====
