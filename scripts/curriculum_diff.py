@@ -373,6 +373,254 @@ def _diff_run(args) -> int:
 COMMANDS["diff"] = ("diff two syllabi (snapshot .yaml or frozen certs/<cert>.md) as JSON", _diff_args, _diff_run)
 
 
+# ==== plan ====
+#
+#   scripts/curriculum_diff.py plan docs/upgrades/<upgrade>.yaml [-o <upgrade>.plan.json] [--check]
+#
+# The spec names, per cert, `tracked` (the frozen syllabus the material was built
+# against, default certs/<cert>.md), `target` (the new snapshot) and optionally
+# `upstream_base` (the old version's own snapshot). The plan holds three diffs per
+# cert: impact (tracked -> target, which drives the classes), upstream
+# (upstream_base -> target: what the vendor changed) and drift (tracked ->
+# upstream_base: where the frozen file already differed from its own PDF). Every
+# topic of the tracked syllabus gets exactly one class, by CLASS_RULES in order;
+# every new objective no topic covers is `new`. PLANNED_FILES says what each class
+# may touch in the PRs that follow, which is what `guard` enforces.
+
+CLASSES = ("keep", "revalidate", "regenerate", "new", "retire")
+CLASS_RULES = (   # the plan and the report print exactly this table
+    ("retire", "its objective is not in the new syllabus (removed, or below MATCH similarity to every new one)",
+     "archive the topic directory; redirect its links"),
+    ("regenerate", f"its objective changed: best match has MATCH ({MATCH}) <= similarity < REWORD ({REWORD})",
+     "one PR through the whole content process (content, exercises, lab, translations)"),
+    ("revalidate", "its objective was reworded (REWORD <= similarity < 1), moved to another domain, "
+     "or its domain's published weight changed",
+     "re-run every check against the new text; record the result in meta.yaml; a failed check makes it regenerate"),
+    ("keep", "its objective text, domain and domain weight are identical",
+     "no content change; only its listed technical version lines may be rewritten in place, by the version bump"),
+    ("new", "an objective of the new syllabus that no topic covers",
+     "a new topic directory, through the whole content process"),
+)
+# What each class may touch: `{t}` is certs/<cert>/<topic>, `{lang}` each language the topic has.
+PLANNED_FILES = {
+    "keep": [],
+    "revalidate": ["{t}/{lang}/meta.yaml"],
+    "regenerate": ["{t}/**"],
+    "new": ["{t}/**"],
+    "retire": ["{t}/**"],
+}
+
+
+def classify(d: dict, old: dict) -> dict[str, tuple[str, list[str], str | None, float | None]]:
+    """old topic id -> (class, reasons, new objective id, similarity), by CLASS_RULES in order."""
+    o = d["objectives"]
+    by_old = lambda kind: {e["old_id"]: e for e in o[kind]}  # noqa: E731
+    removed, changed, reworded, moved = by_old("removed"), by_old("changed"), by_old("reworded"), by_old("moved")
+    matched = {**by_old("unchanged"), **reworded, **moved}
+    weights = {w["old_id"]: w for w in d["domains"]["weight_changed"]}
+    result = {}
+    for dom in old["domains"]:
+        for obj in dom["objectives"]:
+            tid = obj["id"]
+            if tid in removed:
+                result[tid] = ("retire", ["objective removed"], None, None)
+            elif tid in changed:
+                c = changed[tid]
+                result[tid] = ("regenerate", [f"objective changed (similarity {c['similarity']})"],
+                               c["new_id"], c["similarity"])
+            else:
+                reasons = []
+                if tid in reworded:
+                    reasons.append(f"objective reworded (similarity {reworded[tid]['similarity']})")
+                if tid in moved:
+                    reasons.append(f"moved: {moved[tid]['from_domain']} -> {moved[tid]['to_domain']}")
+                if dom["id"] in weights:
+                    reasons.append(f"domain weight {weights[dom['id']]['old']}% -> {weights[dom['id']]['new']}%")
+                result[tid] = ("revalidate" if reasons else "keep", reasons or ["unchanged"],
+                               matched[tid]["new_id"], matched[tid]["similarity"])
+    return result
+
+
+def _glob(path: str, pattern: str) -> bool:
+    return path.startswith(pattern[:-2]) if pattern.endswith("/**") else path == pattern
+
+
+def inventory(root: Path, cert: str, topic: str) -> dict:
+    t = root / "certs" / cert / topic
+    langs = sorted(p.name for p in t.iterdir() if p.is_dir() and p.name != "lab") if t.is_dir() else []
+    return {"dir": f"certs/{cert}/{topic}", "languages": langs, "lab": (t / "lab" / "lab.yaml").is_file()}
+
+
+def planned(cls: str, inv: dict) -> list[str]:
+    files = []
+    for pattern in PLANNED_FILES[cls]:
+        langs = inv["languages"] if "{lang}" in pattern else [None]
+        files += [pattern.format(t=inv["dir"], lang=lang) for lang in langs]
+    return files
+
+
+# Below topic level. A `revalidate` or `regenerate` topic lists the sections (markdown headings) of
+# its content.md and exercises.md that name what changed: the old domain name (moved), the old
+# objective title verbatim (reworded or changed), or a weight line (domain weight changed). Only
+# those sections are candidates for an edit; every other section stays byte-identical. Separately,
+# every topic lists the lines that name the tracked version (`v1.35`, `1.35`): `curriculum` lines
+# cite the curriculum document, `label` lines are headings or banners, `technical` lines are
+# commands, outputs or prose about that Kubernetes version, the only ones a version bump may need
+# to rewrite by hand. `# ...` lines inside code fences are not headings. Lab files (lab.yaml, *.sh)
+# are scanned too, and all their version lines are technical: the runner reads `kubernetes:`.
+DOC_FILES = ("content.md", "exercises.md")
+HEADING = re.compile(r"^#{1,4} ")
+
+
+FENCE = re.compile(r"^\s*(```|~~~)")
+
+
+def _headings(text: str) -> list[bool]:
+    """Per line: is it a markdown heading? A `# ...` line inside a code fence is a comment or an output, not one."""
+    out, fenced = [], False
+    for line in text.splitlines():
+        if FENCE.match(line):
+            fenced = not fenced
+            out.append(False)
+        else:
+            out.append(not fenced and bool(HEADING.match(line)))
+    return out
+
+
+def _sections(text: str) -> list[tuple[int, str, str]]:
+    """(first line number, heading, body) per markdown section; text before the first heading is line 1."""
+    out, start, title, body = [], 1, "(top)", []
+    for n, (line, heading) in enumerate(zip(text.splitlines(), _headings(text)), 1):
+        if heading:
+            if body or out:
+                out.append((start, title, "\n".join(body)))
+            start, title, body = n, line.lstrip("# ").strip(), [line]
+        else:
+            body.append(line)
+    out.append((start, title, "\n".join(body)))
+    return out
+
+
+def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, needles: list[tuple[str, str]]) -> dict:
+    """Sections that name a changed field, and lines that name the tracked version.
+
+    Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
+    line there is `technical`, since the runner and the Killercoda export read them."""
+    ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)")
+    sections, lines = [], {"curriculum": 0, "label": 0, "technical": []}
+    topic_dir = root / "certs" / cert / topic
+    docs = [(f"{lang}/{name}", True) for lang in langs for name in DOC_FILES]
+    labs = sorted(p.relative_to(topic_dir).as_posix() for p in (topic_dir / "lab").glob("*")
+                  if p.is_file() and (p.name == "lab.yaml" or p.suffix == ".sh")) if (topic_dir / "lab").is_dir() else []
+    for name, is_doc in docs + [(lab, False) for lab in labs]:
+        path = topic_dir / name
+        if not path.is_file():
+            continue
+        rel = f"certs/{cert}/{topic}/{name}"
+        text = path.read_text(encoding="utf-8")
+        if is_doc:
+            for start, title, body in _sections(text):
+                why = [label for label, needle in needles if needle.casefold() in body.casefold()]
+                if why:
+                    sections.append({"file": rel, "line": start, "heading": title, "why": why})
+        heads = _headings(text) if is_doc else [False] * len(text.splitlines())
+        for n, (line, heading) in enumerate(zip(text.splitlines(), heads), 1):
+            if not ver.search(line):
+                continue
+            if is_doc and "curriculum" in line.casefold():
+                lines["curriculum"] += 1
+            elif is_doc and (heading or line.startswith("**")):
+                lines["label"] += 1
+            else:
+                lines["technical"].append(f"{rel}:{n}")
+    return {"sections": sections, "version_lines": lines}
+
+
+def _needles(cls: str, reasons: list[str], obj: dict, dom: dict) -> list[tuple[str, str]]:
+    if cls not in ("revalidate", "regenerate"):
+        return []
+    out = []
+    if any(r.startswith("moved") for r in reasons):
+        out.append((f"old domain: {dom['name']}", dom["name"]))
+    if any(r.startswith(("objective reworded", "objective changed")) for r in reasons):
+        out.append(("old objective title", obj["text"]))
+    if any(r.startswith("domain weight") for r in reasons):
+        out.append(("weight", "weight"))
+    return out
+
+
+def _ref(root: Path, file: str, data: dict) -> dict:
+    return {"file": file, "version": data["version"], "sha256": data["file_sha256"],
+            "source": data.get("source"), "tree_sha256": data.get("tree_sha256")}
+
+
+def plan_cert(root: Path, cert: str, spec: dict) -> dict:
+    tracked_file = spec.get("tracked") or f"certs/{cert}.md"
+    tracked = load_syllabus(root / tracked_file)
+    target = load_syllabus(root / spec["target"])
+    impact = diff(tracked, target)
+    classes = classify(impact, tracked)
+    topics = []
+    for dom in tracked["domains"]:
+        for o in dom["objectives"]:
+            cls, reasons, new_id, score = classes[o["id"]]
+            inv = inventory(root, cert, o["id"])
+            found = scan(root, cert, o["id"], inv["languages"], tracked["version"], _needles(cls, reasons, o, dom))
+            files = planned(cls, inv)
+            if cls in ("keep", "revalidate"):   # scoped edits: only files holding a listed section or line
+                files = sorted(set(files) | {s["file"] for s in found["sections"]}
+                               | {ref.rsplit(":", 1)[0] for ref in found["version_lines"]["technical"]})
+            topics.append({"topic": o["id"], "title": o["text"], "domain": dom["name"], "class": cls,
+                           "reasons": reasons, "maps_to": new_id, "similarity": score,
+                           "languages": inv["languages"], "lab": inv["lab"], "planned_files": files, **found})
+    new = [{"objective": a["new_id"], "title": a["text"], "domain": a["domain"], "class": "new",
+            "planned_files": [f"certs/{cert}/<new topic for {a['new_id']}>/**"]}
+           for a in impact["objectives"]["added"]]
+    counts = {c: sum(1 for t in topics if t["class"] == c) for c in CLASSES}
+    counts["new"] = len(new)
+    topic_files = sorted(str(p.relative_to(root)) for p in (root / "certs" / cert).glob("*/**/*") if p.is_file())
+    globs = [g for t in topics for g in t["planned_files"]]
+    efficiency = {"topic_files": len(topic_files),
+                  "planned_files": sum(1 for f in topic_files if any(_glob(f, g) for g in globs)),
+                  "sections_to_edit": sum(len(t["sections"]) for t in topics),
+                  "version_lines": {k: sum(len(t["version_lines"][k]) if k == "technical" else t["version_lines"][k]
+                                           for t in topics) for k in ("curriculum", "label", "technical")}}
+    out = {"cert": cert, "tracked": {k: v for k, v in _ref(root, tracked_file, tracked).items()
+                                     if k in ("file", "version", "sha256")},
+           "target": _ref(root, spec["target"], target),
+           "impact": impact, "topics": topics, "new": new, "counts": counts, "efficiency": efficiency}
+    if spec.get("upstream_base"):
+        base = load_syllabus(root / spec["upstream_base"])
+        out["upstream_base"] = _ref(root, spec["upstream_base"], base)
+        out["upstream"] = diff(base, target)
+        out["drift"] = diff(tracked, base)
+    return out
+
+
+def plan(root: Path, spec_file: str) -> dict:
+    spec = yaml.safe_load((root / spec_file).read_text(encoding="utf-8"))
+    return {"upgrade": spec["upgrade"], "milestone": spec.get("milestone"), "issue": spec.get("issue"),
+            "spec": spec_file,
+            "rules": [{"class": c, "rule": r, "action": a} for c, r, a in CLASS_RULES],
+            "planned_files": PLANNED_FILES,
+            "thresholds": {"match": MATCH, "reword": REWORD},
+            "certs": {cert: plan_cert(root, cert, s) for cert, s in sorted(spec["certs"].items())}}
+
+
+def _plan_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("spec", help="the upgrade spec, relative to the repository root")
+    p.add_argument("-o", "--out", help="default: <spec>.plan.json")
+    p.add_argument("--check", action="store_true", help="fail if --out is not what the inputs produce")
+
+
+def _plan_run(args) -> int:
+    out = args.out or str(Path(args.spec).with_suffix(".plan.json"))
+    return write(dump_json(plan(REPO, args.spec)), out, args.check)
+
+
+COMMANDS["plan"] = ("classify every topic of an upgrade spec", _plan_args, _plan_run)
+
+
 # ==== main ====
 
 def main(argv: list[str] | None = None) -> int:
