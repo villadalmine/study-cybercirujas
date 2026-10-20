@@ -46,7 +46,7 @@ jobs:
         id: app-token
         # v3.3.0; `app-id` is deprecated in favour of `client-id` (the App's "Iv..." id), which the
         # secret does not hold; it still works and only warns.
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
@@ -58,7 +58,7 @@ jobs:
         # v5.0.0. Reads release-please-config.json and .release-please-manifest.json (manifest mode).
         # Outputs used: release_created, tag_name, version (the root component's, documented in the
         # action's README).
-        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7  # v5.0.0
         with:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
