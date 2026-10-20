@@ -1,0 +1,17 @@
+# Values for the chart smoke test (deploy/helm-smoke/smoke.sh, .github/workflows/chart-smoke.yml):
+# a throwaway kind cluster, the image built from this checkout and loaded into it, nothing
+# that needs the outside world. TEACH_SECRET is not here: the script generates one per run.
+image:
+  repository: study       # overridden by smoke.sh from IMAGE=
+  tag: ci
+  pullPolicy: Never       # the image is loaded with `kind load`, never pulled
+
+gateway:
+  enabled: false          # no Gateway API CRDs in kind; the test goes through port-forward
+
+botStats:
+  enabled: true           # exercise the PVC and the uid 10001 / fsGroup write path
+  storageClass: ""        # kind's default (local-path)
+
+checkModels:
+  enabled: false          # a CronJob that calls out to the network has no place in CI

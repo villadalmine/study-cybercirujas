@@ -534,12 +534,13 @@ leave the Release PR open: it keeps collecting changes.
 ## Checks that must pass
 
 All of them run without keys, without a model, and without network beyond
-installing dependencies. CI runs the same targets.
+installing dependencies (and pulling base images for the chart smoke test). CI runs the same targets.
 
 | Flow | Test | Command |
 |---|---|---|
 | clone → setup → serve → site, API, CLI → Docker lab → cleanup | `tests/e2e/clone_and_run.sh` | `make test-e2e` (needs Docker for the lab step; clones your **committed** HEAD) |
 | the site, the API and the student CLI, offline | `tests/test_smoke.py` | `make smoke` |
+| the Helm chart installs and serves: image built from the checkout, kind, `helm install`, rollout, `/healthz` and `/api/catalog`, bot-stats volume writable by the app user, `helm uninstall` (CI only on changes under `deploy/`) | `deploy/helm-smoke/smoke.sh`, `tests/test_chart_smoke.py` | job `install` of `.github/workflows/chart-smoke.yml`; locally the commands at the top of that file (needs Docker and kind; delete the cluster after) |
 | determinism: derived files and validators twice, byte for byte, network and models blocked | `tests/test_determinism.py` | `make determinism` |
 | labs: every lab honours the contract; `lab new` produces a valid lab; broken specs are caught; `lab up` attaches stdin | `tests/test_labs.py` | `make test` |
 | translation: the structural gate a translation must pass (code blocks, URLs, headings, length) | `tests/test_translation_verify.py` | `make test` |
