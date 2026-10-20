@@ -131,7 +131,7 @@ OK: docs/upgrades/cka-ckad-1.37.md is current
 
 **The snapshots are what the pinned PDFs produce** (`extract --check` on each of the four PDFs: `OK ... is current`),
 and the old and new trees hash the same: CKA `1e485720…` for v1.35 and v1.37, CKAD `90399946…` for both.
-`tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. While the upgrade is open, a PR that edits a version line of CKA or CKAD regenerates both with the two commands above.
+`tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. While the upgrade is open, any PR that changes a file under `certs/cka/` or `certs/ckad/` (a line, a language, a lab file) regenerates both with the two commands above.
 
 **`keep` topics are untouched.** Phase 1 (the tool, the snapshots, `upstream:` in the catalog, this folder) changes no
 topic file: `git diff --stat origin/main...HEAD -- certs/cka/ certs/ckad/` is empty, so all 48 `keep` topics and the 3
