@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
       # EndBug/label-sync v2.3.3, pinned by commit (tags move; commits do not).
-      - uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a
+      - uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a  # v2.3.3
         with:
           config-file: .github/labels.yml
           dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
