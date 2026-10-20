@@ -466,16 +466,32 @@ def planned(cls: str, inv: dict) -> list[str]:
 # every topic lists the lines that name the tracked version (`v1.35`, `1.35`): `curriculum` lines
 # cite the curriculum document, `label` lines are headings or banners, `technical` lines are
 # commands, outputs or prose about that Kubernetes version, the only ones a version bump may need
-# to rewrite by hand.
+# to rewrite by hand. `# ...` lines inside code fences are not headings. Lab files (lab.yaml, *.sh)
+# are scanned too, and all their version lines are technical: the runner reads `kubernetes:`.
 DOC_FILES = ("content.md", "exercises.md")
 HEADING = re.compile(r"^#{1,4} ")
+
+
+FENCE = re.compile(r"^\s*(```|~~~)")
+
+
+def _headings(text: str) -> list[bool]:
+    """Per line: is it a markdown heading? A `# ...` line inside a code fence is a comment or an output, not one."""
+    out, fenced = [], False
+    for line in text.splitlines():
+        if FENCE.match(line):
+            fenced = not fenced
+            out.append(False)
+        else:
+            out.append(not fenced and bool(HEADING.match(line)))
+    return out
 
 
 def _sections(text: str) -> list[tuple[int, str, str]]:
     """(first line number, heading, body) per markdown section; text before the first heading is line 1."""
     out, start, title, body = [], 1, "(top)", []
-    for n, line in enumerate(text.splitlines(), 1):
-        if HEADING.match(line):
+    for n, (line, heading) in enumerate(zip(text.splitlines(), _headings(text)), 1):
+        if heading:
             if body or out:
                 out.append((start, title, "\n".join(body)))
             start, title, body = n, line.lstrip("# ").strip(), [line]
@@ -486,28 +502,37 @@ def _sections(text: str) -> list[tuple[int, str, str]]:
 
 
 def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, needles: list[tuple[str, str]]) -> dict:
-    """Sections that name a changed field, and lines that name the tracked version."""
+    """Sections that name a changed field, and lines that name the tracked version.
+
+    Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
+    line there is `technical`, since the runner and the Killercoda export read them."""
     ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)")
     sections, lines = [], {"curriculum": 0, "label": 0, "technical": []}
-    for lang in langs:
-        for name in DOC_FILES:
-            path = root / "certs" / cert / topic / lang / name
-            if not path.is_file():
-                continue
-            rel = f"certs/{cert}/{topic}/{lang}/{name}"
-            text = path.read_text(encoding="utf-8")
+    topic_dir = root / "certs" / cert / topic
+    docs = [(f"{lang}/{name}", True) for lang in langs for name in DOC_FILES]
+    labs = sorted(p.relative_to(topic_dir).as_posix() for p in (topic_dir / "lab").glob("*")
+                  if p.is_file() and (p.name == "lab.yaml" or p.suffix == ".sh")) if (topic_dir / "lab").is_dir() else []
+    for name, is_doc in docs + [(lab, False) for lab in labs]:
+        path = topic_dir / name
+        if not path.is_file():
+            continue
+        rel = f"certs/{cert}/{topic}/{name}"
+        text = path.read_text(encoding="utf-8")
+        if is_doc:
             for start, title, body in _sections(text):
                 why = [label for label, needle in needles if needle.casefold() in body.casefold()]
                 if why:
                     sections.append({"file": rel, "line": start, "heading": title, "why": why})
-            for n, line in enumerate(text.splitlines(), 1):
-                if ver.search(line):
-                    kind = ("curriculum" if "curriculum" in line.casefold() else
-                            "label" if HEADING.match(line) or line.startswith("**") else "technical")
-                    if kind == "technical":
-                        lines[kind].append(f"{rel}:{n}")
-                    else:
-                        lines[kind] += 1
+        heads = _headings(text) if is_doc else [False] * len(text.splitlines())
+        for n, (line, heading) in enumerate(zip(text.splitlines(), heads), 1):
+            if not ver.search(line):
+                continue
+            if is_doc and "curriculum" in line.casefold():
+                lines["curriculum"] += 1
+            elif is_doc and (heading or line.startswith("**")):
+                lines["label"] += 1
+            else:
+                lines["technical"].append(f"{rel}:{n}")
     return {"sections": sections, "version_lines": lines}
 
 

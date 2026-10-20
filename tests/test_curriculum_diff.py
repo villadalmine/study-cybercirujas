@@ -278,6 +278,22 @@ class BelowTopicLevel(unittest.TestCase):
         self.assertEqual(found["version_lines"], {"curriculum": 1, "label": 0,
                                                   "technical": ["certs/ckad/2.4/en/content.md:7"]})
 
+    def test_fenced_hash_lines_are_not_headings_and_labs_are_scanned(self):
+        doc = "# Title\n\n```\n# master   Ready   control-plane   2m   v1.35.0\n```\n\n## Next\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs/cka/4.2/en").mkdir(parents=True)
+            (root / "certs/cka/4.2/lab").mkdir(parents=True)
+            (root / "certs/cka/4.2/en/content.md").write_text(doc, encoding="utf-8")
+            (root / "certs/cka/4.2/lab/lab.yaml").write_text("kubernetes: '1.35'\nrunner_image: kindest/node:v1.35.8\n",
+                                                            encoding="utf-8")
+            (root / "certs/cka/4.2/lab/break_fix.sh").write_text("#!/bin/bash\n# CKA v1.35\n", encoding="utf-8")
+            found = cd.scan(root, "cka", "4.2", ["en"], "1.35", [])
+        self.assertEqual([t for _, t, _ in cd._sections(doc)], ["Title", "Next"])
+        self.assertEqual(found["version_lines"]["technical"],
+                         ["certs/cka/4.2/en/content.md:4", "certs/cka/4.2/lab/break_fix.sh:2",
+                          "certs/cka/4.2/lab/lab.yaml:1", "certs/cka/4.2/lab/lab.yaml:2"])
+
 
 if __name__ == "__main__":
     unittest.main()
