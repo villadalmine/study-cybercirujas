@@ -1,8 +1,9 @@
 """Tracker/scraper: nothing is static — the whole catalog derives from sources.
 
 - sync_cncf(): deterministic. Reads the cncf/curriculum repo through the GitHub
-  API: each PDF's last-changed date is the curriculum version. Marks
-  new-version-available when upstream changed.
+  API: writes what upstream publishes into each cert's `upstream:` block
+  (version, objectives pinned by commit, sha256) and `upstream_status`
+  (current | outdated). It never writes `tracked_version` (#63).
 - sync_lpi(): scrapes lpi.org and an AI model turns the page into structured
   updates (level, validity, prerequisites) per catalog cert.
 - snapshot_topics(): downloads a cert's official objectives (HTML or PDF), the
@@ -22,6 +23,7 @@ import html as html_lib
 import io
 import re
 import subprocess
+from urllib.parse import quote
 
 import httpx
 import yaml
@@ -203,20 +205,31 @@ def sync_cncf() -> list[str]:
         ).json()
         updated = commits[0]["commit"]["committer"]["date"][:10] if commits else None
         cert["last_checked"] = today
-        if updated and cert.get("curriculum_updated") != updated:
+        date_moved = bool(updated and cert.get("curriculum_updated") != updated)
+        if date_moved:
             cert["curriculum_updated"] = updated
-            cert["upstream_status"] = "new-version-available"
             changes.append(f"{cert_id}: curriculum changed -> {updated}")
-        # `tracked_version` records what UPSTREAM publishes. What our material was
-        # built on lives in the syllabus frontmatter (`version` + `snapshot_date`),
-        # written by `teach cert snapshot` and never touched here — otherwise a
-        # sync would silently rewrite the record of what we froze, and "is our
-        # content current?" would become unanswerable by the act of asking.
-        # scripts/check_versions.py compares the two.
+        # What upstream publishes goes in `upstream:` (#63), never in `tracked_version`: that one says
+        # which curriculum the material was built against, and only the final PR of the cert's upgrade
+        # milestone moves it (check_pr enforces it). A sync used to copy the version from the PDF's
+        # file name into `tracked_version`, which would have relabelled v1.35 material as v1.37.
         semantic = re.search(r"v(\d+\.\d+)", name)
-        if semantic and cert.get("tracked_version") != semantic.group(1):
-            cert["tracked_version"] = semantic.group(1)
-            changes.append(f"{cert_id}: upstream version -> {semantic.group(1)}")
+        if semantic and commits:
+            version = semantic.group(1)
+            block = cert.get("upstream") or {}
+            if block.get("version") != version:
+                url = f"https://github.com/cncf/curriculum/raw/{commits[0]['sha']}/{quote(name)}"
+                body, _ = _get_bytes(url)
+                cert["upstream"] = {**block, "version": version, "objectives": url,
+                                    "sha256": hashlib.sha256(body).hexdigest(), "published": updated,
+                                    "detected": today}
+                changes.append(f"{cert_id}: upstream publishes {version} (tracked_version stays "
+                               f"{cert.get('tracked_version')})")
+            status = "current" if str(cert.get("tracked_version")) == version else "outdated"
+        else:
+            # No version in the file name: the commit date is the only signal (#63's derived status).
+            status = "outdated" if date_moved else cert.get("upstream_status") or "current"
+        cert["upstream_status"] = status
     catalog.save(data)
     return changes or ["cncf: no upstream changes"]
 
