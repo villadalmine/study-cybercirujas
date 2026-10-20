@@ -1,46 +1,45 @@
 # Community 26
 
-> 13 nodes · cohesion 0.17
+> 17 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **_reject_if_recap()** (10 connections) — `teach/core/generator.py`
-- **_strip_fence()** (8 connections) — `teach/core/generator.py`
-- **Development Guidelines for teach-plat** (7 connections) — `CLAUDE.md`
-- **Rules** (3 connections) — `CLAUDE.md`
-- **2026-07-27** (3 connections) — `docs/HISTORY.md`
-- **Verification: what is proven, and what is only assumed** (2 connections) — `CLAUDE.md`
-- **2026-07-11/12** (2 connections) — `docs/HISTORY.md`
-- **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
-- **Agent Idea Synchronization (AGENTS_SYNC.md)** (1 connections) — `CLAUDE.md`
-- **Commands** (1 connections) — `CLAUDE.md`
-- **Content Workflow** (1 connections) — `CLAUDE.md`
-- **Pull requests from agents** (1 connections) — `CLAUDE.md`
-- **Backends sometimes wrap the whole response in a ```markdown ... ``` fence even…** (1 connections) — `teach/core/generator.py`
+- **_stream()** (14 connections) — `teach/lab/runner.py`
+- **test_stream.py** (14 connections) — `tests/lab/test_stream.py`
+- **Lab** (4 connections) — `tests/lab/test_stream.py`
+- **test_a_child_that_exits_124_is_not_reported_as_a_timeout()** (3 connections) — `tests/lab/test_stream.py`
+- **test_scripts_run_under_timeout_inside_the_container()** (3 connections) — `tests/lab/test_stream.py`
+- **test_the_backstop_docker_exec_is_bounded()** (3 connections) — `tests/lab/test_stream.py`
+- **threading** (3 connections)
+- **test_a_stuck_on_timeout_does_not_hang_the_runner()** (2 connections) — `tests/lab/test_stream.py`
+- **test_output_and_exit_code_pass_through()** (2 connections) — `tests/lab/test_stream.py`
+- **test_the_message_names_the_phase_timeout_not_the_host_backstop()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_fires_while_the_child_is_silent()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_stops_what_runs_inside_the_container()** (2 connections) — `tests/lab/test_stream.py`
+- **pump()** (1 connections) — `teach/lab/runner.py`
+- **stop()** (1 connections) — `teach/lab/runner.py`
+- **.__init__()** (1 connections) — `tests/lab/test_stream.py`
+- **Run, echo output live, and return (exit code, full output). `timeout` is the…** (1 connections) — `teach/lab/runner.py`
+- **Per-phase timeouts hold even when the lab prints nothing (review of PR #2). The…** (1 connections) — `tests/lab/test_stream.py`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (5 shared connections)
-- [Community 15](Community_15.md) (3 shared connections)
-- [Community 14](Community_14.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 12](Community_12.md) (8 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 - [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 
 ## Source Files
 
-- `CLAUDE.md`
-- `WORKFLOW.md`
-- `docs/HISTORY.md`
-- `teach/core/generator.py`
+- `teach/lab/runner.py`
+- `tests/lab/test_stream.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (69%)
-- INFERRED: 9 (31%)
+- EXTRACTED: 34 (94%)
+- INFERRED: 2 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

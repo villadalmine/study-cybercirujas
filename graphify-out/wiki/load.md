@@ -13,8 +13,8 @@
 - cmd_export() `EXTRACTED`
 - resolve() `EXTRACTED`
 - SpecError `EXTRACTED`
-- select() `EXTRACTED`
 - _scenario() `EXTRACTED`
+- select() `EXTRACTED`
 - cmd_migrate() `EXTRACTED`
 - _lab() `EXTRACTED`
 - test_export_publishes_only_what_has_evidence() `EXTRACTED`

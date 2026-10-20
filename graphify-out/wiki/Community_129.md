@@ -1,32 +1,32 @@
 # Community 129
 
-> 5 nodes · cohesion 0.60
+> 8 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **check_provenance.py** (11 connections) — `scripts/check_provenance.py`
-- **check_cert()** (6 connections) — `scripts/check_provenance.py`
-- **main()** (3 connections) — `scripts/check_provenance.py`
-- **_topics()** (3 connections) — `scripts/check_provenance.py`
-- **Guardrails: content must be traceable, accounted for, and authored correctly.…** (1 connections) — `scripts/check_provenance.py`
+- **test_killercoda_publish.py** (11 connections) — `tests/lab/test_killercoda_publish.py`
+- **git()** (5 connections) — `tests/lab/test_killercoda_publish.py`
+- **mirror()** (4 connections) — `tests/lab/test_killercoda_publish.py`
+- **publish()** (4 connections) — `tests/lab/test_killercoda_publish.py`
+- **test_publish_adds_keeps_what_was_not_reproven_and_is_idempotent()** (4 connections) — `tests/lab/test_killercoda_publish.py`
+- **scenario()** (3 connections) — `tests/lab/test_killercoda_publish.py`
+- **test_an_export_without_scenarios_does_not_touch_the_mirror()** (3 connections) — `tests/lab/test_killercoda_publish.py`
+- **deploy/killercoda/publish.sh: the failure paths must never wipe or damage the…** (1 connections) — `tests/lab/test_killercoda_publish.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 6](Community_6.md) (2 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 61](Community_61.md) (4 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_provenance.py`
+- `tests/lab/test_killercoda_publish.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 21 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

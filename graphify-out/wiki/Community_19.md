@@ -1,56 +1,40 @@
 # Community 19
 
-> 21 nodes · cohesion 0.19
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **lab/cli.py** (30 connections) — `teach/lab/cli.py`
-- **main()** (19 connections) — `teach/lab/cli.py`
-- **cmd_export()** (12 connections) — `teach/lab/cli.py`
-- **resolve()** (10 connections) — `teach/lab/cli.py`
-- **SpecError** (9 connections) — `teach/lab/spec.py`
-- **_clone()** (6 connections) — `teach/lab/cli.py`
-- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
-- **cmd_new()** (6 connections) — `teach/lab/cli.py`
-- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
-- **_banner()** (4 connections) — `teach/lab/cli.py`
-- **cmd_list()** (4 connections) — `teach/lab/cli.py`
-- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
-- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
-- **Lab** (3 connections)
-- **Path** (2 connections)
-- **__main__.py** (2 connections) — `teach/lab/__main__.py`
-- **Exception** (1 connections)
-- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
-- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
-- **Deterministic export of verified labs to a Killercoda scenario tree (an…** (1 connections) — `teach/lab/cli.py`
-- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 29](Community_29.md) (10 shared connections)
-- [Community 12](Community_12.md) (9 shared connections)
-- [Community 1](Community_1.md) (6 shared connections)
-- [Community 18](Community_18.md) (5 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 59](Community_59.md) (2 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/lab/__main__.py`
-- `teach/lab/cli.py`
-- `teach/lab/spec.py`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 91 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

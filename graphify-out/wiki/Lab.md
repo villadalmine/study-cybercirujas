@@ -24,16 +24,16 @@
 - migrate() `EXTRACTED`
 
 ### uses
-- [run()](run.md) `INFERRED`
+- run() `INFERRED`
 - down() `INFERRED`
 - check() `INFERRED`
 - container_name() `INFERRED`
 - _require_running() `INFERRED`
 - _run_mode() `INFERRED`
+- ensure_image() `INFERRED`
 - _killer() `INFERRED`
 - node_image() `INFERRED`
 - shell() `INFERRED`
-- ensure_image() `INFERRED`
 - _mode_cmd() `INFERRED`
 - image_for() `INFERRED`
 - spec_hash() `INFERRED`

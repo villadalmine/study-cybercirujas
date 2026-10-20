@@ -1,6 +1,6 @@
 # Community 46
 
-> 11 nodes · cohesion 0.22
+> 12 nodes · cohesion 0.20
 
 ## Key Concepts
 
@@ -8,6 +8,7 @@
 - **authenticate()** (5 connections) — `teach/core/auth.py`
 - **auth.py** (5 connections) — `teach/core/auth.py`
 - **Architecture — 3 Components** (4 connections) — `PLAN.md`
+- **me()** (3 connections) — `teach/api.py`
 - **Platform (Long-Term Roadmap, see PLAN.md)** (3 connections) — `BACKLOG.md`
 - **3. Web: Public Landing + Paid Study Zone** (3 connections) — `PLAN.md`
 - **1. Catalog Tracker (Scraper — nothing is static)** (1 connections) — `PLAN.md`
@@ -18,8 +19,8 @@
 
 ## Relationships
 
-- [Community 125](Community_125.md) (3 shared connections)
-- [Community 54](Community_54.md) (2 shared connections)
+- [Community 125](Community_125.md) (5 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 130](Community_130.md) (1 shared connections)
 - [Platform Architecture Plan](Platform_Architecture_Plan.md) (1 shared connections)
@@ -28,12 +29,13 @@
 
 - `BACKLOG.md`
 - `PLAN.md`
+- `teach/api.py`
 - `teach/core/auth.py`
 
 ## Audit Trail
 
-- EXTRACTED: 16 (80%)
-- INFERRED: 4 (20%)
+- EXTRACTED: 18 (82%)
+- INFERRED: 4 (18%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,43 +1,37 @@
 # Community 111
 
-> 11 nodes · cohesion 0.29
+> 10 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **publish_if_complete.py** (19 connections) — `scripts/publish_if_complete.py`
-- **is_complete()** (7 connections) — `scripts/publish_if_complete.py`
-- **main()** (6 connections) — `scripts/publish_if_complete.py`
-- **complete_certs()** (4 connections) — `scripts/publish_if_complete.py`
-- **publish()** (4 connections) — `scripts/publish_if_complete.py`
-- **_record()** (3 connections) — `scripts/publish_if_complete.py`
-- **_save()** (3 connections) — `scripts/publish_if_complete.py`
-- **_topic_ids()** (3 connections) — `scripts/publish_if_complete.py`
-- **Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…** (1 connections) — `scripts/publish_if_complete.py`
-- **Publish when a certification becomes complete. Part of the pass, not a…** (1 connections) — `scripts/publish_if_complete.py`
-- **(complete, why not). Everything the certification declares must be there.…** (1 connections) — `scripts/publish_if_complete.py`
+- **test_images.py** (12 connections) — `tests/lab/test_images.py`
+- **test_ensure_image_builds_locally_and_never_pulls()** (4 connections) — `tests/lab/test_images.py`
+- **_cmd()** (3 connections) — `tests/lab/test_images.py`
+- **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
+- **fake()** (1 connections) — `tests/lab/test_images.py`
+- **__init__()** (1 connections) — `tests/lab/test_images.py`
+- **test_job_ids_are_unique_across_workflows()** (1 connections) — `tests/lab/test_images.py`
+- **test_runner_base_images_are_pinned_by_digest()** (1 connections) — `tests/lab/test_images.py`
+- **Path** (1 connections)
+- **Static guards on the runner images and the CI that builds them (no Docker…** (1 connections) — `tests/lab/test_images.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 69](Community_69.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
+- [Community 36](Community_36.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 13](Community_13.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/publish_if_complete.py`
+- `tests/lab/test_images.py`
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 16 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

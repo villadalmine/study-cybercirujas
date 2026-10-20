@@ -1,54 +1,46 @@
 # Community 59
 
-> 20 nodes · cohesion 0.16
+> 12 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **shutil** (31 connections)
-- **conftest.py** (19 connections) — `tests/lab/conftest.py`
-- **test_export_killercoda.py** (19 connections) — `tests/lab/test_export_killercoda.py`
-- **lab/__init__.py** (15 connections) — `teach/lab/__init__.py`
-- **pytest** (11 connections)
-- **test_golden_tree()** (5 connections) — `tests/lab/test_export_killercoda.py`
-- **test_refuses_what_does_not_fit()** (5 connections) — `tests/lab/test_export_killercoda.py`
-- **test_secret_guard()** (5 connections) — `tests/lab/test_export_killercoda.py`
-- **test_verify_wrapper_honours_regex()** (5 connections) — `tests/lab/test_export_killercoda.py`
-- **docker_ok()** (4 connections) — `tests/lab/conftest.py`
-- **image_ok()** (4 connections) — `tests/lab/conftest.py`
-- **_labs()** (4 connections) — `tests/lab/test_export_killercoda.py`
-- **test_images_and_shape()** (4 connections) — `tests/lab/test_export_killercoda.py`
-- **test_kind_family_image()** (4 connections) — `tests/lab/test_export_killercoda.py`
-- **test_byte_identical_twice()** (2 connections) — `tests/lab/test_export_killercoda.py`
-- **run()** (1 connections) — `tests/lab/test_export_killercoda.py`
-- **skipif** (1 connections)
-- **study-lab: run break/fix labs in throwaway containers (docs/LABS-RUNNER.md).** (1 connections) — `teach/lab/__init__.py`
-- **Shared fixtures for the study-lab tests (pytest; unittest discover skips this…** (1 connections) — `tests/lab/conftest.py`
-- **study-lab export --target killercoda: fixture labs, golden tree, determinism,…** (1 connections) — `tests/lab/test_export_killercoda.py`
+- **root()** (13 connections) — `teach/core/catalog.py`
+- **load_models()** (10 connections) — `teach/core/catalog.py`
+- **save_models()** (8 connections) — `teach/core/catalog.py`
+- **_status_snapshot()** (6 connections) — `teach/api.py`
+- **models_path()** (6 connections) — `teach/core/catalog.py`
+- **Path** (5 connections)
+- **CatalogueWriterTests** (3 connections) — `tests/test_model_probe.py`
+- **.test_the_header_and_the_shape_survive_a_rewrite()** (3 connections) — `tests/test_model_probe.py`
+- **Root of the data repo. Override with TEACH_ROOT.** (1 connections) — `teach/core/catalog.py`
+- **The study bot's model catalogue.** (1 connections) — `teach/core/catalog.py`
+- **Rewrite models.yaml, keeping the header comments above it. Those comments are…** (1 connections) — `teach/core/catalog.py`
+- **models.yaml is rewritten by two scripts; both must leave it readable.** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
-- [Community 131](Community_131.md) (10 shared connections)
-- [Community 1](Community_1.md) (10 shared connections)
-- [Community 18](Community_18.md) (9 shared connections)
-- [Community 29](Community_29.md) (8 shared connections)
-- [Community 43](Community_43.md) (8 shared connections)
-- [Community 70](Community_70.md) (7 shared connections)
-- [Community 56](Community_56.md) (5 shared connections)
-- [Community 12](Community_12.md) (5 shared connections)
-- [Community 36](Community_36.md) (3 shared connections)
-- [Community 135](Community_135.md) (3 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
+- [Community 74](Community_74.md) (7 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [video.py](video.py.md) (3 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 22](Community_22.md) (2 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (2 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/lab/__init__.py`
-- `tests/lab/conftest.py`
-- `tests/lab/test_export_killercoda.py`
+- `teach/api.py`
+- `teach/core/catalog.py`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 111 (100%)
+- EXTRACTED: 43 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

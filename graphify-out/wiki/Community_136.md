@@ -1,28 +1,30 @@
 # Community 136
 
-> 3 nodes · cohesion 0.67
+> 6 nodes · cohesion 0.53
 
 ## Key Concepts
 
-- **test_paths_lang.py** (8 connections) — `tests/test_paths_lang.py`
-- **Career paths are served in the language that was asked for. A path's base…** (1 connections) — `tests/test_paths_lang.py`
-- **fastapi_testclient** (1 connections)
+- **usage_report.py** (10 connections) — `scripts/usage_report.py`
+- **main()** (5 connections) — `scripts/usage_report.py`
+- **rows()** (3 connections) — `scripts/usage_report.py`
+- **_money()** (2 connections) — `scripts/usage_report.py`
+- **_tokens()** (2 connections) — `scripts/usage_report.py`
+- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
 
 ## Relationships
 
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 47](Community_47.md) (1 shared connections)
-- [PathLanguageTests](PathLanguageTests.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_paths_lang.py`
+- `scripts/usage_report.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 15 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

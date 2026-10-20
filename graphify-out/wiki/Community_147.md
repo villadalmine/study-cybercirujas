@@ -1,47 +1,54 @@
 # Community 147
 
-> 14 nodes · cohesion 0.19
+> 19 nodes · cohesion 0.14
 
 ## Key Concepts
 
+- **quality.py** (17 connections) — `teach/core/quality.py`
+- **check_config.py** (14 connections) — `scripts/check_config.py`
 - **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
 - **collections** (12 connections)
-- **test_images.py** (9 connections) — `tests/lab/test_images.py`
+- **quality_report.py** (8 connections) — `scripts/quality_report.py`
+- **main()** (6 connections) — `scripts/check_config.py`
 - **main()** (6 connections) — `scripts/topic_cost.py`
-- **_cmd()** (5 connections) — `tests/lab/test_images.py`
+- **effective()** (5 connections) — `scripts/check_config.py`
+- **recent()** (3 connections) — `scripts/check_config.py`
 - **by_topic()** (3 connections) — `scripts/topic_cost.py`
 - **records()** (3 connections) — `scripts/topic_cost.py`
+- **dominant()** (2 connections) — `scripts/check_config.py`
 - **dominant()** (2 connections) — `scripts/topic_cost.py`
-- **test_job_ids_are_unique_across_workflows()** (2 connections) — `tests/lab/test_images.py`
-- **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
-- **Path** (1 connections)
+- **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
+- **(model, effort, notes) as the generator would resolve them right now. Resolved…** (1 connections) — `scripts/check_config.py`
+- **Per-certification quality report. Generates nothing and spends no budget.…** (1 connections) — `scripts/quality_report.py`
 - **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
 - **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
-- **Static guards on the runner images and the CI that builds them (no Docker…** (1 connections) — `tests/lab/test_images.py`
+- **Quality floor for generated material, identical for every backend. A different…** (1 connections) — `teach/core/quality.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 36](Community_36.md) (4 shared connections)
-- [Community 102](Community_102.md) (3 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 31](Community_31.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 85](Community_85.md) (1 shared connections)
+- [Community 43](Community_43.md) (13 shared connections)
+- [Community 102](Community_102.md) (6 shared connections)
+- [Community 36](Community_36.md) (5 shared connections)
+- [Community 89](Community_89.md) (4 shared connections)
+- [Community 7](Community_7.md) (3 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
+- [Community 124](Community_124.md) (3 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 127](Community_127.md) (2 shared connections)
+- [Community 13](Community_13.md) (2 shared connections)
 - [Community 69](Community_69.md) (1 shared connections)
 
 ## Source Files
 
+- `scripts/check_config.py`
+- `scripts/quality_report.py`
 - `scripts/topic_cost.py`
-- `tests/lab/test_images.py`
+- `teach/core/quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 76 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
