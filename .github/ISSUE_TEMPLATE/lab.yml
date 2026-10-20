@@ -18,5 +18,5 @@ body:
     id: output
     attributes:
       label: Commands and output
-      description: "`teach lab validate <cert> <topic>` and `teach lab up <cert> <topic>` output, OS, Docker version."
+      description: "`teach lab validate <cert> <topic>` and `study-lab run <cert> <topic>` (Linux labs: `teach lab up`) output, OS, Docker version."
       render: shell

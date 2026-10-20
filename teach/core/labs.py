@@ -387,7 +387,14 @@ def scaffold(cert_id: str, topic_id: str, force: bool = False) -> Path:
 
 # ----------------------------------------------------------------- public API
 
-def up(cert_id: str, topic_id: str) -> dict:
+HOST_WARNING = (
+    "WARNING: --host runs this lab's break_fix.sh DIRECTLY ON THIS MACHINE (outside any "
+    "container), with your user, your kubeconfig and your files. Only do this for scripts you "
+    "have read and trust, on a throwaway machine. The safe way is: study-lab run {cert} {topic}"
+)
+
+
+def up(cert_id: str, topic_id: str, host: bool = False) -> dict:
     directory = lab_dir(cert_id, topic_id)
     spec = _load_spec(directory)
     provider = spec.get("provider", "terraform")
@@ -395,6 +402,12 @@ def up(cert_id: str, topic_id: str) -> dict:
         if provider == "local":
             name = _lab_name(cert_id, topic_id)
             if _needs_cluster(directory):
+                if not host:
+                    raise LabError(
+                        f"{cert_id}/{topic_id} uses kubectl. It no longer runs on this machine by "
+                        f"default: use the containerized runner (study-lab run {cert_id} {topic_id}) "
+                        "or pass --host to run the script on the host at your own risk.")
+                print(HOST_WARNING.format(cert=cert_id, topic=topic_id), file=sys.stderr)
                 _up_cluster(directory, name)
             else:
                 _up_container(directory, spec, name)
@@ -419,7 +432,7 @@ def enter_hint(cert_id: str, topic_id: str) -> str | None:
         return None
     name = _lab_name(cert_id, topic_id)
     if _needs_cluster(directory):
-        return f"kubectl config use-context kind-{name}"
+        return f"kubectl config use-context kind-{name}  (only after `lab up --host`; the safe runner: study-lab shell {cert_id} {topic_id})"
     user = _script_user(directory)
     return f"docker exec -it -u {user} -w /home/student {name} bash"
 

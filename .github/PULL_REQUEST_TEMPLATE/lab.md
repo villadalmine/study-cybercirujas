@@ -87,7 +87,7 @@ teach lab validate <cert> <topic>
 git clone https://github.com/villadalmine/study-cybercirujas.git && cd study-cybercirujas
 git fetch origin pull/<N>/head:pr && git checkout pr
 make setup && make test
-teach lab validate <cert> <topic> && teach lab up <cert> <topic>
+teach lab validate <cert> <topic> && study-lab run <cert> <topic>   # Linux labs also: teach lab up <cert> <topic>
 ```
 
 ## Risk and rollback

@@ -141,10 +141,12 @@ certs/<cert>/<topic>/lab/                break-and-fix lab
 ## Practice: break-and-fix labs
 
 Each topic ships a script that breaks something for you to fix. Linux topics
-run in a throwaway Docker container; Kubernetes topics create a
-[kind](https://kind.sigs.k8s.io/) cluster (needs `kind` and `kubectl`).
-**Never run `break_fix.sh` directly on your own machine** — that is what the
-container is for.
+run in a throwaway Docker container with `teach lab up`; Kubernetes topics
+(the ones that use `kubectl`) run in the containerized runner, `study-lab run
+<cert> <topic>`, which needs only Docker. `teach lab up` refuses those topics;
+`teach lab up --host` exists, runs the script on your own machine and is at
+your own risk. **Never run `break_fix.sh` directly on your own machine** — that
+is what the container is for.
 
 ```bash
 .venv/bin/teach lab up lpi-010-160 2.1     # asks for confirmation, then breaks it
@@ -314,7 +316,7 @@ Full endpoint table, licence of the material and how to build on it:
 ```bash
 .venv/bin/teach cert list            # every certification, version, upstream state
 .venv/bin/teach cert show cka        # syllabus: id, weight, title of every topic
-.venv/bin/teach lab up cka 1.1       # break-and-fix lab (see above)
+.venv/bin/study-lab run cka 1.1       # break-and-fix lab in a container (see above)
 .venv/bin/teach serve                # same as make serve
 ```
 
