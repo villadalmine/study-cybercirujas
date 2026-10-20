@@ -2,10 +2,11 @@
 """Which exam version is our material built on, and which one is current?
 
 Two different questions that were being answered by one field. `catalog.yaml`
-carries `tracked_version`, and `tracker.sync_cncf()` **overwrites it** with
-whatever upstream now publishes — so after a sync it no longer says what our
-content is based on, it says what exists. The comparison the field looks like it
-supports is destroyed by the act of refreshing it.
+carries `tracked_version`, and `tracker.sync_cncf()` used to **overwrite it** with
+whatever upstream published. Since #63 the sync writes the cert's `upstream:`
+block instead and never `tracked_version`, which only an upgrade milestone's
+final PR moves; this script still compares the frozen syllabus with
+`tracked_version` and `curriculum_updated`.
 
 The two facts are already recorded separately, in the right places:
 

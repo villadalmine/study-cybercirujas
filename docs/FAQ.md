@@ -28,7 +28,7 @@ updates this FAQ in the same PR ([CONTRIBUTING → Pull requests](../CONTRIBUTIN
 
 ```mermaid
 flowchart TD
-    V["Vendor objectives page or PDF<br/>catalog.yaml sources.objectives"] -->|"fetch_text, first 20,000 chars"| SN["teach cert snapshot<br/>a model extracts topics as YAML"]
+    V["Vendor objectives page or PDF<br/>catalog.yaml sources.objectives"] -->|"fetch_document: the whole text, refused over 20,000 chars;<br/>sha256 of the bytes"| SN["teach cert snapshot<br/>a model extracts topics as YAML"]
     SN -->|"code checks: weights sum to 100,<br/>not a uniform split, not chapter headings"| SY["1 · Frozen syllabus<br/>certs/&lt;cert&gt;.md<br/>version · snapshot_date · URL"]
     SY -->|"cert, exam, version, topic id,<br/>title, weight, source URLs"| PR["Prompt (fixed templates in generator.py)<br/>no retrieved text: selection, not RAG"]
     PR --> M["Model: pinned id in pipeline.yaml<br/>claude CLI, LiteLLM/OpenRouter, codex, gemini, custom"]
@@ -206,17 +206,23 @@ after the fixes in [#120](https://github.com/villadalmine/study-cybercirujas/iss
 
 **Where do the objectives come from?**
 From the public page or PDF each vendor publishes, named in `catalog.yaml →
-sources.objectives`. What upstream publishes today (`tracked_version`,
-`upstream_*`) is written only by `teach tracker sync`; what the material is
-built on is the frozen syllabus, compared by `scripts/check_versions.py`
+sources.objectives`. `tracked_version` is the curriculum the material was
+built against; what upstream publishes today goes in the cert's `upstream:`
+block and `upstream_status` (`current` | `outdated`), written by
+`teach tracker sync` (which never moves `tracked_version`) or by hand in an
+upgrade milestone's first PR (#63). The frozen syllabus is compared by
+`scripts/check_versions.py`
 ([OPERATING → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)).
 Changing a tracked version needs its own milestone and `Scope: exam-version`
 ([CONTRIBUTING → How big is my change?](../CONTRIBUTING.md#how-big-is-my-change)).
 
 **Are the official documents pinned by hash?**
 The internal links are (content → translation, content → lab, syllabus →
-video). The vendor document is pinned by URL, version and snapshot date, not
-by a hash of its bytes, and the cited pages are not pinned at all (G6).
+video). The vendor document is now hashed when it is read: `teach cert snapshot`
+records the sha256 of the bytes as `source_sha256` and refuses a document over
+its 20,000-character window instead of truncating it, and the CNCF PDFs frozen
+in `syllabi/` record theirs. Syllabi frozen before that carry no hash, and the
+cited pages are not pinned at all (G6).
 
 **Which sources are accepted?**
 Official, public documentation. `scripts/check_sources.py` reads
@@ -445,7 +451,7 @@ existing issue or a proposed one (title in *italics*); none is hidden.
 | G3 | `provenance` passes when `model` is a CLI or alias name (`claude`, `agy`, `cheap`), which is most of the older corpus; OPERATING says the real model is enforced | `scripts/quality_score.py:81-87`, `scripts/check_provenance.py:99-103` | proposed: *check_provenance: a CLI or alias name is not a model id* |
 | G4 | Some English `meta.yaml` files say `lang: es` (e.g. `certs/cka/1.1/en/meta.yaml`): their provenance is a copy of the Spanish record | `scripts/check_provenance.py` does not compare `lang` with the directory | proposed: *check_provenance: meta.yaml lang must match its directory* |
 | G5 | `meta.yaml` does not record effort, prompt version or hash, temperature or CLI version; effort lives only in the local usage log | `generator.py:198-207`, `:335-352` | proposed: *meta.yaml: record effort and a prompt hash* |
-| G6 | The vendor document is not hashed (URL, version and date only) and the snapshot reads only its first 20,000 characters; cited pages are not pinned, so a page can change under its URL | `check_source_chain.py:106-123`, `tracker.py:93-106` | proposed: *snapshot: record the objectives document's sha256 and refuse a truncated text*; cited pages: [AUDITOR_DESIGN step 3](AUDITOR_DESIGN.md#what-i-would-build-in-order) (crawl + diff), proposed issue |
+| G6 | Syllabi frozen before 2026-10-20 do not record the vendor document's hash (new snapshots do, and refuse a truncated text); cited pages are not pinned, so a page can change under its URL | `check_source_chain.py:106-123`, `tracker.py:93-106` | proposed: *snapshot: record the objectives document's sha256 and refuse a truncated text*; cited pages: [AUDITOR_DESIGN step 3](AUDITOR_DESIGN.md#what-i-would-build-in-order) (crawl + diff), proposed issue |
 | G7 | `citations_resolve` and `check_api_facts.py` need the network and are not in CI, so `citations_resolve` is `not_run` everywhere | `quality_weights.yaml` (`citations_resolve`), `Makefile` `verify-ci` | proposed: *ci: scheduled citation and API-facts run that records results* |
 | G8 | No topic is *Verified*: no recorded independent review, few verified labs, almost no human review | `quality:` blocks; `make quality` | [#46](https://github.com/villadalmine/study-cybercirujas/issues/46), [#98](https://github.com/villadalmine/study-cybercirujas/issues/98), [#166](https://github.com/villadalmine/study-cybercirujas/issues/166) |
 | G9 | No test measures how much a regeneration changes structure or facts | — | proposed: *test: regeneration stability on a fixed sample (paid, by hand)* |

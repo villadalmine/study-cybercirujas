@@ -1,0 +1,88 @@
+cert: cka
+version: '1.35'
+source:
+  repo: cncf/curriculum
+  commit: 008b73c0ac99d04abf0d95bf7803fc5d147da54a
+  path: CKA_Curriculum_v1.35.pdf
+  url: https://github.com/cncf/curriculum/raw/008b73c0ac99d04abf0d95bf7803fc5d147da54a/CKA_Curriculum_v1.35.pdf
+  sha256: 634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c
+  committed: '2026-03-03'
+extraction:
+  tool: scripts/curriculum_diff.py extract
+  method: pdftotext -layout; two columns split at the widest gap between marker starts
+tree_sha256: 1e485720b91222245e79237faef624a47d058b33a1abe5948fbeda07f194e799
+domains:
+- id: '1'
+  name: Storage
+  weight: 10
+  objectives:
+  - id: '1.1'
+    text: Implement storage classes and dynamic volume provisioning
+  - id: '1.2'
+    text: Configure volume types, access modes and reclaim policies
+  - id: '1.3'
+    text: Manage persistent volumes and persistent volume claims
+- id: '2'
+  name: Troubleshooting
+  weight: 30
+  objectives:
+  - id: '2.1'
+    text: Troubleshoot clusters and nodes
+  - id: '2.2'
+    text: Troubleshoot cluster components
+  - id: '2.3'
+    text: Monitor cluster and application resource usage
+  - id: '2.4'
+    text: Manage and evaluate container output streams
+  - id: '2.5'
+    text: Troubleshoot services and networking
+- id: '3'
+  name: Workloads and Scheduling
+  weight: 15
+  objectives:
+  - id: '3.1'
+    text: Understand application deployments and how to perform rolling update and rollbacks
+  - id: '3.2'
+    text: Use ConfigMaps and Secrets to configure applications
+  - id: '3.3'
+    text: Configure workload autoscaling
+  - id: '3.4'
+    text: Understand the primitives used to create robust, self-healing, application deployments
+  - id: '3.5'
+    text: Configure Pod admission and scheduling (limits, node affinity, etc.)
+- id: '4'
+  name: Cluster Architecture, Installation and Configuration
+  weight: 25
+  objectives:
+  - id: '4.1'
+    text: Manage role based access control (RBAC)
+  - id: '4.2'
+    text: Prepare underlying infrastructure for installing a Kubernetes cluster
+  - id: '4.3'
+    text: Create and manage Kubernetes clusters using kubeadm
+  - id: '4.4'
+    text: Manage the lifecycle of Kubernetes clusters
+  - id: '4.5'
+    text: Implement and configure a highly-available control plane
+  - id: '4.6'
+    text: Use Helm and Kustomize to install cluster components
+  - id: '4.7'
+    text: Understand extension interfaces (CNI, CSI, CRI, etc.)
+  - id: '4.8'
+    text: Understand CRDs, install and configure operators
+- id: '5'
+  name: Servicing and Networking
+  weight: 20
+  objectives:
+  - id: '5.1'
+    text: Understand connectivity between Pods
+  - id: '5.2'
+    text: Define and enforce Network Policies
+  - id: '5.3'
+    text: Use ClusterIP, NodePort, LoadBalancer service types and endpoints
+  - id: '5.4'
+    text: Use the Gateway API to manage Ingress traffic
+  - id: '5.5'
+    text: Know how to use Ingress controllers and Ingress resources
+  - id: '5.6'
+    text: Understand and use CoreDNS

@@ -1,8 +1,9 @@
 """Tracker/scraper: nothing is static — the whole catalog derives from sources.
 
 - sync_cncf(): deterministic. Reads the cncf/curriculum repo through the GitHub
-  API: each PDF's last-changed date is the curriculum version. Marks
-  new-version-available when upstream changed.
+  API: writes what upstream publishes into each cert's `upstream:` block
+  (version, objectives pinned by commit, sha256) and `upstream_status`
+  (current | outdated). It never writes `tracked_version` (#63).
 - sync_lpi(): scrapes lpi.org and an AI model turns the page into structured
   updates (level, validity, prerequisites) per catalog cert.
 - snapshot_topics(): downloads a cert's official objectives (HTML or PDF), the
@@ -17,10 +18,12 @@ in generator.py. They are model input, not comments.
 """
 
 import datetime
+import hashlib
 import html as html_lib
 import io
 import re
 import subprocess
+from urllib.parse import quote
 
 import httpx
 import yaml
@@ -91,8 +94,33 @@ def _get_bytes(url: str) -> tuple[bytes, str]:
 
 
 def fetch_text(url: str, limit: int = 20000) -> str:
-    """Plain text from a URL: PDF (pypdf) or HTML (tags stripped)."""
+    """Plain text from a URL: PDF (pypdf) or HTML (tags stripped), cut at `limit` characters.
+
+    Fine for a version banner or a summary page. A syllabus snapshot must not be
+    cut: it uses `fetch_document`, which refuses instead."""
     body, content_type = _get_bytes(url)
+    return document_text(url, body, content_type)[:limit]
+
+
+def fetch_document(url: str, limit: int = 20000) -> tuple[str, str]:
+    """(full text, sha256 of the bytes served) of an objectives document, for a snapshot.
+
+    The snapshot used to read `fetch_text(url)`, cut at 20,000 characters: a longer
+    document lost its tail silently and the model was asked for the objectives of a
+    fragment. Here a longer text is refused, and the hash of the vendor's bytes is
+    returned so the frozen syllabus records exactly which document it came from."""
+    body, content_type = _get_bytes(url)
+    text = document_text(url, body, content_type)
+    if len(text) > limit:
+        raise TrackerError(
+            f"{url}: the extracted text is {len(text)} characters, over the {limit} a snapshot reads. "
+            "Refused rather than truncated: point sources.objectives at the objectives document itself, "
+            "or raise the limit deliberately.")
+    return text, hashlib.sha256(body).hexdigest()
+
+
+def document_text(url: str, body: bytes, content_type: str) -> str:
+    """The text of a fetched PDF or HTML body, whitespace collapsed, never cut."""
     if url.lower().endswith(".pdf") or "pdf" in content_type:
         from pypdf import PdfReader
 
@@ -103,7 +131,7 @@ def fetch_text(url: str, limit: int = 20000) -> str:
         text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", decoded, flags=re.S)
         text = re.sub(r"<[^>]+>", " ", text)
         text = html_lib.unescape(text)
-    return re.sub(r"\s+", " ", text).strip()[:limit]
+    return re.sub(r"\s+", " ", text).strip()
 
 
 # Lines a CLI backend prints about itself, which are not the answer. Seen on a
@@ -177,20 +205,31 @@ def sync_cncf() -> list[str]:
         ).json()
         updated = commits[0]["commit"]["committer"]["date"][:10] if commits else None
         cert["last_checked"] = today
-        if updated and cert.get("curriculum_updated") != updated:
+        date_moved = bool(updated and cert.get("curriculum_updated") != updated)
+        if date_moved:
             cert["curriculum_updated"] = updated
-            cert["upstream_status"] = "new-version-available"
             changes.append(f"{cert_id}: curriculum changed -> {updated}")
-        # `tracked_version` records what UPSTREAM publishes. What our material was
-        # built on lives in the syllabus frontmatter (`version` + `snapshot_date`),
-        # written by `teach cert snapshot` and never touched here — otherwise a
-        # sync would silently rewrite the record of what we froze, and "is our
-        # content current?" would become unanswerable by the act of asking.
-        # scripts/check_versions.py compares the two.
+        # What upstream publishes goes in `upstream:` (#63), never in `tracked_version`: that one says
+        # which curriculum the material was built against, and only the final PR of the cert's upgrade
+        # milestone moves it (check_pr enforces it). A sync used to copy the version from the PDF's
+        # file name into `tracked_version`, which would have relabelled v1.35 material as v1.37.
         semantic = re.search(r"v(\d+\.\d+)", name)
-        if semantic and cert.get("tracked_version") != semantic.group(1):
-            cert["tracked_version"] = semantic.group(1)
-            changes.append(f"{cert_id}: upstream version -> {semantic.group(1)}")
+        if semantic and commits:
+            version = semantic.group(1)
+            block = cert.get("upstream") or {}
+            if block.get("version") != version:
+                url = f"https://github.com/cncf/curriculum/raw/{commits[0]['sha']}/{quote(name)}"
+                body, _ = _get_bytes(url)
+                cert["upstream"] = {**block, "version": version, "objectives": url,
+                                    "sha256": hashlib.sha256(body).hexdigest(), "published": updated,
+                                    "detected": today}
+                changes.append(f"{cert_id}: upstream publishes {version} (tracked_version stays "
+                               f"{cert.get('tracked_version')})")
+            status = "current" if str(cert.get("tracked_version")) == version else "outdated"
+        else:
+            # No version in the file name: the commit date is the only signal (#63's derived status).
+            status = "outdated" if date_moved else cert.get("upstream_status") or "current"
+        cert["upstream_status"] = status
     catalog.save(data)
     return changes or ["cncf: no upstream changes"]
 
@@ -528,7 +567,7 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
             f"'{cert_id}' already has a syllabus ({len(existing)} topics). Use --force to re-snapshot."
         )
 
-    text = fetch_text(url)
+    text, source_sha256 = fetch_document(url)
     result = _ai_yaml(
         backend,
         usage={"op": "snapshot", "cert": cert_id},
@@ -604,6 +643,8 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         post.metadata["weights"] = "unpublished"
     post.metadata["version"] = str(result.get("version") or cert.get("tracked_version"))
     post.metadata["snapshot_date"] = datetime.date.today().isoformat()
+    # The bytes the vendor served, so "which document was this frozen from" has an exact answer.
+    post.metadata["source_sha256"] = source_sha256
     sources = post.metadata.get("sources") or []
     if url not in sources:
         post.metadata["sources"] = [*sources, url]

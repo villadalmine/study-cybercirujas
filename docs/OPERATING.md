@@ -305,8 +305,11 @@ functions over the same tree.
 The question: **is the frozen material built on the exam version each vendor
 publishes today?** Two facts are kept apart on purpose
 (`scripts/check_versions.py` explains why): what we froze lives in each
-`certs/<cert>.md` frontmatter; what upstream publishes lives in
-`catalog.yaml`, and only `teach tracker sync` writes it.
+`certs/<cert>.md` frontmatter; what upstream publishes lives in the cert's
+`upstream:` block and `upstream_status` in `catalog.yaml`, written by
+`teach tracker sync`. The sync never writes `tracked_version`: that is the
+version the material was built against, moved only by the final PR of an
+upgrade milestone ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)).
 
 ### What `make check-updates` does
 

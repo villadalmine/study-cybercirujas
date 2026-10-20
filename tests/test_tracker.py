@@ -13,9 +13,11 @@ vendor, an exam or a page layout.
 """
 from __future__ import annotations
 
+import hashlib
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -116,6 +118,73 @@ class SyllabusCoverageTests(unittest.TestCase):
         topics = [{"id": f"351.{i}", "weight": w} for i, w in
                   enumerate([10, 5, 7, 15, 5, 12, 10, 15, 5, 4, 4, 4, 4], 1)]
         tracker._reject_unreadable_syllabus(topics, self.PAGE, "u")
+
+
+class SnapshotDocumentTests(unittest.TestCase):
+    """The snapshot reads the whole objectives document and records its hash (#63; audit 2026-10-20, item 5)."""
+
+    def fetch(self, body: bytes, limit: int = 20000):
+        with mock.patch.object(tracker, "_get_bytes", return_value=(body, "text/html")):
+            return tracker.fetch_document("https://example.org/objectives", limit=limit)
+
+    def test_returns_the_full_text_and_the_sha256_of_the_bytes(self):
+        body = b"<html><body><h1>Objectives</h1><p>1.1 Install</p></body></html>"
+        text, digest = self.fetch(body)
+        self.assertEqual(text, "Objectives 1.1 Install")
+        self.assertEqual(digest, hashlib.sha256(body).hexdigest())
+
+    def test_refuses_a_document_longer_than_the_limit_instead_of_truncating(self):
+        with self.assertRaises(tracker.TrackerError) as raised:
+            self.fetch(b"<p>" + b"objective " * 50 + b"</p>", limit=100)
+        self.assertIn("refused rather than truncated", str(raised.exception).lower())
+
+    def test_fetch_text_still_cuts_for_its_other_callers(self):
+        with mock.patch.object(tracker, "_get_bytes", return_value=(b"<p>abcdef</p>", "text/html")):
+            self.assertEqual(tracker.fetch_text("https://example.org/x", limit=3), "abc")
+
+
+class SyncCncfTests(unittest.TestCase):
+    """`teach tracker sync` fills `upstream:` and never moves `tracked_version` (#63)."""
+
+    def run_sync(self, cert: dict):
+        data = {"certs": {"cka": cert}}
+        responses = {
+            "contents": [{"name": "CKA_Curriculum_v1.37.pdf"}],
+            "commits": [{"sha": "b3c8508", "commit": {"committer": {"date": "2026-10-15T15:49:08Z"}}}],
+        }
+
+        class Response:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def json(self):
+                return self.payload
+
+        def fake_get(url):
+            return Response(responses["contents" if url.endswith("/contents/") else "commits"])
+
+        with mock.patch.object(tracker, "_get", side_effect=fake_get), \
+                mock.patch.object(tracker, "_get_bytes", return_value=(b"%PDF", "application/pdf")), \
+                mock.patch.object(tracker.catalog, "load", return_value=data), \
+                mock.patch.object(tracker.catalog, "save"):
+            changes = tracker.sync_cncf()
+        return data["certs"]["cka"], changes
+
+    def test_a_new_upstream_version_goes_to_upstream_not_tracked_version(self):
+        cert, changes = self.run_sync({"tracked_version": "1.35", "sources": {}})
+        self.assertEqual(cert["tracked_version"], "1.35")
+        self.assertEqual(cert["upstream_status"], "outdated")
+        self.assertEqual(cert["upstream"]["version"], "1.37")
+        self.assertEqual(cert["upstream"]["objectives"],
+                         "https://github.com/cncf/curriculum/raw/b3c8508/CKA_Curriculum_v1.37.pdf")
+        self.assertEqual(cert["upstream"]["sha256"], hashlib.sha256(b"%PDF").hexdigest())
+        self.assertIn("tracked_version stays 1.35", " ".join(changes))
+
+    def test_after_the_switch_the_status_is_current(self):
+        cert, _ = self.run_sync({"tracked_version": "1.37", "sources": {},
+                                 "upstream": {"version": "1.37", "milestone": "CKA & CKAD v1.37 upgrade"}})
+        self.assertEqual((cert["tracked_version"], cert["upstream_status"]), ("1.37", "current"))
+        self.assertEqual(cert["upstream"]["milestone"], "CKA & CKAD v1.37 upgrade")
 
 
 if __name__ == "__main__":
