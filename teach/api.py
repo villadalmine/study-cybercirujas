@@ -75,6 +75,12 @@ def me(user: str = Depends(require_user)) -> dict:
 
 # --- public: the certification landscape is the shop window ---
 
+def _not_found(error: Exception) -> HTTPException:
+    """A 404 that never carries a filesystem path: FileNotFoundError text names the absolute path."""
+    detail = "Not found" if isinstance(error, FileNotFoundError) else str(error)
+    return HTTPException(status_code=404, detail=detail)
+
+
 @app.get("/api/catalog")
 def get_catalog() -> dict:
     """Every certification: name, exam, vendor, level, validity and official sources."""
@@ -283,7 +289,7 @@ def get_cert(cert_id: str) -> dict:
         entry = catalog.get_cert(cert_id)
         topic_list = certs.topics(cert_id)
     except (KeyError, FileNotFoundError) as error:
-        raise HTTPException(status_code=404, detail=str(error))
+        raise _not_found(error)
     # The syllabus is public; the internal generation status is not exposed,
     # it is translated into availability (+ which languages the material exists in)
     public_topics = [
@@ -307,7 +313,7 @@ def get_topic_preview(cert_id: str, topic_id: str, lang: str = certs.DEFAULT_LAN
     try:
         topic = certs.get_topic(cert_id, topic_id)
     except (KeyError, FileNotFoundError) as error:
-        raise HTTPException(status_code=404, detail=str(error))
+        raise _not_found(error)
     content = certs.topic_content(cert_id, topic_id, lang=lang)
     text = content["content"] or ""
     return {
@@ -340,7 +346,7 @@ def get_topic(
     try:
         topic = certs.get_topic(cert_id, topic_id)
     except (KeyError, FileNotFoundError) as error:
-        raise HTTPException(status_code=404, detail=str(error))
+        raise _not_found(error)
     return {
         "topic": topic,
         **certs.topic_content(cert_id, topic_id, lang=lang),
