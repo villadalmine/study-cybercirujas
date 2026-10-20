@@ -36,11 +36,12 @@ def load() -> dict:
     except FileNotFoundError:
         return {"certs": {}}
     key = (str(path), st.st_mtime_ns, st.st_size)
-    if _CACHE.get("key") != key:
+    entry = _CACHE.get("entry")   # one (key, data) pair, replaced in a single assignment: readers never mix versions
+    if entry is None or entry[0] != key:
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
         data.setdefault("certs", {})
-        _CACHE.update(key=key, data=data)
-    return copy.deepcopy(_CACHE["data"])
+        entry = _CACHE["entry"] = (key, data)
+    return copy.deepcopy(entry[1])
 
 
 def save(data: dict) -> None:

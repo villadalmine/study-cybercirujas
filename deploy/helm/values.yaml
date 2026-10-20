@@ -43,6 +43,13 @@ env:
   # TEACH_SECRET (firma de cookies de sesión) va por Secret y es OBLIGATORIO: sin valor
   # (o con el de ejemplo, o de menos de 32 caracteres) el render falla. Setealo en values-local.
   TEACH_SECRET: ""
+  # Rate limit per client, requests/min ("0" = off, the default). It needs the REAL client address:
+  # with a TCP-passthrough edge (HAProxy without PROXY protocol) every visitor arrives from the same
+  # address and would share ONE bucket. Turn it on only after PROXY protocol is enabled at the edge
+  # and on the Gateway (gatewayAPI.enableProxyProtocol); then set TEACH_TRUST_PROXY "1" (docs/OPERATING.md).
+  TEACH_RATE_API: "0"
+  TEACH_RATE_SEARCH: "0"
+  TEACH_TRUST_PROXY: "0"
 
 # Generación de contenido DESDE el pod (opcional). Normalmente el contenido se
 # genera local (claude/codex) y va horneado en la imagen; esto es para usar el

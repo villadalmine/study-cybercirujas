@@ -3,8 +3,12 @@
 Per worker and in memory: enough to stop one client from hammering `/api/search`,
 not a substitute for limits at the proxy. Limits are requests per minute and can be
 changed (0 turns the limit off): TEACH_RATE_API (default 300) and TEACH_RATE_SEARCH
-(default 30). The client is the socket peer; set TEACH_TRUST_PROXY=1 only behind a
-proxy you control, to use the first X-Forwarded-For entry instead.
+(default 30). The client is the socket peer. Behind a proxy that appends the peer address
+to X-Forwarded-For (Envoy / the Gateway API proxy of the chart does), set TEACH_TRUST_PROXY=1:
+the client is then taken from the END of the header, TEACH_TRUSTED_HOPS entries from the right
+(default 1 = the address the proxy itself appended). Entries further left are client-supplied
+and never used, so rotating the header does not give a client a new bucket. Never set it
+when the app is reachable without that proxy.
 """
 
 import os
@@ -56,7 +60,8 @@ LIMITER = Limiter()
 
 def client_id(request) -> str:
     if os.environ.get("TEACH_TRUST_PROXY") == "1":
-        fwd = request.headers.get("x-forwarded-for", "")
-        if fwd:
-            return fwd.split(",")[0].strip()
+        hops = max(1, _int_env("TEACH_TRUSTED_HOPS", 1))
+        parts = [p.strip() for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]
+        if len(parts) >= hops:
+            return parts[-hops]
     return request.client.host if request.client else "unknown"
