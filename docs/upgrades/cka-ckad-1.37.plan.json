@@ -213,7 +213,7 @@
         "version_lines": {
           "curriculum": 106,
           "label": 19,
-          "technical": 168
+          "technical": 171
         }
       },
       "impact": {
@@ -975,8 +975,10 @@
               "certs/cka/4.3/en/content.md:38",
               "certs/cka/4.3/en/content.md:39",
               "certs/cka/4.3/en/content.md:47",
+              "certs/cka/4.3/en/content.md:57",
               "certs/cka/4.3/en/content.md:58",
               "certs/cka/4.3/en/content.md:62",
+              "certs/cka/4.3/en/content.md:63",
               "certs/cka/4.3/en/content.md:64",
               "certs/cka/4.3/en/content.md:65",
               "certs/cka/4.3/en/content.md:70",
@@ -998,6 +1000,7 @@
               "certs/cka/4.3/es/content.md:34",
               "certs/cka/4.3/es/content.md:35",
               "certs/cka/4.3/es/content.md:43",
+              "certs/cka/4.3/es/content.md:53",
               "certs/cka/4.3/es/content.md:54",
               "certs/cka/4.3/es/content.md:58",
               "certs/cka/4.3/es/content.md:59",

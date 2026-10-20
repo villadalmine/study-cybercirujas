@@ -18,7 +18,7 @@ The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the
 
 | Cert | keep | revalidate | regenerate | new | retire | topic files | in scope | sections | technical version lines |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cka | 26 | 1 | 0 | 0 | 0 | 216 | 54 | 0 | 168 (52 files, 26 topics): 108 in the material, 60 in labs |
+| cka | 26 | 1 | 0 | 0 | 0 | 216 | 54 | 0 | 171 (52 files, 26 topics): 111 in the material, 60 in labs |
 | ckad | 22 | 2 | 0 | 0 | 0 | 192 | 32 | 4 | 49 (24 files, 22 topics): all in labs |
 
 **Upstream changed no objective.** The v1.37 PDFs are byte-identical to the v1.35 ones (same sha256; cncf/curriculum
@@ -38,9 +38,9 @@ Kubernetes v1.37" since 2026-10-19 (#51): what moved is the **Kubernetes version
 ckad 2.4's "rewording" is the vendor's typo ("API **depreciations**"); our spelling is the correct term, so the 4 listed
 title sections should stay as they are. No prose needs a model.
 
-**What the Kubernetes version does touch** is 217 technical lines, listed one by one in the report:
+**What the Kubernetes version does touch** is 220 technical lines, listed one by one in the report:
 
-- 108 in the CKA material, 11 topics (`kubeadm upgrade apply v1.35.1`, `apt-get install kubeadm=1.35.1-1.1`,
+- 111 in the CKA material, 11 topics (`kubeadm upgrade apply v1.35.1`, `apt-get install kubeadm=1.35.1-1.1`,
   `kubectl get nodes` outputs inside code fences, the `pkgs.k8s.io/.../v1.35` repository), most of them in 4.2 and 4.3;
 - 109 in the labs of 48 topics: `lab/lab.yaml` (`kubernetes: '1.35'`, which the runner uses to pick the kind node image,
   and `runner_image: ... kindest/node v1.35.x`) and the `lab/*.sh` headers.
@@ -131,7 +131,7 @@ OK: docs/upgrades/cka-ckad-1.37.md is current
 
 **The snapshots are what the pinned PDFs produce** (`extract --check` on each of the four PDFs: `OK ... is current`),
 and the old and new trees hash the same: CKA `1e485720…` for v1.35 and v1.37, CKAD `90399946…` for both.
-`tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. While the upgrade is open, any PR that changes a file under `certs/cka/` or `certs/ckad/` (a line, a language, a lab file) regenerates both with the two commands above.
+`tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. The plan is the upgrade's input, not a live view of the tree (as the edits land, a fresh plan lists fewer version lines), so a PR that leaves the plan byte-identical to the one on `origin/main` passes, and a PR that changes it must equal what its inputs produce; the guard reads the plan committed on the base either way.
 
 **`keep` topics are untouched.** Phase 1 (the tool, the snapshots, `upstream:` in the catalog, this folder) changes no
 topic file: `git diff --stat origin/main...HEAD -- certs/cka/ certs/ckad/` is empty, so all 48 `keep` topics and the 3
@@ -162,14 +162,14 @@ guard: 2 changed file(s), 1 outside the plan, 1 out-of-scope edit(s), 7 provenan
 
 ## Phase 2: what will happen, and what guards it
 
-Nothing below has started; it needs Rino's OK on the cost. For v1.37 no topic is regenerated, so phase 2 is small.
+Phase 2 ran on 2026-10-21 and it was small: no topic is regenerated, no model is called. What was done, and where it differs from this table, is in *Phase 2: the edit script* and *Efficiency* below.
 
 | Step | What | How | Guarded by |
 | :--- | :--- | :--- | :--- |
 | revalidate | cka 3.6, ckad 2.4, ckad 5.4 | every check re-run against the new objective text; result recorded in each `meta.yaml`. No prose edit: the listed sections are titles carrying our (correct) spelling | `quality_score.py --check`; `guard` (only `meta.yaml` and the listed sections) |
-| version lines | 217 lines in 76 files: 108 in 22 CKA material files, 109 in 54 lab files | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` and the kind node images (a package or image that does not exist is not written), record the edit in the topic's `meta.yaml`; then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
+| version lines | 220 lines in 76 files: 111 in 22 CKA material files, 109 in 54 lab files | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` and the kind node images (a package or image that does not exist is not written), record the edit in the topic's `meta.yaml`; then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
 | regenerate / new | none for v1.37 | one PR per topic. The prompt carries the frozen syllabus text and the official documentation excerpts the topic cites (grounding at write time, only for these topics) | below |
-| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` from the snapshot, the 195 curriculum lines re-pointed to the pinned v1.37 PDF | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done |
+| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` `version` and `sources` (no re-snapshot: the date stays the real one). The 195 "Curriculum v1.35" citations are not in the plan and an exam-version PR changes nothing else: one follow-up issue (#220) | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done |
 
 Every phase-2 PR that rewrites `content.md` or `exercises.md` passes, on **those files only**:
 
@@ -187,15 +187,16 @@ Every phase-2 PR that rewrites `content.md` or `exercises.md` passes, on **those
 
 `keep` topics are not regenerated: their objectives are byte-for-byte the same.
 
-### Kubernetes 1.37 labs depend on Cilium
+### Kubernetes 1.37 and Killercoda
 
 The Killercoda kubeadm image switches to Kubernetes 1.37 on 2026-10-25 (`deploy/killercoda/killercoda_envs.yaml`, as
 reported) and the parity bootstrap uses Cilium (PR #162). Checked live on 2026-10-20: the latest stable Cilium,
-**v1.20.3** (2026-10-15), lists Kubernetes 1.33 to 1.36 in `Documentation/network/kubernetes/compatibility.rst`; only
-`main` and the pre-release **v1.21.0-pre.3** (2026-10-02) list 1.34 to 1.37 (commit `c96d528`, "Update k8s libraries
-to v1.37.0", 2026-09-02). Until Cilium v1.21.0 is released, the 1.37 row cannot be proven and the k8s labs are skipped
-with a warning after 2026-10-25, as PR #162 designed. The version-line labs and the switch wait for that release, or
-ship verified on 1.36 with the gap written down.
+**v1.20.3**, lists Kubernetes 1.33 to 1.36; only `main` and the pre-release **v1.21.0-pre.3** list 1.37. So the
+Killercoda parity cannot prove 1.37 until Cilium v1.21.0.
+
+**Decision (Rino, 2026-10-21): the syllabus does not depend on Killercoda.** The switch of `tracked_version` waits for the
+material and for the runner and lab proofs on kind 1.37, not for Cilium and not for Killercoda. The Killercoda k8s labs
+stay `loaded-untested` on the mirror side until their own parity passes, independently of this upgrade.
 
 ## Efficiency: how this update came out
 
@@ -205,13 +206,30 @@ ship verified on 1.36 with the gap written down.
 | Topic files phase 1 changed | 0 |
 | Topic files in scope for phase 2 | 86 (21 %): 6 `meta.yaml` of revalidated topics, 4 files with a listed section, 22 material files and 54 lab files with technical version lines (plus the `meta.yaml` where each edit records its provenance) |
 | Sections in scope | 4 (titles; recommended: no edit) |
-| Lines in scope | 217 technical version lines: 108 of 56,484 lines of CKA + CKAD material (0.19 %), 109 in labs |
+| Lines in scope | 220 technical version lines: 111 of 56,484 lines of CKA + CKAD material (0.20 %), 109 in labs |
 | Topics regenerated | 0 of 51 |
 | Model tokens spent in phase 1 | 0 (no paid call: extraction, diff, plan and guard need no model) |
 | Plan + report regeneration time | 0.3 s |
 | Agent time for phase 1 | about 3 h, almost all of it building the tool once, plus one review round (scan of fences and labs, guard allowlist from the base, CI check of the plan); the next upgrade reuses it |
 
-Phase 2 fills in the measured cost and time per PR from `scripts/topic_cost.py` here.
+### Phase 2, measured (2026-10-21)
+
+| Measure | Result |
+| :--- | :--- |
+| Lines rewritten | 220: 111 in the CKA material (22 files, 11 topics, en and es), 109 in labs (54 files, 48 labs), of 76,960 lines in `certs/cka` + `certs/ckad` (0.29 %) |
+| Files touched | 95 of 408 files of the two certs (23 %): 22 material + 19 `meta.yaml` (the `tool_edit` stamp and 8 `lang` fixes) + 54 lab files; plus 3 outside (`catalog.yaml`, `certs/cka.md`, `certs/ckad.md`) |
+| Model tokens, USD | 0 tokens, 0 USD (a script); a full regeneration was estimated at ~140 USD |
+| Second run of the script | 0 lines, 0 files (`--check` exits 0) |
+| Guard | 0 outside the plan, 0 out-of-scope edits, 0 provenance problems on the material PR and on both lab PRs |
+| PRs | 1 script (+ guard path, scan fix), 1 CKA material, 1 runner image, 1 CKA labs, 1 CKAD labs, 1 switch. CKAD has no material lines (all 49 are in labs) |
+| Labs that run something | 6 of 48 changed labs have a `lab.yaml` that selects or names a node (cka 1.1, 3.3, 3.4, 3.5, ckad 4.4, 5.2); the other 42 changed only comments in `break_fix.sh` (99 of the 109 lab lines are curriculum headers and links) |
+
+What the plan did not see, found while doing it: (1) the runner image itself pinned kubectl and the node to 1.35.8, so a
+CKAD lab (no `kubernetes:` key) would have run 1.35 under a `lab.yaml` that says 1.37 (the runner image PR); (2) the
+companion lines of an upgrade sample (3 lines, fixed in `scan`); (3) 8 `en/meta.yaml` said `lang: es`.
+
+The size rules (one topic and language per PR, one lab per PR) would have made this 19 + 48 PRs; the material and each cert's
+labs are one PR each and need the maintainer's `scope-exception` label, which is what the label is for.
 
 ### Cost: scoped edits versus full regeneration
 
@@ -225,7 +243,7 @@ about 0.07 USD.
 | :--- | :--- | ---: |
 | regenerate all of CKA + CKAD | 51 topics | ~140 USD (75 to 255) |
 | regenerate the 3 topics the syllabus diff touches | 3 topics | ~8.5 USD (5 to 15) |
-| **this plan: scoped edits** | 0 prose edits; 217 version lines in 76 files, by hand or one scoped completion per file | **0 to ~5 USD** |
+| **this plan: scoped edits** | 0 prose edits; 220 version lines in 76 files, by hand or one scoped completion per file | **0 to ~5 USD** |
 
 Revalidation itself costs nothing in model credits (groundedness runs a local pinned classifier). On the subscription
 the figures are quota, not a bill.
@@ -237,3 +255,34 @@ objectives, and the frozen files used two different orders, so new ids differ fr
 topics (the report's *Maps to* column). The switch should keep today's directory names and update each topic's domain
 and title in `certs/<cert>.md`; renumbering would rename 51 directories and break every link for no change in content.
 That is the maintainer's call, in the switch PR.
+
+## Phase 2: the edit script, `scripts/upgrade_versions.py`
+
+No model. `docs/upgrades/cka-ckad-1.37.pins.yaml` is the one place the versions are pinned (read live on 2026-10-21:
+`dl.k8s.io/release/stable-1.37.txt` = v1.37.1; `pkgs.k8s.io/core:/stable:/v1.37/deb` has kubeadm, kubelet and kubectl
+1.37.0-1.1 and 1.37.1-1.1; kind v0.33.0 ships `kindest/node:v1.37.0`). The script reads the plan and the pins and rewrites
+only the listed lines:
+
+```bash
+scripts/upgrade_versions.py docs/upgrades/cka-ckad-1.37.plan.json docs/upgrades/cka-ckad-1.37.pins.yaml --scope material --cert cka
+scripts/upgrade_versions.py docs/upgrades/cka-ckad-1.37.plan.json docs/upgrades/cka-ckad-1.37.pins.yaml --scope labs --cert cka   # after the lab proof
+```
+
+- after a material run: `.venv/bin/python3 scripts/quality_score.py certs/cka` (the content hash in each `quality` block moves;
+  `make pr-check` fails without it, and it reorders `tool_edit` into its canonical place in the file);
+- a token `1.33`, `1.34`, `1.35` (with or without `v` and a patch) moves up two minors, so a sample "1.34 to 1.35" upgrade
+  becomes "1.36 to 1.37" and still skips nothing; a target patch of 1 becomes the pinned patch; `.0` and `.x` stay;
+- `kindest/node v1.35.8` becomes the pinned tag; no sample output is invented, only its version token moves;
+- a line that already names 1.37 is skipped, so a second run writes nothing (`--check` exits 1 if anything would change);
+- an odd patch stops the run instead of guessing;
+- the edit is recorded in the `meta.yaml` next to each edited material file as a `tool_edit` block (tool, script sha256, plan,
+  plan and pins sha256, date). `curriculum_diff.py guard` accepts it in place of `effort` and `prompt_sha256` only for a `keep`
+  or `revalidate` topic, only when `tool_edit.tool` is `scripts/upgrade_versions.py` and its sha256 now, the one in the
+  `meta.yaml` and the pins file's `tool_sha256` (read from the base) are the same, and only when every changed line of the
+  topic's docs is a technical version line the plan lists **and exactly what the script writes for the line it replaced**
+  (same line count, nothing else moved). The same content check runs on every listed line of every file, labs included
+  (`WRONG REWRITE`). The original generation's provenance stays untouched, and any other edit needs the model fields like before.
+
+A scan correction came with it: a sample that shows an upgrade also names the version it starts from (`Cluster version:
+v1.34.1` beside a table `v1.34.1 to v1.35.1`). `scan` now lists the `v1.N.P` lines of the minor below, in a file that
+already has a tracked line (3 lines in CKA 4.3), so the bump cannot leave a sample contradicting itself.
