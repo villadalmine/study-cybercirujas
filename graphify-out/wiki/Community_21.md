@@ -1,10 +1,10 @@
 # Community 21
 
-> 25 nodes · cohesion 0.11
+> 24 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **_verify_translation()** (20 connections) — `teach/core/generator.py`
+- **_verify_translation()** (21 connections) — `teach/core/generator.py`
 - **Can a cheap model do the translation step?** (9 connections) — `docs/TRANSLATION_STUDY.md`
 - **test_translation_verify.py** (8 connections) — `tests/test_translation_verify.py`
 - **_english()** (5 connections) — `tests/test_translation_verify.py`
@@ -14,7 +14,6 @@
 - **.test_translated_diagram_label_that_keeps_alignment()** (4 connections) — `tests/test_translation_verify.py`
 - **.test_faithful_translation()** (3 connections) — `tests/test_translation_verify.py`
 - **2026-08-03** (3 connections) — `docs/HISTORY.md`
-- **2026-08-04** (3 connections) — `docs/HISTORY.md`
 - **Three bugs this study found in our own checks** (3 connections) — `docs/TRANSLATION_STUDY.md`
 - **Method** (2 connections) — `docs/TRANSLATION_STUDY.md`
 - **Why translating and authoring are different problems** (2 connections) — `docs/TRANSLATION_STUDY.md`
@@ -36,14 +35,14 @@
 - [Community 65](Community_65.md) (2 shared connections)
 - [Community 15](Community_15.md) (2 shared connections)
 - [clean_registry.py](clean_registry.py.md) (2 shared connections)
-- [Community 31](Community_31.md) (1 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
 - [Community 50](Community_50.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
 - [Community 158](Community_158.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
 
 ## Source Files
 
@@ -54,7 +53,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (79%)
+- EXTRACTED: 41 (79%)
 - INFERRED: 11 (21%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,37 +1,35 @@
 # Community 207
 
-> 8 nodes · cohesion 0.32
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **corpus.py** (17 connections) — `teach/core/corpus.py`
-- **_fold()** (5 connections) — `teach/core/corpus.py`
-- **_terms()** (4 connections) — `teach/core/corpus.py`
-- **unicodedata** (4 connections)
-- **_informative()** (3 connections) — `teach/core/corpus.py`
-- **The four functions a study agent needs, and the only four it gets. Phase 2 of…** (1 connections) — `teach/core/corpus.py`
-- **Lowercase, accent-stripped, so `Kubernetes` finds `kubernetes` and…** (1 connections) — `teach/core/corpus.py`
-- **Drop the terms that match so much of the corpus they cannot rank it. All of…** (1 connections) — `teach/core/corpus.py`
+- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
+- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
+- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
+- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **parametrize** (4 connections)
+- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
+- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
 
 ## Relationships
 
-- [Community 75](Community_75.md) (4 shared connections)
-- [Community 31](Community_31.md) (4 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 72](Community_72.md) (2 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 210](Community_210.md) (1 shared connections)
+- [Community 12](Community_12.md) (7 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 220](Community_220.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
+- `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 27 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

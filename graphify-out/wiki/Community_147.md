@@ -1,6 +1,6 @@
 # Community 147
 
-> 10 nodes · cohesion 0.29
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
@@ -10,7 +10,6 @@
 - **effective()** (5 connections) — `scripts/check_config.py`
 - **recent()** (3 connections) — `scripts/check_config.py`
 - **dominant()** (2 connections) — `scripts/check_config.py`
-- **Generation backends** (2 connections) — `docs/OPERATING.md`
 - **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
 - **(model, effort, notes) as the generator would resolve them right now. Resolved…** (1 connections) — `scripts/check_config.py`
 - **Which model authors and at what effort. Declared, not left to the CLI. Read by…** (1 connections) — `teach/core/pipeline.py`
@@ -23,18 +22,17 @@
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 18](Community_18.md) (2 shared connections)
 - [Community 160](Community_160.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
 - [Community 2](Community_2.md) (1 shared connections)
+- [Community 157](Community_157.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/OPERATING.md`
 - `scripts/check_config.py`
 - `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 30 (97%)
+- EXTRACTED: 29 (97%)
 - INFERRED: 1 (3%)
 - AMBIGUOUS: 0 (0%)
 

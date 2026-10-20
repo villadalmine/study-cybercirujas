@@ -1,63 +1,63 @@
 # Community 59
 
-> 28 nodes · cohesion 0.13
+> 27 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **catalog.py** (29 connections) — `teach/core/catalog.py`
-- **load()** (17 connections) — `teach/core/catalog.py`
+- **catalog.py** (31 connections) — `teach/core/catalog.py`
 - **root()** (13 connections) — `teach/core/catalog.py`
-- **save()** (11 connections) — `teach/core/catalog.py`
 - **load_models()** (10 connections) — `teach/core/catalog.py`
-- **_ai_yaml()** (10 connections) — `teach/core/tracker.py`
-- **main()** (8 connections) — `scripts/check_versions.py`
-- **list_certs()** (8 connections) — `teach/core/catalog.py`
+- **test_api_404_paths.py** (10 connections) — `tests/test_api_404_paths.py`
 - **save_models()** (8 connections) — `teach/core/catalog.py`
-- **sync_lpi()** (8 connections) — `teach/core/tracker.py`
-- **generate_paths()** (7 connections) — `teach/core/tracker.py`
-- **_status_snapshot()** (6 connections) — `teach/api.py`
+- **test_paths_lang.py** (8 connections) — `tests/test_paths_lang.py`
+- **get_models()** (7 connections) — `teach/api.py`
+- **_refresh_live()** (6 connections) — `teach/api.py`
 - **models_path()** (6 connections) — `teach/core/catalog.py`
-- **translate_paths()** (6 connections) — `teach/core/tracker.py`
 - **catalog_path()** (5 connections) — `teach/core/catalog.py`
-- **get_cert()** (5 connections) — `teach/core/catalog.py`
 - **Path** (5 connections)
-- **add_cert()** (4 connections) — `teach/core/catalog.py`
+- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
 - **CatalogueWriterTests** (3 connections) — `tests/test_model_probe.py`
 - **.test_the_header_and_the_shape_survive_a_rewrite()** (3 connections) — `tests/test_model_probe.py`
+- **fastapi_testclient** (3 connections)
+- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
+- **BackgroundTasks** (1 connections)
+- **Compare the catalogue against OpenRouter, at most every few hours. Never raises…** (1 connections) — `teach/api.py`
+- **The study bot's model catalogue, from `models.yaml`, plus what is live. Served…** (1 connections) — `teach/api.py`
 - **Global certification catalog (catalog.yaml). Written by the tracker (and `cert…** (1 connections) — `teach/core/catalog.py`
 - **Root of the data repo. Override with TEACH_ROOT.** (1 connections) — `teach/core/catalog.py`
+- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
 - **The study bot's model catalogue.** (1 connections) — `teach/core/catalog.py`
 - **Rewrite models.yaml, keeping the header comments above it. Those comments are…** (1 connections) — `teach/core/catalog.py`
-- **Scrape the official LPI summary and update level/validity/requires.** (1 connections) — `teach/core/tracker.py`
-- *... and 3 more nodes in this community*
+- **404 responses never carry an absolute filesystem path.** (1 connections) — `tests/test_api_404_paths.py`
+- *... and 2 more nodes in this community*
 
 ## Relationships
 
-- [Community 74](Community_74.md) (15 shared connections)
-- [Community 63](Community_63.md) (11 shared connections)
-- [Community 0](Community_0.md) (7 shared connections)
-- [video.py](video.py.md) (7 shared connections)
-- [Community 43](Community_43.md) (6 shared connections)
-- [Community 14](Community_14.md) (4 shared connections)
-- [Community 54](Community_54.md) (3 shared connections)
-- [Community 72](Community_72.md) (3 shared connections)
+- [Community 43](Community_43.md) (12 shared connections)
+- [Community 125](Community_125.md) (8 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
+- [Community 3](Community_3.md) (5 shared connections)
+- [Community 10](Community_10.md) (5 shared connections)
+- [Community 63](Community_63.md) (4 shared connections)
+- [video.py](video.py.md) (4 shared connections)
 - [Community 37](Community_37.md) (3 shared connections)
-- [Community 10](Community_10.md) (3 shared connections)
-- [Community 125](Community_125.md) (2 shared connections)
-- [Community 47](Community_47.md) (2 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (3 shared connections)
+- [Community 0](Community_0.md) (3 shared connections)
+- [Community 88](Community_88.md) (2 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_versions.py`
 - `teach/api.py`
 - `teach/core/catalog.py`
-- `teach/core/tracker.py`
+- `tests/test_api_404_paths.py`
 - `tests/test_model_probe.py`
+- `tests/test_paths_lang.py`
 
 ## Audit Trail
 
-- EXTRACTED: 131 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 95 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

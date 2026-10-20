@@ -1,25 +1,31 @@
 # Community 208
 
-> 4 nodes · cohesion 0.50
+> 10 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **Check before you push** (4 connections) — `CONTRIBUTING.md`
-- **How a lab gets proven before it is published** (1 connections) — `CONTRIBUTING.md`
-- **Optional: run it automatically before every `git push`** (1 connections) — `CONTRIBUTING.md`
-- **Run a lab anywhere, and get yours published** (1 connections) — `CONTRIBUTING.md`
+- **SiteTagTests** (10 connections) — `tests/test_deploy_guide.py`
+- **.git()** (5 connections) — `tests/test_deploy_guide.py`
+- **.make()** (4 connections) — `tests/test_deploy_guide.py`
+- **.test_refuses_a_second_tag_the_same_day_unless_suffixed()** (4 connections) — `tests/test_deploy_guide.py`
+- **.test_tags_the_ref_with_release_and_image()** (4 connections) — `tests/test_deploy_guide.py`
+- **.test_rejects_a_ref_that_is_not_a_commit()** (3 connections) — `tests/test_deploy_guide.py`
+- **.today()** (3 connections) — `tests/test_deploy_guide.py`
+- **.setUp()** (2 connections) — `tests/test_deploy_guide.py`
+- **.tearDown()** (1 connections) — `tests/test_deploy_guide.py`
+- **skipIf** (1 connections)
 
 ## Relationships
 
-- [Community 101](Community_101.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
+- `tests/test_deploy_guide.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

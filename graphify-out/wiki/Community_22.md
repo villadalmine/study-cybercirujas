@@ -1,44 +1,48 @@
 # Community 22
 
-> 15 nodes · cohesion 0.13
+> 19 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **Content Status** (8 connections) — `STATUS.md`
-- **get_models()** (7 connections) — `teach/api.py`
-- **_refresh_live()** (6 connections) — `teach/api.py`
-- **upstream()** (5 connections) — `teach/core/models_live.py`
-- **Exam versions** (2 connections) — `STATUS.md`
-- **BackgroundTasks** (1 connections)
-- **Certification Videos** (1 connections) — `STATUS.md`
-- **Certifications** (1 connections) — `STATUS.md`
-- **Milestone** (1 connections) — `STATUS.md`
-- **Path Videos** (1 connections) — `STATUS.md`
-- **Quality** (1 connections) — `STATUS.md`
-- **Spend (measured)** (1 connections) — `STATUS.md`
-- **Compare the catalogue against OpenRouter, at most every few hours. Never raises…** (1 connections) — `teach/api.py`
-- **The study bot's model catalogue, from `models.yaml`, plus what is live. Served…** (1 connections) — `teach/api.py`
-- **{id: model} as OpenRouter publishes it right now. Raises on failure.** (1 connections) — `teach/core/models_live.py`
+- **_stream()** (14 connections) — `teach/lab/runner.py`
+- **test_stream.py** (14 connections) — `tests/lab/test_stream.py`
+- **_why()** (5 connections) — `teach/lab/runner.py`
+- **Lab** (4 connections) — `tests/lab/test_stream.py`
+- **threading** (4 connections)
+- **test_a_child_that_exits_124_is_not_reported_as_a_timeout()** (3 connections) — `tests/lab/test_stream.py`
+- **test_scripts_run_under_timeout_inside_the_container()** (3 connections) — `tests/lab/test_stream.py`
+- **test_the_backstop_docker_exec_is_bounded()** (3 connections) — `tests/lab/test_stream.py`
+- **test_a_stuck_on_timeout_does_not_hang_the_runner()** (2 connections) — `tests/lab/test_stream.py`
+- **test_output_and_exit_code_pass_through()** (2 connections) — `tests/lab/test_stream.py`
+- **test_the_message_names_the_phase_timeout_not_the_host_backstop()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_fires_while_the_child_is_silent()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_stops_what_runs_inside_the_container()** (2 connections) — `tests/lab/test_stream.py`
+- **pump()** (1 connections) — `teach/lab/runner.py`
+- **stop()** (1 connections) — `teach/lab/runner.py`
+- **.__init__()** (1 connections) — `tests/lab/test_stream.py`
+- **Run, echo output live, and return (exit code, full output). `timeout` is the…** (1 connections) — `teach/lab/runner.py`
+- **`exit N`, plus what 124 most likely means (coreutils timeout's status).** (1 connections) — `teach/lab/runner.py`
+- **Per-phase timeouts hold even when the lab prints nothing (review of PR #2). The…** (1 connections) — `tests/lab/test_stream.py`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (3 shared connections)
-- [Community 59](Community_59.md) (2 shared connections)
-- [Community 125](Community_125.md) (2 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 12](Community_12.md) (10 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 157](Community_157.md) (1 shared connections)
 
 ## Source Files
 
-- `STATUS.md`
-- `teach/api.py`
-- `teach/core/models_live.py`
+- `teach/lab/runner.py`
+- `tests/lab/test_stream.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (92%)
-- INFERRED: 2 (8%)
+- EXTRACTED: 39 (95%)
+- INFERRED: 2 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

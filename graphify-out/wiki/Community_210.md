@@ -1,42 +1,34 @@
 # Community 210
 
-> 11 nodes · cohesion 0.20
+> 9 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **mcp_server.py** (8 connections) — `teach/mcp_server.py`
-- **serve()** (6 connections) — `teach/mcp_server.py`
-- **functools** (5 connections)
-- **_readable()** (4 connections) — `teach/mcp_server.py`
-- **wrapped()** (2 connections) — `teach/mcp_server.py`
-- **get_syllabus()** (2 connections) — `teach/mcp_server.py`
-- **list_certs()** (2 connections) — `teach/mcp_server.py`
-- **search_topics()** (2 connections) — `teach/mcp_server.py`
-- **Study against this corpus from any agent — the same four functions, over MCP.…** (1 connections) — `teach/mcp_server.py`
-- **Turn a lookup failure into something the agent can act on. The SDK's own…** (1 connections) — `teach/mcp_server.py`
-- **Run the stdio server, as `.mcp.json` starts it.** (1 connections) — `teach/mcp_server.py`
+- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
+- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
+- **main()** (6 connections) — `scripts/ocr_pdf.py`
+- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
+- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
+- **Path** (3 connections)
+- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
+- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
+- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
 
 ## Relationships
 
-- [Community 72](Community_72.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 93](Community_93.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 124](Community_124.md) (1 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 61](Community_61.md) (4 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/mcp_server.py`
+- `scripts/ocr_pdf.py`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (91%)
-- INFERRED: 2 (9%)
+- EXTRACTED: 26 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---
