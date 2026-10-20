@@ -45,15 +45,6 @@ def require_user(request: Request) -> str:
     return user
 
 
-def require_subscriber(request: Request) -> str:
-    user = require_user(request)
-    if not auth.has_subscription(user):
-        raise HTTPException(
-            status_code=402, detail="Se requiere un plan activo para estudiar"
-        )
-    return user
-
-
 @app.post("/api/login")
 def login(body: LoginBody, request: Request) -> dict:
     if not auth.authenticate(body.username, body.password):
