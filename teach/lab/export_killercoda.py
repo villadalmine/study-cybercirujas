@@ -15,7 +15,7 @@ from pathlib import Path
 
 import yaml
 
-from . import safety, spec
+from . import goals, safety, spec
 
 SITE = "https://study.cybercirujas.club"
 REPO = "https://github.com/villadalmine/study-cybercirujas"
@@ -150,11 +150,13 @@ echo "$out"
                     + f"{s.get('level', 'beginner').capitalize()} break/fix lab ({s['cert']} {s['topic']}). "
                     "Something is broken on purpose: find it, fix it, press Check.\n\n"
                     "The lab sets itself up while this page loads; its symptom is printed in the terminal.\n"
+                    + ("\n" + goals.markdown(s) if goals.of(s) else "")
                     + ("" if lab.verified else "\nStatus: not yet verified end to end in the study-lab runner; it may be rough.\n")
                     + _footer(lab),
         "step1.md": "## Read the symptom\n\nThe terminal shows what was broken. Read it again with:\n\n"
                     f"```\ncat {home}/break.out\n```{{{{exec}}}}\n\nInvestigate before you change anything.\n",
-        "step2.md": "## Fix it\n\nWhen you think it is solved, press **Check**.\n\n" + hints,
+        "step2.md": "## Fix it\n\n" + (goals.markdown(s, "### Goals") + "\n" if goals.of(s) else "")
+                    + "When you think it is solved, press **Check**.\n\n" + hints,
         "finish.md": "## Done\n\nThe lab's own check passed.\n" + (
             f"\n<details><summary>Reference solution</summary>\n\n{_fence(solution)}\n\n</details>\n" if solution else "") + _footer(lab),
     }

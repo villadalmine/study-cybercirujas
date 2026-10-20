@@ -38,7 +38,7 @@ def test_full_v2_validates(tmp_path):
                        "verify": {"args": ["check"], "success": {"output_regex": "OK"}},
                        "cleanup": {"args": ["clean"], "stdin": "y\n"}},
                 env={"FORCE": "1"}, ports=[{"container": 8080}], limits={"ram_mb": 2048, "cpus": 2},
-                timeout={"up": 300}, hints=["a"], level="beginner",
+                timeout={"up": 300}, hints=["a"], level="beginner", goals={"fix": ["a", "b"], "solved": "c"},
                 origin={"kind": "community", "repo": "https://example.org/x"},
                 verified={"status": True, "date": "2026-10-15", "method": "runner"},
                 license="MIT", **{"x-anything": {"free": True}})
@@ -57,6 +57,9 @@ def test_full_v2_validates(tmp_path):
     ({"verified": {"date": "2026-10-15"}}, "status"),
     ({"modes": {"verify": {"args": "verify"}}}, "modes"),
     ({"schema_version": 3}, "schema_version"),
+    ({"goals": {"fix": []}}, "goals"),
+    ({"goals": {"solved": "x"}}, "goals"),
+    ({"goals": {"fix": ["a"], "extra": 1}}, "goals"),
 ])
 def test_invalid_cases(tmp_path, patch, needle):
     lab = spec.load(write(tmp_path, dict(V1, **patch)))

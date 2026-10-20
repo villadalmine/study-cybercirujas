@@ -5,6 +5,7 @@ import shutil
 import subprocess
 
 import pytest
+import yaml
 
 from teach.lab import export_killercoda as kc
 from teach.lab import spec
@@ -91,3 +92,33 @@ def test_verify_wrapper_honours_regex(tmp_path):
     assert run() != 0
     state.write_text("fixed\n")
     assert run() == 0
+
+
+def test_goals_rendered_in_intro_and_fix_step(tmp_path):
+    shutil.copytree(FX / "linux", tmp_path / "lab")
+    f = tmp_path / "lab" / "lab.yaml"
+    data = yaml.safe_load(f.read_text(encoding="utf-8"))
+    data["goals"] = {"fix": ["The CPU is  busy.", "The disk is full."], "solved": "Check looks at\n the unit."}
+    f.write_text(yaml.safe_dump(data), encoding="utf-8")
+    out = kc.scenario(spec.load(tmp_path / "lab", "curated"))
+    for name in ("intro.md", "step2.md"):
+        assert "1. The CPU is busy.\n2. The disk is full.\n" in out[name], name
+        assert "**Solved means:** Check looks at the unit." in out[name], name
+    assert out["step2.md"].index("### Goals") < out["step2.md"].index("press **Check**")
+
+
+def test_no_goals_no_goals_section():
+    out = kc.scenario(spec.load(FX / "linux", "curated"))
+    assert "Goals" not in out["intro.md"] and "Goals" not in out["step2.md"]
+
+
+def test_lab_readme_carries_the_goals():
+    """A lab that declares goals and has a README shows the same text there (teach/lab/goals.py)."""
+    from teach.lab import goals
+    for f in sorted((REPO / "certs").glob("*/*/lab/lab.yaml")):
+        data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+        if not goals.of(data):
+            continue
+        readme = f.parent / "README.md"
+        assert readme.is_file(), f"{f.parent}: declares goals but has no README.md"
+        assert goals.markdown(data) in readme.read_text(encoding="utf-8"), f"{readme}: goals differ from lab.yaml"

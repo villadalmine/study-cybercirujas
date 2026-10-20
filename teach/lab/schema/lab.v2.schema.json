@@ -126,6 +126,16 @@
       "description": "Progressive hints, shown one at a time by 'study-lab hint'.",
       "type": "array", "items": {"type": "string"}
     },
+    "goals": {
+      "description": "What the student has to fix, said up front without giving away the commands, and what Check looks at to call it solved. The same text goes to the Killercoda intro and Fix step and to the lab README.md (teach/lab/goals.py).",
+      "type": "object",
+      "required": ["fix"],
+      "additionalProperties": false,
+      "properties": {
+        "fix": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "solved": {"type": "string", "minLength": 1, "description": "The conditions the verify mode checks, in plain words."}
+      }
+    },
     "level": {"enum": ["beginner", "intermediate", "advanced"]},
     "safety": {
       "description": "What the lab does beyond a throwaway container. teach lab up prints it and asks for confirmation; the lab README, the break_fix.sh header and the Killercoda intro repeat it (teach/lab/safety.py).",
