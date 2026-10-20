@@ -492,10 +492,11 @@ one place: the `paths` of `.github/workflows/docker.yml`, which match what
 | `site:image-rebuild` | `teach/`, `certs/`, `scripts/`, `media/`, root `*.yaml`, `pyproject.toml`, `deploy/Dockerfile` | mergeable to `main` — `main` is the source. On merge GitHub Actions rebuilds the **public** image (`ghcr.io/villadalmine/study-cybercirujas:latest`, what people who clone or `docker run` get) |
 
 **No PR deploys production.** The site at study.cybercirujas.club is released
-by the maintainer in a separate step: build the image on their machine or
-cluster, `helm upgrade` with an explicit tag ([docs/OPERATING.md](docs/OPERATING.md)),
-and tag the released commit `site-YYYY-MM-DD` so anyone can see what is
-published: `git tag -l 'site-*'`.
+by the maintainer in a separate step: take the image of a release (`:vX.Y.Z`
+from GHCR, or built in their cluster from that tag), `helm upgrade` with that
+explicit tag, never `:latest`, and tag the released commit `site-YYYY-MM-DD`
+with `make site-tag` so anyone can see what is published: `git tag -l 'site-*'`.
+The steps, with preflight, verification and rollback: [docs/DEPLOY.md](docs/DEPLOY.md).
 The release it came from (`vX.Y.Z`) is named in that deploy, see [Releases](#releases).
 
 <a id="releases"></a>

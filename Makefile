@@ -122,6 +122,21 @@ deploy-local: ## helm upgrade with values-local.yaml (TAG=)
 	helm upgrade --install study deploy/helm -n teach-plat --create-namespace \
 	  -f deploy/helm/values-local.yaml --set image.tag=$(TAG)
 
+# The commit a deploy published, as an annotated tag (docs/DEPLOY.md → Tag what is published).
+# Local only: it prints the push, it never pushes.
+.PHONY: site-tag
+SITE_REF    ?= HEAD
+SITE_SUFFIX ?=
+IMAGE_TAG   ?=
+site-tag: ## tag the deployed commit site-YYYY-MM-DD (UTC) with its release and image (SITE_REF= IMAGE_TAG= SITE_SUFFIX=.2)
+	@ref=$$(git rev-parse --verify --quiet "$(SITE_REF)^{commit}") || { echo "ERROR: SITE_REF=$(SITE_REF) is not a commit"; exit 1; }; \
+	tag="site-$$(date -u +%Y-%m-%d)$(SITE_SUFFIX)"; \
+	if git rev-parse --verify --quiet "refs/tags/$$tag" >/dev/null; then \
+		echo "ERROR: $$tag already exists; a second deploy today: SITE_SUFFIX=.2"; exit 1; fi; \
+	rel=$$(git describe --tags --match 'v[0-9]*' --abbrev=0 "$$ref" 2>/dev/null || echo none); \
+	git tag -a "$$tag" "$$ref" -m "site: $$tag" -m "release: $$rel" -m "image: $(or $(IMAGE_TAG),not given)" && \
+	echo "OK: $$tag -> $$(git rev-parse --short "$$ref") (release $$rel). Publish it: git push origin $$tag"
+
 milestone: ## work the declared milestone to completion, then stop
 	@scripts/run_milestone.sh
 

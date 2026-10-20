@@ -360,35 +360,16 @@ every contributor and every agent reads, not in one tool's private folder.
 
 ## Deploying to Kubernetes
 
-Content is baked into the image — publishing means rebuild + upgrade.
-Prerequisites: Gateway API (Cilium or similar) and cert-manager with a
-ClusterIssuer for TLS.
-
-```bash
-# 1. Your values, once: domain, gateway, issuer. values-local.yaml is gitignored.
-cp deploy/helm/values-study.example.yaml deploy/helm/values-local.yaml
-$EDITOR deploy/helm/values-local.yaml
-# `env.TEACH_SECRET` is required (at least 32 characters, e.g. `openssl rand -hex 32`);
-# the chart refuses to render without a real one. Changing it logs every session out.
-
-# 2a. With the public GHCR image (built by GitHub Actions from main):
-helm upgrade --install study deploy/helm -n teach-plat --create-namespace   -f deploy/helm/values-local.yaml   --set image.repository=ghcr.io/villadalmine/study-cybercirujas   --set image.tag=latest
-
-# 2b. Or build in-cluster (Kaniko, no GitHub Actions):
-make image-cluster TAG=mytag
-make deploy-local TAG=mytag
-```
-
-Pass the **same explicit `TAG=`** to both targets: `TAG` defaults to a fresh
-timestamp per invocation, so omitting it builds one tag and deploys another.
+Content is baked into the image, so publishing means a new image and a
+`helm upgrade` with an explicit tag. The whole procedure is in
+[docs/DEPLOY.md](DEPLOY.md): which image for amd64 or arm64 nodes, the values
+file, preflight, verification, rollback, the `site-YYYY-MM-DD` tag and the
+upgrade notes per release.
+`env.TEACH_SECRET` is required (at least 32 characters, e.g. `openssl rand -hex 32`):
+the chart refuses to render without a real one.
 
 Build and deploy only when a certification is complete in that language; commit
 partial progress freely.
-
-The GHCR image is built from a clean checkout, so it carries no rendered
-videos (`media/**/*.mp4` is gitignored for size); the site works without them,
-the video buttons simply do not appear. An image built with `make
-image-cluster` from a working copy that has rendered them includes them.
 
 ## Environment variables
 
