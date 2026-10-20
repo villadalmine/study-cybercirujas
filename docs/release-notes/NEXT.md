@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **Self-audit:** `docs/audit/` publishes the rubric we check this repo with, `scripts/audit_compare.py` compares auditors, and anyone can submit a result or propose a criterion.
 
 ## Upgrade notes
 

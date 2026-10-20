@@ -39,7 +39,7 @@ flowchart LR
 
 1. Clone the repo and note the commit you audit: `git rev-parse HEAD`.
 2. Read [`rubric.yml`](rubric.yml). Work read-only; if you cannot verify something, score it `0` and write
-   "not verified" in the note. Do not guess. When a criterion asks for a sample, pick it with seed `42`.
+   "not verified" in the note. Do not guess. When a criterion asks for a sample, take it exactly as the top of `rubric.yml` says (`random.Random(42).sample(sorted(paths), 10)` over the criterion's `sample_glob`). Criteria with a `scale:` (P1, X3) use that scale instead of the enforcement one.
 3. Write `docs/audit/results/<YYYY-MM-DD>-<auditor>.yml`:
 
    ```yaml
@@ -90,7 +90,7 @@ It prints, in this order:
    For example, serving F1 (weight 5) and F3 (weight 4), fully automatable, small effort: `9 x 1.0 / 1 = 9.00`.
 4. the mean score and the list of disagreements.
 
-The exit code is `0` when every criterion has a proposal, `2` when some were refused, and `1` when there are no
+The exit code is `0` when every criterion has a proposal, `2` when some were refused (they are left out of the mean), `3` when two files share the same auditor and commit, and `1` when there are no
 results. It needs no network and no model, and prints the same output twice.
 
 ## Propose a new criterion

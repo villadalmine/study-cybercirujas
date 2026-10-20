@@ -8,6 +8,9 @@
 #   The priority is NOT an opinion: scripts/audit_compare.py computes it with the formula below (foundations x automatable / effort).
 #   Even with score 2 you propose something (cheaper, clearer or more robust). A criterion without a proposal does not count.
 #   0 = only stated (docs) or missing · 1 = partial / only warns / manual · 2 = enforced (CI gate, generated with --check)
+# Two criteria (P1, X3) judge clarity, not enforcement: they carry their own `scale:` and it replaces the line above for them.
+# Sampling is exact, so every auditor looks at the same files: sort the paths of the named glob (relative to the repo root,
+# POSIX separators) and take `random.Random(42).sample(paths, 10)`. A criterion that samples names its glob (`sample_glob`).
 # Extending = adding criteria with a NEW id; never reuse or rename an id (that is how reports from different days stay comparable).
 version: 3
 # Product foundations (from docs/PRINCIPLES.md). Priority of a proposal = sum of the weights of the foundations it serves
@@ -27,10 +30,12 @@ areas:
     - id: P1
       question: "Does the README say in 3 lines what the repo is for and for whom, and does that match what the repo does today?"
       how_to_verify: "Read README.md; compare with catalog.yaml and teach/."
+      scale: "0 = purpose or audience missing, or contradicts the repo · 1 = stated but longer than a screen, or one part is outdated · 2 = 3 lines, an audience, and every claim checked against the repo"
   determinism:
     - id: D1
       question: "Are the generation inputs pinned (frozen syllabus with hash, sources with hash, full model id, prompt hash)?"
-      how_to_verify: "Snapshot/source-chain scripts; meta.yaml of a sample of 10 topics picked with a fixed seed."
+      sample_glob: "certs/*/*/en/meta.yaml"
+      how_to_verify: "Snapshot/source-chain scripts; the meta.yaml files of the sample (rule at the top)."
     - id: D2
       question: "Do the validators and generated files give the same result twice (byte for byte)?"
       how_to_verify: "Run each gen_*/--check twice and compare."
@@ -53,10 +58,11 @@ areas:
       how_to_verify: "validate --strict; count of labs with a fix."
     - id: L2
       question: "Is 'tested' defined as a standard (fixed targets) and impossible to fake?"
-      how_to_verify: "lab-targets.yaml + schema; evidence with the lab hash."
+      how_to_verify: "The lab.yaml schema and the definition of tested in the runner (docs/LABS-RUNNER.md, teach/lab/); evidence tied to the lab hash."
     - id: L3
       question: "Does each lab test the syllabus objective where it is filed?"
-      how_to_verify: "Sample of 10 labs with a seed: objective vs what it breaks/verifies."
+      sample_glob: "certs/**/lab/lab.yaml"
+      how_to_verify: "The sample (rule at the top): objective vs what each lab breaks and verifies."
     - id: L4
       question: "Is only what was tested there published to Killercoda (gate)?"
       how_to_verify: "killercoda-publish.yml + publish gate."
@@ -72,8 +78,9 @@ areas:
       question: "Is there a single source of truth per fact (no duplicates that contradict each other)?"
       how_to_verify: "Search the same fact in 2+ docs (versions, commands, counts)."
     - id: X3
-      question: "Can a newcomer follow it from general to particular (HOW-IT-WORKS, FAQ, GUARDRAILS)?"
-      how_to_verify: "Read README -> HOW-IT-WORKS -> FAQ in order and note where you get lost."
+      question: "Can a newcomer follow the docs from general to particular (README, then docs/FAQ.md, then docs/PRINCIPLES.md)?"
+      how_to_verify: "Read them in that order and note where you get lost or a link is dead."
+      scale: "0 = you get lost, or an entry point is missing · 1 = you arrive, but with a dead link or a jump a newcomer would not make · 2 = each step links to the next and nothing is assumed"
   management:
     - id: G1
       question: "Are milestones, issues, PRs, changelog, tags and release notes maintained by themselves?"

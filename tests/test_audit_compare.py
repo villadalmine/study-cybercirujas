@@ -1,4 +1,5 @@
 """scripts/audit_compare.py: the table, the disagreements, refusing "no proposal" and the ranking formula (fixtures in tests/fixtures/audit/)."""
+import contextlib
 import io
 import shutil
 import sys
@@ -40,6 +41,9 @@ class AuditCompareTests(unittest.TestCase):
         ids = audit_compare.criterion_ids(real)
         self.assertEqual(ids, ["P1", "D1", "D2", "D3", "C1", "C2", "C3", "L1", "L2", "L3", "L4",
                                "K1", "X1", "X2", "X3", "G1", "G2", "S1"])
+        for c in (c for area in real["areas"].values() for c in area):
+            if c["id"] in ("P1", "X3"):
+                self.assertIn("scale", c)  # clarity criteria carry their own 0/1/2
         self.assertEqual(list(real["foundations"]), [f"F{n}" for n in range(1, 9)])
         self.assertEqual([f["weight"] for f in real["foundations"].values()], [5, 5, 4, 4, 3, 3, 2, 2])
 
@@ -65,6 +69,22 @@ class AuditCompareTests(unittest.TestCase):
         code, out = run_main("a.yml", "c.yml")
         self.assertEqual(code, 2)
         self.assertIn("without proposal (refused): D1@carol@ccccccc, D2@carol@ccccccc", out)
+
+    def test_the_mean_leaves_out_refused_and_missing_criteria(self):
+        report, _, _ = audit_compare.compare(self.rubric, load("a.yml", "c.yml"))
+        # alice: D1=2, D2=1 -> 3 of 4; carol's two are refused, so they are not counted as 0
+        self.assertIn("mean score: 75% of the maximum, over 2 scored criteria (2 refused or missing, not counted)", report)
+
+    def test_two_results_for_the_same_auditor_and_commit_fail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            shutil.copy(FIX / "a.yml", Path(tmp) / "2026-10-21-alice.yml")
+            shutil.copy(FIX / "a.yml", Path(tmp) / "2026-10-22-alice.yml")
+            with self.assertRaisesRegex(audit_compare.DuplicateAuditor, "alice@aaaaaaa"):
+                audit_compare.load_results(sorted(Path(tmp).glob("*.yml")))
+            err = io.StringIO()
+            with redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
+                self.assertEqual(audit_compare.main(["--rubric", str(FIX / "rubric.yml"), "--results", tmp]), 3)
+            self.assertIn("one auditor, one result per commit", err.getvalue())
 
     def test_main_exits_0_when_everything_has_a_proposal(self):
         code, out = run_main("a.yml", "b.yml")

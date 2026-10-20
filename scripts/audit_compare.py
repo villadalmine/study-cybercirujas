@@ -7,7 +7,8 @@ proposal side by side, and a ranking computed by a fixed formula:
     priority = sum(weight of each foundation served) x automatable / effort
 
 Deterministic and offline: no network, no model. A criterion whose proposal is
-missing is REFUSED: its score does not count and the exit code is 2.
+missing is REFUSED: its score does not count (not in the mean either) and the exit code is 2.
+Two files with the same auditor and commit are an error (exit code 3).
 
     python3 scripts/audit_compare.py [--date YYYY-MM-DD] [--rubric FILE] [--results DIR]
 """
@@ -35,11 +36,20 @@ def has_proposal(criterion: dict) -> bool:
     return isinstance(p, dict) and all(str(p.get(k, "")).strip() for k in REQUIRED)
 
 
+class DuplicateAuditor(ValueError):
+    """Two result files share the same auditor and commit."""
+
+
 def load_results(files: list[Path]) -> dict[str, dict]:
-    data = {}
+    data, seen = {}, {}
     for f in files:
         d = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
-        data[f"{d.get('auditor', f.stem)}@{str(d.get('commit', ''))[:7]}"] = d.get("criteria", {}) or {}
+        key = f"{d.get('auditor', f.stem)}@{str(d.get('commit', ''))[:7]}"
+        if key in seen:
+            raise DuplicateAuditor(f"{seen[key].name} and {f.name} are both {key}: one auditor, one result per commit "
+                                   "(use a different `auditor` or audit another commit)")
+        seen[key] = f
+        data[key] = d.get("criteria", {}) or {}
     return data
 
 
@@ -105,9 +115,11 @@ def compare(rubric: dict, data: dict[str, dict]) -> tuple[str, list[str], list[s
         out.append("\n## Proposal ranking (foundations x automatable / effort)")
         for val, i, a, q, fs in sorted(ranking, key=lambda r: (-r[0], r[1], r[2])):
             out.append(f"- {val:5.2f}  {i} ({a}) [{fs}] {q}")
-    scored = [valid_score(data[a].get(i, {})) or 0 for a in auditors for i in ids]
-    mean = sum(scored) / (2 * len(scored)) if scored else 0
-    out.append(f"\nmean score: {mean:.0%} of the maximum · disagreements: {', '.join(disagreements) or 'none'}")
+    scored = [v for a in auditors for i in ids if (v := valid_score(data[a].get(i, {}))) is not None]
+    excluded = len(auditors) * len(ids) - len(scored)
+    mean = f"{sum(scored) / (2 * len(scored)):.0%}" if scored else "-"
+    out.append(f"\nmean score: {mean} of the maximum, over {len(scored)} scored criteria "
+               f"({excluded} refused or missing, not counted) · disagreements: {', '.join(disagreements) or 'none'}")
     return "\n".join(out), disagreements, refused
 
 
@@ -122,7 +134,12 @@ def main(argv: list[str] | None = None) -> int:
     if not files:
         print(f"no results in {args.results}")
         return 1
-    report, _, refused = compare(rubric, load_results(files))
+    try:
+        data = load_results(files)
+    except DuplicateAuditor as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 3
+    report, _, refused = compare(rubric, data)
     print(report)
     return 2 if refused else 0
 
