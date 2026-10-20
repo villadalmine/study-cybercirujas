@@ -35,6 +35,7 @@ gateway:
 
 env:
   ENVIRONMENT: production
+  # obligatorio, minimo 32 caracteres: generalo con  openssl rand -hex 32
   TEACH_SECRET: "PONER-UN-SECRETO-FUERTE-DE-32-BYTES"
 
 # opcional: generar contenido desde el pod con el LiteLLM del cluster
