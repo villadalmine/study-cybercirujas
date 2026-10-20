@@ -343,6 +343,29 @@ Everything else — conventions, provenance for hand edits, new labs, the test
 matrix — is in **[CONTRIBUTING.md](CONTRIBUTING.md)**. How decisions are made:
 [GOVERNANCE.md](GOVERNANCE.md). [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## Contributors
+
+Recognizing code, content, bug reports, ideas, reviews and tests with the
+[All Contributors specification](https://allcontributors.org/en/reference/specification/).
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <a href="https://github.com/dannyward630"><img src="https://avatars.githubusercontent.com/u/71604164?v=4&s=100" width="100px;" alt="Danny Ward"/><br /><sub><b>Danny Ward</b></sub></a><br />
+        <a href="https://github.com/villadalmine/study-cybercirujas/issues/51" title="Bug reports">🐛</a>
+        <a href="https://github.com/villadalmine/study-cybercirujas/pull/61" title="Code">💻</a>
+      </td>
+      <td align="center" valign="top">
+        <a href="https://github.com/villadalmine"><img src="https://avatars.githubusercontent.com/u/1070184?v=4&s=100" width="100px;" alt="villadalmine"/><br /><sub><b>villadalmine</b></sub></a><br />
+        <a href="https://github.com/villadalmine/study-cybercirujas/commits/main?author=villadalmine" title="Code">💻</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## AI-generated content
 
 Every topic — theory, exercises, labs and translations — was **written by

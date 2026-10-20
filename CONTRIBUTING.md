@@ -96,6 +96,15 @@ credits them in the notes of the GitHub Release that ships it (`Thanks @user (#N
 [Releases](#releases)). `CHANGELOG.md` is written by release-please and is never edited by hand, so the
 thanks do not go there.
 
+**All Contributors.** The [README](README.md#contributors) recognizes project work across code, content,
+bug reports, ideas, reviews and tests. Maintainers add a bug reporter after confirming the report, and add
+pull request authors when their work is merged, using every applicable category. A reviewer or tester is
+credited when that contribution is accepted. The maintainer can use
+`@all-contributors please add @user for bug,code` when the GitHub app is installed, or run
+`npx all-contributors add user bug,code` and commit the generated README and `.all-contributorsrc` updates.
+The app is optional and its installation is a maintainer decision; contributor recognition adds no required
+CI check.
+
 <a id="no-braindumps"></a>
 
 ### No braindumps, no NDA material
@@ -415,6 +424,12 @@ without a form). A maintainer looks at it and does one of four things, and remov
 Issues and pull requests of the maintainer and of the agents are born with their milestone and labels and skip the queue.
 Pull requests from outside follow the security-first list of the `triage-pr-externa` skill (anything touching `.github/`,
 the `Makefile` or `scripts/check_*` is the maintainer's decision alone).
+
+**Credit is part of triage.** When a maintainer confirms a bug report, add its reporter to the README as `bug`, even
+when another contributor implements the fix. When a pull request merges, add its author with the categories that
+describe the accepted work (`code`, `content`, `doc`, `test`, `review` or `idea`). Add a reviewer or tester after
+their contribution is accepted. If the All Contributors app is unavailable, use the CLI described above; do not
+add a required workflow check for the table.
 
 **Stale, kindly.** [`.github/workflows/stale.yml`](.github/workflows/stale.yml) runs daily. It marks `lifecycle:stale`, says so in
 a friendly comment, and closes later as *not planned*; a comment from anyone removes the label; a closed issue can be reopened.
