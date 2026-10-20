@@ -27,6 +27,11 @@ modes:
     args:
     - cleanup
 level: intermediate
+goals:
+  fix:
+  - 'The CPU is busy on an idle box. Find the process and stop it for good. Killing the PID is not enough: something restarts it, so look at its parent and the systemd unit.'
+  - "The disk shows used space that du can't find. Find who still holds the deleted file and release it."
+  solved: 'Check passes when the systemd unit behind the CPU burner is stopped and disabled, no worker process of it is left, and no process holds a deleted file under the spool directory /var/tmp/lab-200.1.'
 hints:
 - 'uptime, then vmstat 1 5: is the run queue (r) above zero on a box with nothing to do?'
 - 'top or ps: which process eats the CPU? pstree -p 1: who is its parent?'
