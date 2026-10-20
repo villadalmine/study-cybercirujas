@@ -2,7 +2,7 @@
 # generated from it and from the files it names; nothing in them is written by hand.
 #
 #   scripts/curriculum_diff.py plan docs/upgrades/cka-ckad-1.37.yaml
-#   scripts/curriculum_diff.py render docs/upgrades/cka-ckad-1.37.plan.json -o docs/upgrades/cka-ckad-1.37-plan.md
+#   scripts/curriculum_diff.py render docs/upgrades/cka-ckad-1.37.plan.json -o docs/upgrades/cka-ckad-1.37.md
 #
 # tracked:       the frozen syllabus the material was built against (default certs/<cert>.md)
 # target:        the new curriculum, frozen from the official PDF pinned by commit

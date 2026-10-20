@@ -363,28 +363,26 @@ class Guard(unittest.TestCase):
 # ==== render ====
 
 class CommittedUpgrade(unittest.TestCase):
-    """docs/upgrades/*.plan.json is what its spec and the committed syllabi produce, and renders deterministically.
+    """docs/upgrades/<x>.plan.json and <x>.md are exactly what their spec and inputs produce: `plan --check` and
+    `render --check`, run here so CI (make verify-ci runs the unit tests) refuses a hand-edited plan, which is the
+    guard's allowlist, or a stale report. While an upgrade is open, a PR that edits a version line of its certs
+    regenerates both (two commands, docs/upgrades/README.md)."""
 
-    Classes, counts and diffs are compared, not the whole file: the plan also lists each topic's languages and
-    version lines, and a later translation must not fail every unrelated PR (`plan --check` compares the bytes)."""
-
-    def test_committed_plans_match_their_inputs(self):
+    def test_committed_plans_and_reports_are_current(self):
         specs = sorted((REPO / "docs" / "upgrades").glob("*.yaml"))
         if not specs:
             self.skipTest("no upgrade spec committed")
         for spec in specs:
-            committed = json.loads(spec.with_suffix(".plan.json").read_text(encoding="utf-8"))
-            fresh = cd.plan(REPO, str(spec.relative_to(REPO)))
-            for cert, c in fresh["certs"].items():
-                old = committed["certs"][cert]
-                with self.subTest(spec=spec.name, cert=cert):
-                    self.assertEqual(c["counts"], old["counts"])
-                    self.assertEqual([(t["topic"], t["class"], t["maps_to"]) for t in c["topics"]],
-                                     [(t["topic"], t["class"], t["maps_to"]) for t in old["topics"]])
-                    self.assertEqual((c["impact"], c.get("upstream"), c.get("drift")),
-                                     (old["impact"], old.get("upstream"), old.get("drift")))
-            self.assertEqual(cd.render(committed), cd.render(json.loads(json.dumps(committed))))
-            self.assertIn("```mermaid", cd.render(committed))
+            with self.subTest(spec=spec.name):
+                plan_file, report = spec.with_suffix(".plan.json"), spec.with_suffix(".md")
+                fresh = cd.dump_json(cd.plan(REPO, str(spec.relative_to(REPO))))
+                self.assertEqual(plan_file.read_text(encoding="utf-8"), fresh,
+                                 f"{plan_file.name} is stale or hand-edited: scripts/curriculum_diff.py plan "
+                                 f"{spec.relative_to(REPO)}")
+                self.assertEqual(report.read_text(encoding="utf-8"), cd.render(json.loads(fresh)),
+                                 f"{report.name} is stale: scripts/curriculum_diff.py render {plan_file.relative_to(REPO)} "
+                                 f"-o {report.relative_to(REPO)}")
+                self.assertIn("```mermaid", report.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

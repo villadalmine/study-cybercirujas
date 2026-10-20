@@ -18,8 +18,8 @@ The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the
 
 | Cert | keep | revalidate | regenerate | new | retire | topic files | in scope | sections | technical version lines |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cka | 26 | 1 | 0 | 0 | 0 | 216 | 23 | 0 | 105 (21 files, 11 topics) |
-| ckad | 22 | 2 | 0 | 0 | 0 | 192 | 8 | 4 | 0 |
+| cka | 26 | 1 | 0 | 0 | 0 | 216 | 54 | 0 | 168 (52 files, 26 topics): 108 in the material, 60 in labs |
+| ckad | 22 | 2 | 0 | 0 | 0 | 192 | 32 | 4 | 49 (24 files, 22 topics): all in labs |
 
 **Upstream changed no objective.** The v1.37 PDFs are byte-identical to the v1.35 ones (same sha256; cncf/curriculum
 renamed the files) and the extracted trees hash the same (`tree_sha256`). The Linux Foundation exam pages say "based on
@@ -38,10 +38,15 @@ Kubernetes v1.37" since 2026-10-19 (#51): what moved is the **Kubernetes version
 ckad 2.4's "rewording" is the vendor's typo ("API **depreciations**"); our spelling is the correct term, so the 4 listed
 title sections should stay as they are. No prose needs a model.
 
-**What the Kubernetes version does touch** is 105 technical lines in 11 CKA topics (`kubeadm upgrade apply v1.35.1`,
-`apt-get install kubeadm=1.35.1-1.1`, `kubectl get nodes` outputs, the `pkgs.k8s.io/.../v1.35` repository), most of them
-in 4.2 and 4.3 (kubeadm install and upgrade). They are listed one by one in the report. Besides those, 195 lines cite
-"Curriculum v1.35" (mostly with a dead `raw/master` link) and 46 are headings or banners: mechanical, for the switch PR.
+**What the Kubernetes version does touch** is 217 technical lines, listed one by one in the report:
+
+- 108 in the CKA material, 11 topics (`kubeadm upgrade apply v1.35.1`, `apt-get install kubeadm=1.35.1-1.1`,
+  `kubectl get nodes` outputs inside code fences, the `pkgs.k8s.io/.../v1.35` repository), most of them in 4.2 and 4.3;
+- 109 in the labs of 48 topics: `lab/lab.yaml` (`kubernetes: '1.35'`, which the runner uses to pick the kind node image,
+  and `runner_image: ... kindest/node v1.35.x`) and the `lab/*.sh` headers.
+
+Besides those, 195 lines cite "Curriculum v1.35" (mostly with a dead `raw/master` link) and 43 are headings or banners:
+mechanical, for the switch PR.
 
 ## Sources, pinned by commit
 
@@ -91,7 +96,8 @@ flowchart TD
    regenerates a topic.
 4. **Scope below topic level.** For each `revalidate`/`regenerate` topic the plan lists the sections (markdown headings)
    that name what changed: the old domain name, the old objective title, a weight line. For every topic it lists the
-   lines that name the tracked version, split into `curriculum`, `label` and `technical`.
+   lines that name the tracked version, split into `curriculum`, `label` and `technical`; `# ...` lines inside code
+   fences are not headings, and every version line of `lab/lab.yaml` and `lab/*.sh` is `technical`.
 5. **Issues**: one per `regenerate` or `new` topic, as a sub-issue of the umbrella issue. For v1.37 there are none.
 6. **Phase 2** (below), then the **switch**: the final PR moves `tracked_version` and `sources.objectives`.
 
@@ -111,10 +117,10 @@ Run on 2026-10-20 in WSL Ubuntu 24.04, poppler `pdftotext` 24.02.0, Python 3.12.
 **Same inputs, same bytes.** Plan, report and both upstream diffs, twice, in fresh processes with `PYTHONHASHSEED` 1 and 2:
 
 ```
-67e3b904608eb8492aa71c25f3dc8f33ce11d2b31d7bc0086550a020186fbfc0  plan1.json
-67e3b904608eb8492aa71c25f3dc8f33ce11d2b31d7bc0086550a020186fbfc0  plan2.json
-505d5b4a83fac5ef330dc5316c53d67be4732a8993d3d0d8d66af3b4721414c0  report1.md
-505d5b4a83fac5ef330dc5316c53d67be4732a8993d3d0d8d66af3b4721414c0  report2.md
+44d882230a18744b4ed03928e6b6e9e9b0a0e1d8249a76cafcd4ea8834e98d88  plan1.json
+44d882230a18744b4ed03928e6b6e9e9b0a0e1d8249a76cafcd4ea8834e98d88  plan2.json
+3179cda4fd41a0bd4f8dd3dbca2a8824318193c7dae06823b031ddd8d5171222  report1.md
+3179cda4fd41a0bd4f8dd3dbca2a8824318193c7dae06823b031ddd8d5171222  report2.md
 c3849220139ae9a5181be72c2bdd9644050a98494013ba4455bdb0dd2baf80a9  up-cka1.json
 c3849220139ae9a5181be72c2bdd9644050a98494013ba4455bdb0dd2baf80a9  up-cka2.json
 0a89b320f9af7b3fb1a7fd627b4e0c56e93a1d13a205657e5de650881f4afe67  up-ckad1.json
@@ -125,7 +131,7 @@ OK: docs/upgrades/cka-ckad-1.37.md is current
 
 **The snapshots are what the pinned PDFs produce** (`extract --check` on each of the four PDFs: `OK ... is current`),
 and the old and new trees hash the same: CKA `1e485720…` for v1.35 and v1.37, CKAD `90399946…` for both.
-`tests/test_curriculum_diff.py` repeats the byte-identical check on every push.
+`tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. While the upgrade is open, a PR that edits a version line of CKA or CKAD regenerates both with the two commands above.
 
 **`keep` topics are untouched.** Phase 1 (the tool, the snapshots, `upstream:` in the catalog, this folder) changes no
 topic file: `git diff --stat origin/main...HEAD -- certs/cka/ certs/ckad/` is empty, so all 48 `keep` topics and the 3
@@ -136,10 +142,12 @@ topic file: `git diff --stat origin/main...HEAD -- certs/cka/ certs/ckad/` is em
 
 ```
 $ scripts/curriculum_diff.py guard docs/upgrades/cka-ckad-1.37.plan.json --base origin/main
-guard: 15 changed file(s), 0 outside the plan, 0 out-of-scope edit(s), 0 provenance problem(s)
+plan: docs/upgrades/cka-ckad-1.37.plan.json from the head (new in this PR, verified against its inputs)
+guard: 16 changed file(s), 0 outside the plan, 0 out-of-scope edit(s), 0 provenance problem(s)
 
 # a phase-2 edit: a listed version line rewritten (allowed), another line of the same file and a keep topic edited (refused)
 $ scripts/curriculum_diff.py guard docs/upgrades/cka-ckad-1.37.plan.json --files certs/cka/4.3/es/content.md certs/cka/1.1/en/content.md
+plan: docs/upgrades/cka-ckad-1.37.plan.json as committed on <base sha> (the base), not the head's copy
 NOT PLANNED: certs/cka/1.1/en/content.md
 OUT OF SCOPE: certs/cka/4.3/es/content.md: line(s) 5 changed but are not listed in the plan
 PROVENANCE: certs/cka/1.1/en/meta.yaml: model 'claude' is not a model id
@@ -159,15 +167,17 @@ Nothing below has started; it needs Rino's OK on the cost. For v1.37 no topic is
 | Step | What | How | Guarded by |
 | :--- | :--- | :--- | :--- |
 | revalidate | cka 3.6, ckad 2.4, ckad 5.4 | every check re-run against the new objective text; result recorded in each `meta.yaml`. No prose edit: the listed sections are titles carrying our (correct) spelling | `quality_score.py --check`; `guard` (only `meta.yaml` and the listed sections) |
-| version lines | 105 lines, 21 files, 11 CKA topics | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` (a package that does not exist is not written); then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
+| version lines | 217 lines in 76 files: 108 in 22 CKA material files, 109 in 54 lab files | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` and the kind node images (a package or image that does not exist is not written), record the edit in the topic's `meta.yaml`; then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
 | regenerate / new | none for v1.37 | one PR per topic. The prompt carries the frozen syllabus text and the official documentation excerpts the topic cites (grounding at write time, only for these topics) | below |
 | switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` from the snapshot, the 195 curriculum lines re-pointed to the pinned v1.37 PDF | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done |
 
 Every phase-2 PR that rewrites `content.md` or `exercises.md` passes, on **those files only**:
 
+- **Scope, enforced by `guard`**: only planned files, listed sections and listed lines change. Its allowlist is the
+  plan committed on the base, never the PR's own copy, so a PR cannot widen its scope by editing `plan.json`.
 - **Provenance, enforced by `guard`** (audit items 1 and 4), even though the old corpus is not migrated: `model` is a
   real model id (not `claude`, `agy`, `cheap`), `lang` equals its directory, `effort` and `prompt_sha256` are present;
-  a hand edit says `model: human`. The generator does not write `effort` and `prompt_sha256` to `meta.yaml` yet, so a
+  a hand edit says `model: human`. A topic with listed lines may update its `meta.yaml` for that. The generator does not write `effort` and `prompt_sha256` to `meta.yaml` yet, so a
   model-written phase-2 PR needs that small generator change first.
 - **Groundedness as a blocking check** on the changed files (`scripts/check_groundedness.py` on the PR's topics must
   pass, not just warn), plus `check_api_facts` and the lab verification (`teach lab validate`, the parity run).
@@ -193,13 +203,13 @@ ship verified on 1.36 with the gap written down.
 | :--- | :--- |
 | Topic files in CKA + CKAD | 408 |
 | Topic files phase 1 changed | 0 |
-| Topic files in scope for phase 2 | 31 (7.6 %): 6 `meta.yaml` of revalidated topics, 4 files with a listed section, 21 files with technical version lines |
+| Topic files in scope for phase 2 | 86 (21 %): 6 `meta.yaml` of revalidated topics, 4 files with a listed section, 22 material files and 54 lab files with technical version lines (plus the `meta.yaml` where each edit records its provenance) |
 | Sections in scope | 4 (titles; recommended: no edit) |
-| Lines in scope | 105 technical version lines, of 56,484 lines of CKA + CKAD material (0.19 %) |
+| Lines in scope | 217 technical version lines: 108 of 56,484 lines of CKA + CKAD material (0.19 %), 109 in labs |
 | Topics regenerated | 0 of 51 |
 | Model tokens spent in phase 1 | 0 (no paid call: extraction, diff, plan and guard need no model) |
 | Plan + report regeneration time | 0.3 s |
-| Agent time for phase 1 | about 3 h, almost all of it building the tool once; the next upgrade reuses it |
+| Agent time for phase 1 | about 3 h, almost all of it building the tool once, plus one review round (scan of fences and labs, guard allowlist from the base, CI check of the plan); the next upgrade reuses it |
 
 Phase 2 fills in the measured cost and time per PR from `scripts/topic_cost.py` here.
 
@@ -215,7 +225,7 @@ about 0.07 USD.
 | :--- | :--- | ---: |
 | regenerate all of CKA + CKAD | 51 topics | ~140 USD (75 to 255) |
 | regenerate the 3 topics the syllabus diff touches | 3 topics | ~8.5 USD (5 to 15) |
-| **this plan: scoped edits** | 0 prose edits; 105 version lines in 21 files, by hand or one scoped completion per file | **0 to ~1.5 USD** |
+| **this plan: scoped edits** | 0 prose edits; 217 version lines in 76 files, by hand or one scoped completion per file | **0 to ~5 USD** |
 
 Revalidation itself costs nothing in model credits (groundedness runs a local pinned classifier). On the subscription
 the figures are quota, not a bill.
