@@ -22,13 +22,14 @@ import argparse
 import hashlib
 import json
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
 
 import yaml
 
-from . import runner, spec
+from . import kc_scope, runner, spec
 
 ORIGIN_LABEL = {"curated": "curado (repo study)", "community": "repo externo", "local": "carpeta local"}
 CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "study-lab" / "repos"
@@ -231,10 +232,23 @@ def cmd_export(args) -> int:
 _UNPROVABLE = "no Cilium release validated for this Kubernetes version"
 
 
+def provable_labs(kd: Path, scope: "kc_scope.Scope") -> list[tuple[str, str]]:
+    """(cert, topic) of every lab that has a reference fix: a file in fixes/, or a `fix)` verb in its script when the
+    certification is in the Killercoda scope. The rest are loaded-untested."""
+    from . import export_killercoda as kc
+    found = {tuple(f.stem.rpartition("-")[::2]) for f in (kd / "fixes").glob("*.sh")}
+    for cert in scope.certs:
+        for d in (runner.REPO_ROOT / "certs" / cert).glob("*/lab"):
+            lab = spec.load(d, "curated")
+            if lab.contract_ok and kc_scope.has_fix_verb((d / lab.spec["script"]).read_text(encoding="utf-8")):
+                found.add((cert, d.parent.name))
+    return sorted(found, key=lambda x: (x[0], kc.natural(x[1])))
+
+
 def cmd_test(args) -> int:
     """Run the GENERATED scenario the way Killercoda does (on an Ubuntu 24.04 VM, as root) and write tested.json."""
     import tempfile
-    from . import export_killercoda as kc, kc_test
+    from . import export_killercoda as kc, kc_scope, kc_test
     kd = runner.REPO_ROOT / "deploy" / "killercoda"
     needs = (yaml.safe_load((kd / "tracks.yaml").read_text(encoding="utf-8")) or {}).get("needs") or {}
     day = args.today or kc_test.today()
@@ -247,10 +261,10 @@ def cmd_test(args) -> int:
         img = kc.load_envs()["images"][args.print_env]
         print(env.get("kubernetes", ""), env.get("cni", "").rpartition(" ")[2], img.get("runtime", {}).get("version", ""))
         return 0
-    if args.plan:   # the labs that have a reference fix, as a CI matrix
+    scope = kc_scope.load(kd / "tracks.yaml")
+    if args.plan:   # the labs that CAN be proven (a reference fix), as a CI matrix; `required` = the allowlist in tracks.yaml
         plan, unprovable = [], {}
-        for f in sorted((kd / "fixes").glob("*.sh")):
-            cert, _, topic = f.stem.rpartition("-")
+        for cert, topic in provable_labs(kd, scope):
             lab = spec.load(runner.REPO_ROOT / "certs" / cert / topic / "lab", "curated")
             image = kc.IMAGES[lab.spec["requires"]][int(lab.spec.get("nodes") or 0)]
             try:
@@ -258,7 +272,7 @@ def cmd_test(args) -> int:
             except LookupError as exc:   # e.g. Kubernetes 1.37 with no Cilium release that lists it: skip that family only
                 unprovable.setdefault(image, (str(exc), []))[1].append(f"{cert}/{topic}")
                 continue
-            plan.append({"lab": f"{cert}/{topic}", "image": image})
+            plan.append({"lab": f"{cert}/{topic}", "image": image, "required": kc_scope.is_required(f"{cert}/{topic}", scope)})
         for image, (why, labs) in unprovable.items():   # GitHub workflow command, on stderr so stdout stays the JSON matrix
             print(f"::warning title={image} not proven nor published::{_UNPROVABLE} on {day}: {why}. Skipped: "
                   f"{', '.join(labs)}. The mirror keeps its current scenarios (publish is additive).", file=sys.stderr)
@@ -273,13 +287,19 @@ def cmd_test(args) -> int:
         scen = {k[len(base) + 1:]: v for k, v in files.items() if k.startswith(base + "/")}
         image = json.loads(scen["index.json"])["backend"]["imageid"]
         fix = kd / "fixes" / f"{cert}-{topic}.sh"
-        if not fix.is_file():
-            print(f"[study-lab] {w}: no reference fix at {fix}: it cannot be proven, so it will not be published")
+        script = (runner.REPO_ROOT / "certs" / cert / topic / "lab" / lab.spec["script"]).read_text(encoding="utf-8")
+        if not fix.is_file() and not kc_scope.has_fix_verb(script):
+            print(f"[study-lab] {w}: loaded-untested, no reference fix (no {fix.name}, no `fix)` verb in the script): "
+                  "it cannot be proven, so it is never published to the Killercoda mirror")
             code = 1
             continue
         with tempfile.TemporaryDirectory() as tmp:
-            kc.write(scen, Path(tmp))
-            stages = kc_test.run_scenario(Path(tmp), fix)
+            if not fix.is_file():   # the script's own `fix` verb is the reference fix, run as a student would: from /root
+                fix = Path(tmp) / "fix.sh"
+                fix.write_text(f"#!/usr/bin/env bash\nset -euo pipefail\ncd /root\n{kc._env(lab)}\n"
+                               f"timeout 600 bash ./{shlex.quote(lab.spec['script'])} fix </dev/null\n", encoding="utf-8")
+            kc.write(scen, Path(tmp) / "scenario")
+            stages = kc_test.run_scenario(Path(tmp) / "scenario", fix)
         ev = kc_test.evidence(scen, image, stages, kc_test.runner_info(), day, kc_test.measure(image))
         out = Path(args.evidence) / base / kc_test.EVIDENCE
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -343,7 +363,7 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--target", required=True, choices=["killercoda"])
     tt.add_argument("--evidence", default="build/killercoda-evidence")
     tt.add_argument("--today")
-    tt.add_argument("--plan", action="store_true", help="print the labs that have a reference fix, as JSON (CI matrix)")
+    tt.add_argument("--plan", action="store_true", help="print the labs that can be proven, as JSON (CI matrix; `required` = the allowlist of tracks.yaml)")
     tt.add_argument("--print-env", help="print '<k8s patch> <cilium tag> <containerd version>' for an imageid (used by bootstrap-kubeadm.sh)")
     tt.add_argument("labs", nargs="*", help="<cert>/<topic>")
     b = sub.add_parser("build")

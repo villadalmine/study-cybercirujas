@@ -54,6 +54,9 @@ jobs:
     if: needs.plan.outputs.labs != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    # Tested labs (the allowlist in tracks.yaml) fail this job and so block the publish; any other lab that fails is
+    # simply not published (no evidence) and the rest still is.
+    continue-on-error: ${{ !matrix.required }}
     strategy:
       fail-fast: false
       matrix:
@@ -82,7 +85,6 @@ jobs:
       - name: Prove the scenario
         if: steps.env.outputs.skip != 'true'
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
-        continue-on-error: true   # a failing lab is simply not published; the other scenarios still are
       - run: sudo chown -R "$USER" evidence 2>/dev/null || true
         if: always()
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2

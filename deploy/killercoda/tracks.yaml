@@ -1,3 +1,14 @@
+# SCOPE and STATUS of each lab on Killercoda (rules: docs/RUN-A-LAB-ANYWHERE.md, table: docs/KILLERCODA-STATUS.md).
+# scope:    the certifications Killercoda supports (kubeadm and Ubuntu VMs): the status table covers all their labs.
+# required: the ALLOWLIST of `tested` labs: they passed the batch parity run, and their parity check is a gate.
+#           Everything else is `loaded-untested`: it stays in the repo, runs locally with study-lab, is never a CI failure
+#           and is never pushed to the Killercoda mirror (the publish gate needs a passing tested.json for its current hash).
+# failed:   lab -> why a lab with a reference fix did not pass (documentation; one line each, no issue per lab).
+# Adding a lab to `required` is a measured fact: the parity workflow passed it.
+scope: [cka, ckad]
+required:
+  - cka/1.1
+failed: {}
 # What study-lab export --target killercoda publishes by default (the pilot, issue #43).
 # Only labs whose environment Killercoda has: linux -> ubuntu, kind -> kubernetes-kubeadm-1node.
 pilot:
