@@ -527,7 +527,7 @@ Features (`feat`), Bug Fixes (`fix`), Documentation (`docs`), Internals (`ci`, `
 reads the changelog, picks the moment and merges (squash). That creates the tag `vX.Y.Z` and the GitHub
 Release, and the same workflow publishes the image `ghcr.io/villadalmine/study-cybercirujas:vX.Y.Z` (next to
 `:latest` and `:<sha>`). Nobody edits `CHANGELOG.md`, the manifest or the version files by hand; a PR that
-does is a bug in that PR (the Release PR itself is the one exemption in `scripts/check_pr.py`).
+does is a bug in that PR (the Release PR and the release-notes reset PR are the only exemptions in `scripts/check_pr.py`).
 
 **Release notes.** `CHANGELOG.md` lists every change; the human summary of a release (Highlights, Upgrade
 notes, Thanks) is [`docs/release-notes/NEXT.md`](docs/release-notes/NEXT.md): **user-visible change? add a
@@ -563,10 +563,10 @@ name (see [Size and scope](#size-and-scope)).
 | The published site | `site-YYYY-MM-DD` per `helm upgrade` (below) | `git tag -l 'site-*'` |
 | Each exam | `tracked_version` in `catalog.yaml` | the catalog and the site |
 
-**Thanks to contributors.** The maintainer adds the credit `Thanks @user (#N)` for every merged PR from
-someone outside the maintainers to the **notes of the GitHub Release** (`gh release edit vX.Y.Z`), right
-after merging the Release PR. Not in `CHANGELOG.md` (release-please owns it and rewrites it) and not in the
-Release PR description (rewritten on every push to `main`).
+**Thanks to contributors.** Generated: the `notes` job adds `@user (#N)` to the **notes of the GitHub Release**
+for every merged PR from someone outside the maintainers (see *Release notes* above). By hand, only what it cannot
+see (a reviewer, a reporter, a `Co-authored-by:` co-author): a line under *Thanks* in `docs/release-notes/NEXT.md`.
+Not in `CHANGELOG.md` (release-please owns it and rewrites it) and not in the Release PR description.
 
 **If something breaks.** The Release PR cannot be opened without the repository secrets `RELEASE_APP_ID` and
 `RELEASE_APP_PRIVATE_KEY` (the GitHub App `study-cybercirujas-releases`, needed so the required checks run on

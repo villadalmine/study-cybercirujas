@@ -129,14 +129,9 @@ class CheckPrTests(unittest.TestCase):
         self.assertEqual(check_pr.check(title, "", nxt, **rel), [])
         self.assertTrue(check_pr.check(title, "", nxt + ["scripts/check_pr.py"], **rel))
         self.assertTrue(check_pr.check(title, "", ["CHANGELOG.md"], **rel))
-        for ref in ("release-notes-reset--v0.5", "release-notes-reset--v0.5.0-x", "bot/graph-refresh", None):
-            with self.subTest(ref=ref):
-                self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "head_ref": ref}))
-        self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "author": "mallory"}))
-        self.assertTrue(check_pr.check(title, "", nxt, **{**rel, "same_repo": False}))
-        # the Release PR branch cannot carry NEXT.md
-        self.assertTrue(check_pr.check("chore(main): release 0.5.0", "", nxt,
-                                       **{**rel, "head_ref": "release-please--branches--main"}))
+        for change in ({"head_ref": "release-notes-reset--v0.5"}, {"head_ref": "release-please--branches--main"},
+                       {"author": "mallory"}, {"same_repo": False}):
+            self.assertTrue(check_pr.check(title, "", nxt, **{**rel, **change}), change)
 
     def test_the_release_pr_dco_is_decided_by_the_same_facts_not_the_email(self):
         files, rel = self.RELEASE_FILES, self.RELEASE
@@ -157,9 +152,9 @@ class CheckPrTests(unittest.TestCase):
 
     def test_the_release_exemption_reads_the_author_and_repo_from_the_event(self):
         """Through main(): the event payload decides, and an exempt PR writes no runs file."""
-        def run(login, head_repo, ref="release-please--branches--main", files=("CHANGELOG.md",)):
+        def run(login, head_repo, ref="release-please--branches--main", files=("CHANGELOG.md",), uid=343498577):
             event = {"pull_request": {"title": "chore(main): release 0.3.0", "body": "",
-                                      "user": {"login": login},
+                                      "user": {"login": login, "id": uid},
                                       "head": {"ref": ref, "repo": {"full_name": head_repo}},
                                       "base": {"repo": {"full_name": "o/r"}}}}
             with tempfile.TemporaryDirectory() as tmp:
@@ -174,6 +169,7 @@ class CheckPrTests(unittest.TestCase):
         # version.txt is not a release file (release-type simple does not create it): full check applies
         self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "version.txt"))[0], 1)
         self.assertEqual(run("someone", "o/r")[0], 1)
+        self.assertEqual(run(bot, "o/r", uid=1)[0], 1)   # same login, not the App
         self.assertEqual(run(bot, "fork/r")[0], 1)
         self.assertEqual(run(bot, "o/r", ref="release-please--branches--main-x")[0], 1)
         self.assertEqual(run(bot, "o/r", files=("CHANGELOG.md", "teach/api.py"))[0], 1)

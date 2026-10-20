@@ -27,7 +27,7 @@ COMMENT = re.compile(r"<!--.*?-->", re.S)
 HEADING = re.compile(r"^##[ \t]+(.+?)[ \t]*$", re.M)
 PR_REF = re.compile(r"\(#(\d+)\)\s*$")
 SEMVER_TAG = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
-MENTION = re.compile(r"@([A-Za-z0-9][A-Za-z0-9-]*)")
+MENTION = re.compile(r"(?<![\w.@/-])@([A-Za-z0-9][A-Za-z0-9-]*)")
 
 
 def parse_sections(text: str) -> dict[str, list[str]]:
@@ -103,6 +103,9 @@ def remove_published(current: str, published: str) -> str:
 
 def previous_tag(tags: list[str], tag: str) -> str | None:
     """The highest vX.Y.Z below `tag`."""
+    if not SEMVER_TAG.match(tag):
+        return None
+
     def key(t: str):
         return tuple(int(p) for p in SEMVER_TAG.match(t).groups())
     versions = {t for t in tags if SEMVER_TAG.match(t)} | {tag}

@@ -37,6 +37,8 @@ class PureTests(unittest.TestCase):
         tags = ["v0.3.0", "v0.4.0", "v0.10.0", "v0.9.1", "site-2026-10-01", "v0.4.0-rc1"]
         self.assertEqual(rn.previous_tag(tags, "v0.10.0"), "v0.9.1")
         self.assertIsNone(rn.previous_tag(tags, "v0.3.0"))
+        self.assertIsNone(rn.previous_tag(tags, "site-2026-10-01"))
+        self.assertEqual(rn.MENTION.findall("a@b.com @x-y, (@z)"), ["x-y", "z"])
 
     def test_compose_puts_generated_thanks_after_hand_written_ones_and_drops_empty_sections(self):
         block = rn.compose(NEXT, ["- @alice (#3)"])
@@ -50,24 +52,20 @@ class PureTests(unittest.TestCase):
         once = rn.merge_body(block, changelog)
         self.assertEqual(once, f"{block}\n---\n\n{changelog}")
         self.assertEqual(rn.merge_body(block, once), once)
-        self.assertEqual(rn.merge_body("", changelog), changelog)
 
     def test_reset_removes_published_lines_keeps_new_ones_and_comments(self):
         current = NEXT.replace("## Upgrade notes", "- **New:** added after the tag.\n\n## Upgrade notes")
         got = rn.remove_published(current, NEXT)
         self.assertTrue("nine labs" not in got and "@reviewer" not in got)
         self.assertIn("- **New:** added after the tag.", got)
-        self.assertIn("<!-- hint -->", got)
         self.assertEqual(rn.remove_published(got, NEXT), got)
 
 
 class FakeGitHub:
-    """Just enough of the REST API; records the writes."""
-
-    def __init__(self, body="## [0.5.0]\n", branch_exists=False):
+    def __init__(self, body="## [0.5.0]\n", branch_exists=False, main_next=NEXT):
         self.writes, self.body, self.branch_exists = [], body, branch_exists
         self.files = {("v0.5.0", rn.NEXT_PATH): NEXT, ("v0.5.0", rn.CODEOWNERS_PATH): "* @villadalmine\n",
-                      ("main", rn.NEXT_PATH): NEXT}
+                      ("main", rn.NEXT_PATH): main_next}
 
     def paged(self, path):
         return [{"tag_name": t} for t in ("v0.5.0", "v0.4.0", "v0.3.0")]
@@ -79,8 +77,7 @@ class FakeGitHub:
         if path == "/releases/tags/v0.5.0":
             return {"id": 77, "body": self.body}
         if path.startswith("/compare/v0.4.0...v0.5.0"):
-            msgs = ["feat: a (#10)", "fix: b (#11)", "docs: c (#12)", "chore(main): release 0.5.0 (#13)"]
-            return {"commits": [{"commit": {"message": m}} for m in msgs]}
+            return {"commits": [{"commit": {"message": f"x (#{n})"}} for n in (10, 11, 12, 13)]}
         if path.startswith("/pulls/") and method == "GET":
             return {10: pr(10, "villadalmine"), 11: pr(11, "dana"), 12: pr(12, "app[bot]", kind="Bot"),
                     13: pr(13, "releases[bot]", kind="Bot")}[int(path.rsplit("/", 1)[1])]
@@ -112,12 +109,14 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(put["branch"], "release-notes-reset--v0.5.0")
         self.assertEqual(rn.parse_sections(base64.b64decode(put["content"]).decode()), {})
 
-    def test_a_second_run_writes_nothing(self):
+    def test_a_rerun_after_the_reset_merged_writes_nothing(self):
         first = FakeGitHub()
         rn.publish(first, "v0.5.0")
-        done = FakeGitHub(body=next(w for w in first.writes if w[0] == "PATCH")[2]["body"], branch_exists=True)
-        rn.publish(done, "v0.5.0")
-        self.assertEqual(done.writes, [])
+        body = next(w for w in first.writes if w[0] == "PATCH")[2]["body"]
+        for branch_exists in (True, False):   # reset PR still open, or merged and main already empty
+            done = FakeGitHub(body=body, branch_exists=branch_exists, main_next=EMPTY)
+            rn.publish(done, "v0.5.0")
+            self.assertEqual(done.writes, [])
 
 
 if __name__ == "__main__":

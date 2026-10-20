@@ -45,10 +45,11 @@ how #60 lost the exemption.)
 
 The second exemption is the same shape for the release-please PR (.github/workflows/release-please.yml,
 CONTRIBUTING.md -> Releases): its title is checked, and its description and sign-off are not, when
-the author is the GitHub App's bot login (study-cybercirujas-releases[bot]), its head repository is this
-one, its branch is release-please--branches--main, and EVERY changed file is one release-please
+the author is the GitHub App's bot login (study-cybercirujas-releases[bot], and its user id), its head
+repository is this one, its branch is release-please--branches--main, and EVERY changed file is one release-please
 writes (CHANGELOG.md, the manifest, pyproject.toml). Any other author, fork, branch or
 file gets the full check, and a commit's author email is never trusted here either.
+(The notes-reset PR of scripts/release_notes.py is exempt the same way, for NEXT.md only.)
 
 - the Scope section does not declare exactly one of small | medium | large |
   exam-version (CONTRIBUTING -> How big is my change?);
@@ -231,6 +232,7 @@ def is_graph_refresh(head_ref: str | None, files: list[str], author: str | None 
 
 
 RELEASE_BOT_AUTHOR = "study-cybercirujas-releases[bot]"
+RELEASE_BOT_ID = 343498577   # the App's user id: it survives a rename of the App, a login does not
 RELEASE_BRANCH = re.compile(r"release-please--branches--main(--components--[\w.-]+)?")
 RELEASE_FILES = frozenset({"CHANGELOG.md", ".release-please-manifest.json", "pyproject.toml"})
 # The small PR scripts/release_notes.py opens after a release to empty the next-release notes.
@@ -748,6 +750,8 @@ def main() -> int:
         title, body = pr["title"], pr.get("body") or ""
         head_ref = pr.get("head", {}).get("ref")
         author = (pr.get("user") or {}).get("login")
+        if author == RELEASE_BOT_AUTHOR and (pr.get("user") or {}).get("id") != RELEASE_BOT_ID:
+            author = f"{author} (unexpected user id)"   # same login, not the App: full check
         head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name") or ""
         base_repo = ((pr.get("base") or {}).get("repo") or {}).get("full_name") or "-"
         same_repo = head_repo.lower() == base_repo.lower()  # a fork's head repo differs
