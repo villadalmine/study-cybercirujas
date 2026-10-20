@@ -621,6 +621,139 @@ def _plan_run(args) -> int:
 COMMANDS["plan"] = ("classify every topic of an upgrade spec", _plan_args, _plan_run)
 
 
+# ==== guard ====
+#
+#   scripts/curriculum_diff.py guard docs/upgrades/<upgrade>.plan.json [--base origin/main | --files ...]
+#
+# A changed file under certs/<cert>/<topic>/ of a cert in the plan must be one of
+# that topic's planned files; a directory that is not a topic yet is allowed only
+# when the plan has a `new` objective for that cert. Everything else (certs/<cert>.md,
+# catalog.yaml, code, docs) is not this guard's business: check_pr covers it.
+
+def allowed(path: str, plan_data: dict) -> bool:
+    for cert, c in plan_data["certs"].items():
+        prefix = f"certs/{cert}/"
+        if not path.startswith(prefix):
+            continue
+        topic = path[len(prefix):].split("/", 1)[0]
+        known = {t["topic"]: t for t in c["topics"]}
+        if topic not in known:
+            return bool(c["new"])
+        return any(_glob(path, g) for g in known[topic]["planned_files"])
+    return True
+
+
+def guard(plan_data: dict, changed: list[str]) -> list[str]:
+    return [f for f in changed if not allowed(f, plan_data)]
+
+
+# Provenance of what an upgrade PR rewrites (audit items 1 and 4), enforced here even though the
+# old corpus is not migrated: when content.md or exercises.md of a topic in the plan changes, the
+# meta.yaml next to it must name a real model id (not a CLI or alias name), carry the effort and the
+# sha256 of the prompt, and say the language of its own directory. A hand edit says `model: human`.
+ALIASES = {"", "claude", "agy", "cheap", "codex", "gemini", "opus", "sonnet", "haiku", "unknown", "none"}
+
+
+def provenance(root: Path, plan_data: dict, changed: list[str]) -> list[str]:
+    problems = []
+    dirs = sorted({str(Path(f).parent) for f in changed
+                   if Path(f).name in DOC_FILES and any(f.startswith(f"certs/{c}/") for c in plan_data["certs"])})
+    for d in dirs:
+        meta_path = root / d / "meta.yaml"
+        meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) if meta_path.is_file() else {}
+        model = str(meta.get("model") or "").strip()
+        if model != "human":
+            if model.casefold() in ALIASES or not re.search(r"\d", model):
+                problems.append(f"{d}/meta.yaml: model {model!r} is not a model id")
+            for key in ("effort", "prompt_sha256"):
+                if not meta.get(key):
+                    problems.append(f"{d}/meta.yaml: {key} is missing")
+        if str(meta.get("lang") or "") != Path(d).name:
+            problems.append(f"{d}/meta.yaml: lang {meta.get('lang')!r} is not its directory {Path(d).name!r}")
+    return problems
+
+
+def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text) -> list[str]:
+    """Edits outside what the plan lists, in a doc file the plan scopes (a section or a version line).
+
+    `base_text(path)` / `head_text(path)` return a file's text before and after (None if absent).
+    A listed section may change freely; a listed technical version line may be rewritten in place;
+    every other line must stay byte-identical. When lines are added or removed, sections are compared
+    by position instead, and only listed sections may differ."""
+    sections: dict[str, set] = {}
+    lines: dict[str, set] = {}
+    for c in plan_data["certs"].values():
+        for t in c["topics"]:
+            if t["class"] == "revalidate":
+                for s in t["sections"]:
+                    sections.setdefault(s["file"], set()).add(s["heading"])
+            for ref in t["version_lines"]["technical"]:
+                f, n = ref.rsplit(":", 1)
+                lines.setdefault(f, set()).add(int(n))
+    problems = []
+    for f in changed:
+        if f not in sections and f not in lines:
+            continue
+        old, new = base_text(f), head_text(f)
+        if old is None or new is None:
+            problems.append(f"{f}: added or deleted, but a scoped edit only rewrites what the plan lists")
+            continue
+        a, b = _sections(old), _sections(new)
+        if len(old.splitlines()) == len(new.splitlines()):
+            ends = [s for s, _, _ in a[1:]] + [len(old.splitlines()) + 1]
+            free = {n for (s, title, _), end in zip(a, ends) if title in sections.get(f, ()) for n in range(s, end)}
+            bad = [n for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1)
+                   if x != y and n not in free and n not in lines.get(f, ())]
+            if bad:
+                problems.append(f"{f}: line(s) {', '.join(map(str, bad[:8]))} changed but are not listed in the plan")
+        elif f not in sections or len(a) != len(b):
+            problems.append(f"{f}: lines added or removed outside a listed section")
+        else:
+            problems += [f"{f}: section {ta!r} changed but is not listed in the plan"
+                         for (_, ta, body_a), (_, _, body_b) in zip(a, b)
+                         if body_a != body_b and ta not in sections[f]]
+    return problems
+
+
+def _git_text(ref: str | None, path: str) -> str | None:
+    if ref is None:
+        p = REPO / path
+        return p.read_text(encoding="utf-8") if p.is_file() else None
+    r = subprocess.run(["git", "show", f"{ref}:{path}"], cwd=REPO, capture_output=True, text=True)
+    return r.stdout if r.returncode == 0 else None
+
+
+def _guard_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("plan", type=Path)
+    p.add_argument("--base", default="origin/main")
+    p.add_argument("--files", nargs="*", help="changed files (default: git diff --name-only BASE...HEAD)")
+
+
+def _guard_run(args) -> int:
+    files = args.files
+    if files is None:
+        files = subprocess.run(["git", "diff", "--name-only", f"{args.base}...HEAD"], cwd=REPO, check=True,
+                               capture_output=True, text=True).stdout.split()
+    plan_data = json.loads(args.plan.read_text(encoding="utf-8"))
+    bad = guard(plan_data, files)
+    for f in bad:
+        print(f"NOT PLANNED: {f}")
+    base = subprocess.run(["git", "merge-base", args.base, "HEAD"], cwd=REPO, capture_output=True,
+                          text=True).stdout.strip() or args.base
+    scoped = unlisted_edits(plan_data, files, lambda f: _git_text(base, f), lambda f: _git_text(None, f))
+    weak = provenance(REPO, plan_data, files)
+    for p in scoped:
+        print(f"OUT OF SCOPE: {p}")
+    for p in weak:
+        print(f"PROVENANCE: {p}")
+    print(f"guard: {len(files)} changed file(s), {len(bad)} outside the plan, {len(scoped)} out-of-scope "
+          f"edit(s), {len(weak)} provenance problem(s)")
+    return 1 if bad or scoped or weak else 0
+
+
+COMMANDS["guard"] = ("fail if a PR touches a topic file the plan does not list", _guard_args, _guard_run)
+
+
 # ==== main ====
 
 def main(argv: list[str] | None = None) -> int:
