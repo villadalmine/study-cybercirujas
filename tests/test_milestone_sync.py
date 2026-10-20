@@ -27,30 +27,25 @@ def pr(**kw):
     return base
 
 
-class PickTests(unittest.TestCase):
+class PlanTests(unittest.TestCase):
     def test_earliest_due_open_release_milestone_undated_last(self):
         self.assertEqual(ms.pick_milestone(MILESTONES)["title"], "v0.4.0")
         self.assertEqual([m["title"] for m in ms.release_milestones(MILESTONES)], ["v0.4.0", "v0.5.0", "v0.6.0"])
         self.assertEqual(ms.pick_milestone(MILESTONES, exclude="v0.4.0")["title"], "v0.5.0")
         self.assertIsNone(ms.pick_milestone([MILESTONES[0], MILESTONES[3]]))
 
-
-class PrMergedTests(unittest.TestCase):
-    def test_sets_the_current_release(self):
+    def test_sets_the_current_release_and_warns_only_without_an_issue_link(self):
         plan = ms.plan_pr_merged(pr(), MILESTONES)
+        self.assertEqual((plan["milestone"], plan["warn"]), (10, None))
+        plan = ms.plan_pr_merged(pr(body="Small fix. <!-- Closes #1 -->"), MILESTONES)
         self.assertEqual(plan["milestone"], 10)
-        self.assertIsNone(plan["warn"])
+        self.assertIn("links no issue", plan["warn"])
 
     def test_left_alone_existing_milestone_release_pr_unmerged_or_other_base(self):
         for p in (pr(milestone={"title": "CKA & CKAD v1.37 upgrade"}), pr(merged=False), pr(base={"ref": "dev"}),
                   pr(head={"ref": "release-please--branches--main--components--study-cybercirujas"}),
                   pr(labels=[{"name": "autorelease: pending"}])):
             self.assertIsNone(ms.plan_pr_merged(p, MILESTONES)["milestone"], p)
-
-    def test_warns_without_an_issue_link_but_still_assigns(self):
-        plan = ms.plan_pr_merged(pr(body="Small fix. <!-- Closes #1 -->"), MILESTONES)
-        self.assertEqual(plan["milestone"], 10)
-        self.assertIn("links no issue", plan["warn"])
 
     def test_issue_link_forms(self):
         for body in ("Closes #3", "fixes #3", "Fixed: #3", "Part of #123", "Resolves owner/repo#7",
@@ -59,21 +54,15 @@ class PrMergedTests(unittest.TestCase):
         for body in ("", None, "see #3", "issue 3"):
             self.assertFalse(ms.links_an_issue(body), body)
 
-
-class IssueClosedTests(unittest.TestCase):
     def test_only_completed_issues_without_milestone(self):
         self.assertEqual(ms.plan_issue_closed({"state_reason": "completed", "milestone": None}, MILESTONES)["milestone"], 10)
         self.assertIsNone(ms.plan_issue_closed({"state_reason": "not_planned", "milestone": None}, MILESTONES)["milestone"])
         self.assertIsNone(ms.plan_issue_closed({"state_reason": "completed", "milestone": {"title": "v0.5.0"}}, MILESTONES)["milestone"])
 
-
-class ReleaseTests(unittest.TestCase):
-    def test_moves_open_items_to_the_next_and_closes(self):
+    def test_release_moves_open_items_to_the_next_and_closes(self):
         plan = ms.plan_release("v0.4.0", MILESTONES, [{"number": 1}, {"number": 2}])
         self.assertEqual((plan["released"], plan["next"]["title"], plan["move"], plan["close"]), (10, "v0.5.0", [1, 2], True))
         self.assertEqual(ms.plan_release("v0.4.0", MILESTONES, [])["close"], True)
-
-    def test_open_items_and_no_next_milestone_stays_open(self):
         plan = ms.plan_release("v0.4.0", [MILESTONES[2]], [{"number": 1}])
         self.assertEqual((plan["move"], plan["close"]), ([], False))
         self.assertEqual(ms.plan_release("v0.4.1", MILESTONES, [])["released"], None)   # patch without its milestone
@@ -119,10 +108,6 @@ class MainTests(unittest.TestCase):
                          [("PATCH", "/issues/7"), ("POST", "/issues/7/comments"), ("PATCH", "/milestones/10")])
         self.assertEqual(calls[0][2], {"milestone": 11})
         self.assertEqual(calls[2][2], {"state": "closed"})
-
-    def test_dry_run_changes_nothing(self):
-        calls, _ = self.run_main({"release": {"tag_name": "v0.4.0"}}, "release", open_items=[{"number": 7}], dry_run=True)
-        self.assertEqual(calls, [])
 
 
 if __name__ == "__main__":

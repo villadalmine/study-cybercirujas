@@ -2,6 +2,7 @@
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -29,6 +30,10 @@ class CheckPrTests(unittest.TestCase):
         problems = "\n".join(check_pr.check("fix(cka): reclaim policy", self.body("bad.md"), TOUCHED))
         self.assertIn("empty section: ## Risk and rollback", problems)
         self.assertIn("meta.yaml says 'claude'", problems)
+
+    def test_the_templates_bare_closes_line_does_not_fill_a_section(self):
+        body = re.sub(r"(## What and why\n).*?(?=\n## )", r"\1\nCloses #\n", self.body("good.md"), flags=re.S)
+        self.assertIn("empty section: ## What and why", check_pr.check("fix(cka): reclaim policy", body, TOUCHED))
 
     def test_deleted_material_is_not_missing_provenance(self):
         gone = ["certs/cka/9.9/xx/content.md", "certs/cka/9.9/xx/meta.yaml"]
