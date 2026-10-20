@@ -314,7 +314,7 @@ Full endpoint table, licence of the material and how to build on it:
 ```bash
 .venv/bin/teach cert list            # every certification, version, upstream state
 .venv/bin/teach cert show cka        # syllabus: id, weight, title of every topic
-.venv/bin/teach lab up cka 1.1       # break-and-fix lab (see above)
+.venv/bin/study-lab run cka 1.1       # break-and-fix lab in a container (see above)
 .venv/bin/teach serve                # same as make serve
 ```
 

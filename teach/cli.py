@@ -90,10 +90,15 @@ def cert_generate(
 
 
 @lab_app.command("up")
-def lab_up(cert_id: str, topic_id: str) -> None:
+def lab_up(
+    cert_id: str,
+    topic_id: str,
+    host: bool = typer.Option(False, "--host", help="kubectl labs only: run the script ON THIS MACHINE "
+                              "instead of the container runner (study-lab run). At your own risk."),
+) -> None:
     """Bring up a topic lab (local Docker, or terraform if lab.yaml asks for it)."""
     try:
-        result = labs.up(cert_id, topic_id)
+        result = labs.up(cert_id, topic_id, host=host)
     except labs.LabError as error:
         typer.echo(f"Error: {error}", err=True)
         raise typer.Exit(1)
