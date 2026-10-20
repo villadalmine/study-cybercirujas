@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# WARNING: this lab does more than break a throwaway container.
+#   - It creates real cloud resources that cost money until you delete them.
+#   - It exposes something on a public IP address while it runs.
+# Creates real, billable Azure resources in your subscription (a VNet, two NSGs, a Standard public
+# IP and a B1s VM running nginx), and the VM answers on that public IP while the lab exists. Use a
+# sandbox or free-credit subscription and run `break_fix.sh teardown` when you finish: until then
+# it keeps costing money.
+#
 # =============================================================================
 #  AZ-900 (exam version 2026-07-20)
 #  Topic 2.2 - Describe Azure compute and networking services   [weight 9.62]

@@ -129,8 +129,19 @@ origin: {kind: curated | community | generated, repo: ..., author: ..., generate
 derived_from: {syllabus: 'certs/cka.md#1.1', content: certs/cka/1.1/en/content.md, content_sha256: <chain hash>}  # labs in certs/: required (scripts/check_source_chain.py)
 verified: {status: true, date: '2026-10-15', method: runner | ci | human, by: ..., runner_image: ...}
 license: Apache-2.0
+safety:                      # only labs that do more than break a throwaway container
+  risks: [modifies-host]     # modifies-host | billable-cloud | public-exposure
+  warning: >-                # what it changes and where to run it
+    Edits /etc/hosts on the machine it runs on. Run it only on a disposable VM.
 x-anything: {}               # free extension keys
 ```
+
+`safety` is shown before the lab runs: `teach lab up` prints it and starts only after
+an explicit `yes` (or `STUDY_LAB_ACCEPT_RISKS=yes` for unattended runs; a non-interactive
+run without it refuses). The lab's `README.md`, the header of its `break_fix.sh` and the
+Killercoda intro repeat the same text (`teach/lab/safety.py`, `tests/test_lab_safety.py`).
+Today: AZ-900 2.2 and 2.3 (billable Azure resources, 2.2 with a public IP) and 2.4
+(edits `~/.azure`, `/etc/hosts` and a route).
 
 New behaviour is added here, as metadata, never as runner code: CKA 3.4's
 script uses `check`/`clean` and reads `TEACH_PLAT_LAB_CONFIRMED`; CKA 3.5's

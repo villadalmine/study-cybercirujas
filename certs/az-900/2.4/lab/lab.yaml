@@ -10,3 +10,9 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+safety:
+  risks: [modifies-host]
+  warning: >-
+    Moves your Azure CLI profile and token cache out of ~/.azure, rewrites ~/.azure/config, edits
+    /etc/hosts and adds a blackhole route on the machine it runs on. Run it only on a disposable VM,
+    never on your own workstation; `break_fix.sh --restore` puts the files back.

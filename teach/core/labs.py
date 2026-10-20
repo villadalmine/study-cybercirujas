@@ -43,6 +43,12 @@ def lab_dir(cert_id: str, topic_id: str) -> Path:
     return certs.content_dir(cert_id, topic_id) / "lab"
 
 
+def load_spec_for(cert_id: str, topic_id: str) -> dict:
+    """The lab.yaml of a topic as written, {} when the topic has no lab (lab up then fails with its own error)."""
+    spec_file = lab_dir(cert_id, topic_id) / "lab.yaml"
+    return (yaml.safe_load(spec_file.read_text(encoding="utf-8")) or {}) if spec_file.is_file() else {}
+
+
 def _write_status(directory: Path, state: str, detail: str = "") -> dict:
     status = {
         "state": state,  # running | destroyed | failed

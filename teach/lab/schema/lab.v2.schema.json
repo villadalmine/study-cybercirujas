@@ -127,6 +127,21 @@
       "type": "array", "items": {"type": "string"}
     },
     "level": {"enum": ["beginner", "intermediate", "advanced"]},
+    "safety": {
+      "description": "What the lab does beyond a throwaway container. teach lab up prints it and asks for confirmation; the lab README, the break_fix.sh header and the Killercoda intro repeat it (teach/lab/safety.py).",
+      "type": "object",
+      "required": ["risks", "warning"],
+      "additionalProperties": false,
+      "properties": {
+        "risks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["modifies-host", "billable-cloud", "public-exposure"]}
+        },
+        "warning": {"type": "string", "minLength": 40, "description": "What it changes and where to run it, in one or two sentences."}
+      }
+    },
     "origin": {
       "type": "object",
       "additionalProperties": false,

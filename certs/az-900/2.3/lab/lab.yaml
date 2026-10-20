@@ -10,3 +10,9 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+safety:
+  risks: [billable-cloud]
+  warning: >-
+    Creates a real, billable Azure Storage account and resource group in your subscription. Use a
+    sandbox or free-credit subscription and run `break_fix.sh cleanup` when you finish: until then
+    it keeps costing money.

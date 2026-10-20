@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# WARNING: this lab does more than break a throwaway container.
+#   - It changes files or settings of the machine it runs on.
+# Moves your Azure CLI profile and token cache out of ~/.azure, rewrites ~/.azure/config, edits
+# /etc/hosts and adds a blackhole route on the machine it runs on. Run it only on a disposable VM,
+# never on your own workstation; `break_fix.sh --restore` puts the files back.
 #
 # az900-2.4-identity-breakfix.sh
 #

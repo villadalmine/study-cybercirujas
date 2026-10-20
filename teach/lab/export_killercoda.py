@@ -15,7 +15,7 @@ from pathlib import Path
 
 import yaml
 
-from . import spec
+from . import safety, spec
 
 SITE = "https://study.cybercirujas.club"
 REPO = "https://github.com/villadalmine/study-cybercirujas"
@@ -146,7 +146,8 @@ code=$?
 echo "$out"
 {_verify_test(lab)}
 """,
-        "intro.md": f"# {s['title']}\n\n{s.get('level', 'beginner').capitalize()} break/fix lab ({s['cert']} {s['topic']}). "
+        "intro.md": f"# {s['title']}\n\n" + (safety.markdown(s) + "\n" if safety.of(s) else "")
+                    + f"{s.get('level', 'beginner').capitalize()} break/fix lab ({s['cert']} {s['topic']}). "
                     "Something is broken on purpose: find it, fix it, press Check.\n\n"
                     "The lab sets itself up while this page loads; its symptom is printed in the terminal.\n"
                     + ("" if lab.verified else "\nStatus: not yet verified end to end in the study-lab runner; it may be rough.\n")

@@ -10,3 +10,10 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+safety:
+  risks: [billable-cloud, public-exposure]
+  warning: >-
+    Creates real, billable Azure resources in your subscription (a VNet, two NSGs, a Standard public
+    IP and a B1s VM running nginx), and the VM answers on that public IP while the lab exists. Use a
+    sandbox or free-credit subscription and run `break_fix.sh teardown` when you finish: until then
+    it keeps costing money.
