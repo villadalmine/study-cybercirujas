@@ -1,13 +1,11 @@
 """The chart refuses to render without a real TEACH_SECRET."""
 import shutil
 import subprocess
+import unittest
 from pathlib import Path
-
-import pytest
 
 CHART = Path(__file__).resolve().parent.parent / "deploy" / "helm"
 HELM = shutil.which("helm")
-pytestmark = pytest.mark.skipif(HELM is None, reason="helm not installed")
 
 
 def render(*sets):
@@ -17,18 +15,25 @@ def render(*sets):
     return subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
 
-def test_default_values_do_not_render():
-    res = render()
-    assert res.returncode != 0 and "TEACH_SECRET" in res.stderr
+@unittest.skipIf(HELM is None, "helm not installed")
+class HelmSecretTests(unittest.TestCase):
+    def test_default_values_do_not_render(self):
+        res = render()
+        self.assertNotEqual(res.returncode, 0)
+        self.assertIn("TEACH_SECRET", res.stderr)
+
+    def test_placeholders_and_short_values_do_not_render(self):
+        for value in ("change-me", "short", "PONER-UN-SECRETO-FUERTE-DE-32-BYTES"):
+            with self.subTest(value=value):
+                res = render(f"env.TEACH_SECRET={value}")
+                self.assertNotEqual(res.returncode, 0)
+                self.assertIn("TEACH_SECRET", res.stderr)
+
+    def test_a_real_secret_renders(self):
+        res = render("env.TEACH_SECRET=" + "a1" * 20)
+        self.assertEqual(res.returncode, 0, res.stderr)
+        self.assertIn("TEACH_SECRET", res.stdout)
 
 
-@pytest.mark.parametrize("value", ["change-me", "short", "PONER-UN-SECRETO-FUERTE-DE-32-BYTES"])
-def test_placeholders_and_short_values_do_not_render(value):
-    res = render(f"env.TEACH_SECRET={value}")
-    assert res.returncode != 0 and "TEACH_SECRET" in res.stderr
-
-
-def test_a_real_secret_renders():
-    res = render("env.TEACH_SECRET=" + "a1" * 20)
-    assert res.returncode == 0, res.stderr
-    assert "TEACH_SECRET" in res.stdout
+if __name__ == "__main__":
+    unittest.main()
