@@ -1,41 +1,31 @@
 # Community 148
 
-> 9 nodes · cohesion 0.22
+> 8 nodes · cohesion 0.32
 
 ## Key Concepts
 
-- **What you can contribute** (5 connections) — `CONTRIBUTING.md`
-- **Model** (4 connections) — `tests/test_groundedness.py`
-- **Raising a topic's quality score** (4 connections) — `CONTRIBUTING.md`
-- **.verified()** (3 connections) — `teach/lab/spec.py`
-- **Sign your commits (DCO)** (3 connections) — `CONTRIBUTING.md`
-- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
-- **skipUnless** (1 connections)
-- **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
-- **Provenance is mandatory** (1 connections) — `CONTRIBUTING.md`
+- **PathLanguageTests** (7 connections) — `tests/test_paths_lang.py`
+- **._translated()** (4 connections) — `tests/test_paths_lang.py`
+- **.setUp()** (2 connections) — `tests/test_paths_lang.py`
+- **.test_every_language_gets_its_own_names()** (2 connections) — `tests/test_paths_lang.py`
+- **.test_the_default_language_is_translated_like_any_other()** (2 connections) — `tests/test_paths_lang.py`
+- **.test_an_untranslated_path_keeps_what_it_has()** (1 connections) — `tests/test_paths_lang.py`
+- **.test_the_i18n_block_itself_is_not_served()** (1 connections) — `tests/test_paths_lang.py`
+- **Paths that actually carry a translation for this language.** (1 connections) — `tests/test_paths_lang.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
+- [Community 88](Community_88.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
-- `docs/LABS-RUNNER.md`
-- `teach/lab/spec.py`
-- `tests/test_groundedness.py`
+- `tests/test_paths_lang.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (62%)
-- INFERRED: 6 (38%)
+- EXTRACTED: 11 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

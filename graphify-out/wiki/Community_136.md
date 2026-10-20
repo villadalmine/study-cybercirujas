@@ -1,30 +1,33 @@
 # Community 136
 
-> 6 nodes · cohesion 0.53
+> 9 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **usage_report.py** (10 connections) — `scripts/usage_report.py`
-- **main()** (5 connections) — `scripts/usage_report.py`
-- **rows()** (3 connections) — `scripts/usage_report.py`
-- **_money()** (2 connections) — `scripts/usage_report.py`
-- **_tokens()** (2 connections) — `scripts/usage_report.py`
-- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
+- **OwnedTeardownTests** (8 connections) — `tests/test_labs_ownership.py`
+- **_down_container()** (5 connections) — `teach/core/labs.py`
+- **.test_a_foreign_container_under_the_name_survives()** (4 connections) — `tests/test_labs_ownership.py`
+- **.test_our_container_is_removed()** (4 connections) — `tests/test_labs_ownership.py`
+- **.run_container()** (3 connections) — `tests/test_labs_ownership.py`
+- **.running()** (3 connections) — `tests/test_labs_ownership.py`
+- **.setUp()** (1 connections) — `tests/test_labs_ownership.py`
+- **.tearDown()** (1 connections) — `tests/test_labs_ownership.py`
+- **skipUnless** (1 connections)
 
 ## Relationships
 
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 36](Community_36.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 112](Community_112.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 121](Community_121.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/usage_report.py`
+- `teach/core/labs.py`
+- `tests/test_labs_ownership.py`
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

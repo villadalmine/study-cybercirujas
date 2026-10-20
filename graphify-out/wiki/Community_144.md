@@ -1,28 +1,31 @@
 # Community 144
 
-> 4 nodes · cohesion 0.50
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **cited_runs()** (6 connections) — `scripts/check_pr.py`
-- **sections()** (6 connections) — `scripts/check_pr.py`
-- **`## Heading` → its text, with HTML comments removed.** (1 connections) — `scripts/check_pr.py`
-- **(repo, run id) linked under '### Where it ran' inside Evidence.** (1 connections) — `scripts/check_pr.py`
+- **test_helm_secret_required.py** (7 connections) — `tests/test_helm_secret_required.py`
+- **HelmSecretTests** (6 connections) — `tests/test_helm_secret_required.py`
+- **render()** (6 connections) — `tests/test_helm_secret_required.py`
+- **.test_a_real_secret_renders()** (2 connections) — `tests/test_helm_secret_required.py`
+- **.test_default_values_do_not_render()** (2 connections) — `tests/test_helm_secret_required.py`
+- **.test_digits_only_value_gets_the_intended_message()** (2 connections) — `tests/test_helm_secret_required.py`
+- **.test_placeholders_and_short_values_do_not_render()** (2 connections) — `tests/test_helm_secret_required.py`
+- **skipIf** (1 connections)
+- **The chart refuses to render without a real TEACH_SECRET.** (1 connections) — `tests/test_helm_secret_required.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (2 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
-- [Community 167](Community_167.md) (2 shared connections)
+- [Community 61](Community_61.md) (3 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `tests/test_helm_secret_required.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,33 +1,35 @@
 # Community 131
 
-> 8 nodes · cohesion 0.36
+> 13 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **check_claims.py** (11 connections) — `scripts/check_claims.py`
-- **main()** (6 connections) — `scripts/check_claims.py`
-- **ask()** (4 connections) — `scripts/check_claims.py`
-- **references()** (3 connections) — `scripts/check_claims.py`
-- **random** (2 connections)
-- **Does the cited page actually SAY what the material claims it says?…** (1 connections) — `scripts/check_claims.py`
-- **(label, url) from the references section only. URLs in the body are examples…** (1 connections) — `scripts/check_claims.py`
-- **Fetch and judge. Deliberately a separate process per claim: one failure should…** (1 connections) — `scripts/check_claims.py`
+- **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
+- **._outdated()** (7 connections) — `tests/test_stale_cycle.py`
+- **._regenerate()** (5 connections) — `tests/test_stale_cycle.py`
+- **.test_cycle_closes_when_none_are_left()** (5 connections) — `tests/test_stale_cycle.py`
+- **.test_regenerating_default_does_not_release_the_rest()** (5 connections) — `tests/test_stale_cycle.py`
+- **.test_unreadable_meta_counts_as_outdated()** (5 connections) — `tests/test_stale_cycle.py`
+- **.test_without_a_timestamp_nothing_is_outdated()** (4 connections) — `tests/test_stale_cycle.py`
+- **.test_content_older_than_the_change_is_flagged()** (2 connections) — `tests/test_stale_cycle.py`
+- **.setUp()** (1 connections) — `tests/test_stale_cycle.py`
+- **.tearDown()** (1 connections) — `tests/test_stale_cycle.py`
+- **A topic that never changed reports no outdated languages, however old its…** (1 connections) — `tests/test_stale_cycle.py`
+- **When in doubt, regenerate: if freshness cannot be proven, it is not assumed.** (1 connections) — `tests/test_stale_cycle.py`
+- **The case that drove the design: rebuilding Spanish cannot mark the topic…** (1 connections) — `tests/test_stale_cycle.py`
 
 ## Relationships
 
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 10](Community_10.md) (7 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_claims.py`
+- `tests/test_stale_cycle.py`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

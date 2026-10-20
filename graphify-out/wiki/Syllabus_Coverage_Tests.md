@@ -31,8 +31,9 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (7 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
+- [Community 14](Community_14.md) (4 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
+- [Community 135](Community_135.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 5](Community_5.md) (1 shared connections)
 

@@ -1,6 +1,6 @@
 # Community 69
 
-> 19 nodes · cohesion 0.15
+> 18 nodes · cohesion 0.16
 
 ## Key Concepts
 
@@ -15,7 +15,6 @@
 - **set_key()** (4 connections) — `scripts/steer.py`
 - **_cert_block()** (3 connections) — `scripts/steer.py`
 - **create_block()** (3 connections) — `scripts/steer.py`
-- **default_languages()** (3 connections) — `teach/core/pipeline.py`
 - **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
 - **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
 - **Add a certification to pipeline.yaml that is not there yet. `activate` used to…** (1 connections) — `scripts/steer.py`
@@ -26,18 +25,18 @@
 
 ## Relationships
 
-- [Community 62](Community_62.md) (10 shared connections)
+- [Community 62](Community_62.md) (9 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 - [Community 89](Community_89.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
+- [Community 36](Community_36.md) (2 shared connections)
 - [Community 49](Community_49.md) (1 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
 - [Community 88](Community_88.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
 - [Community 138](Community_138.md) (1 shared connections)
-- [Community 6](Community_6.md) (1 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 
 ## Source Files
 
@@ -48,7 +47,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 54 (90%)
+- EXTRACTED: 52 (90%)
 - INFERRED: 6 (10%)
 - AMBIGUOUS: 0 (0%)
 

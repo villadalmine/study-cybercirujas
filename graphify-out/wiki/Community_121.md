@@ -1,38 +1,50 @@
 # Community 121
 
-> 11 nodes · cohesion 0.18
+> 16 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **Killercoda is an export target, never the source** (7 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **today()** (3 connections) — `teach/lab/kc_test.py`
-- **RUN-A-LAB-ANYWHERE.md** (3 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **LABS-RUNNER.md** (2 connections) — `docs/LABS-RUNNER.md`
-- **How a lab gets proven before it is published** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Run a lab anywhere** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Limits and open questions** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Publish: automatic on merge** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Publish by hand (the same thing, when you want to see it)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **What each scenario says about itself** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **What Killercoda documents about limits (checked 2026-10-16)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **up()** (15 connections) — `teach/core/labs.py`
+- **_up_container()** (11 connections) — `teach/core/labs.py`
+- **Path** (11 connections)
+- **down()** (10 connections) — `teach/core/labs.py`
+- **LabError** (9 connections) — `teach/core/labs.py`
+- **_up_cluster()** (9 connections) — `teach/core/labs.py`
+- **_needs_cluster()** (8 connections) — `teach/core/labs.py`
+- **_load_spec()** (7 connections) — `teach/core/labs.py`
+- **_break_args()** (6 connections) — `teach/core/labs.py`
+- **_terraform()** (6 connections) — `teach/core/labs.py`
+- **_write_status()** (6 connections) — `teach/core/labs.py`
+- **Labs — what an audit found, 2026-08-08 (design parked, not started)** (6 connections) — `BACKLOG.md`
+- **_require()** (5 connections) — `teach/core/labs.py`
+- **Exception** (1 connections)
+- **CKA/CKAD/CKS/KCNA labs run against a real Kubernetes cluster (kubectl); LPI…** (1 connections) — `teach/core/labs.py`
+- **The argument that makes break_fix.sh break, for scripts that need one. About a…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [Community 70](Community_70.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 112](Community_112.md) (21 shared connections)
+- [Community 8](Community_8.md) (6 shared connections)
+- [Community 61](Community_61.md) (4 shared connections)
+- [Community 166](Community_166.md) (2 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 209](Community_209.md) (2 shared connections)
+- [Community 130](Community_130.md) (2 shared connections)
+- [Community 163](Community_163.md) (2 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
+- [Community 136](Community_136.md) (1 shared connections)
+- [Platform Architecture Plan](Platform_Architecture_Plan.md) (1 shared connections)
+- [Community 206](Community_206.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/LABS-RUNNER.md`
-- `docs/RUN-A-LAB-ANYWHERE.md`
-- `teach/lab/kc_test.py`
+- `BACKLOG.md`
+- `teach/core/labs.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (93%)
-- INFERRED: 1 (7%)
+- EXTRACTED: 74 (92%)
+- INFERRED: 6 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

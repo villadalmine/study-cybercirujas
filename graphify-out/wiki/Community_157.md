@@ -1,27 +1,34 @@
 # Community 157
 
-> 3 nodes · cohesion 0.67
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **_write_meta()** (5 connections) — `teach/core/generator.py`
-- **Path** (1 connections)
-- **Provenance for one language directory: who made it, with what, when. Written…** (1 connections) — `teach/core/generator.py`
+- **Content Workflow** (9 connections) — `WORKFLOW.md`
+- **Backends** (2 connections) — `WORKFLOW.md`
+- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
+- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
+- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
+- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
+- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
+- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
 
 ## Relationships
 
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
+- [README.md](README.md.md) (1 shared connections)
 - [Community 7](Community_7.md) (1 shared connections)
+- [Community 14](Community_14.md) (1 shared connections)
+- [Community 15](Community_15.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/generator.py`
+- `WORKFLOW.md`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 10 (83%)
+- INFERRED: 2 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -19,9 +19,9 @@
 ## Relationships
 
 - [Community 7](Community_7.md) (2 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 107](Community_107.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 
 ## Source Files
 

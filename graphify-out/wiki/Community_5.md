@@ -34,11 +34,11 @@
 ## Relationships
 
 - [README.md](README.md.md) (1 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
+- [Community 167](Community_167.md) (1 shared connections)
 - [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
 
 ## Source Files
 

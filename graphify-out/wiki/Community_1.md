@@ -8,7 +8,7 @@
 - **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
-- **lab/__init__.py** (15 connections) — `teach/lab/__init__.py`
+- **lab/__init__.py** (16 connections) — `teach/lab/__init__.py`
 - **Tests** (10 connections) — `docs/LABS-RUNNER.md`
 - **git_repo()** (9 connections) — `tests/lab/conftest.py`
 - **flow()** (9 connections) — `tests/lab/test_e2e.py`
@@ -33,18 +33,18 @@
 
 ## Relationships
 
-- [Community 29](Community_29.md) (14 shared connections)
-- [Community 61](Community_61.md) (8 shared connections)
-- [Community 18](Community_18.md) (7 shared connections)
+- [Community 26](Community_26.md) (8 shared connections)
+- [Community 61](Community_61.md) (7 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 29](Community_29.md) (6 shared connections)
+- [Community 12](Community_12.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 12](Community_12.md) (3 shared connections)
 - [Community 56](Community_56.md) (3 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Developers — use the API, run your own copy, build on it](Developers_—_use_the_API,_run_your_own_copy,_build_on_it.md) (1 shared connections)
+- [Community 70](Community_70.md) (3 shared connections)
+- [Community 111](Community_111.md) (3 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
 - [Community 129](Community_129.md) (1 shared connections)
-- [Community 135](Community_135.md) (1 shared connections)
 
 ## Source Files
 
@@ -56,7 +56,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 123 (98%)
+- EXTRACTED: 124 (98%)
 - INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 

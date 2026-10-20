@@ -1,11 +1,12 @@
 # Community 25
 
-> 14 nodes · cohesion 0.24
+> 15 nodes · cohesion 0.22
 
 ## Key Concepts
 
 - **ServerSmokeTests** (14 connections) — `tests/test_smoke.py`
 - **.get()** (10 connections) — `tests/test_smoke.py`
+- **_free_port()** (3 connections) — `tests/test_smoke.py`
 - **.setUpClass()** (2 connections) — `tests/test_smoke.py`
 - **.test_catalog_lists_certifications()** (2 connections) — `tests/test_smoke.py`
 - **.test_health()** (2 connections) — `tests/test_smoke.py`
@@ -21,7 +22,7 @@
 
 ## Relationships
 
-- [Community 127](Community_127.md) (2 shared connections)
+- [Community 127](Community_127.md) (3 shared connections)
 
 ## Source Files
 
@@ -29,7 +30,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 24 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
