@@ -1,0 +1,2676 @@
+{
+  "certs": {
+    "cka": {
+      "cert": "cka",
+      "counts": {
+        "keep": 26,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 1
+      },
+      "drift": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": false,
+        "new": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.35"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [
+            {
+              "from_domain": "Workloads and Scheduling",
+              "new_id": "4.1",
+              "old_id": "3.6",
+              "similarity": 1.0,
+              "text": "Manage role based access control (RBAC)",
+              "to_domain": "Cluster Architecture, Installation and Configuration"
+            }
+          ],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Implement storage classes and dynamic volume provisioning"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Configure volume types, access modes and reclaim policies"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Manage persistent volumes and persistent volume claims"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Troubleshoot clusters and nodes"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Troubleshoot cluster components"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Monitor cluster and application resource usage"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Manage and evaluate container output streams"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "2.5",
+              "similarity": 1.0,
+              "text": "Troubleshoot services and networking"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Understand application deployments and how to perform rolling update and rollbacks"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Use ConfigMaps and Secrets to configure applications"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Configure workload autoscaling"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Understand the primitives used to create robust, self-healing, application deployments"
+            },
+            {
+              "new_id": "3.5",
+              "old_id": "3.5",
+              "similarity": 1.0,
+              "text": "Configure Pod admission and scheduling (limits, node affinity, etc.)"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Prepare underlying infrastructure for installing a Kubernetes cluster"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Create and manage Kubernetes clusters using kubeadm"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Manage the lifecycle of Kubernetes clusters"
+            },
+            {
+              "new_id": "4.5",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Implement and configure a highly-available control plane"
+            },
+            {
+              "new_id": "4.6",
+              "old_id": "4.5",
+              "similarity": 1.0,
+              "text": "Use Helm and Kustomize to install cluster components"
+            },
+            {
+              "new_id": "4.7",
+              "old_id": "4.6",
+              "similarity": 1.0,
+              "text": "Understand extension interfaces (CNI, CSI, CRI, etc.)"
+            },
+            {
+              "new_id": "4.8",
+              "old_id": "4.7",
+              "similarity": 1.0,
+              "text": "Understand CRDs, install and configure operators"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Understand connectivity between Pods"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Define and enforce Network Policies"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use ClusterIP, NodePort, LoadBalancer service types and endpoints"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Use the Gateway API to manage Ingress traffic"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "5.5",
+              "similarity": 1.0,
+              "text": "Know how to use Ingress controllers and Ingress resources"
+            },
+            {
+              "new_id": "5.6",
+              "old_id": "5.6",
+              "similarity": 1.0,
+              "text": "Understand and use CoreDNS"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "efficiency": {
+        "planned_files": 23,
+        "sections_to_edit": 0,
+        "topic_files": 216,
+        "version_lines": {
+          "curriculum": 106,
+          "label": 22,
+          "technical": 105
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": false,
+        "new": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [
+            {
+              "from_domain": "Workloads and Scheduling",
+              "new_id": "4.1",
+              "old_id": "3.6",
+              "similarity": 1.0,
+              "text": "Manage role based access control (RBAC)",
+              "to_domain": "Cluster Architecture, Installation and Configuration"
+            }
+          ],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Implement storage classes and dynamic volume provisioning"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Configure volume types, access modes and reclaim policies"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Manage persistent volumes and persistent volume claims"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Troubleshoot clusters and nodes"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Troubleshoot cluster components"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Monitor cluster and application resource usage"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Manage and evaluate container output streams"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "2.5",
+              "similarity": 1.0,
+              "text": "Troubleshoot services and networking"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Understand application deployments and how to perform rolling update and rollbacks"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Use ConfigMaps and Secrets to configure applications"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Configure workload autoscaling"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Understand the primitives used to create robust, self-healing, application deployments"
+            },
+            {
+              "new_id": "3.5",
+              "old_id": "3.5",
+              "similarity": 1.0,
+              "text": "Configure Pod admission and scheduling (limits, node affinity, etc.)"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Prepare underlying infrastructure for installing a Kubernetes cluster"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Create and manage Kubernetes clusters using kubeadm"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Manage the lifecycle of Kubernetes clusters"
+            },
+            {
+              "new_id": "4.5",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Implement and configure a highly-available control plane"
+            },
+            {
+              "new_id": "4.6",
+              "old_id": "4.5",
+              "similarity": 1.0,
+              "text": "Use Helm and Kustomize to install cluster components"
+            },
+            {
+              "new_id": "4.7",
+              "old_id": "4.6",
+              "similarity": 1.0,
+              "text": "Understand extension interfaces (CNI, CSI, CRI, etc.)"
+            },
+            {
+              "new_id": "4.8",
+              "old_id": "4.7",
+              "similarity": 1.0,
+              "text": "Understand CRDs, install and configure operators"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Understand connectivity between Pods"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Define and enforce Network Policies"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use ClusterIP, NodePort, LoadBalancer service types and endpoints"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Use the Gateway API to manage Ingress traffic"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "5.5",
+              "similarity": 1.0,
+              "text": "Know how to use Ingress controllers and Ingress resources"
+            },
+            {
+              "new_id": "5.6",
+              "old_id": "5.6",
+              "similarity": 1.0,
+              "text": "Understand and use CoreDNS"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/cka/v1.37.yaml",
+        "sha256": "c55712d371ae46d4d811738018f637f2a8cb93b0a57258776e68a8abeb647e9e",
+        "source": {
+          "commit": "b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec",
+          "committed": "2026-10-15",
+          "path": "CKA_Curriculum_v1.37.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c",
+          "url": "https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf"
+        },
+        "tree_sha256": "1e485720b91222245e79237faef624a47d058b33a1abe5948fbeda07f194e799",
+        "version": "1.37"
+      },
+      "topics": [
+        {
+          "class": "keep",
+          "domain": "Storage",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implement storage classes and dynamic volume provisioning",
+          "topic": "1.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Storage",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configure volume types, access modes and reclaim policies",
+          "topic": "1.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Storage",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Manage persistent volumes and persistent volume claims",
+          "topic": "1.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Troubleshooting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.1",
+          "planned_files": [
+            "certs/cka/2.1/en/content.md",
+            "certs/cka/2.1/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshoot clusters and nodes",
+          "topic": "2.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cka/2.1/en/content.md:22",
+              "certs/cka/2.1/en/content.md:23",
+              "certs/cka/2.1/en/content.md:24",
+              "certs/cka/2.1/en/content.md:226",
+              "certs/cka/2.1/en/content.md:243",
+              "certs/cka/2.1/es/content.md:22",
+              "certs/cka/2.1/es/content.md:23",
+              "certs/cka/2.1/es/content.md:24",
+              "certs/cka/2.1/es/content.md:226",
+              "certs/cka/2.1/es/content.md:243"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Troubleshooting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.2",
+          "planned_files": [
+            "certs/cka/2.2/en/content.md",
+            "certs/cka/2.2/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshoot cluster components",
+          "topic": "2.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cka/2.2/en/content.md:39",
+              "certs/cka/2.2/en/content.md:40",
+              "certs/cka/2.2/es/content.md:39",
+              "certs/cka/2.2/es/content.md:40"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Troubleshooting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Monitor cluster and application resource usage",
+          "topic": "2.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Troubleshooting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Manage and evaluate container output streams",
+          "topic": "2.4",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Troubleshooting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshoot services and networking",
+          "topic": "2.5",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand application deployments and how to perform rolling update and rollbacks",
+          "topic": "3.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use ConfigMaps and Secrets to configure applications",
+          "topic": "3.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.3",
+          "planned_files": [
+            "certs/cka/3.3/en/exercises.md",
+            "certs/cka/3.3/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configure workload autoscaling",
+          "topic": "3.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": [
+              "certs/cka/3.3/en/exercises.md:56",
+              "certs/cka/3.3/en/exercises.md:218",
+              "certs/cka/3.3/es/exercises.md:58"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand the primitives used to create robust, self-healing, application deployments",
+          "topic": "3.4",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.5",
+          "planned_files": [
+            "certs/cka/3.5/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configure Pod admission and scheduling (limits, node affinity, etc.)",
+          "topic": "3.5",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cka/3.5/es/exercises.md:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Workloads and Scheduling",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.1",
+          "planned_files": [
+            "certs/cka/3.6/en/meta.yaml",
+            "certs/cka/3.6/es/meta.yaml"
+          ],
+          "reasons": [
+            "moved: Workloads and Scheduling -> Cluster Architecture, Installation and Configuration"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Manage role based access control (RBAC)",
+          "topic": "3.6",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.2",
+          "planned_files": [
+            "certs/cka/4.1/en/exercises.md",
+            "certs/cka/4.1/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Prepare underlying infrastructure for installing a Kubernetes cluster",
+          "topic": "4.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": [
+              "certs/cka/4.1/en/exercises.md:155",
+              "certs/cka/4.1/en/exercises.md:159",
+              "certs/cka/4.1/en/exercises.md:161",
+              "certs/cka/4.1/en/exercises.md:181",
+              "certs/cka/4.1/es/exercises.md:197",
+              "certs/cka/4.1/es/exercises.md:201",
+              "certs/cka/4.1/es/exercises.md:206",
+              "certs/cka/4.1/es/exercises.md:226",
+              "certs/cka/4.1/es/exercises.md:243"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.3",
+          "planned_files": [
+            "certs/cka/4.2/en/content.md",
+            "certs/cka/4.2/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Create and manage Kubernetes clusters using kubeadm",
+          "topic": "4.2",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 2,
+            "technical": [
+              "certs/cka/4.2/en/content.md:64",
+              "certs/cka/4.2/en/content.md:188",
+              "certs/cka/4.2/en/content.md:197",
+              "certs/cka/4.2/en/content.md:212",
+              "certs/cka/4.2/en/content.md:222",
+              "certs/cka/4.2/es/content.md:62",
+              "certs/cka/4.2/es/content.md:191",
+              "certs/cka/4.2/es/content.md:201",
+              "certs/cka/4.2/es/content.md:203",
+              "certs/cka/4.2/es/content.md:205",
+              "certs/cka/4.2/es/content.md:206",
+              "certs/cka/4.2/es/content.md:207",
+              "certs/cka/4.2/es/content.md:208",
+              "certs/cka/4.2/es/content.md:212",
+              "certs/cka/4.2/es/content.md:217",
+              "certs/cka/4.2/es/content.md:232",
+              "certs/cka/4.2/es/content.md:242",
+              "certs/cka/4.2/es/content.md:267"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.4",
+          "planned_files": [
+            "certs/cka/4.3/en/content.md",
+            "certs/cka/4.3/en/exercises.md",
+            "certs/cka/4.3/es/content.md",
+            "certs/cka/4.3/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Manage the lifecycle of Kubernetes clusters",
+          "topic": "4.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cka/4.3/en/content.md:18",
+              "certs/cka/4.3/en/content.md:38",
+              "certs/cka/4.3/en/content.md:39",
+              "certs/cka/4.3/en/content.md:47",
+              "certs/cka/4.3/en/content.md:58",
+              "certs/cka/4.3/en/content.md:62",
+              "certs/cka/4.3/en/content.md:64",
+              "certs/cka/4.3/en/content.md:65",
+              "certs/cka/4.3/en/content.md:70",
+              "certs/cka/4.3/en/content.md:74",
+              "certs/cka/4.3/en/content.md:97",
+              "certs/cka/4.3/en/content.md:120",
+              "certs/cka/4.3/en/content.md:126",
+              "certs/cka/4.3/en/content.md:145",
+              "certs/cka/4.3/en/content.md:146",
+              "certs/cka/4.3/en/content.md:147",
+              "certs/cka/4.3/en/exercises.md:27",
+              "certs/cka/4.3/en/exercises.md:66",
+              "certs/cka/4.3/en/exercises.md:74",
+              "certs/cka/4.3/en/exercises.md:92",
+              "certs/cka/4.3/en/exercises.md:112",
+              "certs/cka/4.3/en/exercises.md:117",
+              "certs/cka/4.3/es/content.md:9",
+              "certs/cka/4.3/es/content.md:16",
+              "certs/cka/4.3/es/content.md:34",
+              "certs/cka/4.3/es/content.md:35",
+              "certs/cka/4.3/es/content.md:43",
+              "certs/cka/4.3/es/content.md:54",
+              "certs/cka/4.3/es/content.md:58",
+              "certs/cka/4.3/es/content.md:59",
+              "certs/cka/4.3/es/content.md:60",
+              "certs/cka/4.3/es/content.md:61",
+              "certs/cka/4.3/es/content.md:66",
+              "certs/cka/4.3/es/content.md:70",
+              "certs/cka/4.3/es/content.md:93",
+              "certs/cka/4.3/es/content.md:116",
+              "certs/cka/4.3/es/content.md:122",
+              "certs/cka/4.3/es/content.md:141",
+              "certs/cka/4.3/es/content.md:142",
+              "certs/cka/4.3/es/content.md:143",
+              "certs/cka/4.3/es/exercises.md:29",
+              "certs/cka/4.3/es/exercises.md:66",
+              "certs/cka/4.3/es/exercises.md:69",
+              "certs/cka/4.3/es/exercises.md:77",
+              "certs/cka/4.3/es/exercises.md:98",
+              "certs/cka/4.3/es/exercises.md:129",
+              "certs/cka/4.3/es/exercises.md:137"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.5",
+          "planned_files": [
+            "certs/cka/4.4/en/content.md",
+            "certs/cka/4.4/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implement and configure a highly-available control plane",
+          "topic": "4.4",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": [
+              "certs/cka/4.4/en/content.md:147",
+              "certs/cka/4.4/en/content.md:148",
+              "certs/cka/4.4/en/content.md:149",
+              "certs/cka/4.4/en/content.md:150",
+              "certs/cka/4.4/es/content.md:140",
+              "certs/cka/4.4/es/content.md:141",
+              "certs/cka/4.4/es/content.md:142",
+              "certs/cka/4.4/es/content.md:143"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.6",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Helm and Kustomize to install cluster components",
+          "topic": "4.5",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.7",
+          "planned_files": [
+            "certs/cka/4.6/es/content.md",
+            "certs/cka/4.6/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand extension interfaces (CNI, CSI, CRI, etc.)",
+          "topic": "4.6",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": [
+              "certs/cka/4.6/es/content.md:80",
+              "certs/cka/4.6/es/content.md:81",
+              "certs/cka/4.6/es/exercises.md:3"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Architecture, Installation and Configuration",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.8",
+          "planned_files": [
+            "certs/cka/4.7/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand CRDs, install and configure operators",
+          "topic": "4.7",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cka/4.7/es/content.md:238"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand connectivity between Pods",
+          "topic": "5.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Define and enforce Network Policies",
+          "topic": "5.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use ClusterIP, NodePort, LoadBalancer service types and endpoints",
+          "topic": "5.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use the Gateway API to manage Ingress traffic",
+          "topic": "5.4",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.5",
+          "planned_files": [
+            "certs/cka/5.5/es/content.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Know how to use Ingress controllers and Ingress resources",
+          "topic": "5.5",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cka/5.5/es/content.md:235"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Servicing and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.6",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand and use CoreDNS",
+          "topic": "5.6",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/cka.md",
+        "sha256": "26f02fa23273a2c237eff7f014e31aaf965ccc3a2707ae9470730439a53cde38",
+        "version": "1.35"
+      },
+      "upstream": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Implement storage classes and dynamic volume provisioning"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Configure volume types, access modes and reclaim policies"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Manage persistent volumes and persistent volume claims"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Troubleshoot clusters and nodes"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Troubleshoot cluster components"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Monitor cluster and application resource usage"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Manage and evaluate container output streams"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "2.5",
+              "similarity": 1.0,
+              "text": "Troubleshoot services and networking"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Understand application deployments and how to perform rolling update and rollbacks"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Use ConfigMaps and Secrets to configure applications"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Configure workload autoscaling"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Understand the primitives used to create robust, self-healing, application deployments"
+            },
+            {
+              "new_id": "3.5",
+              "old_id": "3.5",
+              "similarity": 1.0,
+              "text": "Configure Pod admission and scheduling (limits, node affinity, etc.)"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Manage role based access control (RBAC)"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Prepare underlying infrastructure for installing a Kubernetes cluster"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Create and manage Kubernetes clusters using kubeadm"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Manage the lifecycle of Kubernetes clusters"
+            },
+            {
+              "new_id": "4.5",
+              "old_id": "4.5",
+              "similarity": 1.0,
+              "text": "Implement and configure a highly-available control plane"
+            },
+            {
+              "new_id": "4.6",
+              "old_id": "4.6",
+              "similarity": 1.0,
+              "text": "Use Helm and Kustomize to install cluster components"
+            },
+            {
+              "new_id": "4.7",
+              "old_id": "4.7",
+              "similarity": 1.0,
+              "text": "Understand extension interfaces (CNI, CSI, CRI, etc.)"
+            },
+            {
+              "new_id": "4.8",
+              "old_id": "4.8",
+              "similarity": 1.0,
+              "text": "Understand CRDs, install and configure operators"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Understand connectivity between Pods"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Define and enforce Network Policies"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use ClusterIP, NodePort, LoadBalancer service types and endpoints"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Use the Gateway API to manage Ingress traffic"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "5.5",
+              "similarity": 1.0,
+              "text": "Know how to use Ingress controllers and Ingress resources"
+            },
+            {
+              "new_id": "5.6",
+              "old_id": "5.6",
+              "similarity": 1.0,
+              "text": "Understand and use CoreDNS"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 27,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "upstream_base": {
+        "file": "syllabi/cka/v1.35.yaml",
+        "sha256": "d84cd4b3fbc10124bbc4a9a9f7ce2a1bc5a940365ca2ae0a067f75577ef07691",
+        "source": {
+          "commit": "008b73c0ac99d04abf0d95bf7803fc5d147da54a",
+          "committed": "2026-03-03",
+          "path": "CKA_Curriculum_v1.35.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c",
+          "url": "https://github.com/cncf/curriculum/raw/008b73c0ac99d04abf0d95bf7803fc5d147da54a/CKA_Curriculum_v1.35.pdf"
+        },
+        "tree_sha256": "1e485720b91222245e79237faef624a47d058b33a1abe5948fbeda07f194e799",
+        "version": "1.35"
+      }
+    },
+    "ckad": {
+      "cert": "ckad",
+      "counts": {
+        "keep": 22,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 2
+      },
+      "drift": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": false,
+        "new": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.35"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [
+            {
+              "from_domain": "Application Deployment",
+              "new_id": "5.1",
+              "old_id": "2.4",
+              "similarity": 0.9818,
+              "text": "Understand API depreciations",
+              "to_domain": "Application Observability and Maintenance"
+            },
+            {
+              "from_domain": "Services and Networking",
+              "new_id": "3.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Kustomize",
+              "to_domain": "Application Deployment"
+            }
+          ],
+          "removed": [],
+          "reworded": [
+            {
+              "new": "Understand API depreciations",
+              "new_id": "5.1",
+              "old": "Understand API deprecations",
+              "old_id": "2.4",
+              "similarity": 0.9818
+            }
+          ],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Define, build and modify container images"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Choose and use the right workload resource (Deployment, DaemonSet, CronJob, etc.)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Understand multi-container Pod design patterns (e.g. sidecar, init and others)"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Utilize persistent and ephemeral volumes"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Use Kubernetes primitives to implement common deployment strategies (e.g. blue/green or canary)"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Understand Deployments and how to perform rolling updates"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Use the Helm package manager to deploy existing packages"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Implement probes and health checks"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Use built-in CLI tools to monitor Kubernetes applications"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Utilize container logs"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Debugging in Kubernetes"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Discover and use resources that extend Kubernetes (CRD, Operators)"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Understand authentication, authorization and admission control"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Understand requests, limits, quotas"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Define resource requirements"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "4.5",
+              "similarity": 1.0,
+              "text": "Understand ConfigMaps"
+            },
+            {
+              "new_id": "2.6",
+              "old_id": "4.6",
+              "similarity": 1.0,
+              "text": "Create & consume Secrets"
+            },
+            {
+              "new_id": "2.7",
+              "old_id": "4.7",
+              "similarity": 1.0,
+              "text": "Understand ServiceAccounts"
+            },
+            {
+              "new_id": "2.8",
+              "old_id": "4.8",
+              "similarity": 1.0,
+              "text": "Understand Application Security (SecurityContexts, Capabilities, etc.)"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Demonstrate basic understanding of NetworkPolicies"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Provide and troubleshoot access to applications via services"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use Ingress rules to expose applications"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "efficiency": {
+        "planned_files": 8,
+        "sections_to_edit": 4,
+        "topic_files": 192,
+        "version_lines": {
+          "curriculum": 89,
+          "label": 24,
+          "technical": 0
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": false,
+        "new": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [
+            {
+              "from_domain": "Application Deployment",
+              "new_id": "5.1",
+              "old_id": "2.4",
+              "similarity": 0.9818,
+              "text": "Understand API depreciations",
+              "to_domain": "Application Observability and Maintenance"
+            },
+            {
+              "from_domain": "Services and Networking",
+              "new_id": "3.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Kustomize",
+              "to_domain": "Application Deployment"
+            }
+          ],
+          "removed": [],
+          "reworded": [
+            {
+              "new": "Understand API depreciations",
+              "new_id": "5.1",
+              "old": "Understand API deprecations",
+              "old_id": "2.4",
+              "similarity": 0.9818
+            }
+          ],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Define, build and modify container images"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Choose and use the right workload resource (Deployment, DaemonSet, CronJob, etc.)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Understand multi-container Pod design patterns (e.g. sidecar, init and others)"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Utilize persistent and ephemeral volumes"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Use Kubernetes primitives to implement common deployment strategies (e.g. blue/green or canary)"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Understand Deployments and how to perform rolling updates"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Use the Helm package manager to deploy existing packages"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Implement probes and health checks"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Use built-in CLI tools to monitor Kubernetes applications"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Utilize container logs"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Debugging in Kubernetes"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Discover and use resources that extend Kubernetes (CRD, Operators)"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Understand authentication, authorization and admission control"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Understand requests, limits, quotas"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Define resource requirements"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "4.5",
+              "similarity": 1.0,
+              "text": "Understand ConfigMaps"
+            },
+            {
+              "new_id": "2.6",
+              "old_id": "4.6",
+              "similarity": 1.0,
+              "text": "Create & consume Secrets"
+            },
+            {
+              "new_id": "2.7",
+              "old_id": "4.7",
+              "similarity": 1.0,
+              "text": "Understand ServiceAccounts"
+            },
+            {
+              "new_id": "2.8",
+              "old_id": "4.8",
+              "similarity": 1.0,
+              "text": "Understand Application Security (SecurityContexts, Capabilities, etc.)"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Demonstrate basic understanding of NetworkPolicies"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Provide and troubleshoot access to applications via services"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use Ingress rules to expose applications"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/ckad/v1.37.yaml",
+        "sha256": "f8337fc98d18cb5a85b9bac227ed62293713e41413316a96a58fd3304660b6ed",
+        "source": {
+          "commit": "f423fa49c0cab0820533babd95b37ebe8fd89e67",
+          "committed": "2026-10-01",
+          "path": "CKAD_Curriculum_v1.37.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "7736d2f0291239d62e9fc618304413ee9b6e53fc4580aac70bf4328203c1c210",
+          "url": "https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf"
+        },
+        "tree_sha256": "903999460dccab7054accd3d71f6c694f25c79fdfe3381ca30cfe1c62e492f23",
+        "version": "1.37"
+      },
+      "topics": [
+        {
+          "class": "keep",
+          "domain": "Application Design and Build",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Define, build and modify container images",
+          "topic": "1.1",
+          "version_lines": {
+            "curriculum": 5,
+            "label": 3,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Design and Build",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Choose and use the right workload resource (Deployment, DaemonSet, CronJob, etc.)",
+          "topic": "1.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 1,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Design and Build",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand multi-container Pod design patterns (e.g. sidecar, init and others)",
+          "topic": "1.3",
+          "version_lines": {
+            "curriculum": 5,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Design and Build",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Utilize persistent and ephemeral volumes",
+          "topic": "1.4",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Deployment",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Kubernetes primitives to implement common deployment strategies (e.g. blue/green or canary)",
+          "topic": "2.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Deployment",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand Deployments and how to perform rolling updates",
+          "topic": "2.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Deployment",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use the Helm package manager to deploy existing packages",
+          "topic": "2.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Application Deployment",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.1",
+          "planned_files": [
+            "certs/ckad/2.4/en/content.md",
+            "certs/ckad/2.4/en/exercises.md",
+            "certs/ckad/2.4/en/meta.yaml",
+            "certs/ckad/2.4/es/content.md",
+            "certs/ckad/2.4/es/exercises.md",
+            "certs/ckad/2.4/es/meta.yaml"
+          ],
+          "reasons": [
+            "objective reworded (similarity 0.9818)",
+            "moved: Application Deployment -> Application Observability and Maintenance"
+          ],
+          "sections": [
+            {
+              "file": "certs/ckad/2.4/en/content.md",
+              "heading": "2.4 Understand API deprecations",
+              "line": 1,
+              "why": [
+                "old objective title"
+              ]
+            },
+            {
+              "file": "certs/ckad/2.4/en/exercises.md",
+              "heading": "Exercises: 2.4 Understand API deprecations (CKAD v1.35)",
+              "line": 1,
+              "why": [
+                "old objective title"
+              ]
+            },
+            {
+              "file": "certs/ckad/2.4/es/content.md",
+              "heading": "2.4 Understand API deprecations",
+              "line": 1,
+              "why": [
+                "old objective title"
+              ]
+            },
+            {
+              "file": "certs/ckad/2.4/es/exercises.md",
+              "heading": "Ejercicios: 2.4 Understand API deprecations (CKAD v1.35)",
+              "line": 1,
+              "why": [
+                "old objective title"
+              ]
+            }
+          ],
+          "similarity": 0.9818,
+          "title": "Understand API deprecations",
+          "topic": "2.4",
+          "version_lines": {
+            "curriculum": 2,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Observability and Maintenance",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implement probes and health checks",
+          "topic": "3.1",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Observability and Maintenance",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use built-in CLI tools to monitor Kubernetes applications",
+          "topic": "3.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Observability and Maintenance",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Utilize container logs",
+          "topic": "3.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Observability and Maintenance",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Debugging in Kubernetes",
+          "topic": "3.4",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Discover and use resources that extend Kubernetes (CRD, Operators)",
+          "topic": "4.1",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand authentication, authorization and admission control",
+          "topic": "4.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand requests, limits, quotas",
+          "topic": "4.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Define resource requirements",
+          "topic": "4.4",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand ConfigMaps",
+          "topic": "4.5",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.6",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Create & consume Secrets",
+          "topic": "4.6",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.7",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand ServiceAccounts",
+          "topic": "4.7",
+          "version_lines": {
+            "curriculum": 2,
+            "label": 4,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Application Environment, Configuration and Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.8",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand Application Security (SecurityContexts, Capabilities, etc.)",
+          "topic": "4.8",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Services and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Demonstrate basic understanding of NetworkPolicies",
+          "topic": "5.1",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Services and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Provide and troubleshoot access to applications via services",
+          "topic": "5.2",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Services and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Ingress rules to expose applications",
+          "topic": "5.3",
+          "version_lines": {
+            "curriculum": 4,
+            "label": 2,
+            "technical": []
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Services and Networking",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.4",
+          "planned_files": [
+            "certs/ckad/5.4/en/meta.yaml",
+            "certs/ckad/5.4/es/meta.yaml"
+          ],
+          "reasons": [
+            "moved: Services and Networking -> Application Deployment"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Kustomize",
+          "topic": "5.4",
+          "version_lines": {
+            "curriculum": 3,
+            "label": 0,
+            "technical": []
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/ckad.md",
+        "sha256": "f2ca2261d8eea6c65de8ba978914293cbbd28be23e749c8f04ea1de56b7bfeec",
+        "version": "1.35"
+      },
+      "upstream": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Define, build and modify container images"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Choose and use the right workload resource (Deployment, DaemonSet, CronJob, etc.)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Understand multi-container Pod design patterns (e.g. sidecar, init and others)"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Utilize persistent and ephemeral volumes"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Discover and use resources that extend Kubernetes (CRD, Operators)"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Understand authentication, authorization and admission control"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Understand requests, limits, quotas"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Define resource requirements"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "2.5",
+              "similarity": 1.0,
+              "text": "Understand ConfigMaps"
+            },
+            {
+              "new_id": "2.6",
+              "old_id": "2.6",
+              "similarity": 1.0,
+              "text": "Create & consume Secrets"
+            },
+            {
+              "new_id": "2.7",
+              "old_id": "2.7",
+              "similarity": 1.0,
+              "text": "Understand ServiceAccounts"
+            },
+            {
+              "new_id": "2.8",
+              "old_id": "2.8",
+              "similarity": 1.0,
+              "text": "Understand Application Security (SecurityContexts, Capabilities, etc.)"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Use Kubernetes primitives to implement common deployment strategies (e.g. blue/green or canary)"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Understand Deployments and how to perform rolling updates"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Use the Helm package manager to deploy existing packages"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Kustomize"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Demonstrate basic understanding of NetworkPolicies"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Provide and troubleshoot access to applications via services"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Use Ingress rules to expose applications"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Understand API depreciations"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Implement probes and health checks"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Use built-in CLI tools to monitor Kubernetes applications"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Utilize container logs"
+            },
+            {
+              "new_id": "5.5",
+              "old_id": "5.5",
+              "similarity": 1.0,
+              "text": "Debugging in Kubernetes"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 24,
+          "version": "1.35"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "upstream_base": {
+        "file": "syllabi/ckad/v1.35.yaml",
+        "sha256": "90dd115a8741b64bf78b24292711eee49071f1d145302f3877e52e9241835d0a",
+        "source": {
+          "commit": "d50919e585e1b643d91bdfb738f995544fbb7e90",
+          "committed": "2026-02-25",
+          "path": "CKAD_Curriculum_v1.35.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "7736d2f0291239d62e9fc618304413ee9b6e53fc4580aac70bf4328203c1c210",
+          "url": "https://github.com/cncf/curriculum/raw/d50919e585e1b643d91bdfb738f995544fbb7e90/CKAD_Curriculum_v1.35.pdf"
+        },
+        "tree_sha256": "903999460dccab7054accd3d71f6c694f25c79fdfe3381ca30cfe1c62e492f23",
+        "version": "1.35"
+      }
+    }
+  },
+  "issue": 51,
+  "milestone": "CKA & CKAD v1.37 upgrade",
+  "planned_files": {
+    "keep": [],
+    "new": [
+      "{t}/**"
+    ],
+    "regenerate": [
+      "{t}/**"
+    ],
+    "retire": [
+      "{t}/**"
+    ],
+    "revalidate": [
+      "{t}/{lang}/meta.yaml"
+    ]
+  },
+  "rules": [
+    {
+      "action": "archive the topic directory; redirect its links",
+      "class": "retire",
+      "rule": "its objective is not in the new syllabus (removed, or below MATCH similarity to every new one)"
+    },
+    {
+      "action": "one PR through the whole content process (content, exercises, lab, translations)",
+      "class": "regenerate",
+      "rule": "its objective changed: best match has MATCH (0.6) <= similarity < REWORD (0.9)"
+    },
+    {
+      "action": "re-run every check against the new text; record the result in meta.yaml; a failed check makes it regenerate",
+      "class": "revalidate",
+      "rule": "its objective was reworded (REWORD <= similarity < 1), moved to another domain, or its domain's published weight changed"
+    },
+    {
+      "action": "no content change; only its listed technical version lines may be rewritten in place, by the version bump",
+      "class": "keep",
+      "rule": "its objective text, domain and domain weight are identical"
+    },
+    {
+      "action": "a new topic directory, through the whole content process",
+      "class": "new",
+      "rule": "an objective of the new syllabus that no topic covers"
+    }
+  ],
+  "spec": "docs/upgrades/cka-ckad-1.37.yaml",
+  "thresholds": {
+    "match": 0.6,
+    "reword": 0.9
+  },
+  "upgrade": "CKA & CKAD v1.37"
+}

@@ -360,5 +360,32 @@ class Guard(unittest.TestCase):
             self.assertEqual(cd.provenance(root, plan, ["certs/ckad/2.4/es/meta.yaml"]), [])
 
 
+# ==== render ====
+
+class CommittedUpgrade(unittest.TestCase):
+    """docs/upgrades/*.plan.json is what its spec and the committed syllabi produce, and renders deterministically.
+
+    Classes, counts and diffs are compared, not the whole file: the plan also lists each topic's languages and
+    version lines, and a later translation must not fail every unrelated PR (`plan --check` compares the bytes)."""
+
+    def test_committed_plans_match_their_inputs(self):
+        specs = sorted((REPO / "docs" / "upgrades").glob("*.yaml"))
+        if not specs:
+            self.skipTest("no upgrade spec committed")
+        for spec in specs:
+            committed = json.loads(spec.with_suffix(".plan.json").read_text(encoding="utf-8"))
+            fresh = cd.plan(REPO, str(spec.relative_to(REPO)))
+            for cert, c in fresh["certs"].items():
+                old = committed["certs"][cert]
+                with self.subTest(spec=spec.name, cert=cert):
+                    self.assertEqual(c["counts"], old["counts"])
+                    self.assertEqual([(t["topic"], t["class"], t["maps_to"]) for t in c["topics"]],
+                                     [(t["topic"], t["class"], t["maps_to"]) for t in old["topics"]])
+                    self.assertEqual((c["impact"], c.get("upstream"), c.get("drift")),
+                                     (old["impact"], old.get("upstream"), old.get("drift")))
+            self.assertEqual(cd.render(committed), cd.render(json.loads(json.dumps(committed))))
+            self.assertIn("```mermaid", cd.render(committed))
+
+
 if __name__ == "__main__":
     unittest.main()
