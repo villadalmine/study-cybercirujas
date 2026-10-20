@@ -390,6 +390,17 @@ release-please keeps one open Release PR from the Conventional Commit titles;
 merging it is the human gate that tags `vX.Y.Z` and publishes the image
 ([CONTRIBUTING → Releases](../CONTRIBUTING.md#releases)).
 
+**How does a curriculum upgrade work?**
+When a vendor publishes a new curriculum version, the cert gets an upgrade milestone
+(`<CERT> v<version> upgrade`) and the process of
+[#63](https://github.com/villadalmine/study-cybercirujas/issues/63) runs, with no model until phase 2:
+`scripts/curriculum_diff.py extract` freezes the official PDF, pinned by commit and hashed, in `syllabi/`;
+`plan` diffs it against the frozen syllabus the material was built on and gives every topic one class by rules in
+the code (`keep`, `revalidate`, `regenerate`, `new`, `retire`), down to the sections and version lines in scope; the
+plan and its report live in `docs/upgrades/` and CI checks they are what their inputs produce. Each phase-2 PR may
+change only what the plan lists (`guard`, with provenance in `meta.yaml`), and the final PR moves `tracked_version`.
+The first run, CKA & CKAD v1.37, regenerated nothing: [docs/upgrades/README.md](upgrades/README.md).
+
 **What are milestones for?**
 `vX.Y.0` milestones plan a release. `<CERT> <version> upgrade` milestones are
 the only place a tracked exam version may change, enforced by `check_pr.py`

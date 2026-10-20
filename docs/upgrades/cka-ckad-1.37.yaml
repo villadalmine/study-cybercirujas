@@ -1,0 +1,22 @@
+# Upgrade spec for scripts/curriculum_diff.py plan (#63). The plan and the report next to this file are
+# generated from it and from the files it names; nothing in them is written by hand.
+#
+#   scripts/curriculum_diff.py plan docs/upgrades/cka-ckad-1.37.yaml
+#   scripts/curriculum_diff.py render docs/upgrades/cka-ckad-1.37.plan.json -o docs/upgrades/cka-ckad-1.37.md
+#
+# tracked:       the frozen syllabus the material was built against (default certs/<cert>.md)
+# target:        the new curriculum, frozen from the official PDF pinned by commit
+# upstream_base: the old curriculum frozen from ITS official PDF, so the report can tell what the vendor
+#                changed apart from where our frozen file already differed from its own PDF
+upgrade: CKA & CKAD v1.37
+milestone: CKA & CKAD v1.37 upgrade
+issue: 51
+certs:
+  cka:
+    tracked: certs/cka.md
+    target: syllabi/cka/v1.37.yaml
+    upstream_base: syllabi/cka/v1.35.yaml
+  ckad:
+    tracked: certs/ckad.md
+    target: syllabi/ckad/v1.37.yaml
+    upstream_base: syllabi/ckad/v1.35.yaml
