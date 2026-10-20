@@ -83,6 +83,9 @@ def test_banner_wording():
     ev = {"env": {"image": "ubuntu", "os": "24.04", "parity": "assumed"}, "runner": {"url": "https://ci/1"}, "date": "2026-10-16"}
     assert "Tested:** ubuntu, Ubuntu 24.04 on 2026-10-16 ([run](https://ci/1))" in kc_meta.banner(p, ev)
     assert "not yet measured on Killercoda" in kc_meta.banner(p, ev)
+    part = kc_meta.banner(p, dict(ev, env=dict(ev["env"], parity="partially-measured")))
+    assert "Environment measured on Killercoda (Cilium version assumed)." in part
+    assert "Environment measured on Killercoda." in kc_meta.banner(p, dict(ev, env=dict(ev["env"], parity="measured")))
 
 
 def test_banner_human_tested_line():

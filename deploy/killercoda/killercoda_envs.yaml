@@ -5,26 +5,41 @@
 #                     about images, versions or resources: checked 2026-10-16)
 #         unmeasured = unknown: run the probe scenario (probe/, published in the mirror) on Killercoda and paste its output here
 #         measured  = read from a real Killercoda session (who and when in `measured_by`)
-# While anything an image depends on is not `measured`, evidence records parity: assumed, never measured.
+# Evidence records parity: measured only when every fact of the image (and of today's Kubernetes row) is `measured`.
+# status of 2026-10-19: both images measured by the probe run by @villadalmine (issue #99); the Cilium version is assumed (per row), so parity is `partially-measured`.
 schema: 1
 documented_limits:   # killercoda.com/faq, /pricing (2026-10-16); nothing numeric for creators is documented
   session: "1 hour on the free plan, 4 hours with a paid membership (FAQ); no daily or monthly usage limits (FAQ)"
   creators: "FREE can create public scenarios and share them (pricing); no limit on scenarios, repo size, assets or background-script time is documented: ask support"
   terms: "commercial use, branding and links are not stated on the pages we can read (terms/AGB are a separate document): ask support before any banner"
 images:
+  # source: measured (probe run by @villadalmine, 2026-10-19). The first version of this file ASSUMED kubeadm 1.36.5 with flannel;
+  # the probe showed 1.36.1 with Cilium. Lesson: probe first, never assume (docs/RUN-A-LAB-ANYWHERE.md "Probe first").
   ubuntu:
-    os: {name: Ubuntu, version: '24.04', status: reported}
-    resources: {status: unmeasured}
+    source: measured (probe run by @villadalmine, 2026-10-19)
+    os: {name: Ubuntu, version: '24.04', point_release: '24.04.5 LTS', kernel: 6.8.0-146-generic, arch: amd64, status: measured}
+    resources: {cpu: 1, ram_total_mib: 1903, ram_available_mib: 1499, disk: 19G, disk_free: 13G, status: measured}
+    tools: {docker: 29.1.3, podman: 4.9.3, python3: 3.12.3, systemd: running, status: measured}
   kubernetes-kubeadm-1node:
-    os: {name: Ubuntu, version: '24.04', status: reported}
+    source: measured (probe run by @villadalmine, 2026-10-19)
+    os: {name: Ubuntu, version: '24.04', point_release: '24.04.5 LTS', kernel: 6.8.0-146-generic, arch: amd64, status: measured}
     kubernetes:        # the version Killercoda runs on a date; the gate picks the row that contains today
-      - {from: '2000-01-01', until: '2026-10-25', minor: '1.36', patch: '1.36.5', status: reported}
-      - {from: '2026-10-25', minor: '1.37', patch: '1.37.1', status: reported}
-    runtime: {name: containerd, status: unmeasured}
-    cni: {name: flannel, version: v0.28.10, status: unmeasured}   # assumed for the test; Killercoda's real CNI is not documented
-    node_name: {value: controlplane, status: unmeasured}
-    default_storageclass: {status: unmeasured}                     # does the image ship local-path? ask the probe
-    resources: {status: unmeasured}
+      # 1.36.1 measured (kubectl client v1.36.1, server v1.36.1, Kustomize v5.8.1). The 1.37 switch date is as reported, not measured.
+      # cilium: the release pinned for that Kubernetes row. `k8s` lists the minors its docs (docs.cilium.io, Kubernetes
+      # compatibility, checked 2026-10-20) say it supports; a row whose minor is not listed fails loudly (resolve_env).
+      # v1.20 lists 1.33-1.36 only: no Cilium release lists 1.37 yet, so the 1.37 row cannot be proven until one does.
+      - {from: '2000-01-01', until: '2026-10-25', minor: '1.36', patch: '1.36.1', status: measured,
+         cilium: {version: v1.20.3, k8s: ['1.33', '1.34', '1.35', '1.36'], status: assumed}}
+      - {from: '2026-10-25', minor: '1.37', patch: '1.37.1', status: reported,
+         cilium: {version: v1.20.3, k8s: ['1.33', '1.34', '1.35', '1.36'], status: assumed}}
+    runtime: {name: containerd, version: 2.2.1, crictl: v1.37.0, status: measured}
+    # Cilium measured (pods cilium, cilium-envoy, cilium-operator; conflist 05-cilium.conflist; cilium-cni in /opt/cni/bin).
+    # The probe did not print the Cilium VERSION: it is pinned per Kubernetes row below (assumed), not here.
+    cni: {name: cilium, cli: v0.20.1, conflist: 05-cilium.conflist, status: measured}
+    node_name: {value: controlplane, ip: 172.30.1.2, status: measured}
+    default_storageclass: {name: local-path, provisioner: rancher.io/local-path, reclaim: Delete, binding: WaitForFirstConsumer, status: measured}
+    resources: {cpu: 1, ram_total_mib: 2246, ram_available_mib: 947, disk: 19G, disk_free: 7.4G, status: measured}
+    tools: {docker: 29.1.3, podman: 4.9.3, python3: 3.12.3, systemd: running, status: measured}
 capabilities:          # setup a lab asks for (tracks.yaml: needs); added to background.sh only when missing
   default-storageclass:
     script: |

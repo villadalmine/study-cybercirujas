@@ -2,7 +2,7 @@
 
 Meant for a machine that looks like a Killercoda host: an Ubuntu 24.04 VM where you are root (a GitHub-hosted
 ubuntu-24.04 runner, or `make killercoda-test` in a local VM). For the kubernetes image the cluster comes from
-deploy/killercoda/bootstrap-kubeadm.sh with the versions pinned in killercoda_envs.yaml.
+deploy/killercoda/bootstrap-kubeadm.sh with the versions pinned in killercoda_envs.yaml (measured on Killercoda: kubeadm + Cilium + containerd 2.2 + local-path).
 
 Flow: assets -> /root, background.sh, wait for /tmp/finished, verify.sh must FAIL, the reference fix
 (deploy/killercoda/fixes/<cert>-<topic>.sh), verify.sh must PASS, cleanup.sh twice (it must be idempotent).
@@ -46,9 +46,30 @@ def resolve_env(image: str, today: str) -> dict:
     for k in ("runtime", "cni"):
         if k in spec_:
             env[k] = spec_[k]["name"] + (" " + spec_[k]["version"] if "version" in spec_[k] else "")
-    facts = [v for v in spec_.values() if isinstance(v, dict) and "status" in v] + spec_.get("kubernetes", [])
-    env["parity"] = "measured" if all(f["status"] == "measured" for f in facts) else "assumed"
+    facts = [v for v in spec_.values() if isinstance(v, dict) and "status" in v] + ([row] if "kubernetes" in spec_ else [])
+    if "kubernetes" in spec_:
+        cil = row.get("cilium") or {}
+        if row["minor"] not in cil.get("k8s", []) or not cil.get("version"):
+            raise LookupError(f"no Cilium release in killercoda_envs.yaml supports Kubernetes {row['minor']} (row {row['from']}): "
+                              "pin one whose docs list it, then re-prove")
+        env["cni"] = f"cilium {cil['version']}"
+        facts.append(cil)
+    statuses = [f["status"] for f in facts]
+    env["parity"] = ("measured" if all(s == "measured" for s in statuses)
+                     else "partially-measured" if "measured" in statuses and "assumed" in statuses and "reported" not in statuses
+                     else "assumed")
     return env
+
+
+# One image per line. The separator is the two characters backslash-n, which kubectl's jsonpath turns into a newline;
+# a real newline inside the quoted string makes kubectl fail with "unterminated quoted string" (found in review of #162).
+DS_IMAGES = r"jsonpath={range .items[*]}{.spec.template.spec.containers[0].image}{'\n'}{end}"
+
+
+def parse_cni(images: str) -> str:
+    """'cilium <tag>' from the image lines of `kubectl get ds -A` (digest dropped), or '' when no Cilium daemonset is there."""
+    cni = next((i for i in images.split() if "/cilium/cilium:" in i), "")
+    return f"cilium {cni.partition('@')[0].rpartition(':')[2]}" if cni else ""
 
 
 def measure(image: str) -> dict:
@@ -61,10 +82,9 @@ def measure(image: str) -> dict:
             return p.stdout if p.returncode == 0 else ""
         server = (json.loads(run("kubectl", "version", "-o", "json") or "{}").get("serverVersion") or {}).get("gitVersion", "")
         env["kubernetes"] = server.lstrip("v")
-        env["runtime"] = "containerd" if run("containerd", "--version").startswith("containerd") else ""
-        images = run("kubectl", "get", "ds", "-A", "-o", "jsonpath={range .items[*]}{.spec.template.spec.containers[0].image}{\"\\n\"}{end}")
-        flannel = next((i for i in images.split() if "flannel" in i), "")
-        env["cni"] = f"flannel {flannel.rpartition(':')[2]}" if flannel else ""
+        cver = run("containerd", "--version").split()
+        env["runtime"] = f"containerd {cver[-2].lstrip('v')}" if len(cver) >= 3 and cver[0] == "containerd" else ""
+        env["cni"] = parse_cni(run("kubectl", "get", "ds", "-A", "-o", DS_IMAGES))
     return env
 
 
@@ -124,10 +144,13 @@ def valid_for(ev: dict | None, files: dict[str, str], image: str, today: str) ->
     """The publish gate: a pass for THIS scenario and for the environment Killercoda runs today, on a measured basis or not."""
     if not ev or ev.get("result") != "pass" or ev.get("scenario_sha256") != sha256_of(files):
         return False
-    now, got = resolve_env(image, today), ev.get("env") or {}
-    # the MEASURED versions must be the ones Killercoda runs today (the runtime is compared by name only)
-    return all((got.get(k) or "").split(" ")[0] == v.split(" ")[0] if k == "runtime" else got.get(k) == v
-               for k, v in now.items() if k != "parity")
+    try:
+        now = resolve_env(image, today)
+    except LookupError:   # no Cilium for that Kubernetes row: nothing can be proven for it
+        return False
+    got = ev.get("env") or {}
+    # the MEASURED versions must be the ones Killercoda runs today (runtime and CNI by name and version)
+    return all(got.get(k) == v for k, v in now.items() if k != "parity")
 
 
 def today() -> str:

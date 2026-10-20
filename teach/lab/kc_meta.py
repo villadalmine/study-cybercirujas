@@ -135,7 +135,9 @@ def banner(prov: dict, ev: dict | None, human: dict | None = None) -> str:
         e = ev["env"]
         k8s = f", Kubernetes {e['kubernetes']}" if e.get("kubernetes") else ""
         link = f" ([run]({ev['runner']['url']}))" if ev["runner"].get("url") else ""
-        note = "" if e.get("parity") == "measured" else " Environment assumed from public reports, not yet measured on Killercoda."
+        note = {"measured": " Environment measured on Killercoda.",
+                "partially-measured": " Environment measured on Killercoda (Cilium version assumed)."}.get(
+            e.get("parity"), " Environment assumed from public reports, not yet measured on Killercoda.")
         out += f"> **Tested:** {e['image']}, Ubuntu {e['os']}{k8s} on {ev['date']}{link}: break, verify fails, fix, verify passes, cleanup.{note}\n"
     if human:
         out += f"> **Tested on Killercoda** by @{human['by']} on {human['date']}: a person ran this scenario there and it behaved.\n"

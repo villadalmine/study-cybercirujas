@@ -45,11 +45,13 @@ too, marked "not yet verified" in their intro.
 assets to `/root`, `background.sh`, wait for `/tmp/finished`, **`verify.sh` must fail**, the reference fix
 (`deploy/killercoda/fixes/<cert>-<topic>.sh`), **`verify.sh` must pass**, `cleanup.sh` twice. It writes
 `tested.json`: the sha256 of the scenario, the environment (image, OS, Kubernetes patch version, CNI) and its
-`parity` (`assumed` until the values in `deploy/killercoda/killercoda_envs.yaml` are `measured` on Killercoda), the
+`parity` (`measured`: the values in `deploy/killercoda/killercoda_envs.yaml` come from a probe run on Killercoda), the
 runner (CI run URL, or local host), the date and the result of each stage.
 
 - **CI:** `.github/workflows/killercoda-parity.yml` on a GitHub-hosted `ubuntu-24.04` runner (a VM). The k8s family
-  gets a kubeadm cluster at the version Killercoda runs today (`deploy/killercoda/bootstrap-kubeadm.sh`).
+  gets a kubeadm cluster like the one measured on Killercoda: 1.36.1, Cilium, containerd 2.2.1, local-path default
+  (`deploy/killercoda/bootstrap-kubeadm.sh`), with the runner limited to 1 CPU. RAM is not lowered (a runner has 16 GB; Killercoda
+  has about 2.2 GB), so out-of-memory behaviour is only proven on Killercoda itself.
 - **Locally:** an Ubuntu 24.04 VM where you are root (multipass, Incus `--vm`, or a cloud VM), then
   `make killercoda-test LAB=cka/1.1`. A WSL Ubuntu 24.04 works for the linux family.
 - **The gate:** `study-lab export --target killercoda --evidence DIR` keeps a scenario only if its `tested.json` is a
@@ -58,7 +60,16 @@ runner (CI run URL, or local host), the date and the result of each stage.
   Killercoda bump and the evidence no longer matches: the scenario is retested or not published. No evidence, no publish.
 - A lab without a reference fix in `deploy/killercoda/fixes/` cannot be proven, so it is not published.
 
-Known limits of the proof: `parity: assumed` (the image details below are not documented by Killercoda); the
+**Probe first (lesson of 2026-10-19, issue #99).** Killercoda documents nothing about its images, so the first version of
+`killercoda_envs.yaml` assumed kubeadm 1.36.5 with flannel. The probe scenarios (`deploy/killercoda/probe/`), run by hand,
+showed Kubernetes 1.36.1, **Cilium** (not flannel), containerd 2.2.1, local-path as default StorageClass, 1 CPU and about
+2 GB. Two assumptions, two errors, and every green parity run was proving a cluster that Killercoda does not run. Rule:
+before pinning any fact about a third-party environment, measure it with a probe and record who ran it and when
+(`source: measured`); anything not measured stays `reported` or `assumed`, and only a fully measured image yields
+`parity: measured` (`partially-measured` while the Cilium version, pinned per Kubernetes row, is assumed; a row whose minor no pinned Cilium lists fails loudly, which is the case of the 1.37 row today: from that date `--print-env` exits 2 and the publish plan leaves the k8s family out with a `::warning::` naming the reason, while the linux family is still proven and published; the mirror keeps its k8s files because publish is additive, but the root `structure.json` stops listing a course that has no valid evidence until a Cilium is pinned and re-proven; dry run: `study-lab test --target killercoda --plan --today 2026-10-26`, or the `today` input of the workflow). Still assumed: the Cilium version (the probe did not print it; v1.20.3 is the newest that supports
+Kubernetes 1.36) and the 1.37 switch date (as reported).
+
+Known limits of the proof: the Cilium version and the 1.37 switch are not measured; RAM is not constrained in CI; the
 scenario must still be run once by a human on Killercoda (`tested_on_killercoda`, later).
 
 ### What Killercoda documents about limits (checked 2026-10-16)
