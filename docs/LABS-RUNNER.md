@@ -124,6 +124,9 @@ ports: [{container: 8080}]   # published on 127.0.0.1
 limits: {ram_mb: 3072, cpus: 2}
 timeout: {up: 600, break: 300, verify: 120, cleanup: 300}
 hints: ["...", "..."]
+goals:                       # what the student has to fix, without the commands
+  fix: ["The CPU is busy on an idle box: stop the process for good.", "..."]
+  solved: what verify checks, in plain words
 level: beginner | intermediate | advanced
 origin: {kind: curated | community | generated, repo: ..., author: ..., generated_by: ...}
 derived_from: {syllabus: 'certs/cka.md#1.1', content: certs/cka/1.1/en/content.md, content_sha256: <chain hash>}  # labs in certs/: required (scripts/check_source_chain.py)
@@ -142,6 +145,10 @@ run without it refuses). The lab's `README.md`, the header of its `break_fix.sh`
 Killercoda intro repeat the same text (`teach/lab/safety.py`, `tests/test_lab_safety.py`).
 Today: AZ-900 2.2 and 2.3 (billable Azure resources, 2.2 with a public IP) and 2.4
 (edits `~/.azure`, `/etc/hosts` and a route).
+
+`goals` tells the student what to fix before they start, and what Check looks at. The Killercoda
+intro and *Fix it* step render it, and the lab's `README.md` carries the same text
+(`teach/lab/goals.py`; `tests/lab/test_export_killercoda.py` fails if they drift).
 
 New behaviour is added here, as metadata, never as runner code: CKA 3.4's
 script uses `check`/`clean` and reads `TEACH_PLAT_LAB_CONFIRMED`; CKA 3.5's

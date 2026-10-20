@@ -25,7 +25,7 @@ flowchart LR
 
 `study-lab export --target killercoda` reads `lab.yaml` and the lab script and writes, for each lab, a scenario:
 `intro` (with the lab's `break` as a background script; its symptom is printed in the terminal), a *Read the
-symptom* step, a *Fix it* step with the lab's hints and a **verify** that runs the lab's own `verify` mode
+symptom* step, a *Fix it* step with the lab's `goals` (also in the intro, when the lab declares them) and hints, and a **verify** that runs the lab's own `verify` mode
 (exit 0, plus `modes.verify.success.output_regex` when the lab declares one), and a *finish* page with the
 reference solution. The script is shipped as a scenario asset, with its commented solution removed from the
 file (it appears in *finish* instead). Each certification is a Killercoda course (`structure.json` and a
