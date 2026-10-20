@@ -374,7 +374,8 @@ const lvlName = { essentials: () => t('lvlEss'), associate: () => t('lvlAssoc'),
                   professional: () => t('lvlPro'), specialty: () => t('lvlSpec') };
 
 // ------------------------------------------------------- mini render de MD
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const inline = (s) => esc(s)
   .replace(/`([^`]+)`/g, '<code>$1</code>')
   .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -396,9 +397,11 @@ function md(text) {
     // así el <ol>/<ul> sigue numerando bien después del bloque.
     const fence = line.match(/^(\s*)```/);
     if (fence) { flush(); codeIndent = fence[1]; html += '<pre><code>'; inCode = true; continue; }
-    if (/^<\/?details>$/.test(line.trim()) || /^<summary>.*<\/summary>$/.test(line.trim())) {
-      flush(); closeList(); html += line.trim(); continue;
-    }
+    // only the literal <details>/</details> tags pass through; a <summary> line
+    // keeps its tags but its text goes through the same escaping as any other text
+    if (/^<\/?details>$/.test(line.trim())) { flush(); closeList(); html += line.trim(); continue; }
+    const sum = line.trim().match(/^<summary>(.*)<\/summary>$/);
+    if (sum) { flush(); closeList(); html += `<summary>${inline(sum[1])}</summary>`; continue; }
     const h = line.match(/^(#{1,6})\s+(.*)/);
     if (h) { flush(); closeList(); const l = Math.min(h[1].length + 1, 6);
              html += `<h${l}>${inline(h[2])}</h${l}>`; continue; }
@@ -431,15 +434,15 @@ function md(text) {
 const examOf = (id) => { const c = CERTS[id]; return c ? c.exam : id; };
 const nameOf = (id) => { const c = CERTS[id]; return c ? c.name : id; };
 const certChips = (cert) =>
-  (cert.vendor ? `<span class="chip">🏛 ${cert.vendor}</span>` : '') +
-  (cert.exam ? `<span class="chip">📝 ${cert.exam}</span>` : '') +
-  (cert.validity ? `<span class="chip">⏳ ${t('expires')}: ${cert.validity}</span>` : '') +
+  (cert.vendor ? `<span class="chip">🏛 ${esc(cert.vendor)}</span>` : '') +
+  (cert.exam ? `<span class="chip">📝 ${esc(cert.exam)}</span>` : '') +
+  (cert.validity ? `<span class="chip">⏳ ${t('expires')}: ${esc(cert.validity)}</span>` : '') +
   (cert.requires && cert.requires.length
     ? `<span class="chip req">${t('requires')} ${cert.requires.map(nameOf).join(', ')}</span>` : '') +
   (cert.renewed_by && cert.renewed_by.length
     ? `<span class="chip care">♻ ${t('renews')} ${cert.renewed_by.map(examOf).join(' / ')}</span>` : '') +
   (cert.curriculum_updated
-    ? `<span class="chip">📋 ${t('curriculum')}: ${cert.curriculum_updated}</span>` : '');
+    ? `<span class="chip">📋 ${t('curriculum')}: ${esc(cert.curriculum_updated)}</span>` : '');
 
 
 
@@ -479,7 +482,7 @@ async function showLanding() {
             `<div><span class="lvl">${lvlName[level] ? lvlName[level]() : level}</span></div><div class="grid">` +
             byCategory[category][vendor][level].map(([id, cert]) =>
               `<div class="cert" onclick="go(showCert,'${id}')">
-                 <strong>${cert.name}</strong>${certChips(cert)}
+                 <strong>${esc(cert.name)}</strong>${certChips(cert)}
                </div>`).join('') + '</div>'
           ).join('')
         ).join('');
@@ -490,7 +493,7 @@ async function showLanding() {
 const node = (id) => {
   const cert = CERTS[id] || { exam: id, name: id };
   const short = (cert.name || id).replace(/\s*\([^)]*\)\s*$/, '');
-  return `<div class="node" onclick="go(showCert,'${id}')"><strong>${cert.exam}</strong>
+  return `<div class="node" onclick="go(showCert,'${id}')"><strong>${esc(cert.exam)}</strong>
             <small>${short}</small>
             <small>${cert.validity ? '⏳ ' + cert.validity : ''}</small></div>`;
 };
@@ -505,21 +508,21 @@ async function showPaths() {
   let html = `<h2>🧭 ${t('paths')}</h2>`;
   for (const [slug, path] of entries) {
     if (path.type === 'achievement') {
-      html += `<div class="badge"><strong>🏅 ${path.name}</strong>
-                 <p>${path.description || ''}</p>
+      html += `<div class="badge"><strong>🏅 ${esc(path.name)}</strong>
+                 <p>${esc(path.description || '')}</p>
                  ${path.requires_all.map(node).join('')}
                  ${path.how_to_obtain ? `<p><em>${t('howGet')}</em> ${path.how_to_obtain}</p>` : ''}</div>`;
     } else if (path.type === 'info') {
-      html += `<div class="badge"><strong>♻ ${path.name}</strong>
-                 <p>${path.description || ''}</p>
+      html += `<div class="badge"><strong>♻ ${esc(path.name)}</strong>
+                 <p>${esc(path.description || '')}</p>
                  <ul>${(path.rules || []).map((r) => `<li>${r}</li>`).join('')}</ul></div>`;
     } else {
       const video = videos[slug];
-      html += `<h3>${path.name}</h3><p style="opacity:.8">${path.description || ''}</p>` +
+      html += `<h3>${esc(path.name)}</h3><p style="opacity:.8">${esc(path.description || '')}</p>` +
         (video && video.available
-          ? `<video controls preload="none" poster="${video.thumbnail_url || ''}"
+          ? `<video controls preload="none" poster="${esc(video.thumbnail_url || '')}"
                style="width:100%;max-width:820px;border-radius:12px;margin:.5rem 0;display:block;background:#000">
-               <source src="${video.video_url}" type="video/mp4"></video>` +
+               <source src="${esc(video.video_url)}" type="video/mp4"></video>` +
              (video.lang_fallback ? `<p class="note">${t('fallback')}</p>` : '')
           : '') +
         `<div class="flow">` +
@@ -540,24 +543,24 @@ async function showCert(certId) {
   const cert = data.cert;
   $('content').innerHTML = `
     <a class="back" onclick="go(showLanding)">${t('backAll')}</a>
-    <h2>${cert.name}</h2>
+    <h2>${esc(cert.name)}</h2>
     <p>${certChips(cert)}</p>` +
     (video && video.available
-      ? `<video controls preload="none" poster="${video.thumbnail_url || ''}"
+      ? `<video controls preload="none" poster="${esc(video.thumbnail_url || '')}"
            style="width:100%;max-width:820px;border-radius:12px;margin:.8rem 0;display:block;background:#000">
-           <source src="${video.video_url}" type="video/mp4"></video>` +
+           <source src="${esc(video.video_url)}" type="video/mp4"></video>` +
         (video.lang_fallback ? `<p class="note">${t('fallback')}</p>` : '')
       : '') +
-    `<div><span class="lvl">${t('syllabus')} · v${cert.tracked_version}</span></div>` +
+    `<div><span class="lvl">${t('syllabus')} · v${esc(cert.tracked_version)}</span></div>` +
     (cert.sources ? `<p class="note">${t('srcDocs')}: ` + [['objectives', t('srcObj')], ['overview', t('srcOvw')], ['repo', t('srcRepo')]].filter(([k]) => cert.sources[k]).map(([k, label]) => `<a href="${esc(cert.sources[k])}" target="_blank" rel="noopener">${label}</a>`).join(' · ') + `</p>` : '') +
     (data.topics.length ? '' : `<p>${t('noSyllabus')}</p>`) +
     data.topics.map((topic) =>
       `<div class="topic">
-         <span class="id">${topic.id}</span>
-         <span class="title"><span class="dot${topic.available ? '' : ' off'}"></span>${topic.title}</span>
+         <span class="id">${esc(topic.id)}</span>
+         <span class="title"><span class="dot${topic.available ? '' : ' off'}"></span>${esc(topic.title)}</span>
          <span class="w">${topic.weight ?? ''}</span>
          ${topic.available
-           ? `<a class="study" onclick="go(showTopic,'${certId}','${topic.id}')">${t('view')}</a>`
+           ? `<a class="study" onclick="go(showTopic,'${esc(certId)}','${esc(topic.id)}')">${t('view')}</a>`
            : `<span class="study" style="opacity:.5">${t('soon')}</span>`}
        </div>`).join('');
   window.scrollTo(0, 0);
@@ -1068,7 +1071,7 @@ async function botAskCareer(key, slug, q, intent) {
     { role: 'system', content: [
       'You are a study advisor for IT certifications. Answer in the language of the question.',
       BOT_CAREER_INTENTS[intent] || '',
-      `The path is "${path.name}"${path.steps ? `, taken in this order: ${path.steps.map((s) => s.join(' or ')).join(' → ')}` : ''}.`,
+      `The path is "${esc(path.name)}"${path.steps ? `, taken in this order: ${path.steps.map((s) => s.join(' or ')).join(' → ')}` : ''}.`,
       'Below is one note per certification, written from its official objectives. Use ONLY these notes. Where they do not say something, say so plainly instead of filling it in.',
       notes.map((n) => `### ${n.name} (${n.cert})\n${n.note}`).join('\n\n'),
       all.length > certs.length
