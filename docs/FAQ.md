@@ -399,11 +399,15 @@ Epics and follow-ups are issues: start at
 ## Deployment
 
 **How does the site get published?**
-Content is baked into the image. A merge to `main` rebuilds the public image
-`ghcr.io/villadalmine/study-cybercirujas`; no PR deploys production. The
-maintainer runs `helm upgrade` with an explicit tag and tags the commit
-`site-YYYY-MM-DD` ([CONTRIBUTING → Merging and deploying the site](../CONTRIBUTING.md#merging-and-deploying-the-site),
-[OPERATING → Deploying to Kubernetes](OPERATING.md#deploying-to-kubernetes)).
+Content is baked into the image. A merge to `main` publishes
+`ghcr.io/villadalmine/study-cybercirujas:<sha>` and `:latest`, and each release
+adds `:vX.Y.Z`; no PR deploys production. The maintainer deploys a release tag
+`:vX.Y.Z` with `helm upgrade`, never `:latest`, after checking that the tag
+lists the architecture of the cluster's nodes (or builds the image in the
+cluster instead), and then runs `make site-tag` to tag the deployed commit
+`site-YYYY-MM-DD` with its release and image. The procedure, preflight and
+rollback are in [DEPLOY.md](DEPLOY.md)
+([CONTRIBUTING → Merging and deploying the site](../CONTRIBUTING.md#merging-and-deploying-the-site)).
 
 **Can I run my own copy?**
 Yes: `make setup && make serve`, or the public image
