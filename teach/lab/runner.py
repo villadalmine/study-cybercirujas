@@ -94,9 +94,10 @@ def ensure_image(lab: Lab) -> str:
     image = image_for(lab)
     if _docker("image", "inspect", image).returncode == 0:
         return image
-    print(f"[study-lab] image {image} not found locally; trying docker pull")
-    if _docker("pull", image, capture=False).returncode == 0:
-        return image
+    # Never `docker pull`: the runner image is built from deploy/study-lab (base images
+    # pinned by digest), so what runs --privileged is what is in this repository, not
+    # whatever a registry namespace serves under the same tag.
+    print(f"[study-lab] image {image} not found locally; building it from {IMAGES_DIR}")
     build(IMAGES[lab.spec["requires"]])
     return image
 

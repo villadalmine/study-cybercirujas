@@ -8,7 +8,7 @@
 # the host's daemon — the opposite of "everything runs inside the container".
 #
 # Versions are pinned and checksummed; bump them together (docs/LABS-RUNNER.md).
-FROM docker:29.9.0-dind
+FROM docker:29.9.0-dind@sha256:0b6d18a4a222e71c88be6034926b4f6cde2fc33c2218643d03ccfddc65995470
 
 ARG TARGETARCH=amd64
 ARG KIND_VERSION=v0.33.0
