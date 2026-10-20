@@ -13,12 +13,12 @@ FROM docker:29.9.0-dind@sha256:0b6d18a4a222e71c88be6034926b4f6cde2fc33c2218643d0
 ARG TARGETARCH=amd64
 ARG KIND_VERSION=v0.33.0
 ARG KIND_SHA256_amd64=aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d
-ARG KUBECTL_VERSION=v1.35.8
-ARG KUBECTL_SHA256_amd64=874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf
+ARG KUBECTL_VERSION=v1.37.1
+ARG KUBECTL_SHA256_amd64=65691ff77eb6fa44c908b77a1082c9f092c3b9733b5cefabec0d1104890e21a8
 ARG HELM_VERSION=v4.3.0
 ARG HELM_SHA256_amd64=86584a54def73570558f66f5111cc53dfed56689637ae32c1201205d494f54fb
-# Node image matching the CKA v1.35 curriculum, from the kind v0.33.0 release notes.
-ARG KIND_NODE_IMAGE=kindest/node:v1.35.8@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0
+# Node image for the Kubernetes v1.37 exam (CKA and CKAD), from the kind v0.33.0 release notes.
+ARG KIND_NODE_IMAGE=kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5
 
 RUN apk add --no-cache bash coreutils curl jq git grep sed gawk findutils util-linux \
         procps ncurses openssl gettext vim nano less bash-completion tini \
