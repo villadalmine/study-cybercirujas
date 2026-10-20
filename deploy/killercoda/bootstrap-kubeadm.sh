@@ -8,6 +8,10 @@
 set -euo pipefail
 PATCH=${1:?k8s patch version, e.g. 1.36.1}; CILIUM=${2:?cilium tag, e.g. v1.20.3}; CONTAINERD=${3:?containerd version, e.g. 2.2.1}; MINOR=${PATCH%.*}
 CILIUM_CLI=v0.20.1; RUNC=v1.3.6; LOCALPATH=v0.0.37
+# the values come from a file edited in pull requests and are used in URLs, apt pins and `cilium install`: shape-check them
+[[ $PATCH =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "refusing k8s patch '$PATCH'" >&2; exit 2; }
+[[ $CILIUM =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "refusing cilium tag '$CILIUM'" >&2; exit 2; }
+[[ $CONTAINERD =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "refusing containerd version '$CONTAINERD'" >&2; exit 2; }
 export KUBECONFIG=/etc/kubernetes/admin.conf
 if kubectl get nodes 2>/dev/null | grep -q ' Ready'; then echo "cluster already up"; exit 0; fi
 export DEBIAN_FRONTEND=noninteractive

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+from urllib.parse import unquote, urlsplit
 import shlex
 import subprocess
 from pathlib import Path
@@ -179,10 +180,87 @@ def slug(topic: str, title: str = "") -> str:
     return re.sub(r"[^a-z0-9]+", "-", f"{topic} {title}".lower()).strip("-")[:48].strip("-")
 
 
+# killercoda_envs.yaml is edited in pull requests and its values end up in commands run as root on CI
+# (bootstrap-kubeadm.sh, capability scripts). Whatever it says is checked against these allowlists first.
+# This is defence in depth, not a sandbox: a capability `script` is shell, and is reviewed as code like any other.
+# The shape checks for the three bootstrap arguments are repeated in bootstrap-kubeadm.sh with the same patterns.
+_PATCH = re.compile(r"\d+\.\d+\.\d+")
+_MINOR = re.compile(r"\d+\.\d+")
+_VERSION = re.compile(r"v?\d+(\.\d+){1,3}")
+_CILIUM_TAG = re.compile(r"v\d+\.\d+\.\d+")
+_NAME = re.compile(r"[a-z][a-z0-9-]*")
+# (host, path prefix): the URL's host must match exactly, and its path must live under the prefix
+ALLOWED_URLS = (
+    ("raw.githubusercontent.com", "/rancher/local-path-provisioner/"),
+    ("github.com", "/flannel-io/flannel/releases/download/"),
+    ("github.com", "/cilium/"),
+    ("github.com", "/containernetworking/plugins/releases/download/"),
+    ("pkgs.k8s.io", "/"),
+)
+
+
+def url_allowed(url: str) -> bool:
+    """https only, exact host, no userinfo/port, path under an allowed prefix and without dot segments.
+
+    A plain startswith() would accept https://github.com/cilium/../other-org/x (curl squashes `/../`),
+    so the path is split into segments and checked after percent-decoding (also when double-encoded).
+    """
+    try:
+        parts = urlsplit(url)
+        port = parts.port
+    except ValueError:
+        return False
+    if parts.scheme != "https" or "@" in parts.netloc or port is not None or "\\" in url:
+        return False
+    path = parts.path
+    for _ in range(3):
+        decoded = unquote(path)
+        if decoded == path:
+            break
+        path = decoded
+    if any(seg in (".", "..") for seg in path.split("/")) or "%2e" in parts.path.lower():
+        return False
+    return any(parts.hostname == host and path.startswith(prefix) for host, prefix in ALLOWED_URLS)
+
+
+def validate_envs(envs: dict) -> dict:
+    """Raise ValueError unless every version, name and URL in the envs file is on the allowlist."""
+    def bad(what, value):
+        raise ValueError(f"killercoda_envs.yaml: {what} {value!r} is not allowed (see ALLOWED_URLS / version patterns)")
+
+    for image in (envs.get("images") or {}).values():
+        for row in image.get("kubernetes") or []:
+            if not _PATCH.fullmatch(str(row.get("patch", ""))):
+                bad("kubernetes patch", row.get("patch"))
+            if "minor" in row and not _MINOR.fullmatch(str(row["minor"])):
+                bad("kubernetes minor", row["minor"])
+            cilium = row.get("cilium")
+            if cilium:   # this tag reaches `cilium install --version` as root
+                if not _CILIUM_TAG.fullmatch(str(cilium.get("version", ""))):
+                    bad("cilium version", cilium.get("version"))
+                for minor in cilium.get("k8s") or []:
+                    if not _MINOR.fullmatch(str(minor)):
+                        bad("cilium k8s minor", minor)
+        for key in ("runtime", "cni"):
+            item = image.get(key)
+            if not item:
+                continue
+            if not _NAME.fullmatch(str(item.get("name", ""))):
+                bad(f"{key} name", item.get("name"))
+            for field in ("version", "cli", "crictl"):
+                if field in item and not _VERSION.fullmatch(str(item[field])):
+                    bad(f"{key} {field}", item[field])
+    for cap in (envs.get("capabilities") or {}).values():
+        for url in re.findall(r"https?://[^\s'\"]+", str(cap.get("script", ""))):
+            if not url_allowed(url):
+                bad("URL", url)
+    return envs
+
+
 def load_envs() -> dict:
     """What Killercoda runs, pinned in deploy/killercoda/killercoda_envs.yaml (with how each value is known)."""
-    return yaml.safe_load((Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "killercoda_envs.yaml")
-                          .read_text(encoding="utf-8"))
+    return validate_envs(yaml.safe_load((Path(__file__).resolve().parents[2] / "deploy" / "killercoda" / "killercoda_envs.yaml")
+                                        .read_text(encoding="utf-8")))
 
 
 def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unverified: bool = False,
