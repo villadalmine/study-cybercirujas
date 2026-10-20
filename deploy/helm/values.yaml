@@ -40,8 +40,9 @@ gateway:
 
 env:
   ENVIRONMENT: production
-  # TEACH_SECRET (firma de cookies de sesión) va por Secret — setealo en values-local.
-  TEACH_SECRET: change-me
+  # TEACH_SECRET (firma de cookies de sesión) va por Secret y es OBLIGATORIO: sin valor
+  # (o con el de ejemplo, o de menos de 32 caracteres) el render falla. Setealo en values-local.
+  TEACH_SECRET: ""
 
 # Generación de contenido DESDE el pod (opcional). Normalmente el contenido se
 # genera local (claude/codex) y va horneado en la imagen; esto es para usar el
