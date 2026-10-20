@@ -1,3 +1,4 @@
+schema_version: 2
 cert: ckad
 topic: '5.2'
 title: Provide and troubleshoot access to applications via services
@@ -10,3 +11,28 @@ resources:
     ram_mb: 1024
 setup:
 - break_fix.sh
+requires: kind
+modes:
+  break:
+    args: []
+  verify:
+    args:
+    - check
+  cleanup:
+    args:
+    - cleanup
+env:
+  CKAD_LAB_CONFIRM: 'yes'
+origin:
+  kind: curated
+  repo: https://github.com/villadalmine/study-cybercirujas
+derived_from:
+  syllabus: certs/ckad.md#5.2
+  content: certs/ckad/5.2/en/content.md
+  content_sha256: 4ffef5e82614150dfdda58987d7d71379073c10154067cbd390f5ee71147ebc7
+verified:
+  status: true
+  date: '2026-10-19'
+  by: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+  method: runner
+  runner_image: study-lab:k8s (kind v0.33.0, kindest/node v1.35.8)
