@@ -1,37 +1,51 @@
 # Community 111
 
-> 10 nodes · cohesion 0.22
+> 18 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **test_images.py** (12 connections) — `tests/lab/test_images.py`
-- **test_ensure_image_builds_locally_and_never_pulls()** (4 connections) — `tests/lab/test_images.py`
-- **_cmd()** (3 connections) — `tests/lab/test_images.py`
-- **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
-- **fake()** (1 connections) — `tests/lab/test_images.py`
-- **__init__()** (1 connections) — `tests/lab/test_images.py`
-- **test_job_ids_are_unique_across_workflows()** (1 connections) — `tests/lab/test_images.py`
-- **test_runner_base_images_are_pinned_by_digest()** (1 connections) — `tests/lab/test_images.py`
-- **Path** (1 connections)
-- **Static guards on the runner images and the CI that builds them (no Docker…** (1 connections) — `tests/lab/test_images.py`
+- **pytest** (17 connections)
+- **test_kc_envs_allowlist.py** (16 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
+- **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **url_allowed()** (5 connections) — `teach/lab/export_killercoda.py`
+- **test_bad_cilium_tag_reaching_cilium_install()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_kubernetes_patch()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_runtime_and_cli_versions()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **parametrize** (5 connections)
+- **test_bad_cilium_supported_minor()** (4 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bootstrap_script_refuses_odd_arguments()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_committed_file_is_valid()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_allowed_urls_pass()** (2 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **bad()** (1 connections) — `teach/lab/export_killercoda.py`
+- **https only, exact host, no userinfo/port, path under an allowed prefix and…** (1 connections) — `teach/lab/export_killercoda.py`
+- **Raise ValueError unless every version, name and URL in the envs file is on the…** (1 connections) — `teach/lab/export_killercoda.py`
+- **killercoda_envs.yaml values are checked against allowlists before they reach a…** (1 connections) — `tests/lab/test_kc_envs_allowlist.py`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (2 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
-- [Community 18](Community_18.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 70](Community_70.md) (4 shared connections)
+- [Community 1](Community_1.md) (3 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 31](Community_31.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 129](Community_129.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/lab/test_images.py`
+- `teach/lab/export_killercoda.py`
+- `tests/lab/test_kc_envs_allowlist.py`
 
 ## Audit Trail
 
-- EXTRACTED: 16 (94%)
-- INFERRED: 1 (6%)
+- EXTRACTED: 62 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

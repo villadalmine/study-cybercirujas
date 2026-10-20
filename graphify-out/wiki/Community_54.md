@@ -30,10 +30,9 @@
 
 - [Community 125](Community_125.md) (10 shared connections)
 - [Community 47](Community_47.md) (5 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 59](Community_59.md) (3 shared connections)
 - [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
 - [Community 75](Community_75.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
 - [Community 22](Community_22.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 

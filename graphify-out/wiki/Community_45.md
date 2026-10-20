@@ -22,7 +22,7 @@
 ## Relationships
 
 - [Community 37](Community_37.md) (12 shared connections)
-- [Community 36](Community_36.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
 - [Community 143](Community_143.md) (1 shared connections)
 
 ## Source Files

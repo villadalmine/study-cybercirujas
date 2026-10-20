@@ -1,28 +1,39 @@
 # Community 146
 
-> 4 nodes · cohesion 0.50
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **run()** (4 connections) — `tests/test_groundedness.py`
-- **NoNetwork** (2 connections) — `tests/test_groundedness.py`
-- **.test_pr6_traps_caught_offline_and_byte_for_byte()** (2 connections) — `tests/test_groundedness.py`
-- **.test_dry_run_and_fetch_with_the_network_blocked()** (2 connections) — `tests/test_groundedness.py`
+- **quota.py** (15 connections) — `scripts/quota.py`
+- **main()** (6 connections) — `scripts/quota.py`
+- **probe()** (6 connections) — `scripts/quota.py`
+- **record()** (3 connections) — `scripts/quota.py`
+- **show_history()** (3 connections) — `scripts/quota.py`
+- **2026-09-11** (2 connections) — `docs/HISTORY.md`
+- **Detect whether the AI backend currently has quota, and record the history.…** (1 connections) — `scripts/quota.py`
+- **Returns (exit-style status, detail). Cheap by construction: the prompt asks for…** (1 connections) — `scripts/quota.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 148](Community_148.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 18](Community_18.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 62](Community_62.md) (2 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 15](Community_15.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_groundedness.py`
+- `docs/HISTORY.md`
+- `scripts/quota.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 26 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

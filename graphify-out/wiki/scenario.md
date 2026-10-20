@@ -9,11 +9,11 @@
 ### calls
 - json `EXTRACTED`
 - tree() `EXTRACTED`
+- load_envs() `EXTRACTED`
 - _scenario() `EXTRACTED`
 - shlex `EXTRACTED`
 - select() `EXTRACTED`
 - bash_n() `EXTRACTED`
-- load_envs() `EXTRACTED`
 - ExportError `EXTRACTED`
 - test_refuses_what_does_not_fit() `EXTRACTED`
 - test_secret_guard() `EXTRACTED`

@@ -1,30 +1,24 @@
 # Community 211
 
-> 6 nodes · cohesion 0.47
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
-- **table()** (4 connections) — `scripts/gen_readme_table.py`
-- **main()** (3 connections) — `scripts/gen_readme_table.py`
-- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
-- **Regenerate the certification table in README.md from STATUS.md. STATUS.md is…** (1 connections) — `scripts/gen_readme_table.py`
-- **The `## Certifications` table of STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
+- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
+- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
+- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 18](Community_18.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/gen_readme_table.py`
+- `teach/core/catalog.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

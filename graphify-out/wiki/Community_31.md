@@ -1,9 +1,10 @@
 # Community 31
 
-> 18 nodes · cohesion 0.18
+> 19 nodes · cohesion 0.19
 
 ## Key Concepts
 
+- **re** (70 connections)
 - **check_docs.py** (19 connections) — `scripts/check_docs.py`
 - **check_file()** (7 connections) — `scripts/check_docs.py`
 - **main()** (7 connections) — `scripts/check_docs.py`
@@ -25,11 +26,18 @@
 
 ## Relationships
 
+- [Community 32](Community_32.md) (7 shared connections)
+- [Community 61](Community_61.md) (6 shared connections)
+- [Community 124](Community_124.md) (6 shared connections)
 - [Community 18](Community_18.md) (5 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 207](Community_207.md) (2 shared connections)
+- [Community 89](Community_89.md) (4 shared connections)
+- [Community 207](Community_207.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 127](Community_127.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 12](Community_12.md) (3 shared connections)
+- [Community 161](Community_161.md) (2 shared connections)
+- [Community 52](Community_52.md) (2 shared connections)
 
 ## Source Files
 
@@ -37,7 +45,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 44 (100%)
+- EXTRACTED: 109 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

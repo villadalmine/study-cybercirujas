@@ -1,63 +1,54 @@
 # Community 74
 
-> 41 nodes · cohesion 0.10
+> 19 nodes · cohesion 0.15
 
 ## Key Concepts
 
 - **tracker.py** (36 connections) — `teach/core/tracker.py`
-- **catalog.py** (29 connections) — `teach/core/catalog.py`
-- **snapshot_topics()** (18 connections) — `teach/core/tracker.py`
-- **load()** (17 connections) — `teach/core/catalog.py`
 - **fetch_text()** (14 connections) — `teach/core/tracker.py`
-- **save()** (11 connections) — `teach/core/catalog.py`
-- **_ai_yaml()** (10 connections) — `teach/core/tracker.py`
 - **sync_clouds()** (9 connections) — `teach/core/tracker.py`
 - **sync_cncf()** (9 connections) — `teach/core/tracker.py`
-- **TrackerError** (8 connections) — `teach/core/tracker.py`
-- **main()** (8 connections) — `scripts/check_versions.py`
-- **list_certs()** (8 connections) — `teach/core/catalog.py`
-- **sync_lpi()** (8 connections) — `teach/core/tracker.py`
 - **httpx** (8 connections)
-- **generate_paths()** (7 connections) — `teach/core/tracker.py`
+- **tracker_sync()** (7 connections) — `teach/cli.py`
 - **_get_bytes()** (7 connections) — `teach/core/tracker.py`
-- **translate_paths()** (6 connections) — `teach/core/tracker.py`
-- **catalog_path()** (5 connections) — `teach/core/catalog.py`
-- **get_cert()** (5 connections) — `teach/core/catalog.py`
 - **_get()** (5 connections) — `teach/core/tracker.py`
-- **add_cert()** (4 connections) — `teach/core/catalog.py`
-- **2026-07-16** (4 connections) — `docs/HISTORY.md`
-- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
 - **published_version()** (3 connections) — `teach/core/tracker.py`
 - **html** (3 connections)
-- *... and 16 more nodes in this community*
+- **Phase 1 — AI fundamentals (extends the three cloud careers)** (2 connections) — `docs/AI_ROADMAP.md`
+- **Response** (1 connections)
+- **Scrape the official sources and update the catalog.** (1 connections) — `teach/cli.py`
+- **Tracker/scraper: nothing is static — the whole catalog derives from sources. -…** (1 connections) — `teach/core/tracker.py`
+- **Each curriculum's version is the date of the last commit touching its PDF.** (1 connections) — `teach/core/tracker.py`
+- **Upstream facts for the vendor-cloud certs (category: cloud). AWS, Microsoft and…** (1 connections) — `teach/core/tracker.py`
+- **The version an objectives page states, or None if it states none. None means…** (1 connections) — `teach/core/tracker.py`
+- **(body, content-type), with a fetch that cannot hang the caller. httpx hangs…** (1 connections) — `teach/core/tracker.py`
+- **Plain text from a URL: PDF (pypdf) or HTML (tags stripped).** (1 connections) — `teach/core/tracker.py`
 
 ## Relationships
 
-- [Community 63](Community_63.md) (11 shared connections)
-- [Community 0](Community_0.md) (11 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (7 shared connections)
-- [Community 59](Community_59.md) (7 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [video.py](video.py.md) (5 shared connections)
-- [Community 18](Community_18.md) (5 shared connections)
+- [Community 59](Community_59.md) (15 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
+- [Community 31](Community_31.md) (4 shared connections)
+- [Community 14](Community_14.md) (4 shared connections)
 - [Community 61](Community_61.md) (4 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
-- [Community 88](Community_88.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
-- [Community 127](Community_127.md) (3 shared connections)
+- [Community 135](Community_135.md) (3 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (3 shared connections)
+- [AI certification roadmap](AI_certification_roadmap.md) (2 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 11](Community_11.md) (2 shared connections)
 
 ## Source Files
 
 - `docs/AI_ROADMAP.md`
-- `docs/HISTORY.md`
-- `scripts/check_versions.py`
-- `teach/core/catalog.py`
+- `teach/cli.py`
 - `teach/core/tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 176 (97%)
-- INFERRED: 6 (3%)
+- EXTRACTED: 81 (95%)
+- INFERRED: 4 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

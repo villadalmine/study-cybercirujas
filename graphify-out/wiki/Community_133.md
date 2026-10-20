@@ -26,7 +26,7 @@
 - [Community 124](Community_124.md) (1 shared connections)
 - [Community 130](Community_130.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 8](Community_8.md) (1 shared connections)
+- [Community 166](Community_166.md) (1 shared connections)
 - [Community 15](Community_15.md) (1 shared connections)
 - [Community 14](Community_14.md) (1 shared connections)
 

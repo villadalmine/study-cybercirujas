@@ -2,7 +2,7 @@
 
 > God node · 22 connections · `teach/lab/cli.py`
 
-**Community:** [Community 29](Community_29.md)
+**Community:** [Community 26](Community_26.md)
 
 ## Connections by Relation
 
