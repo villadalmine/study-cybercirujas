@@ -94,8 +94,8 @@ PR gets the full check; `git rebase --signoff origin/main` fixes it). Merged his
 The graph bot's PR is the one exemption, decided by who opened it, from which repository and branch and
 which files it touches, never by a commit's author email, which anyone can set.
 
-**Thanks.** When a pull request from someone outside the maintainers is merged, the maintainer
-credits them in the notes of the GitHub Release that ships it (`Thanks @user (#N)`; see
+**Thanks.** When a pull request from someone outside the maintainers is merged, they are
+credited in the notes of the GitHub Release that ships it (`@user (#N)`, generated; see
 [Releases](#releases)). `CHANGELOG.md` is written by release-please and is never edited by hand, so the
 thanks do not go there.
 
@@ -527,7 +527,18 @@ Features (`feat`), Bug Fixes (`fix`), Documentation (`docs`), Internals (`ci`, `
 reads the changelog, picks the moment and merges (squash). That creates the tag `vX.Y.Z` and the GitHub
 Release, and the same workflow publishes the image `ghcr.io/villadalmine/study-cybercirujas:vX.Y.Z` (next to
 `:latest` and `:<sha>`). Nobody edits `CHANGELOG.md`, the manifest or the version files by hand; a PR that
-does is a bug in that PR (the Release PR itself is the one exemption in `scripts/check_pr.py`).
+does is a bug in that PR (the Release PR and the release-notes reset PR are the only exemptions in `scripts/check_pr.py`).
+
+**Release notes.** `CHANGELOG.md` lists every change; the human summary of a release (Highlights, Upgrade
+notes, Thanks) is [`docs/release-notes/NEXT.md`](docs/release-notes/NEXT.md): **user-visible change? add a
+line to `docs/release-notes/NEXT.md`** in your PR. When the Release PR is merged, the `notes` job of
+`release-please.yml` (`scripts/release_notes.py`) puts that text on top of the GitHub Release, with the
+release-please changelog below a `---`, and adds `Thanks` by itself: `@user (#N)` for the author of every PR
+merged between the previous tag and the new one who is not in `.github/CODEOWNERS` or a bot (credit it cannot
+find, such as a reviewer, goes by hand under *Thanks* in NEXT.md). Then it opens a small PR
+(`chore(release-notes): reset NEXT.md after vX.Y.Z`, branch `release-notes-reset--vX.Y.Z`, by the releases
+App so its checks run) that removes the published lines; lines added after the tag stay. Without an
+App-token push to `main`, that PR is the way under branch protection.
 
 **Cadence.** About every 4 weeks, when the milestone `vX.Y.0` is closed, and at least once a month if there
 is any `feat` or `fix` since the last one. A **patch** (`vX.Y.Z`) goes out on demand, right away, for wrong
@@ -552,10 +563,10 @@ name (see [Size and scope](#size-and-scope)).
 | The published site | `site-YYYY-MM-DD` per `helm upgrade` (below) | `git tag -l 'site-*'` |
 | Each exam | `tracked_version` in `catalog.yaml` | the catalog and the site |
 
-**Thanks to contributors.** The maintainer adds the credit `Thanks @user (#N)` for every merged PR from
-someone outside the maintainers to the **notes of the GitHub Release** (`gh release edit vX.Y.Z`), right
-after merging the Release PR. Not in `CHANGELOG.md` (release-please owns it and rewrites it) and not in the
-Release PR description (rewritten on every push to `main`).
+**Thanks to contributors.** Generated: the `notes` job adds `@user (#N)` to the **notes of the GitHub Release**
+for every merged PR from someone outside the maintainers (see *Release notes* above). By hand, only what it cannot
+see (a reviewer, a reporter, a `Co-authored-by:` co-author): a line under *Thanks* in `docs/release-notes/NEXT.md`.
+Not in `CHANGELOG.md` (release-please owns it and rewrites it) and not in the Release PR description.
 
 **If something breaks.** The Release PR cannot be opened without the repository secrets `RELEASE_APP_ID` and
 `RELEASE_APP_PRIVATE_KEY` (the GitHub App `study-cybercirujas-releases`, needed so the required checks run on
