@@ -32,7 +32,11 @@ ACCEPT_ENV = "STUDY_LAB_ACCEPT_RISKS"
 def of(spec: dict | None) -> dict | None:
     """The lab's safety block, or None when it declares none."""
     block = (spec or {}).get("safety")
-    return block if isinstance(block, dict) and block.get("risks") else None
+    if not (isinstance(block, dict) and block.get("risks")):
+        return None
+    risks = block["risks"]
+    # lab.yaml is read unvalidated by `lab up`: a hand-written `risks: modifies-host` is one risk.
+    return {**block, "risks": [risks] if isinstance(risks, str) else list(risks)}
 
 
 def lines(spec: dict | None) -> list[str]:
@@ -77,7 +81,10 @@ def confirm(spec: dict | None, label: str, *, echo=print, ask=None, stdin=None, 
         echo(f"Not an interactive terminal: nothing was started. Set {ACCEPT_ENV}=yes to accept these risks.")
         return False
     ask = ask or (lambda prompt: input(prompt))
-    answer = ask("Type 'yes' to start it anyway: ").strip().lower()
+    try:
+        answer = ask("Type 'yes' to start it anyway: ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        answer = ""
     if answer != "yes":
         echo("Not started.")
         return False

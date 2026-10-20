@@ -107,6 +107,16 @@ class ConfirmTests(unittest.TestCase):
         self.assertFalse(self.run_confirm(self.SPEC, Tty(), answer="y")[0])
         self.assertFalse(self.run_confirm(self.SPEC, Tty(), answer="")[0])
 
+    def test_ctrl_d_or_ctrl_c_is_a_no(self):
+        for exc in (EOFError, KeyboardInterrupt):
+            def ask(_p, exc=exc):
+                raise exc
+            self.assertFalse(safety.confirm(self.SPEC, "Lab x/1", echo=lambda _l: None, ask=ask, stdin=Tty(), env={}))
+
+    def test_a_single_risk_written_as_a_string(self):
+        text = safety.lines({"safety": {"risks": "modifies-host", "warning": "Edits /etc/hosts here."}})
+        self.assertEqual(text[1], "  - It " + safety.RISKS["modifies-host"] + ".")
+
 
 class LabUpTests(unittest.TestCase):
     def invoke(self, env):
