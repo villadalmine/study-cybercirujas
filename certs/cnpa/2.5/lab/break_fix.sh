@@ -55,6 +55,62 @@ for bin in bash grep sed; do
   command -v "$bin" >/dev/null 2>&1 || { echo "FATAL: '$bin' not found in PATH." >&2; exit 1; }
 done
 
+# --- verbs: verify | fix | cleanup (default: break). verify exits 0 ONLY when the pipeline is
+# fail-closed AND the planted secret is gone; before this, every verb re-ran the break and exited 0.
+verify_lab() {
+  local rc=0 tmp
+  [[ -f "$LAB_DIR/ci-pipeline.sh" ]] || { echo "FAIL: the lab is not set up (run it with no argument first)."; return 1; }
+  if grep -Eq 'gate_[a-z_]+[[:space:]]+"\$SRC"[[:space:]]*\|\|[[:space:]]*true' "$LAB_DIR/ci-pipeline.sh"; then
+    echo "FAIL: a gate in ci-pipeline.sh is still fail-open (|| true)."; rc=1
+  else
+    echo "ok: no gate is fail-open."
+  fi
+  if grep -REq 'AKIA[0-9A-Z]{16}' "$LAB_DIR/src"; then
+    echo "FAIL: a hardcoded AWS key is still in the source tree."; rc=1
+  else
+    echo "ok: no hardcoded credential in the source."
+  fi
+  # Behavioural proof of fail-closed: plant a secret in a copy; the pipeline must refuse it.
+  tmp="$(mktemp -d)"
+  cp -r "$LAB_DIR/src/." "$tmp/"
+  printf 'AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"\n' >> "$tmp/config/settings.py"
+  if bash "$LAB_DIR/ci-pipeline.sh" "$tmp" >/dev/null 2>&1; then
+    echo "FAIL: the pipeline still passes with a planted secret (not fail-closed)."; rc=1
+  else
+    echo "ok: the pipeline blocks a planted secret."
+  fi
+  rm -rf "$tmp"
+  if bash "$LAB_DIR/ci-pipeline.sh" "$LAB_DIR/src" >/dev/null 2>&1; then
+    echo "ok: the clean source passes every gate."
+  else
+    echo "FAIL: the pipeline does not pass on the source tree."; rc=1
+  fi
+  if [[ $rc -eq 0 ]]; then echo "RESULT: PASS - fail-closed and no secret in source."; else echo "RESULT: FAIL"; fi
+  return $rc
+}
+fix_lab() {
+  [[ -f "$LAB_DIR/ci-pipeline.sh" ]] || { echo "FAIL: the lab is not set up."; return 1; }
+  sed -i 's/^\(gate_secret_scan "\$SRC"\)[[:space:]]*||[[:space:]]*true.*$/\1/' "$LAB_DIR/ci-pipeline.sh"
+  cat > "$LAB_DIR/src/config/settings.py" <<'PYEOF'
+import os
+AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
+# credentials come from the environment / the platform's secret store, never from the source tree
+def client_for_reports():
+    class _Stub:
+        def list(self):
+            return ["q1", "q2", "q3"]
+    return _Stub()
+PYEOF
+  echo "Reference fix applied: gate restored to fail-closed, secret removed from source."
+}
+case "${1:-break}" in
+  verify)  verify_lab; exit $? ;;
+  fix)     fix_lab; exit $? ;;
+  cleanup) rm -rf "$LAB_DIR"; echo "Lab directory removed."; exit 0 ;;
+  break)   ;;
+  *) echo "usage: $0 [break|verify|fix|cleanup]" >&2; exit 2 ;;
+esac
+
 echo "============================================================================"
 echo " CNPA 2.5 — Security Integration in CI/CD Pipelines — BREAK & FIX"
 echo " Lab directory : $LAB_DIR"
