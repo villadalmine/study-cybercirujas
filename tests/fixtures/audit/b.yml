@@ -1,0 +1,15 @@
+rubric_version: 3
+auditor: bob
+date: 2026-10-21
+commit: bbbbbbb7654321
+criteria:
+  D1:
+    score: 1
+    evidence: "meta.yaml has the model alias"
+    note: "alias, not the full id"
+    proposal: {what_to_change: "store the full model id", implies: "3 h, medium risk, no credits", how_to_improve: "validate it in check_provenance", foundations: F3, automatable: partial, effort: M, priority: medium}
+  D2:
+    score: 1
+    evidence: "ran make gen-check twice, same output"
+    note: "ok"
+    proposal: {what_to_change: "diff the outputs byte for byte", implies: "1 h, no risk", how_to_improve: "add a test", foundations: [F3], automatable: no, effort: S, priority: low}

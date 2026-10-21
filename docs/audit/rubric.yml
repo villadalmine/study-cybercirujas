@@ -1,0 +1,94 @@
+# Self-audit rubric for study-cybercirujas (v3).
+# Every auditor (a person or an AI agent) answers EVERY criterion with: score (0|1|2), evidence (file:line, or a command + a short
+# output), a one-line note, and ALWAYS a proposal:
+#   proposal: {what_to_change, implies (cost in hours, risk, whether it spends LLM credits, what it could break), how_to_improve,
+#              priority (high|medium|low)}
+#   + foundations: which product principles it serves (ids from the foundations section), automatable: yes|partial|no (can it become
+#   deterministic and programmable?), effort: S|M|L
+#   The priority is NOT an opinion: scripts/audit_compare.py computes it with the formula below (foundations x automatable / effort).
+#   Even with score 2 you propose something (cheaper, clearer or more robust). A criterion without a proposal does not count.
+#   0 = only stated (docs) or missing · 1 = partial / only warns / manual · 2 = enforced (CI gate, generated with --check)
+# Two criteria (P1, X3) judge clarity, not enforcement: they carry their own `scale:` and it replaces the line above for them.
+# Sampling is exact, so every auditor looks at the same files: sort the paths of the named glob (relative to the repo root,
+# POSIX separators) and take `random.Random(42).sample(paths, 10)`. A criterion that samples names its glob (`sample_glob`).
+# Extending = adding criteria with a NEW id; never reuse or rename an id (that is how reports from different days stay comparable).
+version: 3
+# Product foundations (from docs/PRINCIPLES.md). Priority of a proposal = sum of the weights of the foundations it serves
+# x automatable factor (yes 1.0, partial 0.6, no 0.3) / effort (S 1, M 2, L 4).
+foundations:
+  F1: {weight: 5, name: "what is taught is true: official sources cited, nothing invented"}
+  F2: {weight: 5, name: "labs work and test the syllabus objective where they are filed"}
+  F3: {weight: 4, name: "deterministic and reproducible: pinned inputs, checks that give the same result twice"}
+  F4: {weight: 4, name: "visible provenance: where each thing comes from, who or what made it"}
+  F5: {weight: 3, name: "code and commands in the material are valid (syntax, current APIs)"}
+  F6: {weight: 3, name: "documentation as code: one source of truth, nothing drifts"}
+  F7: {weight: 2, name: "contributing is easy and safe (gates, review, automation)"}
+  F8: {weight: 2, name: "sovereign and cheap: self-hosted, no credits spent unless needed"}
+repo: villadalmine/study-cybercirujas
+areas:
+  purpose:
+    - id: P1
+      question: "Does the README say in 3 lines what the repo is for and for whom, and does that match what the repo does today?"
+      how_to_verify: "Read README.md; compare with catalog.yaml and teach/."
+      scale: "0 = purpose or audience missing, or contradicts the repo · 1 = stated but longer than a screen, or one part is outdated · 2 = 3 lines, an audience, and every claim checked against the repo"
+  determinism:
+    - id: D1
+      question: "Are the generation inputs pinned (frozen syllabus with hash, sources with hash, full model id, prompt hash)?"
+      sample_glob: "certs/*/*/en/meta.yaml"
+      how_to_verify: "Snapshot/source-chain scripts; the meta.yaml files of the sample (rule at the top)."
+    - id: D2
+      question: "Do the validators and generated files give the same result twice (byte for byte)?"
+      how_to_verify: "Run each gen_*/--check twice and compare."
+    - id: D3
+      question: "Is the CI decision (pass/fail) reproducible without network or model?"
+      how_to_verify: "Determinism tests; TEACH_OFFLINE."
+  content:
+    - id: C1
+      question: "Does every topic cite original official sources, and does CI verify it?"
+      how_to_verify: "check_source_chain / citations; % of topics that pass."
+    - id: C2
+      question: "Is there a check that stops invented content (groundedness / claims) and blocks?"
+      how_to_verify: "groundedness.yaml (mode), check_api_facts, workflows."
+    - id: C3
+      question: "Is each file's provenance complete and real (real model, correct lang, date, human edits)?"
+      how_to_verify: "check_provenance; count meta.yaml files with an alias or a wrong lang."
+  labs:
+    - id: L1
+      question: "Does every lab meet the break/verify/fix/cleanup contract, and does CI validate it?"
+      how_to_verify: "validate --strict; count of labs with a fix."
+    - id: L2
+      question: "Is 'tested' defined as a standard (fixed targets) and impossible to fake?"
+      how_to_verify: "The lab.yaml schema and the definition of tested in the runner (docs/LABS-RUNNER.md, teach/lab/); evidence tied to the lab hash."
+    - id: L3
+      question: "Does each lab test the syllabus objective where it is filed?"
+      sample_glob: "certs/**/lab/lab.yaml"
+      how_to_verify: "The sample (rule at the top): objective vs what each lab breaks and verifies."
+    - id: L4
+      question: "Is only what was tested there published to Killercoda (gate)?"
+      how_to_verify: "killercoda-publish.yml + publish gate."
+  code:
+    - id: K1
+      question: "Are the manifests, scripts and code blocks of the material and the labs validated (syntax/lint)?"
+      how_to_verify: "kubeconform/dry-run, shellcheck/bash -n, YAML parsing of blocks in markdown."
+  docs_as_code:
+    - id: X1
+      question: "Is every generated document regenerated with --check in CI (it cannot drift)?"
+      how_to_verify: "List generated docs and their check."
+    - id: X2
+      question: "Is there a single source of truth per fact (no duplicates that contradict each other)?"
+      how_to_verify: "Search the same fact in 2+ docs (versions, commands, counts)."
+    - id: X3
+      question: "Can a newcomer follow the docs from general to particular (README, then docs/FAQ.md, then docs/PRINCIPLES.md)?"
+      how_to_verify: "Read them in that order and note where you get lost or a link is dead."
+      scale: "0 = you get lost, or an entry point is missing · 1 = you arrive, but with a dead link or a jump a newcomer would not make · 2 = each step links to the next and nothing is assumed"
+  management:
+    - id: G1
+      question: "Are milestones, issues, PRs, changelog, tags and release notes maintained by themselves?"
+      how_to_verify: "milestone.yml, release-please, release_notes.py; latest release."
+    - id: G2
+      question: "Does every PR go through an independent review, and are the findings recorded?"
+      how_to_verify: "Last 10 merged PRs: independent review + findings ledger."
+  security:
+    - id: S1
+      question: "Are there no secrets, are actions and dependencies pinned, and is PR code never run with permissions?"
+      how_to_verify: "test_actions_pinned, requirements.lock, pull_request_target workflows."

@@ -383,6 +383,16 @@ Run `make pr-check` before pushing.
 Open a *Content error* issue with the sentence and the official source that
 shows it is wrong; the link is what makes it actionable.
 
+**Can I audit the repo myself, and can I change what is audited?**
+Yes. [`docs/audit/rubric.yml`](audit/rubric.yml) is the self-audit: criteria with fixed ids, a 0/1/2 scale and the
+foundations F1-F8 with their weights. Anyone, a person or an AI agent, scores every criterion with verifiable
+evidence and always a proposal, and submits `docs/audit/results/<date>-<auditor>.yml` by PR.
+[`scripts/audit_compare.py`](../scripts/audit_compare.py) compares auditors offline (disagreements, proposals side
+by side, a ranking by a fixed formula) and refuses a criterion without a proposal
+(tests: [`tests/test_audit_compare.py`](../tests/test_audit_compare.py)). To propose a criterion open an *Audit
+criterion* issue; it gets a new id, existing ids are never renamed
+([how](audit/README.md#propose-a-new-criterion)). The audit is not CI-enforced: results are evidence to read, not a gate.
+
 ## Releases, milestones and the board
 
 **How are releases made?**
