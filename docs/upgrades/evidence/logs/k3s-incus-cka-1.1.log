@@ -1,0 +1,69 @@
+== lab cka/1.1, target k3s-incus, 2026-10-21T06:04:52Z; node: lab-control-plane   Ready   control-plane   6s    v1.37.1+k3s1   10.50.0.18   <none>   Ubuntu 24.04.5 LTS   6.8.0-147-ge
+== break
+[1;32m[OK][0m Provisioner funcional detectado en el cluster: rancher.io/local-path
+
+[1;34m[INFO][0m Guardá ese nombre, lo vas a necesitar para arreglar el laboratorio.
+
+[1;34m[INFO][0m Creando una StorageClass con el provisioner apuntando mal a propósito...
+
+[1;34m[INFO][0m Creando un PersistentVolumeClaim que usa esa StorageClass...
+
+[1;34m[INFO][0m Creando un Pod que monta ese PVC...
+
+============================================================
+ LABORATORIO ROTO: namespace 'cka-1-1-storage-lab'
+============================================================
+
+SÍNTOMA que vas a observar:
+  - kubectl get pvc -n cka-1-1-storage-lab
+      -> cka-lab-pvc va a quedar en fase "Pending" indefinidamente.
+  - kubectl get pod -n cka-1-1-storage-lab
+      -> cka-lab-writer va a quedar en fase "Pending" (no puede arrancar
+         porque su volumen nunca se provisiona).
+  - kubectl describe pvc cka-lab-pvc -n cka-1-1-storage-lab
+      -> En events vas a ver algo como "waiting for a volume to be
+         created, either by external provisioner "example.com/does-not-exist"
+         or manually by system administrator", repetido cada tanto.
+
+Notá que "kubectl apply" de la StorageClass rota funcionó sin error:
+Kubernetes no valida que el campo "provisioner" corresponda a un
+controller real que exista en el cluster. El fallo es completamente
+asíncrono y silencioso del lado del apiserver.
+
+OBJETIVO (qué tenés que lograr):
+  1. Diagnosticar por qué el PVC nunca se bindea, usando "describe"
+     sobre el PVC y sobre la StorageClass.
+  2. Arreglar la StorageClass 'cka-lab-broken-sc' para que use un
+     provisioner que sí funcione en este cluster.
+     Pista: el campo "provisioner" de una StorageClass es inmutable
+     una vez creada (kubectl edit no te va a dejar cambiarlo).
+  3. Sin borrar ni recrear el PVC ni el Pod, lograr que:
+       - cka-lab-pvc quede en fase "Bound"
+       - cka-lab-writer quede en fase "Running"
+
+Cuando creas que lo resolviste, corré:
+  /lab/break_fix.sh verify
+
+============================================================
+rc=0
+== verify before the fix
+PVC cka-lab-pvc: Pending
+Pod cka-lab-writer: Pending
+[1;33m[WARN][0m Todavía no. Objetivo: PVC Bound y Pod Running.
+rc=0
+== fix
+storageclass.storage.k8s.io "cka-lab-broken-sc" deleted
+storageclass.storage.k8s.io/cka-lab-broken-sc created
+== verify after the fix
+PVC cka-lab-pvc: Bound
+Pod cka-lab-writer: Running
+[1;32m[OK][0m Laboratorio resuelto: PVC Bound y Pod Running.
+rc=0
+== cleanup
+
+[1;34m[INFO][0m Borrando namespace 'cka-1-1-storage-lab' y la StorageClass 'cka-lab-broken-sc'...
+namespace "cka-1-1-storage-lab" deleted
+storageclass.storage.k8s.io "cka-lab-broken-sc" deleted
+[1;32m[OK][0m Limpieza completa.
+rc=0
+== result: break_rc=0 verify_before_fix_rc=0 regex_before=0 verify_after_fix_rc=0 regex_after=1 cleanup_rc=0 secs=96

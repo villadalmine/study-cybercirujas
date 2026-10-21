@@ -1,0 +1,106 @@
+== lab ckad/4.4, target kind, 2026-10-21T05:56:51Z
+== run (break)
+[study-lab] lab:     ckad-4.4 — Define resource requirements
+[study-lab] origen:  curado (repo study) (study certs/ckad/4.4)
+[study-lab] estado:  VERIFICADO 2026-10-20 (runner)
+[study-lab] preparing the environment (kind) inside study-lab-ckad-4-4
+[study-lab-init] loading kindest/node:v1.37.0 from cache
+[study-lab-init] creating kind cluster (kindest/node:v1.37.0, 0 workers)
+[study-lab-init] ready: lab-control-plane=Ready 
+[study-lab] breaking the lab (no args)
+>>> Preparando el laboratorio (si existía uno anterior, se borra)...
+
+===============================================================================
+ LABORATORIO LISTO: 3 incidentes de "resource requirements" te esperan
+===============================================================================
+
+ INCIDENTE 1 — namespace ckad44-lab, deployment web-frontend
+   Síntoma que vas a ver: el pod queda en estado Pending para siempre.
+   Pista de diagnóstico:
+     kubectl get pods -n ckad44-lab
+     kubectl describe pod -l app=web-frontend -n ckad44-lab
+   Mirá los Events del describe: el scheduler te dice exactamente qué recurso
+   no le alcanza a ningún node.
+   OBJETIVO: dejá web-frontend en Running (1/1) con requests razonables.
+
+ INCIDENTE 2 — namespace ckad44-lab, deployment cache-worker
+   Síntoma que vas a ver: el pod arranca, muere a los pocos segundos y entra
+   en CrashLoopBackOff. En el describe: Last State: Terminated,
+   Reason: OOMKilled, Exit Code: 137.
+   Dato clave: el proceso necesita ~150M de memoria para trabajar.
+   Pista de diagnóstico:
+     kubectl describe pod -l app=cache-worker -n ckad44-lab
+   OBJETIVO: que cache-worker corra estable, sin reinicios por OOM.
+
+ INCIDENTE 3 — namespace ckad44-quota, deployment api-backend
+   Síntoma que vas a ver: el deployment queda en 2/3 READY y la tercera
+   replica nunca aparece. El pod ni siquiera existe: al que hay que
+   preguntarle es al ReplicaSet.
+   Pista de diagnóstico:
+     kubectl get deploy,rs,pods -n ckad44-quota
+     kubectl describe rs -n ckad44-quota
+     kubectl describe resourcequota cuota-equipo -n ckad44-quota
+   REGLA DE JUEGO: la ResourceQuota es del equipo de plataforma, NO se toca.
+   OBJETIVO: api-backend en 3/3 READY ajustando solo el deployment.
+
+ Cuando creas que terminaste:   ./break-fix.sh verify
+ Para empezar de cero:          ./break-fix.sh (lo regenera roto)
+ Para limpiar todo:             ./break-fix.sh clean
+
+ La solución paso a paso está comentada al FINAL de este archivo.
+ No la mires hasta haber peleado un rato: en el examen no hay solucionario.
+===============================================================================
+
+[study-lab] listo. Entrá con:   study-lab shell ckad 4.4
+[study-lab] verificá con:      study-lab check ckad 4.4
+[study-lab] y limpiá con:      study-lab down ckad 4.4
+rc=0
+== kubectl version (server)
+Client Version: v1.37.1
+Kustomize Version: v5.8.1
+Server Version: v1.37.0
+== check before the fix
+== Verificando los tres incidentes ==
+[FAIL] Incidente 1: web-frontend todavía no tiene replicas Ready.
+       Incidente 2: observando estabilidad de cache-worker-bf7f554d7-m5vzp durante 30s...
+[FAIL] Incidente 2: cache-worker no está estable: el contenedor no está Ready.
+[FAIL] Incidente 3: api-backend tiene 2/3 replicas Ready.
+
+Todavía quedan 3 incidente(s) por resolver. Seguí investigando.
+
+[study-lab] check: FAIL  (exit 1)
+rc=1
+== fix
+deployment.apps/web-frontend resource requirements updated
+deployment.apps/cache-worker resource requirements updated
+deployment.apps/api-backend resource requirements updated
+Waiting for deployment "web-frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "web-frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "web-frontend" rollout to finish: 1 old replicas are pending termination...
+deployment "web-frontend" successfully rolled out
+Waiting for deployment "cache-worker" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "cache-worker" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "cache-worker" rollout to finish: 1 old replicas are pending termination...
+deployment "cache-worker" successfully rolled out
+deployment "api-backend" successfully rolled out
+== check after the fix
+== Verificando los tres incidentes ==
+[OK]   Incidente 1: web-frontend está Ready (ya no queda Pending).
+       Incidente 2: observando estabilidad de cache-worker-68fcf6c6bd-9zfw2 durante 30s...
+[OK]   Incidente 2: cache-worker corre estable (Ready, sin OOMKilled).
+[OK]   Incidente 3: api-backend está 3/3 y la quota sigue intacta.
+
+FELICITACIONES: los tres incidentes están resueltos.
+Limpieza final: ./break-fix.sh clean
+
+[study-lab] check: PASS  (exit 0)
+rc=0
+== down
+[study-lab] running the lab's cleanup
+>>> Borrando namespaces ckad44-lab y ckad44-quota...
+namespace "ckad44-lab" deleted
+namespace "ckad44-quota" deleted
+>>> Laboratorio limpio.
+[study-lab] study-lab-ckad-4-4 removed (with its anonymous volumes: the inner dockerd and kind go with it)
+rc=0
+== result: check_before_fix_rc=1 check_after_fix_rc=0 down_rc=0 leftovers=0 secs=237

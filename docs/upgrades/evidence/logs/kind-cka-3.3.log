@@ -1,0 +1,113 @@
+== lab cka/3.3, target kind, 2026-10-21T05:46:22Z
+== run (break)
+[study-lab] lab:     cka-3.3 — Configure workload autoscaling
+[study-lab] origen:  curado (repo study) (study certs/cka/3.3)
+[study-lab] estado:  VERIFICADO 2026-10-15 (runner)
+[study-lab] preparing the environment (kind) inside study-lab-cka-3-3
+[study-lab-init] loading kindest/node:v1.37.0 from cache
+[study-lab-init] creating kind cluster (kindest/node:v1.37.0, 0 workers)
+[study-lab-init] ready: lab-control-plane=Ready 
+[study-lab] breaking the lab (break)
+[33mContexto activo: kind-lab[0m
+[33mmetrics-server no encontrado. Instalando una versión mínima para laboratorio...[0m
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+Esperando a que metrics-server esté disponible (puede tardar ~1 min)...
+deployment.apps/metrics-server condition met
+
+[1m== Preparando namespace y carga de trabajo ==[0m
+namespace/autoscaling-lab created
+deployment.apps/revenue-api created
+horizontalpodautoscaler.autoscaling/revenue-api-hpa created
+Waiting for deployment "revenue-api" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "revenue-api" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "revenue-api" rollout to finish: 2 of 3 updated replicas are available...
+deployment "revenue-api" successfully rolled out
+
+[1m== Laboratorio listo. Esto es lo que vas a ver ==[0m
+El Deployment "revenue-api" y el HPA "revenue-api-hpa" ya están creados,
+pero el autoscaler NO está funcionando como debería.
+
+Síntoma a observar:
+
+    kubectl get hpa revenue-api-hpa -n autoscaling-lab
+
+  La columna TARGETS va a mostrar algo como:
+
+    NAME               REFERENCE                TARGETS         MINPODS  MAXPODS  REPLICAS
+    revenue-api-hpa    Deployment/revenue-api    <unknown>/50%   2        6        3
+
+  Y si describís el HPA vas a ver un evento del tipo:
+
+    kubectl describe hpa revenue-api-hpa -n autoscaling-lab
+
+    Warning  FailedGetResourceMetric  ... missing request for cpu on container
+             "revenue-api" in pod "revenue-api-xxxx"
+
+TU OBJETIVO:
+
+  Lograr que el HPA pueda calcular la utilización de CPU real y quede
+  operativo, sin borrar ni recrear el HPA ni el Deployment desde cero.
+
+CRITERIO DE ÉXITO (correlo con: ./break-fix-cka-3.3-workload-autoscaling.sh verify):
+
+  1. `kubectl get hpa revenue-api-hpa -n autoscaling-lab` muestra un
+     porcentaje numérico en TARGETS (ej. "1%/50%"), no "<unknown>/50%".
+  2. `kubectl describe hpa revenue-api-hpa -n autoscaling-lab` ya no
+     reporta eventos FailedGetResourceMetric recientes.
+  3. Los 3 Pods de revenue-api siguen corriendo (Running).
+
+Pista: mirá qué necesita el HPA para poder medir el uso de CPU de un Pod
+respecto de un valor de referencia.
+
+[study-lab] listo. Entrá con:   study-lab shell cka 3.3
+[study-lab] verificá con:      study-lab check cka 3.3
+[study-lab] y limpiá con:      study-lab down cka 3.3
+rc=0
+== kubectl version (server)
+Client Version: v1.37.1
+Kustomize Version: v5.8.1
+Server Version: v1.37.0
+== check before the fix
+
+[1m== Verificando el fix ==[0m
+[31mTodavía no hay métrica de utilización calculada. El HPA sigue en <unknown>.[0m
+[33mRepasá: ¿el contenedor de revenue-api ya tiene resources.requests.cpu definido?[0m
+
+[study-lab] check: FAIL  (exit 1)
+rc=1
+== fix
+deployment.apps/revenue-api resource requirements updated
+Waiting for deployment "revenue-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "revenue-api" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "revenue-api" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "revenue-api" rollout to finish: 1 old replicas are pending termination...
+deployment "revenue-api" successfully rolled out
+== check after the fix
+
+[1m== Verificando el fix ==[0m
+[32mEl HPA ya está calculando utilización de CPU (0%). ¡Resuelto![0m
+
+[study-lab] check: PASS  (exit 0)
+rc=0
+== down
+[study-lab] running the lab's cleanup
+
+[1m== Limpiando laboratorio ==[0m
+namespace "autoscaling-lab" deleted
+[study-lab] study-lab-cka-3-3 removed (with its anonymous volumes: the inner dockerd and kind go with it)
+rc=0
+== result: check_before_fix_rc=1 check_after_fix_rc=0 down_rc=0 leftovers=0 secs=229
