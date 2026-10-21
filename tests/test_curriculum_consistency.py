@@ -94,11 +94,17 @@ class FixLine(unittest.TestCase):
                                      lpi), "LPIC-1 objectives version 5.0, " + LPI)
         self.assertEqual(cc.fix_line("LPIC-1 objectives version 4.0", lpi), "LPIC-1 objectives version 5.0")
         # exam-201-202 and exam-201 are one document: only the pinned spelling is allowed
-        lpic2 = strict(entry("4.5", "https://www.lpi.org/our-certifications/exam-201-objectives/"), "lpic-2")
+        lpic2 = strict(entry("4.5", "https://www.lpi.org/our-certifications/exam-201-objectives/"), "lpic-9")
         self.assertEqual(cc.fix_line("see https://www.lpi.org/our-certifications/exam-201-202-objectives/", lpic2),
                          "see https://www.lpi.org/our-certifications/exam-201-objectives/")
         self.assertEqual(cc.fix_line("see https://www.lpi.org/our-certifications/linux-essentials-overview/", lpic2),
                          "see https://www.lpi.org/our-certifications/linux-essentials-overview/")   # another document
+
+    def test_lpic2s_canonical_page_is_a_reviewed_spelling_of_the_catalogs_alias(self):
+        alias = entry("4.5", "https://www.lpi.org/our-certifications/exam-201-objectives/")
+        page = "see https://www.lpi.org/our-certifications/exam-201-202-objectives/"
+        self.assertEqual(cc.fix_line(page, cc.wanted(alias, "lpic-2")), page)               # accepted for lpic-2 (data, with its reason)
+        self.assertNotEqual(cc.fix_line(page, cc.wanted(alias, "lpic-9")), page)            # not for a cert that has no such entry
 
     def test_a_reviewed_extra_spelling_is_accepted(self):
         lpic1 = cc.wanted(entry("5.0", LPI), "lpic-1")                       # exam 102 is accepted for lpic-1 (data)

@@ -42,8 +42,15 @@ family:                                  # applied in order to the catalog URL a
 
 # Spellings the control accepts for a cert besides the catalog's (reviewed, with the reason). Anything not listed must be the catalog's.
 accept:
-  # LPIC-1 is two exams: the catalog pins the 101 objectives page, and topics 102 to 110 are examined in exam 102, whose page
-  # the material rightly cites. Same vendor document family, two documents.
+  # LPIC-2 (checked live 2026-10-21): the catalog pins .../exam-201-objectives/, an alias that redirects to the canonical page of both
+  # exams, .../exam-201-202-objectives/ (title "LPIC-2 Exam 201 and 202 Objectives"), which is what the material cites. The material is
+  # right and the catalog holds the alias; re-pinning the catalog to the canonical URL is an exam-version PR (check_pr), so the canonical
+  # page is accepted here, with this reason, until then.
+  lpic-2: ['https://www.lpi.org/our-certifications/exam-201-202-objectives/']
+  # LPIC-1 is two exams: the catalog pins the 101 objectives page, and topics 102 to 110 are examined in exam 102, which the material
+  # cites at .../exam-102-objectives/. Checked 2026-10-21: that URL now redirects to the LPI home page and the live page for both
+  # exams is .../exam-101-102-objectives/ (the catalog's exam-101 URL redirects there). Accepted only until the lpic-1 citations are
+  # re-pointed to the live page (follow-up): the spelling is dead, not right.
   lpic-1: ['https://www.lpi.org/our-certifications/exam-102-objectives/']
 
 # Where the control looks, relative to certs/<cert>/: the material, each meta.yaml (its sources), and the lab scripts' headers.
