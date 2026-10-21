@@ -38,6 +38,19 @@ other than root, more workers than Killercoda has, labs without a full `break | 
 maintainer-only text (the guard that keeps the export clean). Labs not yet verified in the runner are exported
 too, marked "not yet verified" in their intro.
 
+### Evidence per target
+
+A lab is agnostic; each proof says where it ran. `deploy/lab-targets.yaml` is the only list of targets (`kind`, `k3s-incus`,
+`docker-linux`, `killercoda-kubeadm`, `killercoda-ubuntu`, `human-killercoda`) with, for each: the environment, what is pinned, who
+runs it, what a pass proves, what it does NOT prove, and whether it allows publishing to the Killercoda mirror (only
+`killercoda-*` and `human-killercoda`). `deploy/lab-evidence.yaml` records `<cert>/<topic>: {<target>: {date, lab_hash, evidence,
+runner}}`; `teach/lab/kc_scope.py` rejects an unknown target, a missing field, a bad date or a hash that is not a sha256
+(`tests/lab/test_kc_scope.py`). No entry for a target means "not tested there", never "does not work", and a pass on `kind` or
+`k3s-incus` proves the lab, not the Killercoda scenario (#103). Each target has a `role` there: `primary` (`kind`, `k3s-incus`,
+`docker-linux`) is where a lab is really proven, on our own infra; `optional-channel` (`killercoda-*`, `human-killercoda`) is a
+publishing channel, never required, never blocking, and the only evidence that allows pushing a scenario to the Killercoda
+mirror ([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)).
+
 ### How a lab gets proven before it is published
 
 `kind` is not Killercoda: it runs Ubuntu 24.04 VMs with kubeadm. So a scenario is proven on a host like that.

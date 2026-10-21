@@ -305,6 +305,17 @@ Only labs with a reference fix can be proven, so only those are published:
 two today (`deploy/killercoda/fixes/`), both also run by a person on Killercoda
 (`deploy/killercoda/human_tested.yaml`). More fixes: [#98](https://github.com/villadalmine/study-cybercirujas/issues/98).
 
+**Where was a lab proven, and what does that prove?**
+A lab is agnostic: it never knows where it runs. Each proof names its **target**
+(`kind`, `k3s-incus`, `docker-linux`, `killercoda-kubeadm`, `killercoda-ubuntu`,
+`human-killercoda`), the date, the lab hash, a run link or log sha256 and the runner,
+in `deploy/lab-evidence.yaml`. A blank cell means "not tested there", never "does
+not work". A pass on `kind` or `k3s-incus` proves the lab but is not evidence for
+Killercoda; only the `killercoda-*` and `human-killercoda` targets allow publishing
+to the Killercoda mirror, which is an optional channel, never required. The ids and their exact meaning live in one file,
+`deploy/lab-targets.yaml`, and an unknown id fails the tests
+([#103](https://github.com/villadalmine/study-cybercirujas/issues/103)).
+
 **What does a scenario say about itself?**
 Certification, domain and objective from the frozen syllabus, whether a person
 or an AI wrote it and who reviewed it, the quality level and where it was
