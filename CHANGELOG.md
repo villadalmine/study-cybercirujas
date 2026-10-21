@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.5.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.4.0...v0.5.0) (2026-10-21)
+
+
+### Features
+
+* **catalog:** freeze the CKA and CKAD v1.37 syllabi, hash the vendor document, reference v1.37 as upstream ([#194](https://github.com/villadalmine/study-cybercirujas/issues/194)) ([5799f2c](https://github.com/villadalmine/study-cybercirujas/commit/5799f2cde8b76e9095bc1351fed8e53a529b6493))
+* **catalog:** switch CKA and CKAD to Kubernetes v1.37 ([#203](https://github.com/villadalmine/study-cybercirujas/issues/203)) ([fefffcb](https://github.com/villadalmine/study-cybercirujas/commit/fefffcb34f1d5863e4966958ec842c00956fe5a1))
+* **cka:** bump the Kubernetes version in the CKA labs to 1.37, by script ([#213](https://github.com/villadalmine/study-cybercirujas/issues/213)) ([db37874](https://github.com/villadalmine/study-cybercirujas/commit/db37874ee2a1bf1c4958a8276885becf87180332))
+* **cka:** bump the Kubernetes version in the CKA material to 1.37, by script ([#202](https://github.com/villadalmine/study-cybercirujas/issues/202)) ([0957ca7](https://github.com/villadalmine/study-cybercirujas/commit/0957ca7141391cae718f4d734b052be359ecf294))
+* **ckad:** bump the Kubernetes version in the CKAD labs to 1.37, by script ([#214](https://github.com/villadalmine/study-cybercirujas/issues/214)) ([a2e6739](https://github.com/villadalmine/study-cybercirujas/commit/a2e67397f133bfce187e1ee95ee7a2bf653f761b))
+* **labs:** the k8s runner image on Kubernetes 1.37 (kubectl v1.37.1, kindest/node v1.37.0) ([#204](https://github.com/villadalmine/study-cybercirujas/issues/204)) ([ce2ae28](https://github.com/villadalmine/study-cybercirujas/commit/ce2ae28cd8f4a150e31fe84e51a5b334700da051))
+* **scripts:** curriculum_diff.py guard, an upgrade PR changes only planned files, sections and lines ([#193](https://github.com/villadalmine/study-cybercirujas/issues/193)) ([e296a7f](https://github.com/villadalmine/study-cybercirujas/commit/e296a7ff926e977b25877e5ef61bbd944a9141fa))
+* **scripts:** upgrade_versions.py, the scripted version bump with its pins ([#201](https://github.com/villadalmine/study-cybercirujas/issues/201)) ([0db1788](https://github.com/villadalmine/study-cybercirujas/commit/0db1788a8182324a0175b82ef2878a4cde1d6170))
+
+
+### Bug Fixes
+
+* **tracker:** sync writes the upstream block only while the published version is ahead ([#219](https://github.com/villadalmine/study-cybercirujas/issues/219)) ([849a4ad](https://github.com/villadalmine/study-cybercirujas/commit/849a4adb28fecc9b2ca2e42b97c62605b40e55f4))
+
+
+### Documentation
+
+* **audit:** publish the self-audit rubric and a comparison script ([#212](https://github.com/villadalmine/study-cybercirujas/issues/212)) ([1f5bfd4](https://github.com/villadalmine/study-cybercirujas/commit/1f5bfd442ef5794e224db7fa377699d5ccf606e6))
+* **upgrades:** the CKA & CKAD v1.37 upgrade plan, generated, with its proof and efficiency ([#195](https://github.com/villadalmine/study-cybercirujas/issues/195)) ([2f87e92](https://github.com/villadalmine/study-cybercirujas/commit/2f87e9220c03380403c180c1c7859931697b9b24))
+
+
+### Internals
+
+* **release:** human release notes from NEXT.md, generated Thanks, reset PR ([#205](https://github.com/villadalmine/study-cybercirujas/issues/205)) ([980f054](https://github.com/villadalmine/study-cybercirujas/commit/980f05494dfa2b2d3967f52723d0a6e68de27bc7))
+
 ## [0.4.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.3.0...v0.4.0) (2026-10-20)
 
 
