@@ -1,6 +1,6 @@
 # CKAD 3.4 — Debugging in Kubernetes (ejercicios guiados)
 
-> Fuente de referencia: [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 **Prerrequisitos**: acceso a un cluster (`minikube`, `kind` o similar) con `kubectl` configurado, y un namespace de trabajo:
 

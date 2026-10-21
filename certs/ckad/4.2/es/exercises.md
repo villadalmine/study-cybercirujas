@@ -1,6 +1,6 @@
 # Ejercicios: 4.2 Understand authentication, authorization and admission control (CKAD)
 
-> Fuente de referencia: [CKAD Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKAD Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen un cluster de Kubernetes accesible vía `kubectl` con permisos de administrador (`cluster-admin`), y un namespace de trabajo llamado `ckad-auth`. Creá ese namespace antes de empezar:
 

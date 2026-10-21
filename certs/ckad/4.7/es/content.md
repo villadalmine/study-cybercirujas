@@ -1,6 +1,6 @@
 # 4.7 Understand ServiceAccounts
 
-**Examen:** CKAD (versión 1.35) · **Peso:** 3
+**Examen:** CKAD (versión 1.37) · **Peso:** 3
 
 ---
 
@@ -283,4 +283,4 @@ Borrar un ServiceAccount **no borra** los `RoleBinding`/`ClusterRoleBinding` que
 - Pull an Image from a Private Registry — https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 - kubectl create token — https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create-token
 - kubectl auth can-i — https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#auth
-- CNCF CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

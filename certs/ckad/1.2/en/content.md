@@ -331,4 +331,4 @@ Given a scenario, ask in order:
 - Jobs: https://kubernetes.io/docs/concepts/workloads/controllers/job/
 - CronJob: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 - kubectl `create` reference (deployment/job/cronjob generators): https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

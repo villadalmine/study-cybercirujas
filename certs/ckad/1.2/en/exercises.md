@@ -1,7 +1,7 @@
-# CKAD 1.35 — Domain 1.2: Choose and Use the Right Workload Resource
+# CKAD 1.37 — Domain 1.2: Choose and Use the Right Workload Resource
 
 **Exam weight:** 5
-**Reference:** [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+**Reference:** [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 These guided exercises build hands-on fluency with the workload resources a CKAD candidate must pick between: `Deployment`, `ReplicaSet`, `DaemonSet`, `Job`, `CronJob`, and `StatefulSet`. Run every step yourself against a real cluster (`kind`, `minikube`, or any cluster you have `kubectl` access to) — reading the steps is not a substitute for typing them.
 

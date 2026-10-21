@@ -267,4 +267,4 @@ Para cambiar un valor de un ConfigMap inmutable hay que crear uno nuevo (por eje
 - ConfigMaps — documentación oficial: https://kubernetes.io/docs/concepts/configuration/configmap/
 - Configure a Pod to Use a ConfigMap: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 - kubectl create configmap — referencia de CLI: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create-configmap
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

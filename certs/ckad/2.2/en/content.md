@@ -326,4 +326,4 @@ kubectl rollout undo deployment/nginx
 - `kubectl` Deployment commands (`set image`, `scale`, `autoscale`) — https://kubernetes.io/docs/reference/kubectl/generated/kubectl_set/kubectl_set_image/
 - Configure Liveness, Readiness and Startup Probes — https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 - ReplicaSet — https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-- CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

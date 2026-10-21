@@ -240,4 +240,4 @@ Causas típicas de un PVC en `Pending`: la StorageClass no existe, no hay ningú
 - [Persistent Volumes — Kubernetes Documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
 - [Storage Classes — Kubernetes Documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 - [Configure a Pod to Use a PersistentVolume for Storage — Kubernetes Tasks](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/)
-- [CKAD Curriculum v1.35 — CNCF](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+- [CKAD Curriculum v1.37 — CNCF](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)

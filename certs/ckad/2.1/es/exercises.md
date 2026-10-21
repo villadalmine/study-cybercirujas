@@ -1,6 +1,6 @@
 # Ejercicios guiados — 2.1 Estrategias de deployment con primitivas de Kubernetes (blue/green, canary)
 
-> Fuente de referencia: [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 En estos ejercicios vas a implementar tres estrategias de deployment usando únicamente primitivas nativas de Kubernetes (`Deployment`, `Service`, `labels`/`selectors`), sin service mesh ni controladores externos. Trabajá en un cluster de práctica (`kind`, `minikube` o similar) con `kubectl` configurado.
 

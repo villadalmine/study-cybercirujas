@@ -254,4 +254,4 @@ Por defecto Helm 3 **no** deja registro de la release luego de desinstalar (a di
 - Helm — Comandos de la CLI (`helm install`, `upgrade`, `rollback`, etc.): https://helm.sh/docs/helm/helm/
 - Helm — Using Helm (conceptos de charts, releases, values): https://helm.sh/docs/intro/using_helm/
 - Artifact Hub (búsqueda pública de charts): https://artifacthub.io/
-- CNCF CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

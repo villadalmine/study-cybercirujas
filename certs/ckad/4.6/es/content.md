@@ -271,4 +271,4 @@ stringData:
 - Managing Secrets using configuration files: https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-config-file/
 - Distribute credentials securely using Secrets: https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/
 - Pull an image from a private registry: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

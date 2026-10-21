@@ -1,4 +1,4 @@
-# Exercises: 4.3 — Understand requests, limits, quotas (CKAD v1.35)
+# Exercises: 4.3 — Understand requests, limits, quotas (CKAD v1.37)
 
 > Prerequisite: An accessible Kubernetes cluster (`kind`, `minikube`, or similar) with configured `kubectl`, and `metrics-server` installed if using `kubectl top`.
 
@@ -236,7 +236,7 @@ kubectl delete namespace res-quiz
 
 ---
 
-**Reference:** CNCF, *CKAD Curriculum v1.35* — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+**Reference:** CNCF, *CKAD Curriculum v1.37* — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 
 <details>
 <summary>View Answers</summary>

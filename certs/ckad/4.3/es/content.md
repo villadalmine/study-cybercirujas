@@ -344,4 +344,4 @@ kubectl get resourcequota,limitrange -n dev
 - Resource Quotas: https://kubernetes.io/docs/concepts/policy/resource-quotas/
 - Configure Default Memory/CPU Requests and Limits for a Namespace: https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/
 - Pod Quality of Service Classes: https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

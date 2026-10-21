@@ -333,4 +333,4 @@ webhooks:
 - Dynamic Admission Control — https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/
 - Pod Security Admission — https://kubernetes.io/docs/concepts/security/pod-security-admission/
 - Pod Security Standards — https://kubernetes.io/docs/concepts/security/pod-security-standards/
-- CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

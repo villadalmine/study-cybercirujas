@@ -1,7 +1,7 @@
 # CKAD 1.3 — Multi-Container Pod Design Patterns
 
 **Exam weight:** 5%
-**Reference:** [CNCF CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+**Reference:** [CNCF CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 A Pod is the atomic scheduling unit in Kubernetes, but it is not limited to one container. All containers in a Pod share the same network namespace (one IP, one port space) and can share storage through volumes, while each container still has its own filesystem, process tree, and (by default) resource limits. This exercise set walks through why you'd combine containers, then builds each of the four canonical patterns named in the curriculum: **init containers**, **sidecar**, **adapter**, and **ambassador**.
 

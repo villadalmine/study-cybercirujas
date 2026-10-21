@@ -281,4 +281,4 @@ Notá el uso de `--labels` en `kubectl run`: es la manera más rápida de simula
 - Referencia de API — NetworkPolicy v1 (networking.k8s.io): https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
 - Tutorial oficial — Declare Network Policy: https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 - Labels automáticos de namespace (`kubernetes.io/metadata.name`): https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-- Curriculum CKAD v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- Curriculum CKAD v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

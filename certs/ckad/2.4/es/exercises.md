@@ -1,4 +1,4 @@
-# Ejercicios: 2.4 Understand API deprecations (CKAD v1.35)
+# Ejercicios: 2.4 Understand API deprecations (CKAD v1.37)
 
 ## Ejercicio 1: Explorar las apiVersions vigentes en el cluster
 

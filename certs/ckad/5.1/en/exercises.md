@@ -1,4 +1,4 @@
-# Guided Exercises — 5.1 NetworkPolicies (CKAD v1.35)
+# Guided Exercises — 5.1 NetworkPolicies (CKAD v1.37)
 
 > **Prerequisites:** A cluster with a CNI plugin supporting NetworkPolicies (Calico, Cilium, etc.). On minikube, start with `minikube start --cni=calico`. If your CNI lacks NetworkPolicy support, NetworkPolicy objects will be created in etcd but **have no runtime effect** — keep this in mind when verifying results.
 

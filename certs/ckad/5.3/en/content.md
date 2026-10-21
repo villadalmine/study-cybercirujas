@@ -229,4 +229,4 @@ Common failure scenarios checklist:
 - [Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) — kubernetes.io
 - [IngressClass](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class) — kubernetes.io
 - [kubectl create ingress](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create-ingress) — kubernetes.io
-- [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf) — CNCF
+- [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf) — CNCF

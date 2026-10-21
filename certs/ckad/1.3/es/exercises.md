@@ -1,6 +1,6 @@
 # 1.3 Understand multi-container Pod design patterns (e.g. sidecar, init and others)
 
-> Fuente de referencia: [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen que tenés un cluster de Kubernetes disponible (`minikube`, `kind` o similar) y `kubectl` configurado contra él. Trabajá en un namespace propio para no interferir con otros recursos:
 

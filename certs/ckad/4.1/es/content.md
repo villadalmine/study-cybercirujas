@@ -333,4 +333,4 @@ Errores típicos a evitar:
 - Referencia de `kubectl api-resources`: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#api-resources
 - Referencia de `kubectl explain`: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#explain
 - cert-manager (ejemplo de Operator): https://cert-manager.io/docs/
-- Curriculum oficial CKAD v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- Curriculum oficial CKAD v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

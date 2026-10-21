@@ -8,7 +8,7 @@ Un Pod es la unidad mínima de scheduling en Kubernetes, y todos los containers 
 - **Volúmenes**: si se define un `volume` a nivel Pod, todos los containers que lo montan comparten el mismo storage.
 - **Ciclo de vida**: se programan juntos en el mismo Node, y comparten el `Pod IP`.
 
-Esto habilita patrones de diseño donde un container "principal" delega responsabilidades secundarias (logging, proxy, sincronización de datos) a containers auxiliares, sin acoplar ese código al container principal. El CKAD curriculum (v1.35) agrupa estos patrones bajo el dominio *Application Design and Build*, con foco en reconocer **cuándo** usar cada patrón y **cómo** implementarlo con manifiestos YAML.
+Esto habilita patrones de diseño donde un container "principal" delega responsabilidades secundarias (logging, proxy, sincronización de datos) a containers auxiliares, sin acoplar ese código al container principal. El CKAD curriculum (v1.37) agrupa estos patrones bajo el dominio *Application Design and Build*, con foco en reconocer **cuándo** usar cada patrón y **cómo** implementarlo con manifiestos YAML.
 
 Los tres patrones "clásicos" (documentados originalmente por Brendan Burns en el paper de Google sobre multi-container patterns) son:
 
@@ -242,4 +242,4 @@ error: a container name must be specified for pod app-with-sidecar, choose one o
 - Kubernetes Documentation — Init Containers: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 - Kubernetes Documentation — Sidecar Containers: https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/
 - Kubernetes Documentation — Pods (containers compartiendo recursos): https://kubernetes.io/docs/concepts/workloads/pods/
-- CNCF CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

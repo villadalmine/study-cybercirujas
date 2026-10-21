@@ -380,4 +380,4 @@ kubectl explain deployment.spec.strategy    # documentación offline de cualquie
 - Jobs: https://kubernetes.io/docs/concepts/workloads/controllers/job/
 - CronJob: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 - Referencia de `kubectl create`: https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/
-- Curriculum oficial CKAD v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- Curriculum oficial CKAD v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

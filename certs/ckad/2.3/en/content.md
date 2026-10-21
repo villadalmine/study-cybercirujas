@@ -1,4 +1,4 @@
-# CKAD 1.35 — Domain 2.3: Use the Helm Package Manager to Deploy Existing Packages
+# CKAD 1.37 — Domain 2.3: Use the Helm Package Manager to Deploy Existing Packages
 
 ## Why Helm
 
@@ -255,4 +255,4 @@ If a release doesn't behave as expected:
 - Helm Docs — Helm CLI command reference: https://helm.sh/docs/helm/helm/
 - Helm Docs — Charts (structure and values): https://helm.sh/docs/topics/charts/
 - Artifact Hub (search public charts): https://artifacthub.io/
-- CNCF CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

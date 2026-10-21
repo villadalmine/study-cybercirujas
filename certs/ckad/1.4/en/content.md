@@ -393,4 +393,4 @@ Events:
 - Dynamic Volume Provisioning: https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/
 - Ephemeral Volumes: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/
 - StatefulSets: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

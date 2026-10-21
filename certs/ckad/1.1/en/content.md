@@ -225,7 +225,7 @@ Buildah can also build images without a Dockerfile, scripting layers directly �
 
 ## Referencias
 
-- CNCF CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Dockerfile reference — https://docs.docker.com/reference/dockerfile/
 - Docker build command — https://docs.docker.com/reference/cli/docker/build/
 - Multi-stage builds — https://docs.docker.com/build/building/multi-stage/

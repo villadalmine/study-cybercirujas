@@ -1,7 +1,7 @@
 # CKAD 3.3 — Utilize container logs
 
 **Peso en el examen:** 4
-**Fuente de referencia:** [CKAD Curriculum v1.35 (PDF)](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+**Fuente de referencia:** [CKAD Curriculum v1.37 (PDF)](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 **Documentación oficial complementaria:** [kubectl logs — referencia](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_logs/) · [Logging Architecture](https://kubernetes.io/docs/concepts/cluster-administration/logging/)
 
 ---

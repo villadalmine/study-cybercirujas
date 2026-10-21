@@ -1,6 +1,6 @@
 # 1.1 Define, build and modify container images
 
-**Examen:** CKAD (versión 1.35) · **Peso:** 5
+**Examen:** CKAD (versión 1.37) · **Peso:** 5
 
 ---
 
@@ -283,4 +283,4 @@ Total: 3 (HIGH: 2, CRITICAL: 1)
 - kind — Loading an image into your cluster: https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster
 - minikube — Pushing images: https://minikube.sigs.k8s.io/docs/handbook/pushing/
 - Trivy — Vulnerability scanner: https://trivy.dev/
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

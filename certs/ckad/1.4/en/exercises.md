@@ -1,6 +1,6 @@
 # CKAD 1.4 — Utilize Persistent and Ephemeral Volumes
 
-*Reference: CNCF CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf*
+*Reference: CNCF CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf*
 
 Assumes a running cluster with `kubectl` configured (a local `kind` cluster works fine) and a namespace `volumes-demo`:
 

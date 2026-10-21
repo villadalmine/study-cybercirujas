@@ -232,4 +232,4 @@ Resolution: explicitly declare non-root `runAsUser` UID, or use image declaring 
 - SecurityContext API reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#securitycontext-v1-core
 - Linux capabilities (man7): https://man7.org/linux/man-pages/man7/capabilities.7.html
 - Seccomp security in Kubernetes: https://kubernetes.io/docs/tutorials/security/seccomp/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

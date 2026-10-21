@@ -1,6 +1,6 @@
-# Guided Exercises — Topic 5.3: Use Ingress rules to expose applications (CKAD v1.35, weight 5%)
+# Guided Exercises — Topic 5.3: Use Ingress rules to expose applications (CKAD v1.37, weight 5%)
 
-Reference source: [CNCF CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+Reference source: [CNCF CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 Prerequisite: A cluster with an installed Ingress controller (e.g. `ingress-nginx`). On minikube, enable via `minikube addons enable ingress`.
 

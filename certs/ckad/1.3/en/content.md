@@ -239,4 +239,4 @@ The application connects to `127.0.0.1:6379` unconditionally; the ambassador con
 - Sidecar Containers — https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/
 - Pod Overview — https://kubernetes.io/docs/concepts/workloads/pods/
 - Communicating Between Containers in the Same Pod (tutorial) — https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/
-- CKAD Curriculum v1.35 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
