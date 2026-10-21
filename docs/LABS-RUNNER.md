@@ -49,7 +49,7 @@ URL and commit, or **local folder**) and warns when it is **not verified**.
 flowchart LR
   CLI["study-lab (host)"] -->|docker run| C["lab container"]
   subgraph C["lab container: study-lab:k8s (privileged, own dockerd)"]
-    D["dockerd"] --> K["kind cluster 'lab'\n(kindest/node v1.35.8)"]
+    D["dockerd"] --> K["kind cluster 'lab'\n(kindest/node v1.37.0)"]
     S["/lab/break_fix.sh\nbreak | verify | cleanup"] -->|kubectl| K
   end
   CACHE[("volume study-lab-cache\nnode image tarball")] -.-> D
@@ -110,7 +110,7 @@ cert: cka
 topic: '1.1'                 # always a string
 title: Implement storage classes and dynamic volume provisioning
 requires: kind               # kind | k3s | linux  -> picks study-lab:k8s or study-lab:linux
-kubernetes: '1.35'           # optional: kind node version (1.34-1.37 with kind v0.33.0; any other minor fails, never falls back)
+kubernetes: '1.37'           # optional: kind node version (1.34-1.37 with kind v0.33.0; any other minor fails, never falls back)
 nodes: 0                     # optional: kind workers
 script: break_fix.sh
 run_in: runner               # runner (kubectl from the lab container) | node (inside the kind control plane)
@@ -251,8 +251,8 @@ which are the ones branch protection and *Where it ran* refer to.
 ## Pinned versions
 
 `deploy/study-lab/k8s/Dockerfile`: `docker:29.9.0-dind`, kind `v0.33.0`,
-kubectl `v1.35.8`, helm `v4.3.0` (all sha256-checked), node
-`kindest/node:v1.35.8@sha256:07b2…` (CKA v1.35). `deploy/study-lab/linux/Dockerfile`:
+kubectl `v1.37.1`, helm `v4.3.0` (all sha256-checked), node
+`kindest/node:v1.37.0@sha256:a1ed…` (the v1.37 exam: CKA and CKAD). `deploy/study-lab/linux/Dockerfile`:
 `debian:bookworm-20261005`. Bump them together, with the node table in
 `teach/lab/runner.py` (`KIND_NODES`, from the kind release notes).
 
