@@ -4,6 +4,13 @@ backend: claude
 model: claude
 sources:
 - https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+tool_edit:
+  tool: scripts/upgrade_versions.py
+  script_sha256: 712c8d0f1e263ac4c816b65c5314abda9715770f86eeae7cde47bbff4c11174f
+  plan: docs/upgrades/cka-ckad-1.37.plan.json
+  plan_sha256: 445e569ff8252c6a2642e84df964ef1c0054b90056b091e4c630615d60630688
+  pins_sha256: 956eee89c7315ebaa01c135ff15b8ae6fc4bb9e82e3129aeba9b17261d3f16b5
+  date: '2026-10-21'
 quality:
   weights_version: 1
   score: 86.1

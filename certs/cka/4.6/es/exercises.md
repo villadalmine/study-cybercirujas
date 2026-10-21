@@ -1,6 +1,6 @@
 # CKA 4.6 — Ejercicios guiados: Understand extension interfaces (CNI, CSI, CRI, etc.)
 
-*Peso en el examen: 3.57% · Certificación: CKA v1.35*
+*Peso en el examen: 3.57% · Certificación: CKA v1.37*
 *Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)*
 
 Estos ejercicios asumen un cluster creado con `kubeadm`, con `containerd` como container runtime y `crictl` instalado en los nodos. Ejecutá los comandos con acceso `root` (o `sudo`) en el control plane o en un worker node, salvo que se indique lo contrario.

@@ -15,7 +15,7 @@ Kubernetes supports defined version skew limits between cluster components. Core
 - **kubelet**: May lag up to **3 minor versions** behind `kube-apiserver` (extended skew support enabled since v1.28).
 - **kube-proxy**: Must match the `kubelet` version installed on the local node and cannot be newer than `kube-apiserver`.
 - **kubectl**: May be 1 minor version newer or older than `kube-apiserver`.
-- **Upgrades must proceed sequentially by single minor versions** (e.g. 1.33 → 1.34 → 1.35); skipping minor versions is unsupported.
+- **Upgrades must proceed sequentially by single minor versions** (e.g. 1.35 → 1.36 → 1.37); skipping minor versions is unsupported.
 
 Standard upgrade ordering for a cluster:
 
@@ -35,8 +35,8 @@ apt-cache madison kubeadm
 ```
 
 ```
-kubeadm | 1.35.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
-kubeadm | 1.35.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
+kubeadm | 1.37.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
+kubeadm | 1.37.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
 ```
 
 ### 2. Upgrade the Primary Control Plane Node
@@ -44,7 +44,7 @@ kubeadm | 1.35.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
 ```bash
 # Unhold and upgrade the kubeadm package first
 apt-mark unhold kubeadm
-apt install -y kubeadm='1.35.1-1.1'
+apt install -y kubeadm='1.37.1-1.1'
 apt-mark hold kubeadm
 
 # Inspect the upgrade plan
@@ -54,24 +54,24 @@ kubeadm upgrade plan
 Summary output:
 
 ```
-[upgrade/versions] Cluster version: v1.34.1
-[upgrade/versions] kubeadm version: v1.35.1
+[upgrade/versions] Cluster version: v1.36.1
+[upgrade/versions] kubeadm version: v1.37.1
 Upgrade to the latest stable version:
 
 COMPONENT                 CURRENT   TARGET
-kube-apiserver             v1.34.1   v1.35.1
-kube-controller-manager    v1.34.1   v1.34.1
-kube-scheduler             v1.34.1   v1.35.1
-kube-proxy                 v1.34.1   v1.35.1
+kube-apiserver             v1.36.1   v1.37.1
+kube-controller-manager    v1.36.1   v1.36.1
+kube-scheduler             v1.36.1   v1.37.1
+kube-proxy                 v1.36.1   v1.37.1
 CoreDNS                    v1.11.3   v1.11.3
 etcd                       3.5.15-0  3.5.16-0
 
 You can now apply the upgrade by executing the following command:
-        kubeadm upgrade apply v1.35.1
+        kubeadm upgrade apply v1.37.1
 ```
 
 ```bash
-kubeadm upgrade apply v1.35.1
+kubeadm upgrade apply v1.37.1
 ```
 
 This command updates control plane static pod manifests (`/etc/kubernetes/manifests/`), rotates certificates (unless `--certificate-renewal=false` is set), and updates cluster add-on components (CoreDNS, kube-proxy).
@@ -94,7 +94,7 @@ This marks the target node as **unschedulable** (`cordon`) and evicts non-Daemon
 
 ```bash
 apt-mark unhold kubelet kubectl
-apt install -y kubelet='1.35.1-1.1' kubectl='1.35.1-1.1'
+apt install -y kubelet='1.37.1-1.1' kubectl='1.37.1-1.1'
 apt-mark hold kubelet kubectl
 
 systemctl daemon-reload
@@ -117,13 +117,13 @@ kubectl drain <worker-node> --ignore-daemonsets --delete-emptydir-data
 
 # On worker node
 apt-mark unhold kubeadm
-apt install -y kubeadm='1.35.1-1.1'
+apt install -y kubeadm='1.37.1-1.1'
 apt-mark hold kubeadm
 
 kubeadm upgrade node
 
 apt-mark unhold kubelet kubectl
-apt install -y kubelet='1.35.1-1.1' kubectl='1.35.1-1.1'
+apt install -y kubelet='1.37.1-1.1' kubectl='1.37.1-1.1'
 apt-mark hold kubelet kubectl
 
 systemctl daemon-reload
@@ -142,9 +142,9 @@ kubectl get nodes -o wide
 
 ```
 NAME           STATUS   ROLES           AGE   VERSION
-cp-01          Ready    control-plane   90d   v1.35.1
-worker-01      Ready    <none>          90d   v1.35.1
-worker-02      Ready    <none>          90d   v1.35.1
+cp-01          Ready    control-plane   90d   v1.37.1
+worker-01      Ready    <none>          90d   v1.37.1
+worker-02      Ready    <none>          90d   v1.37.1
 ```
 
 ---

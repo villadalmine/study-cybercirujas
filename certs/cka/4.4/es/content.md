@@ -137,10 +137,10 @@ kubectl get nodes
 
 ```
 NAME   STATUS   ROLES           AGE   VERSION
-cp1    Ready    control-plane   10m   v1.35.0
-cp2    Ready    control-plane   7m    v1.35.0
-cp3    Ready    control-plane   5m    v1.35.0
-worker1  Ready  <none>          3m    v1.35.0
+cp1    Ready    control-plane   10m   v1.37.0
+cp2    Ready    control-plane   7m    v1.37.0
+cp3    Ready    control-plane   5m    v1.37.0
+worker1  Ready  <none>          3m    v1.37.0
 ```
 
 Verificar salud del cluster de etcd (desde un pod con acceso a etcdctl, o `crictl exec` en el contenedor de etcd):

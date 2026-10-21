@@ -77,8 +77,8 @@ kubectl get nodes -o wide
 
 ```
 NAME       STATUS   ROLES           VERSION   CONTAINER-RUNTIME
-node-01    Ready    control-plane   v1.35.0   containerd://1.7.13
-node-02    Ready    <none>          v1.35.0   containerd://1.7.13
+node-01    Ready    control-plane   v1.37.0   containerd://1.7.13
+node-02    Ready    <none>          v1.37.0   containerd://1.7.13
 ```
 
 ---

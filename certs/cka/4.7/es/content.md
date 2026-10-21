@@ -235,7 +235,7 @@ kubectl get backup nightly-backup -o jsonpath='{.metadata.finalizers}'
 - Custom Resources — https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/
 - Extend the Kubernetes API with CustomResourceDefinitions — https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/
 - Operator pattern — https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
-- CustomResourceDefinition (API reference) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#customresourcedefinition-v1-apiextensions-k8s-io
+- CustomResourceDefinition (API reference) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#customresourcedefinition-v1-apiextensions-k8s-io
 - Versions in CustomResourceDefinitions — https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning/
 - Operator Framework / OLM — https://olm.operatorframework.io/
 - OperatorHub — https://operatorhub.io/

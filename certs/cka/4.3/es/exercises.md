@@ -26,7 +26,7 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
 
 **Preguntas:**
 - ¿Qué política de Kubernetes limita cuántas versiones minor de diferencia puede haber entre el `kube-apiserver` y el `kubelet` de un nodo?
-- ¿Por qué es mala práctica saltar directamente de una versión minor a otra que esté dos o más versiones adelante (por ejemplo, de 1.33 a 1.35) en un solo paso?
+- ¿Por qué es mala práctica saltar directamente de una versión minor a otra que esté dos o más versiones adelante (por ejemplo, de 1.35 a 1.37) en un solo paso?
 
 ---
 
@@ -63,10 +63,10 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
    ```bash
    kubeadm version
    ```
-2. Actualizá el paquete `kubeadm` a la versión minor objetivo (reemplazá `1.35.x-00` por la versión real disponible en tu repositorio de paquetes):
+2. Actualizá el paquete `kubeadm` a la versión minor objetivo (reemplazá `1.37.x-00` por la versión real disponible en tu repositorio de paquetes):
    ```bash
    sudo apt-get update
-   sudo apt-get install -y --allow-change-held-packages kubeadm=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubeadm=1.37.x-00
    ```
 3. Revisá el plan de upgrade que propone `kubeadm` antes de aplicar nada:
    ```bash
@@ -74,7 +74,7 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
    ```
 4. Al ser el primer control plane node del cluster, aplicá el upgrade:
    ```bash
-   sudo kubeadm upgrade apply v1.35.x
+   sudo kubeadm upgrade apply v1.37.x
    ```
 5. Si en cambio se tratara de un control plane node adicional en un cluster HA, el comando correcto sería:
    ```bash
@@ -95,7 +95,7 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
    ```
 2. Actualizá `kubelet` y `kubectl` a la misma versión minor usada en el Ejercicio 3:
    ```bash
-   sudo apt-get install -y --allow-change-held-packages kubelet=1.35.x-00 kubectl=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubelet=1.37.x-00 kubectl=1.37.x-00
    ```
 3. Recargá `systemd` y reiniciá el servicio `kubelet`:
    ```bash
@@ -126,7 +126,7 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
 2. Conectate por SSH a `k8s-worker1` y actualizá `kubeadm`:
    ```bash
    sudo apt-get update
-   sudo apt-get install -y --allow-change-held-packages kubeadm=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubeadm=1.37.x-00
    ```
 3. Alineá la configuración local del nodo (los workers no ejecutan `kubeadm upgrade apply`):
    ```bash
@@ -134,7 +134,7 @@ Ejercicios guiados para practicar el ciclo de vida completo de un cluster de Kub
    ```
 4. Actualizá `kubelet` y `kubectl`, y reiniciá el servicio:
    ```bash
-   sudo apt-get install -y --allow-change-held-packages kubelet=1.35.x-00 kubectl=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubelet=1.37.x-00 kubectl=1.37.x-00
    sudo systemctl daemon-reload
    sudo systemctl restart kubelet
    ```

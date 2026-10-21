@@ -1,6 +1,6 @@
 # Ejercicios guiados — 3.5 Configure Pod admission and scheduling (limits, node affinity, etc.)
 
-> CKA v1.35 — Peso en el examen: 2.5
+> CKA v1.37 — Peso en el examen: 2.5
 > Fuente de referencia: [CNCF CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
 
 Este tema combina dos mecanismos distintos que a veces se confunden:

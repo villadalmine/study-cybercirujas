@@ -59,7 +59,7 @@ apt-mark hold kubelet kubeadm kubectl
 kubeadm init \
   --pod-network-cidr=10.244.0.0/16 \
   --apiserver-advertise-address=192.168.1.10 \
-  --kubernetes-version=v1.35.0
+  --kubernetes-version=v1.37.0
 ```
 
 `--pod-network-cidr` es obligatorio si el CNI que vas a instalar lo requiere (por ejemplo Flannel usa `10.244.0.0/16` por convención; Calico suele usar `192.168.0.0/16`). Si el CIDR no coincide con lo que espera el manifest del CNI, los pods quedan en `ContainerCreating` indefinidamente.
@@ -92,7 +92,7 @@ Los nodos quedan en estado `NotReady` hasta que el CNI esté funcionando:
 ```bash
 kubectl get nodes
 # NAME     STATUS     ROLES           AGE   VERSION
-# master   NotReady   control-plane   2m    v1.35.0
+# master   NotReady   control-plane   2m    v1.37.0
 ```
 
 ### Qué produce `kubeadm init`
@@ -188,7 +188,7 @@ El flujo estándar por nodo, empezando siempre por **un solo control-plane node*
 ```bash
 # 1. Actualizar el paquete kubeadm primero
 apt-mark unhold kubeadm
-apt-get install -y kubeadm=1.35.1-1.1
+apt-get install -y kubeadm=1.37.1-1.1
 apt-mark hold kubeadm
 
 # 2. Ver el plan de upgrade
@@ -198,23 +198,23 @@ kubeadm upgrade plan
 ```
 Components that must be upgraded manually after you have upgraded the control plane with 'kubeadm upgrade apply':
 COMPONENT   CURRENT   TARGET
-kubelet     1x v1.35.0   1x v1.35.1
+kubelet     1x v1.37.0   1x v1.37.1
 
-Upgrade to the latest version in the v1.35 series:
+Upgrade to the latest version in the v1.37 series:
 COMPONENT                 CURRENT   TARGET
-kube-apiserver             v1.35.0   v1.35.1
-kube-controller-manager    v1.35.0   v1.35.1
-kube-scheduler             v1.35.0   v1.35.1
-kube-proxy                 v1.35.0   v1.35.1
+kube-apiserver             v1.37.0   v1.37.1
+kube-controller-manager    v1.37.0   v1.37.1
+kube-scheduler             v1.37.0   v1.37.1
+kube-proxy                 v1.37.0   v1.37.1
 
 You can now apply the upgrade by executing the following command:
 
-	kubeadm upgrade apply v1.35.1
+	kubeadm upgrade apply v1.37.1
 ```
 
 ```bash
 # 3. Aplicar (solo en el primer control-plane node)
-kubeadm upgrade apply v1.35.1
+kubeadm upgrade apply v1.37.1
 ```
 
 Para control-plane nodes adicionales o workers, **no** se usa `upgrade apply` sino `upgrade node`:
@@ -229,7 +229,7 @@ kubeadm upgrade node
 kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
 
 apt-mark unhold kubelet kubectl
-apt-get install -y kubelet=1.35.1-1.1 kubectl=1.35.1-1.1
+apt-get install -y kubelet=1.37.1-1.1 kubectl=1.37.1-1.1
 apt-mark hold kubelet kubectl
 systemctl daemon-reload
 systemctl restart kubelet
@@ -239,7 +239,7 @@ kubectl uncordon <node>
 
 Reglas de version skew relevantes para el examen:
 
-- `kubeadm` **no puede saltar más de una minor version** por upgrade (ej: no se puede ir de 1.33 a 1.35 directo; hay que pasar por 1.34).
+- `kubeadm` **no puede saltar más de una minor version** por upgrade (ej: no se puede ir de 1.35 a 1.37 directo; hay que pasar por 1.36).
 - El `kube-apiserver` debe ser la versión más nueva del cluster; los demás componentes del control plane no pueden ser más nuevos que el `apiserver`.
 - `kubelet` puede estar hasta 2 minor versions por detrás del `kube-apiserver`.
 - Siempre actualizar `kubeadm` antes que `kubelet`/`kubectl` en cada nodo.
@@ -264,7 +264,7 @@ kubeadm init --config kubeadm-config.yaml
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
-kubernetesVersion: v1.35.0
+kubernetesVersion: v1.37.0
 networking:
   podSubnet: 10.244.0.0/16
 apiServer:
