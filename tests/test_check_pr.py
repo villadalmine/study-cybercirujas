@@ -1082,7 +1082,26 @@ class DocsImpactTests(unittest.TestCase):
                 code = check_pr.main()
         self.assertEqual(code, 1)
         self.assertIn("PR: docs impact: 2 doc(s)", out.getvalue())
-        self.assertFalse(check_pr.is_bot_pr("bot/graph-refresh", ["scripts/check_pr.py"]))   # identity is checked, not paths
+
+    def test_the_release_pr_is_exempt_through_main(self):
+        # The Release PR changes pyproject.toml, which docs name: it has no description sections to add, so the check must
+        # not run for it. Real identities, no mock of the exemption (review of #246: the old test never ran main() as a bot).
+        docs = {"docs/DEPLOY.md": "the version lives in pyproject.toml"}
+        event = {"pull_request": {
+            "title": "chore(main): release 0.7.0", "body": "", "user": {"login": "study-cybercirujas-releases[bot]", "id": 343498577},
+            "head": {"ref": "release-please--branches--main", "repo": {"full_name": "o/r"}},
+            "base": {"repo": {"full_name": "o/r"}}}}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "repo_prose", lambda: docs), \
+                mock.patch.object(check_pr, "release_notes_ready", return_value=[]):
+            ev = Path(tmp) / "event.json"
+            ev.write_text(json.dumps(event), encoding="utf-8")
+            out = io.StringIO()
+            with mock.patch.object(sys, "argv", ["check_pr.py", "--event", str(ev), "--files", "CHANGELOG.md", "pyproject.toml"]), \
+                    redirect_stdout(out):
+                code = check_pr.main()
+        self.assertEqual(code, 0, out.getvalue())
+        self.assertNotIn("docs impact", out.getvalue())
+        self.assertTrue(check_pr.docs_impact(["pyproject.toml"], "", docs))   # the same files from a person are flagged
 
 
 if __name__ == "__main__":
