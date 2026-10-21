@@ -314,4 +314,4 @@ deployment.apps/web-canary scaled
 - `kubectl patch` reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#patch
 - `kubectl rollout` reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#rollout
 - `kubectl scale` reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#scale
-- CKAD Curriculum v1.35 (source topic list): https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (source topic list): https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

@@ -1,6 +1,6 @@
 # CKAD 2.2 — Understand Deployments and How to Perform Rolling Updates
 
-*Reference: [CNCF CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf) (Domain 2.2, weight 5%)*
+*Reference: [CNCF CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf) (Domain 2.2, weight 5%)*
 
 These exercises assume a working cluster (`kind`, `minikube`, or similar) and `kubectl` configured against it. Work in a scratch namespace so cleanup is trivial.
 

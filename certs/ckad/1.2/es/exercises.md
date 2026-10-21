@@ -349,7 +349,7 @@ Sin ejecutar nada, decidí qué workload resource usarías en cada escenario. De
 
 ## Fuentes
 
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes — Deployments: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 - Kubernetes — ReplicaSet: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 - Kubernetes — DaemonSet: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/

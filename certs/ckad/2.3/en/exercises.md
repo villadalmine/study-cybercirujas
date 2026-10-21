@@ -1,6 +1,6 @@
-# CKAD 1.35 — Topic 2.3: Use the Helm Package Manager to Deploy Existing Packages
+# CKAD 1.37 — Topic 2.3: Use the Helm Package Manager to Deploy Existing Packages
 
-*Exam weight: 5. Reference: CNCF CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf*
+*Exam weight: 5. Reference: CNCF CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf*
 
 These exercises use the [podinfo](https://github.com/stefanprodan/podinfo) chart — a small, single-Deployment demo app — so you can focus on the Helm workflow instead of waiting on heavy dependencies.
 

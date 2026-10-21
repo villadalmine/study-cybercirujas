@@ -1,7 +1,7 @@
 # Guided Exercises: Kustomize (CKAD 5.4)
 
 **Reference Sources:**
-- CNCF, *CKAD Curriculum v1.35* — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF, *CKAD Curriculum v1.37* — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes docs, *Declarative Management of Kubernetes Objects Using Kustomize* — https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
 
 Requirements: `kubectl` >= 1.14 (built-in Kustomize) and access to a working cluster (minikube, kind, etc.).

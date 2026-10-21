@@ -1,6 +1,6 @@
-# Topic 4.8 — Application Security: SecurityContext and Capabilities (CKAD v1.35)
+# Topic 4.8 — Application Security: SecurityContext and Capabilities (CKAD v1.37)
 
-> Reference Source: [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf) — domain *Application Environment, Configuration and Security*, item "Understand Application security (SecurityContexts, Capabilities, etc.)".
+> Reference Source: [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf) — domain *Application Environment, Configuration and Security*, item "Understand Application security (SecurityContexts, Capabilities, etc.)".
 
 Prerequisites: A working cluster with configured `kubectl` (`kind`, `minikube`, or similar) and permissions to create Pods. All exercises use `ckad-sec` namespace.
 

@@ -1,7 +1,7 @@
 # Ejercicios guiados — Tema 1.1: Define, build and modify container images
 
-**Certificación:** CKAD (examen CKAD, versión 1.35) · **Peso:** 5
-**Fuente de referencia:** [CKAD Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+**Certificación:** CKAD (examen CKAD, versión 1.37) · **Peso:** 5
+**Fuente de referencia:** [CKAD Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 > Necesitás un motor de contenedores instalado (`docker` o `podman`; los comandos son intercambiables). Los ejemplos usan `docker`, pero si tenés `podman` podés reemplazar el nombre del comando sin cambiar nada más.
 
@@ -276,6 +276,6 @@ Una imagen "definida" correctamente para Kubernetes también contempla quién la
 ---
 
 **Fuentes consultadas:**
-- CKAD Curriculum v1.35 (CNCF): [https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+- CKAD Curriculum v1.37 (CNCF): [https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 - Dockerfile reference: [https://docs.docker.com/reference/dockerfile/](https://docs.docker.com/reference/dockerfile/)
 - Multi-stage builds: [https://docs.docker.com/build/building/multi-stage/](https://docs.docker.com/build/building/multi-stage/)

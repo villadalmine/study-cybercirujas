@@ -173,6 +173,6 @@ In the exam, if a provided manifest uses a deprecated or missing `apiVersion` in
 - Kubernetes Deprecation Policy: https://kubernetes.io/docs/reference/using-api/deprecation-policy/
 - Deprecated API Migration Guide: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
 - API versioning conceptual overview: https://kubernetes.io/docs/reference/using-api/#api-versioning
-- CKAD Curriculum v1.35 (CNCF): https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Pluto (deprecated API detection): https://pluto.docs.fairwinds.com/
 - kube-no-trouble (kubent): https://github.com/doitintl/kube-no-trouble

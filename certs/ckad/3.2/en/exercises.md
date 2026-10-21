@@ -374,7 +374,7 @@ CPU and memory metrics displayed by `kubectl top` do not come out of nowhere: th
 
 **References:**
 
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes — Resource metrics pipeline: https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
 - Kubernetes — Debug Running Pods: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/
 - Kubernetes — Logging Architecture: https://kubernetes.io/docs/concepts/cluster-administration/logging/

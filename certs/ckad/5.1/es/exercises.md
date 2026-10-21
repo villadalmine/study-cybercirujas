@@ -1,4 +1,4 @@
-# Ejercicios guiados — 5.1 NetworkPolicies (CKAD v1.35)
+# Ejercicios guiados — 5.1 NetworkPolicies (CKAD v1.37)
 
 > **Requisitos previos:** un cluster con un CNI plugin que soporte NetworkPolicies (Calico, Cilium, etc.). En minikube podés arrancar con `minikube start --cni=calico`. Si tu CNI no las soporta, los objetos NetworkPolicy se crean igual pero **no tienen ningún efecto** — tenelo en cuenta al validar los resultados.
 
@@ -346,6 +346,6 @@ Ahora restringí lo que `frontend` puede **iniciar** hacia afuera.
 
 **Fuentes de referencia:**
 
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes Documentation — Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes Documentation — Declare Network Policy (tutorial): https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/

@@ -1,6 +1,6 @@
 # 4.7 Understand ServiceAccounts — Guided Exercises
 
-**Exam:** CKAD (v1.35) · **Weight:** 3
+**Exam:** CKAD (v1.37) · **Weight:** 3
 
 All exercises run in a dedicated namespace to avoid interference with other cluster resources.
 

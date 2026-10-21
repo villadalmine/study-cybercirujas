@@ -1,6 +1,6 @@
 # 2.1 — Deployment Strategies: Rolling Update, Blue/Green, Canary
 
-*Reference: [CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf), domain "Application Deployment" (weight 5).*
+*Reference: [CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf), domain "Application Deployment" (weight 5).*
 
 These exercises build up from the built-in `RollingUpdate` strategy to blue/green and canary patterns implemented with plain Deployments and Services — the primitives available on the exam, with no service mesh or Ingress controller required.
 

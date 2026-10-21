@@ -206,4 +206,4 @@ requests.memory  2Gi    8Gi
 - Pod Quality of Service Classes — https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/
 - Limit Ranges — https://kubernetes.io/docs/concepts/policy/limit-range/
 - Resource Quotas — https://kubernetes.io/docs/concepts/policy/resource-quotas/
-- CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

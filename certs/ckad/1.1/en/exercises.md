@@ -1,6 +1,6 @@
-# CKAD v1.35 — Domain 1.1: Define, Build and Modify Container Images
+# CKAD v1.37 — Domain 1.1: Define, Build and Modify Container Images
 
-*Reference: CNCF CKAD Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf*
+*Reference: CNCF CKAD Curriculum v1.37 — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf*
 
 These exercises assume a shell with `docker` (or a compatible CLI like `podman`/`nerdctl` — commands are interchangeable unless noted) and a working directory you can write files into.
 

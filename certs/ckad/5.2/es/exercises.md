@@ -1,6 +1,6 @@
 # Ejercicios guiados — CKAD 5.2: Provide and troubleshoot access to applications via services
 
-> Referencia: [CKAD Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf). El contenido de este ejercicio es original; la fuente se usa solo para delimitar el alcance del objetivo de examen.
+> Referencia: [CKAD Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf). El contenido de este ejercicio es original; la fuente se usa solo para delimitar el alcance del objetivo de examen.
 
 ## Preparación
 

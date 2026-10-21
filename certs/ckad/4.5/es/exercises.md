@@ -1,8 +1,8 @@
 # Ejercicios guiados — CKAD 4.5: Understand ConfigMaps
 
-**Certificación:** CKAD v1.35 · **Dominio:** 4. Application Environment, Configuration and Security · **Tema:** 4.5 Understand ConfigMaps · **Peso:** 3
+**Certificación:** CKAD v1.37 · **Dominio:** 4. Application Environment, Configuration and Security · **Tema:** 4.5 Understand ConfigMaps · **Peso:** 3
 
-**Fuente de referencia:** [CNCF CKAD Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+**Fuente de referencia:** [CNCF CKAD Curriculum v1.37](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 Requisitos previos: un cluster con `kubectl` configurado (minikube, kind, o similar) y permisos para crear objetos en un namespace propio.
 

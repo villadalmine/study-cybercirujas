@@ -249,4 +249,4 @@ CKAD tests Kustomize because of its native integration inside `kubectl`.
 - Kustomize Project Docs: https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/
 - Kustomize Field Reference: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/
 - `kubectl` Reference (`apply -k`, `kustomize`): https://kubernetes.io/docs/reference/kubectl/generated/kubectl_kustomize/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

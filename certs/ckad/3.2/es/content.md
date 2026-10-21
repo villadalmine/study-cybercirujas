@@ -198,7 +198,7 @@ Practicá los flags `--sort-by`, `-l`, `--containers` y `--no-headers` hasta que
 
 ## Referencias
 
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes — Resource metrics pipeline: https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
 - Kubernetes — `kubectl top`: https://kubernetes.io/docs/reference/kubectl/generated/kubectl_top/
 - Kubernetes — `kubectl events`: https://kubernetes.io/docs/reference/kubectl/generated/kubectl_events/

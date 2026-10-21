@@ -2,7 +2,7 @@
 
 > Requisitos: acceso a un cluster de Kubernetes (`minikube`, `kind` o similar) con `kubectl` configurado y, al menos, una `StorageClass` por default disponible (`kubectl get storageclass` debe devolver al menos una fila).
 >
-> Referencia curricular: [CKAD Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf)
+> Referencia curricular: [CKAD Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf)
 
 ---
 

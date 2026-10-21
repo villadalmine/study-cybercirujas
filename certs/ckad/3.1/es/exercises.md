@@ -364,6 +364,6 @@ No todas las apps hablan HTTP. Para bases de datos y similares se usa `tcpSocket
 
 ## Referencias
 
-- CNCF — CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF — CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Kubernetes — Configure Liveness, Readiness and Startup Probes: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 - Kubernetes — Pod Lifecycle (container probes): https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

@@ -236,4 +236,4 @@ Checklist de errores frecuentes:
 - Pod Lifecycle (container probes) — https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 - API reference: Probe (v1 core) — https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Probe
 - gRPC Health Checking Protocol — https://grpc.io/docs/guides/health-checking/
-- CKAD Curriculum v1.35 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

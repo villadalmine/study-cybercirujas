@@ -259,4 +259,4 @@ En ese caso, igual se puede acceder vía el `nodePort` autogenerado (`31900` en 
 - DNS for Services and Pods: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
 - Debug Services: https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/
 - EndpointSlices: https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/
-- CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

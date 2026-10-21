@@ -334,4 +334,4 @@ kubectl annotate deployment/web kubernetes.io/change-cause="..."
 - ReplicaSet: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 - Referencia de `kubectl rollout`: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#rollout
 - Referencia de `kubectl set image`: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#set
-- CKAD Curriculum v1.35 (CNCF): https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf

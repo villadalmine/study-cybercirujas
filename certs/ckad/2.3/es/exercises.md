@@ -262,7 +262,7 @@
 ---
 
 **Fuentes de referencia:**
-- CNCF, *CKAD Curriculum v1.35*: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CNCF, *CKAD Curriculum v1.37*: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 - Helm, *Using Helm*: https://helm.sh/docs/intro/using_helm/
 - Helm, *Quickstart Guide*: https://helm.sh/docs/intro/quickstart/
 - Helm, *Helm Commands Reference*: https://helm.sh/docs/helm/helm/

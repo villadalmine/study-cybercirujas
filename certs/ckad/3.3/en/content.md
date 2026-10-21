@@ -1,4 +1,4 @@
-# Container Logs in Kubernetes (CKAD 1.35 — 3.3)
+# Container Logs in Kubernetes (CKAD 1.37 — 3.3)
 
 ## 1. The Kubernetes Logging Model
 
@@ -226,4 +226,4 @@ The kubelet manages container log rotation to avoid filling the node disk via fl
 - `kubectl logs` reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs
 - Debug Running Pods (includes troubleshooting logs and `--previous`): https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/
 - Kubelet log rotation flags (`--container-log-max-size`, `--container-log-max-files`): https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
-- CKAD Curriculum v1.35 (CNCF): https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+- CKAD Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
