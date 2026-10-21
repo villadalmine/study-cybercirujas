@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Dominio 5.4: Use the Gateway API to manage Ingress traffic (peso 3.33%)
+# CKA v1.37 - Dominio 5.4: Use the Gateway API to manage Ingress traffic (peso 3.33%)
 # Ejercicio "break & fix" para una VM de laboratorio descartable.
 #
 # Fuente de referencia (curricula oficial, solo como guia de alcance del tema):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 # Referencias tecnicas usadas para los comandos (no se copia texto, solo se cita):
 #   https://gateway-api.sigs.k8s.io/
 #   https://github.com/kubernetes-sigs/gateway-api/releases
@@ -197,7 +197,7 @@ print_mission() {
   cat <<EOF
 
 ============================================================
-LAB ROTO: Gateway API - dominio 5.4 (CKA v1.35)
+LAB ROTO: Gateway API - dominio 5.4 (CKA v1.37)
 ============================================================
 
 Namespace del lab: $NAMESPACE

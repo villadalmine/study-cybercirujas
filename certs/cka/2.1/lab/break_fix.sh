@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # ============================================================
-# CKA v1.35 - Tema 2.1: Troubleshoot clusters and nodes (peso examen: 6)
-# Fuente: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# CKA v1.37 - Tema 2.1: Troubleshoot clusters and nodes (peso examen: 6)
+# Fuente: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Escenario: rompe la configuración del kubelet en el nodo local
 # provocando que quede en estado NotReady. Pensado para correr

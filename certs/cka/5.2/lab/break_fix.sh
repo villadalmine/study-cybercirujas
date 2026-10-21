@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# break-fix: CKA v1.35 - Tema 5.2 "Define and enforce Network Policies" (peso: 3.33%)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# break-fix: CKA v1.37 - Tema 5.2 "Define and enforce Network Policies" (peso: 3.33%)
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # ADVERTENCIA: ejecutar SOLO en una VM de laboratorio descartable con un cluster
 # Kubernetes cuyo CNI soporte NetworkPolicy (Calico, Cilium, etc). Si el cluster

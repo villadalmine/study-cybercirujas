@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Dominio 2.3: Monitor cluster and application resource usage (peso: 6)
+# CKA v1.37 - Dominio 2.3: Monitor cluster and application resource usage (peso: 6)
 # Fuente de referencia del temario (no se copia texto, solo se cita):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Break & Fix: metrics-server queda "sano" a nivel Pod pero deja de servir
 # métricas porque su Service pierde el selector correcto. El estudiante debe

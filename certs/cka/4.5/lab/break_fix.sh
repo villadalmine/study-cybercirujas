@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# CKA v1.35 - Tema 4.5: Use Helm and Kustomize to install cluster components
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# CKA v1.37 - Tema 4.5: Use Helm and Kustomize to install cluster components
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Laboratorio break & fix pensado para una VM descartable con kubectl, helm
 # y soporte de kustomize integrado (kubectl apply -k) ya configurados contra

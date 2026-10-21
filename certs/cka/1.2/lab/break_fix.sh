@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Tema 1.2: Configure volume types, access modes and reclaim policies
+# CKA v1.37 - Tema 1.2: Configure volume types, access modes and reclaim policies
 # Peso en el examen: 3.33
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Break & Fix lab pensado para correrse en una VM de laboratorio descartable
 # con un cluster de un solo nodo (kind/minikube/k3s) donde este script y

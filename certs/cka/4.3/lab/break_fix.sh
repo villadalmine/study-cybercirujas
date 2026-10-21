@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# break-fix: CKA v1.35 - Tema 4.3 "Manage the lifecycle of Kubernetes clusters" (peso 3.57%)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# break-fix: CKA v1.37 - Tema 4.3 "Manage the lifecycle of Kubernetes clusters" (peso 3.57%)
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Escenario: un nodo kubeadm que, tras una "tarea de mantenimiento" mal hecha
 # (edición manual de los argumentos de arranque de kubelet, algo típico durante

@@ -2,12 +2,12 @@
 set -euo pipefail
 
 # ============================================================================
-# CKA v1.35 - Tema 3.4 (peso 2.5)
+# CKA v1.37 - Tema 3.4 (peso 2.5)
 # Understand the primitives used to create robust, self-healing,
 # application deployments
 #
 # Fuente de referencia (curriculum oficial, NO copiar texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Primitivos que este laboratorio pone a prueba:
 #   - Deployment / ReplicaSet (control loop de reconciliación)

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Tema 2.5: Troubleshoot services and networking (peso 6%)
+# CKA v1.37 - Tema 2.5: Troubleshoot services and networking (peso 6%)
 # Break & Fix lab - ejecutar SOLO en una VM de laboratorio descartable
 # con acceso a un cluster de prueba (kind/minikube/k3s), nunca en un
 # cluster real o compartido.
 #
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 
 set -euo pipefail
 

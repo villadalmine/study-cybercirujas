@@ -2,11 +2,11 @@
 set -euo pipefail
 
 # ============================================================================
-# break-fix: CKA v1.35 - Tema 4.4
+# break-fix: CKA v1.37 - Tema 4.4
 # "Implement and configure a highly-available control plane"
 # Peso en el examen: 3.57%
 # Fuente (solo como referencia de alcance del tema, no se copia texto):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Este script está pensado para correr en la VM que actúa como load balancer
 # (haproxy + keepalived) de un control plane HA armado con kubeadm (topología

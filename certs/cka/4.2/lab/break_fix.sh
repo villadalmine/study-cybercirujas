@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # ============================================================================
-# CKA v1.35 - Tema 4.2: Create and manage Kubernetes clusters using kubeadm
+# CKA v1.37 - Tema 4.2: Create and manage Kubernetes clusters using kubeadm
 # Peso en el examen: 3.57
 # Referencia de la definición del tema (curricula oficial, contenido propio):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Break & Fix: static pod manifest del kube-apiserver corrupto.
 # Pensado para correr como root en el (único) nodo control-plane de una
