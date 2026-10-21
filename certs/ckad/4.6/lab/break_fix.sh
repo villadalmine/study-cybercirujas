@@ -12,8 +12,8 @@
 #           para limpiar: kubectl delete namespace lab-secrets-46
 #
 # Fuentes de referencia (consultadas, no copiadas):
-# - Curriculum CKAD v1.35:
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# - Curriculum CKAD v1.37:
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 # - Kubernetes docs — Secrets:
 #   https://kubernetes.io/docs/concepts/configuration/secret/
 # - Kubernetes docs — Distribute Credentials Securely Using Secrets:

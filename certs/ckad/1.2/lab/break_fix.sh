@@ -15,8 +15,8 @@
 # en el namespace "ckad-1-2-breakfix", pero jamás lo corras en producción.
 #
 # Fuentes de referencia (consultadas como guía, contenido original):
-# - CNCF, CKAD Curriculum v1.35:
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# - CNCF, CKAD Curriculum v1.37:
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 # - Deployments: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 # - DaemonSet:   https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 # - CronJob:     https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/

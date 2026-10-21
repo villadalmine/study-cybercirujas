@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# CKAD (examen v1.35) - Laboratorio "break & fix"
+# CKAD (examen v1.37) - Laboratorio "break & fix"
 # Curriculum: dominio "Services & Networking"
 # Tema 5.2: Provide and troubleshoot access to applications via Services
 # Peso en el examen: 5
 # Fuente de referencia (curriculum oficial del CNCF, no se copia texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Qué hace este script:
 #   1) Crea un namespace descartable con un Deployment, un Service y un Pod

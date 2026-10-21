@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # break-fix: CKAD 3.3 - Utilize container logs (peso en el examen: 4)
-# Referencia: CKAD Curriculum v1.35 (dominio "Application Observability and Maintenance")
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# Referencia: CKAD Curriculum v1.37 (dominio "Application Observability and Maintenance")
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Este script asume que se ejecuta en una VM de laboratorio descartable con
 # kubectl apuntando a un cluster de práctica (kind/minikube/k3s, etc.), no

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
 # break-fix-ckad-1-3.sh
-# CKAD (examen v1.35) - Tema 1.3: Understand multi-container Pod design
+# CKAD (examen v1.37) - Tema 1.3: Understand multi-container Pod design
 # patterns (sidecar, init and others). Peso en el examen: 5.
 #
 # Fuente de referencia (curricula oficial, solo como referencia, no se
-# copia texto de ahi): https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# copia texto de ahi): https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # ADVERTENCIA: ejecutar SOLO en una VM de laboratorio descartable con
 # acceso a un cluster de Kubernetes de prueba (kind, minikube, k3s, etc.).

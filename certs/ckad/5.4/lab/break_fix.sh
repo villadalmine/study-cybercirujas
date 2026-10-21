@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ============================================================================
-# CKAD 1.35 - Tema 5.4 Kustomize (peso examen: 5)
+# CKAD 1.37 - Tema 5.4 Kustomize (peso examen: 5)
 # Break & Fix de laboratorio - Kustomize: configMapGenerator y name reference
 #
 # Fuente de referencia (curricula oficial, solo como guia de alcance del tema):
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Este script:
 #   1) crea un namespace y un recurso de laboratorio 100% descartables

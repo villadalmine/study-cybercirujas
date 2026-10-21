@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# Break & Fix Lab - CKAD v1.35
+# Break & Fix Lab - CKAD v1.37
 # Dominio: Application Environment, Configuration and Security
 # Tema 4.5 "Understand ConfigMaps" (peso en el examen: 3)
 #
 # Fuente de referencia (curricula oficial, usada solo para encuadrar el
 # objetivo de examen, no se copia texto de ahí):
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Este script asume que se corre contra un cluster Kubernetes descartable
 # (kind, minikube, k3d, etc.) en una VM de laboratorio. Crea un namespace

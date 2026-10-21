@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# CKAD v1.35 - Tema 2.4: Understand API deprecations (peso: 5)
+# CKAD v1.37 - Tema 2.4: Understand API deprecations (peso: 5)
 # Break & Fix lab - ejecutar SOLO en una VM de laboratorio descartable con
 # un cluster de Kubernetes de prueba (kind/minikube/k3d). El script no toca
 # nada fuera de un namespace dedicado y es completamente reversible.
 #
 # Fuentes de referencia (consultadas solo como contexto, contenido original):
-#   - https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   - https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #   - https://kubernetes.io/docs/reference/using-api/deprecation-guide/
 #   - https://kubernetes.io/docs/reference/using-api/deprecation-policy/
 #

@@ -4,7 +4,7 @@
 # deployment strategies (blue/green, canary)
 #
 # Fuente de referencia (curriculum, no material copiado literal):
-# https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Uso:
 #   ./break-fix-2.1.sh break     -> crea el lab y rompe el cutover blue/green

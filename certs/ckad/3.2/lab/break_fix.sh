@@ -2,7 +2,7 @@
 #===============================================================================
 # break-fix-ckad-3.2.sh
 #
-# CKAD (examen v1.35) — Tema 3.2: "Use built-in CLI tools to monitor
+# CKAD (examen v1.37) — Tema 3.2: "Use built-in CLI tools to monitor
 # Kubernetes applications" (peso en el examen: 4%)
 #
 # Ejercicio "break & fix": este script rompe TRES cosas de forma controlada
@@ -17,8 +17,8 @@
 #     Todo es reversible; la limpieza está documentada al final.
 #
 # Fuentes de referencia (consultadas como guía, contenido original):
-#   - Curriculum oficial CKAD v1.35:
-#     https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   - Curriculum oficial CKAD v1.37:
+#     https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #   - Resource metrics pipeline (kubectl top / metrics-server):
 #     https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
 #   - Debug de aplicaciones con kubectl:

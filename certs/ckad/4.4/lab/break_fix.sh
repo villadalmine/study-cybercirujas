@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #===============================================================================
-# break-fix.sh — CKAD 4.4: Define resource requirements (CKAD v1.35, peso 3)
+# break-fix.sh — CKAD 4.4: Define resource requirements (CKAD v1.37, peso 3)
 #
 # Laboratorio "break & fix": este script rompe TRES cosas de forma controlada
 # y segura en un cluster de laboratorio DESCARTABLE (minikube, kind, k3s...).
@@ -17,8 +17,8 @@
 #   ./break-fix.sh fix      -> aplica la solución de referencia (la del final)
 #
 # Fuentes consultadas como referencia (contenido original, no copiado):
-# - Curriculum CKAD v1.35:
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# - Curriculum CKAD v1.37:
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 # - Manage resources for containers:
 #   https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 # - Assign memory resources / ejemplo OOM con polinux/stress:

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# CKAD 1.35 - Tema 5.3: Use Ingress rules to expose applications (peso 5)
+# CKAD 1.37 - Tema 5.3: Use Ingress rules to expose applications (peso 5)
 # Script "break & fix" para VM de laboratorio descartable.
 # Crea una app + Service + Ingress funcionando y luego rompe una regla del
 # Ingress a propósito. El estudiante debe diagnosticar y arreglar SOLO el
 # Ingress (sin borrar/recrear el namespace) hasta que el curl de verificación
 # devuelva 200.
 #
-# Referencia curricular: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# Referencia curricular: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Uso:
 #   ./break-fix-5.3-ingress.sh            # crea el escenario y lo rompe
