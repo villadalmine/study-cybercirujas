@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# break-fix: CKA (examen v1.35) - Tema 1.1
+# break-fix: CKA (examen v1.37) - Tema 1.1
 # "Implement storage classes and dynamic volume provisioning" (peso: 3.33%)
 #
 # Fuente de referencia (curriculum oficial, solo para ubicar el tema y su peso,
 # el contenido de este script es original):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Uso:
 #   ./break-fix-1.1-storage-classes.sh break     # rompe el laboratorio (default)

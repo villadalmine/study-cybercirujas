@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Tema 5.5: Ingress controllers e Ingress resources (peso 3.34)
-# Fuente de referencia del temario: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# CKA v1.37 - Tema 5.5: Ingress controllers e Ingress resources (peso 3.34)
+# Fuente de referencia del temario: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Laboratorio "break & fix": arma un Ingress funcional apuntando a una app
 # de prueba, lo rompe de forma aleatoria y controlada, y te deja

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# break-fix: CKA 1.35 - Tema 2.4 "Manage and evaluate container output streams" (peso 6)
-# Fuente de referencia del temario: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# break-fix: CKA 1.37 - Tema 2.4 "Manage and evaluate container output streams" (peso 6)
+# Fuente de referencia del temario: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Este script ROMPE algo a propósito dentro de un namespace descartable.
 # Ejecutalo únicamente en una VM de laboratorio / cluster de práctica (kind, minikube, k3d, etc.),

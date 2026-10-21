@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Dominio 5: Networking
+# CKA v1.37 - Dominio 5: Networking
 # Tema 5.6 - Understand and use CoreDNS (peso examen: 3.34)
 # Fuente de referencia (curriculum oficial, no se copia texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Script "break & fix": rompe la resolución de DNS interna del clúster
 # introduciendo una directiva inválida en el Corefile de CoreDNS.

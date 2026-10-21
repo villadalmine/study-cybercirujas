@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKA 1.35 - Dominio 5: Services and Networking
+# CKA 1.37 - Dominio 5: Services and Networking
 # Tema 5.1 - Understand connectivity between Pods (peso examen: 3.33)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Script de práctica "break & fix". Uso EXCLUSIVO en una VM de laboratorio
 # descartable: modifica reglas de iptables del host y crea recursos en el

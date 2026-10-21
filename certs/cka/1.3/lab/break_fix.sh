@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # ============================================================
-# CKA 1.35 - Tema 1.3: Manage persistent volumes and persistent
+# CKA 1.37 - Tema 1.3: Manage persistent volumes and persistent
 # volume claims (peso examen: 3.34%)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Este script ROMPE algo a propósito en un namespace de laboratorio
 # dedicado. Pensado para correr contra un cluster kubeadm/kind/minikube

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# CKA v1.35 - Break & Fix Lab
+# CKA v1.37 - Break & Fix Lab
 # Tema 3.5: Configure Pod admission and scheduling (limits, node affinity, etc.)
 # Peso en el examen: 2.5
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # Uso:
 #   ./cka-3.5-admission-scheduling.sh break     -> arma el escenario y rompe dos Deployments

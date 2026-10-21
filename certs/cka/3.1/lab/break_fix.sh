@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# CKA 1.35 - 3.1 Understand application deployments and how to perform
+# CKA 1.37 - 3.1 Understand application deployments and how to perform
 # rolling update and rollbacks
 #
 # break-fix: dispara un rolling update de un Deployment hacia una imagen

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
 # break-fix: CKA 4.6 - Understand extension interfaces (CNI, CSI, CRI, etc.)
-# Peso en el examen (CKA v1.35): 3.57%
+# Peso en el examen (CKA v1.37): 3.57%
 #
 # Fuente de referencia (curriculum oficial, solo como referencia de alcance del tema):
-#   https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 #
 # ADVERTENCIA: este script modifica archivos de configuración de sistema
 # (CNI) en el nodo donde se ejecuta. Usalo SOLO en una VM de laboratorio

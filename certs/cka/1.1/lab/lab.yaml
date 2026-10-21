@@ -12,7 +12,7 @@ resources:
 setup:
 - break_fix.sh
 requires: kind
-kubernetes: '1.35'
+kubernetes: '1.37'
 script: break_fix.sh
 modes:
   break:
