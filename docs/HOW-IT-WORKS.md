@@ -186,7 +186,10 @@ flowchart TD
 ```mermaid
 flowchart TD
     M["merged PRs<br/>Conventional Commit titles"] --> RP["release-please.yml<br/>one Release PR, bumps version, writes CHANGELOG.md"]
-    RP -->|"the maintainer merges it: the human gate"| TAG["tag vX.Y.Z + GitHub Release"]
+    RP --> GATE{"feat or fix in this version<br/>and NEXT.md empty?"}
+    GATE -->|"yes: check_pr fails it"| SUM["docs(release-notes) PR to main<br/>adds the summary, refreshes the Release PR"]
+    SUM --> RP
+    GATE -->|"no: the maintainer merges it, the human gate"| TAG["tag vX.Y.Z + GitHub Release"]
     TAG --> IMG["image ghcr.io/.../study-cybercirujas:vX.Y.Z"]
     TAG --> NOTES["notes job<br/>scripts/release_notes.py<br/>docs/release-notes/NEXT.md + Thanks"]
     TAG --> MSC["milestone.yml, scripts/milestone_sync.py<br/>close vX.Y.Z, move what is still open"]
@@ -198,6 +201,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | Nobody edits the changelog or version by hand | `scripts/check_pr.py` | yes (except the bot PRs) | |
 | The Release PR passes the same required checks | `release-please.yml` (GitHub App token) | yes | |
+| A release with a `feat` or a `fix` has its human summary in NEXT.md | `scripts/check_pr.py` (`release_notes_ready`) | yes, on the Release PR | |
 | Release notes and Thanks | `release_notes.py publish` | | a failure leaves the changelog-only release; re-run |
 | The release milestone is settled from what shipped (patches too) | `milestone.yml`, `scripts/milestone_sync.py` | | a PR without `Closes`/`Part of` gets a warning |
 | Deploy and site tag | `docs/DEPLOY.md`, `make site-tag` | no PR deploys production | |
