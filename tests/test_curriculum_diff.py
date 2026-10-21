@@ -374,7 +374,18 @@ class CommittedUpgrade(unittest.TestCase):
 
     @staticmethod
     def on_main(rel):
-        res = subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=REPO, capture_output=True, text=True)
+        """The file as committed on origin/main. A CI checkout is shallow and has no origin/main: fetch it once
+        (depth 1). Offline and without the ref, None: the caller then demands the strict equality."""
+        def show():
+            return subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=REPO, capture_output=True, text=True)
+        res = show()
+        if res.returncode != 0:
+            try:
+                subprocess.run(["git", "fetch", "-q", "--depth=1", "origin", "main:refs/remotes/origin/main"],
+                               cwd=REPO, capture_output=True, timeout=120)
+            except (OSError, subprocess.TimeoutExpired):
+                return None
+            res = show()
         return res.stdout if res.returncode == 0 else None
 
     def test_committed_plans_and_reports_are_current(self):
