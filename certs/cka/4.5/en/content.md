@@ -262,4 +262,4 @@ Updates to literal values change the generated name hash (`app-config-8gcm2ttbdg
 - Helm Official Documentation: https://helm.sh/docs/
 - Kustomize Official References: https://kubectl.docs.kubernetes.io/references/kustomize/
 - Declarative Management with Kustomize: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

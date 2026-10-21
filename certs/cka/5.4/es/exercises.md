@@ -1,7 +1,7 @@
-# CKA 1.35 — 5.4: Use the Gateway API to manage Ingress traffic
+# CKA 1.37 — 5.4: Use the Gateway API to manage Ingress traffic
 
 > Peso en el examen: 3.33%
-> Fuentes de referencia: [CNCF CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf), [Gateway API — sig-network](https://gateway-api.sigs.k8s.io/), [Envoy Gateway docs](https://gateway.envoyproxy.io/latest/)
+> Fuentes de referencia: [CNCF CKA Curriculum v1.37](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf), [Gateway API — sig-network](https://gateway-api.sigs.k8s.io/), [Envoy Gateway docs](https://gateway.envoyproxy.io/latest/)
 
 Gateway API es el sucesor de Ingress: separa responsabilidades en tres roles (infrastructure provider → `GatewayClass`, cluster operator → `Gateway`, application developer → `HTTPRoute`/`GRPCRoute`), es extensible por diseño (no depende de annotations) y soporta features nativas como traffic splitting por weight, header/query matching y cross-namespace routing controlado.
 

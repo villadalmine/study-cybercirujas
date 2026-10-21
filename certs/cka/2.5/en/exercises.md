@@ -1,6 +1,6 @@
 # Guided Exercises: Troubleshoot Services and Networking (CKA 2.5)
 
-> Reference Source: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Reference Source: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Prerequisites: A working Kubernetes cluster (kubeadm, kind, etc.) with at least two nodes and an active CNI plugin (Calico, Cilium, etc.).
 

@@ -1,7 +1,7 @@
 # Guided Exercises — CKA 1.2: Configure volume types, access modes and reclaim policies
 
 > Exam Weight: 3.33%
-> Reference Source: [CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Reference Source: [CKA Curriculum v1.37](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 > Prerequisites: A working cluster with at least 1 worker node (kind, minikube, or similar) and `kubectl` configured.
 
 ---

@@ -227,4 +227,4 @@ If labels omit required matches, network attempts return connection timeouts, co
 - Network Policies Overview: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Declare Network Policy Task Guide: https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 - NetworkPolicy API Reference: https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

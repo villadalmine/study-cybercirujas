@@ -1,4 +1,4 @@
-# CKA 1.35 — Tema 2.5: Troubleshoot Services and Networking
+# CKA 1.37 — Tema 2.5: Troubleshoot Services and Networking
 
 ## Introducción
 
@@ -490,7 +490,7 @@ nc: connect to 10.244.1.5 port 8080 (tcp) failed: Connection refused
 
 ## Referencias
 
-- CNCF, *CKA Curriculum v1.35*: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF, *CKA Curriculum v1.37*: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 - Kubernetes Docs, *Debug Services*: https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/
 - Kubernetes Docs, *Debugging DNS Resolution*: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
 - Kubernetes Docs, *Network Policies*: https://kubernetes.io/docs/concepts/services-networking/network-policies/

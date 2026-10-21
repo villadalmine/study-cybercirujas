@@ -1,6 +1,6 @@
 # Guided Exercises — 3.3 Configure workload autoscaling (weight 2.5)
 
-> Curriculum Reference: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Curriculum Reference: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 These exercises assume a working cluster with `kubectl` configured and administrative access. We focus primarily on `HorizontalPodAutoscaler` (HPA), which is fully manageable via `kubectl` without external dependencies. We also cover `VerticalPodAutoscaler` (VPA) manifests conceptually.
 

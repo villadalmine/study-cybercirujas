@@ -1,8 +1,8 @@
 # CKA 2.5 — Troubleshoot Services and Networking
 
-**Certificación:** CKA (Certified Kubernetes Administrator), examen v1.35
+**Certificación:** CKA (Certified Kubernetes Administrator), examen v1.37
 **Tema del currículum:** 2.5 Troubleshoot services and networking (peso: 6)
-**Fuente de referencia:** [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+**Fuente de referencia:** [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen un cluster funcional (kubeadm, kind o similar) con al menos dos nodos y un plugin CNI instalado (Calico, Cilium, etc.). Ejecutá los comandos en orden; cada bloque termina con preguntas para chequear que entendiste el porqué, no solo el comando.
 

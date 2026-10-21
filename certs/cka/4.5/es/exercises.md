@@ -1,6 +1,6 @@
 # Ejercicios guiados — Tema 4.5: Use Helm and Kustomize to install cluster components
 
-> Fuente de referencia: CNCF, *CKA Curriculum v1.35* — https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+> Fuente de referencia: CNCF, *CKA Curriculum v1.37* — https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 
 Requisitos previos: un cluster funcional con acceso vía `kubectl`, y el binario `helm` (v3) instalado. `kustomize` no requiere instalación aparte: está integrado en `kubectl` mediante la flag `-k`.
 

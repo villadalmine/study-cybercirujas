@@ -1,6 +1,6 @@
 # CKA 2.3 — Monitor cluster and application resource usage
 
-> Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Este tema cubre cómo observar el consumo de CPU y memoria a nivel de `Node` y de `Pod`, entender de dónde salen esos números (el pipeline de métricas), y usar esa información para diagnosticar problemas de scheduling, `OOMKilled` y presión de recursos en los nodos. Todos los comandos asumen que ya tenés un cluster funcionando y `kubectl` configurado contra él.
 

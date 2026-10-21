@@ -285,4 +285,4 @@ kubectl get networkpolicy -A
 - Network Policies — documentación oficial: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Declare Network Policy (task guide): https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 - NetworkPolicy API reference: https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
-- CKA Curriculum v1.35 (CNCF): https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CKA Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

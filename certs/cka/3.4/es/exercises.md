@@ -1,4 +1,4 @@
-# 3.4 — Primitivos para deployments robustos y self-healing (CKA v1.35, peso 2.5)
+# 3.4 — Primitivos para deployments robustos y self-healing (CKA v1.37, peso 2.5)
 
 Este ejercicio guiado cubre las primitivas de Kubernetes que garantizan que una aplicación se mantenga en el estado deseado: `Deployment`, `ReplicaSet`, `StatefulSet`, `DaemonSet`, `Job`/`CronJob`, probes (`liveness`, `readiness`, `startup`), `restartPolicy` y `PodDisruptionBudget`.
 
@@ -439,7 +439,7 @@ kubectl taint nodes <nombre-nodo> dedicated=infra:NoSchedule-
 
 ## Referencias
 
-- Curriculum oficial CKA v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- Curriculum oficial CKA v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 - Kubernetes docs — Deployments: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 - Kubernetes docs — ReplicaSet: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 - Kubernetes docs — StatefulSets: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/

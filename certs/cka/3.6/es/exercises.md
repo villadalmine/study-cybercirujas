@@ -1,10 +1,10 @@
-# CKA 1.35 — Tema 3.6: Manage Role Based Access Control (RBAC)
+# CKA 1.37 — Tema 3.6: Manage Role Based Access Control (RBAC)
 
 *Peso en el examen: 2.5%*
 
 RBAC es el modelo de autorización que usa la API de Kubernetes para decidir qué puede hacer un usuario, grupo o `ServiceAccount` sobre qué recursos. Se implementa con cuatro objetos: `Role`, `ClusterRole`, `RoleBinding` y `ClusterRoleBinding`, todos en el API group `rbac.authorization.k8s.io/v1`.
 
-> Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf). Documentación técnica complementaria: [Using RBAC Authorization — kubernetes.io](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
+> Fuente de referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf). Documentación técnica complementaria: [Using RBAC Authorization — kubernetes.io](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
 ---
 

@@ -225,4 +225,4 @@ Key `drain` flags:
 - Safely Drain a Node: https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
 - Operating etcd clusters for Kubernetes: https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/
 - etcdctl snapshot recovery: https://etcd.io/docs/latest/op-guide/recovery/
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

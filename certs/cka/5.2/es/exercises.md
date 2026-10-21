@@ -1,7 +1,7 @@
-# Ejercicios guiados: Define and enforce Network Policies (CKA 1.35 — 5.2)
+# Ejercicios guiados: Define and enforce Network Policies (CKA 1.37 — 5.2)
 
 > Peso en el examen: 3.33%
-> Fuente de referencia: [CNCF CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CNCF CKA Curriculum v1.37](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 > **Nota previa:** los `NetworkPolicy` solo se enforcean si el CNI del cluster los soporta (Calico, Cilium, Weave Net, etc.). Flannel "puro" no los aplica. Si tu cluster no enforcea policies, los `kubectl apply` van a funcionar igual (el objeto se crea), pero el tráfico no se va a bloquear realmente. Verificalo antes de empezar.
 

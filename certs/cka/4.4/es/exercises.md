@@ -1,7 +1,7 @@
-# CKA 1.35 — Tema 4.4: Implement and configure a highly-available control plane
+# CKA 1.37 — Tema 4.4: Implement and configure a highly-available control plane
 
 **Peso en el examen:** 3.57%
-**Referencia:** [CNCF CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+**Referencia:** [CNCF CKA Curriculum v1.37](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen que tenés acceso a un cluster `kubeadm` con al menos un control-plane node ya inicializado (`kubeadm init`) y, cuando se indique, un nodo adicional listo para unirse como control-plane. Si trabajás en un lab de un solo nodo, los pasos de inspección (bloques 1, 2, 4 y 5) igual son válidos; el bloque 3 podés seguirlo en modo lectura, analizando los comandos sin ejecutar el join real.
 

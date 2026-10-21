@@ -1,6 +1,6 @@
 # Ejercicios guiados — CKA 2.4: Manage and evaluate container output streams
 
-> Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Requisitos previos: acceso a un cluster de Kubernetes (`kind`, `minikube` o similar) con permisos para crear `Pods` en un `namespace` de práctica, y `kubectl` configurado.
 

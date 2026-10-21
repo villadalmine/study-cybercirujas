@@ -1,6 +1,6 @@
 # Ejercicios guiados: Troubleshoot clusters and nodes (CKA 2.1)
 
-> Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen un cluster kubeadm con al menos un control-plane node y un worker node, acceso SSH a ambos, y `kubectl` configurado.
 

@@ -1,4 +1,4 @@
-# Guided Exercises — 3.4 Self-healing primitives and robust deployments (CKA v1.35)
+# Guided Exercises — 3.4 Self-healing primitives and robust deployments (CKA v1.37)
 
 Prerequisites: A multi-node Kubernetes cluster (minikube `--nodes 2` or kind) with `kubectl` configured.
 

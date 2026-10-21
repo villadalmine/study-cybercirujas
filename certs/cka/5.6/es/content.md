@@ -228,4 +228,4 @@ kubectl -n kube-system get pods -l k8s-app=node-local-dns
 - CoreDNS plugins reference — https://coredns.io/plugins/
 - NodeLocal DNSCache — https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns/
 - Pod's DNS Policy (`dnsPolicy`/`dnsConfig`) — https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
-- CKA Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CKA Curriculum v1.37 — https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
