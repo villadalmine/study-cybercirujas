@@ -217,7 +217,9 @@ def sync_cncf() -> list[str]:
         if semantic and commits:
             version = semantic.group(1)
             block = cert.get("upstream") or {}
-            if block.get("version") != version:
+            # `upstream:` says what is ahead of the material. Once tracked_version equals the published
+            # version there is nothing ahead, and writing the block again would stamp today's date on it.
+            if block.get("version") != version and str(cert.get("tracked_version")) != version:
                 url = f"https://github.com/cncf/curriculum/raw/{commits[0]['sha']}/{quote(name)}"
                 body, _ = _get_bytes(url)
                 cert["upstream"] = {**block, "version": version, "objectives": url,
