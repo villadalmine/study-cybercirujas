@@ -32,7 +32,9 @@ flowchart LR
 5. **Squash merge, controlled by the maintainer.** The PR title becomes the one commit on `main`, so it is a Conventional Commit. Merges are done by the maintainer, or by the maintainer's session under the charter's rules (no blocking findings, green CI, the merge pinned to the reviewed head commit); the author of a change never merges it.
 6. **The milestone is automatic**: `milestone.yml` (`scripts/milestone_sync.py`) puts a merged PR, and an issue closed as completed, in the
    open `v*` milestone due first. **release-please** keeps the Release PR; merging it is the human release decision, and it makes the
-   tag, the changelog and the notes.
+   tag, the changelog and the notes. It cannot merge while the new version has a `feat` or a `fix` and
+   `docs/release-notes/NEXT.md` has no Highlights or Upgrade notes line (`scripts/check_pr.py`); the summary goes in
+   a `docs(release-notes): ...` PR, which refreshes the Release PR.
 7. **Labels are code** (`.github/labels.yml`): CI sets `scope:*`, `site:*`, `type:` by path and `lang:`; exception labels are set only
    by the maintainer; `triage:needed` marks something from outside the project that nobody has looked at yet.
 

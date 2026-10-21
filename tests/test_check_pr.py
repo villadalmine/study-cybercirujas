@@ -161,7 +161,9 @@ class CheckPrTests(unittest.TestCase):
                 ev, runs = Path(tmp) / "e.json", Path(tmp) / "runs.txt"
                 ev.write_text(json.dumps(event))
                 argv = ["check_pr.py", "--event", str(ev), "--files", *files, "--runs-file", str(runs)]
-                with mock.patch.object(sys, "argv", argv), redirect_stdout(io.StringIO()):
+                # the notes gate reads the real CHANGELOG and NEXT.md: ReleaseNotesGateTests covers it
+                with mock.patch.object(sys, "argv", argv), redirect_stdout(io.StringIO()), \
+                        mock.patch.object(check_pr, "release_notes_ready", return_value=[]):
                     return check_pr.main(), runs.exists()
         bot = "study-cybercirujas-releases[bot]"
         self.assertEqual(run(bot, "o/r"), (0, False))
@@ -965,6 +967,59 @@ class ExamVersionWiringTests(unittest.TestCase):
                 code, out = self.run_main(tmp, "exam-version", milestone=milestone)
                 self.assertEqual(code, 1, out)
                 self.assertIn("exam version:", out)
+
+
+class ReleaseNotesGateTests(unittest.TestCase):
+    """The Release PR is the human gate: v0.6.0 shipped with a feat and a fix and an empty NEXT.md
+    (decision 2026-10-21-study-notas-puerta-release-pr)."""
+    CHANGELOG = ("# Changelog\n\n## [0.7.0](https://x) (2026-11-01)\n\n\n### {kind}\n\n* **x:** y (#1)\n\n"
+                 "## [0.6.0](https://x) (2026-10-21)\n\n### Features\n\n* old (#2)\n")
+    EMPTY = "<!-- hint -->\n## Highlights\n\n<!-- one line -->\n\n## Upgrade notes\n\n## Thanks\n\n- @someone (#3)\n"
+
+    def test_a_feat_or_fix_with_an_empty_next_fails(self):
+        for kind in ("Features", "Bug Fixes"):
+            problems = check_pr.release_notes_ready(self.CHANGELOG.format(kind=kind), self.EMPTY)
+            self.assertEqual(len(problems), 1, kind)
+            self.assertIn("NEXT.md", problems[0])
+
+    def test_a_highlight_or_an_upgrade_note_passes_thanks_alone_does_not(self):
+        for section in ("Highlights", "Upgrade notes"):
+            text = self.EMPTY.replace(f"## {section}\n", f"## {section}\n\n- **X:** y.\n", 1)
+            self.assertEqual(check_pr.release_notes_ready(self.CHANGELOG.format(kind="Bug Fixes"), text), [], section)
+        self.assertTrue(check_pr.release_notes_ready(self.CHANGELOG.format(kind="Features"), self.EMPTY))
+
+    def test_only_the_newest_entry_counts(self):
+        # a docs-only release needs no summary, even when an older entry had features
+        self.assertEqual(check_pr.release_notes_ready(self.CHANGELOG.format(kind="Documentation"), self.EMPTY), [])
+        self.assertEqual(check_pr.release_notes_ready("# Changelog\n", self.EMPTY), [])
+
+    def test_the_shipped_v060_would_have_been_stopped(self):
+        changelog = (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertTrue(check_pr.release_notes_ready(changelog[changelog.index("## [0.6.0]"):], self.EMPTY))
+
+    def test_main_runs_the_gate_on_the_release_pr_and_not_on_the_notes_reset_pr(self):
+        # Real identities, no mock of the exemption: review of #243 found the reset PR (same App,
+        # release-notes-reset--v* branch, only NEXT.md) would have been gated and failed.
+        def run(ref, files, title):
+            event = {"pull_request": {
+                "title": title, "body": "", "user": {"login": "study-cybercirujas-releases[bot]", "id": 343498577},
+                "head": {"ref": ref, "repo": {"full_name": "o/r"}}, "base": {"repo": {"full_name": "o/r"}}}}
+            with tempfile.TemporaryDirectory() as tmp:
+                ev = Path(tmp) / "event.json"
+                ev.write_text(json.dumps(event), encoding="utf-8")
+                out = io.StringIO()
+                with mock.patch.object(sys, "argv", ["check_pr.py", "--event", str(ev), "--files", *files]), \
+                        redirect_stdout(out):
+                    return check_pr.main(), out.getvalue()
+        with mock.patch.object(check_pr, "release_notes_ready", return_value=["release notes: x"]) as gate:
+            code, out = run("release-please--branches--main", ["CHANGELOG.md"], "chore(main): release 0.7.0")
+            self.assertEqual(code, 1, out)
+            self.assertIn("PR: release notes: x", out)
+            code, out = run("release-notes-reset--v0.7.0", ["docs/release-notes/NEXT.md"],
+                            "chore(release-notes): reset NEXT.md after v0.7.0")
+            self.assertEqual(code, 0, out)
+            self.assertEqual(gate.call_count, 1)
+        self.assertIn("docs(release-notes)", check_pr.release_notes_ready(self.CHANGELOG.format(kind="Features"), self.EMPTY)[0])
 
 
 if __name__ == "__main__":

@@ -50,6 +50,9 @@ repository is this one, its branch is release-please--branches--main, and EVERY 
 writes (CHANGELOG.md, the manifest, pyproject.toml). Any other author, fork, branch or
 file gets the full check, and a commit's author email is never trusted here either.
 (The notes-reset PR of scripts/release_notes.py is exempt the same way, for NEXT.md only.)
+The Release PR is the human gate of a release: when the new CHANGELOG entry has Features or Bug Fixes,
+docs/release-notes/NEXT.md must hold a Highlights or Upgrade notes line, or the Release PR fails
+(release_notes_ready; decision 2026-10-21: v0.6.0 shipped without its human summary).
 
 - the Scope section does not declare exactly one of small | medium | large |
   exam-version (CONTRIBUTING -> How big is my change?);
@@ -94,6 +97,9 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import yaml
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from release_notes import NEXT_PATH, parse_sections  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -251,6 +257,32 @@ def is_release_please(head_ref: str | None, files: list[str], author: str | None
     names = [f.replace("\\", "/") for f in files]
     return ((RELEASE_BRANCH.fullmatch(head_ref) is not None and all(f in RELEASE_FILES for f in names))
             or (NOTES_RESET_BRANCH.fullmatch(head_ref) is not None and all(f in NOTES_RESET_FILES for f in names)))
+
+
+# The Release PR is the human gate (CONTRIBUTING -> Release notes): a release with a feat or a fix
+# carries its human summary. NEXT.md was the right place and worked in v0.5.0 and v0.5.1; only the
+# control was missing, so v0.6.0 shipped without one.
+USER_VISIBLE = re.compile(r"^### (Features|Bug Fixes)\s*$", re.M)
+SUMMARY_SECTIONS = ("Highlights", "Upgrade notes")
+
+
+def release_notes_ready(changelog: str, next_text: str) -> list[str]:
+    """[] when the newest CHANGELOG entry has no feat or fix, or NEXT.md summarises it."""
+    newest = (re.split(r"^## \[", changelog, flags=re.M) + ["", ""])[1]
+    if not USER_VISIBLE.search(newest):
+        return []
+    if any(parse_sections(next_text).get(name) for name in SUMMARY_SECTIONS):
+        return []
+    return [f"release notes: this release has a feat or a fix and {NEXT_PATH} has no Highlights or Upgrade "
+            "notes line; add the human summary in a `docs(release-notes): ...` PR to main (a docs commit shows "
+            "in the changelog, so release-please refreshes this PR and the check runs again; a chore does not)"]
+
+
+def is_release_pr(head_ref: str | None, files: list[str], author: str | None = None,
+                  same_repo: bool = False) -> bool:
+    """The Release PR itself, not the notes-reset PR that shares its exemption."""
+    return (RELEASE_BRANCH.fullmatch(head_ref or "") is not None
+            and is_release_please(head_ref, files, author, same_repo))
 
 
 def is_bot_pr(head_ref: str | None, files: list[str], author: str | None = None,
@@ -793,6 +825,9 @@ def main() -> int:
     authored = [f for f in files if f.replace("\\", "/") not in generated]
     problems = check(title, body, authored, head_ref=head_ref, author=author,
                      same_repo=same_repo) + scope(authored, code_lines, labels, all_files=files, generated_current=generated_current)
+    if is_release_pr(head_ref, files, author, same_repo):
+        read = lambda rel: (REPO / rel).read_text(encoding="utf-8") if (REPO / rel).is_file() else ""  # noqa: E731
+        problems += release_notes_ready(read("CHANGELOG.md"), read(NEXT_PATH))
     if args.base:
         problems += dco(commits_of(args.base), author, head_ref, files, same_repo)
     if args.base and CATALOG in files and not is_bot_pr(head_ref, files, author, same_repo):
