@@ -1,33 +1,32 @@
 # Community 210
 
-> 9 nodes · cohesion 0.36
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
-- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
-- **main()** (6 connections) — `scripts/ocr_pdf.py`
-- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
-- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
-- **Path** (3 connections)
-- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
-- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
-- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
+- **DocsImpactTests** (11 connections) — `tests/test_check_pr.py`
+- **.test_a_doc_naming_the_path_or_the_file_name_is_affected_lookalikes_are_not()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_doc_the_pr_updates_and_a_docs_only_pr_need_nothing()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_listed_doc_must_be_that_path_not_a_substring_of_another()** (1 connections) — `tests/test_check_pr.py`
+- **.test_changed_study_material_does_not_list_every_doc_that_mentions_meta_yaml()** (1 connections) — `tests/test_check_pr.py`
+- **.test_each_affected_doc_must_be_in_the_section()** (1 connections) — `tests/test_check_pr.py`
+- **.test_history_generated_material_and_tests_are_not_docs()** (1 connections) — `tests/test_check_pr.py`
+- **.test_main_runs_it_and_bot_prs_are_exempt()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_real_repo_lists_what_243_missed()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_release_pr_is_exempt_through_main()** (1 connections) — `tests/test_check_pr.py`
+- **#243 changed scripts/check_pr.py and left AGENTS.md, AGENT-GUIDE and HOW-IT-…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/ocr_pdf.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,37 +1,35 @@
 # Community 221
 
-> 9 nodes · cohesion 0.25
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **tree_sha256()** (8 connections) — `scripts/curriculum_diff.py`
-- **number()** (6 connections) — `scripts/curriculum_diff.py`
-- **check_tree()** (4 connections) — `scripts/curriculum_diff.py`
-- **sha256_text()** (4 connections) — `scripts/curriculum_diff.py`
-- **snapshot()** (4 connections) — `scripts/curriculum_diff.py`
-- **Result for v1.37 (2026-10-20)** (2 connections) — `docs/upgrades/README.md`
-- **What a real curriculum always satisfies: domains, objectives in each, weights…** (1 connections) — `scripts/curriculum_diff.py`
-- **Hash of the objective tree itself, so two PDFs with the same objectives compare…** (1 connections) — `scripts/curriculum_diff.py`
-- **A weight as the document means it: 10, not 10.0; 3.33 stays 3.33.** (1 connections) — `scripts/curriculum_diff.py`
+- **accepted()** (9 connections) — `teach/core/bot_stats.py`
+- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
+- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
+- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
+- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
+- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (6 shared connections)
-- [Community 219](Community_219.md) (2 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/upgrades/README.md`
-- `scripts/curriculum_diff.py`
+- `teach/core/bot_stats.py`
+- `tests/test_bot_stats.py`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (95%)
-- INFERRED: 1 (5%)
+- EXTRACTED: 18 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,30 +1,33 @@
 # Community 239
 
-> 5 nodes · cohesion 0.50
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **write()** (6 connections) — `scripts/curriculum_diff.py`
-- **_diff_run()** (5 connections) — `scripts/curriculum_diff.py`
-- **dump_json()** (5 connections) — `scripts/curriculum_diff.py`
-- **_plan_run()** (4 connections) — `scripts/curriculum_diff.py`
-- **Write `text` to `out` (stdout if none), or with `check` fail when `out` holds…** (1 connections) — `scripts/curriculum_diff.py`
+- **How it works** (6 connections) — `docs/HOW-IT-WORKS.md`
+- **Level 1: the five flows** (6 connections) — `docs/HOW-IT-WORKS.md`
+- **1. Content generation** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **2. Labs** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **3. Pull request lifecycle** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **4. Release** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **5. Curriculum upgrade** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **Level 0: the whole thing in one picture** (1 connections) — `docs/HOW-IT-WORKS.md`
+- **Where we are now** (1 connections) — `docs/HOW-IT-WORKS.md`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (6 shared connections)
-- [Community 135](Community_135.md) (3 shared connections)
-- [Community 219](Community_219.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 164](Community_164.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/curriculum_diff.py`
+- `docs/HOW-IT-WORKS.md`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (88%)
-- INFERRED: 2 (12%)
+- EXTRACTED: 11 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

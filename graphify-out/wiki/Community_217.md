@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **Killercoda is an export target, never the source** (8 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Killercoda is an export target, never the source** (9 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **Run a lab anywhere** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **Evidence per target** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **How a lab gets proven before it is published** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
@@ -16,6 +16,7 @@
 
 ## Relationships
 
+- [Community 111](Community_111.md) (1 shared connections)
 - [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
@@ -24,7 +25,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 9 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

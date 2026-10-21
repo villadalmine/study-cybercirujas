@@ -1,26 +1,38 @@
 # Community 166
 
-> 3 nodes · cohesion 0.67
+> 12 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **_write_meta()** (5 connections) — `teach/core/generator.py`
-- **Path** (1 connections)
-- **Provenance for one language directory: who made it, with what, when. Written…** (1 connections) — `teach/core/generator.py`
+- **test_corpus.py** (9 connections) — `tests/test_corpus.py`
+- **get_topic()** (6 connections) — `teach/core/corpus.py`
+- **ContractTests** (3 connections) — `tests/test_corpus.py`
+- **TopicTests** (3 connections) — `tests/test_corpus.py`
+- **get_topic()** (2 connections) — `teach/mcp_server.py`
+- **.test_a_missing_language_says_so_rather_than_pretending()** (2 connections) — `tests/test_corpus.py`
+- **.test_the_material_travels_with_its_sources()** (2 connections) — `tests/test_corpus.py`
+- **.test_it_is_the_four_functions_the_design_names()** (1 connections) — `tests/test_corpus.py`
+- **.test_nothing_in_the_contract_can_write()** (1 connections) — `tests/test_corpus.py`
+- **The material for one topic: theory, exercises, and where it came from.…** (1 connections) — `teach/core/corpus.py`
+- **The four functions a study agent gets — and the boundary around them. Phase 2…** (1 connections) — `tests/test_corpus.py`
+- **inspect** (1 connections)
 
 ## Relationships
 
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 75](Community_75.md) (3 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/generator.py`
+- `teach/core/corpus.py`
+- `teach/mcp_server.py`
+- `tests/test_corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

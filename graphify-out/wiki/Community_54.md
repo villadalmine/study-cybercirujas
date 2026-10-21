@@ -1,63 +1,51 @@
 # Community 54
 
-> 42 nodes · cohesion 0.05
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **FAQ — how the ecosystem works, honestly** (17 connections) — `docs/FAQ.md`
-- **study-lab — break/fix labs in a throwaway container** (10 connections) — `docs/LABS-RUNNER.md`
-- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **What you can contribute** (5 connections) — `CONTRIBUTING.md`
-- **.fetch()** (4 connections) — `tests/test_check_pr.py`
-- **fail()** (4 connections) — `tests/test_check_pr.py`
-- **.verified()** (3 connections) — `teach/lab/spec.py`
-- **Raising a topic's quality score** (3 connections) — `CONTRIBUTING.md`
-- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
+- **current()** (5 connections) — `teach/lab/kc_scope.py`
+- **Releases, milestones and the board** (3 connections) — `docs/FAQ.md`
+- **Glossary** (3 connections) — `docs/HOW-IT-WORKS.md`
 - **Content generation** (2 connections) — `docs/FAQ.md`
-- **Determinism and provenance** (2 connections) — `docs/FAQ.md`
-- **Quality score** (2 connections) — `docs/FAQ.md`
+- **Killercoda** (2 connections) — `docs/FAQ.md`
+- **Sources and licensing** (2 connections) — `docs/FAQ.md`
 - **Translations** (2 connections) — `docs/FAQ.md`
-- **How it works** (2 connections) — `docs/LABS-RUNNER.md`
-- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
-- **Quick start** (2 connections) — `docs/LABS-RUNNER.md`
-- **Run a lab from another repository** (2 connections) — `docs/LABS-RUNNER.md`
-- **State of the 548 curated labs (validate, 2026-10-15)** (2 connections) — `docs/LABS-RUNNER.md`
-- **The template: `lab.yaml` v2 + `break | verify | cleanup`** (2 connections) — `docs/LABS-RUNNER.md`
-- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
-- *... and 17 more nodes in this community*
+- **Deployment** (1 connections) — `docs/FAQ.md`
+- **Hallucination and groundedness** (1 connections) — `docs/FAQ.md`
+- **Known gaps** (1 connections) — `docs/FAQ.md`
+- **Labs and the runner** (1 connections) — `docs/FAQ.md`
+- **Reviews: AI and human** (1 connections) — `docs/FAQ.md`
+- **Security** (1 connections) — `docs/FAQ.md`
+- **The generation pipeline in one picture** (1 connections) — `docs/FAQ.md`
+- **The web app and the study bot** (1 connections) — `docs/FAQ.md`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 23](Community_23.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 32](Community_32.md) (1 shared connections)
+- [Community 111](Community_111.md) (3 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
+- [Community 263](Community_263.md) (1 shared connections)
 - [Community 146](Community_146.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
+- [Community 239](Community_239.md) (1 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
 - `docs/FAQ.md`
-- `docs/LABS-RUNNER.md`
-- `teach/lab/spec.py`
-- `tests/test_check_pr.py`
+- `docs/HOW-IT-WORKS.md`
+- `teach/lab/kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 48 (81%)
-- INFERRED: 11 (19%)
+- EXTRACTED: 20 (69%)
+- INFERRED: 9 (31%)
 - AMBIGUOUS: 0 (0%)
 
 ---

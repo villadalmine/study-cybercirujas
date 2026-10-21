@@ -1,18 +1,16 @@
 # Community 167
 
-> 13 nodes · cohesion 0.17
+> 11 nodes · cohesion 0.20
 
 ## Key Concepts
 
 - **get_topic()** (8 connections) — `teach/api.py`
-- **get_cert()** (7 connections) — `teach/api.py`
 - **get_topic_preview()** (7 connections) — `teach/api.py`
 - **_not_found()** (7 connections) — `teach/api.py`
 - **get_paths()** (5 connections) — `teach/api.py`
 - **_valid_lang()** (5 connections) — `teach/api.py`
 - **HTTPException** (1 connections)
 - **Exception** (1 connections)
-- **One certification: catalogue entry, syllabus and which topics have material.** (1 connections) — `teach/api.py`
 - **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
 - **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
 - **A 404 that never carries a filesystem path: FileNotFoundError text names the…** (1 connections) — `teach/api.py`
@@ -21,12 +19,12 @@
 ## Relationships
 
 - [Community 107](Community_107.md) (6 shared connections)
-- [Community 125](Community_125.md) (5 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
+- [Community 125](Community_125.md) (3 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
 - [Community 207](Community_207.md) (2 shared connections)
-- [Community 0](Community_0.md) (1 shared connections)
 - [Community 173](Community_173.md) (1 shared connections)
 - [Community 121](Community_121.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
 
@@ -34,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
+- EXTRACTED: 27 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

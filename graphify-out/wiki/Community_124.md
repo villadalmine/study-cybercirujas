@@ -1,6 +1,6 @@
 # Community 124
 
-> 67 nodes · cohesion 0.06
+> 70 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -17,6 +17,7 @@
 - **k8s_check()** (7 connections) — `scripts/quality_score.py`
 - **lab_check()** (7 connections) — `scripts/quality_score.py`
 - **main()** (7 connections) — `scripts/quality_score.py`
+- **load_weights()** (7 connections) — `teach/core/scoring.py`
 - **score()** (7 connections) — `teach/core/scoring.py`
 - **FormulaTests** (6 connections) — `tests/test_quality_score.py`
 - **cited_domains()** (6 connections) — `scripts/check_sources.py`
@@ -28,23 +29,22 @@
 - **catalogue()** (5 connections) — `scripts/check_sources.py`
 - **main()** (5 connections) — `scripts/check_sources.py`
 - **floor_check()** (5 connections) — `scripts/quality_score.py`
-- **rel()** (5 connections) — `scripts/quality_score.py`
-- *... and 42 more nodes in this community*
+- *... and 45 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (16 shared connections)
-- [Community 63](Community_63.md) (12 shared connections)
-- [Community 89](Community_89.md) (6 shared connections)
+- [Community 232](Community_232.md) (10 shared connections)
+- [Community 89](Community_89.md) (10 shared connections)
+- [Community 43](Community_43.md) (7 shared connections)
 - [Community 46](Community_46.md) (6 shared connections)
-- [Community 50](Community_50.md) (2 shared connections)
+- [Community 61](Community_61.md) (5 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 63](Community_63.md) (3 shared connections)
 - [Community 104](Community_104.md) (2 shared connections)
 - [Community 147](Community_147.md) (2 shared connections)
 - [Community 7](Community_7.md) (2 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 13](Community_13.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 
 ## Source Files
 
@@ -57,7 +57,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 183 (100%)
+- EXTRACTED: 190 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

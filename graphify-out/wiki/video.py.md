@@ -1,11 +1,12 @@
 # video.py
 
-> 47 nodes · cohesion 0.11
+> 49 nodes · cohesion 0.10
 
 ## Key Concepts
 
 - **video.py** (49 connections) — `teach/core/video.py`
 - **Path** (15 connections)
+- **root()** (13 connections) — `teach/core/catalog.py`
 - **generate_cert_script()** (12 connections) — `teach/core/video.py`
 - **VideoError** (10 connections) — `teach/core/video.py`
 - **_render_from_script()** (10 connections) — `teach/core/video.py`
@@ -28,33 +29,33 @@
 - **_working_encoder()** (5 connections) — `teach/core/video.py`
 - **Video — Technical Debt** (5 connections) — `docs/BACKLOG.md`
 - **2026-07-17** (5 connections) — `docs/HISTORY.md`
-- **_ensure_voice()** (4 connections) — `teach/core/video.py`
-- *... and 22 more nodes in this community*
+- *... and 24 more nodes in this community*
 
 ## Relationships
 
+- [Community 43](Community_43.md) (6 shared connections)
 - [Community 0](Community_0.md) (5 shared connections)
+- [Community 173](Community_173.md) (4 shared connections)
 - [Community 7](Community_7.md) (4 shared connections)
-- [Community 59](Community_59.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 173](Community_173.md) (3 shared connections)
-- [Community 10](Community_10.md) (2 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
 - [Community 16](Community_16.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/BACKLOG.md`
 - `docs/HISTORY.md`
+- `teach/core/catalog.py`
 - `teach/core/video.py`
 
 ## Audit Trail
 
-- EXTRACTED: 142 (94%)
+- EXTRACTED: 152 (94%)
 - INFERRED: 9 (6%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,35 +1,41 @@
 # Community 131
 
-> 13 nodes · cohesion 0.26
+> 16 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
-- **._outdated()** (7 connections) — `tests/test_stale_cycle.py`
-- **._regenerate()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_cycle_closes_when_none_are_left()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_regenerating_default_does_not_release_the_rest()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_unreadable_meta_counts_as_outdated()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_without_a_timestamp_nothing_is_outdated()** (4 connections) — `tests/test_stale_cycle.py`
-- **.test_content_older_than_the_change_is_flagged()** (2 connections) — `tests/test_stale_cycle.py`
-- **.setUp()** (1 connections) — `tests/test_stale_cycle.py`
-- **.tearDown()** (1 connections) — `tests/test_stale_cycle.py`
-- **A topic that never changed reports no outdated languages, however old its…** (1 connections) — `tests/test_stale_cycle.py`
-- **When in doubt, regenerate: if freshness cannot be proven, it is not assumed.** (1 connections) — `tests/test_stale_cycle.py`
-- **The case that drove the design: rebuilding Spanish cannot mark the topic…** (1 connections) — `tests/test_stale_cycle.py`
+- **audit_compare.py** (16 connections) — `scripts/audit_compare.py`
+- **compare()** (7 connections) — `scripts/audit_compare.py`
+- **load_results()** (5 connections) — `scripts/audit_compare.py`
+- **main()** (5 connections) — `scripts/audit_compare.py`
+- **DuplicateAuditor** (4 connections) — `scripts/audit_compare.py`
+- **has_proposal()** (4 connections) — `scripts/audit_compare.py`
+- **valid_score()** (4 connections) — `scripts/audit_compare.py`
+- **criterion_ids()** (2 connections) — `scripts/audit_compare.py`
+- **priority()** (2 connections) — `scripts/audit_compare.py`
+- **Path** (1 connections)
+- **ValueError** (1 connections)
+- **Compare the outputs of several auditors against docs/audit/rubric.yml. Prints a…** (1 connections) — `scripts/audit_compare.py`
+- **A proposal counts only if it says what to change, what it implies and how to…** (1 connections) — `scripts/audit_compare.py`
+- **Two result files share the same auditor and commit.** (1 connections) — `scripts/audit_compare.py`
+- **The score of a criterion, or None if it is missing, not 0/1/2, or has no…** (1 connections) — `scripts/audit_compare.py`
+- **Return (report, disagreements, refused).** (1 connections) — `scripts/audit_compare.py`
 
 ## Relationships
 
-- [Community 10](Community_10.md) (7 shared connections)
+- [Community 232](Community_232.md) (3 shared connections)
+- [Community 89](Community_89.md) (3 shared connections)
+- [Community 30](Community_30.md) (2 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_stale_cycle.py`
+- `scripts/audit_compare.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 33 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

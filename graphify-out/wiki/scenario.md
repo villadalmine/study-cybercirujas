@@ -1,6 +1,6 @@
 # scenario()
 
-> God node · 30 connections · `teach/lab/export_killercoda.py`
+> God node · 31 connections · `teach/lab/export_killercoda.py`
 
 **Community:** [Community 18](Community_18.md)
 
@@ -9,11 +9,13 @@
 ### calls
 - json `EXTRACTED`
 - tree() `EXTRACTED`
-- load_envs() `EXTRACTED`
-- _scenario() `EXTRACTED`
 - shlex `EXTRACTED`
+- _forged() `EXTRACTED`
+- load_envs() `EXTRACTED`
 - select() `EXTRACTED`
+- _scenario() `EXTRACTED`
 - bash_n() `EXTRACTED`
+- _env() `EXTRACTED`
 - of() `EXTRACTED`
 - markdown() `EXTRACTED`
 - of() `EXTRACTED`
@@ -23,11 +25,9 @@
 - test_secret_guard() `EXTRACTED`
 - test_verify_wrapper_honours_regex() `EXTRACTED`
 - split_solution() `EXTRACTED`
-- _env() `EXTRACTED`
 - _run_line() `EXTRACTED`
 - _verify_test() `EXTRACTED`
-- markdown() `EXTRACTED`
-- *…and 7 more `calls` connection(s) not listed (lowest-degree first to go)*
+- *…and 8 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - export_killercoda.py `EXTRACTED`
@@ -36,7 +36,7 @@
 - Relative path -> text for one scenario (the lab's scripts go under assets/). `EXTRACTED`
 
 ### references
-- [Lab](Lab.md) `EXTRACTED`
+- Lab `EXTRACTED`
 
 ---
 
