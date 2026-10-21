@@ -434,7 +434,8 @@ merging it is the human gate that tags `vX.Y.Z` and publishes the image
 
 **Who writes the release notes?**
 The changelog is release-please's. The Highlights, Upgrade notes and Thanks
-on top of a GitHub Release come from `docs/release-notes/NEXT.md` (PR authors add lines) plus the authors of the
+on top of a GitHub Release come from `docs/release-notes/NEXT.md` (PR authors add lines; the Release PR fails while a release with a `feat` or a
+`fix` has none) plus the authors of the
 merged PRs, found by `scripts/release_notes.py` when the release is created; a small PR then empties NEXT.md
 ([CONTRIBUTING → Releases](../CONTRIBUTING.md#releases)).
 
