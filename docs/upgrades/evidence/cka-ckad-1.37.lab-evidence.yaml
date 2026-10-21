@@ -1,0 +1,73 @@
+# Where the CKA and CKAD labs were proven on Kubernetes 1.37 (#51, #103). Same shape as deploy/lab-evidence.yaml (#206):
+#   <cert>/<topic>: {<target>: {date, lab_hash, evidence, runner}}, targets from deploy/lab-targets.yaml (`kind`, `k3s-incus`).
+# No entry for a target means "not tested there", never "does not work". When #206 is on main these entries move there as they are.
+# lab_hash of a lab now: teach.lab.kc_meta.lab_hash(spec.load(Path("certs/<cert>/<topic>/lab"), "curated")), on the tree of
+# main + #201 + the lab PRs (#213, #214). `evidence` is the kept log and its sha256 (also in logs/SHA256SUMS).
+# What each log shows: break, check/verify FAIL before the fix, the reference fix, check/verify PASS after it, down or cleanup.
+
+cka/1.1:
+  kind:
+    date: '2026-10-21'
+    lab_hash: b65bd576a80ad6056afda9795389519a9965ef554ecd58650e77dad45f3911b7
+    evidence: docs/upgrades/evidence/logs/kind-cka-1.1.log sha256:2ad1e31834900d727168430e44005f17e855a485e36b9dd2864539bbdf7db3f8
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: b65bd576a80ad6056afda9795389519a9965ef554ecd58650e77dad45f3911b7
+    evidence: docs/upgrades/evidence/logs/k3s-incus-cka-1.1.log sha256:4d031a538fdb07cf614a13a0ea0fab6a8c587ee2ad1c41cbb4c2b10a70bebceb
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex
+cka/3.3:
+  kind:
+    date: '2026-10-21'
+    lab_hash: 73887deafb7afe676e007d13a4b3fba3ef3d9d743ee0166898532615dca68c8d
+    evidence: docs/upgrades/evidence/logs/kind-cka-3.3.log sha256:2e37f3c4e8c111c20dcfc12f118754ce22f6b317808ba1fce4f0ca669328c5bd
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: 73887deafb7afe676e007d13a4b3fba3ef3d9d743ee0166898532615dca68c8d
+    evidence: docs/upgrades/evidence/logs/k3s-incus-cka-3.3.log sha256:1dff76aa55944f08b6402e788cb377384ae1802f2368c5c9c7a19c35dc558652
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex
+cka/3.4:
+  kind:
+    date: '2026-10-21'
+    lab_hash: a0d4f8d4a85582824452906dd68545ac8f44b0ea0385900b4b591abb6a7c96a5
+    evidence: docs/upgrades/evidence/logs/kind-cka-3.4.log sha256:25807c364e2532e87cc4a9825fe9143bcf7e6476e14131e0f18a8734bd4ef550
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: a0d4f8d4a85582824452906dd68545ac8f44b0ea0385900b4b591abb6a7c96a5
+    evidence: docs/upgrades/evidence/logs/k3s-incus-cka-3.4.log sha256:7819eaeb659e82a987845def8416385e3a4290642f734fff9528024e111ffdaf
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex
+cka/3.5:
+  kind:
+    date: '2026-10-21'
+    lab_hash: 6069c7bef02485deb26b20e3383e92552654af7e14935c77acc8acab4a46dac5
+    evidence: docs/upgrades/evidence/logs/kind-cka-3.5.log sha256:1d8cd09b6bea72874e07157581746c6d802153885eefd2e60491e16aef6d89ec
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: 6069c7bef02485deb26b20e3383e92552654af7e14935c77acc8acab4a46dac5
+    evidence: docs/upgrades/evidence/logs/k3s-incus-cka-3.5.log sha256:a69e1553dfc40df54e2e4e7aaa88273bd97e041768c52141bf140f602fd3e611
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex
+ckad/4.4:
+  kind:
+    date: '2026-10-21'
+    lab_hash: a096f242c4b0f9b790aeaf923d3f371989b4361d5f7f14a9788682c58b14e3fc
+    evidence: docs/upgrades/evidence/logs/kind-ckad-4.4.log sha256:9483942cd797886225328298fc0943fdd12a7f2d9f06a51b701a13cf4f4591e5
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: a096f242c4b0f9b790aeaf923d3f371989b4361d5f7f14a9788682c58b14e3fc
+    evidence: docs/upgrades/evidence/logs/k3s-incus-ckad-4.4.log sha256:be23e852208d41d65b80508106878c283e132e23d22ecdd393d0ffed6ee13078
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex
+ckad/5.2:
+  kind:
+    date: '2026-10-21'
+    lab_hash: cd32e6af4970ad580bd872592bf6184fa6253edf65fa27e96e244f5d8e9245fa
+    evidence: docs/upgrades/evidence/logs/kind-ckad-5.2.log sha256:952a2feea6ea45d1fdc8bde2dbf8447ce3708a277717dbb85bb927e7a5639d68
+    runner: study-lab:k8s (kind v0.33.0, kindest/node v1.37.0, server v1.37.0), one Incus VM on the Dell (8 vCPU, nice 19), Docker 29, Ubuntu 24.04
+  k3s-incus:
+    date: '2026-10-21'
+    lab_hash: cd32e6af4970ad580bd872592bf6184fa6253edf65fa27e96e244f5d8e9245fa
+    evidence: docs/upgrades/evidence/logs/k3s-incus-ckad-5.2.log sha256:37761361918be00d01a0a6b3d61f36cc04352422eefebf88166a4bf58346aa03
+    runner: k3s v1.37.1+k3s1, one Incus VM on the Dell (4 vCPU, 4 GiB, Ubuntu 24.04), node lab-control-plane; the lab's break_fix.sh run directly with its own env, FAIL and PASS judged by the verify exit code, and for cka 1.1 and 3.5 (rc 0 either way) by the lab success regex

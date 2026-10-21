@@ -1,0 +1,80 @@
+== lab ckad/5.2, target k3s-incus, 2026-10-21T06:12:12Z; node: lab-control-plane   Ready   control-plane   7m26s   v1.37.1+k3s1   10.50.0.18   <none>   Ubuntu 24.04.5 LTS   6.8.0-147-
+== break
+Contexto actual de kubectl: default
+namespace/ckad-5-2-lab created
+deployment.apps/web-deploy created
+service/web-svc created
+pod/web-tester created
+Esperando a que el Deployment esté listo...
+Waiting for deployment "web-deploy" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "web-deploy" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web-deploy" successfully rolled out
+Esperando a que el pod de test esté listo...
+pod/web-tester condition met
+Verificación inicial (entorno sano, todavía sin romper nada)...
+OK: el Service funciona correctamente antes de la falla inyectada.
+
+============================================================
+ LABORATORIO LISTO - Tema 5.2: acceso a apps via Services
+============================================================
+Se rompió A PROPÓSITO algo relacionado con cómo el Service
+'web-svc' expone al Deployment 'web-deploy' en el namespace
+'ckad-5-2-lab'. Qué falla exacta se aplicó se elige al azar en cada
+corrida de "setup" y no se te dice cuál es.
+
+SÍNTOMA que vas a observar:
+  Al intentar acceder a la app a través del Service, la
+  conexión falla (timeout, connection refused, o no llega un
+  HTTP 200), a pesar de que el Deployment "existe" en el
+  namespace.
+
+PROBAR EL SÍNTOMA:
+  kubectl -n ckad-5-2-lab exec web-tester -- curl -v --max-time 5 http://web-svc/
+
+TU OBJETIVO:
+  Diagnosticar y arreglar el problema usando kubectl, hasta
+  que vuelva a valer lo siguiente:
+    - kubectl -n ckad-5-2-lab exec web-tester -- curl -s -o /dev/null -w '%{http_code}\n' http://web-svc/
+      devuelve 200
+    - kubectl -n ckad-5-2-lab get endpoints web-svc
+      muestra 2 direcciones
+    - kubectl -n ckad-5-2-lab get deployment web-deploy
+      muestra 2/2 réplicas Ready
+
+HERRAMIENTAS ÚTILES PARA DIAGNOSTICAR (no revelan la causa,
+pero te dan las pistas que necesitás):
+  kubectl -n ckad-5-2-lab get deployment,pod,svc,endpoints -o wide
+  kubectl -n ckad-5-2-lab describe svc web-svc
+  kubectl -n ckad-5-2-lab describe pod -l app=web
+  kubectl -n ckad-5-2-lab get pod -l app=web --show-labels
+
+Cuando creas que lo arreglaste, corré:
+  /lab/break_fix.sh check
+
+Para destruir el laboratorio:
+  /lab/break_fix.sh cleanup
+============================================================
+rc=0
+== verify before the fix
+HTTP code recibido: 000
+Endpoints Ready en el Service: 0
+Pods Ready en el Deployment: 2 / 2
+RESULTADO: FAIL - todavía hay un problema. Seguí diagnosticando.
+rc=1
+== fix
+service/web-svc patched
+service/web-svc patched (no change)
+deployment.apps/web-deploy scaled
+deployment.apps/web-deploy patched
+deployment "web-deploy" successfully rolled out
+== verify after the fix
+HTTP code recibido: 200
+Endpoints Ready en el Service: 2
+Pods Ready en el Deployment: 2 / 2
+RESULTADO: PASS - arreglaste el acceso a la app via el Service.
+rc=0
+== cleanup
+namespace "ckad-5-2-lab" deleted
+Namespace 'ckad-5-2-lab' eliminado.
+rc=0
+== result: break_rc=0 verify_before_fix_rc=1 regex_before=4 verify_after_fix_rc=0 regex_after=4 cleanup_rc=0 secs=64

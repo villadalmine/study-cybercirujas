@@ -1,0 +1,103 @@
+== lab cka/3.5, target kind, 2026-10-21T05:53:59Z
+== run (break)
+[study-lab] lab:     cka-3.5 — Configure Pod admission and scheduling (limits, node affinity, etc.)
+[study-lab] origen:  curado (repo study) (study certs/cka/3.5)
+[study-lab] estado:  VERIFICADO 2026-10-15 (runner)
+[study-lab] preparing the environment (kind) inside study-lab-cka-3-5
+[study-lab-init] loading kindest/node:v1.37.0 from cache
+[study-lab-init] creating kind cluster (kindest/node:v1.37.0, 0 workers)
+[study-lab-init] ready: lab-control-plane=Ready 
+[study-lab] breaking the lab (break)
+Esperando que la línea base quede sana antes de romper nada...
+Waiting for deployment "web-quota" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "web-quota" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "web-quota" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web-quota" successfully rolled out
+Waiting for deployment "web-affinity" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web-affinity" successfully rolled out
+
+================================================================
+LAB ROTO - Tema 3.5: Pod admission and scheduling
+Namespace: cka-3-5-lab
+================================================================
+
+Vas a ver algo así (dale unos segundos y corré vos mismo estos comandos):
+
+  kubectl -n cka-3-5-lab get deploy
+  kubectl -n cka-3-5-lab get pods
+  kubectl -n cka-3-5-lab get events --sort-by=.lastTimestamp
+
+SÍNTOMA 1 (Deployment 'web-quota'):
+  El Deployment no llega a 2/2 réplicas nuevas disponibles. El ReplicaSet
+  más reciente tiene un evento de tipo "FailedCreate" mencionando un
+  LimitRange y un límite de cpu excedido.
+
+SÍNTOMA 2 (Deployment 'web-affinity'):
+  Los pods quedan en estado Pending. El evento del pod dice algo como
+  "0/N nodes are available: N node(s) didn't match Pod's node affinity/selector."
+
+OBJETIVO:
+  1. Para 'web-quota': lográ que el Deployment quede en 2/2 Running
+     SIN borrar ni deshabilitar el LimitRange 'cpu-cap'. Tenés
+     que reconciliar los resources del container con lo que el LimitRange
+     permite (ajustando el Deployment, el LimitRange, o ambos).
+
+  2. Para 'web-affinity': lográ que el Deployment quede en 2/2 Running
+     SIN quitar el bloque de nodeAffinity. Tenés que hacer que la regla
+     de afinidad efectivamente se pueda cumplir en el cluster.
+
+Cuando creas que está resuelto, corré:
+  ./break_fix.sh check
+
+================================================================
+
+[study-lab] listo. Entrá con:   study-lab shell cka 3.5
+[study-lab] verificá con:      study-lab check cka 3.5
+[study-lab] y limpiá con:      study-lab down cka 3.5
+rc=0
+== kubectl version (server)
+Client Version: v1.37.1
+Kustomize Version: v5.8.1
+Server Version: v1.37.0
+== check before the fix
+Verificando web-quota...
+  TODAVÍA ROTO: web-quota no llegó a estar disponible.
+Verificando web-affinity...
+  TODAVÍA ROTO: web-affinity no llegó a estar disponible.
+  OK: el LimitRange 'cpu-cap' sigue existiendo (no lo borraste).
+
+Todavía hay puntos pendientes. Revisá 'kubectl describe' sobre los pods/RS afectados.
+
+[study-lab] check: FAIL  (exit 0, regex /TODO RESUELTO/ not found)
+rc=1
+== fix
+deployment.apps/web-quota resource requirements updated
+node/lab-control-plane labeled
+Waiting for deployment "web-quota" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "web-quota" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "web-quota" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "web-quota" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "web-quota" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "web-quota" rollout to finish: 1 old replicas are pending termination...
+deployment "web-quota" successfully rolled out
+Waiting for deployment "web-affinity" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "web-affinity" rollout to finish: 1 old replicas are pending termination...
+deployment "web-affinity" successfully rolled out
+== check after the fix
+Verificando web-quota...
+  OK: web-quota está disponible.
+Verificando web-affinity...
+  OK: web-affinity está disponible.
+  OK: el LimitRange 'cpu-cap' sigue existiendo (no lo borraste).
+
+TODO RESUELTO. Buen trabajo.
+
+[study-lab] check: PASS  (exit 0, regex /TODO RESUELTO/ found)
+rc=0
+== down
+[study-lab] running the lab's cleanup
+namespace "cka-3-5-lab" deleted
+Namespace cka-3-5-lab eliminado.
+[study-lab] study-lab-cka-3-5 removed (with its anonymous volumes: the inner dockerd and kind go with it)
+rc=0
+== result: check_before_fix_rc=1 check_after_fix_rc=0 down_rc=0 leftovers=0 secs=172
