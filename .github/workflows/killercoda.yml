@@ -28,6 +28,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -q --require-hashes -r requirements.lock && python -m pip install -q --no-deps -e .
+      - name: Stale lab evidence (warns, never fails)
+        run: python -m teach.lab.kc_scope
       - name: Guardrails on the generated scenarios (schema, references, scripts, syllabus objective)
         run: scripts/study-lab export --target killercoda --all --check
       - name: Scenario diff against the base branch

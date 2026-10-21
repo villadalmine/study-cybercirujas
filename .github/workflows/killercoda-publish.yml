@@ -54,6 +54,7 @@ jobs:
     if: needs.plan.outputs.labs != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    # Optional channel: a lab that fails is simply not published (no evidence) and the rest still is.
     strategy:
       fail-fast: false
       matrix:
@@ -66,6 +67,7 @@ jobs:
       - run: python -m pip install -q --require-hashes -r requirements.lock && python -m pip install -q --no-deps -e .
       - name: kubeadm cluster like Killercoda's (k8s family)
         id: env
+        continue-on-error: true   # a bootstrap failure of one lab must not stop the other labs from being published
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
           # never a here-string of a command substitution into `read`: it hides a failing --print-env and the bootstrap dies
@@ -80,9 +82,9 @@ jobs:
           read -r patch cilium containerd <<<"$envline"
           sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario
-        if: steps.env.outputs.skip != 'true'
-        run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
         continue-on-error: true   # a failing lab is simply not published; the other scenarios still are
+        if: steps.env.outputs.skip != 'true' && steps.env.outcome != 'failure'
+        run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
       - run: sudo chown -R "$USER" evidence 2>/dev/null || true
         if: always()
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2

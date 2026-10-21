@@ -17,15 +17,37 @@ permissions:
   contents: read
 
 jobs:
+  parity-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      labs: ${{ steps.plan.outputs.labs }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q --require-hashes -r requirements.lock && python -m pip install -q --no-deps -e .
+      - id: plan
+        # The matrix is data: every lab that can be proven (a file in deploy/killercoda/fixes/, or a `fix)` verb in the script of a
+        # certification in `scope:` of deploy/killercoda/tracks.yaml). No lab or certification is named in this file.
+        run: |
+          labs=$(python -m teach.lab test --target killercoda --plan 2>plan.err) || { cat plan.err; exit 1; }
+          cat plan.err
+          grep '^::warning' plan.err | sed 's/^::warning title=/- /' >> "$GITHUB_STEP_SUMMARY" || true
+          echo "labs=$labs" >> "$GITHUB_OUTPUT"
+
   killercoda-parity:
+    needs: parity-plan
+    if: needs.parity-plan.outputs.labs != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    # Killercoda is an optional publishing channel (RFC #210): a lab failing here never fails a PR. The steps that can fail are
+    # `continue-on-error`, so the check stays green and a warning names the lab (a job-level flag would leave a red check).
     strategy:
       fail-fast: false
       matrix:
-        include:   # keep in step with `pilot` in deploy/killercoda/tracks.yaml
-          - {lab: 'cka/1.1', image: kubernetes-kubeadm-1node}
-          - {lab: 'lpic-2/200.1', image: ubuntu}
+        include: ${{ fromJSON(needs.parity-plan.outputs.labs) }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
@@ -38,6 +60,7 @@ jobs:
           nproc
       - name: kubeadm cluster like Killercoda's (k8s family)
         id: env
+        continue-on-error: true
         if: matrix.image == 'kubernetes-kubeadm-1node'
         run: |
           # never a here-string of a command substitution into `read`: it hides a failing --print-env. Exit 2 = no Cilium release validated for today's
@@ -51,8 +74,13 @@ jobs:
           read -r patch cilium containerd <<<"$envline"
           sudo bash deploy/killercoda/bootstrap-kubeadm.sh "$patch" "$cilium" "$containerd"
       - name: Prove the scenario (break, verify fails, fix, verify passes, cleanup)
-        if: steps.env.outputs.skip != 'true'
+        id: prove
+        continue-on-error: true
+        if: steps.env.outputs.skip != 'true' && steps.env.outcome != 'failure'
         run: sudo -E env HOME=/root KUBECONFIG=/root/.kube/config "$(which python)" -m teach.lab test --target killercoda --evidence evidence ${{ matrix.lab }}
+      - name: Say it when the lab did not pass
+        if: steps.prove.outcome == 'failure' || steps.env.outcome == 'failure'
+        run: echo "::warning title=${{ matrix.lab }} not proven on Killercoda::this lab stays loaded-untested; an optional channel never fails a PR" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Evidence
         if: always()
         run: |
