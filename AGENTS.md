@@ -7,10 +7,12 @@ and merge. This file is the first thing an agent reads.
 ## Read in this order
 
 1. [docs/CHARTER.md](docs/CHARTER.md): the eleven rules that are not negotiable. A change that breaks one does not go in.
-2. [docs/FAQ.md](docs/FAQ.md): how each part works, with the code that proves it.
-3. [CONTRIBUTING.md](CONTRIBUTING.md): conventions, PR templates, labels, provenance, releases.
-4. [docs/AGENT-GUIDE.md](docs/AGENT-GUIDE.md): commands, the content cycle, what each check proves.
-5. [docs/PRINCIPLES.md](docs/PRINCIPLES.md): the reasoning behind the charter.
+2. [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md): the whole system in levels, with the scripts and what blocks.
+3. [docs/GUARDRAILS.md](docs/GUARDRAILS.md): what is checked for truth, labs and code, and what is only a convention.
+4. [docs/FAQ.md](docs/FAQ.md): how each part works, with the code that proves it.
+5. [CONTRIBUTING.md](CONTRIBUTING.md): conventions, PR templates, labels, provenance, releases.
+6. [docs/AGENT-GUIDE.md](docs/AGENT-GUIDE.md): commands, the content cycle, what each check proves.
+7. [docs/PRINCIPLES.md](docs/PRINCIPLES.md): the reasoning behind the charter.
 
 ## Hard rules for agents
 
@@ -37,8 +39,7 @@ and merge. This file is the first thing an agent reads.
 7. **Labels**: CI sets `scope:*`, `site:*`, `type:` by path and `lang:`; `size-exception` and `scope-exception` are set only by the
    maintainer; `triage:needed` means someone from outside the project that nobody has looked at yet.
 
-The details (labels, the stale rules, the outside-contributor triage, releases): [CONTRIBUTING.md](CONTRIBUTING.md#labels),
-[triage](CONTRIBUTING.md#triage-and-response-times) and [releases](CONTRIBUTING.md#releases).
+The long version, with the milestones, every label and the outside-contributor triage: [docs/ISSUE-TO-RELEASE.md](docs/ISSUE-TO-RELEASE.md).
 
 ## Where things live
 

@@ -1,6 +1,7 @@
 # Principles
 
 *[The charter](CHARTER.md) is the short version of this page: eleven rules, each with the check that enforces it. This page keeps the reasoning.*
+*What is checked for each principle, what blocks and what is only a convention: [GUARDRAILS](GUARDRAILS.md).*
 
 > **Knowledge has no owner and no borders. We build it together, for everyone.**
 >

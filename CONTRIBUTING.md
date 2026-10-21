@@ -1,5 +1,7 @@
 # Contributing
 
+**Before anything else, read [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md)** (and [docs/ISSUE-TO-RELEASE.md](docs/ISSUE-TO-RELEASE.md) for how an issue becomes a release): how content, labs, pull requests, releases and curriculum upgrades fit together, with what blocks and what only warns.
+
 Thank you. This project is a curriculum maintained like software
 ([docs/PRINCIPLES.md](docs/PRINCIPLES.md)), so contributing works like it does
 in a code repository: a branch, a change, checks that pass, a review. You do
