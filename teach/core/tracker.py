@@ -362,7 +362,7 @@ def _apply_snapshot_status(
 
     This used to copy the old status verbatim, so a re-snapshot with a different
     title or weight left the topic at 'generated' and its content was never
-    revisited — the syllabus-change trigger PLAN.md described did not exist.
+    revisited — the syllabus-change trigger docs/ORIGINAL_DESIGN.md described did not exist.
     Returns (added, stale, edited_that_changed).
     """
     added: list[str] = []

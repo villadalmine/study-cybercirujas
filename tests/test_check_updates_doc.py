@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-ANCHOR = "docs/OPERATING.md#checking-curriculum-updates"
+ANCHOR = "OPERATING.md#checking-curriculum-updates"   # both docs live in docs/
 
 
 class CheckUpdatesDocTests(unittest.TestCase):
@@ -16,7 +16,7 @@ class CheckUpdatesDocTests(unittest.TestCase):
         self.assertIn("`make check-updates` does not run it", section)
         for must in ("tracker sync", "check_versions.py", "models.yaml", "Exam versions",
                      "Outdated", "not measured", "Never re-snapshot without the owner's decision",
-                     "catalog.yaml", "STATUS.md"):
+                     "catalog.yaml", "docs/STATUS.md"):
             with self.subTest(must=must):
                 self.assertIn(must, section)
 
@@ -28,7 +28,7 @@ class CheckUpdatesDocTests(unittest.TestCase):
         self.assertIn("\ncheck-models:", makefile)
 
     def test_agents_and_people_find_it(self):
-        for doc in ("CLAUDE.md", "AGENTS_SYNC.md"):
+        for doc in ("docs/AGENT-GUIDE.md", "docs/AGENTS_SYNC.md"):
             with self.subTest(doc=doc):
                 self.assertIn(ANCHOR, (REPO / doc).read_text(encoding="utf-8"))
 

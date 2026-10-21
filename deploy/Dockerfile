@@ -28,7 +28,7 @@ COPY *.yaml ./
 COPY certs/ certs/
 COPY media/ media/
 # /api/status imports check_versions.survey() — the same function that renders
-# STATUS.md's table, on purpose (one implementation, two projections). The
+# docs/STATUS.md's table, on purpose (one implementation, two projections). The
 # cleaner home for it is teach/core; until that refactor, ship the scripts.
 COPY scripts/ scripts/
 

@@ -27,7 +27,7 @@ instructions) are deliberately still in Spanish. They are not comments — they
 are what the model receives, and the entire existing corpus was produced with
 them. Translating them would change generated output and invalidate the
 baseline the quality floor in pipeline.yaml was calibrated against, so it is a
-content decision rather than a cleanup one. See BACKLOG.md.
+content decision rather than a cleanup one. See docs/BACKLOG.md.
 """
 
 import datetime

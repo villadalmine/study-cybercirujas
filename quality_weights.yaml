@@ -28,7 +28,7 @@ checks:
   lab:                 {weight: 10, what: "the topic's lab ran in the study-lab runner: break -> verify FAIL -> fix -> verify PASS -> cleanup (lab.yaml verified)"}
   independent_review:  {weight: 10, what: "an independent review (fable revisor-pr, Copilot) with its link, recorded in meta.yaml reviews"}
   human_review:        {weight: 5,  what: "a person reviewed or edited it (meta.yaml human_edits / human_review)"}
-  groundedness:        {weight: 5,  what: "each claim is supported by its cited source — placeholder until the classifier lab picks the model; always not_run today"}
+  groundedness:        {weight: 5,  what: "each claim is supported by its cited source — advisory: CI runs it in warn mode (scripts/check_groundedness.py, groundedness.yaml); a recorded result is kept here, otherwise not_run"}
 
 # Minimum share of cited domains that must belong to a catalogued project
 # (docs/sources.yaml, neutral domains included) for `sources` to pass.

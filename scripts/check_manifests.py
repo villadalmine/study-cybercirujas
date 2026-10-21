@@ -9,7 +9,7 @@ or the material did. Unlike prose, this is objective — it parses or it does no
 Honest scope: this checks **syntax**, not validity against the Kubernetes API.
 An invented `spec.replicaCount` (the real field is `replicas`) parses fine and
 passes. Catching that needs validation against the real schemas — see the
-verification section of WORKFLOW.md.
+verification section of docs/WORKFLOW.md.
 
     scripts/check_manifests.py              # whole repo
     scripts/check_manifests.py certs/cks    # one subtree

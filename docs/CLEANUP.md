@@ -216,7 +216,7 @@ Only delete after deciding they will never be salvaged.
 
 | File | Delete? |
 |---|---|
-| `usage.jsonl` | **No.** Every spend figure, model comparison and forecast is derived from it. Deleting it makes `make metrics`, `MODELS.md` and `topic_cost.py` lie by omission |
+| `usage.jsonl` | **No.** Every spend figure, model comparison and forecast is derived from it. Deleting it makes `make metrics`, `docs/MODELS.md` and `topic_cost.py` lie by omission |
 | `quota-history.jsonl` | **No.** Same: window measurements come from here |
 | `resume.log`, `milestone.log` | Yes, once read — they are append-only narration |
 | `claims/` | Only while nothing is generating (`claims.active()` empty). Claims die with their process anyway |
@@ -231,7 +231,7 @@ git status --short | grep '^??'    # look at the list before acting
 ```
 
 `chart/` is the exception — an audited design proposal kept untracked on
-purpose; see the RAG-bot section of BACKLOG.md before removing it.
+purpose; see the RAG-bot section of docs/BACKLOG.md before removing it.
 
 ---
 
@@ -248,38 +248,38 @@ call and is listed here so it is not lost.
 | What | Where | Fix |
 |---|---|---|
 | README opened with an internal "where we left off" note, the maintainer pipeline, the workstation timer and `.env` handling | `README.md` | Rewritten for someone arriving from outside; the maintainer material moved verbatim to [OPERATING.md](OPERATING.md) |
-| Disclosure named `claude-opus-5`, `opus-4-8`, `fable-5` while `ckne` and part of `mcpa` are `claude-opus-5-5` | `README.md` | Model families named, exact ids left to `meta.yaml` / [MODELS.md](../MODELS.md), which cannot drift |
+| Disclosure named `claude-opus-5`, `opus-4-8`, `fable-5` while `ckne` and part of `mcpa` are `claude-opus-5-5` | `README.md` | Model families named, exact ids left to `meta.yaml` / [docs/MODELS.md](MODELS.md), which cannot drift |
 | "Anthropic embeds invisible watermarks (SynthID-Text based) … so the material is machine-detectable" | `README.md` | The cited TechCrunch piece (2026-08-11) does not mention SynthID (Google's technology), and says watermarking is automatic only for models released after 2 August 2026, with older models "later". Most of this corpus predates that. Claim removed |
 | `make setup` fails on stock Ubuntu (`ensurepip is not available`) | README, DEVELOPERS | `python3-venv` listed as a prerequisite |
 | `make verify` fails on any fresh clone (`status_matrix --check` counts gitignored videos) | Makefile, CI | New `make verify-ci` = what CI runs = what a contributor runs; `verify.yml` calls it instead of a copied list |
 | "Every push to main publishes the image" — but the 2026-10-12 `models.yaml` refresh never reached GHCR | `.github/workflows/docker.yml` | The path filter listed `catalog.yaml` only; the Dockerfile ships every root `*.yaml` and `scripts/`. Filter widened, `workflow_dispatch` added |
 | Deploy command used `--set image.registry=…` (no such key) and the chart default was `ghcr.io/villadalmine/teach-plat` (no such image) | OPERATING, `deploy/helm/values.yaml` | `image.repository=ghcr.io/villadalmine/study-cybercirujas`; the copy-`values-local.yaml` step now comes before the command that needs it |
 | `teach lab up` reported "running" with nothing broken | `teach/core/labs.py` | `docker exec` had no `-i`, so the confirmation prompt read EOF and the script cancelled. Fixed with a test; `lab up` now prints how to enter the lab |
-| BACKLOG said the fallback is "to Spanish" | `BACKLOG.md` | It is `en`, then `es` (`certs.FALLBACK_LANGS`) |
-| BACKLOG "Next" listed done work (cks/kcna translations, cnpe snapshot, the study bot) | `BACKLOG.md` | Removed with a dated note; the `chart/` RAG proposal marked superseded |
-| ROADMAP said 27 published and AI 0/7, header dated 09-18 over 09-30 content | `ROADMAP.md` | 28 published (mcpa, ckne in English), header 09-30 |
-| PLAN described a paid login zone and admin/admin | `PLAN.md` | Banner: original design, superseded points listed, code wins |
-| DEVELOPERS said the registry has no retention | `DEVELOPERS.md` | `make clean-registry` exists; reworded |
-| The README certification table was a hand-kept list waiting to rot | `scripts/gen_readme_table.py` | Generated from STATUS.md between markers, `--check` in `make verify` and CI |
+| BACKLOG said the fallback is "to Spanish" | `docs/BACKLOG.md` | It is `en`, then `es` (`certs.FALLBACK_LANGS`) |
+| BACKLOG "Next" listed done work (cks/kcna translations, cnpe snapshot, the study bot) | `docs/BACKLOG.md` | Removed with a dated note; the `chart/` RAG proposal marked superseded |
+| ROADMAP said 27 published and AI 0/7, header dated 09-18 over 09-30 content | `docs/ROADMAP.md` | 28 published (mcpa, ckne in English), header 09-30 |
+| PLAN described a paid login zone and admin/admin | `docs/ORIGINAL_DESIGN.md` | Banner: original design, superseded points listed, code wins |
+| DEVELOPERS said the registry has no retention | `docs/DEVELOPERS.md` | `make clean-registry` exists; reworded |
+| The README certification table was a hand-kept list waiting to rot | `scripts/gen_readme_table.py` | Generated from docs/STATUS.md between markers, `--check` in `make verify` and CI |
 
 ## Needs the owner's decision
 
-1. **`AGENTS_SYNC.md` (1 017 lines).** Its own rule says a processed proposal is
+1. **`docs/AGENTS_SYNC.md` (1 017 lines).** Its own rule says a processed proposal is
    removed, yet it still carries the August queues between Claude and
    Antigravity (`## Queue — … 2026-08-06`, `2026-08-08`) and dated status
    letters (`From claude — 2026-08-11 … 08-19`). Proposal: keep the rules
    (first ~400 lines), move the dated letters into docs/HISTORY.md or delete them
    (git keeps them), empty the queue.
-2. **`ROADMAP.md` "Where we left off"** is a session note, not a roadmap. Keep
+2. **`docs/ROADMAP.md` "Where we left off"** is a session note, not a roadmap. Keep
    it short (open items only) or move it to docs/HISTORY.md at the end of each
    session; the README no longer links to it.
-3. **`PLAN.md`** is mostly history now. Either trim it to the principles
+3. **`docs/ORIGINAL_DESIGN.md`** is mostly history now. Either trim it to the principles
    (snapshot, state in files, generate once, CLI first, separate roles — the
    Curriculum-as-Code core) or rename it `docs/ORIGINAL_DESIGN.md`.
-4. **`BACKLOG.md` vs `ROADMAP.md`** both carry "what is next"; BACKLOG says the
+4. **`docs/BACKLOG.md` vs `docs/ROADMAP.md`** both carry "what is next"; BACKLOG says the
    ordered queue lives in ROADMAP. Merging them would remove one source of drift.
 5. **272 topics with model `claude (unresolved)`** and 207 `agy (unresolved)`
-   in [MODELS.md](../MODELS.md); the API serves `generated_by.model: "claude"`
+   in [docs/MODELS.md](MODELS.md); the API serves `generated_by.model: "claude"`
    (e.g. `cka/1.1`). The disclosure is honest about this, but provenance is
    weakest exactly where the corpus is oldest.
 6. **`lpi-devops` has `pt` declared with 3 of 15 topics** — the ROADMAP trap
@@ -300,7 +300,7 @@ a tree-sitter map of the *machinery* (`teach/`, `scripts/`, tests, configs and
 the docs), so agents can query it over MCP. graphify is a free pip install
 (no LLM, no key), pinned in `make graph-setup`.
 
-**Decided (2026-10-15, Rino: "dale la a"): `graphify-out/` stays committed.**
+**Decided (2026-10-15, by the maintainer): `graphify-out/` stays committed.**
 Main keeps it fresh, not each PR: after a merge that touches what the graph covers
 (`teach/`, `scripts/`, `tests/`, `Makefile`), `.github/workflows/graph.yml` runs
 `scripts/check_graph.py --regenerate --strict` and, if the graph is stale, opens one
@@ -326,5 +326,5 @@ Recommendations still open (nothing removed — owner decides):
   regenerated on every build. `/api/search` and the MCP `search_topics` tool
   are the start of it.
 - **OpenWiki:** drop `openwiki/` and the `make wiki` target unless there is a
-  concrete reader for a paid, unattended-forbidden wiki; DEVELOPERS.md and the
+  concrete reader for a paid, unattended-forbidden wiki; docs/DEVELOPERS.md and the
   generated API table already document the machinery for free.

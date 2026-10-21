@@ -119,6 +119,25 @@ class CheckDocsTests(unittest.TestCase):
             with self.subTest(ref=ref):
                 self.assertTrue(why.strip())
 
+    def test_a_personal_name_in_a_public_doc_fails(self):
+        """Decisions are written by role (the maintainer); the words come from docs/personal-names.yaml."""
+        import yaml
+        real = yaml.safe_load((Path(__file__).resolve().parent.parent / "docs" / "personal-names.yaml").read_text(encoding="utf-8"))
+        self.assertIn("Rino", real["personal_names"])
+        found = check_docs.personal_name_problems("docs/X.md", "Decided (Rino, 2026-10-21): yes.\nthe maintainer decided\n", ["Rino"])
+        self.assertEqual(len(found), 1)
+        self.assertIn("docs/X.md:1", found[0])
+        self.assertEqual(check_docs.personal_name_problems("docs/X.md", "Marino and the maintainer\n", ["Rino"]), [])   # whole word only
+
+    def test_an_absolute_github_url_to_a_missing_repo_file_fails(self):
+        base = "https://github.com/villadalmine/study-cybercirujas"
+        tracked = {"docs/FAQ.md", "docs"}
+        self.assertEqual(check_docs.absolute_url_problems("README.md", 3, f"[ok]({base}/blob/main/docs/FAQ.md)", tracked), [])
+        gone = check_docs.absolute_url_problems("AGENTS.md", 41, f"[x]({base}/blob/main/docs/ISSUE-TO-RELEASE.md)", tracked)
+        self.assertEqual(len(gone), 1)
+        self.assertIn("docs/ISSUE-TO-RELEASE.md", gone[0])
+        self.assertEqual(check_docs.absolute_url_problems("README.md", 1, f"[i]({base}/issues/12)", tracked), [])   # not a file
+
     def test_the_real_docs_are_consistent(self):
         mock.patch.stopall()
         self.assertEqual(check_docs.main(["--no-generated"]), 0)

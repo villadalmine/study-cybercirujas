@@ -1,7 +1,13 @@
 # Verifying the material is true — design notes
 
-Status: **design, nothing built**. Written 2026-08-06 after `check_claims.py`
+Status: **partly built** (updated 2026-10-21). Written 2026-08-06 after `check_claims.py`
 found a real stale citation in fresh content and made the remaining gap obvious.
+
+> **What exists since this was written:** `scripts/check_claims.py` (does the cited page say it, sampled), `scripts/check_api_facts.py`
+> (field names against the project's own spec), `scripts/check_source_chain.py`, and groundedness (`scripts/check_groundedness.py`, a pinned
+> classifier, CI job `groundedness` in `warn` mode, [FAQ](FAQ.md)). **Not built:** a claim extractor, a weekly crawl-and-diff of the
+> cited pages, and any check that the explanation is *true*; the layers below still describe that plan. Tracking: epic
+> [#166](https://github.com/villadalmine/study-cybercirujas/issues/166).
 
 ## The gap, precisely
 

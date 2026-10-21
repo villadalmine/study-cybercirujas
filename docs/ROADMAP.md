@@ -1,13 +1,13 @@
 # Roadmap — where this is and where it goes
 
-Read this first after time away. [CHANGELOG.md](CHANGELOG.md) says what each release
-changed ([docs/HISTORY.md](docs/HISTORY.md) is the dated record up to 2026-10-16); this says what is **next and why**. Finished work is deleted from
+Long-range intent. The work in flight is tracked as issues, milestones and epics (README, *Where we are now*; how it all fits: the FAQ); read this for **why** things come next. [CHANGELOG.md](../CHANGELOG.md) says what each release
+changed ([docs/HISTORY.md](HISTORY.md) is the dated record up to 2026-10-16); this says what is **next and why**. Finished work is deleted from
 this file rather than ticked — an item here means it is still open.
 
 Everything below is derived from the tree. Verify any line with `make status`,
-`make check-updates` or [STATUS.md](STATUS.md) rather than trusting the date.
+`make check-updates` or [docs/STATUS.md](STATUS.md) rather than trusting the date.
 
-Last reviewed: **2026-09-30** (counts below re-checked against STATUS.md on 2026-10-14) · site: study.cybercirujas.club
+Last reviewed: **2026-09-30** (counts below re-checked against docs/STATUS.md on 2026-10-14) · site: study.cybercirujas.club
 
 ## Where it is
 
@@ -85,7 +85,7 @@ not a new entry.
 
 - **`teach cert generate <cert>` with no `--topic` authors every pending topic in
   one invocation**, ignoring `budget.topics_per_run`. It did 15 MCPA topics in
-  114 minutes when 2 were intended. AGENTS_SYNC.md warns about this in those
+  114 minutes when 2 were intended. docs/AGENTS_SYNC.md warns about this in those
   words. Always pass `--topic`.
 - **`fix_corrupted_content.py` does not only report — it fills.** `pt` is
   declared for `lpi-devops` with 3 of 15 topics done, so an audit run starts
@@ -117,7 +117,7 @@ the bot's own limited key — and the page is built from what it measured: 12 of
 and 2 ignore the effort setting entirely. A second pass sends each model a real
 topic of this corpus and asks about it in all seven languages; a model is now
 offered only where it answered from that material, in that language. Findings
-and method in [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+and method in [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md).
 
 That closes the feedback, not the phase: phase 2 still waits for a question
 phase 1 cannot answer.
@@ -144,7 +144,7 @@ Ordered by what each one buys, not by size.
    - **the comprehension fixture is one topic** (`lpi-010-160/5.2`,
      `/etc/passwd`). It proves a model reads what we send it; it does not prove
      the answer is any good, which is still the honest gap —
-     [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md);
+     [docs/AUDITOR_DESIGN.md](AUDITOR_DESIGN.md);
    - **the two `:free` models that answered nothing** (`gemma-4-31b`,
      `nemotron-3-ultra`) are marked `flaky` and still offered. Replacing a
      model is a judgement call against the criteria at the top of
@@ -166,7 +166,7 @@ Ordered by what each one buys, not by size.
 3. **AI phase 1 — `aws-aif`, `gcp-gail`, `ai-901` (36 objectives).** Turns the
    roadmap already visible on the site into three studyable second rungs of the
    cloud careers. Rationale and the five filters that admitted them:
-   [docs/AI_ROADMAP.md](docs/AI_ROADMAP.md).
+   [docs/AI_ROADMAP.md](AI_ROADMAP.md).
 
 4. **NVIDIA — start with `nca-aiio` alone (22).** Its infrastructure branch
    continues the Kubernetes corpus naturally. One associate first proves the
@@ -179,7 +179,7 @@ Ordered by what each one buys, not by size.
 
 ## Study bot — the phases after this one
 
-Full design: [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md). Each phase
+Full design: [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md). Each phase
 starts when its **entry condition** is met, not when the previous one finishes.
 
 | Phase | Entry condition | What it adds |
@@ -211,7 +211,7 @@ starts when its **entry condition** is met, not when the previous one finishes.
   needs the network and no quota.
 - **Publishing images is manual.** The host has `git` but no `make`,
   `kubectl` or `helm`, so the unattended pass stops after committing and says
-  so. Options are in [AGENTS_SYNC.md](AGENTS_SYNC.md); none has been chosen.
+  so. Options are in [docs/AGENTS_SYNC.md](AGENTS_SYNC.md); none has been chosen.
 - **Anthropic and OpenAI certifications are wanted but not catalogable.**
   Anthropic's four Pearson VUE exams have the right shape but no publicly
   published objectives (the Partner Academy is organisation-gated); OpenAI's is

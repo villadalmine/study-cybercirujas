@@ -1,4 +1,4 @@
-# Who is asked to review what (GOVERNANCE.md → Who maintains what).
+# Who is asked to review what (docs/GOVERNANCE.md → Who maintains what).
 # Today one maintainer owns everything; areas get their own owners as
 # maintainers join, e.g.:
 #   /certs/cka/        @someone

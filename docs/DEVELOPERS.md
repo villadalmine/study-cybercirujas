@@ -19,7 +19,7 @@ project. Concretely, and honestly:
   being hammered, the answer will be a limit, not more capacity. Be reasonable:
   cache what you fetch, and do not poll what does not change.
 - **Versioned 0.x.** The repository is released as SemVer `v0.Y.Z` (GitHub Releases); while it is 0.x,
-  paths and payloads can still change. Watch [CHANGELOG.md](CHANGELOG.md); breaking changes are recorded
+  paths and payloads can still change. Watch [CHANGELOG.md](../CHANGELOG.md); breaking changes are recorded
   there under their release.
 - **No authentication** on the public endpoints, and none planned — the content
   is free by decision, not by oversight.
@@ -38,7 +38,7 @@ means something practical for you:
   records the model, date and source document that produced it.
 - **What no check proves is that an explanation is true.** A confident, well
   cited, wrong paragraph passes everything above — the gap is documented at
-  [docs/AUDITOR_DESIGN.md](docs/AUDITOR_DESIGN.md).
+  [docs/AUDITOR_DESIGN.md](AUDITOR_DESIGN.md).
 - **If you redistribute this material, that risk travels with it**, and the
   Article 50 disclosure obligation travels with it too. Keep the provenance:
   every `meta.yaml` names the model and the vendor document, and the API
@@ -51,9 +51,9 @@ and say so to your own users.
 
 | What | Licence | Notes |
 |---|---|---|
-| Code (`teach/`, `scripts/`, `deploy/`) | **Apache 2.0** — see [LICENSE](LICENSE) | Use it, fork it, sell what you build with it. Keep the notice |
+| Code (`teach/`, `scripts/`, `deploy/`) | **Apache 2.0** — see [LICENSE](../LICENSE) | Use it, fork it, sell what you build with it. Keep the notice |
 | Study material (`certs/**`) | **Apache 2.0**, same as the code | AI-generated; carries the disclosure obligation above |
-| Exam syllabi it derives from | **Their vendors'** | The CNCF curricula (github.com/cncf/curriculum) are CC-BY 4.0. The Linux Foundation's own exams outside that repository (LFCS, LFCA, CKNE, MCPA, published on training.linuxfoundation.org), LPI, AWS, Microsoft, Google, HashiCorp (an IBM company) and NVIDIA publish under their own terms. We never copy them verbatim — topics are original text written *from* them, with the source document linked. If you redistribute, that separation is yours to preserve too. Names and trademarks: [README → Legal & Trademark Disclaimer](README.md#legal) |
+| Exam syllabi it derives from | **Their vendors'** | The CNCF curricula (github.com/cncf/curriculum) are CC-BY 4.0. The Linux Foundation's own exams outside that repository (LFCS, LFCA, CKNE, MCPA, published on training.linuxfoundation.org), LPI, AWS, Microsoft, Google, HashiCorp (an IBM company) and NVIDIA publish under their own terms. We never copy them verbatim — topics are original text written *from* them, with the source document linked. If you redistribute, that separation is yours to preserve too. Names and trademarks: [README → Legal & Trademark Disclaimer](../README.md#legal) |
 
 ## Using the hosted API
 
@@ -123,7 +123,7 @@ is no database and no build step for the site.
 .venv/bin/uvicorn teach.api:app --host 0.0.0.0 --port 8000
 ```
 
-**In Kubernetes**, with the chart used in production (the full procedure, with preflight, verification and rollback, is [docs/DEPLOY.md](docs/DEPLOY.md)):
+**In Kubernetes**, with the chart used in production (the full procedure, with preflight, verification and rollback, is [docs/DEPLOY.md](DEPLOY.md)):
 
 ```bash
 make image-cluster TAG=mine        # build in-cluster with Kaniko
@@ -157,12 +157,12 @@ git merge upstream/main            # or: git rebase upstream/main
 ```
 
 Content merges cleanly in practice because topics are separate files and are
-only rewritten when regenerated. **Conflicts you can expect**: `STATUS.md`,
-`MODELS.md` and `graphify-out/` are all generated — resolve them by
+only rewritten when regenerated. **Conflicts you can expect**: `docs/STATUS.md`,
+`docs/MODELS.md` and `graphify-out/` are all generated — resolve them by
 regenerating rather than by merging:
 
 ```bash
-teach status                       # rewrites STATUS.md and MODELS.md from disk
+teach status                       # rewrites docs/STATUS.md and docs/MODELS.md from disk
 make graph                         # rewrites the code graph
 ```
 
@@ -204,8 +204,8 @@ This repository is run as a DevOps loop, and the instrumentation is part of the
 product rather than an afterthought. If you fork it, you inherit all of it.
 
 **Culture** — decisions and their reasoning live in the repository, not in
-someone's memory: [ROADMAP.md](ROADMAP.md) for where things are going,
-[CHANGELOG.md](CHANGELOG.md) for what changed in each release ([docs/HISTORY.md](docs/HISTORY.md) before the first), [AGENTS_SYNC.md](AGENTS_SYNC.md)
+someone's memory: [docs/ROADMAP.md](ROADMAP.md) for where things are going,
+[CHANGELOG.md](../CHANGELOG.md) for what changed in each release ([docs/HISTORY.md](HISTORY.md) before the first), [docs/AGENTS_SYNC.md](AGENTS_SYNC.md)
 for coordination between the humans and agents working on it. Every rule that
 exists because something broke says what it cost.
 
@@ -243,7 +243,7 @@ so anything built on it can carry the disclosure forward.
 **Contributing**: every push and pull request runs the free half of
 `make verify` in GitHub Actions (`.github/workflows/verify.yml`) — quality
 floor, manifests, Kubernetes APIs, provenance, sources, syllabus coverage,
-the STATUS.md and API-reference freshness checks, the tests, and a secret
+the docs/STATUS.md and API-reference freshness checks, the tests, and a secret
 scan. No quota is spent, so a stranger's pull request gets the same verdict
 the owner gets — and the contributor runs the very same target locally:
 `make verify-ci`. It is `make verify` minus the checks that describe the
@@ -257,7 +257,7 @@ exactly that reason.
 Where the loop is honest about its gaps: publishing is a manual step (the
 workstation running the unattended pass has no `make`/`kubectl`/`helm`), and
 registry retention is a command (`make clean-registry`, see
-[docs/CLEANUP.md](docs/CLEANUP.md)) rather than a policy that runs by itself.
+[docs/CLEANUP.md](CLEANUP.md)) rather than a policy that runs by itself.
 
 ## Keeping this page true
 

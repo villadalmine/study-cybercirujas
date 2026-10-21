@@ -1,0 +1,4 @@
+# Names of people that public docs must not contain: a decision is referred to by role ("the maintainer", "a contributor").
+# scripts/check_docs.py fails when one of these words appears in a tracked Markdown doc. GitHub handles in URLs are fine.
+personal_names:
+  - Rino

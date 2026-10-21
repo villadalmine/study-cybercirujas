@@ -163,7 +163,7 @@ class VisibleTests(unittest.TestCase):
         self.assertTrue(any(c["name"] == "lab" for c in topic["quality"]["checks"]))
 
     def test_status_md_has_the_quality_table(self):
-        self.assertIn("\n## Quality\n", (REPO / "STATUS.md").read_text(encoding="utf-8"))
+        self.assertIn("\n## Quality\n", (REPO / "docs/STATUS.md").read_text(encoding="utf-8"))
 
     def test_the_site_shows_a_badge_in_every_language(self):
         html = (REPO / "teach" / "web" / "index.html").read_text(encoding="utf-8")

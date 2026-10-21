@@ -31,6 +31,8 @@ import sys
 import unicodedata
 from pathlib import Path
 
+import yaml
+
 REPO = Path(__file__).resolve().parent.parent
 
 # Markdown that is documentation. The corpus (certs/), generated graph pages,
@@ -42,15 +44,14 @@ ALLOWED: dict[str, str] = {
     "deploy/helm/values-local.yaml": "created by the reader from values-study.example.yaml; gitignored",
     ".env": "created by the reader from .env.example; gitignored",
     "usage.jsonl": "local spend log; gitignored",
-    "docs/ORIGINAL_DESIGN.md": "a rename docs/CLEANUP.md proposes for PLAN.md, not done",
 }
 
 # Files that describe proposals or history: their links are checked, the
 # commands they mention are not (a `teach pipeline` in BACKLOG is an idea, a
 # `teach cert diff` in PLAN is the original design, not the current CLI).
 COMMANDS_NOT_CHECKED = {
-    "BACKLOG.md": "proposals",
-    "PLAN.md": "the original design, kept as history",
+    "docs/BACKLOG.md": "proposals",
+    "docs/ORIGINAL_DESIGN.md": "the original design, kept as history",
     "CHANGELOG.md": "history",
     "docs/HISTORY.md": "history",
 }
@@ -65,6 +66,30 @@ MAKE_CMD = re.compile(r"^(?:\$\s+)?make\s+([a-z][\w-]*)")
 TEACH_CMD = re.compile(r"^(?:\$\s+)?(?:\.venv/bin/)?teach\s+([a-z][\w-]*)(?:\s+([a-z][\w-]*))?")
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 EXPLICIT_ANCHOR = re.compile(r"<a\s+(?:id|name)=[\"']([^\"']+)[\"']", re.I)
+
+
+REPO_URL = re.compile(r"https://github\.com/villadalmine/study-cybercirujas/(?:blob|tree)/main/([^\s)#>\"'`]+)")
+
+
+def personal_names() -> list[str]:
+    """docs/personal-names.yaml: words that identify a person; decisions are written by role."""
+    f = REPO / "docs" / "personal-names.yaml"
+    return list((yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("personal_names") or []) if f.is_file() else []
+
+
+def personal_name_problems(rel: str, text: str, names: list[str]) -> list[str]:
+    out = []
+    for n, line in enumerate(text.splitlines(), 1):
+        for name in names:
+            if re.search(rf"\b{re.escape(name)}\b", line):
+                out.append(f"{rel}:{n}: names a person ({name}); refer to the role instead (the maintainer, a contributor), see docs/personal-names.yaml")
+    return out
+
+
+def absolute_url_problems(rel: str, n: int, line: str, tracked: set[str]) -> list[str]:
+    """An absolute GitHub URL to a file of this repo is never checked by the link check, so it can point at nothing and stay green."""
+    return [f"{rel}:{n}: absolute GitHub URL to {m.group(1)!r}, which does not exist on this branch; write a relative link"
+            for m in REPO_URL.finditer(line) if m.group(1).rstrip("/") not in tracked and m.group(1).rstrip("/") not in ALLOWED]
 
 
 def tracked_paths() -> set[str]:
@@ -167,7 +192,7 @@ def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: di
     if tracked is None:
         tracked = cache.setdefault("__tracked__", tracked_paths())
     text = path.read_text(encoding="utf-8")
-    problems = []
+    problems = personal_name_problems(rel, text, personal_names())
     check_commands = rel not in COMMANDS_NOT_CHECKED
     for n, line, code in prose_lines(text):
         where = f"{rel}:{n}"
@@ -185,6 +210,7 @@ def check_file(rel: str, targets: set[str], top: set[str], subs: dict, cache: di
                     problems.append(f"{where}: `teach {cmd} {sub}` is not a command of teach/cli.py")
         if code:
             continue
+        problems += absolute_url_problems(rel, n, line, tracked)
         for target in LINK.findall(line):
             if re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I):   # http:, mailto:, …
                 continue

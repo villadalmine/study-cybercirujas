@@ -158,7 +158,7 @@ def owner(cert_id: str) -> str:
     NOT a lock — teach/core/claims.py is what prevents two runs colliding on a
     topic. This exists so two agents do not spend two quota windows producing the
     same certification, and it is in YAML rather than prose because prose did not
-    hold: a stale line in AGENTS_SYNC.md outlived the split that replaced it, and
+    hold: a stale line in docs/AGENTS_SYNC.md outlived the split that replaced it, and
     the other agent correctly followed what was written.
     """
     config = (load().get("certs") or {}).get(cert_id) or {}

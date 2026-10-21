@@ -124,7 +124,7 @@ run demonstrated why that filter exists: es translations rode into the table
 attributed to the translating model until `--lang en` was added.
 
 Numbers at the time of writing (`scripts/model_comparison.py --cert cgoa
---lang en`; MODELS.md regenerates them continuously):
+--lang en`; docs/MODELS.md regenerates them continuously):
 
 | model | topics | KB/topic | ktok/topic | KB/1k | min/topic | topics/window | KB/window |
 |---|---|---|---|---|---|---|---|
@@ -132,7 +132,7 @@ Numbers at the time of writing (`scripts/model_comparison.py --cert cgoa
 | claude-opus-5 | 1–2* | 164.7 | 206.3 | 0.80 | 42.2 | 3.5 | 570 |
 
 \* one opus topic was claim-excluded (being translated) when this was written;
-MODELS.md shows the settled figures.
+docs/MODELS.md shows the settled figures.
 
 **Reading, with the thin-evidence caveat (n=2 per side):**
 

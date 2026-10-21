@@ -13,7 +13,7 @@ Three checks, all mechanical, none costing API quota:
    2026-08-05).
 
 2. **Bookkeeping.** The syllabus `status` must match the disk. A topic marked
-   `pending` whose files exist means STATUS.md and the audit are both lying, in
+   `pending` whose files exist means docs/STATUS.md and the audit are both lying, in
    opposite directions: the matrix under-reports and the work queue keeps
    offering finished work.
 
@@ -113,7 +113,7 @@ def check_cert(cert: str, languages: list[str]) -> list[str]:
         if present and status == "pending":
             problems.append(
                 f"{cert}/{topic_id}: files exist in {', '.join(present)} but the syllabus still "
-                f"says 'pending' — STATUS.md under-reports it and the work queue keeps "
+                f"says 'pending' — docs/STATUS.md under-reports it and the work queue keeps "
                 f"offering it as work to redo"
             )
         if not present and status == "generated":

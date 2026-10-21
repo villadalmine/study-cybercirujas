@@ -1,6 +1,6 @@
 # Backlog
 
-Pending items, without strict ordering unless specified. Resolved items are closed in their issue or PR and show up in the release notes ([CHANGELOG.md](CHANGELOG.md); the dated record up to 2026-10-16 is [docs/HISTORY.md](docs/HISTORY.md)); design details live in [PLAN.md](PLAN.md).
+Pending items, without strict ordering unless specified. Open work is now tracked as issues, milestones and epics (see the README, *Where we are now*); this file keeps the design questions that have no issue yet. Resolved items are closed in their issue or PR and show up in the release notes ([CHANGELOG.md](../CHANGELOG.md); the dated record up to 2026-10-16 is [docs/HISTORY.md](HISTORY.md)); design details live in [docs/ORIGINAL_DESIGN.md](ORIGINAL_DESIGN.md).
 
 ## In Progress / Next (Ordering)
 
@@ -12,8 +12,8 @@ Standing rule for any generation run: after finishing, re-run `scripts/fix_corru
 2. **Content for `lfcs` (5 topics) and `lfca` (6 topics)** — both have a snapshotted syllabus but zero generated content in any language, so they are the cheapest way to widen the catalog (no scraping step needed).
 3. **Videos for paths without one**: `linux-devops`, `kubernetes-security`, `gitops-platform`, `observabilidad`, `service-mesh-networking`, `linux-foundation`. The `kubernetes` path is already done (es/en/de).
 
-   *Removed 2026-10-14 as done:* translating `cks`/`kcna` to English (both complete in en+es), the `cnpe` snapshot (18 topics, complete), and the BYO-key study bot (live, all four phases — [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md)).
-4. **See [ROADMAP.md](ROADMAP.md) for what is next and why.** This file holds
+   *Removed 2026-10-14 as done:* translating `cks`/`kcna` to English (both complete in en+es), the `cnpe` snapshot (18 topics, complete), and the BYO-key study bot (live, all four phases — [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md)).
+4. **See [docs/ROADMAP.md](ROADMAP.md) for what is next and why.** This file holds
    design detail and open investigations; the ordered queue lives there.
 
 ## Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
@@ -48,23 +48,23 @@ Also open: 637 citations from 269 uncatalogued domains. `check_sources.py
 
 ## Pipeline Automation
 
-- **Syllabus-change trigger — the `stale` status is dead code.** It is in `certs.py::VALID_STATUS` and both `cli.py` and `generator.py` claim to regenerate "pending/stale" topics, but nothing ever assigns it: `tracker.py::snapshot_topics` copies the previous status verbatim, so a re-snapshot with a changed title or weight leaves the topic `generated` and its content is never revisited. PLAN.md's "only changed topics are regenerated" describes an intention, not the code. Implementation order and the reason each step matters is in WORKFLOW.md — detect the diff in `snapshot_topics`, invalidate **every** language rather than just Spanish (generation currently skips on file existence and ignores status entirely, so a naive fix would update `es` and leave the translations describing the old syllabus), then re-render the certification video since its domain-weight scene comes from the topics that changed.
-- **`teach cert translate` — real translation as a separate mode.** Proposed via AGENTS_SYNC.md; the design and trade-offs are under "Real translation" in the Content section below. Keep it as its own flag (`--from es`), not a change to `--lang`, so both authoring and translating stay available.
+- **Syllabus-change trigger — the `stale` status is dead code.** It is in `certs.py::VALID_STATUS` and both `cli.py` and `generator.py` claim to regenerate "pending/stale" topics, but nothing ever assigns it: `tracker.py::snapshot_topics` copies the previous status verbatim, so a re-snapshot with a changed title or weight leaves the topic `generated` and its content is never revisited. docs/ORIGINAL_DESIGN.md's "only changed topics are regenerated" describes an intention, not the code. Implementation order and the reason each step matters is in docs/WORKFLOW.md — detect the diff in `snapshot_topics`, invalidate **every** language rather than just Spanish (generation currently skips on file existence and ignores status entirely, so a naive fix would update `es` and leave the translations describing the old syllabus), then re-render the certification video since its domain-weight scene comes from the topics that changed.
+- **`teach cert translate` — real translation as a separate mode.** Proposed via docs/AGENTS_SYNC.md; the design and trade-offs are under "Real translation" in the Content section below. Keep it as its own flag (`--from es`), not a change to `--lang`, so both authoring and translating stay available.
 - **A `teach pipeline` command** wrapping the loop end to end (snapshot → generate → audit → status → video) driven by `pipeline.yaml`, so the whole thing is one entry point rather than four scripts run in the right order. `scripts/run_batch.py` is the bounded generation step; the rest is still manual.
 
 ## Content
 
-- **See [STATUS.md](STATUS.md)** for the complete matrix of cert × language × lab, path × video language, and cert × video language (regenerate with `scripts/status_matrix.py` from actual filesystem — do not trust manual updates).
+- **See [docs/STATUS.md](STATUS.md)** for the complete matrix of cert × language × lab, path × video language, and cert × video language (regenerate with `scripts/status_matrix.py` from actual filesystem — do not trust manual updates).
 - ~~CKS in progress~~ **Done (2026-07-17)**: 26/26 in Spanish (content + exercises + labs, verified with `fix_corrupted_content.py` at 0 and per-file counts, not just topic status). Survived an external process `kill` and two Claude API quota cuts in the middle — resumed cleanly each time because topic generation is idempotent.
 - ~~Translate CKAD, CKA, CKS, and KCNA to the other 6 languages — currently they only exist in Spanish.~~ **Partially done (2026-07-27)**: CKAD and CKA now have English (24/24 and 27/27). Remaining: fr/de/zh/ja/pt for those two, and every non-Spanish language for CKS and KCNA — see item 2 above.
 - ~~Review if other CNCF certs already snapshotted (KCNA, KCSA, CKS, etc.) have the same weight-by-domain issue before generating content for them~~ **KCNA had the bug** (weights summed to 360, each sub-topic had the full domain weight copied) — re-snapshotted with the fixed script, now sums to 100, and content is generated (13/13). `KCSA` still has no snapshot (0 topics) so it does not apply. `LFCS` (5) and `LFCA` (6) do have snapshots and their weights sum to 100 correctly — but only at **domain level**, one topic per domain, unlike cka/ckad/cks which are snapshotted at sub-topic granularity (27/24/26). Decide before generating: 5 enormous topics, or re-snapshot into sub-topics for a comparable reading unit.
 - Certification videos exist only in Spanish (5 certs). Path videos reach German at most. `ja` is blocked on TTS (see below); the rest is just render time.
-- **Real translation (not implemented, worth considering).** What the CLI calls translating is not translating: `--lang en` regenerates a topic from scratch from syllabus metadata and never reads the Spanish content (see WORKFLOW.md). That is why every language costs full authoring price — ~7 min and two completions per topic — and why language versions drift apart in structure and examples. A genuine translation mode would read `certs/<cert>/<topic>/es/content.md` and ask for the same text in the target language. Trade-offs, both real: it would be **much cheaper and viable on a small model** (restating existing prose, not authoring exam material) and would keep languages in sync — but every language would inherit the Spanish version's structure, and a weak model translating dense technical prose can quietly mangle command output and terminology, which the current audit would not catch because the result is neither a stub nor a short file. If added, it belongs as a separate flag (e.g. `--from es`) rather than as a change to the existing behaviour, so both modes stay available.
+- **Real translation (not implemented, worth considering).** What the CLI calls translating is not translating: `--lang en` regenerates a topic from scratch from syllabus metadata and never reads the Spanish content (see docs/WORKFLOW.md). That is why every language costs full authoring price — ~7 min and two completions per topic — and why language versions drift apart in structure and examples. A genuine translation mode would read `certs/<cert>/<topic>/es/content.md` and ask for the same text in the target language. Trade-offs, both real: it would be **much cheaper and viable on a small model** (restating existing prose, not authoring exam material) and would keep languages in sync — but every language would inherit the Spanish version's structure, and a weak model translating dense technical prose can quietly mangle command output and terminology, which the current audit would not catch because the result is neither a stub nor a short file. If added, it belongs as a separate flag (e.g. `--from es`) rather than as a change to the existing behaviour, so both modes stay available.
 
 ## Video — Technical Debt
 
 - **Certification video scripts cannot be translated, only re-authored.** `paths translate` exists for career-path scripts, but there is no equivalent for `certs/*/script.yaml`: `video.generate_cert_script` always authors from the syllabus. Since 2026-08-04 English is the authoring language and everything else is supposed to be a translation, so this is the one place where the pipeline still forces a second authoring pass. The cost is small — a video script is a handful of slides, not 10 KB of content — which is why it is not blocking kcna. Fix by reusing `generator.translate_topic`'s approach: feed the English `script.yaml`, translate only the `voiceover` and title fields, and leave the structure untouched so the slide count and timing cannot drift.
-- **Re-render the German path videos.** They are marked complete in STATUS.md but their deterministic scenes were narrated in Spanish by the German voice — `_path_voiceover`/`_domains_voiceover` only handled `en` and fell through to the default for everything else (fixed in `b93418f`). The affected files are `media/paths/*/de/script.yaml`. Re-rendering costs no API budget: the render step calls no model, it only redraws slides and re-runs Piper.
+- **Re-render the German path videos.** They are marked complete in docs/STATUS.md but their deterministic scenes were narrated in Spanish by the German voice — `_path_voiceover`/`_domains_voiceover` only handled `en` and fell through to the default for everything else (fixed in `b93418f`). The affected files are `media/paths/*/de/script.yaml`. Re-rendering costs no API budget: the render step calls no model, it only redraws slides and re-runs Piper.
 - **Prompt language is an open decision.** The prompt strings in `generator.py`, `tracker.py` and `video.py` are still Spanish while the rest of the code is English, and that is deliberate — they are model input, and the entire existing corpus was produced with them. Translating them would change generated output and invalidate the baseline the quality floor was calibrated against. If they are ever translated, treat it as a content migration: regenerate a sample first, re-measure the floor against it, and decide whether the corpus needs redoing for consistency.
 
 - ~~No Piper voice configured for de/zh~~ **Resolved (2026-07-17)**: Piper does have de/zh voices (`de_DE-thorsten-high`, `zh_CN-huayan-medium`), added to `VOICES` in `core/video.py`. **`ja` remains blocked** — Piper does not have any Japanese voice (full list of supported languages verified against the `rhasspy/piper-voices` repository); another TTS would be needed to narrate in Japanese.
@@ -112,7 +112,7 @@ Measured lab generation cost, from `usage.jsonl` (n=51): median **$0.509**, ~205
 Regenerating all 342 is ~**$195** and ~5 quota windows — the windows are the
 constraint, not the dollars.
 
-## Labs — Execution Modes (see PLAN.md, SDD section)
+## Labs — Execution Modes (see docs/ORIGINAL_DESIGN.md, SDD section)
 
 Suggested order (each stage reuses the previous one):
 
@@ -120,7 +120,7 @@ Suggested order (each stage reuses the previous one):
    - If the topic's `break_fix.sh` uses `kubectl` (all CKA/CKAD/CKS/KCNA): boots a `kind` (Kubernetes-in-Docker) cluster and runs the script against it. Requires `kind`+`kubectl`+`docker` installed.
    - Otherwise (LPI Linux Essentials): runs the script inside a simple Debian/Ubuntu container as a non-root user (the scripts refuse to run as root). Requires only `docker`.
    - `teach lab status` now checks the actual docker/kind process status instead of blindly trusting the last written `status.yaml` (if the container/cluster died or was manually deleted, it detects it and marks it `failed`).
-   - Pending item: generate the explicit `Dockerfile`/`docker-compose.yml` mentioned in the original PLAN.md — the current version runs the container directly using `docker run` (simpler, same result for v1) instead of a versioned compose file; review if compose is worth it when there is demand for multi-container labs.
+   - Pending item: generate the explicit `Dockerfile`/`docker-compose.yml` mentioned in the original docs/ORIGINAL_DESIGN.md — the current version runs the container directly using `docker run` (simpler, same result for v1) instead of a versioned compose file; review if compose is worth it when there is demand for multi-container labs.
 2. **Exercise Video — Actual Capture, No Mock.** Same principle as the marketing video (factual data is never written by AI — see the path scene in `core/video.py`): spin up the actual container from `lab.yaml`, run `break_fix.sh` for real, and record the session using **asciinema** (`.cast` file, text format, KB not MB, reproducible/scalable, self-hostable player) instead of mocking the terminal with AI or rendering MP4. The AI only writes the voiceover narration (Piper TTS, as already done).
 3. **Paid A — BYO-Cloud + Terraform.** Extends the existing contract in `labs.py` (`up`/`down` over `lab/terraform/`): generate the Terraform module per topic, v1 has the student running `terraform apply` using their own credentials (the platform never touches them). A "one-click" mode where the platform runs Terraform with credentials pasted by the student is more convenient but turns the platform into a custodian of third-party cloud credentials — defer until proven demand.
 4. **Paid B — Hosted by Me, "Connect" Button → Auto-destruction.**
@@ -131,54 +131,17 @@ Suggested order (each stage reuses the previous one):
 - ~~**`make image-cluster` used a fixed `TAG` that could diverge from the Helm release in production without visible errors.**~~ **Resolved (2026-07-16)**:
   Default `TAG` is now `$(shell date +%Y%m%d%H%M%S)` in the Makefile — a fresh timestamp per invocation, instead of a manual sync number between Makefile and Helm. Note: it is still the deployer's responsibility to pass the SAME explicit `TAG=...` to `make image-cluster` and `make deploy-local` in the same run (running `make` twice without an explicit `TAG=` generates two different timestamps and breaks build↔deploy pairing).
 
-## Platform (Long-Term Roadmap, see PLAN.md)
+## Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md)
 
 - Multi-provider labs, and a Go lab-runner working against the `lab.yaml`/`terraform/`/`status.yaml` contract.
 - **Real user auth.** The admin/admin stub was removed on 2026-07-19; `teach/core/auth.py` is now a deliberate deny-all placeholder (`authenticate` and `has_subscription` both always return `False`) since all content is public and login-free. This only becomes blocking when the paid lab tier ships — that is the thing that needs a real identity (OIDC/social) plus a payment gateway behind it, not the content.
 - Improve web presentation: currently displays raw content; needs Markdown rendering, styles, navigation. (low priority).
 
-## RAG Study Bot — Proposal Under Review (`chart/`) — superseded
-
-> **Superseded 2026-09-09** by the BYO-key study bot ([docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md)); kept as the record of why. For a *local* RAG over the corpus the README now documents Ollama + Open WebUI, which needs none of this chart.
-
-Untracked design artifact in `chart/`: a Helm chart plus `CONTEXT.md`, generated from a conversation with Kimi AI on 2026-07-27 for architecture review. It proposes a self-hosted RAG assistant (pgvector + Ollama + FastAPI bot + hourly embedder CronJob) on top of the existing content, plus KubeVirt/vcluster labs and Guacamole browser access. **Not deployable as it stands** — see the audit below. The two `study-cybercirujas-full.zip` copies were byte-identical archives of `chart/` itself and were deleted (`diff -r` clean, nothing lost).
-
-**The idea is sound and the corpus is already there.** 274 `content.md` + 274 `exercises.md` (~5.5 MB of markdown, 218 es / 140 en / 38 each in fr,de,zh,ja,pt) — enough to be a genuinely useful retrieval corpus, and it is already chunked by cert/topic/language, which is exactly the metadata the proposed `study_embeddings` table wants. `VECTOR(1024)` correctly matches multilingual-e5-large and BGE-M3, and a multilingual embedder is the right call given the 7-language content.
-
-**What the chart gets wrong (verified by rendering it, not by reading it):**
-
-1. **It does not render at all.** `helm template study ./chart` fails: `redis.yaml:51` dereferences `.Values.redis.service.port`, and the `redis:` block in `values.yaml` has no `service:` key. Hard stop before anything else.
-2. **Service hostnames are dead on arrival.** `values.yaml` sets `POSTGRES_HOST: "{{ .Release.Name }}-postgres"` (same for `OLLAMA_HOST`, `REDIS_HOST`), but **Helm does not template `values.yaml`** — templates consume it as literal data. Forcing a render confirms the pods receive the literal string `{{ .Release.Name }}-postgres` as a hostname, so bot-api could never reach Postgres, Ollama or Redis. Fix: resolve the names inside the templates, or wrap the value in `tpl`. The `ollama.initContainers` block in `values.yaml` has the same defect (`{{- range .Values.ollama.models }}` never expands), so no model would ever be pulled.
-3. **Four subsystems are values-only, with no templates**: `guacamole`, `kubevirt`, `vcluster`, `monitoring` all have configuration blocks and zero manifests. The chart advertises considerably more than it implements.
-4. **Default credentials baked in**: `POSTGRES_PASSWORD: "changeme"` ×3 and Grafana `adminPassword: "admin"`. This repo went through a pre-publication secrets audit (see docs/HISTORY.md, 2026-07-19); committing this as-is would walk default creds straight back into a public repo. Move to `existingSecret` before any commit.
-5. **`llama3.1:70b` will not run on the stated hardware.** `CONTEXT.md` lists a Tesla P4 (8 GB VRAM) and the model list requests 8b *and* 70b. A 4-bit 70b needs roughly 40 GB; it would spill to CPU and be unusable for interactive chat. 8b quantized fits comfortably. Drop 70b or plan for different hardware.
-6. **Three images that do not exist**: `study-cybercirujas/bot-api`, `/embedder`, `/web`. The chart also assumes a static-site frontend and an embedder that clones content from `CONTENT_REPO_URL` into a PVC — whereas the real platform is a single FastAPI app serving markdown straight from `certs/` in the image. This is a v2 architecture, not an increment on `deploy/helm/`.
-
-**Two conflicts with decisions already made in this repo — these are judgement calls, not bugs:**
-
-- **Labs on the home cluster.** The Labs section below concluded explicitly: *do not run third-party labs on the home cluster* — direct blast radius to the home LAN. The proposal does exactly that (KubeVirt VMs and vcluster labs on the T7910, quota for 30 VMs, Guacamole exposed). Either the earlier risk analysis is revisited on purpose, or the lab half of this proposal is dropped and only the RAG half is kept.
-- **Personalization needs identity.** The `user_profiles` / `user_progress` / `activity_log` tables assume logged-in users, but content is deliberately free and login-free and `auth.py` is a deny-all placeholder. This does not block the bot — it splits it.
-
-**Interactive tutor variant (proposed via AGENTS_SYNC.md, 2026-07-30).** A second proposal covers the same ground with a better answer to the blocker above: instead of user accounts, the browser generates a UUID in `localStorage` and sends it as `X-Session-ID`, with quiz history and lab attempts kept server-side against that id. That genuinely unblocks personalization without contradicting the free/no-login stance — adopt it over the `user_profiles` table. Endpoints proposed: `POST /api/tutor/quiz/generate`, `POST /api/tutor/quiz/evaluate`, `POST /api/tutor/ask`, `GET /api/tutor/recommendations`. Four things to settle before building it:
-
-- **The deployment has no persistent storage at all.** `deploy/helm/` declares no volumes and no PVC, and content is baked into the image, so `helm upgrade` replaces the pod on every publish. A SQLite or JSON session store on local disk would be wiped every time a certification ships, and would break the moment replicas go above 1. Either stand up the Postgres the chart already proposes, or decide explicitly that session state is ephemeral and say so in the UI.
-- **Pre-generate the quizzes instead of generating them per request.** Quiz generation and answer evaluation as runtime LLM calls make the cost scale with traffic and stay unbounded on a public site — a different kind of exposure from one-time content generation, and this project hit its monthly spend limit twice in three days. Generating a question bank per topic at build time and baking it into the image, exactly as content already works, turns that into a bounded cost and leaves only answer evaluation live. Consider whether evaluation can be multiple-choice-first, so the common path needs no model at all.
-- **Skip the graph layer.** With 274 topics already keyed by `(cert, topic, lang)`, a metadata filter over a plain vector index is the graph; a separate graph store adds moving parts without answering a query the filter cannot.
-- **`X-Session-ID` is client-supplied**, so it is forgeable and enumerable by design. Fine for anonymous progress, but nothing sensitive may ever sit behind it, and it must not become a de facto auth token later.
-
-**Suggested split — phase 1 is worth doing on its own:**
-
-1. **Anonymous content bot (no auth, no new cluster).** Embed `certs/**/content.md` into pgvector, answer questions with citations back to cert/topic, run it as a route in the existing FastAPI app. Needs Postgres+pgvector and an inference backend — nothing else in the chart. This is the piece that delivers most of the value and conflicts with nothing.
-2. **Personalized bot.** Progress tracking and mastery-aware answers — blocked on the real-auth item under Platform.
-3. **Lab orchestration.** Revisit only after the home-cluster risk decision, and after the local Docker provider in the Labs section is actually verified.
-
-Keep `chart/` untracked until at least items 1–4 above are fixed; a chart that cannot render should not land in a public repo as if it were deployable.
-
 ## Repo Hygiene
 
-- `chart/` stays untracked by the decision recorded in the RAG-bot audit
-  above; the study bot that superseded it is in
-  [docs/STUDY_BOT_DESIGN.md](docs/STUDY_BOT_DESIGN.md).
+- `chart/` stays untracked (a rejected RAG-bot proposal, removed from this file on 2026-10-21: it was superseded on 2026-09-09; its record is in git history);
+  the study bot that superseded it is in
+  [docs/STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md).
 - Registry housekeeping is now `make clean-registry` — see
-  [docs/CLEANUP.md](docs/CLEANUP.md) for what fills up and the procedure.
+  [docs/CLEANUP.md](CLEANUP.md) for what fills up and the procedure.
 - Source comments and docstrings under `teach/` and `scripts/` are still largely in Spanish, which contradicts the English-only rule in `CLAUDE.md`. Mechanical to fix, but it is a wide diff — worth doing in one dedicated pass rather than drip-feeding it into feature commits.

@@ -3,8 +3,8 @@
 The dated, hand-written record of what was delivered up to **2026-10-16**, frozen on that date
 (decision 4 of the repository-management proposal): nothing is added here any more. From the first
 release on, what changed is written by release-please into [CHANGELOG.md](../CHANGELOG.md), one section
-per version, from the Conventional Commit titles. Design details live in [PLAN.md](../PLAN.md); pending
-items live in [BACKLOG.md](../BACKLOG.md).
+per version, from the Conventional Commit titles. Design details live in [PLAN.md](ORIGINAL_DESIGN.md); pending
+items live in [BACKLOG.md](BACKLOG.md).
 
 Free-form, reverse chronological order (most recent first).
 
@@ -789,7 +789,7 @@ Free-form, reverse chronological order (most recent first).
 
 ## 2026-08-20
 
-- **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](../MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
+- **The AI disclosure now reaches the student, not just the repo reader (EU AI Act Art. 50).** Every topic page shows what actually produced what is being served — `🤖 AI-generated content by <model> · translated from <lang> · <date>` in the reader's language, read from the served language's `meta.yaml` (fallback-aware, so a Spanish fallback shows Spanish's provenance). The site footer links to the GitHub repository, where per-topic provenance, [MODELS.md](MODELS.md) and the whole pipeline are public. API: `topic_content()` returns `generated_by`; the model-side machine-readable marking is upstream (Anthropic watermarks Claude text since 2026-08). Closes BACKLOG item 7.
 
 ## 2026-08-04
 

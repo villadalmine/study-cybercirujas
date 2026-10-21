@@ -19,7 +19,7 @@ The solution is commented at the end of each script. Do not read it before you t
 flowchart LR
   L["certs/&lt;cert&gt;/&lt;topic&gt;/lab/ (source of truth)"] --> E["study-lab export --target killercoda"]
   E --> T["build/killercoda (deterministic tree)"]
-  T -->|"manual push"| M["mirror repo (public; its README, CONTRIBUTING, CODEOWNERS and .github are hand-written and never touched by the export)"]
+  T -->|"killercoda-publish.yml on merge to main: only scenarios with passing evidence"| M["mirror repo (public; its README, CONTRIBUTING, CODEOWNERS and .github are hand-written and never touched by the export)"]
   M -->|"webhook"| K["Killercoda: one course per certification"]
 ```
 

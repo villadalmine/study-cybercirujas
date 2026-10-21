@@ -16,12 +16,12 @@ and nowhere else.
 ## Day-to-day changes
 
 Content corrections, translation fixes, new labs, bug fixes and small
-features: open a pull request following [CONTRIBUTING.md](CONTRIBUTING.md).
+features: open a pull request following [CONTRIBUTING.md](../CONTRIBUTING.md).
 If the checks pass and a maintainer approves, it is merged. No proposal needed.
 
 ## Proposals (RFCs) — for anything that changes how the project works
 
-Use a proposal for: changing [the principles](docs/PRINCIPLES.md) or this
+Use a proposal for: changing [the principles](PRINCIPLES.md) or this
 document, adding or dropping a certification family or a language, changing
 the lab contract or the provenance format, adding a dependency on any
 external service, or changing what the checks enforce.
@@ -46,7 +46,7 @@ external service, or changing what the checks enforce.
 Versions are SemVer 0.x, cut by release-please from the Conventional Commit titles of merged PRs. The
 maintainer decides **when** by merging the Release PR (about every 4 weeks, when the `vX.Y.0` milestone is
 done; patches on demand for wrong content, a broken lab or a security fix). Milestones plan a release, the
-Release PR records it. The full rules: [CONTRIBUTING.md -> Releases](CONTRIBUTING.md#releases). Moving to
+Release PR records it. The full rules: [CONTRIBUTING.md -> Releases](../CONTRIBUTING.md#releases). Moving to
 `1.0.0` is a decision under the RFC process above.
 
 ## Becoming a maintainer
@@ -58,4 +58,4 @@ or a language. A maintainer who steps away is moved to an *Emeritus* list.
 
 ## Code of conduct
 
-Everyone participating follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+Everyone participating follows the [Code of Conduct](../CODE_OF_CONDUCT.md).

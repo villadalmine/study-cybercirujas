@@ -1,8 +1,8 @@
 # Content Workflow
 
 How study content gets created, verified and published, and how to continue the
-work with a different AI backend. Design rationale lives in [PLAN.md](PLAN.md);
-what is pending is in [BACKLOG.md](BACKLOG.md).
+work with a different AI backend. Design rationale lives in [docs/ORIGINAL_DESIGN.md](ORIGINAL_DESIGN.md);
+what is pending is in [docs/BACKLOG.md](BACKLOG.md).
 
 ## First, the thing that surprises everyone
 
@@ -27,11 +27,12 @@ Three consequences that matter:
    technical material from a one-line syllabus entry, not restating existing
    prose. Model quality shows up directly in the output.
 
-If what you actually want is cheap translation — feed the existing Spanish
-content to a small model and ask for the same text in another language — that is
-a **different feature that does not exist yet**. See "Real translation" in
-BACKLOG.md. It would be far cheaper and would keep languages in sync, at the
-cost of every language inheriting the Spanish version's structure.
+If what you actually want is cheap translation — feed the existing content to a
+small model and ask for the same text in another language — that is a different
+feature, and it **exists**: `teach cert translate` (see "Translating instead of
+re-authoring" below and [TRANSLATION_STUDY.md](TRANSLATION_STUDY.md)). It is far
+cheaper and keeps languages in sync, at the cost of every language inheriting the
+source's structure.
 
 ## Everything the pipeline produces is declared in `pipeline.yaml`
 
@@ -182,7 +183,7 @@ definition:
   `generated`, and is then only discovered by an audit somebody has to remember
   to run.
 - **The audit** (`fix_corrupted_content.py`), which queues it for regeneration.
-- **`STATUS.md`**, which counts only material that passes. A file that exists
+- **`docs/STATUS.md`**, which counts only material that passes. A file that exists
   but is below the floor is pending work, not finished work.
 
 It checks two things — size, and the structure the prompt explicitly asked for:
@@ -222,7 +223,7 @@ What is checked, and what each one actually establishes:
 | Check | Command | Proves | Does not prove |
 |---|---|---|---|
 | Structural floor | `make quality` (its floor report) | Not a stub; has the sections the prompt required | Anything about correctness |
-| Quality score | `make quality` (writes each meta.yaml `quality:` block), `scripts/quality_score.py --check` | Every check that exists ran, or is recorded as not run, and the block is current | Anything a check does not measure (groundedness is reserved, not run) |
+| Quality score | `make quality` (writes each meta.yaml `quality:` block), `scripts/quality_score.py --check` | Every check that exists ran, or is recorded as not run, and the block is current | Anything a check does not measure (groundedness runs in CI in `warn` mode, see [FAQ](FAQ.md#determinism-and-provenance); it is not part of the score yet) |
 | Recap guard | automatic, in the generator | The backend returned material, not a summary of its own actions | — |
 | Citation liveness | `scripts/check_citations.py` | The cited sources exist | That they support the claim made |
 | Manifest syntax | `scripts/check_manifests.py` | Embedded YAML/JSON parses | That the fields are real API fields |
@@ -260,7 +261,7 @@ manifests are clean, and its value from here is as a regression guard.
   validation rejects it. Deterministic, free, no model. The clearest next step.
 - **Running the labs.** `break_fix.sh` is executable ground truth: if the
   content teaches something wrong about a topic, the lab exercising it fails.
-  This is blocked on the same untested-labs item in BACKLOG.md.
+  This is blocked on the same untested-labs item in docs/BACKLOG.md.
 - **Judging claims against the cited page**, by fetching the source and asking a
   model which assertions it does not support. The only approach that addresses
   prose directly, and the only one that costs API budget per check.
@@ -294,7 +295,7 @@ combos it scans are clean. There is a second list in
 .venv/bin/python3 scripts/status_matrix.py
 ```
 
-Regenerates `STATUS.md` by counting files on disk. Never edit it by hand, and
+Regenerates `docs/STATUS.md` by counting files on disk. Never edit it by hand, and
 trust it over any status field. Partial translations show as `🔶 8/26c·8/26e`.
 
 ### 5. Commit
@@ -357,7 +358,7 @@ teach cert generate  cnpa --lang es --backend claude # nothing to translate from
 ```
 
 Translating is measured, not assumed, to be safe on a cheap model — see
-[docs/TRANSLATION_STUDY.md](docs/TRANSLATION_STUDY.md). Short version: use `cheap` for
+[docs/TRANSLATION_STUDY.md](TRANSLATION_STUDY.md). Short version: use `cheap` for
 translation (equal prose, 60× cheaper, every failure mode is caught before writing) and
 `claude` for authoring. The saving that matters is Claude quota, not dollars.
 
