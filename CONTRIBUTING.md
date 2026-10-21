@@ -290,6 +290,12 @@ and the cost, plus the official source. It is verified, not trusted:
 the `meta.yaml` of every topic it touches. A person and a model pass the same
 filter.
 
+**Docs impact.** A change is not done until every doc that describes it says the same. For each file the PR
+changes (not a doc), `scripts/check_pr.py` finds the docs that name it, by path or by file name, and the PR does
+not touch: each one goes under a `## Docs impact` section of the description, `updated` or
+`not affected: <why>`. CI prints the list ready to paste. History, generated files, study material and tests are
+not counted. Without it, a change to `check_pr.py` left three docs describing the old release (#243, fixed in #245).
+
 **Where it ran.** Every PR proves where it ran: under *Evidence*, a
 `### Where it ran` subsection links the green CI run on the PR's **current
 head commit** (plus the machine or local environment, if you ran anything

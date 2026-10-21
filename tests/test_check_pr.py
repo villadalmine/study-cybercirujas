@@ -941,7 +941,8 @@ class ExamVersionWiringTests(unittest.TestCase):
         with mock.patch.object(sys, "argv", argv), redirect_stdout(out), \
                 mock.patch.object(check_pr, "base_texts", lambda paths, base: {p: CATALOG_BASE for p in paths}), \
                 mock.patch.object(check_pr, "commits_of", lambda base: []), \
-                mock.patch.object(check_pr, "head_catalog", lambda: head):
+                mock.patch.object(check_pr, "head_catalog", lambda: head), \
+                mock.patch.object(check_pr, "repo_prose", lambda: {}):   # docs impact: DocsImpactTests
             return check_pr.main(), out.getvalue()
 
     def test_pr_61_fails_even_with_the_label(self):
@@ -1020,6 +1021,87 @@ class ReleaseNotesGateTests(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertEqual(gate.call_count, 1)
         self.assertIn("docs(release-notes)", check_pr.release_notes_ready(self.CHANGELOG.format(kind="Features"), self.EMPTY)[0])
+
+
+class DocsImpactTests(unittest.TestCase):
+    """#243 changed scripts/check_pr.py and left AGENTS.md, AGENT-GUIDE and HOW-IT-WORKS describing the old
+    release (decision 2026-10-21-impacto-bloquea): a doc that names a changed file is in the PR or listed."""
+    DOCS = {"AGENTS.md": "run scripts/check_pr.py before", "docs/HOW.md": "the check_pr.py gate",
+            "docs/X.md": "nothing here", "docs/Y.md": "see my_check_pr.py and scripts/check_pr.pyc"}
+
+    def test_a_doc_naming_the_path_or_the_file_name_is_affected_lookalikes_are_not(self):
+        found = check_pr.impact(["scripts/check_pr.py", "docs/FAQ.md"], self.DOCS)
+        self.assertEqual(found, {"AGENTS.md": ["scripts/check_pr.py"], "docs/HOW.md": ["scripts/check_pr.py"]})
+
+    def test_a_doc_the_pr_updates_and_a_docs_only_pr_need_nothing(self):
+        self.assertEqual(list(check_pr.impact(["scripts/check_pr.py", "AGENTS.md"], self.DOCS)), ["docs/HOW.md"])
+        self.assertEqual(check_pr.impact(["docs/FAQ.md"], self.DOCS), {})
+        self.assertEqual(check_pr.impact(["scripts" + chr(92) + "check_pr.py", "AGENTS.md"], self.DOCS),
+                         {"docs/HOW.md": ["scripts/check_pr.py"]})   # a Windows path is the same file
+
+    def test_each_affected_doc_must_be_in_the_section(self):
+        body = "## What and why\n\n`docs/HOW.md`\n\n## Docs impact\n\n- `AGENTS.md`: not affected: other step\n"
+        problems = check_pr.docs_impact(["scripts/check_pr.py"], body, self.DOCS)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("`docs/HOW.md` (names `scripts/check_pr.py`): not affected: <why>", problems[0])
+        self.assertNotIn("`AGENTS.md` (names", problems[0])   # named in the section: done
+        full = body + "- `docs/HOW.md`: updated in #245\n"
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], full, self.DOCS), [])
+
+    def test_history_generated_material_and_tests_are_not_docs(self):
+        for path in ("CHANGELOG.md", "docs/HISTORY.md", "graphify-out/GRAPH_REPORT.md", "certs/cka/1.1/en/content.md",
+                     "docs/release-notes/NEXT.md", "tests/fixtures/pr/good.md"):
+            self.assertTrue(check_pr.IMPACT_SKIP.match(path), path)
+        self.assertFalse(check_pr.is_prose(".github/labels.yml"))
+        self.assertTrue(check_pr.is_prose("docs/audit/rubric.yml") and check_pr.is_prose("AGENTS.md"))
+
+    def test_changed_study_material_does_not_list_every_doc_that_mentions_meta_yaml(self):
+        # replayed on the last 40 merged PRs: counting certs/** flagged 33 of 40 (14 with more than 10 docs)
+        docs = {"docs/FAQ.md": "each topic has a meta.yaml and a lab.yaml", "AGENTS.md": "certs/cka/1.1/en/meta.yaml"}
+        self.assertEqual(check_pr.impact(["certs/cka/1.1/en/meta.yaml", "certs/cka/1.1/lab/lab.yaml"], docs), {})
+        self.assertEqual(list(check_pr.impact(["teach/lab/lab.yaml"], docs)), ["docs/FAQ.md"])
+
+    def test_a_listed_doc_must_be_that_path_not_a_substring_of_another(self):
+        docs = {"README.md": "see scripts/check_pr.py"}
+        body = "## Docs impact\n\n- `docs/README.md`: not affected: other file\n"
+        self.assertTrue(check_pr.docs_impact(["scripts/check_pr.py"], body, docs))
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], "## Docs impact\n\n- `README.md`: updated\n", docs), [])
+
+    def test_the_real_repo_lists_what_243_missed(self):
+        found = check_pr.impact(["scripts/check_pr.py", "CONTRIBUTING.md", "docs/FAQ.md"], check_pr.repo_prose())
+        for doc in ("AGENTS.md", "docs/AGENT-GUIDE.md", "docs/HOW-IT-WORKS.md"):
+            self.assertIn(doc, found)
+
+    def test_main_runs_it_and_bot_prs_are_exempt(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "repo_prose", lambda: self.DOCS):
+            body = Path(tmp) / "b.md"
+            body.write_text((FIXTURES / "good.md").read_text(encoding="utf-8"), encoding="utf-8")
+            out = io.StringIO()
+            with mock.patch.object(sys, "argv", ["check_pr.py", "--title", "docs: x", "--body-file", str(body),
+                                                 "--files", "scripts/check_pr.py"]), redirect_stdout(out):
+                code = check_pr.main()
+        self.assertEqual(code, 1)
+        self.assertIn("PR: docs impact: 2 doc(s)", out.getvalue())
+
+    def test_the_release_pr_is_exempt_through_main(self):
+        # The Release PR changes pyproject.toml, which docs name: it has no description sections to add, so the check must
+        # not run for it. Real identities, no mock of the exemption (review of #246: the old test never ran main() as a bot).
+        docs = {"docs/DEPLOY.md": "the version lives in pyproject.toml"}
+        event = {"pull_request": {
+            "title": "chore(main): release 0.7.0", "body": "", "user": {"login": "study-cybercirujas-releases[bot]", "id": 343498577},
+            "head": {"ref": "release-please--branches--main", "repo": {"full_name": "o/r"}},
+            "base": {"repo": {"full_name": "o/r"}}}}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "repo_prose", lambda: docs), \
+                mock.patch.object(check_pr, "release_notes_ready", return_value=[]):
+            ev = Path(tmp) / "event.json"
+            ev.write_text(json.dumps(event), encoding="utf-8")
+            out = io.StringIO()
+            with mock.patch.object(sys, "argv", ["check_pr.py", "--event", str(ev), "--files", "CHANGELOG.md", "pyproject.toml"]), \
+                    redirect_stdout(out):
+                code = check_pr.main()
+        self.assertEqual(code, 0, out.getvalue())
+        self.assertNotIn("docs impact", out.getvalue())
+        self.assertTrue(check_pr.docs_impact(["pyproject.toml"], "", docs))   # the same files from a person are flagged
 
 
 if __name__ == "__main__":

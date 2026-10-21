@@ -17,6 +17,8 @@ and merge. This file is the first thing an agent reads.
 ## Hard rules for agents
 
 - **DCO**: every commit is signed off (`git commit -s`); `scripts/check_pr.py` fails the PR otherwise.
+- **Docs impact**: before opening the PR, every doc that names a file you changed is updated or listed under
+  `## Docs impact` with `not affected: <why>`; `scripts/check_pr.py` fails the PR otherwise and prints the list.
 - **AI disclosure**: the PR says an AI wrote it, with the agent, the real model id and the cost, and `meta.yaml` of every topic you touch agrees.
 - **No secrets**: no keys, tokens or personal data in a commit, a PR body or a log; credentials come from the environment.
 - **One topic per PR**, one concern per PR (code or material or labs, not mixed); more than 400 changed lines of code is split.

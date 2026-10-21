@@ -175,6 +175,7 @@ flowchart TD
 | Step | Script or workflow | Blocks | Warns |
 | :--- | :--- | :--- | :--- |
 | Description has every section, scope, provenance, DCO sign-off, a green run linked | `scripts/check_pr.py` (`pr-format`) | yes | |
+| Every doc that names a changed file is updated or listed under Docs impact | `scripts/check_pr.py` (`docs_impact`) | yes | |
 | Unit tests, offline smoke, determinism, quality | `verify.yml` (`verify`, `e2e`) | yes | |
 | Docs links, anchors, paths and generated files are current | `scripts/check_docs.py` (`docs.yml`) | | runs on PRs, not a required check; a stale code graph is only a warning |
 | Groundedness of the topics the PR changes | `groundedness.yml` | | `mode: warn` ([#41](https://github.com/villadalmine/study-cybercirujas/issues/41)) |

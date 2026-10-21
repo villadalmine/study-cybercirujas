@@ -285,6 +285,56 @@ def is_release_pr(head_ref: str | None, files: list[str], author: str | None = N
             and is_release_please(head_ref, files, author, same_repo))
 
 
+# Docs impact: a doc that names a changed file and is not in the PR is listed with what was decided
+# (#243 changed check_pr.py and left AGENTS.md, AGENT-GUIDE and HOW-IT-WORKS describing the old release).
+# The same rule runs before `gh pr create` in the maintainer's tooling (decision 2026-10-21-impacto-bloquea).
+IMPACT_SECTION = "Docs impact"
+IMPACT_SKIP = re.compile(r"^(CHANGELOG\.md|docs/HISTORY\.md|graphify-out/|openwiki/|certs/|docs/release-notes/|"
+                         r"\.github/ISSUE_TEMPLATE/|tests/)")
+
+
+def is_prose(path: str) -> bool:
+    """A file that explains how something works: Markdown or text; YAML only under docs/."""
+    return not path.startswith("tests/") and (
+        path.endswith((".md", ".txt")) or (path.startswith("docs/") and path.endswith((".yml", ".yaml"))))
+
+
+def impact(changed: list[str], docs: dict[str, str]) -> dict[str, list[str]]:
+    """{doc: [changed files it names]} for docs the PR does not touch; a file is named by its path or,
+    when distinctive (a dot and more than 5 characters), by its file name."""
+    changed = [f.replace("\\", "/") for f in changed]
+    out: dict[str, list[str]] = {}
+    # study material, generated output, history and tests are not what a doc describes: a content PR must not list every doc
+    # that mentions meta.yaml (measured: 33 of the last 40 merged PRs would have been flagged, 14 with more than 10 docs)
+    for path in sorted(p for p in changed if not is_prose(p) and not IMPACT_SKIP.match(p)):
+        name = path.rsplit("/", 1)[-1]
+        names = [path] + ([name] if "." in name and len(name) > 5 and name != path else [])
+        for doc, text in docs.items():
+            if doc in changed or doc == path:
+                continue
+            if any(re.search(rf"(?<![\w/.-]){re.escape(n)}(?![\w-])", text) for n in names):
+                out.setdefault(doc, []).append(path)
+    return dict(sorted(out.items()))
+
+
+def repo_prose(root: Path = REPO) -> dict[str, str]:
+    listed = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout
+    return {p: (root / p).read_text(encoding="utf-8", errors="replace") for p in listed.splitlines()
+            if is_prose(p) and not IMPACT_SKIP.match(p) and (root / p).is_file()}
+
+
+def docs_impact(changed: list[str], body: str, docs: dict[str, str]) -> list[str]:
+    """Each affected doc is named in the `## Docs impact` section (`updated` or `not affected: <why>`)."""
+    found = impact(changed, docs)
+    listed = sections(body).get(IMPACT_SECTION, "")
+    lack = [d for d in found if not re.search(rf"(?<![\w/.-]){re.escape(d)}(?![\w-])", listed)]   # a path, not a substring of another
+    if not lack:
+        return []
+    block = "\n".join(f"- `{d}` (names {', '.join(f'`{p}`' for p in found[d])}): not affected: <why>" for d in lack)
+    return [f"docs impact: {len(lack)} doc(s) name a file this PR changes and are not in the PR; add them under "
+            f"`## {IMPACT_SECTION}` with `not affected: <why>`, or update them:\n## {IMPACT_SECTION}\n\n{block}"]
+
+
 def is_bot_pr(head_ref: str | None, files: list[str], author: str | None = None,
               same_repo: bool = False) -> bool:
     """A PR a workflow of ours opens, which cannot cite its own CI run: the graph bot's or the Release PR."""
@@ -828,6 +878,8 @@ def main() -> int:
     if is_release_pr(head_ref, files, author, same_repo):
         read = lambda rel: (REPO / rel).read_text(encoding="utf-8") if (REPO / rel).is_file() else ""  # noqa: E731
         problems += release_notes_ready(read("CHANGELOG.md"), read(NEXT_PATH))
+    if files and not is_bot_pr(head_ref, files, author, same_repo):
+        problems += docs_impact(files, body, repo_prose())
     if args.base:
         problems += dco(commits_of(args.base), author, head_ref, files, same_repo)
     if args.base and CATALOG in files and not is_bot_pr(head_ref, files, author, same_repo):
