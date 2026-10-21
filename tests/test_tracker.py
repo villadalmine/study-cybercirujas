@@ -186,6 +186,12 @@ class SyncCncfTests(unittest.TestCase):
         self.assertEqual((cert["tracked_version"], cert["upstream_status"]), ("1.37", "current"))
         self.assertEqual(cert["upstream"]["milestone"], "CKA & CKAD v1.37 upgrade")
 
+    def test_sync_is_idempotent_once_the_tracked_version_is_the_published_one(self):
+        cert, changes = self.run_sync({"tracked_version": "1.37", "sources": {}})
+        self.assertNotIn("upstream", cert)                      # nothing ahead: no block, no clock date
+        self.assertEqual(cert["upstream_status"], "current")
+        self.assertNotIn("upstream publishes", " ".join(changes))
+
 
 if __name__ == "__main__":
     unittest.main()
