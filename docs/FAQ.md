@@ -300,10 +300,29 @@ the environment Killercoda runs on that date. On merge,
 `killercoda-publish.yml` proves again and publishes only scenarios with valid
 evidence ([RUN-A-LAB-ANYWHERE.md](RUN-A-LAB-ANYWHERE.md)).
 
+**Is Killercoda required, and which labs are on it?**
+No: Killercoda is an optional publishing channel and never blocks a PR
+([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)).
+It offers a kubeadm cluster and an Ubuntu VM, nothing else, so not every
+certification can have a lab there; the Kubernetes labs (CKA and CKAD) are the
+ones tried. Every lab has one of two Killercoda statuses. **`tested`**: it has
+evidence on a `killercoda-*` or `human-killercoda` target in
+`deploy/lab-evidence.yaml`. **`loaded-untested`**: it stays in the repo and runs
+locally with `study-lab`, but nothing proves it on Killercoda yet. A loaded-untested
+lab is never a CI failure and is never pushed to the mirror repository Killercoda
+reads; a failing or skipped Killercoda job never fails a PR, for any certification.
+
 **How many are published?**
-Only labs with a reference fix can be proven, so only those are published:
-two today (`deploy/killercoda/fixes/`), both also run by a person on Killercoda
-(`deploy/killercoda/human_tested.yaml`). More fixes: [#98](https://github.com/villadalmine/study-cybercirujas/issues/98).
+Only a `tested` lab reaches the mirror, and the publish gate needs both a passing
+`tested.json` and a recorded `killercoda-*` entry in `deploy/lab-evidence.yaml` for the
+lab's current hash (a lab under `failed:` is refused; when a lab changes, its proof is
+recorded again). Three are tested today: `cka/1.1`,
+`ckad/5.2` and `lpic-2/200.1` (the human test of `lpic-2/200.1` predates a change to the lab, so a re-test of the
+current version is pending; publishing needs only the CI proof). A proof for an older version of a lab is reported as stale
+in the CI log (`killercoda.yml`) and stops counting until the lab is re-proven. Of the 51 CKA and CKAD labs, the batch run of
+2026-10-20 found 2 that pass, 1 that fails (`ckad/4.4`, its fix does not fit the
+1-CPU node) and 48 with no reference fix yet, so they cannot be proven. More
+fixes: [#98](https://github.com/villadalmine/study-cybercirujas/issues/98).
 
 **Where was a lab proven, and what does that prove?**
 A lab is agnostic: it never knows where it runs. Each proof names its **target**

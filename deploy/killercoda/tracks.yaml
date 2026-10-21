@@ -1,3 +1,10 @@
+# Killercoda is an OPTIONAL publishing channel (RFC #210): never required, never blocking. Proof: deploy/lab-evidence.yaml.
+# scope:  certifications whose lab scripts are scanned for a `fix)` verb (a reference fix), so the parity run can try them.
+# failed: lab -> why a run did not pass (one line each, no issue per lab). Such a lab is `loaded-untested`: it stays in the
+#         repo, runs locally with study-lab, and is never pushed to the Killercoda mirror.
+scope: [cka, ckad]
+failed:
+  ckad/4.4: "batch run 2026-10-20 (actions run 39511161118): the reference fix's rollout never finished on the 1-CPU kubeadm node (the lab's resource requests do not fit)"
 # What study-lab export --target killercoda publishes by default (the pilot, issue #43).
 # Only labs whose environment Killercoda has: linux -> ubuntu, kind -> kubernetes-kubeadm-1node.
 pilot:

@@ -267,7 +267,8 @@ def load_envs() -> dict:
 
 
 def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unverified: bool = False,
-         needs: dict | None = None, evidence: dict | None = None, day: str = "", gated: list | None = None, decorate: bool = False) -> dict[str, str]:
+         needs: dict | None = None, evidence: dict | None = None, day: str = "", gated: list | None = None, decorate: bool = False,
+         scope=None) -> dict[str, str]:
     """The whole mirror: <cert>/<topic>/... per lab, a structure.json per cert (a Killercoda course) and one at the root."""
     names, out, certs = names or {}, {}, {}
     for lab in sorted(labs, key=lambda x: (x.spec["cert"], natural(x.spec["topic"]))):
@@ -281,6 +282,12 @@ def tree(labs: list[spec.Lab], names: dict[str, str] | None = None, allow_unveri
             if not kc_test.valid_for(ev, files, json.loads(files["index.json"])["backend"]["imageid"], day):
                 (gated if gated is not None else []).append(f"{c}/{t}: no passing tested.json for this scenario and today's environment")
                 continue
+            if scope is not None:   # a passing tested.json is not enough: the lab needs a recorded proof for ITS current hash
+                from . import kc_meta
+                if not scope.proven_for(f"{c}/{t}", kc_meta.lab_hash(lab)):
+                    (gated if gated is not None else []).append(
+                        f"{c}/{t}: no killercoda-* entry in deploy/lab-evidence.yaml for the current lab hash (or listed under failed)")
+                    continue
             files["tested.json"] = json.dumps(ev, indent=2, ensure_ascii=False) + "\n"
         if decorate:   # certification header, provenance banner, metadata.json, syllabus-ordered titles (the hash was taken before)
             from . import kc_meta

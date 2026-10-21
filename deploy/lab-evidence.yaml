@@ -4,9 +4,9 @@
 # A human entry carries the hash of the lab as that person ran it; if the lab changed since, the table shows "stale".
 cka/1.1:
   killercoda-kubeadm:
-    date: '2026-10-20'
-    lab_hash: 1bf8b0a86113fa15a54162552efe0ad33c6a1352a93cd94d62be3c097138ac36
-    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39510067609
+    date: '2026-10-21'
+    lab_hash: b65bd576a80ad6056afda9795389519a9965ef554ecd58650e77dad45f3911b7
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39608994677 (tested.json sha256 26e10a3bf631f7c76f867537296fa7a353511853d351812cd8a27574dee70e4e)
     runner: github-hosted ubuntu-24.04, kubeadm 1.36.1, cilium v1.20.3, containerd 2.2.1, 1 CPU
   human-killercoda:
     date: '2026-10-19'
@@ -15,18 +15,18 @@ cka/1.1:
     runner: killercoda.com, kubernetes-kubeadm-1node image of that day
 lpic-2/200.1:
   killercoda-ubuntu:
-    date: '2026-10-20'
+    date: '2026-10-21'
     lab_hash: 48bf6acd73477754dcc8f5a4a47c4fb4f10016551fdac41f40615feceb43dc3c
-    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39510067609
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39608994677 (tested.json sha256 f233c68b6b8278dfdc3767a4e7a7ca11ca51b5c0cb50fcaa1c455d4be9e1339e)
     runner: github-hosted ubuntu-24.04, 1 CPU
   human-killercoda:
     date: '2026-10-19'
     lab_hash: 7c2e93e28e3cf74960b3155219ce9f65874e632a47c5ff651fda491c23471047
-    evidence: by villadalmine (deploy/killercoda/human_tested.yaml)
+    evidence: by villadalmine (deploy/killercoda/human_tested.yaml); the lab changed after this test (goals added), a human re-test of the current hash is pending
     runner: killercoda.com, ubuntu image of that day
 ckad/5.2:
   killercoda-kubeadm:
-    date: '2026-10-20'
-    lab_hash: 215eaea57bc7c863e8d6d559d74d7a0c83ea17efad24bf83e1fa4a142f6883e9
-    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39511161118
+    date: '2026-10-21'
+    lab_hash: cd32e6af4970ad580bd872592bf6184fa6253edf65fa27e96e244f5d8e9245fa
+    evidence: https://github.com/villadalmine/study-cybercirujas/actions/runs/39608994677 (tested.json sha256 5dfc62b7010d94ce969026334e0c02927aa95a9f93b0c80a3e18843edcde109f)
     runner: github-hosted ubuntu-24.04, kubeadm 1.36.1, cilium v1.20.3, containerd 2.2.1, 1 CPU

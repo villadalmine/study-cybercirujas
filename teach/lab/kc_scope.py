@@ -128,3 +128,42 @@ def reason(lab_id: str, scope: Scope, provable: bool) -> str:
     if lab_id in scope.failed:
         return scope.failed[lab_id]
     return "never run on a Killercoda-like host" if provable else "no reference fix yet"
+
+
+def stale_entries(scope: Scope, hash_of) -> list[tuple[str, str, str, str]]:
+    """(lab, target, recorded hash, current hash) for every evidence entry recorded for a lab that has changed since.
+
+    A stale entry is history, not a lie: it says the lab was proven as it was. It stops counting for the Killercoda gate."""
+    out = []
+    for lab, targets in sorted(scope.evidence.items()):
+        try:
+            current = hash_of(lab)
+        except (OSError, ValueError, KeyError):   # the lab no longer exists
+            continue
+        out += [(lab, tgt, e["lab_hash"], current) for tgt, e in sorted(targets.items()) if e["lab_hash"] != current]
+    return out
+
+
+
+def main() -> int:
+    """`python -m teach.lab.kc_scope`: one ::warning:: per stale evidence entry. Never fails: stale evidence must be visible, not blocking."""
+    from . import kc_meta, spec
+    root = Path(__file__).resolve().parents[2]
+    sc = load(root / "deploy" / "killercoda" / "tracks.yaml")
+    def current(lab: str) -> str:
+        c, _, topic = lab.partition("/")
+        try:
+            return kc_meta.lab_hash(spec.load(root / "certs" / c / topic / "lab", "curated"))
+        except spec.SpecError as exc:
+            raise OSError(str(exc)) from exc
+
+    stale = stale_entries(sc, current)
+    for lab, tgt, old, new in stale:
+        print(f"::warning title=stale lab evidence::{lab} on {tgt} was proven for lab hash {old[:8]}, the lab is now {new[:8]}: "
+              + ("it does not count for the Killercoda mirror until it is re-proven or re-tested on the current lab" if tgt in sc.publishing else "re-test it"))
+    print(f"{len(stale)} stale evidence entr{'y' if len(stale) == 1 else 'ies'} of {sum(len(v) for v in sc.evidence.values())}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

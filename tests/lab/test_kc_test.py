@@ -162,7 +162,7 @@ def test_a_skipped_k8s_lab_does_not_break_the_evidence_or_publish_steps():
         env = next(s for s in steps if s.get("id") == "env")
         assert '"$rc" -eq 2' in env["run"] and "skip=true" in env["run"] and "::warning" in env["run"]
         prove = next(s for s in steps if str(s.get("name", "")).startswith("Prove the scenario"))
-        assert prove.get("if") == "steps.env.outputs.skip != 'true'"
+        assert prove.get("if") == "steps.env.outputs.skip != 'true' && steps.env.outcome != 'failure'"
     ev = next(s for s in parity if s.get("name") == "Evidence")
     first = ev["run"].strip().splitlines()[0]
     assert first.startswith("[ -d evidence ] ||") and "exit 0" in first   # the guard runs before any `find evidence`

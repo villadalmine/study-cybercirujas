@@ -38,6 +38,27 @@ other than root, more workers than Killercoda has, labs without a full `break | 
 maintainer-only text (the guard that keeps the export clean). Labs not yet verified in the runner are exported
 too, marked "not yet verified" in their intro.
 
+### Which labs are on Killercoda: `tested` and `loaded-untested`
+
+Killercoda is an **optional publishing channel** ([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)): never
+required, never blocking. It only has a kubeadm cluster and an Ubuntu VM, so not every lab can be there; the primary proof of a lab is
+on our own infra (`kind`, `k3s-incus`). Each lab has a Killercoda status:
+
+| Status | Meaning | In CI | On the Killercoda mirror |
+| :--- | :--- | :--- | :--- |
+| `tested` | `deploy/lab-evidence.yaml` has a proof on `killercoda-kubeadm`, `killercoda-ubuntu` or `human-killercoda` | a failing run never fails a PR | published, if its `tested.json` matches the lab's current hash |
+| `loaded-untested` | in the repo, runs locally with `study-lab`, may be exported locally; no Killercoda proof (no reference fix, a failed run, or never run) | never a failure | **never pushed** |
+
+- **Nothing untested is published.** The publish job pushes to the mirror (`study-cybercirujas-killercoda`, the repository Killercoda
+  reads) only scenarios with a passing `tested.json` **and** a `killercoda-*` entry in `deploy/lab-evidence.yaml` for the lab's current hash (`Scope.proven_for`; a lab under `failed:` is refused), for every certification (`tests/lab/test_kc_gate.py` forges a passing `tested.json` and shows it is refused). After a lab changes, record its new parity run in the evidence file.
+- **It never breaks a PR.** The steps that can fail in `killercoda-parity.yml` and `killercoda-publish.yml` are `continue-on-error` (the check stays green and a warning names the lab); their matrix comes
+  from `study-lab test --target killercoda --plan`, so no lab or certification is named in workflow YAML.
+- **A reference fix** is either `deploy/killercoda/fixes/<cert>-<topic>.sh` or a `fix)` verb in the lab's own script. The certifications
+  scanned for a `fix)` verb are `scope` in `deploy/killercoda/tracks.yaml`; `failed` there says why a run did not pass (no issue per lab).
+
+Batch run of 2026-10-20 over the 51 CKA and CKAD labs: 2 pass (`cka/1.1`, `ckad/5.2`), 1 fails (`ckad/4.4`: its fix never finishes on
+the 1-CPU node), 48 have no reference fix and stay `loaded-untested` (tracking: [#98](https://github.com/villadalmine/study-cybercirujas/issues/98)).
+
 ### Evidence per target
 
 A lab is agnostic; each proof says where it ran. `deploy/lab-targets.yaml` is the only list of targets (`kind`, `k3s-incus`,
@@ -71,7 +92,7 @@ runner (CI run URL, or local host), the date and the result of each stage.
   pass for the same scenario hash and for the environment Killercoda runs on that date (the schedule in
   `killercoda_envs.yaml`: Kubernetes 1.36 until 2026-10-25, then 1.37). Change a lab, the exporter or the date past a
   Killercoda bump and the evidence no longer matches: the scenario is retested or not published. No evidence, no publish.
-- A lab without a reference fix in `deploy/killercoda/fixes/` cannot be proven, so it is not published.
+- A lab without a reference fix (no `deploy/killercoda/fixes/<cert>-<topic>.sh`, no `fix)` verb in its script) cannot be proven, so it is `loaded-untested` and is not published to the mirror.
 
 **Probe first (lesson of 2026-10-19, issue #99).** Killercoda documents nothing about its images, so the first version of
 `killercoda_envs.yaml` assumed kubeadm 1.36.5 with flannel. The probe scenarios (`deploy/killercoda/probe/`), run by hand,
@@ -114,7 +135,7 @@ diff against the base branch in the job summary.
 ### Publish: automatic on merge
 
 `.github/workflows/killercoda-publish.yml` runs on a push to `main` that changes labs, the exporter or
-`deploy/killercoda/`, and on demand. Jobs: `plan` (labs with a reference fix), `prove` (one VM per lab, evidence as an
+`deploy/killercoda/`, and on demand. Jobs: `plan` (labs that can be proven), `prove` (one VM per lab, evidence as an
 artifact), `publish` (runs only if every `prove` job ran to the end; evidence is the fresh one plus the `tested.json` the mirror
 already has, so scenarios that were not re-proven keep theirs; export with `--evidence`, so only passing scenarios; then
 `deploy/killercoda/publish.sh`: a commit `export: study@<sha>` on the mirror, none if the tree is identical, and nothing

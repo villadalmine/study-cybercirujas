@@ -107,3 +107,17 @@ def test_proven_for_needs_the_current_hash_and_a_publishing_target():
     assert not sc.proven_for("cka/1.2", H)            # only kind: not Killercoda evidence
     assert not sc.proven_for("cka/1.3", H)            # listed under failed
     assert not sc.proven_for("cka/9.9", H)            # no entry
+
+
+def test_stale_evidence_is_listed_never_silent():
+    sc = kc_scope.Scope(["cka"], {}, {"cka/1.1": _ev("killercoda-kubeadm", "human-killercoda"), "cka/1.2": _ev("kind")}, ("killercoda-kubeadm",))
+    now = {"cka/1.1": H, "cka/1.2": "c" * 64}
+    stale = kc_scope.stale_entries(sc, lambda lab: now[lab])
+    assert stale == [("cka/1.2", "kind", H, "c" * 64)]
+    gone = kc_scope.stale_entries(sc, lambda lab: (_ for _ in ()).throw(OSError("no lab")))
+    assert gone == []   # a lab that no longer exists is not reported as stale
+
+
+def test_the_stale_report_runs_on_the_real_repo_and_never_fails(capsys):
+    assert kc_scope.main() == 0
+    assert "stale evidence entr" in capsys.readouterr().out
