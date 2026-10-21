@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# CKAD 1.35 - Tema 4.1: Discover and use resources that extend Kubernetes (CRD, Operators)
+# CKAD 1.37 - Tema 4.1: Discover and use resources that extend Kubernetes (CRD, Operators)
 # Laboratorio break & fix
 #
 # Este script crea un escenario descartable en el cluster actual (un namespace

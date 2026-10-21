@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# CKAD v1.35 - Tema 1.1: Define, build and modify container images (peso: 5)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# CKAD v1.37 - Tema 1.1: Define, build and modify container images (peso: 5)
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Laboratorio "break & fix" pensado para correr en una VM de laboratorio DESCARTABLE.
 # Todo lo que este script toca vive dentro de $LAB_DIR (por defecto bajo $HOME) y en

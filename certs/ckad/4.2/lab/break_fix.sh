@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # ============================================================================
-# CKAD 1.35 - Tema 4.2: Understand authentication, authorization
+# CKAD 1.37 - Tema 4.2: Understand authentication, authorization
 # and admission control (peso examen: 3)
 # Fuente de referencia (curriculum oficial, solo como contexto, no copiado):
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Este script arma un escenario "break & fix" seguro y descartable:
 # crea un namespace nuevo, un ServiceAccount, un Role con permisos

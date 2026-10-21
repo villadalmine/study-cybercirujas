@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# CKAD (examen v1.35) - Tema 1.4: Utilize persistent and ephemeral volumes (peso: 5)
-# Fuente curricular: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# CKAD (examen v1.37) - Tema 1.4: Utilize persistent and ephemeral volumes (peso: 5)
+# Fuente curricular: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Break & Fix: un PersistentVolumeClaim que nunca hace bind por un
 # storageClassName con typo, mientras un volumen ephemeral (emptyDir) en el

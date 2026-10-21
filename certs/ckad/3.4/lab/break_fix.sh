@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# CKAD 1.35 - Tema 3.4 "Debugging in Kubernetes" (peso: 3)
+# CKAD 1.37 - Tema 3.4 "Debugging in Kubernetes" (peso: 3)
 # Ejercicio break & fix para VM de laboratorio descartable (kind/minikube/etc).
 # Fuente de referencia (curriculum, solo como contexto de alcance del tema):
-#   https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Este script crea un namespace propio y despliega un Deployment + Service
 # rotos de forma intencional pero segura (no toca nada fuera de ese namespace).

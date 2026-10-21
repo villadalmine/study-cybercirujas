@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # ============================================================================
-# break-fix-netpol.sh — CKAD v1.35 · Tema 5.1: NetworkPolicies (peso: 5)
+# break-fix-netpol.sh — CKAD v1.37 · Tema 5.1: NetworkPolicies (peso: 5)
 # ============================================================================
 #
 # Ejercicio "break & fix": este script monta un mini-escenario en tu cluster
@@ -20,7 +20,7 @@
 # fuera de el. Limpieza total: kubectl delete namespace netpol-lab
 #
 # Fuentes de referencia (consultadas, no copiadas):
-#   - CKAD Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   - CKAD Curriculum v1.37: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #   - Kubernetes docs, Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 #
 # ============================================================================
@@ -273,6 +273,6 @@ EOF
 #     pero no hacen nada: en el examen se asume que el cluster las aplica.
 #
 # Fuentes:
-#   - https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   - https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #   - https://kubernetes.io/docs/concepts/services-networking/network-policies/
 # ============================================================================

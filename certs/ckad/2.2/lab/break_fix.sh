@@ -4,7 +4,7 @@
 # BREAK & FIX — CKAD 2.2: Understand Deployments and how to perform
 #                          rolling updates
 # =============================================================================
-# Certificación : CKAD (examen v1.35) — peso del tema en el examen: 5
+# Certificación : CKAD (examen v1.37) — peso del tema en el examen: 5
 #
 # Qué hace este script:
 #   1. Crea un namespace de laboratorio y un Deployment sano (nginx, 3 réplicas)
@@ -19,8 +19,8 @@
 #   kubectl delete namespace ckad-2-2-breakfix
 #
 # Fuentes de referencia (consultadas como guía, contenido original):
-#   - CKAD Curriculum v1.35:
-#     https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+#   - CKAD Curriculum v1.37:
+#     https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #   - Deployments (conceptos, rolling updates, rollback):
 #     https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 #   - kubectl rollout:

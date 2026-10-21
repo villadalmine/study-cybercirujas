@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================================
-# CKAD 1.35 - Tema 4.3: Understand requests, limits, quotas (peso: 3)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# CKAD 1.37 - Tema 4.3: Understand requests, limits, quotas (peso: 3)
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Script "break & fix" para laboratorio DESCARTABLE (kind/minikube/VM de
 # práctica). Crea un namespace propio, rompe algo relacionado con

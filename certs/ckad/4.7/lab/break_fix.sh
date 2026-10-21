@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# CKAD v1.35 - Tema 4.7: Understand ServiceAccounts (peso: 3)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKAD_Curriculum_v1.35.pdf
+# CKAD v1.37 - Tema 4.7: Understand ServiceAccounts (peso: 3)
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 #
 # Laboratorio "break & fix" pensado para correr en una VM de laboratorio
 # DESCARTABLE con acceso de kubectl a un clúster Kubernetes cualquiera.
