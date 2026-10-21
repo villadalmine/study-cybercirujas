@@ -194,16 +194,16 @@ Tanto el container runtime como el kubelet deben usar el mismo cgroup driver. En
 
 Usamos el repositorio oficial de paquetes de Kubernetes (`pkgs.k8s.io`), versionado por minor release.
 
-1. Instalá dependencias y agregá la GPG key del repo (ejemplo para la serie v1.35):
+1. Instalá dependencias y agregá la GPG key del repo (ejemplo para la serie v1.37):
    ```bash
    sudo apt update
    sudo apt install -y apt-transport-https ca-certificates curl gpg
-   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | \
+   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | \
      sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
    ```
 2. Agregá el repo:
    ```bash
-   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | \
+   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | \
      sudo tee /etc/apt/sources.list.d/kubernetes.list
    ```
 3. Instalá los paquetes:
@@ -223,7 +223,7 @@ Usamos el repositorio oficial de paquetes de Kubernetes (`pkgs.k8s.io`), version
    ```
 
 **Preguntas de verificación:**
-1. ¿Por qué el repositorio está versionado por minor release (`v1.35`) en lugar de tener un único repo para todas las versiones?
+1. ¿Por qué el repositorio está versionado por minor release (`v1.37`) en lugar de tener un único repo para todas las versiones?
 2. ¿Qué riesgo mitiga `apt-mark hold` en un cluster ya inicializado?
 3. ¿`kubectl` es un requisito para que el nodo funcione como parte del cluster, o es solo una herramienta de administración?
 
@@ -240,7 +240,7 @@ kubeadm incluye validaciones automáticas antes de inicializar el cluster; corre
 2. Revisá que no haya errores relacionados a swap, módulos de kernel, puertos ocupados o el container runtime.
 3. (Opcional) descargá por adelantado las imágenes de los componentes del control plane, para evitar demoras o fallos de red durante `kubeadm init`:
    ```bash
-   sudo kubeadm config images pull --kubernetes-version v1.35.0
+   sudo kubeadm config images pull --kubernetes-version v1.37.0
    ```
 
 **Preguntas de verificación:**

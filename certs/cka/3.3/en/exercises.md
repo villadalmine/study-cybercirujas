@@ -53,7 +53,7 @@ HPA scaling based on CPU/memory depends on the Metrics API (`metrics.k8s.io`) ex
    ```
 
 **Comprehension Questions**
-1. Which API group and version does `kubectl autoscale` generate in Kubernetes 1.35?
+1. Which API group and version does `kubectl autoscale` generate in Kubernetes 1.37?
 2. What does condition `ScalingActive=False` indicate in `kubectl describe hpa`?
 
 ---
@@ -215,7 +215,7 @@ Cluster Autoscaler (CA) manages host **node counts** based on `Pending` Pod dema
 2. `metrics-server` scrapes kubelet `/stats/summary` endpoints and exposes `metrics.k8s.io`.
 
 **Block 2**
-1. `autoscaling/v2` (stable HPA API version in Kubernetes 1.35).
+1. `autoscaling/v2` (stable HPA API version in Kubernetes 1.37).
 2. Indicates HPA cannot fetch or evaluate metrics, halting active scale decisions.
 
 **Block 3**

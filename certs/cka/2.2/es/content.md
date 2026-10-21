@@ -36,8 +36,8 @@ Salida esperada cuando todo está sano:
 
 ```
 NAME             STATUS   ROLES           AGE   VERSION
-controlplane     Ready    control-plane   10d   v1.35.0
-node01           Ready    <none>          10d   v1.35.0
+controlplane     Ready    control-plane   10d   v1.37.0
+node01           Ready    <none>          10d   v1.37.0
 ```
 
 Si un componente del control plane está caído, vas a ver algo como:

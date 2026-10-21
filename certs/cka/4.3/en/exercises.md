@@ -24,7 +24,7 @@ Prerequisites: A working `kubeadm` cluster with one control plane node (`k8s-cp1
 ### Questions
 
 1. Which version skew policy regulates minor version differences between `kube-apiserver` and node `kubelet` agents?
-2. Why is skipping minor versions during upgrades (e.g. 1.33 to 1.35) prohibited by `kubeadm`?
+2. Why is skipping minor versions during upgrades (e.g. 1.35 to 1.37) prohibited by `kubeadm`?
 
 ---
 
@@ -63,7 +63,7 @@ Prerequisites: A working `kubeadm` cluster with one control plane node (`k8s-cp1
 2. Upgrade `kubeadm` package:
    ```bash
    sudo apt-get update
-   sudo apt-get install -y --allow-change-held-packages kubeadm=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubeadm=1.37.x-00
    ```
 3. Inspect upgrade plan:
    ```bash
@@ -71,7 +71,7 @@ Prerequisites: A working `kubeadm` cluster with one control plane node (`k8s-cp1
    ```
 4. Apply control plane upgrade:
    ```bash
-   sudo kubeadm upgrade apply v1.35.x
+   sudo kubeadm upgrade apply v1.37.x
    ```
 
 ### Questions
@@ -89,7 +89,7 @@ Prerequisites: A working `kubeadm` cluster with one control plane node (`k8s-cp1
    ```
 2. Upgrade `kubelet` and `kubectl`:
    ```bash
-   sudo apt-get install -y --allow-change-held-packages kubelet=1.35.x-00 kubectl=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubelet=1.37.x-00 kubectl=1.37.x-00
    sudo systemctl daemon-reload
    sudo systemctl restart kubelet
    ```
@@ -109,12 +109,12 @@ Prerequisites: A working `kubeadm` cluster with one control plane node (`k8s-cp1
 2. SSH into `k8s-worker1` and upgrade `kubeadm`:
    ```bash
    sudo apt-get update
-   sudo apt-get install -y --allow-change-held-packages kubeadm=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubeadm=1.37.x-00
    sudo kubeadm upgrade node
    ```
 3. Upgrade `kubelet` and `kubectl`, then restart services:
    ```bash
-   sudo apt-get install -y --allow-change-held-packages kubelet=1.35.x-00 kubectl=1.35.x-00
+   sudo apt-get install -y --allow-change-held-packages kubelet=1.37.x-00 kubectl=1.37.x-00
    sudo systemctl daemon-reload
    sudo systemctl restart kubelet
    ```

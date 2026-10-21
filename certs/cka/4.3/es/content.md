@@ -6,14 +6,14 @@ Este tema cubre las tareas operativas necesarias para mantener un cluster de Kub
 
 ## Version Skew Policy
 
-Kubernetes soporta un desfasaje limitado de versiones entre componentes. Reglas clave (aplican a v1.35, confirmar siempre contra la versión específica del examen):
+Kubernetes soporta un desfasaje limitado de versiones entre componentes. Reglas clave (aplican a v1.37, confirmar siempre contra la versión específica del examen):
 
 - **kube-apiserver**: es la versión "de referencia". No debe haber ningún componente más nuevo que el apiserver.
 - **kube-controller-manager, kube-scheduler, cloud-controller-manager**: pueden estar hasta **1 minor version** por debajo del apiserver.
 - **kubelet**: puede estar hasta **3 minor versions** por debajo del apiserver (soporte extendido desde v1.28).
 - **kube-proxy**: misma versión que kubelet en ese nodo, no debe superar al apiserver.
 - **kubectl**: puede estar 1 minor version por arriba o por debajo del apiserver.
-- Los **upgrades deben hacerse de a una minor version por vez** (ej: 1.33 → 1.34 → 1.35), nunca saltar minors.
+- Los **upgrades deben hacerse de a una minor version por vez** (ej: 1.35 → 1.36 → 1.37), nunca saltar minors.
 
 Esto implica el orden estándar de upgrade de un cluster:
 
@@ -31,8 +31,8 @@ apt-cache madison kubeadm
 ```
 
 ```
-kubeadm | 1.35.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
-kubeadm | 1.35.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
+kubeadm | 1.37.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
+kubeadm | 1.37.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
 ```
 
 ### 2. Upgrade del primer control plane node
@@ -40,7 +40,7 @@ kubeadm | 1.35.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.35/deb  Packages
 ```bash
 # Fijar/instalar la versión exacta de kubeadm
 apt-mark unhold kubeadm
-apt install -y kubeadm='1.35.1-1.1'
+apt install -y kubeadm='1.37.1-1.1'
 apt-mark hold kubeadm
 
 # Verificar el plan de upgrade
@@ -50,24 +50,24 @@ kubeadm upgrade plan
 Salida típica (resumida):
 
 ```
-[upgrade/versions] Cluster version: v1.34.1
-[upgrade/versions] kubeadm version: v1.35.1
+[upgrade/versions] Cluster version: v1.36.1
+[upgrade/versions] kubeadm version: v1.37.1
 Upgrade to the latest stable version:
 
 COMPONENT                 CURRENT   TARGET
-kube-apiserver             v1.34.1   v1.35.1
-kube-controller-manager    v1.34.1   v1.35.1
-kube-scheduler             v1.34.1   v1.35.1
-kube-proxy                 v1.34.1   v1.35.1
+kube-apiserver             v1.36.1   v1.37.1
+kube-controller-manager    v1.36.1   v1.37.1
+kube-scheduler             v1.36.1   v1.37.1
+kube-proxy                 v1.36.1   v1.37.1
 CoreDNS                    v1.11.3   v1.11.3
 etcd                       3.5.15-0  3.5.16-0
 
 You can now apply the upgrade by executing the following command:
-        kubeadm upgrade apply v1.35.1
+        kubeadm upgrade apply v1.37.1
 ```
 
 ```bash
-kubeadm upgrade apply v1.35.1
+kubeadm upgrade apply v1.37.1
 ```
 
 Esto actualiza los manifiestos estáticos del control plane (`/etc/kubernetes/manifests/`), certificados (con renovación automática salvo que se pase `--certificate-renewal=false`), y componentes de addon (CoreDNS, kube-proxy).
@@ -90,7 +90,7 @@ Esto marca el nodo como **unschedulable** (`cordon`) y expulsa los pods que corr
 
 ```bash
 apt-mark unhold kubelet kubectl
-apt install -y kubelet='1.35.1-1.1' kubectl='1.35.1-1.1'
+apt install -y kubelet='1.37.1-1.1' kubectl='1.37.1-1.1'
 apt-mark hold kubelet kubectl
 
 systemctl daemon-reload
@@ -113,13 +113,13 @@ kubectl drain <worker-node> --ignore-daemonsets --delete-emptydir-data
 
 # En el worker
 apt-mark unhold kubeadm
-apt install -y kubeadm='1.35.1-1.1'
+apt install -y kubeadm='1.37.1-1.1'
 apt-mark hold kubeadm
 
 kubeadm upgrade node
 
 apt-mark unhold kubelet kubectl
-apt install -y kubelet='1.35.1-1.1' kubectl='1.35.1-1.1'
+apt install -y kubelet='1.37.1-1.1' kubectl='1.37.1-1.1'
 apt-mark hold kubelet kubectl
 
 systemctl daemon-reload
@@ -138,9 +138,9 @@ kubectl get nodes -o wide
 
 ```
 NAME           STATUS   ROLES           AGE   VERSION
-cp-01          Ready    control-plane   90d   v1.35.1
-worker-01      Ready    <none>          90d   v1.35.1
-worker-02      Ready    <none>          90d   v1.35.1
+cp-01          Ready    control-plane   90d   v1.37.1
+worker-01      Ready    <none>          90d   v1.37.1
+worker-02      Ready    <none>          90d   v1.37.1
 ```
 
 ## Backup y restore de etcd

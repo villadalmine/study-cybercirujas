@@ -232,7 +232,7 @@ curl --resolve app.example.com:80:203.0.113.10 http://app.example.com/
 
 ## 10. Ingress vs Gateway API
 
-Vale la pena saber que la comunidad de Kubernetes está migrando hacia la **Gateway API** (`Gateway`, `HTTPRoute`, etc.) como sucesora más expresiva de `Ingress`, pero para CKA v1.35 el foco sigue siendo el recurso `Ingress` clásico y su controller.
+Vale la pena saber que la comunidad de Kubernetes está migrando hacia la **Gateway API** (`Gateway`, `HTTPRoute`, etc.) como sucesora más expresiva de `Ingress`, pero para CKA v1.37 el foco sigue siendo el recurso `Ingress` clásico y su controller.
 
 ## Referencias
 

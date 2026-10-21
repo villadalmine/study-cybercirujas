@@ -19,9 +19,9 @@ Typical output showing an unhealthy node:
 
 ```
 NAME       STATUS     ROLES           AGE   VERSION
-master1    Ready      control-plane   40d   v1.35.0
-worker1    NotReady   <none>          40d   v1.35.0
-worker2    Ready      <none>          40d   v1.35.0
+master1    Ready      control-plane   40d   v1.37.0
+worker1    NotReady   <none>          40d   v1.37.0
+worker2    Ready      <none>          40d   v1.37.0
 ```
 
 `kubectl describe node <node>` is the most critical diagnostic command for analyzing node status: it displays `Conditions`, `Taints`, `Allocatable` resources, `Events`, and `kubelet`/container runtime versions.
@@ -223,7 +223,7 @@ chroot /host
 ```bash
 $ kubectl get nodes
 NAME      STATUS     ROLES    AGE   VERSION
-worker1   NotReady   <none>   400d  v1.35.0
+worker1   NotReady   <none>   400d  v1.37.0
 
 $ journalctl -u kubelet --since "5 min ago" | tail
 ... "Failed to connect to apiserver" err="x509: certificate has expired or is not yet valid"
@@ -240,7 +240,7 @@ $ kubeadm certs renew all
 $ systemctl restart kubelet
 $ kubectl get nodes
 NAME      STATUS   ROLES    AGE   VERSION
-worker1   Ready    <none>   400d  v1.35.0
+worker1   Ready    <none>   400d  v1.37.0
 ```
 
 ## References

@@ -55,7 +55,7 @@ El HPA basado en CPU/memoria depende de la Metrics API (`metrics.k8s.io`), que e
    Prestá atención a los campos `Reference`, `Metrics`, `Min/Max replicas` y la sección `Conditions`.
 
 **Preguntas de comprensión**
-1. ¿A qué apiVersion pertenece el objeto que crea `kubectl autoscale` en un cluster 1.35?
+1. ¿A qué apiVersion pertenece el objeto que crea `kubectl autoscale` en un cluster 1.37?
 2. En la salida de `kubectl describe hpa`, ¿qué indica una condición `ScalingActive=False`?
 
 ---

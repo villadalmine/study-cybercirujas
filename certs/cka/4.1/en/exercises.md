@@ -152,13 +152,13 @@ Prerequisites: At least two Linux virtual machines (Ubuntu 22.04/24.04 recommend
 
 ## Step 7: Install `kubeadm`, `kubelet`, and `kubectl`
 
-1. Add Kubernetes repository key and sources (v1.35):
+1. Add Kubernetes repository key and sources (v1.37):
    ```bash
    sudo apt update
    sudo apt install -y apt-transport-https ca-certificates curl gpg
-   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | \
+   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | \
      sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | \
+   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | \
      sudo tee /etc/apt/sources.list.d/kubernetes.list
    ```
 2. Install packages:
@@ -178,7 +178,7 @@ Prerequisites: At least two Linux virtual machines (Ubuntu 22.04/24.04 recommend
    ```
 2. Pull control plane images in advance:
    ```bash
-   sudo kubeadm config images pull --kubernetes-version v1.35.0
+   sudo kubeadm config images pull --kubernetes-version v1.37.0
    ```
 
 ---
