@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.1...v0.6.0) (2026-10-21)
+
+
+### Features
+
+* **labs:** evidence per target, one fixed list of targets and a validator ([#103](https://github.com/villadalmine/study-cybercirujas/issues/103)) ([#206](https://github.com/villadalmine/study-cybercirujas/issues/206)) ([955214d](https://github.com/villadalmine/study-cybercirujas/commit/955214d80088edada8167dbfab96bcfc3f42cd6d))
+* **labs:** Killercoda is an optional channel, labs are tested or loaded-untested ([#211](https://github.com/villadalmine/study-cybercirujas/issues/211)) ([e659888](https://github.com/villadalmine/study-cybercirujas/commit/e6598885c80db31fb5250a52dd133a2b257ca854))
+
+
+### Bug Fixes
+
+* **ci:** settle the release milestone at release time from what shipped ([#239](https://github.com/villadalmine/study-cybercirujas/issues/239)) ([de006de](https://github.com/villadalmine/study-cybercirujas/commit/de006deecc5c34b42be7c49a84648908ed2c82d2))
+* **labs:** lab_hash sorts by the path parts, so it is the same on every OS ([#241](https://github.com/villadalmine/study-cybercirujas/issues/241)) ([196e533](https://github.com/villadalmine/study-cybercirujas/commit/196e5335516580d61c65d6f0ed290a4cfc78ab98))
+
+
+### Documentation
+
+* cleanup, the root keeps only what tools expect; AGENTS.md, CHARTER.md, a short README, stale docs fixed ([#215](https://github.com/villadalmine/study-cybercirujas/issues/215)) ([51cfbb6](https://github.com/villadalmine/study-cybercirujas/commit/51cfbb64cf0d36196088789bff03a00afc17d327))
+* HOW-IT-WORKS, GUARDRAILS and ISSUE-TO-RELEASE, the system in levels, the quality dimensions and the work flow ([#216](https://github.com/villadalmine/study-cybercirujas/issues/216)) ([7f036e3](https://github.com/villadalmine/study-cybercirujas/commit/7f036e340d2da79902bb3845595ac1867a6d8324))
+
 ## [0.5.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.0...v0.5.1) (2026-10-21)
 
 
