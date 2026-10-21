@@ -1,31 +1,30 @@
 # Community 226
 
-> 6 nodes · cohesion 0.33
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **state()** (5 connections) — `scripts/check_versions.py`
-- **_same_version()** (4 connections) — `scripts/check_versions.py`
-- **.setUp()** (3 connections) — `tests/test_labs_host_guard.py`
-- **parts()** (1 connections) — `scripts/check_versions.py`
-- **True/False if both versions are known and comparable, else None. "3.0" and…** (1 connections) — `scripts/check_versions.py`
-- **current | outdated | unknown. `unknown` is a real answer and is reported as…** (1 connections) — `scripts/check_versions.py`
+- **Rewrite** (8 connections) — `tests/test_upgrade_versions.py`
+- **.test_a_companion_line_moves_once()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_a_sample_upgrade_keeps_its_distance()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_already_on_target_is_skipped_and_odd_patch_stops()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_patch_rules()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_the_curriculum_link_is_pinned_by_commit()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_the_kind_node_takes_the_pinned_tag()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_what_is_not_a_kubernetes_version_stays()** (1 connections) — `tests/test_upgrade_versions.py`
 
 ## Relationships
 
-- [Community 63](Community_63.md) (3 shared connections)
-- [Community 209](Community_209.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_versions.py`
-- `tests/test_labs_host_guard.py`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (80%)
-- INFERRED: 2 (20%)
+- EXTRACTED: 8 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

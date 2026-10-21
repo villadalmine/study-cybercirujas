@@ -2,22 +2,22 @@
 
 > God node · 22 connections · `teach/core/catalog.py`
 
-**Community:** [Community 74](Community_74.md)
+**Community:** [Community 173](Community_173.md)
 
 ## Connections by Relation
 
 ### calls
 - yaml `EXTRACTED`
 - snapshot_topics() `EXTRACTED`
+- sync_cncf() `EXTRACTED`
 - generate_cert_script() `EXTRACTED`
 - sync_clouds() `EXTRACTED`
-- sync_cncf() `EXTRACTED`
 - generate_script() `EXTRACTED`
 - [main()](main.md) `EXTRACTED`
 - list_certs() `EXTRACTED`
 - sync_lpi() `EXTRACTED`
-- generate_paths() `EXTRACTED`
 - copy `EXTRACTED`
+- generate_paths() `EXTRACTED`
 - translate_paths() `EXTRACTED`
 - get_paths() `EXTRACTED`
 - catalog_path() `EXTRACTED`

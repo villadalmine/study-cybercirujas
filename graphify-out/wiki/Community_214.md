@@ -1,36 +1,37 @@
 # Community 214
 
-> 9 nodes · cohesion 0.33
+> 11 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **window_budget.py** (12 connections) — `scripts/window_budget.py`
-- **main()** (6 connections) — `scripts/window_budget.py`
-- **statistics** (5 connections)
-- **_load()** (4 connections) — `scripts/window_budget.py`
-- **_kind()** (3 connections) — `scripts/window_budget.py`
-- **_week()** (2 connections) — `scripts/window_budget.py`
-- **Path** (1 connections)
-- **How much quota is left this week, in the unit that actually runs out. The…** (1 connections) — `scripts/window_budget.py`
-- **What the API actually said the limit was: spend | weekly | "". Read from the…** (1 connections) — `scripts/window_budget.py`
+- **tool_edit_ok()** (9 connections) — `scripts/curriculum_diff.py`
+- **cite_checker()** (8 connections) — `scripts/curriculum_diff.py`
+- **wrong_rewrites()** (8 connections) — `scripts/curriculum_diff.py`
+- **load_pins()** (5 connections) — `scripts/curriculum_diff.py`
+- **ok()** (3 connections) — `scripts/curriculum_diff.py`
+- **_listed()** (3 connections) — `scripts/curriculum_diff.py`
+- **uv_rewrite()** (3 connections) — `scripts/curriculum_diff.py`
+- **(file, old line, new line) -> True when the new line is what the citation fix…** (1 connections) — `scripts/curriculum_diff.py`
+- **The upgrade's pins file as committed on the base (`<spec>.pins.yaml` next to…** (1 connections) — `scripts/curriculum_diff.py`
+- **A scripted edit stands in for a model's effort and prompt hash, and only for…** (1 connections) — `scripts/curriculum_diff.py`
+- **A technical version line the plan lists may only become what the upgrade's own…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 112](Community_112.md) (3 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 57](Community_57.md) (6 shared connections)
+- [Community 135](Community_135.md) (4 shared connections)
+- [Community 63](Community_63.md) (3 shared connections)
+- [Community 5](Community_5.md) (3 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/window_budget.py`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 23 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 28 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,20 +1,21 @@
 # Community 242
 
-> 3 nodes · cohesion 0.67
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **claims()** (4 connections) — `scripts/check_groundedness.py`
-- **flush()** (1 connections) — `scripts/check_groundedness.py`
-- **Sentences of the prose (no code, headings, tables, comments or References),…** (1 connections) — `scripts/check_groundedness.py`
+- **NEXT.md** (4 connections) — `docs/release-notes/NEXT.md`
+- **Highlights** (1 connections) — `docs/release-notes/NEXT.md`
+- **Thanks** (1 connections) — `docs/release-notes/NEXT.md`
+- **Upgrade notes** (1 connections) — `docs/release-notes/NEXT.md`
 
 ## Relationships
 
-- [Community 34](Community_34.md) (2 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_groundedness.py`
+- `docs/release-notes/NEXT.md`
 
 ## Audit Trail
 

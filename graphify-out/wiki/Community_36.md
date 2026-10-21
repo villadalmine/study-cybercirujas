@@ -1,41 +1,39 @@
 # Community 36
 
-> 11 nodes · cohesion 0.29
+> 9 nodes · cohesion 0.28
 
 ## Key Concepts
 
-- **publish_if_complete.py** (19 connections) — `scripts/publish_if_complete.py`
+- **check_provenance.py** (11 connections) — `scripts/check_provenance.py`
+- **video_languages()** (9 connections) — `teach/core/pipeline.py`
 - **is_complete()** (7 connections) — `scripts/publish_if_complete.py`
-- **main()** (6 connections) — `scripts/publish_if_complete.py`
-- **complete_certs()** (4 connections) — `scripts/publish_if_complete.py`
-- **publish()** (4 connections) — `scripts/publish_if_complete.py`
-- **_record()** (3 connections) — `scripts/publish_if_complete.py`
-- **_save()** (3 connections) — `scripts/publish_if_complete.py`
+- **check_cert()** (6 connections) — `scripts/check_provenance.py`
+- **main()** (3 connections) — `scripts/check_provenance.py`
+- **_topics()** (3 connections) — `scripts/check_provenance.py`
 - **_topic_ids()** (3 connections) — `scripts/publish_if_complete.py`
-- **Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…** (1 connections) — `scripts/publish_if_complete.py`
-- **Publish when a certification becomes complete. Part of the pass, not a…** (1 connections) — `scripts/publish_if_complete.py`
+- **Guardrails: content must be traceable, accounted for, and authored correctly.…** (1 connections) — `scripts/check_provenance.py`
 - **(complete, why not). Everything the certification declares must be there.…** (1 connections) — `scripts/publish_if_complete.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 18](Community_18.md) (3 shared connections)
-- [Community 62](Community_62.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
-- [Community 211](Community_211.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 62](Community_62.md) (5 shared connections)
+- [Community 6](Community_6.md) (3 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 49](Community_49.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 
 ## Source Files
 
+- `scripts/check_provenance.py`
 - `scripts/publish_if_complete.py`
+- `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 36 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,30 +1,31 @@
 # Community 223
 
-> 7 nodes · cohesion 0.29
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **From claude — 2026-08-14: where this stands, and how to resume** (7 connections) — `AGENTS_SYNC.md`
-- **What changed in the machinery this session, and why you should not undo it** (2 connections) — `AGENTS_SYNC.md`
-- **Decisions left to the owner, not to us** (1 connections) — `AGENTS_SYNC.md`
-- **Resume in three commands** (1 connections) — `AGENTS_SYNC.md`
-- **Two measurement traps that cost me real time** (1 connections) — `AGENTS_SYNC.md`
-- **What is done** (1 connections) — `AGENTS_SYNC.md`
-- **What is pending, in the order I would do it** (1 connections) — `AGENTS_SYNC.md`
+- **Roadmap — where this is and where it goes** (8 connections) — `docs/ROADMAP.md`
+- **Standing decisions worth not re-litigating** (2 connections) — `docs/ROADMAP.md`
+- **Current focus — set 2026-09-11** (1 connections) — `docs/ROADMAP.md`
+- **Smaller things, when there is an appetite** (1 connections) — `docs/ROADMAP.md`
+- **Study bot — the phases after this one** (1 connections) — `docs/ROADMAP.md`
+- **What is next** (1 connections) — `docs/ROADMAP.md`
+- **Where it is** (1 connections) — `docs/ROADMAP.md`
+- **Where we left off — 2026-09-30** (1 connections) — `docs/ROADMAP.md`
 
 ## Relationships
 
-- [Community 5](Community_5.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `docs/ROADMAP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (88%)
-- INFERRED: 1 (12%)
+- EXTRACTED: 8 (89%)
+- INFERRED: 1 (11%)
 - AMBIGUOUS: 0 (0%)
 
 ---

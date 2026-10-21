@@ -1,33 +1,30 @@
 # Community 224
 
-> 7 nodes · cohesion 0.43
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
-- **main()** (6 connections) — `scripts/topic_cost.py`
-- **by_topic()** (3 connections) — `scripts/topic_cost.py`
-- **records()** (3 connections) — `scripts/topic_cost.py`
-- **dominant()** (2 connections) — `scripts/topic_cost.py`
-- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
-- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
+- **EndpointTests** (7 connections) — `tests/test_models_live.py`
+- **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
+- **.setUp()** (1 connections) — `tests/test_models_live.py`
+- **.tearDown()** (1 connections) — `tests/test_models_live.py`
+- **.test_a_fresh_check_is_not_repeated_on_every_request()** (1 connections) — `tests/test_models_live.py`
+- **explode()** (1 connections) — `tests/test_models_live.py`
+- **.test_findings_reach_the_page()** (1 connections) — `tests/test_models_live.py`
+- **The guard must never be able to break the page it protects.** (1 connections) — `tests/test_models_live.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 3](Community_3.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/topic_cost.py`
+- `tests/test_models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 7 (88%)
+- INFERRED: 1 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

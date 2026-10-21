@@ -1,13 +1,13 @@
 # Community 40
 
-> 49 nodes · cohesion 0.06
+> 51 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **CheckPrTests** (22 connections) — `tests/test_check_pr.py`
+- **CheckPrTests** (24 connections) — `tests/test_check_pr.py`
 - **commit()** (16 connections) — `tests/test_check_pr.py`
 - **DcoTests** (14 connections) — `tests/test_check_pr.py`
-- **.body()** (12 connections) — `tests/test_check_pr.py`
+- **.body()** (13 connections) — `tests/test_check_pr.py`
 - **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
 - **.run_main()** (4 connections) — `tests/test_check_pr.py`
 - **.test_git_paths_are_read_unquoted()** (3 connections) — `tests/test_check_pr.py`
@@ -26,10 +26,10 @@
 - **.test_site_line_is_required()** (2 connections) — `tests/test_check_pr.py`
 - **.test_the_bad_fixture_fails_on_both_counts()** (2 connections) — `tests/test_check_pr.py`
 - **.test_the_release_pr_dco_is_decided_by_the_same_facts_not_the_email()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_templates_bare_closes_line_does_not_fill_a_section()** (2 connections) — `tests/test_check_pr.py`
 - **.test_title_must_be_a_conventional_commit()** (2 connections) — `tests/test_check_pr.py`
 - **.test_where_it_ran_outside_evidence_is_not_evidence()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_forged_bot_email_exempts_nobody()** (2 connections) — `tests/test_check_pr.py`
-- *... and 24 more nodes in this community*
+- *... and 26 more nodes in this community*
 
 ## Relationships
 
@@ -41,7 +41,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (100%)
+- EXTRACTED: 81 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

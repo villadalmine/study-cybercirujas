@@ -24,15 +24,14 @@
 
 ## Relationships
 
+- [Community 63](Community_63.md) (4 shared connections)
 - [Community 103](Community_103.md) (3 shared connections)
-- [Community 63](Community_63.md) (3 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
 - [Community 124](Community_124.md) (2 shared connections)
 - [Community 70](Community_70.md) (2 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 226](Community_226.md) (1 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
 - [Community 10](Community_10.md) (1 shared connections)
 - [Community 127](Community_127.md) (1 shared connections)
 

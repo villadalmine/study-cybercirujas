@@ -1,21 +1,24 @@
 # Community 83
 
-> 12 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **CheckDocsTests** (12 connections) — `tests/test_check_docs.py`
+- **CheckDocsTests** (14 connections) — `tests/test_check_docs.py`
 - **.problems()** (8 connections) — `tests/test_check_docs.py`
 - **.git()** (3 connections) — `tests/test_check_docs.py`
 - **.setUp()** (2 connections) — `tests/test_check_docs.py`
 - **.test_a_missing_file_or_anchor_fails()** (2 connections) — `tests/test_check_docs.py`
 - **.test_a_missing_path_in_code_fails()** (2 connections) — `tests/test_check_docs.py`
+- **.test_a_personal_name_in_a_public_doc_fails()** (2 connections) — `tests/test_check_docs.py`
 - **.test_existence_is_asked_of_git_case_exact_and_tracked_only()** (2 connections) — `tests/test_check_docs.py`
 - **.test_good_links_paths_and_commands_pass()** (2 connections) — `tests/test_check_docs.py`
 - **.test_links_inside_code_blocks_are_not_checked()** (2 connections) — `tests/test_check_docs.py`
 - **.test_unknown_make_targets_and_teach_commands_fail()** (2 connections) — `tests/test_check_docs.py`
 - **.test_allowed_references_say_why()** (1 connections) — `tests/test_check_docs.py`
+- **.test_an_absolute_github_url_to_a_missing_repo_file_fails()** (1 connections) — `tests/test_check_docs.py`
 - **.test_the_real_docs_are_consistent()** (1 connections) — `tests/test_check_docs.py`
+- **Decisions are written by role (the maintainer); the words come from…** (1 connections) — `tests/test_check_docs.py`
 
 ## Relationships
 
@@ -27,7 +30,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 23 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,6 +1,6 @@
 # main()
 
-> God node · 24 connections · `scripts/check_pr.py`
+> God node · 25 connections · `scripts/check_pr.py`
 
 **Community:** [Community 32](Community_32.md)
 
@@ -14,13 +14,13 @@
 - sections() `EXTRACTED`
 - cited_runs() `EXTRACTED`
 - quality_only() `EXTRACTED`
+- scope() `EXTRACTED`
 - dco() `EXTRACTED`
 - site_impact() `EXTRACTED`
 - verify_runs() `EXTRACTED`
 - read_labels() `EXTRACTED`
 - read_milestone() `EXTRACTED`
 - base_texts() `EXTRACTED`
-- scope() `EXTRACTED`
 - commits_of() `EXTRACTED`
 - exam_version() `EXTRACTED`
 - exam_version_changes() `EXTRACTED`
@@ -31,6 +31,9 @@
 
 ### contains
 - check_pr.py `EXTRACTED`
+
+### indirect_call
+- generated_current() `INFERRED`
 
 ---
 

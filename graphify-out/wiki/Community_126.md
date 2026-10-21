@@ -1,42 +1,40 @@
 # Community 126
 
-> 12 nodes · cohesion 0.17
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **study-lab — break/fix labs in a throwaway container** (10 connections) — `docs/LABS-RUNNER.md`
-- **shell()** (7 connections) — `teach/lab/runner.py`
-- **How it works** (2 connections) — `docs/LABS-RUNNER.md`
-- **Quick start** (2 connections) — `docs/LABS-RUNNER.md`
-- **Run a lab from another repository** (2 connections) — `docs/LABS-RUNNER.md`
-- **State of the 548 curated labs (validate, 2026-10-15)** (2 connections) — `docs/LABS-RUNNER.md`
-- **The template: `lab.yaml` v2 + `break | verify | cleanup`** (2 connections) — `docs/LABS-RUNNER.md`
-- **Create a lab that follows the template** (1 connections) — `docs/LABS-RUNNER.md`
-- **Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15)** (1 connections) — `docs/LABS-RUNNER.md`
-- **Other places to run it** (1 connections) — `docs/LABS-RUNNER.md`
-- **Pinned versions** (1 connections) — `docs/LABS-RUNNER.md`
-- **Validate your repo in CI (reusable action)** (1 connections) — `docs/LABS-RUNNER.md`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (3 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 140](Community_140.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/LABS-RUNNER.md`
-- `teach/lab/runner.py`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (86%)
-- INFERRED: 3 (14%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

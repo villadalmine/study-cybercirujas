@@ -1,31 +1,36 @@
 # Community 227
 
-> 6 nodes · cohesion 0.53
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **usage_report.py** (10 connections) — `scripts/usage_report.py`
-- **main()** (5 connections) — `scripts/usage_report.py`
-- **rows()** (3 connections) — `scripts/usage_report.py`
-- **_money()** (2 connections) — `scripts/usage_report.py`
-- **_tokens()** (2 connections) — `scripts/usage_report.py`
-- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
+- **Backlog** (11 connections) — `docs/BACKLOG.md`
+- **Labs — Execution Modes (see docs/ORIGINAL_DESIGN.md, SDD section)** (3 connections) — `docs/BACKLOG.md`
+- **Content** (2 connections) — `docs/BACKLOG.md`
+- **Pipeline Automation** (2 connections) — `docs/BACKLOG.md`
+- **Deploy — Technical Debt** (1 connections) — `docs/BACKLOG.md`
+- **Repo Hygiene** (1 connections) — `docs/BACKLOG.md`
+- **Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)** (1 connections) — `docs/BACKLOG.md`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 209](Community_209.md) (2 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 172](Community_172.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/usage_report.py`
+- `docs/BACKLOG.md`
 
 ## Audit Trail
 
-- EXTRACTED: 15 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 12 (80%)
+- INFERRED: 3 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

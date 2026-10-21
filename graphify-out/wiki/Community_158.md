@@ -1,14 +1,10 @@
 # Community 158
 
-> 11 nodes · cohesion 0.18
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
 - **Principles** (8 connections) — `docs/PRINCIPLES.md`
-- **7. The source chain** (5 connections) — `docs/PRINCIPLES.md`
-- **fail()** (4 connections) — `tests/test_check_pr.py`
-- **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
-- **Quality score** (2 connections) — `docs/FAQ.md`
 - **1. Information sovereignty** (1 connections) — `docs/PRINCIPLES.md`
 - **2. Curriculum-as-Code** (1 connections) — `docs/PRINCIPLES.md`
 - **3. Determinism** (1 connections) — `docs/PRINCIPLES.md`
@@ -18,23 +14,17 @@
 
 ## Relationships
 
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 222](Community_222.md) (1 shared connections)
-- [Community 140](Community_140.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/FAQ.md`
 - `docs/PRINCIPLES.md`
-- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (59%)
-- INFERRED: 7 (41%)
+- EXTRACTED: 8 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

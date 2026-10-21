@@ -1,12 +1,13 @@
 # Community 103
 
-> 15 nodes · cohesion 0.19
+> 16 nodes · cohesion 0.18
 
 ## Key Concepts
 
 - **chain_sha256()** (14 connections) — `teach/core/certs.py`
 - **derived_from()** (9 connections) — `teach/lab/spec.py`
 - **translation_source_sha256()** (8 connections) — `teach/core/certs.py`
+- **7. The source chain** (6 connections) — `docs/PRINCIPLES.md`
 - **.__init__()** (5 connections) — `tests/test_source_chain.py`
 - **2026-10-15** (5 connections) — `docs/HISTORY.md`
 - **ChainHashTests** (4 connections) — `tests/test_source_chain.py`
@@ -25,27 +26,28 @@
 - [Community 104](Community_104.md) (3 shared connections)
 - [Community 29](Community_29.md) (3 shared connections)
 - [Community 10](Community_10.md) (2 shared connections)
-- [Community 158](Community_158.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Community 138](Community_138.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [Community 1](Community_1.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
 - [Community 7](Community_7.md) (1 shared connections)
 - [Community 26](Community_26.md) (1 shared connections)
 - [Community 15](Community_15.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/HISTORY.md`
+- `docs/PRINCIPLES.md`
 - `teach/core/certs.py`
 - `teach/lab/spec.py`
 - `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 34 (83%)
-- INFERRED: 7 (17%)
+- EXTRACTED: 35 (78%)
+- INFERRED: 10 (22%)
 - AMBIGUOUS: 0 (0%)
 
 ---

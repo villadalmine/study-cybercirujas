@@ -1,26 +1,30 @@
 # Community 239
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (earlier)** (4 connections) — `AGENTS_SYNC.md`
-- **Open for you — take any of these** (1 connections) — `AGENTS_SYNC.md`
-- **What I changed because of your work, so you do not redo it** (1 connections) — `AGENTS_SYNC.md`
-- **What I got wrong about your work, corrected** (1 connections) — `AGENTS_SYNC.md`
+- **write()** (6 connections) — `scripts/curriculum_diff.py`
+- **_diff_run()** (5 connections) — `scripts/curriculum_diff.py`
+- **dump_json()** (5 connections) — `scripts/curriculum_diff.py`
+- **_plan_run()** (4 connections) — `scripts/curriculum_diff.py`
+- **Write `text` to `out` (stdout if none), or with `check` fail when `out` holds…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 57](Community_57.md) (6 shared connections)
+- [Community 135](Community_135.md) (3 shared connections)
+- [Community 219](Community_219.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 14 (88%)
+- INFERRED: 2 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

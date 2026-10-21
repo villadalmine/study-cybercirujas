@@ -1,13 +1,13 @@
 # Community 1
 
-> 40 nodes · cohesion 0.10
+> 41 nodes · cohesion 0.10
 
 ## Key Concepts
 
 - **test_cli.py** (23 connections) — `tests/lab/test_cli.py`
+- **lab/__init__.py** (19 connections) — `teach/lab/__init__.py`
 - **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
-- **lab/__init__.py** (18 connections) — `teach/lab/__init__.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
 - **Tests** (10 connections) — `docs/LABS-RUNNER.md`
 - **git_repo()** (9 connections) — `tests/lab/conftest.py`
@@ -29,20 +29,20 @@
 - **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
 - **skipif** (3 connections)
-- *... and 15 more nodes in this community*
+- *... and 16 more nodes in this community*
 
 ## Relationships
 
+- [Community 61](Community_61.md) (8 shared connections)
 - [Community 26](Community_26.md) (8 shared connections)
-- [Community 61](Community_61.md) (7 shared connections)
-- [Community 18](Community_18.md) (6 shared connections)
 - [Community 29](Community_29.md) (6 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 111](Community_111.md) (4 shared connections)
+- [Community 12](Community_12.md) (3 shared connections)
 - [Community 56](Community_56.md) (3 shared connections)
 - [Community 70](Community_70.md) (3 shared connections)
-- [Community 111](Community_111.md) (3 shared connections)
-- [Community 12](Community_12.md) (2 shared connections)
-- [Community 220](Community_220.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 
@@ -56,7 +56,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 127 (98%)
+- EXTRACTED: 129 (98%)
 - INFERRED: 3 (2%)
 - AMBIGUOUS: 0 (0%)
 

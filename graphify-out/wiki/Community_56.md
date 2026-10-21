@@ -8,10 +8,10 @@
 - **kc_meta.py** (21 connections) — `teach/lab/kc_meta.py`
 - **decorate()** (12 connections) — `teach/lab/kc_meta.py`
 - **syllabus()** (9 connections) — `teach/lab/kc_meta.py`
-- **provenance()** (8 connections) — `teach/lab/kc_meta.py`
 - **bash_n()** (7 connections) — `teach/lab/export_killercoda.py`
 - **human_record()** (7 connections) — `teach/lab/kc_meta.py`
 - **check_tree()** (6 connections) — `teach/lab/export_killercoda.py`
+- **provenance()** (6 connections) — `teach/lab/kc_meta.py`
 - **source_commit()** (6 connections) — `teach/lab/kc_meta.py`
 - **_yaml()** (6 connections) — `teach/lab/kc_meta.py`
 - **_lab()** (6 connections) — `tests/lab/test_kc_meta.py`
@@ -33,18 +33,18 @@
 
 ## Relationships
 
-- [Community 18](Community_18.md) (15 shared connections)
+- [Community 18](Community_18.md) (11 shared connections)
 - [Community 61](Community_61.md) (4 shared connections)
+- [Community 50](Community_50.md) (4 shared connections)
 - [Community 29](Community_29.md) (4 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
 - [Community 63](Community_63.md) (3 shared connections)
 - [Community 1](Community_1.md) (3 shared connections)
 - [Community 12](Community_12.md) (2 shared connections)
 - [Community 26](Community_26.md) (1 shared connections)
-- [Community 140](Community_140.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
 - [Community 102](Community_102.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
@@ -54,8 +54,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 108 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 108 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---
