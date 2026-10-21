@@ -130,7 +130,7 @@ OK: docs/upgrades/cka-ckad-1.37.md is current
 ```
 
 **The snapshots are what the pinned PDFs produce** (`extract --check` on each of the four PDFs: `OK ... is current`),
-and the old and new trees hash the same: CKA `1e485720…` for v1.35 and v1.37, CKAD `90399946…` for both.
+and the old and new trees hash the same: CKA `1e485720â€¦` for v1.35 and v1.37, CKAD `90399946â€¦` for both.
 `tests/test_curriculum_diff.py` repeats the byte-identical check on every push, and compares the committed plan and report byte for byte with what their inputs produce (`plan --check` and `render --check` in CI, through `make verify-ci`), so a hand-edited plan or a stale report fails. The plan is the upgrade's input, not a live view of the tree (as the edits land, a fresh plan lists fewer version lines), so a PR that leaves the plan byte-identical to the one on `origin/main` passes, and a PR that changes it must equal what its inputs produce; the guard reads the plan committed on the base either way.
 
 **`keep` topics are untouched.** Phase 1 (the tool, the snapshots, `upstream:` in the catalog, this folder) changes no
