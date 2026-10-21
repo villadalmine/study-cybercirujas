@@ -254,10 +254,12 @@ def keys(found: list[dict]) -> list[str]:
     return out
 
 
-def meta_ok(old_text: str, new_text: str, want: dict) -> bool:
+def meta_ok(old_text: str, new_text: str, want: dict, lang: str | None = None) -> bool:
     """A meta.yaml edited by the citation fix: only `sources` moved, and each source is `fix_line` of the old one.
 
-    `quality` (re-scored after the content changed) and `tool_edit` (the stamp) are the two keys allowed to differ."""
+    `quality` (re-scored after the content changed) and `tool_edit` (the stamp) are the two keys allowed to differ. `lang`
+    may be corrected to the language of its own directory (`lang`, when given): a derived field, and the guard refuses a
+    meta whose lang is not its directory's."""
     try:
         old, new = yaml.safe_load(old_text) or {}, yaml.safe_load(new_text) or {}
     except yaml.YAMLError:
@@ -266,4 +268,6 @@ def meta_ok(old_text: str, new_text: str, want: dict) -> bool:
         d.pop("quality", None)
         d.pop("tool_edit", None)
     old["sources"] = [fix_line(str(x), want) for x in old.get("sources") or []]
+    if lang and new.get("lang") == lang:
+        old["lang"] = lang
     return old == new
