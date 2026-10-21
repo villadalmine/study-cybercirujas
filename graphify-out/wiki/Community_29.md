@@ -1,10 +1,10 @@
 # Community 29
 
-> 36 nodes · cohesion 0.11
+> 37 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **load()** (40 connections) — `teach/lab/spec.py`
+- **load()** (42 connections) — `teach/lab/spec.py`
 - **spec.py** (28 connections) — `teach/lab/spec.py`
 - **test_schema.py** (18 connections) — `tests/lab/test_schema.py`
 - **write()** (13 connections) — `tests/lab/test_schema.py`
@@ -29,22 +29,22 @@
 - **test_script_cannot_escape_lab_dir()** (3 connections) — `tests/lab/test_schema.py`
 - **test_v1_file_validates_unchanged()** (3 connections) — `tests/lab/test_schema.py`
 - **test_v1_without_kubectl_is_linux()** (3 connections) — `tests/lab/test_schema.py`
-- *... and 11 more nodes in this community*
+- *... and 12 more nodes in this community*
 
 ## Relationships
 
-- [Community 18](Community_18.md) (13 shared connections)
+- [Community 18](Community_18.md) (12 shared connections)
 - [Community 26](Community_26.md) (10 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
 - [Community 1](Community_1.md) (6 shared connections)
-- [Community 139](Community_139.md) (4 shared connections)
-- [Community 63](Community_63.md) (4 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 70](Community_70.md) (4 shared connections)
 - [Community 12](Community_12.md) (4 shared connections)
 - [Community 56](Community_56.md) (4 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
 - [Community 103](Community_103.md) (3 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
 
 ## Source Files
 
@@ -54,7 +54,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 126 (100%)
+- EXTRACTED: 131 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

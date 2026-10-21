@@ -1,45 +1,63 @@
 # Community 5
 
-> 13 nodes · cohesion 0.15
+> 59 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **Agent Synchronization & Idea Queue (AGENTS_SYNC.md)** (21 connections) — `AGENTS_SYNC.md`
-- **From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix** (2 connections) — `AGENTS_SYNC.md`
-- **Open — worth someone's time** (2 connections) — `AGENTS_SYNC.md`
-- **Division of work — owner's call, 2026-08-07** (1 connections) — `AGENTS_SYNC.md`
-- **Every commit is signed off (DCO)** (1 connections) — `AGENTS_SYNC.md`
-- **First: install the hook. It is the only rule that does not depend on you.** (1 connections) — `AGENTS_SYNC.md`
-- **Pull requests from agents** (1 connections) — `AGENTS_SYNC.md`
-- **Settled — do not re-investigate or re-litigate these** (1 connections) — `AGENTS_SYNC.md`
-- **Several agents at once: yes, and you do not have to coordinate** (1 connections) — `AGENTS_SYNC.md`
-- **There is ONE entry point. Use it.** (1 connections) — `AGENTS_SYNC.md`
-- **What is fixed, and what is yours** (1 connections) — `AGENTS_SYNC.md`
-- **Who decides what — read this first** (1 connections) — `AGENTS_SYNC.md`
-- **Workflow Rules for Agents** (1 connections) — `AGENTS_SYNC.md`
+- **curriculum_citations.py** (27 connections) — `scripts/curriculum_citations.py`
+- **upgrade_versions.py** (20 connections) — `scripts/upgrade_versions.py`
+- **wanted()** (13 connections) — `scripts/curriculum_citations.py`
+- **fix_line()** (11 connections) — `scripts/curriculum_citations.py`
+- **run()** (11 connections) — `scripts/upgrade_versions.py`
+- **run_citations()** (11 connections) — `scripts/upgrade_versions.py`
+- **check_curriculum_consistency.py** (9 connections) — `scripts/check_curriculum_consistency.py`
+- **check()** (8 connections) — `scripts/check_curriculum_consistency.py`
+- **offenders()** (8 connections) — `scripts/curriculum_citations.py`
+- **window()** (7 connections) — `scripts/curriculum_citations.py`
+- **cited()** (6 connections) — `scripts/curriculum_citations.py`
+- **problems()** (6 connections) — `scripts/curriculum_citations.py`
+- **main()** (5 connections) — `scripts/check_curriculum_consistency.py`
+- **family()** (5 connections) — `scripts/curriculum_citations.py`
+- **meta_ok()** (5 connections) — `scripts/curriculum_citations.py`
+- **spans()** (5 connections) — `scripts/curriculum_citations.py`
+- **version_regexes()** (5 connections) — `scripts/curriculum_citations.py`
+- **rewrite()** (5 connections) — `scripts/upgrade_versions.py`
+- **sha256()** (5 connections) — `scripts/upgrade_versions.py`
+- **Path** (5 connections)
+- **files()** (4 connections) — `scripts/curriculum_citations.py`
+- **key()** (4 connections) — `scripts/curriculum_citations.py`
+- **keys()** (4 connections) — `scripts/curriculum_citations.py`
+- **stamp()** (4 connections) — `scripts/upgrade_versions.py`
+- **stamp_block()** (4 connections) — `scripts/upgrade_versions.py`
+- *... and 34 more nodes in this community*
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
-- [Community 238](Community_238.md) (1 shared connections)
-- [Community 236](Community_236.md) (1 shared connections)
-- [Community 235](Community_235.md) (1 shared connections)
-- [Community 239](Community_239.md) (1 shared connections)
-- [Community 167](Community_167.md) (1 shared connections)
-- [Community 237](Community_237.md) (1 shared connections)
-- [Community 216](Community_216.md) (1 shared connections)
-- [Community 223](Community_223.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 63](Community_63.md) (9 shared connections)
+- [Community 43](Community_43.md) (9 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 46](Community_46.md) (4 shared connections)
+- [Community 214](Community_214.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
+- [Community 222](Community_222.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 27](Community_27.md) (1 shared connections)
+- [Community 57](Community_57.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `docs/upgrades/README.md`
+- `scripts/check_curriculum_consistency.py`
+- `scripts/curriculum_citations.py`
+- `scripts/curriculum_diff.py`
+- `scripts/upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (91%)
-- INFERRED: 2 (9%)
+- EXTRACTED: 142 (98%)
+- INFERRED: 3 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

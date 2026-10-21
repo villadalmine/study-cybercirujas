@@ -26,7 +26,7 @@
 - **_mux_scene()** (5 connections) — `teach/core/video.py`
 - **_synthesize()** (5 connections) — `teach/core/video.py`
 - **_working_encoder()** (5 connections) — `teach/core/video.py`
-- **Video — Technical Debt** (5 connections) — `BACKLOG.md`
+- **Video — Technical Debt** (5 connections) — `docs/BACKLOG.md`
 - **2026-07-17** (5 connections) — `docs/HISTORY.md`
 - **_ensure_voice()** (4 connections) — `teach/core/video.py`
 - *... and 22 more nodes in this community*
@@ -37,18 +37,18 @@
 - [Community 7](Community_7.md) (4 shared connections)
 - [Community 59](Community_59.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
+- [Community 173](Community_173.md) (3 shared connections)
 - [Community 10](Community_10.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
 - [Community 63](Community_63.md) (2 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 16](Community_16.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `BACKLOG.md`
+- `docs/BACKLOG.md`
 - `docs/HISTORY.md`
 - `teach/core/video.py`
 

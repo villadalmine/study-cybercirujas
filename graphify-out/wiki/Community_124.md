@@ -1,6 +1,6 @@
 # Community 124
 
-> 65 nodes · cohesion 0.06
+> 67 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -9,6 +9,7 @@
 - **check_sources.py** (14 connections) — `scripts/check_sources.py`
 - **entry()** (12 connections) — `scripts/quality_score.py`
 - **check_manifests.py** (12 connections) — `scripts/check_manifests.py`
+- **scoring.py** (11 connections) — `teach/core/scoring.py`
 - **problems()** (9 connections) — `scripts/check_manifests.py`
 - **check_k8s_apis.py** (9 connections) — `scripts/check_k8s_apis.py`
 - **Path** (9 connections)
@@ -28,22 +29,22 @@
 - **main()** (5 connections) — `scripts/check_sources.py`
 - **floor_check()** (5 connections) — `scripts/quality_score.py`
 - **rel()** (5 connections) — `scripts/quality_score.py`
-- **check()** (5 connections) — `tests/test_quality_score.py`
-- *... and 40 more nodes in this community*
+- *... and 42 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (15 shared connections)
-- [Community 63](Community_63.md) (14 shared connections)
+- [Community 43](Community_43.md) (16 shared connections)
+- [Community 63](Community_63.md) (12 shared connections)
 - [Community 89](Community_89.md) (6 shared connections)
 - [Community 46](Community_46.md) (6 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
 - [Community 104](Community_104.md) (2 shared connections)
-- [Community 157](Community_157.md) (2 shared connections)
+- [Community 147](Community_147.md) (2 shared connections)
 - [Community 7](Community_7.md) (2 shared connections)
-- [Community 211](Community_211.md) (1 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 - [Community 127](Community_127.md) (1 shared connections)
+- [Community 13](Community_13.md) (1 shared connections)
 
 ## Source Files
 
@@ -56,7 +57,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 176 (100%)
+- EXTRACTED: 183 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

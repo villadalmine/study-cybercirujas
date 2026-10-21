@@ -1,38 +1,43 @@
 # Community 134
 
-> 11 nodes · cohesion 0.18
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **Pull requests** (7 connections) — `CONTRIBUTING.md`
-- **markdown()** (5 connections) — `teach/lab/safety.py`
-- **of()** (5 connections) — `teach/lab/safety.py`
-- **How issue forms work** (3 connections) — `CONTRIBUTING.md`
-- **Agents** (1 connections) — `CONTRIBUTING.md`
-- **How big is my change?** (1 connections) — `CONTRIBUTING.md`
-- **Labels** (1 connections) — `CONTRIBUTING.md`
-- **Size and scope** (1 connections) — `CONTRIBUTING.md`
-- **Triage and response times** (1 connections) — `CONTRIBUTING.md`
-- **The lab's safety block, or None when it declares none.** (1 connections) — `teach/lab/safety.py`
-- **The warning as a Markdown block for a README or the Killercoda intro, or ''.** (1 connections) — `teach/lab/safety.py`
+- **The loop** (10 connections) — `docs/WORKFLOW.md`
+- **Content Workflow** (9 connections) — `docs/WORKFLOW.md`
+- **1. Snapshot the syllabus — once per certification** (2 connections) — `docs/WORKFLOW.md`
+- **2. Generate** (2 connections) — `docs/WORKFLOW.md`
+- **Backends** (2 connections) — `docs/WORKFLOW.md`
+- **Switching to Gemini (or any CLI agent)** (2 connections) — `docs/WORKFLOW.md`
+- **The syllabus-change trigger** (2 connections) — `docs/WORKFLOW.md`
+- **Translating instead of re-authoring** (2 connections) — `docs/WORKFLOW.md`
+- **2b. The quality floor — the same standard for every backend** (1 connections) — `docs/WORKFLOW.md`
+- **2c. What "quality" can and cannot be proven mechanically** (1 connections) — `docs/WORKFLOW.md`
+- **4. Status** (1 connections) — `docs/WORKFLOW.md`
+- **5. Commit** (1 connections) — `docs/WORKFLOW.md`
+- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `docs/WORKFLOW.md`
+- **Failure modes worth knowing** (1 connections) — `docs/WORKFLOW.md`
+- **Language flow: author once in English, translate outwards** (1 connections) — `docs/WORKFLOW.md`
+- **Unattended runs and quota** (1 connections) — `docs/WORKFLOW.md`
 
 ## Relationships
 
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 139](Community_139.md) (2 shared connections)
-- [Community 133](Community_133.md) (1 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
+- [Community 15](Community_15.md) (2 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
-- `teach/lab/safety.py`
+- `docs/WORKFLOW.md`
 
 ## Audit Trail
 
-- EXTRACTED: 15 (88%)
-- INFERRED: 2 (12%)
+- EXTRACTED: 20 (83%)
+- INFERRED: 4 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

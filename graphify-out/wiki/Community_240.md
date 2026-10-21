@@ -1,13 +1,14 @@
 # Community 240
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **DeployDocTests** (4 connections) — `tests/test_deploy_guide.py`
-- **.test_covers_the_operator_steps()** (1 connections) — `tests/test_deploy_guide.py`
-- **.test_example_values_hold_no_cluster_specific_names()** (1 connections) — `tests/test_deploy_guide.py`
-- **.test_never_deploys_latest()** (1 connections) — `tests/test_deploy_guide.py`
+- **Run** (4 connections) — `tests/test_upgrade_versions.py`
+- **.test_only_listed_lines_in_scope_move_and_a_second_run_changes_nothing()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.tree()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.go()** (2 connections) — `tests/test_upgrade_versions.py`
+- **Path** (1 connections)
 
 ## Relationships
 
@@ -15,11 +16,11 @@
 
 ## Source Files
 
-- `tests/test_deploy_guide.py`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

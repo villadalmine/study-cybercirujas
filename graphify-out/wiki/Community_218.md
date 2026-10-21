@@ -1,33 +1,33 @@
 # Community 218
 
-> 8 nodes · cohesion 0.36
+> 11 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **check_claims.py** (11 connections) — `scripts/check_claims.py`
-- **main()** (6 connections) — `scripts/check_claims.py`
-- **ask()** (4 connections) — `scripts/check_claims.py`
-- **references()** (3 connections) — `scripts/check_claims.py`
-- **random** (2 connections)
-- **Does the cited page actually SAY what the material claims it says?…** (1 connections) — `scripts/check_claims.py`
-- **(label, url) from the references section only. URLs in the body are examples…** (1 connections) — `scripts/check_claims.py`
-- **Fetch and judge. Deliberately a separate process per claim: one failure should…** (1 connections) — `scripts/check_claims.py`
+- **ToolEditProvenance** (12 connections) — `tests/test_upgrade_versions.py`
+- **.ok()** (7 connections) — `tests/test_upgrade_versions.py`
+- **.base()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.meta()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_another_tool_or_a_sha_the_pins_do_not_name()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.test_accepted_for_the_line_the_script_writes()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_guard_flags_a_wrong_rewrite_of_any_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_an_edit_outside_the_plan()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_other_content_on_a_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_the_committed_pins_name_this_script()** (1 connections) — `tests/test_upgrade_versions.py`
+- **curriculum_diff.tool_edit_ok / wrong_rewrites: a scripted edit counts only for…** (1 connections) — `tests/test_upgrade_versions.py`
 
 ## Relationships
 
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [1. The code graph (Graphify)](1._The_code_graph_Graphify.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_claims.py`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,34 +1,33 @@
 # Community 216
 
-> 8 nodes · cohesion 0.25
+> 11 nodes · cohesion 0.35
 
 ## Key Concepts
 
-- **normalise_weights()** (7 connections) — `teach/core/tracker.py`
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `AGENTS_SYNC.md`
-- **.test_normalising_does_not_disguise_weights_taken_from_the_count()** (3 connections) — `tests/test_tracker.py`
-- **.test_normalises_a_published_scale_to_exactly_one_hundred()** (2 connections) — `tests/test_tracker.py`
-- **What is now enforced, so this cannot recur** (2 connections) — `AGENTS_SYNC.md`
-- **What I need from you** (1 connections) — `AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `AGENTS_SYNC.md`
-- **Scale the published weights to percentages summing to exactly 100. Syllabi…** (1 connections) — `teach/core/tracker.py`
+- **Guard** (11 connections) — `tests/test_curriculum_diff.py`
+- **.plan()** (7 connections) — `tests/test_curriculum_diff.py`
+- **.check()** (4 connections) — `tests/test_curriculum_diff.py`
+- **.test_regenerate_and_retire_own_their_directory()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_a_scoped_topic_may_record_provenance_in_its_meta()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_an_unlisted_line_may_not()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_listed_section_and_version_line_may_change()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_new_topic_directory_needs_a_new_objective()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_only_planned_files_pass()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_provenance_of_a_rewritten_topic()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.unlisted()** (2 connections) — `tests/test_curriculum_diff.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (3 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (3 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
-- `teach/core/tracker.py`
-- `tests/test_tracker.py`
+- `tests/test_curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (93%)
-- INFERRED: 1 (7%)
+- EXTRACTED: 20 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

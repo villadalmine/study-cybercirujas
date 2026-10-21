@@ -1,36 +1,31 @@
 # Community 220
 
-> 8 nodes · cohesion 0.25
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **fixture()** (8 connections) — `scripts/check_groundedness.py`
-- **Path** (5 connections)
-- **write_quality()** (4 connections) — `scripts/check_groundedness.py`
-- **changed()** (3 connections) — `scripts/check_groundedness.py`
-- **fixture_repo()** (2 connections) — `tests/lab/test_kc_meta.py`
-- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **Upsert the `groundedness` entry in meta.yaml, then re-render the block as…** (1 connections) — `scripts/check_groundedness.py`
-- **A labelled fixture's claims against their own sources: per-claim scores and the…** (1 connections) — `scripts/check_groundedness.py`
+- **Within one certification (the only fair comparisons; authoring language `en` only)** (8 connections) — `docs/MODELS.md`
+- **Model Comparison** (3 connections) — `docs/MODELS.md`
+- **cgoa** (1 connections) — `docs/MODELS.md`
+- **cnpa** (1 connections) — `docs/MODELS.md`
+- **kca** (1 connections) — `docs/MODELS.md`
+- **kcsa** (1 connections) — `docs/MODELS.md`
+- **lpic-1** (1 connections) — `docs/MODELS.md`
+- **lpic-3-303** (1 connections) — `docs/MODELS.md`
+- **mcpa** (1 connections) — `docs/MODELS.md`
+- **Whole corpus, per model (context, not a verdict)** (1 connections) — `docs/MODELS.md`
 
 ## Relationships
 
-- [Community 34](Community_34.md) (7 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 129](Community_129.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
-- [Community 72](Community_72.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_groundedness.py`
-- `tests/lab/test_kc_meta.py`
-- `tests/lab/test_runner_guard.py`
+- `docs/MODELS.md`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

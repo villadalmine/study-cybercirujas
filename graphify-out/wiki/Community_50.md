@@ -1,46 +1,66 @@
 # Community 50
 
-> 11 nodes · cohesion 0.24
+> 44 nodes · cohesion 0.07
 
 ## Key Concepts
 
+- **json** (98 connections)
+- **publish_if_complete.py** (19 connections) — `scripts/publish_if_complete.py`
+- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
 - **translation_study.py** (16 connections) — `scripts/translation_study.py`
+- **quota.py** (15 connections) — `scripts/quota.py`
+- **check_api_facts.py** (12 connections) — `scripts/check_api_facts.py`
+- **load()** (10 connections) — `teach/core/bot_stats.py`
 - **translate()** (8 connections) — `scripts/translation_study.py`
+- **path()** (8 connections) — `teach/core/bot_stats.py`
 - **main()** (7 connections) — `scripts/translation_study.py`
+- **main()** (6 connections) — `scripts/publish_if_complete.py`
+- **main()** (6 connections) — `scripts/quota.py`
+- **probe()** (6 connections) — `scripts/quota.py`
 - **evaluate()** (5 connections) — `scripts/translation_study.py`
+- **_write()** (5 connections) — `teach/core/bot_stats.py`
+- **main()** (4 connections) — `scripts/check_api_facts.py`
+- **spec_kinds()** (4 connections) — `scripts/check_api_facts.py`
+- **tracked_versions()** (4 connections) — `scripts/check_api_facts.py`
+- **gh_api()** (4 connections) — `scripts/check_pr.py`
+- **complete_certs()** (4 connections) — `scripts/publish_if_complete.py`
+- **publish()** (4 connections) — `scripts/publish_if_complete.py`
 - **master_key()** (4 connections) — `scripts/translation_study.py`
-- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **Languages** (2 connections) — `docs/OPERATING.md`
-- **Run the pipeline's own two gates. Verdict plus the reasons it failed.** (1 connections) — `scripts/translation_study.py`
-- **Measure what a translation actually costs, and whether it survives…** (1 connections) — `scripts/translation_study.py`
-- **Read the proxy key from the cluster rather than from a file on disk. It is only…** (1 connections) — `scripts/translation_study.py`
-- **One completion through the proxy. Returns text plus what it cost.** (1 connections) — `scripts/translation_study.py`
+- **check()** (3 connections) — `scripts/check_api_facts.py`
+- **_record()** (3 connections) — `scripts/publish_if_complete.py`
+- **_save()** (3 connections) — `scripts/publish_if_complete.py`
+- *... and 19 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 18](Community_18.md) (3 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 37](Community_37.md) (2 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [Community 13](Community_13.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
+- [Community 43](Community_43.md) (24 shared connections)
+- [Community 89](Community_89.md) (13 shared connections)
+- [Community 61](Community_61.md) (10 shared connections)
+- [StoredShapeTests](StoredShapeTests.md) (9 shared connections)
+- [Community 102](Community_102.md) (8 shared connections)
+- [Community 37](Community_37.md) (6 shared connections)
+- [Community 127](Community_127.md) (6 shared connections)
+- [Community 70](Community_70.md) (6 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 62](Community_62.md) (4 shared connections)
+- [Community 147](Community_147.md) (4 shared connections)
 
 ## Source Files
 
 - `docs/AGENTIC_TOOLING_STUDY.md`
 - `docs/OPERATING.md`
+- `scripts/check_api_facts.py`
+- `scripts/check_pr.py`
+- `scripts/publish_if_complete.py`
+- `scripts/quota.py`
 - `scripts/translation_study.py`
+- `teach/core/bot_stats.py`
 
 ## Audit Trail
 
-- EXTRACTED: 32 (89%)
-- INFERRED: 4 (11%)
+- EXTRACTED: 226 (97%)
+- INFERRED: 7 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,6 +1,6 @@
 # CheckPrTests
 
-> God node · 22 connections · `tests/test_check_pr.py`
+> God node · 24 connections · `tests/test_check_pr.py`
 
 **Community:** [Community 40](Community_40.md)
 
@@ -24,13 +24,13 @@
 - .test_where_it_ran_outside_evidence_is_not_evidence() `EXTRACTED`
 - .test_a_complete_pr_passes() `EXTRACTED`
 - .test_the_bad_fixture_fails_on_both_counts() `EXTRACTED`
+- .test_the_templates_bare_closes_line_does_not_fill_a_section() `EXTRACTED`
 - .test_deleted_material_is_not_missing_provenance() `EXTRACTED`
 - .test_existing_material_without_meta_still_fails() `EXTRACTED`
+- .test_the_release_exemption_has_no_free_ride() `EXTRACTED`
+- .test_the_notes_reset_pr_is_exempt_only_on_its_branch_with_only_next_md() `EXTRACTED`
 - .test_site_impact_is_computed_from_docker_yml_paths() `EXTRACTED`
-- .test_the_templates_carry_every_required_section() `EXTRACTED`
-- .test_the_graph_bot_pr_is_checked_by_title_author_and_files_only() `EXTRACTED`
-- .test_the_release_pr_is_checked_by_title_author_branch_and_files_only() `EXTRACTED`
-- *…and 1 more `method` connection(s) not listed (lowest-degree first to go)*
+- *…and 3 more `method` connection(s) not listed (lowest-degree first to go)*
 
 ---
 

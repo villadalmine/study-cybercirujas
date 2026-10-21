@@ -13,7 +13,7 @@
 - **.test_translated_comments_inside_code_blocks()** (4 connections) — `tests/test_translation_verify.py`
 - **.test_translated_diagram_label_that_keeps_alignment()** (4 connections) — `tests/test_translation_verify.py`
 - **.test_faithful_translation()** (3 connections) — `tests/test_translation_verify.py`
-- **2026-08-03** (3 connections) — `docs/HISTORY.md`
+- **2026-08-04** (3 connections) — `docs/HISTORY.md`
 - **Three bugs this study found in our own checks** (3 connections) — `docs/TRANSLATION_STUDY.md`
 - **Method** (2 connections) — `docs/TRANSLATION_STUDY.md`
 - **Why translating and authoring are different problems** (2 connections) — `docs/TRANSLATION_STUDY.md`
@@ -39,10 +39,10 @@
 - [Community 124](Community_124.md) (1 shared connections)
 - [Community 50](Community_50.md) (1 shared connections)
 - [Community 54](Community_54.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
-- [Community 158](Community_158.md) (1 shared connections)
-- [Community 14](Community_14.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
 
 ## Source Files
 

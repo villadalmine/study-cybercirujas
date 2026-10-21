@@ -1,11 +1,12 @@
 # Community 217
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **Killercoda is an export target, never the source** (7 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Killercoda is an export target, never the source** (8 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **Run a lab anywhere** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Evidence per target** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **How a lab gets proven before it is published** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **Limits and open questions** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **Publish: automatic on merge** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
@@ -15,7 +16,7 @@
 
 ## Relationships
 
-- [README.md](README.md.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 9 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

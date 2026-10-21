@@ -1,25 +1,36 @@
 # Community 219
 
-> 4 nodes · cohesion 0.50
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **verify_runs()** (4 connections) — `scripts/check_pr.py`
-- **judge_run()** (3 connections) — `scripts/check_pr.py`
-- **Why a cited run does not prove this head, or None if it does. Jobs named…** (1 connections) — `scripts/check_pr.py`
-- **True if at least one cited run proves this head; prints why each one does or…** (1 connections) — `scripts/check_pr.py`
+- **normalize()** (9 connections) — `scripts/curriculum_diff.py`
+- **diff()** (8 connections) — `scripts/curriculum_diff.py`
+- **_match_domains()** (5 connections) — `scripts/curriculum_diff.py`
+- **_match_objectives()** (5 connections) — `scripts/curriculum_diff.py`
+- **similarity()** (5 connections) — `scripts/curriculum_diff.py`
+- **difflib** (2 connections)
+- **old domain id -> new domain id.** (1 connections) — `scripts/curriculum_diff.py`
+- **(old index, new index, similarity): exact normalized text first, then greedy by…** (1 connections) — `scripts/curriculum_diff.py`
+- **The machine-readable difference between two syllabi. Pure: same inputs, same…** (1 connections) — `scripts/curriculum_diff.py`
+- **The comparison key of an objective or domain name: NFKC, case-folded, single…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (3 shared connections)
+- [Community 57](Community_57.md) (6 shared connections)
+- [Community 221](Community_221.md) (2 shared connections)
+- [Community 239](Community_239.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

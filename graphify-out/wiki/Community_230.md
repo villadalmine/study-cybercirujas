@@ -1,29 +1,28 @@
 # Community 230
 
-> 5 nodes · cohesion 0.50
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **fix_fences.py** (8 connections) — `scripts/fix_fences.py`
-- **classify()** (4 connections) — `scripts/fix_fences.py`
-- **main()** (3 connections) — `scripts/fix_fences.py`
-- **Retag fenced blocks whose label promises something the content is not.…** (1 connections) — `scripts/fix_fences.py`
-- **console' | 'jsonl' | None — None means leave it alone.** (1 connections) — `scripts/fix_fences.py`
+- **Governance** (7 connections) — `docs/GOVERNANCE.md`
+- **Becoming a maintainer** (1 connections) — `docs/GOVERNANCE.md`
+- **Code of conduct** (1 connections) — `docs/GOVERNANCE.md`
+- **Day-to-day changes** (1 connections) — `docs/GOVERNANCE.md`
+- **Proposals (RFCs) — for anything that changes how the project works** (1 connections) — `docs/GOVERNANCE.md`
+- **Releases** (1 connections) — `docs/GOVERNANCE.md`
+- **Who maintains what, today** (1 connections) — `docs/GOVERNANCE.md`
 
 ## Relationships
 
-- [Community 18](Community_18.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/fix_fences.py`
+- `docs/GOVERNANCE.md`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

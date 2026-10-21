@@ -1,25 +1,26 @@
 # Community 238
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **Start here: how to do a day's work in this repo** (4 connections) — `AGENTS_SYNC.md`
-- **If something fails** (1 connections) — `AGENTS_SYNC.md`
-- **The mental model** (1 connections) — `AGENTS_SYNC.md`
-- **What "quality" means here, concretely** (1 connections) — `AGENTS_SYNC.md`
+- **Self-audit: how to check this repo yourself** (5 connections) — `docs/audit/README.md`
+- **Compare several auditors** (1 connections) — `docs/audit/README.md`
+- **Propose a new criterion** (1 connections) — `docs/audit/README.md`
+- **Run it** (1 connections) — `docs/audit/README.md`
+- **What is in this folder** (1 connections) — `docs/audit/README.md`
 
 ## Relationships
 
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `docs/audit/README.md`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 5 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,28 +1,41 @@
 # Community 167
 
-> 5 nodes · cohesion 0.40
+> 13 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `AGENTS_SYNC.md`
-- **German translation: working recipe found, blocked on timeout** (2 connections) — `AGENTS_SYNC.md`
-- **What I need from you** (2 connections) — `AGENTS_SYNC.md`
-- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `AGENTS_SYNC.md`
-- **What I finished** (1 connections) — `AGENTS_SYNC.md`
+- **get_topic()** (8 connections) — `teach/api.py`
+- **get_cert()** (7 connections) — `teach/api.py`
+- **get_topic_preview()** (7 connections) — `teach/api.py`
+- **_not_found()** (7 connections) — `teach/api.py`
+- **get_paths()** (5 connections) — `teach/api.py`
+- **_valid_lang()** (5 connections) — `teach/api.py`
+- **HTTPException** (1 connections)
+- **Exception** (1 connections)
+- **One certification: catalogue entry, syllabus and which topics have material.** (1 connections) — `teach/api.py`
+- **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
+- **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
+- **A 404 that never carries a filesystem path: FileNotFoundError text names the…** (1 connections) — `teach/api.py`
+- **Career paths with their steps, in the requested language. The base fields of a…** (1 connections) — `teach/api.py`
 
 ## Relationships
 
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 107](Community_107.md) (6 shared connections)
+- [Community 125](Community_125.md) (5 shared connections)
+- [Community 10](Community_10.md) (4 shared connections)
+- [Community 207](Community_207.md) (2 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
+- [Community 173](Community_173.md) (1 shared connections)
+- [Community 121](Community_121.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `teach/api.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (71%)
-- INFERRED: 2 (29%)
+- EXTRACTED: 33 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

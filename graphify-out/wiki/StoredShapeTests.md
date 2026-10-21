@@ -1,17 +1,13 @@
 # StoredShapeTests
 
-> 34 nodes · cohesion 0.10
+> 26 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
 - **StoredShapeTests** (13 connections) — `tests/test_bot_stats.py`
 - **record()** (13 connections) — `teach/core/bot_stats.py`
-- **load()** (10 connections) — `teach/core/bot_stats.py`
 - **accepted()** (9 connections) — `teach/core/bot_stats.py`
-- **path()** (8 connections) — `teach/core/bot_stats.py`
 - **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
-- **_write()** (5 connections) — `teach/core/bot_stats.py`
 - **.test_the_file_does_not_grow_with_the_number_of_answers()** (5 connections) — `tests/test_bot_stats.py`
 - **_known_models()** (3 connections) — `teach/core/bot_stats.py`
 - **._shape()** (3 connections) — `tests/test_bot_stats.py`
@@ -20,7 +16,6 @@
 - **.test_no_timestamp_is_written_per_request()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_since_is_the_first_day_and_never_moves()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_the_breakdown_counts_each_characteristic_independently()** (3 connections) — `tests/test_bot_stats.py`
-- **_blank()** (2 connections) — `teach/core/bot_stats.py`
 - **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
@@ -29,19 +24,19 @@
 - **.test_a_refused_event_writes_nothing_at_all()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_an_unwritable_path_is_swallowed()** (2 connections) — `tests/test_bot_stats.py`
 - **.setUp()** (1 connections) — `tests/test_bot_stats.py`
-- *... and 9 more nodes in this community*
+- **.tearDown()** (1 connections) — `tests/test_bot_stats.py`
+- **Count one answer. Returns whether it was accepted. Never raises. `today` is the…** (1 connections) — `teach/core/bot_stats.py`
+- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
+- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
+- **Counters, never rows — the property the whole design rests on.** (1 connections) — `tests/test_bot_stats.py`
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (6 shared connections)
-- [Community 59](Community_59.md) (3 shared connections)
-- [Community 125](Community_125.md) (3 shared connections)
-- [Community 18](Community_18.md) (3 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 50](Community_50.md) (9 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
+- [Community 107](Community_107.md) (1 shared connections)
 
 ## Source Files
 
@@ -50,8 +45,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 74 (96%)
-- INFERRED: 3 (4%)
+- EXTRACTED: 51 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

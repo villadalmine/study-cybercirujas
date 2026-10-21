@@ -1,45 +1,57 @@
 # Community 14
 
-> 18 nodes · cohesion 0.11
+> 57 nodes · cohesion 0.07
 
 ## Key Concepts
 
-- **The loop** (10 connections) — `WORKFLOW.md`
-- **Content Workflow** (9 connections) — `WORKFLOW.md`
-- **1. Snapshot the syllabus — once per certification** (2 connections) — `WORKFLOW.md`
-- **2. Generate** (2 connections) — `WORKFLOW.md`
-- **3. Audit — never skip this** (2 connections) — `WORKFLOW.md`
-- **6. Publish — only for a complete certification** (2 connections) — `WORKFLOW.md`
-- **Backends** (2 connections) — `WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `WORKFLOW.md`
-- **The syllabus-change trigger** (2 connections) — `WORKFLOW.md`
-- **Translating instead of re-authoring** (2 connections) — `WORKFLOW.md`
-- **2b. The quality floor — the same standard for every backend** (1 connections) — `WORKFLOW.md`
-- **2c. What "quality" can and cannot be proven mechanically** (1 connections) — `WORKFLOW.md`
-- **4. Status** (1 connections) — `WORKFLOW.md`
-- **5. Commit** (1 connections) — `WORKFLOW.md`
-- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `WORKFLOW.md`
-- **Failure modes worth knowing** (1 connections) — `WORKFLOW.md`
-- **Language flow: author once in English, translate outwards** (1 connections) — `WORKFLOW.md`
-- **Unattended runs and quota** (1 connections) — `WORKFLOW.md`
+- **milestone_sync.py** (27 connections) — `scripts/milestone_sync.py`
+- **release_notes.py** (26 connections) — `scripts/release_notes.py`
+- **publish()** (16 connections) — `scripts/release_notes.py`
+- **GitHub** (14 connections) — `scripts/milestone_sync.py`
+- **main()** (13 connections) — `scripts/milestone_sync.py`
+- **.call()** (11 connections) — `scripts/milestone_sync.py`
+- **shipped_items()** (10 connections) — `scripts/milestone_sync.py`
+- **open_reset_pr()** (7 connections) — `scripts/release_notes.py`
+- **file_at()** (6 connections) — `scripts/release_notes.py`
+- **.paged()** (5 connections) — `scripts/milestone_sync.py`
+- **pick_milestone()** (5 connections) — `scripts/milestone_sync.py`
+- **plan_pr_merged()** (5 connections) — `scripts/milestone_sync.py`
+- **plan_release()** (5 connections) — `scripts/milestone_sync.py`
+- **previous_tag()** (5 connections) — `scripts/milestone_sync.py`
+- **main()** (5 connections) — `scripts/release_notes.py`
+- **parse_sections()** (5 connections) — `scripts/release_notes.py`
+- **remove_published()** (5 connections) — `scripts/release_notes.py`
+- **closing_issue_numbers()** (4 connections) — `scripts/milestone_sync.py`
+- **.issue()** (4 connections) — `scripts/milestone_sync.py`
+- **.milestones()** (4 connections) — `scripts/milestone_sync.py`
+- **release_milestones()** (4 connections) — `scripts/milestone_sync.py`
+- **summary()** (4 connections) — `scripts/milestone_sync.py`
+- **commit_subjects()** (4 connections) — `scripts/release_notes.py`
+- **compose()** (4 connections) — `scripts/release_notes.py`
+- **maintainers()** (4 connections) — `scripts/release_notes.py`
+- *... and 32 more nodes in this community*
 
 ## Relationships
 
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 166](Community_166.md) (2 shared connections)
-- [Community 15](Community_15.md) (2 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [README.md](README.md.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 46](Community_46.md) (6 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 89](Community_89.md) (4 shared connections)
+- [Community 127](Community_127.md) (4 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 50](Community_50.md) (2 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
 
 ## Source Files
 
-- `WORKFLOW.md`
+- `scripts/milestone_sync.py`
+- `scripts/release_notes.py`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (81%)
-- INFERRED: 5 (19%)
+- EXTRACTED: 123 (85%)
+- INFERRED: 21 (15%)
 - AMBIGUOUS: 0 (0%)
 
 ---

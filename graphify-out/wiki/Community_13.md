@@ -1,9 +1,10 @@
 # Community 13
 
-> 22 nodes · cohesion 0.13
+> 24 nodes · cohesion 0.12
 
 ## Key Concepts
 
+- **quality.py** (17 connections) — `teach/core/quality.py`
 - **check()** (16 connections) — `teach/core/quality.py`
 - **QualityFloorTest** (8 connections) — `tests/test_quality.py`
 - **rules()** (6 connections) — `teach/core/quality.py`
@@ -19,6 +20,7 @@
 - **.test_unknown_kind_invents_no_rules()** (2 connections) — `tests/test_quality.py`
 - **.test_floor_sits_below_the_observed_minimum()** (2 connections) — `tests/test_quality.py`
 - **.test_thresholds_are_declared()** (2 connections) — `tests/test_quality.py`
+- **Quality floor for generated material, identical for every backend. A different…** (1 connections) — `teach/core/quality.py`
 - **Rules for 'content' or 'exercises'. With no `quality` block in the YAML there…** (1 connections) — `teach/core/quality.py`
 - **Return the problems found. An empty list means the floor is met. `kind` is…** (1 connections) — `teach/core/quality.py`
 - **The references section is explicitly requested by the prompt, and it is what…** (1 connections) — `tests/test_quality.py`
@@ -30,12 +32,17 @@
 ## Relationships
 
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 62](Community_62.md) (2 shared connections)
-- [Community 166](Community_166.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 211](Community_211.md) (1 shared connections)
+- [Community 50](Community_50.md) (3 shared connections)
+- [Community 49](Community_49.md) (3 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 112](Community_112.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [Community 107](Community_107.md) (1 shared connections)
 
 ## Source Files
 
@@ -45,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 40 (100%)
+- EXTRACTED: 55 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

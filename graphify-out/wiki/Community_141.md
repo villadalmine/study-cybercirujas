@@ -1,41 +1,44 @@
 # Community 141
 
-> 7 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
-- **find_bad_combos()** (9 connections) — `scripts/fix_corrupted_content.py`
-- **survey()** (7 connections) — `scripts/next_work.py`
-- **main()** (5 connections) — `scripts/next_work.py`
-- **2026-08-04** (3 connections) — `docs/HISTORY.md`
-- **_topic_count()** (2 connections) — `scripts/next_work.py`
-- **2026-07-29** (2 connections) — `docs/HISTORY.md`
-- **Every active certification with what it still needs, most urgent first.** (1 connections) — `scripts/next_work.py`
+- **Content Status** (8 connections) — `docs/STATUS.md`
+- **get_models()** (7 connections) — `teach/api.py`
+- **_refresh_live()** (6 connections) — `teach/api.py`
+- **upstream()** (5 connections) — `teach/core/models_live.py`
+- **Exam versions** (2 connections) — `docs/STATUS.md`
+- **BackgroundTasks** (1 connections)
+- **Certification Videos** (1 connections) — `docs/STATUS.md`
+- **Certifications** (1 connections) — `docs/STATUS.md`
+- **Milestone** (1 connections) — `docs/STATUS.md`
+- **Path Videos** (1 connections) — `docs/STATUS.md`
+- **Quality** (1 connections) — `docs/STATUS.md`
+- **Spend (measured)** (1 connections) — `docs/STATUS.md`
+- **Compare the catalogue against OpenRouter, at most every few hours. Never raises…** (1 connections) — `teach/api.py`
+- **The study bot's model catalogue, from `models.yaml`, plus what is live. Served…** (1 connections) — `teach/api.py`
+- **{id: model} as OpenRouter publishes it right now. Raises on failure.** (1 connections) — `teach/core/models_live.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 15](Community_15.md) (2 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 211](Community_211.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 6](Community_6.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
+- [Community 3](Community_3.md) (3 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
+- [Community 107](Community_107.md) (2 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/HISTORY.md`
-- `scripts/fix_corrupted_content.py`
-- `scripts/next_work.py`
+- `docs/STATUS.md`
+- `teach/api.py`
+- `teach/core/models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (87%)
-- INFERRED: 3 (13%)
+- EXTRACTED: 22 (92%)
+- INFERRED: 2 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

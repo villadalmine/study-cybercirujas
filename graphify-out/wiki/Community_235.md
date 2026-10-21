@@ -1,25 +1,27 @@
 # Community 235
 
-> 4 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `AGENTS_SYNC.md`
-- **Changed, do not redo** (1 connections) — `AGENTS_SYNC.md`
-- **Open — pick anything** (1 connections) — `AGENTS_SYNC.md`
-- **Two findings you should know about** (1 connections) — `AGENTS_SYNC.md`
+- **CommittedUpgrade** (4 connections) — `tests/test_curriculum_diff.py`
+- **.on_main()** (4 connections) — `tests/test_curriculum_diff.py`
+- **.test_committed_plans_and_reports_are_current()** (2 connections) — `tests/test_curriculum_diff.py`
+- **show()** (1 connections) — `tests/test_curriculum_diff.py`
+- **docs/upgrades/<x>.plan.json and <x>.md are exactly what their spec and inputs…** (1 connections) — `tests/test_curriculum_diff.py`
+- **The file as committed on origin/main. A CI checkout is shallow and has no…** (1 connections) — `tests/test_curriculum_diff.py`
 
 ## Relationships
 
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `AGENTS_SYNC.md`
+- `tests/test_curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,36 +1,48 @@
 # Community 207
 
-> 10 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
-- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
-- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
-- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **parametrize** (4 connections)
-- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
-- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
+- **topic_content()** (13 connections) — `teach/core/certs.py`
+- **summary()** (5 connections) — `teach/core/scoring.py`
+- **VisibleTests** (4 connections) — `tests/test_quality_score.py`
+- **In Progress / Next (Ordering)** (4 connections) — `docs/BACKLOG.md`
+- **.test_the_api_serves_the_summary()** (2 connections) — `tests/test_quality_score.py`
+- **2026-08-20** (2 connections) — `docs/HISTORY.md`
+- **6. Publish — only for a complete certification** (2 connections) — `docs/WORKFLOW.md`
+- **.test_status_md_has_the_quality_table()** (1 connections) — `tests/test_quality_score.py`
+- **.test_the_site_shows_a_badge_in_every_language()** (1 connections) — `tests/test_quality_score.py`
+- **Contenido generado de un tema en un idioma (fallback al default).** (1 connections) — `teach/core/certs.py`
+- **What the API and the site show: score, level and the checks, from a meta.yaml…** (1 connections) — `teach/core/scoring.py`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (7 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
-- [Community 111](Community_111.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 220](Community_220.md) (1 shared connections)
+- [Community 10](Community_10.md) (4 shared connections)
+- [Community 167](Community_167.md) (2 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
+- [Community 227](Community_227.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 130](Community_130.md) (1 shared connections)
+- [Community 15](Community_15.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/lab/test_runner_guard.py`
+- `docs/BACKLOG.md`
+- `docs/HISTORY.md`
+- `docs/WORKFLOW.md`
+- `teach/core/certs.py`
+- `teach/core/scoring.py`
+- `tests/test_quality_score.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 23 (88%)
+- INFERRED: 3 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

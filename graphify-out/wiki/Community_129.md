@@ -1,33 +1,40 @@
 # Community 129
 
-> 8 nodes · cohesion 0.50
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **test_killercoda_publish.py** (11 connections) — `tests/lab/test_killercoda_publish.py`
-- **git()** (5 connections) — `tests/lab/test_killercoda_publish.py`
-- **mirror()** (4 connections) — `tests/lab/test_killercoda_publish.py`
-- **publish()** (4 connections) — `tests/lab/test_killercoda_publish.py`
-- **test_publish_adds_keeps_what_was_not_reproven_and_is_idempotent()** (4 connections) — `tests/lab/test_killercoda_publish.py`
-- **scenario()** (3 connections) — `tests/lab/test_killercoda_publish.py`
-- **test_an_export_without_scenarios_does_not_touch_the_mirror()** (3 connections) — `tests/lab/test_killercoda_publish.py`
-- **deploy/killercoda/publish.sh: the failure paths must never wipe or damage the…** (1 connections) — `tests/lab/test_killercoda_publish.py`
+- **ckad** (7 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **cka** (6 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Upgrade plan: CKA & CKAD v1.37** (6 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Rules (from the code, not judgment)** (2 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Counts** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Drift: frozen `certs/cka.md` vs its own v1.35 PDF** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Drift: frozen `certs/ckad.md` vs its own v1.35 PDF** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Flow** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Impact: frozen `certs/cka.md` -> v1.37 (drives the classes)** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Impact: frozen `certs/ckad.md` -> v1.37 (drives the classes)** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Per-topic plan** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Per-topic plan** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Sections that name what changed** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Technical lines that name v1.35** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **Technical lines that name v1.35** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **What upstream changed (v1.35 PDF -> v1.37 PDF)** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
+- **What upstream changed (v1.35 PDF -> v1.37 PDF)** (1 connections) — `docs/upgrades/cka-ckad-1.37.md`
 
 ## Relationships
 
-- [Community 61](Community_61.md) (4 shared connections)
-- [Community 220](Community_220.md) (1 shared connections)
-- [Community 111](Community_111.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/lab/test_killercoda_publish.py`
+- `docs/upgrades/cka-ckad-1.37.md`
 
 ## Audit Trail
 
-- EXTRACTED: 21 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

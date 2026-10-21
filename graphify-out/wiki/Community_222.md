@@ -1,31 +1,35 @@
 # Community 222
 
-> 8 nodes · cohesion 0.36
+> 9 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **.fetch()** (4 connections) — `tests/test_check_pr.py`
-- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
+- **scan()** (10 connections) — `scripts/curriculum_diff.py`
+- **_sections()** (5 connections) — `scripts/curriculum_diff.py`
+- **_headings()** (4 connections) — `scripts/curriculum_diff.py`
+- **unlisted_edits()** (4 connections) — `scripts/curriculum_diff.py`
+- **minor_below()** (2 connections) — `scripts/curriculum_diff.py`
+- **Per line: is it a markdown heading? A `# ...` line inside a code fence is a…** (1 connections) — `scripts/curriculum_diff.py`
+- **(first line number, heading, body) per markdown section; text before the first…** (1 connections) — `scripts/curriculum_diff.py`
+- **Sections that name a changed field, and lines that name the tracked version.…** (1 connections) — `scripts/curriculum_diff.py`
+- **Edits outside what the plan lists, in a doc file the plan scopes (a section or…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 158](Community_158.md) (1 shared connections)
+- [Community 57](Community_57.md) (5 shared connections)
+- [Community 135](Community_135.md) (3 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
+- [Community 5](Community_5.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 19 (95%)
+- INFERRED: 1 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---
