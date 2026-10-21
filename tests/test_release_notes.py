@@ -21,7 +21,10 @@ class PureTests(unittest.TestCase):
     def test_only_lines_outside_comments_count_and_the_shipped_template_is_empty(self):
         self.assertEqual(rn.parse_sections(EMPTY), {})
         self.assertEqual(list(rn.parse_sections(NEXT)), ["Highlights", "Thanks"])
-        self.assertEqual(rn.parse_sections((REPO / rn.NEXT_PATH).read_text(encoding="utf-8")), {})
+        # Between releases a PR adds its line here (CONTRIBUTING -> Releases), so the shipped file may hold lines;
+        # it must still parse, and only into the three known sections.
+        shipped = rn.parse_sections((REPO / rn.NEXT_PATH).read_text(encoding="utf-8"))
+        self.assertLessEqual(set(shipped), {"Highlights", "Upgrade notes", "Thanks"})
 
     def test_thanks_leave_out_maintainers_bots_unmerged_and_hand_thanked(self):
         prs = [pr(1, "villadalmine"), pr(2, "dependabot[bot]", kind="Bot"), pr(3, "Alice"), pr(4, "bob", merged=False),
