@@ -324,3 +324,12 @@ The plan scanned technical lines only, the review finding was deferred to an iss
    `quality` and `tool_edit` blocks may differ). Anything else on those lines is refused.
 
 A consistency finding in a review blocks the merge and the release. It is never deferred to a follow-up issue.
+
+## Lessons
+
+- **Release milestones are settled at release time (#238, 2026-10-21).** The upgrade milestones above are planned, but
+  release milestones (`vX.Y.Z`) cannot be: release-please picks the version only at release time (`fix` is a patch), so
+  v0.5.1 shipped with its PRs sitting in v0.6.0 and no v0.5.1 milestone. Control: on `release: published`,
+  `.github/workflows/milestone.yml` creates `vX.Y.Z` if missing, moves into it what shipped since the previous tag,
+  moves what is still open to the next one and closes it (re-runnable with the `tag` input). Upgrade milestones are
+  never touched. Post-mortem and decision: [#238](https://github.com/villadalmine/study-cybercirujas/issues/238).

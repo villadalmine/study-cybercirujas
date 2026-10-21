@@ -422,8 +422,11 @@ A CI gate (`scripts/check_curriculum_consistency.py`) keeps every cert's curricu
 the only place a tracked exam version may change, enforced by `check_pr.py`
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)).
 `.github/workflows/milestone.yml` keeps them current: a merged PR or a completed issue without a
-milestone gets the open `v*` one due first, and publishing `vX.Y.Z` moves what is still open to the
-next milestone and closes it. The living "Follow-ups" umbrella issues (#120-#124) carry no release
+milestone gets the open `v*` one due first (a plan, since the version is not known yet). A release milestone is
+created or completed at release time from what actually shipped: publishing `vX.Y.Z` creates the milestone if it
+was never planned (a patch, say; release-please picks the version only then), puts into it every PR merged and issue
+closed as completed since the previous tag, moves what is still open to the next milestone and closes it. It can be
+re-run for a past release from Actions (Milestones, input `tag`); upgrade milestones are never touched. The living "Follow-ups" umbrella issues (#120-#124) carry no release
 milestone on purpose, so they never block a release.
 
 **Where is the plan?**
