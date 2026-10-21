@@ -310,9 +310,9 @@ The plan scanned technical lines only, the review finding was deferred to an iss
    upgrade spec here that names `upstream.milestone`. An invalid block is a failure of its own. One value per cert: if the
    tracked and the upstream value are both cited, the upstream lines are the offenders. The switch PR removes the block and from
    then on only `tracked_version` passes.
-3. **The baseline** (`tests/fixtures/curriculum_consistency_baseline.txt`) lists the offenders that existed when the gate was
+3. **The baseline** (tests/fixtures/curriculum_consistency_baseline.txt, deleted) lists the offenders that existed when the gate was
    added, keyed by file, text and which repeat of the text it is: a NEW mismatch fails, and so does a baseline entry that no
-   longer offends, so the file only shrinks; when it is empty it is deleted and the gate is strict.
+   longer offends, so the file only shrinks; when it is empty it is deleted and the gate is strict. It reached empty on 2026-10-21 (CKAD, CKA, lpic-2's canonical page as a reviewed spelling, and one Linux Essentials link that pointed at a page that no longer exists) and was deleted: the gate checks every cert strictly, and a new mismatch is fixed, never baselined.
 4. **The plan lists citation lines** (`version_lines.citations`, from the catalog's target) next to the technical ones, and the
    edit is `scripts/upgrade_versions.py --scope citations --cert <cert>`, driven by the catalog: while a valid `upstream:` block
    is present it moves the citations of the next upgrade; after the switch it fixes whatever disagrees with `tracked_version`.
