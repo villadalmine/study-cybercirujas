@@ -548,7 +548,8 @@ does is a bug in that PR (the Release PR and the release-notes reset PR are the 
 notes, Thanks) is [`docs/release-notes/NEXT.md`](docs/release-notes/NEXT.md): **user-visible change? add a
 line to `docs/release-notes/NEXT.md`** in your PR. The Release PR is the gate: when the new version has a
 `feat` or a `fix` and NEXT.md has no Highlights or Upgrade notes line, `scripts/check_pr.py` fails it, and
-whoever releases writes the summary in a PR to `main` first (release-please refreshes the Release PR). One
+whoever releases writes the summary first, in a `docs(release-notes): ...` PR to `main` (a `docs` commit shows
+in the changelog, so release-please refreshes the Release PR and the check runs again; a `chore` does not). One
 line per story a user notices, not one per PR. When the Release PR is merged, the `notes` job of
 `release-please.yml` (`scripts/release_notes.py`) puts that text on top of the GitHub Release, with the
 release-please changelog below a `---`, and adds `Thanks` by itself: `@user (#N)` for the author of every PR

@@ -997,23 +997,29 @@ class ReleaseNotesGateTests(unittest.TestCase):
         changelog = (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
         self.assertTrue(check_pr.release_notes_ready(changelog[changelog.index("## [0.6.0]"):], self.EMPTY))
 
-    def test_main_runs_the_gate_only_on_the_release_pr(self):
-        event = {"pull_request": {
-            "title": "chore(main): release 0.7.0", "body": "", "user": {"login": "study-cybercirujas-releases[bot]"},
-            "head": {"ref": "release-please--branches--main", "repo": {"full_name": "o/r"}},
-            "base": {"repo": {"full_name": "o/r"}}}}
+    def test_main_runs_the_gate_on_the_release_pr_and_not_on_the_notes_reset_pr(self):
+        # Real identities, no mock of the exemption: review of #243 found the reset PR (same App,
+        # release-notes-reset--v* branch, only NEXT.md) would have been gated and failed.
+        def run(ref, files, title):
+            event = {"pull_request": {
+                "title": title, "body": "", "user": {"login": "study-cybercirujas-releases[bot]", "id": 343498577},
+                "head": {"ref": ref, "repo": {"full_name": "o/r"}}, "base": {"repo": {"full_name": "o/r"}}}}
+            with tempfile.TemporaryDirectory() as tmp:
+                ev = Path(tmp) / "event.json"
+                ev.write_text(json.dumps(event), encoding="utf-8")
+                out = io.StringIO()
+                with mock.patch.object(sys, "argv", ["check_pr.py", "--event", str(ev), "--files", *files]), \
+                        redirect_stdout(out):
+                    return check_pr.main(), out.getvalue()
         with mock.patch.object(check_pr, "release_notes_ready", return_value=["release notes: x"]) as gate:
-            for is_release in (True, False):
-                with tempfile.TemporaryDirectory() as tmp, \
-                        mock.patch.object(check_pr, "is_release_please", return_value=is_release):
-                    ev = Path(tmp) / "event.json"
-                    ev.write_text(json.dumps(event), encoding="utf-8")
-                    out = io.StringIO()
-                    with mock.patch.object(sys, "argv", ["check_pr.py", "--event", str(ev), "--files", "CHANGELOG.md"]), \
-                            redirect_stdout(out):
-                        check_pr.main()
-                self.assertEqual("PR: release notes: x" in out.getvalue(), is_release, out.getvalue())
+            code, out = run("release-please--branches--main", ["CHANGELOG.md"], "chore(main): release 0.7.0")
+            self.assertEqual(code, 1, out)
+            self.assertIn("PR: release notes: x", out)
+            code, out = run("release-notes-reset--v0.7.0", ["docs/release-notes/NEXT.md"],
+                            "chore(release-notes): reset NEXT.md after v0.7.0")
+            self.assertEqual(code, 0, out)
             self.assertEqual(gate.call_count, 1)
+        self.assertIn("docs(release-notes)", check_pr.release_notes_ready(self.CHANGELOG.format(kind="Features"), self.EMPTY)[0])
 
 
 if __name__ == "__main__":

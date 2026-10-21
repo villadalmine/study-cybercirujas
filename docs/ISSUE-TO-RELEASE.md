@@ -33,7 +33,8 @@ flowchart LR
 6. **The milestone is automatic**: `milestone.yml` (`scripts/milestone_sync.py`) puts a merged PR, and an issue closed as completed, in the
    open `v*` milestone due first. **release-please** keeps the Release PR; merging it is the human release decision, and it makes the
    tag, the changelog and the notes. It cannot merge while the new version has a `feat` or a `fix` and
-   `docs/release-notes/NEXT.md` has no Highlights or Upgrade notes line (`scripts/check_pr.py`).
+   `docs/release-notes/NEXT.md` has no Highlights or Upgrade notes line (`scripts/check_pr.py`); the summary goes in
+   a `docs(release-notes): ...` PR, which refreshes the Release PR.
 7. **Labels are code** (`.github/labels.yml`): CI sets `scope:*`, `site:*`, `type:` by path and `lang:`; exception labels are set only
    by the maintainer; `triage:needed` marks something from outside the project that nobody has looked at yet.
 

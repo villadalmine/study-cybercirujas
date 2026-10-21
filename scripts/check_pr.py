@@ -274,7 +274,15 @@ def release_notes_ready(changelog: str, next_text: str) -> list[str]:
     if any(parse_sections(next_text).get(name) for name in SUMMARY_SECTIONS):
         return []
     return [f"release notes: this release has a feat or a fix and {NEXT_PATH} has no Highlights or Upgrade "
-            "notes line; add the human summary to NEXT.md in a PR to main (release-please refreshes this PR)"]
+            "notes line; add the human summary in a `docs(release-notes): ...` PR to main (a docs commit shows "
+            "in the changelog, so release-please refreshes this PR and the check runs again; a chore does not)"]
+
+
+def is_release_pr(head_ref: str | None, files: list[str], author: str | None = None,
+                  same_repo: bool = False) -> bool:
+    """The Release PR itself, not the notes-reset PR that shares its exemption."""
+    return (RELEASE_BRANCH.fullmatch(head_ref or "") is not None
+            and is_release_please(head_ref, files, author, same_repo))
 
 
 def is_bot_pr(head_ref: str | None, files: list[str], author: str | None = None,
@@ -817,7 +825,7 @@ def main() -> int:
     authored = [f for f in files if f.replace("\\", "/") not in generated]
     problems = check(title, body, authored, head_ref=head_ref, author=author,
                      same_repo=same_repo) + scope(authored, code_lines, labels, all_files=files, generated_current=generated_current)
-    if is_release_please(head_ref, files, author, same_repo):
+    if is_release_pr(head_ref, files, author, same_repo):
         read = lambda rel: (REPO / rel).read_text(encoding="utf-8") if (REPO / rel).is_file() else ""  # noqa: E731
         problems += release_notes_ready(read("CHANGELOG.md"), read(NEXT_PATH))
     if args.base:
