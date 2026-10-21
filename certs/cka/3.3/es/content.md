@@ -210,4 +210,4 @@ A diferencia de HPA/VPA, el **Cluster Autoscaler** no ajusta Pods sino el númer
 - [Vertical Pod Autoscaler — GitHub kubernetes/autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)
 - [metrics-server — GitHub kubernetes-sigs/metrics-server](https://github.com/kubernetes-sigs/metrics-server)
 - [Cluster Autoscaler — GitHub kubernetes/autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler)
-- [CKA Curriculum v1.35 — CNCF](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+- [CKA Curriculum v1.37 — CNCF](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)

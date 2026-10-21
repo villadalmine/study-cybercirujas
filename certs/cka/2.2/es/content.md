@@ -1,6 +1,6 @@
 # 2.2 Troubleshoot cluster components
 
-**Certificación:** CKA v1.35 · **Peso en el examen:** 6
+**Certificación:** CKA v1.37 · **Peso en el examen:** 6
 
 ## Introducción
 
@@ -162,4 +162,4 @@ Si no hay reglas, kube-proxy no está sincronizando — reiniciar el Pod (es un 
 - Kubernetes docs — kubeadm troubleshooting: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/troubleshooting-kubeadm/
 - Kubernetes docs — Debug a StatefulSet / etcd operations reference: https://etcd.io/docs/latest/op-guide/maintenance/
 - Kubernetes docs — kubelet: https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

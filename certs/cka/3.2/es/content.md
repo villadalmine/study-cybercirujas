@@ -284,4 +284,4 @@ Evita cambios accidentales, reduce la carga sobre el API server (kube-apiserver 
 - Managing Secrets using kubectl — https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/
 - Define Environment Variables for a Container — https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 - Pull an Image from a Private Registry — https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-- CKA Curriculum v1.35 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CKA Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

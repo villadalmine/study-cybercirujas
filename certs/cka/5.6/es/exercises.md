@@ -1,6 +1,6 @@
-# CKA 1.35 — Tema 5.6: Understand and use CoreDNS (peso 3.34%)
+# CKA 1.37 — Tema 5.6: Understand and use CoreDNS (peso 3.34%)
 
-> Fuente de referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Fuente de referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Los siguientes ejercicios asumen un cluster funcional (kubeadm, kind o similar) con acceso `kubectl` como admin.
 

@@ -1,6 +1,6 @@
-# CKA 1.35 — Tema 3.3: Configure workload autoscaling (peso 2.5)
+# CKA 1.37 — Tema 3.3: Configure workload autoscaling (peso 2.5)
 
-> Referencia de curriculum: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Referencia de curriculum: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Estos ejercicios asumen un cluster con al menos un control-plane node y un worker node, `kubectl` configurado, y permisos de administrador. Se trabaja principalmente con `HorizontalPodAutoscaler` (HPA), que es el mecanismo de autoscaling que sí se puede ejercitar íntegramente con `kubectl` sin componentes externos. También se cubre `VerticalPodAutoscaler` (VPA) a nivel de manifiesto, ya que sus componentes (recommender, updater, admission-controller) no vienen instalados por defecto en un cluster estándar.
 

@@ -1,7 +1,7 @@
-# CKA 1.35 — Topic 1.1: Implement storage classes and dynamic volume provisioning
+# CKA 1.37 — Topic 1.1: Implement storage classes and dynamic volume provisioning
 
 **Exam Weight:** 3.33%
-**Reference Source:** [CNCF CKA Curriculum v1.35](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+**Reference Source:** [CNCF CKA Curriculum v1.37](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 > Prerequisites: A working cluster with configured `kubectl` and at least one active dynamic provisioner (e.g. `rancher.io/local-path` in `kind`, `k8s.io/minikube-hostpath` in `minikube`, or your cloud provider CSI driver). If your cluster lacks default provisioners, Exercises 2 through 6 operate identically by substituting `provisioner` with any available driver name in your environment.
 

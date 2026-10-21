@@ -268,4 +268,4 @@ kubectl scale deployment/nginx --replicas=5
 - kubectl rollout reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#rollout
 - Performing a Rolling Update: https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/
 - ReplicaSet — Kubernetes Concepts: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

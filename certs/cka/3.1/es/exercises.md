@@ -1,6 +1,6 @@
 # Ejercicios guiados — 3.1 Application deployments: rolling update y rollback
 
-> Referencia: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+> Referencia: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)
 
 Todos los ejercicios asumen un cluster con `kubectl` configurado contra el context correcto. Se recomienda trabajar en un namespace propio para no interferir con otros recursos.
 

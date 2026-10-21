@@ -1,6 +1,6 @@
 # 2.2 Troubleshoot cluster components
 
-> Referencia curricular: [CKA Curriculum v1.35 (CNCF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf). Este material es contenido original elaborado a partir de esa referencia; no reproduce texto de la fuente.
+> Referencia curricular: [CKA Curriculum v1.37 (CNCF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf). Este material es contenido original elaborado a partir de esa referencia; no reproduce texto de la fuente.
 
 Estos ejercicios asumen un cluster `kubeadm` de al menos un control plane node y un worker node, con acceso `ssh` a ambos y `kubectl` configurado con permisos de administrador (`cluster-admin`). Ejecutá cada bloque en orden: cada uno depende del estado dejado por el anterior.
 

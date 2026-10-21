@@ -248,7 +248,7 @@ kubectl describe node node-01 | grep -A5 Capacity
 
 ## Referencias
 
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 - Container Runtime Interface (CRI): https://kubernetes.io/docs/concepts/architecture/cri/
 - Container Network Interface (CNI) spec: https://github.com/containernetworking/cni
 - Kubernetes Network Plugins: https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/

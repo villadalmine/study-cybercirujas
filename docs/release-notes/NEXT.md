@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **One curriculum version per cert:** a new CI gate checks that every curriculum citation and `sources` link in the material names the version and the pinned document the catalog tracks, so the repo can no longer say v1.37 and v1.35 at once; the CKA and CKAD citations are brought in line.
 
 ## Upgrade notes
 

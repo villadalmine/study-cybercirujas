@@ -287,7 +287,7 @@ If `TARGETS` displays `<unknown>/70%`, Metrics Server is either unreachable or t
 
 ## References
 
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 - Resource Metrics Pipeline: https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
 - kubectl top reference: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#top
 - Managing Resources for Containers: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/

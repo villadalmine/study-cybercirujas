@@ -300,4 +300,4 @@ rm -rf /etc/cni/net.d
 - [kubeadm token reference](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/)
 - [High Availability considerations](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
 - [Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-- [CNCF CKA Curriculum v1.35 (PDF)](https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf)
+- [CNCF CKA Curriculum v1.37 (PDF)](https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf)

@@ -239,4 +239,4 @@ kubectl get backup nightly-backup -o jsonpath='{.metadata.finalizers}'
 - Versions in CustomResourceDefinitions — https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definition-versioning/
 - Operator Framework / OLM — https://olm.operatorframework.io/
 - OperatorHub — https://operatorhub.io/
-- CNCF CKA Curriculum v1.35 — https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37 — https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

@@ -210,4 +210,4 @@ Unlike HPA and VPA, the **Cluster Autoscaler** adjusts host node counts rather t
 - Vertical Pod Autoscaler: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
 - metrics-server: https://github.com/kubernetes-sigs/metrics-server
 - Cluster Autoscaler: https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
-- CNCF CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CNCF CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf

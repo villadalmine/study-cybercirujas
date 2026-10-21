@@ -242,4 +242,4 @@ Vale la pena saber que la comunidad de Kubernetes está migrando hacia la **Gate
 - ingress-nginx (proyecto de referencia): https://kubernetes.github.io/ingress-nginx/
 - kubectl create ingress: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create-ingress
 - Gateway API (contexto/futuro): https://kubernetes.io/docs/concepts/services-networking/gateway/
-- CKA Curriculum v1.35: https://github.com/cncf/curriculum/raw/master/CKA_Curriculum_v1.35.pdf
+- CKA Curriculum v1.37: https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
