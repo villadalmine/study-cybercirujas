@@ -1,38 +1,47 @@
 # Community 138
 
-> 15 nodes · cohesion 0.22
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
-- **.run_check()** (8 connections) — `tests/test_source_chain.py`
-- **Tree** (5 connections) — `tests/test_source_chain.py`
-- **.meta()** (4 connections) — `tests/test_source_chain.py`
-- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
-- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
-- **.setUp()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
-- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
-- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
-- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
+- **What you can contribute** (5 connections) — `CONTRIBUTING.md`
+- **Model** (4 connections) — `tests/test_groundedness.py`
+- **fail()** (4 connections) — `tests/test_check_pr.py`
+- **.verified()** (3 connections) — `teach/lab/spec.py`
+- **Raising a topic's quality score** (3 connections) — `CONTRIBUTING.md`
+- **Sign your commits (DCO)** (3 connections) — `CONTRIBUTING.md`
+- **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
+- **.test_pr6_traps_caught_offline_and_byte_for_byte()** (2 connections) — `tests/test_groundedness.py`
+- **Quality score** (2 connections) — `docs/FAQ.md`
+- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
+- **skipUnless** (1 connections)
+- **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
+- **Provenance is mandatory** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
+- [Community 66](Community_66.md) (2 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 250](Community_250.md) (1 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
+- [Community 165](Community_165.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_source_chain.py`
+- `CONTRIBUTING.md`
+- `docs/FAQ.md`
+- `docs/LABS-RUNNER.md`
+- `teach/lab/spec.py`
+- `tests/test_check_pr.py`
+- `tests/test_groundedness.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (93%)
-- INFERRED: 2 (7%)
+- EXTRACTED: 13 (62%)
+- INFERRED: 8 (38%)
 - AMBIGUOUS: 0 (0%)
 
 ---

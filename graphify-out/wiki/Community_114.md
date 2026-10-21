@@ -33,15 +33,15 @@
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
 - [Community 127](Community_127.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
 - [Community 18](Community_18.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
 - [Community 23](Community_23.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
 - [Community 146](Community_146.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)

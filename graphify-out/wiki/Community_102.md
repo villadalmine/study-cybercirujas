@@ -1,6 +1,6 @@
 # Community 102
 
-> 28 nodes · cohesion 0.12
+> 30 nodes · cohesion 0.11
 
 ## Key Concepts
 
@@ -12,6 +12,7 @@
 - **tokens_per_window()** (9 connections) — `teach/core/quota_facts.py`
 - **exhaustions()** (8 connections) — `teach/core/quota_facts.py`
 - **_rows()** (7 connections) — `teach/core/quota_facts.py`
+- **_spend_section()** (6 connections) — `scripts/status_matrix.py`
 - **main()** (6 connections) — `scripts/topic_cost.py`
 - **cooldown_until()** (4 connections) — `teach/core/quota_facts.py`
 - **rows()** (3 connections) — `scripts/metrics_report.py`
@@ -25,22 +26,21 @@
 - **dominant()** (2 connections) — `scripts/topic_cost.py`
 - **Path** (1 connections)
 - **Real metrics for the whole pipeline: per stage, per day, per quota window.…** (1 connections) — `scripts/metrics_report.py`
+- **The budget footer: what generation has actually consumed, from records.…** (1 connections) — `scripts/status_matrix.py`
 - **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
 - **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
-- **Facts about quota, derived from what was recorded — never estimated. Three…** (1 connections) — `teach/core/quota_facts.py`
-- **When it is worth attempting generation again, or None to attempt now. A spend…** (1 connections) — `teach/core/quota_facts.py`
-- *... and 3 more nodes in this community*
+- *... and 5 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (9 shared connections)
 - [Community 50](Community_50.md) (8 shared connections)
-- [Community 63](Community_63.md) (5 shared connections)
-- [Community 89](Community_89.md) (4 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 89](Community_89.md) (6 shared connections)
 - [Community 112](Community_112.md) (4 shared connections)
+- [Community 63](Community_63.md) (3 shared connections)
 - [Community 147](Community_147.md) (2 shared connections)
+- [Community 232](Community_232.md) (1 shared connections)
 - [Community 37](Community_37.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
 - [Community 7](Community_7.md) (1 shared connections)
 - [Community 121](Community_121.md) (1 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
@@ -49,12 +49,13 @@
 ## Source Files
 
 - `scripts/metrics_report.py`
+- `scripts/status_matrix.py`
 - `scripts/topic_cost.py`
 - `teach/core/quota_facts.py`
 
 ## Audit Trail
 
-- EXTRACTED: 87 (100%)
+- EXTRACTED: 90 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
