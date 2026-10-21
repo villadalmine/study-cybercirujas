@@ -415,7 +415,7 @@ When a vendor publishes a new curriculum version, the cert gets an upgrade miles
 the code (`keep`, `revalidate`, `regenerate`, `new`, `retire`), down to the sections and version lines in scope; the
 plan and its report live in `docs/upgrades/` and CI checks they are what their inputs produce. Each phase-2 PR may
 change only what the plan lists (`guard`, with provenance in `meta.yaml`), and the final PR moves `tracked_version`.
-The first run, CKA & CKAD v1.37, regenerated nothing: [docs/upgrades/README.md](upgrades/README.md).
+A CI gate (`scripts/check_curriculum_consistency.py`) keeps every cert's curriculum citations and `sources` links equal to the catalog's `tracked_version` and pinned objectives URL (read from the catalog, so any cert, with the patterns as data in `scripts/curriculum_patterns.yaml`), so the repo cannot say two versions at once; the plan lists those lines, `upgrade_versions.py --scope citations --cert <cert>` fixes them, and the switch fails while any disagrees (#220). The first run, CKA & CKAD v1.37, regenerated nothing: [docs/upgrades/README.md](upgrades/README.md).
 
 **What are milestones for?**
 `vX.Y.0` milestones plan a release. `<CERT> <version> upgrade` milestones are

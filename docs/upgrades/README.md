@@ -169,7 +169,7 @@ Phase 2 ran on 2026-10-21 and it was small: no topic is regenerated, no model is
 | revalidate | cka 3.6, ckad 2.4, ckad 5.4 | every check re-run against the new objective text; result recorded in each `meta.yaml`. No prose edit: the listed sections are titles carrying our (correct) spelling | `quality_score.py --check`; `guard` (only `meta.yaml` and the listed sections) |
 | version lines | 220 lines in 76 files: 111 in 22 CKA material files, 109 in 54 lab files | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` and the kind node images (a package or image that does not exist is not written), record the edit in the topic's `meta.yaml`; then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
 | regenerate / new | none for v1.37 | one PR per topic. The prompt carries the frozen syllabus text and the official documentation excerpts the topic cites (grounding at write time, only for these topics) | below |
-| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` `version` and `sources` (no re-snapshot: the date stays the real one). The 195 "Curriculum v1.35" citations are not in the plan and an exam-version PR changes nothing else: one follow-up issue (#220) | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done |
+| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` `version` and `sources` (no re-snapshot: the date stays the real one), and the citations: `upgrade_versions.py --scope citations --cert <cert>` runs before the switch and the consistency gate fails the switch while any citation or `sources` link still disagrees with the catalog | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done; `check_curriculum_consistency.py` |
 
 Every phase-2 PR that rewrites `content.md` or `exercises.md` passes, on **those files only**:
 
@@ -286,3 +286,41 @@ scripts/upgrade_versions.py docs/upgrades/cka-ckad-1.37.plan.json docs/upgrades/
 A scan correction came with it: a sample that shows an upgrade also names the version it starts from (`Cluster version:
 v1.34.1` beside a table `v1.34.1 to v1.35.1`). `scan` now lists the `v1.N.P` lines of the minor below, in a file that
 already has a tracked line (3 lines in CKA 4.3), so the bump cannot leave a sample contradicting itself.
+
+## The repo says one thing: the consistency gate (#220)
+
+v0.5.0 switched CKA and CKAD to Kubernetes v1.37 while 195 citations still said "Curriculum v1.35" and each `meta.yaml` still
+pointed at the v1.35 PDF. The PDFs are byte-identical, so no content was wrong, but the repo stated two things about one fact.
+The plan scanned technical lines only, the review finding was deferred to an issue, and no check compared the citations with
+`tracked_version`. The control is generic: it reads each cert's `tracked_version` and pinned `sources.objectives` from
+`catalog.yaml`, never a list of certs.
+
+1. **A CI gate, for every cert in `catalog.yaml`** (`scripts/check_curriculum_consistency.py`, in `make verify` and `make verify-ci`):
+   every curriculum citation in `content.md`, `exercises.md` and the lab scripts' headers names `tracked_version` (when it is a
+   dotted number), and every link to the cert's objectives document, in the material and in the `sources:` of each `meta.yaml`,
+   is the catalog's pinned URL, not another spelling or version of the same document. The document identity is derived from
+   the catalog URL (the commit and the digits are not part of it, so `exam-201-202` and `exam-201` are one document).
+   How a citation is written (the introducing words in en/es/pt, the `v`/`versión` marker, the spans to ignore, the reviewed
+   extra spellings of a cert such as LPIC-1's exam 102 page) is data in `scripts/curriculum_patterns.yaml`, one place.
+   A cert the control cannot compare (no pinned URL and no dotted version) fails loudly unless it is listed under `exempt:` with
+   its reason; no cert is skipped silently.
+2. **The upgrade window is bounded.** While an upgrade is open the catalog has an `upstream:` block and a citation may name the
+   upstream value instead of the tracked one, but only if the block is valid: a dotted version newer than `tracked_version`, a
+   pinned URL of the same document, a frozen snapshot (`upstream.snapshot`) whose version and source URL are those, and an
+   upgrade spec here that names `upstream.milestone`. An invalid block is a failure of its own. One value per cert: if the
+   tracked and the upstream value are both cited, the upstream lines are the offenders. The switch PR removes the block and from
+   then on only `tracked_version` passes.
+3. **The baseline** (`tests/fixtures/curriculum_consistency_baseline.txt`) lists the offenders that existed when the gate was
+   added, keyed by file, text and which repeat of the text it is: a NEW mismatch fails, and so does a baseline entry that no
+   longer offends, so the file only shrinks; when it is empty it is deleted and the gate is strict.
+4. **The plan lists citation lines** (`version_lines.citations`, from the catalog's target) next to the technical ones, and the
+   edit is `scripts/upgrade_versions.py --scope citations --cert <cert>`, driven by the catalog: while a valid `upstream:` block
+   is present it moves the citations of the next upgrade; after the switch it fixes whatever disagrees with `tracked_version`.
+   `curriculum_citations.fix_line` is the only definition of "the line, made consistent": the gate, the script and the guard
+   all call it. The switch PR runs it, and the gate fails the switch if anything still disagrees.
+5. **The guard verifies those lines like the others.** A citation line, listed in the plan or not, may only become exactly what
+   `fix_line` writes from the catalog on the base, in a topic the plan keeps or revalidates. A `meta.yaml` of such a topic may
+   move its `sources` or its `quality` only with the `tool_edit` stamp, and then `sources` only to what the fix writes (the
+   `quality` and `tool_edit` blocks may differ). Anything else on those lines is refused.
+
+A consistency finding in a review blocks the merge and the release. It is never deferred to a follow-up issue.

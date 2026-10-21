@@ -276,7 +276,7 @@ class BelowTopicLevel(unittest.TestCase):
         self.assertEqual([(s["line"], s["heading"], s["why"]) for s in found["sections"]],
                          [(1, "2.4 Understand API deprecations", ["old objective title"])])
         self.assertEqual(found["version_lines"], {"curriculum": 1, "label": 0,
-                                                  "technical": ["certs/ckad/2.4/en/content.md:7"]})
+                                                  "technical": ["certs/ckad/2.4/en/content.md:7"], "citations": []})
 
     def test_fenced_hash_lines_are_not_headings_and_labs_are_scanned(self):
         doc = "# Title\n\n```\n# master   Ready   control-plane   2m   v1.35.0\n```\n\n## Next\n"
