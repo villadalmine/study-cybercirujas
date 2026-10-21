@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.5.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.0...v0.5.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **ckad:** the CKAD citations and sources links name the pinned v1.37 curriculum ([#232](https://github.com/villadalmine/study-cybercirujas/issues/232)) ([988f00f](https://github.com/villadalmine/study-cybercirujas/commit/988f00f0b7d26867232d1608dc99811454895276))
+* **cka:** the CKA citations and sources links name the pinned v1.37 curriculum ([#233](https://github.com/villadalmine/study-cybercirujas/issues/233)) ([547f416](https://github.com/villadalmine/study-cybercirujas/commit/547f416b344caad9a81a0e419a6a47d36d78d501))
+* **guard:** a stamped meta.yaml may have its lang corrected to its directory's language ([#231](https://github.com/villadalmine/study-cybercirujas/issues/231)) ([35594d7](https://github.com/villadalmine/study-cybercirujas/commit/35594d73bb9a3b354b24d0e5c9d792d80c521d95))
+* **lpi:** lpic-2 canonical objectives page is a reviewed spelling of the catalog alias ([#234](https://github.com/villadalmine/study-cybercirujas/issues/234)) ([2d42e19](https://github.com/villadalmine/study-cybercirujas/commit/2d42e190fe087b276426cd96463e6decfba9a249))
+* **lpi:** the last consistency finding fixed, the baseline deleted: the gate is strict ([#236](https://github.com/villadalmine/study-cybercirujas/issues/236)) ([b9c0087](https://github.com/villadalmine/study-cybercirujas/commit/b9c0087891505963612bd1c83a29690ddc8a986f))
+
+
+### Documentation
+
+* **upgrades:** the Kubernetes 1.37 lab proofs, per target, with their logs ([#221](https://github.com/villadalmine/study-cybercirujas/issues/221)) ([8fcdfd8](https://github.com/villadalmine/study-cybercirujas/commit/8fcdfd8832ad86042fa0e4cc7007e5214c7abaa9))
+
+
+### Internals
+
+* **upgrades:** a consistency gate for curriculum citations and sources ([#230](https://github.com/villadalmine/study-cybercirujas/issues/230)) ([c9753ac](https://github.com/villadalmine/study-cybercirujas/commit/c9753ac61b0d15d81387e642e9b0e93578571ddf))
+
 ## [0.5.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.4.0...v0.5.0) (2026-10-21)
 
 
