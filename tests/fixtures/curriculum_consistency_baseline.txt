@@ -1,2 +1,0 @@
-# Offenders that existed when the gate was added (#220). It may only shrink: fix the line, then run --update.
-certs/lpi-010-160/4.2/pt/content.md::b5af6be93bad::0

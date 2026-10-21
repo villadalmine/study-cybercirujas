@@ -193,7 +193,7 @@ $ sudo dmesg | tail -n 3
 ## Referências
 
 - LPI Learning Materials — Objetivo 4.2, Understanding Computer Hardware: https://learning.lpi.org/en/learning-materials/010-160/4/4.2/
-- LPI Linux Essentials — objetivos do exame 010-160 v1.6: https://www.lpi.org/our-certifications/exam-160-objectives/
+- LPI Linux Essentials — objetivos do exame 010-160 v1.6: https://www.lpi.org/our-certifications/exam-010-objectives/
 - Documentação do kernel Linux — `/proc` filesystem: https://docs.kernel.org/filesystems/proc.html
 - Documentação do kernel Linux — sysfs: https://docs.kernel.org/filesystems/sysfs.html
 - man pages: `man lscpu`, `man lsblk`, `man free`, `man lspci`, `man lsusb`, `man dmesg`
