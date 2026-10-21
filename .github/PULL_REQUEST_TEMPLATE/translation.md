@@ -97,6 +97,7 @@ python3 -m unittest tests.test_translation_verify
 
 - [ ] Docs consistent (`make check-docs` green) / code graph regenerated (`make graph`) or why not
 - [ ] FAQ updated in this PR if it changes how something in `docs/FAQ.md` works, or not affected
+- [ ] Docs impact: every doc that names a file this PR changes is updated, or listed under `## Docs impact` with `not affected: <why>` (CI prints the list)
 - [ ] Commits signed off (DCO): `git commit -s`; fix a missing one with `git rebase --signoff origin/main`
 
 <!-- What could break, for whom, and how to undo it (usually: revert this PR). -->

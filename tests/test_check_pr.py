@@ -941,7 +941,8 @@ class ExamVersionWiringTests(unittest.TestCase):
         with mock.patch.object(sys, "argv", argv), redirect_stdout(out), \
                 mock.patch.object(check_pr, "base_texts", lambda paths, base: {p: CATALOG_BASE for p in paths}), \
                 mock.patch.object(check_pr, "commits_of", lambda base: []), \
-                mock.patch.object(check_pr, "head_catalog", lambda: head):
+                mock.patch.object(check_pr, "head_catalog", lambda: head), \
+                mock.patch.object(check_pr, "repo_prose", lambda: {}):   # docs impact: DocsImpactTests
             return check_pr.main(), out.getvalue()
 
     def test_pr_61_fails_even_with_the_label(self):
@@ -1020,6 +1021,56 @@ class ReleaseNotesGateTests(unittest.TestCase):
             self.assertEqual(code, 0, out)
             self.assertEqual(gate.call_count, 1)
         self.assertIn("docs(release-notes)", check_pr.release_notes_ready(self.CHANGELOG.format(kind="Features"), self.EMPTY)[0])
+
+
+class DocsImpactTests(unittest.TestCase):
+    """#243 changed scripts/check_pr.py and left AGENTS.md, AGENT-GUIDE and HOW-IT-WORKS describing the old
+    release (decision 2026-10-21-impacto-bloquea): a doc that names a changed file is in the PR or listed."""
+    DOCS = {"AGENTS.md": "run scripts/check_pr.py before", "docs/HOW.md": "the check_pr.py gate",
+            "docs/X.md": "nothing here", "docs/Y.md": "see my_check_pr.py and scripts/check_pr.pyc"}
+
+    def test_a_doc_naming_the_path_or_the_file_name_is_affected_lookalikes_are_not(self):
+        found = check_pr.impact(["scripts/check_pr.py", "docs/FAQ.md"], self.DOCS)
+        self.assertEqual(found, {"AGENTS.md": ["scripts/check_pr.py"], "docs/HOW.md": ["scripts/check_pr.py"]})
+
+    def test_a_doc_the_pr_updates_and_a_docs_only_pr_need_nothing(self):
+        self.assertEqual(list(check_pr.impact(["scripts/check_pr.py", "AGENTS.md"], self.DOCS)), ["docs/HOW.md"])
+        self.assertEqual(check_pr.impact(["docs/FAQ.md"], self.DOCS), {})
+        self.assertEqual(check_pr.impact(["scripts" + chr(92) + "check_pr.py", "AGENTS.md"], self.DOCS),
+                         {"docs/HOW.md": ["scripts/check_pr.py"]})   # a Windows path is the same file
+
+    def test_each_affected_doc_must_be_in_the_section(self):
+        body = "## What and why\n\n`docs/HOW.md`\n\n## Docs impact\n\n- `AGENTS.md`: not affected: other step\n"
+        problems = check_pr.docs_impact(["scripts/check_pr.py"], body, self.DOCS)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("`docs/HOW.md` (names `scripts/check_pr.py`): not affected: <why>", problems[0])
+        self.assertNotIn("`AGENTS.md` (names", problems[0])   # named in the section: done
+        full = body + "- `docs/HOW.md`: updated in #245\n"
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], full, self.DOCS), [])
+
+    def test_history_generated_material_and_tests_are_not_docs(self):
+        for path in ("CHANGELOG.md", "docs/HISTORY.md", "graphify-out/GRAPH_REPORT.md", "certs/cka/1.1/en/content.md",
+                     "docs/release-notes/NEXT.md", "tests/fixtures/pr/good.md"):
+            self.assertTrue(check_pr.IMPACT_SKIP.match(path), path)
+        self.assertFalse(check_pr.is_prose(".github/labels.yml"))
+        self.assertTrue(check_pr.is_prose("docs/audit/rubric.yml") and check_pr.is_prose("AGENTS.md"))
+
+    def test_the_real_repo_lists_what_243_missed(self):
+        found = check_pr.impact(["scripts/check_pr.py", "CONTRIBUTING.md", "docs/FAQ.md"], check_pr.repo_prose())
+        for doc in ("AGENTS.md", "docs/AGENT-GUIDE.md", "docs/HOW-IT-WORKS.md"):
+            self.assertIn(doc, found)
+
+    def test_main_runs_it_and_bot_prs_are_exempt(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "repo_prose", lambda: self.DOCS):
+            body = Path(tmp) / "b.md"
+            body.write_text((FIXTURES / "good.md").read_text(encoding="utf-8"), encoding="utf-8")
+            out = io.StringIO()
+            with mock.patch.object(sys, "argv", ["check_pr.py", "--title", "docs: x", "--body-file", str(body),
+                                                 "--files", "scripts/check_pr.py"]), redirect_stdout(out):
+                code = check_pr.main()
+        self.assertEqual(code, 1)
+        self.assertIn("PR: docs impact: 2 doc(s)", out.getvalue())
+        self.assertFalse(check_pr.is_bot_pr("bot/graph-refresh", ["scripts/check_pr.py"]))   # identity is checked, not paths
 
 
 if __name__ == "__main__":
