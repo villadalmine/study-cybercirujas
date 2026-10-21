@@ -54,7 +54,9 @@ def syllabus(cert: str, topic: str, title: str) -> dict:
 
 def lab_hash(lab: spec.Lab) -> str:
     h = hashlib.sha256()
-    for f in sorted(p for p in lab.directory.rglob("*") if p.is_file()):
+    # sorted by the relative path's parts, a plain tuple of str: Path objects compare case-insensitively on Windows, so the hash
+    # of the same files would differ by OS (a Linux CI hash must equal the one computed on a maintainer's PC)
+    for f in sorted((p for p in lab.directory.rglob("*") if p.is_file()), key=lambda p: p.relative_to(lab.directory).parts):
         h.update(f.relative_to(lab.directory).as_posix().encode() + b"\0" + f.read_bytes().replace(b"\r\n", b"\n") + b"\0")
     return h.hexdigest()
 
