@@ -712,7 +712,7 @@ def cite_checker(base_text):
     def meta(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
         return (len(parts) > 2 and parts[0] == "certs" and parts[1] in certs
-                and cc.meta_ok(old, new, cc.wanted(certs[parts[1]], parts[1], strict=True)))
+                and cc.meta_ok(old, new, cc.wanted(certs[parts[1]], parts[1], strict=True), parts[3] if len(parts) > 4 else None))
     ok.meta = meta
     return ok
 

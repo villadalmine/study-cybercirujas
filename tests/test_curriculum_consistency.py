@@ -285,6 +285,12 @@ class Guard(unittest.TestCase):
                            "a foreign source": ok_meta.replace(NEW, "http://evil/x")}.items():
             with self.subTest(name):
                 self.assertFalse(cd.citation_files_ok(self.PLAN, self.META, self.base, lambda f, t=text: t, self.ok))
+        # lang may be corrected to the language of its own directory, and only to that
+        es_old = ok_meta.replace("lang: en", "lang: es")
+        base_es = lambda f: yaml.safe_dump({"certs": {"cka": entry()}}) if f == "catalog.yaml" else es_old.replace(NEW, OLD)
+        self.assertTrue(cd.citation_files_ok(self.PLAN, self.META, base_es, lambda f: ok_meta, cd.cite_checker(base_es)))
+        self.assertFalse(cd.citation_files_ok(self.PLAN, self.META, base_es, lambda f: ok_meta.replace("lang: en", "lang: pt"),
+                                              cd.cite_checker(base_es)))
         # an unstamped meta may not move sources or quality at all (wrong_rewrites reports it)
         plan = dict(self.PLAN, spec="docs/upgrades/x.yaml")
         pins = yaml.safe_dump({"tool": "scripts/upgrade_versions.py", "tool_sha256": "0" * 64, "tracked": "1.35", "target": "1.37",
