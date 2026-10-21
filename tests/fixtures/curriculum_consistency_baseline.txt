@@ -1,16 +1,2 @@
 # Offenders that existed when the gate was added (#220). It may only shrink: fix the line, then run --update.
 certs/lpi-010-160/4.2/pt/content.md::b5af6be93bad::0
-certs/lpic-2/200.1/en/content.md::c2f98b109e0a::0
-certs/lpic-2/200.1/en/exercises.md::39ef9935eaa1::0
-certs/lpic-2/200.1/en/exercises.md::5e92fc5a474c::0
-certs/lpic-2/200.1/en/meta.yaml::9ff9854030e0::0
-certs/lpic-2/200.1/en/meta.yaml::9ff9854030e0::1
-certs/lpic-2/200.1/en/meta.yaml::9ff9854030e0::2
-certs/lpic-2/200.1/en/meta.yaml::b8e4ccba5f39::0
-certs/lpic-2/200.1/es/content.md::aaaaebf8ffdb::0
-certs/lpic-2/200.1/es/exercises.md::563caefb3d1d::0
-certs/lpic-2/200.1/es/exercises.md::d3e692c7a899::0
-certs/lpic-2/200.1/es/meta.yaml::9ff9854030e0::0
-certs/lpic-2/200.1/es/meta.yaml::9ff9854030e0::1
-certs/lpic-2/200.1/es/meta.yaml::9ff9854030e0::2
-certs/lpic-2/200.1/es/meta.yaml::b8e4ccba5f39::0
