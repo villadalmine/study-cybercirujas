@@ -18,7 +18,9 @@ only those lines and nothing else, from the one pins file:
 
 A material file whose lines moved gets a tool_edit block in the meta.yaml next to it (tool, script sha256, plan
 and pins sha256, the pins date), which is what curriculum_diff.py guard accepts in place of a model's effort and
-prompt hash. --check prints what would change and exits 1 if anything would.
+prompt hash. --scope citations (#220) needs no plan lines: it makes every curriculum citation and every `sources` link
+of the material say what the catalog says (curriculum_citations.fix_line, patterns in curriculum_patterns.yaml). While an
+upgrade is open the catalog's `upstream:` block is the target, so the same scope moves the citations of the next upgrade. --check prints what would change and exits 1 if anything would.
 """
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import curriculum_citations as cc  # noqa: E402
 TOKEN = re.compile(r"(?<![\d.])(v?)1\.(\d{2})(?:\.(\d+|x))?(?!\d)")
 KINDEST = re.compile(r"kindest/node v1\.\d+\.\d+")
 CURRICULUM = re.compile(r"(https://github\.com/cncf/curriculum)/raw/master/(CKAD?)_Curriculum_v1\.35\.pdf")
@@ -106,7 +110,58 @@ def stamp(meta_text: str, block: str) -> str:
     return "\n".join(out).rstrip("\n") + "\n" + block
 
 
+def stamp_block(plan_file: Path, pins_file: Path, pins: dict, root: Path) -> str:
+    return (f"tool_edit:\n  tool: scripts/upgrade_versions.py\n  script_sha256: {sha256(Path(__file__))}\n"
+            f"  plan: {plan_file.resolve().relative_to(root).as_posix()}\n  plan_sha256: {sha256(plan_file)}\n"
+            f"  pins_sha256: {sha256(pins_file)}\n  date: '{pins['date']}'\n")
+
+
+def run_citations(plan_file: Path, pins_file: Path, cert: str | None, check: bool, root: Path = REPO) -> int:
+    """Every curriculum citation and `sources` link of the material, made to say what the catalog says."""
+    pins = yaml.safe_load(pins_file.read_text(encoding="utf-8"))
+    catalog = yaml.safe_load((root / "catalog.yaml").read_text(encoding="utf-8"))["certs"]
+    if not cert:
+        raise SystemExit("--scope citations needs --cert: the patterns recognise a citation, they do not know which certs are safe to rewrite")
+    bad = [w for w in cc.problems(root, {"certs": {cert: catalog[cert]}}) if w.startswith(cert + ":")]
+    if bad:
+        raise SystemExit("\n".join(["the catalog is not in a state this edit can trust:"] + bad))
+    changed: dict[str, int] = {}
+    dirs = set()
+    for c in [cert]:
+        want = cc.wanted(catalog[c], c, root, strict=True)
+        if not want["target_url"] and not want["target_version"]:
+            continue
+        for path in sorted(cc.files(root, c), key=lambda p: (p.name == "meta.yaml", str(p))):
+            lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+            n_changed = 0
+            for i, line in enumerate(lines):
+                body = line.rstrip("\r\n")
+                new = cc.fix_line(body, want)
+                if new != body:
+                    lines[i] = new + line[len(body):]
+                    n_changed += 1
+            if n_changed:
+                rel = path.relative_to(root).as_posix()
+                changed[rel] = n_changed
+                if not check:
+                    path.write_text("".join(lines), encoding="utf-8", newline="")
+                if path.suffix == ".md":
+                    dirs.add(str(path.parent.relative_to(root)))
+    block = stamp_block(plan_file, pins_file, pins, root)
+    for d in sorted(dirs):
+        meta = root / d / "meta.yaml"
+        old = meta.read_text(encoding="utf-8")
+        new = stamp(old, block)
+        if new != old and not check:
+            meta.write_text(new, encoding="utf-8", newline="")
+    print(f"{sum(changed.values())} citation line(s) in {len(changed)} file(s), {len(dirs)} meta.yaml stamped"
+          + (" (check: nothing written)" if check else ""))
+    return 1 if check and changed else 0
+
+
 def run(plan_file: Path, pins_file: Path, scope: str, cert: str | None, check: bool, root: Path = REPO) -> int:
+    if scope == "citations":
+        return run_citations(plan_file, pins_file, cert, check, root)
     plan = json.loads(plan_file.read_text(encoding="utf-8"))
     pins = yaml.safe_load(pins_file.read_text(encoding="utf-8"))
     by_file: dict[str, set[int]] = {}
@@ -152,7 +207,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("plan", type=Path)
     ap.add_argument("pins", type=Path)
-    ap.add_argument("--scope", choices=("material", "labs"), required=True)
+    ap.add_argument("--scope", choices=("material", "labs", "citations"), required=True)
     ap.add_argument("--cert")
     ap.add_argument("--check", action="store_true")
     a = ap.parse_args(argv)

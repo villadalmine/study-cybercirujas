@@ -24,6 +24,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import curriculum_citations as cc  # noqa: E402
 
 # name -> (help, add_arguments(parser), run(args) -> exit code); each section registers its own.
 COMMANDS: dict[str, tuple] = {}
@@ -505,7 +507,8 @@ def minor_below(minor: str) -> str:
     return str(int(minor) - 1)
 
 
-def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, needles: list[tuple[str, str]]) -> dict:
+def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, needles: list[tuple[str, str]],
+         citation_want: dict | None = None) -> dict:
     """Sections that name a changed field, and lines that name the tracked version.
 
     Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
@@ -514,7 +517,7 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
     major, _, minor = version.partition(".")
     companion = (re.compile(rf"(^|[^0-9.])v{major}\.({minor_below(minor)})\.\d+(?!\d)")
                  if minor.isdigit() and int(minor) > 2 else None)
-    sections, lines = [], {"curriculum": 0, "label": 0, "technical": []}
+    sections, lines = [], {"curriculum": 0, "label": 0, "technical": [], "citations": []}
     topic_dir = root / "certs" / cert / topic
     docs = [(f"{lang}/{name}", True) for lang in langs for name in DOC_FILES]
     labs = sorted(p.relative_to(topic_dir).as_posix() for p in (topic_dir / "lab").glob("*")
@@ -548,6 +551,10 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
             found = sorted(set(found) | {n for n, line in enumerate(text.splitlines(), 1) if companion.search(line)
                                          and "curriculum" not in line.casefold()})
         lines["technical"] += [f"{rel}:{n}" for n in found]
+        if is_doc and citation_want:
+            # Citation lines (#220): the curriculum version and link the material cites, against the catalog's target.
+            lines["citations"] += [f"{rel}:{n}" for n, ln in enumerate(text.splitlines(), 1)
+                                   if cc.fix_line(ln, citation_want) != ln]
     return {"sections": sections, "version_lines": lines}
 
 
@@ -575,16 +582,21 @@ def plan_cert(root: Path, cert: str, spec: dict) -> dict:
     target = load_syllabus(root / spec["target"])
     impact = diff(tracked, target)
     classes = classify(impact, tracked)
+    catalog = yaml.safe_load((root / "catalog.yaml").read_text(encoding="utf-8"))["certs"].get(cert, {}) \
+        if (root / "catalog.yaml").is_file() else {}
+    citation_want = cc.wanted(catalog, cert, root, strict=True) if catalog else None
     topics = []
     for dom in tracked["domains"]:
         for o in dom["objectives"]:
             cls, reasons, new_id, score = classes[o["id"]]
             inv = inventory(root, cert, o["id"])
-            found = scan(root, cert, o["id"], inv["languages"], tracked["version"], _needles(cls, reasons, o, dom))
+            found = scan(root, cert, o["id"], inv["languages"], tracked["version"], _needles(cls, reasons, o, dom),
+                         citation_want)
             files = planned(cls, inv)
             if cls in ("keep", "revalidate"):   # scoped edits: only files holding a listed section or line
                 files = sorted(set(files) | {s["file"] for s in found["sections"]}
-                               | {ref.rsplit(":", 1)[0] for ref in found["version_lines"]["technical"]})
+                               | {ref.rsplit(":", 1)[0] for ref in found["version_lines"]["technical"]
+                                                                  + found["version_lines"]["citations"]})
             topics.append({"topic": o["id"], "title": o["text"], "domain": dom["name"], "class": cls,
                            "reasons": reasons, "maps_to": new_id, "similarity": score,
                            "languages": inv["languages"], "lab": inv["lab"], "planned_files": files, **found})
@@ -661,7 +673,8 @@ def allowed(path: str, plan_data: dict) -> bool:
         if topic not in known:
             return bool(c["new"])
         t = known[topic]
-        scoped = t["class"] in ("keep", "revalidate") and (t["sections"] or t["version_lines"]["technical"])
+        scoped = t["class"] in ("keep", "revalidate") and (t["sections"] or t["version_lines"]["technical"]
+                                                           or t["version_lines"].get("citations"))
         rest = path[len(prefix) + len(topic) + 1:].split("/")
         if scoped and len(rest) == 2 and rest[1] == "meta.yaml":
             return True
@@ -678,6 +691,49 @@ def guard(plan_data: dict, changed: list[str]) -> list[str]:
 # meta.yaml next to it must name a real model id (not a CLI or alias name), carry the effort and the
 # sha256 of the prompt, and say the language of its own directory. A hand edit says `model: human`; a scripted version bump records `tool_edit` (see tool_edit_ok).
 ALIASES = {"", "claude", "agy", "cheap", "codex", "gemini", "opus", "sonnet", "haiku", "unknown", "none"}
+
+
+def cite_checker(base_text):
+    """(file, old line, new line) -> True when the new line is what the citation fix writes from the catalog on the BASE.
+
+    Plan-free on purpose: the catalog says what each cert's citations must read, so any line `fix_line` would change may
+    be rewritten to exactly that, in a topic the plan keeps or revalidates, with no widening of the plan."""
+    try:
+        data = yaml.safe_load(base_text("catalog.yaml") or "")
+    except yaml.YAMLError:
+        data = None
+    certs = data.get("certs", {}) if isinstance(data, dict) else {}
+
+    def ok(f: str, old: str, new: str) -> bool:
+        parts = f.split("/")
+        return (len(parts) > 2 and parts[0] == "certs" and parts[1] in certs
+                and cc.fix_line(old, cc.wanted(certs[parts[1]], parts[1], strict=True)) == new)
+
+    def meta(f: str, old: str, new: str) -> bool:
+        parts = f.split("/")
+        return (len(parts) > 2 and parts[0] == "certs" and parts[1] in certs
+                and cc.meta_ok(old, new, cc.wanted(certs[parts[1]], parts[1], strict=True)))
+    ok.meta = meta
+    return ok
+
+
+def citation_files_ok(plan_data: dict, f: str, base_text, head_text, cite_ok) -> bool:
+    """A file the plan does not list may still change when every changed line is the citation fix (#220)."""
+    parts = f.split("/")
+    if len(parts) < 5 or parts[0] != "certs" or parts[1] not in plan_data["certs"]:
+        return False
+    topics = {t["topic"]: t["class"] for t in plan_data["certs"][parts[1]]["topics"]}
+    if topics.get(parts[2]) not in ("keep", "revalidate"):
+        return False
+    old, new = base_text(f), head_text(f)
+    if old is None or new is None:
+        return False
+    if parts[-1] == "meta.yaml":
+        return cite_ok.meta(f, old, new)
+    is_lab_script = len(parts) > 5 and parts[3] == "lab" and parts[-1].endswith(".sh")
+    if (parts[-1] not in DOC_FILES and not is_lab_script) or len(old.splitlines()) != len(new.splitlines()):
+        return False
+    return all(cite_ok(f, x, y) for x, y in zip(old.splitlines(), new.splitlines()) if x != y)
 
 
 TOOLS = {"scripts/upgrade_versions.py"}      # the only scripted editor a meta.yaml may name in `tool_edit`
@@ -710,6 +766,7 @@ def tool_edit_ok(root: Path, plan_data: dict, directory: str, meta: dict, change
     - every changed doc file of the directory keeps its line count, and each line that differs is a technical
       version line the plan lists AND is exactly what the script's own function writes for the line it replaced
       (`echo pwned` on a listed line is refused)."""
+    cite_ok = cite_checker(base_text)
     edit = meta.get("tool_edit")
     pins = load_pins(plan_data, base_text)
     if not isinstance(edit, dict) or edit.get("tool") not in TOOLS or not pins or pins.get("tool") != edit["tool"]:
@@ -730,7 +787,7 @@ def tool_edit_ok(root: Path, plan_data: dict, directory: str, meta: dict, change
         if old is None or new is None or len(old.splitlines()) != len(new.splitlines()):
             return False
         for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1):
-            if x != y and (n not in listed.get(f, set()) or uv_rewrite(x, pins) != y):
+            if x != y and not ((n in listed.get(f, set()) and uv_rewrite(x, pins) == y) or cite_ok(f, x, y)):
                 return False
     return True
 
@@ -748,6 +805,7 @@ def wrong_rewrites(plan_data: dict, changed: list[str], base_text, head_text) ->
     pins = load_pins(plan_data, base_text)
     if not pins:
         return []
+    cite_ok = cite_checker(base_text)
     listed: dict[str, set] = {}
     for c in plan_data["certs"].values():
         for t in c["topics"]:
@@ -755,6 +813,25 @@ def wrong_rewrites(plan_data: dict, changed: list[str], base_text, head_text) ->
                 for f, ns in _listed(t).items():
                     listed.setdefault(f, set()).update(ns)
     problems = []
+    kept = {(cert, t["topic"]) for cert, c in plan_data["certs"].items() for t in c["topics"]
+            if t["class"] in ("keep", "revalidate")}
+    for f in changed:
+        parts = f.split("/")
+        if len(parts) == 5 and parts[0] == "certs" and parts[-1] == "meta.yaml" and (parts[1], parts[2]) in kept:
+            old, new = base_text(f), head_text(f)
+            if old is None or new is None:
+                continue
+            try:
+                a, b = yaml.safe_load(old) or {}, yaml.safe_load(new) or {}
+            except yaml.YAMLError:
+                problems.append(f"{f}: does not parse")
+                continue
+            if a.get("sources") != b.get("sources") or a.get("quality") != b.get("quality"):
+                if "tool_edit" not in b:
+                    problems.append(f"{f}: `sources` or `quality` moved without the tool_edit stamp")
+                elif not cite_ok.meta(f, old, new):
+                    problems.append(f"{f}: a scripted edit may only move `sources` to what the citation fix writes "
+                                    "(and the quality and tool_edit blocks)")
     for f in changed:
         if f not in listed:
             continue
@@ -762,7 +839,7 @@ def wrong_rewrites(plan_data: dict, changed: list[str], base_text, head_text) ->
         if old is None or new is None or len(old.splitlines()) != len(new.splitlines()):
             continue                  # unlisted_edits reports it
         for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1):
-            if x != y and n in listed[f] and uv_rewrite(x, pins) != y:
+            if x != y and n in listed[f] and uv_rewrite(x, pins) != y and not cite_ok(f, x, y):
                 problems.append(f"{f}:{n}: is not what scripts/upgrade_versions.py writes for the line it replaced")
     return problems
 
@@ -789,7 +866,7 @@ def provenance(root: Path, plan_data: dict, changed: list[str], base_text=lambda
     return problems
 
 
-def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text) -> list[str]:
+def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text, cite_ok=None) -> list[str]:
     """Edits outside what the plan lists, in a doc file the plan scopes (a section or a version line).
 
     `base_text(path)` / `head_text(path)` return a file's text before and after (None if absent).
@@ -808,9 +885,11 @@ def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text) ->
             for ref in t["version_lines"]["technical"]:
                 f, n = ref.rsplit(":", 1)
                 lines.setdefault(f, set()).add(int(n))
+    cites = {ref.rsplit(":", 1)[0] for c in plan_data["certs"].values() for t in c["topics"]
+             if t["class"] in ("keep", "revalidate") for ref in t["version_lines"].get("citations", [])}
     problems = []
     for f in changed:
-        if f not in sections and f not in lines:
+        if f not in sections and f not in lines and f not in cites:
             continue
         old, new = base_text(f), head_text(f)
         if old is None or new is None:
@@ -821,7 +900,8 @@ def unlisted_edits(plan_data: dict, changed: list[str], base_text, head_text) ->
             ends = [s for s, _, _ in a[1:]] + [len(old.splitlines()) + 1]
             free = {n for (s, title, _), end in zip(a, ends) if title in sections.get(f, ()) for n in range(s, end)}
             bad = [n for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1)
-                   if x != y and n not in free and n not in lines.get(f, ())]
+                   if x != y and n not in free and n not in lines.get(f, ())
+                   and not (cite_ok and cite_ok(f, x, y))]
             if bad:
                 problems.append(f"{f}: line(s) {', '.join(map(str, bad[:8]))} changed but are not listed in the plan")
         elif f not in sections or len(a) != len(b):
@@ -867,11 +947,12 @@ def _guard_run(args) -> int:
     else:
         print(f"plan: {rel} as committed on {base[:12]} (the base), not the head's copy")
     plan_data = json.loads(committed)
-    bad = guard(plan_data, files)
+    base_t, head_t = (lambda f: _git_text(base, f)), (lambda f: _git_text(None, f))
+    cite_ok = cite_checker(base_t)
+    bad = [f for f in guard(plan_data, files) if not citation_files_ok(plan_data, f, base_t, head_t, cite_ok)]
     for f in bad:
         print(f"NOT PLANNED: {f}")
-    scoped = unlisted_edits(plan_data, files, lambda f: _git_text(base, f), lambda f: _git_text(None, f))
-    base_t, head_t = (lambda f: _git_text(base, f)), (lambda f: _git_text(None, f))
+    scoped = unlisted_edits(plan_data, files, base_t, head_t, cite_ok)
     weak = provenance(REPO, plan_data, files, base_t, head_t)
     wrong = wrong_rewrites(plan_data, files, base_t, head_t)
     for p in scoped:

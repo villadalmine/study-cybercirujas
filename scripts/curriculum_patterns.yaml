@@ -1,0 +1,63 @@
+# The one place that says what a "curriculum citation" is (#220). Read by scripts/curriculum_citations.py and, through it, by
+# check_curriculum_consistency.py (the CI gate), curriculum_diff.py (plan scan and guard) and upgrade_versions.py (the edit).
+# Nothing else in the repo defines these patterns. What a cert must say comes from catalog.yaml (tracked_version and the pinned
+# sources.objectives URL); this file only says how to RECOGNISE a citation of it.
+
+# A cited version: a word that introduces the curriculum (any language we write in), up to `gap` characters, then a version
+# marker and a number with as many components as the cert's tracked_version ("Curriculum v1.35", "Curriculum_v1.35.pdf",
+# "Curriculum oficial CKAD v1.35", "curriculum (v1.35", "**Certification:** CKA v1.35", "**Examen:** CKAD (versión 1.35)").
+# The marker is required so "(5.1)" in prose and "kubeadm=1.35.1" are never taken for a curriculum version.
+# A second form needs no introducing word: the cert's own id (the catalog key, any case, whole word) followed by the number, with or
+# without the marker: "# CKA 1.35 - Topic 1.1", "(CKA v1.35)". The number must have the SHAPE of tracked_version (same digits per
+# component), so a topic id such as "CKA 3.3" or "CKA 1.1" is not a version, and another cert's id ("CKAD 1.35" in a CKA page) is not
+# this cert's citation.
+version:
+  words: 'curriculum|curr[ií]culo|certification|certificaci[oó]n?|examen|exam|exame|syllabus|objectives|objetivos|temario'
+  marker: '(?:v|version\s+|versi[oó]n\s+|vers[aã]o\s+)'
+  gap: 40
+  # The version marker that may FOLLOW a number's introducing word ("Version 4.0 objectives:"): the long forms only, a bare `v`
+  # next to the word "exam" is too common in prose to trust.
+  long_marker: '(?:version\s+|versi[oó]n\s+|vers[aã]o\s+)'
+# Spans that look like a cited version and are not one (a version of something else that merely sits near the word "objectives").
+ignore:
+  - 'CVSS\s+v?\d+(?:\.\d+)*'
+  - 'v?\d+(?:\.\d+)+\s+vectors?'      # the phrase "recognise v4.0 vectors": CVSS again
+  - 'v?\d+(?:\.\d+)+(?=-focused)'
+  - '(?:centrado en|vectores)\s+v?\d+(?:\.\d+)+'
+
+# A version is only compared when the catalog's tracked_version is a dotted number; a date or "unknown" has nothing to compare.
+numeric_tracked: '^\d+(?:\.\d+)+$'
+
+# Per-vendor overrides of the block above, keyed by a substring of the catalog's objectives URL (or by cert id).
+# A vendor that writes its version another way is one entry here, never code.
+vendors: {}
+
+# A link to a document. Any URL found in the material or in a meta.yaml whose identity (`family`) equals the identity of the
+# cert's pinned objectives URL must BE that URL: same document, same pinned commit.
+url: 'https?://[^\s)>\]"'']+'
+family:                                  # applied in order to the catalog URL and to every URL found
+  - ['/(raw|blob)/[^/]+/', '/\1/*/']    # the commit or ref is not part of the document's identity
+  - ['%20', ' ']
+  - ['\d+(?:[.\-_]\d+)*', 'N']           # versions and exam numbers: exam-201-202 and exam-201 are one document
+
+# Spellings the control accepts for a cert besides the catalog's (reviewed, with the reason). Anything not listed must be the catalog's.
+accept:
+  # LPIC-1 is two exams: the catalog pins the 101 objectives page, and topics 102 to 110 are examined in exam 102, whose page
+  # the material rightly cites. Same vendor document family, two documents.
+  lpic-1: ['https://www.lpi.org/our-certifications/exam-102-objectives/']
+
+# Where the control looks, relative to certs/<cert>/: the material, each meta.yaml (its sources), and the lab scripts' headers.
+files:
+  - '*/*/content.md'
+  - '*/*/exercises.md'
+  - '*/*/meta.yaml'
+  - '*/lab/*.sh'
+
+# Deliberate mentions of an old version that are NOT citations of the curriculum, so the control leaves them alone (the
+# whole-corpus grep of every "1.35" in CKA/CKAD was reviewed, #220):
+#  - certs/<cert>/<topic>/lab/lab.yaml `verified:` blocks record the proof of the v1.35 run on its date with its node image
+#    (kindest/node v1.35.8): historical evidence, and lab.yaml is not scanned. The v1.37 proofs are new records
+#    (docs/upgrades/evidence/).
+#  - the upgrade examples in cka 4.2 and 4.3 ("1.35 -> 1.36 -> 1.37", "upgrading directly from 1.35 to 1.37 is prohibited") teach
+#    the one-minor-at-a-time rule; 1.35 is the example's starting point, not the exam version. They have no introducing word
+#    and no cert id before the number, which is why no pattern above matches them.
