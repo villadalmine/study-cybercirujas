@@ -563,8 +563,13 @@ release; the Release PR is what actually happened (the notes come from the commi
 `.github/workflows/milestone.yml` keeps them current without hand edits: a PR merged into `main` without a
 milestone, and an issue closed as completed without one, get the open `v*` milestone due first (Release PRs are
 skipped; a PR whose description has no `Closes #N`, `Fixes #N` or `Part of #N` gets a warning in the job
-summary, never a failure). When release `vX.Y.Z` is published, whatever is still open in milestone `vX.Y.Z`
+summary, never a failure). Those are a plan: release-please decides the version only at release time (`fix` is a
+patch, `feat` a minor), so **a release milestone is created or completed at release time from what actually
+shipped**. When release `vX.Y.Z` is published, the milestone `vX.Y.Z` is created if it does not exist (due date =
+release date), every PR merged and every issue closed as completed between the previous release tag and this one
+moves into it (whatever milestone it was in; `<CERT> upgrade` ones are never touched), whatever is still open in it
 moves to the next `v*` milestone by due date, with a comment, and `vX.Y.Z` is closed (`scripts/milestone_sync.py`).
+To settle a past release, run the workflow from Actions with its `tag` (same result, safe to repeat).
 The `<CERT> <version> upgrade` milestones are separate and stay as they are: `check_pr.py` reads them by
 name (see [Size and scope](#size-and-scope)).
 

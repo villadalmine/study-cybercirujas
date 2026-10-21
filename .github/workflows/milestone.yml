@@ -4,6 +4,8 @@ name: Milestones
 # pull_request_target so merged fork PRs get a write token. Safe: the checkout is `main`, never the PR head;
 # the script only calls the REST API and reads the event JSON itself (no title or body in the shell).
 # GITHUB_TOKEN only. release-please's App-token releases do trigger `release: published`.
+# A release milestone is created or completed at release time from what actually shipped (release-please decides
+# the version only then): `release` also runs by hand (workflow_dispatch, input `tag`) to settle a past release.
 
 on:
   pull_request_target:
@@ -12,12 +14,18 @@ on:
     types: [closed]
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to settle the milestone for (vX.Y.Z, already published)
+        required: true
+        type: string
 
 permissions: {}
 
 concurrency:
   # Per item: one shared group lets GitHub cancel pending runs in a burst (items left without milestone).
-  group: milestone-${{ github.event.pull_request.number || github.event.issue.number || github.event.release.tag_name }}
+  group: milestone-${{ github.event.pull_request.number || github.event.issue.number || github.event.release.tag_name || inputs.tag }}
   cancel-in-progress: false
 
 jobs:
@@ -61,7 +69,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
-    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v'))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -72,6 +82,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           ref: main
+          fetch-depth: 0   # all tags and commits: the release range comes from git
           persist-credentials: false
       - run: python3 scripts/milestone_sync.py release
         env:
