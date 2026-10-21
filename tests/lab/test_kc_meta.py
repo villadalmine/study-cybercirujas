@@ -137,3 +137,19 @@ def test_tree_guardrails(tmp_path):
     idx = next(k for k in files if k.startswith("democert/") and k.endswith("/index.json"))
     broken = dict(files, **{idx: files[idx].replace("ubuntu", "centos")})
     assert any("imageid" in b for b in kc.check_tree(broken))
+
+
+
+def test_lab_hash_is_the_same_on_every_os_for_mixed_case_names(tmp_path):
+    """Path objects sort case-insensitively on Windows; the hash sorts the relative path's parts as plain strings."""
+    import hashlib
+    from types import SimpleNamespace
+    files = {"Zeta.sh": b"z\n", "alpha.sh": b"a\r\n", "sub/x.txt": b"x", "sub-a.txt": b"s"}
+    for name, data in files.items():
+        f = tmp_path / name
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_bytes(data)
+    h = hashlib.sha256()
+    for name in ("Zeta.sh", "alpha.sh", "sub/x.txt", "sub-a.txt"):   # uppercase before lowercase, 'sub' dir before 'sub-a.txt'
+        h.update(name.encode() + b"\0" + files[name].replace(b"\r\n", b"\n") + b"\0")
+    assert kc_meta.lab_hash(SimpleNamespace(directory=tmp_path)) == h.hexdigest()
