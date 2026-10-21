@@ -17,10 +17,11 @@ the official syllabus, checked by deterministic scripts and reviewed before a pe
 
 ## Start here
 
-1. **[The charter](docs/CHARTER.md)**: the eleven rules that are not negotiable, each with the check that enforces it.
-2. **[FAQ](docs/FAQ.md)**: how each part works, in short answers that point to the code that proves them.
-3. **[Using it](docs/USING.md)**: the site, Docker, an offline local model, the REST API, the command line, MCP.
-4. **[CONTRIBUTING](CONTRIBUTING.md)**: how to report a mistake, fix a translation, add a lab or change code. Agents read [AGENTS.md](AGENTS.md).
+1. **[How it works](docs/HOW-IT-WORKS.md)**: the whole system from one picture down to the scripts, in levels, with what blocks and what only warns ([GUARDRAILS](docs/GUARDRAILS.md)).
+2. **[The charter](docs/CHARTER.md)**: the eleven rules that are not negotiable, each with the check that enforces it.
+3. **[FAQ](docs/FAQ.md)**: how each part works, in short answers that point to the code that proves them.
+4. **[Using it](docs/USING.md)**: the site, Docker, an offline local model, the REST API, the command line, MCP.
+5. **[CONTRIBUTING](CONTRIBUTING.md)**: how to report a mistake, fix a translation, add a lab or change code. How an issue becomes a release: [ISSUE-TO-RELEASE](docs/ISSUE-TO-RELEASE.md). Agents read [AGENTS.md](AGENTS.md).
 
 ## Where we are now
 

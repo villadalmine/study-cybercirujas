@@ -1,5 +1,7 @@
 # FAQ — how the ecosystem works, honestly
 
+**New here? Read [HOW-IT-WORKS](HOW-IT-WORKS.md) first**: one diagram per flow, from the big picture to the scripts. [ISSUE-TO-RELEASE](ISSUE-TO-RELEASE.md) is how an issue becomes a release (labels, milestones, review). [GUARDRAILS](GUARDRAILS.md) lists what is checked and what is only a convention. This FAQ answers the specific questions.
+
 Short answers, each pointing to the doc and the code that prove it. Where the
 code does less than a doc says, the answer says so and the gap is listed in
 [Known gaps](#known-gaps). Line numbers are those of the commit that added this
