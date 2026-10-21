@@ -304,7 +304,9 @@ def impact(changed: list[str], docs: dict[str, str]) -> dict[str, list[str]]:
     when distinctive (a dot and more than 5 characters), by its file name."""
     changed = [f.replace("\\", "/") for f in changed]
     out: dict[str, list[str]] = {}
-    for path in sorted(p for p in changed if not is_prose(p)):
+    # study material, generated output, history and tests are not what a doc describes: a content PR must not list every doc
+    # that mentions meta.yaml (measured: 33 of the last 40 merged PRs would have been flagged, 14 with more than 10 docs)
+    for path in sorted(p for p in changed if not is_prose(p) and not IMPACT_SKIP.match(p)):
         name = path.rsplit("/", 1)[-1]
         names = [path] + ([name] if "." in name and len(name) > 5 and name != path else [])
         for doc, text in docs.items():
@@ -325,7 +327,7 @@ def docs_impact(changed: list[str], body: str, docs: dict[str, str]) -> list[str
     """Each affected doc is named in the `## Docs impact` section (`updated` or `not affected: <why>`)."""
     found = impact(changed, docs)
     listed = sections(body).get(IMPACT_SECTION, "")
-    lack = [d for d in found if d not in listed]
+    lack = [d for d in found if not re.search(rf"(?<![\w/.-]){re.escape(d)}(?![\w-])", listed)]   # a path, not a substring of another
     if not lack:
         return []
     block = "\n".join(f"- `{d}` (names {', '.join(f'`{p}`' for p in found[d])}): not affected: <why>" for d in lack)

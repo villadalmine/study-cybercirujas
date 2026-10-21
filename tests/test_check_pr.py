@@ -1055,6 +1055,18 @@ class DocsImpactTests(unittest.TestCase):
         self.assertFalse(check_pr.is_prose(".github/labels.yml"))
         self.assertTrue(check_pr.is_prose("docs/audit/rubric.yml") and check_pr.is_prose("AGENTS.md"))
 
+    def test_changed_study_material_does_not_list_every_doc_that_mentions_meta_yaml(self):
+        # replayed on the last 40 merged PRs: counting certs/** flagged 33 of 40 (14 with more than 10 docs)
+        docs = {"docs/FAQ.md": "each topic has a meta.yaml and a lab.yaml", "AGENTS.md": "certs/cka/1.1/en/meta.yaml"}
+        self.assertEqual(check_pr.impact(["certs/cka/1.1/en/meta.yaml", "certs/cka/1.1/lab/lab.yaml"], docs), {})
+        self.assertEqual(list(check_pr.impact(["teach/lab/lab.yaml"], docs)), ["docs/FAQ.md"])
+
+    def test_a_listed_doc_must_be_that_path_not_a_substring_of_another(self):
+        docs = {"README.md": "see scripts/check_pr.py"}
+        body = "## Docs impact\n\n- `docs/README.md`: not affected: other file\n"
+        self.assertTrue(check_pr.docs_impact(["scripts/check_pr.py"], body, docs))
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], "## Docs impact\n\n- `README.md`: updated\n", docs), [])
+
     def test_the_real_repo_lists_what_243_missed(self):
         found = check_pr.impact(["scripts/check_pr.py", "CONTRIBUTING.md", "docs/FAQ.md"], check_pr.repo_prose())
         for doc in ("AGENTS.md", "docs/AGENT-GUIDE.md", "docs/HOW-IT-WORKS.md"):
