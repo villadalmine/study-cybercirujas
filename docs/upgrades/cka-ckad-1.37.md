@@ -8,7 +8,7 @@ Milestone: *CKA & CKAD v1.37 upgrade* · umbrella issue #51
 
 | Cert | keep | revalidate | regenerate | new | retire | topic files | planned | sections to edit | version lines (curriculum / label / technical) |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cka | 26 | 1 | 0 | 0 | 0 | 216 | 54 | 0 | 106 / 19 / 168 |
+| cka | 26 | 1 | 0 | 0 | 0 | 216 | 54 | 0 | 106 / 19 / 171 |
 | ckad | 22 | 2 | 0 | 0 | 0 | 192 | 32 | 4 | 89 / 24 / 49 |
 
 ## Flow
@@ -94,7 +94,7 @@ Thresholds: MATCH = 0.6, REWORD = 0.9 (difflib ratio on normalized text). The fi
 | 3.6 | Manage role based access control (RBAC) | `revalidate` | moved: Workloads and Scheduling -> Cluster Architecture, Installation and Configuration | 4.1 | 0 | 4/1/0 | en,es | yes |
 | 4.1 | Prepare underlying infrastructure for installing a Kubernetes cluster | `keep` | unchanged | 4.2 | 0 | 4/1/11 | en,es | yes |
 | 4.2 | Create and manage Kubernetes clusters using kubeadm | `keep` | unchanged | 4.3 | 0 | 3/0/22 | en,es | yes |
-| 4.3 | Manage the lifecycle of Kubernetes clusters | `keep` | unchanged | 4.4 | 0 | 4/0/49 | en,es | yes |
+| 4.3 | Manage the lifecycle of Kubernetes clusters | `keep` | unchanged | 4.4 | 0 | 4/0/52 | en,es | yes |
 | 4.4 | Implement and configure a highly-available control plane | `keep` | unchanged | 4.5 | 0 | 4/1/10 | en,es | yes |
 | 4.5 | Use Helm and Kustomize to install cluster components | `keep` | unchanged | 4.6 | 0 | 4/0/2 | en,es | yes |
 | 4.6 | Understand extension interfaces (CNI, CSI, CRI, etc.) | `keep` | unchanged | 4.7 | 0 | 4/0/6 | en,es | yes |
@@ -198,8 +198,10 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cka/4.3/en/content.md:38`
 - `certs/cka/4.3/en/content.md:39`
 - `certs/cka/4.3/en/content.md:47`
+- `certs/cka/4.3/en/content.md:57`
 - `certs/cka/4.3/en/content.md:58`
 - `certs/cka/4.3/en/content.md:62`
+- `certs/cka/4.3/en/content.md:63`
 - `certs/cka/4.3/en/content.md:64`
 - `certs/cka/4.3/en/content.md:65`
 - `certs/cka/4.3/en/content.md:70`
@@ -221,6 +223,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cka/4.3/es/content.md:34`
 - `certs/cka/4.3/es/content.md:35`
 - `certs/cka/4.3/es/content.md:43`
+- `certs/cka/4.3/es/content.md:53`
 - `certs/cka/4.3/es/content.md:54`
 - `certs/cka/4.3/es/content.md:58`
 - `certs/cka/4.3/es/content.md:59`

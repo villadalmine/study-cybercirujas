@@ -1,0 +1,18 @@
+# The one place the v1.37 upgrade pins its versions. scripts/upgrade_versions.py reads only this file
+# and the plan; nothing else in the repo decides a version. Looked up live on the date below, never from memory.
+upgrade: cka-ckad-1.37
+date: '2026-10-21'          # the lookup date; also what a tool edit stamps in meta.yaml (never the clock)
+tracked: '1.35'             # the minor the plan lists lines for
+target: '1.37'              # the exam minor
+shift: 2                    # minors between them: 1.33 -> 1.35, 1.34 -> 1.36, 1.35 -> 1.37 (sample "from" versions keep their distance)
+patch: '1.37.1'             # kubeadm, kubelet and kubectl; where a sample shows a target patch (.1) it becomes this
+kindest_node: 'v1.37.0'     # newest kindest/node tag that exists; teach/lab/runner.py pins its digest
+tool: scripts/upgrade_versions.py   # the one scripted editor the guard accepts for this upgrade
+tool_sha256: 712c8d0f1e263ac4c816b65c5314abda9715770f86eeae7cde47bbff4c11174f   # its sha256: change the script and this line moves with it (a test checks), or the guard refuses the tool edits
+curriculum_commit:          # the v1.37 PDFs, pinned by commit (the v1.35 links on master are 404)
+  CKA: b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec
+  CKAD: f423fa49c0cab0820533babd95b37ebe8fd89e67
+live:                       # what the pins were read from on that date
+  stable_txt: https://dl.k8s.io/release/stable-1.37.txt          # v1.37.1
+  apt_repo: https://pkgs.k8s.io/core:/stable:/v1.37/deb/Packages # kubeadm, kubelet, kubectl: 1.37.0-1.1 and 1.37.1-1.1
+  kind_release: https://github.com/kubernetes-sigs/kind/releases/tag/v0.33.0  # node images 1.37.0, 1.36.4, 1.35.8, 1.34.11

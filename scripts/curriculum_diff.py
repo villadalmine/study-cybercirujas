@@ -501,12 +501,19 @@ def _sections(text: str) -> list[tuple[int, str, str]]:
     return out
 
 
+def minor_below(minor: str) -> str:
+    return str(int(minor) - 1)
+
+
 def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, needles: list[tuple[str, str]]) -> dict:
     """Sections that name a changed field, and lines that name the tracked version.
 
     Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
     line there is `technical`, since the runner and the Killercoda export read them."""
     ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)")
+    major, _, minor = version.partition(".")
+    companion = (re.compile(rf"(^|[^0-9.])v{major}\.({minor_below(minor)})\.\d+(?!\d)")
+                 if minor.isdigit() and int(minor) > 2 else None)
     sections, lines = [], {"curriculum": 0, "label": 0, "technical": []}
     topic_dir = root / "certs" / cert / topic
     docs = [(f"{lang}/{name}", True) for lang in langs for name in DOC_FILES]
@@ -524,6 +531,7 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
                 if why:
                     sections.append({"file": rel, "line": start, "heading": title, "why": why})
         heads = _headings(text) if is_doc else [False] * len(text.splitlines())
+        found = []
         for n, (line, heading) in enumerate(zip(text.splitlines(), heads), 1):
             if not ver.search(line):
                 continue
@@ -532,7 +540,14 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
             elif is_doc and (heading or line.startswith("**")):
                 lines["label"] += 1
             else:
-                lines["technical"].append(f"{rel}:{n}")
+                found.append(n)
+        if is_doc and found and companion:
+            # A sample that shows an upgrade names the version it starts from too ("Cluster version: v1.34.1"
+            # next to a table "v1.34.1 -> v1.35.1"): a bump that moves only the tracked minor would leave
+            # the sample contradicting itself. Same file, patch-qualified `v1.N.P` of the minor below.
+            found = sorted(set(found) | {n for n, line in enumerate(text.splitlines(), 1) if companion.search(line)
+                                         and "curriculum" not in line.casefold()})
+        lines["technical"] += [f"{rel}:{n}" for n in found]
     return {"sections": sections, "version_lines": lines}
 
 
@@ -661,11 +676,99 @@ def guard(plan_data: dict, changed: list[str]) -> list[str]:
 # Provenance of what an upgrade PR rewrites (audit items 1 and 4), enforced here even though the
 # old corpus is not migrated: when content.md or exercises.md of a topic in the plan changes, the
 # meta.yaml next to it must name a real model id (not a CLI or alias name), carry the effort and the
-# sha256 of the prompt, and say the language of its own directory. A hand edit says `model: human`.
+# sha256 of the prompt, and say the language of its own directory. A hand edit says `model: human`; a scripted version bump records `tool_edit` (see tool_edit_ok).
 ALIASES = {"", "claude", "agy", "cheap", "codex", "gemini", "opus", "sonnet", "haiku", "unknown", "none"}
 
 
-def provenance(root: Path, plan_data: dict, changed: list[str]) -> list[str]:
+TOOLS = {"scripts/upgrade_versions.py"}      # the only scripted editor a meta.yaml may name in `tool_edit`
+
+
+def load_pins(plan_data: dict, base_text) -> dict | None:
+    """The upgrade's pins file as committed on the base (`<spec>.pins.yaml` next to the spec), or None."""
+    spec = plan_data.get("spec")
+    text = base_text(str(Path(spec).with_suffix(".pins.yaml"))) if spec else None
+    return (yaml.safe_load(text) or None) if text else None
+
+
+def _listed(topic: dict) -> dict[str, set]:
+    out: dict[str, set] = {}
+    for ref in topic["version_lines"]["technical"]:
+        f, n = ref.rsplit(":", 1)
+        out.setdefault(f, set()).add(int(n))
+    return out
+
+
+def tool_edit_ok(root: Path, plan_data: dict, directory: str, meta: dict, changed: list[str],
+                 base_text, head_text) -> bool:
+    """A scripted edit stands in for a model's effort and prompt hash, and only for what the script can have done.
+
+    All of these hold, or the topic needs the model fields like any other rewrite:
+    - the topic is `keep` or `revalidate` in the plan (a regenerated one is model work);
+    - `tool_edit.tool` is in TOOLS and is the pins file's `tool`, and the tool's sha256 now, the one recorded in
+      the meta.yaml and the pins file's `tool_sha256` (read from the BASE) are the same: a script changed in the
+      PR, or another script with its own hash, does not pass;
+    - every changed doc file of the directory keeps its line count, and each line that differs is a technical
+      version line the plan lists AND is exactly what the script's own function writes for the line it replaced
+      (`echo pwned` on a listed line is refused)."""
+    edit = meta.get("tool_edit")
+    pins = load_pins(plan_data, base_text)
+    if not isinstance(edit, dict) or edit.get("tool") not in TOOLS or not pins or pins.get("tool") != edit["tool"]:
+        return False
+    _, cert, topic, _ = (directory.split("/") + [""] * 4)[:4]
+    t = {x["topic"]: x for x in plan_data["certs"].get(cert, {}).get("topics", [])}.get(topic)
+    tool = root / edit["tool"]
+    if t is None or t["class"] not in ("keep", "revalidate") or not tool.is_file():
+        return False
+    sha = hashlib.sha256(tool.read_bytes()).hexdigest()
+    if not (sha == edit.get("script_sha256") == pins.get("tool_sha256")):
+        return False
+    listed = _listed(t)
+    for f in changed:
+        if not f.startswith(directory + "/") or Path(f).name not in DOC_FILES:
+            continue
+        old, new = base_text(f), head_text(f)
+        if old is None or new is None or len(old.splitlines()) != len(new.splitlines()):
+            return False
+        for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1):
+            if x != y and (n not in listed.get(f, set()) or uv_rewrite(x, pins) != y):
+                return False
+    return True
+
+
+def uv_rewrite(line: str, pins: dict) -> str:
+    import upgrade_versions          # scripts/ is on sys.path when this file runs or is imported as a module
+    return upgrade_versions.rewrite(line, pins)
+
+
+def wrong_rewrites(plan_data: dict, changed: list[str], base_text, head_text) -> list[str]:
+    """A technical version line the plan lists may only become what the upgrade's own script writes for it.
+
+    Applies to every listed line (material and labs), when the upgrade has a pins file on the base. Without the
+    check, a listed line could be replaced by anything and still be 'in the plan'."""
+    pins = load_pins(plan_data, base_text)
+    if not pins:
+        return []
+    listed: dict[str, set] = {}
+    for c in plan_data["certs"].values():
+        for t in c["topics"]:
+            if t["class"] in ("keep", "revalidate"):
+                for f, ns in _listed(t).items():
+                    listed.setdefault(f, set()).update(ns)
+    problems = []
+    for f in changed:
+        if f not in listed:
+            continue
+        old, new = base_text(f), head_text(f)
+        if old is None or new is None or len(old.splitlines()) != len(new.splitlines()):
+            continue                  # unlisted_edits reports it
+        for n, (x, y) in enumerate(zip(old.splitlines(), new.splitlines()), 1):
+            if x != y and n in listed[f] and uv_rewrite(x, pins) != y:
+                problems.append(f"{f}:{n}: is not what scripts/upgrade_versions.py writes for the line it replaced")
+    return problems
+
+
+def provenance(root: Path, plan_data: dict, changed: list[str], base_text=lambda f: None,
+               head_text=lambda f: None) -> list[str]:
     problems = []
     dirs = sorted({str(Path(f).parent) for f in changed
                    if Path(f).name in DOC_FILES and any(f.startswith(f"certs/{c}/") for c in plan_data["certs"])})
@@ -673,7 +776,9 @@ def provenance(root: Path, plan_data: dict, changed: list[str]) -> list[str]:
         meta_path = root / d / "meta.yaml"
         meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) if meta_path.is_file() else {}
         model = str(meta.get("model") or "").strip()
-        if model != "human":
+        if tool_edit_ok(root, plan_data, d, meta, changed, base_text, head_text):
+            pass                   # a script rewrote the listed lines; the model fields still describe who wrote the rest
+        elif model != "human":
             if model.casefold() in ALIASES or not re.search(r"\d", model):
                 problems.append(f"{d}/meta.yaml: model {model!r} is not a model id")
             for key in ("effort", "prompt_sha256"):
@@ -766,14 +871,18 @@ def _guard_run(args) -> int:
     for f in bad:
         print(f"NOT PLANNED: {f}")
     scoped = unlisted_edits(plan_data, files, lambda f: _git_text(base, f), lambda f: _git_text(None, f))
-    weak = provenance(REPO, plan_data, files)
+    base_t, head_t = (lambda f: _git_text(base, f)), (lambda f: _git_text(None, f))
+    weak = provenance(REPO, plan_data, files, base_t, head_t)
+    wrong = wrong_rewrites(plan_data, files, base_t, head_t)
     for p in scoped:
         print(f"OUT OF SCOPE: {p}")
     for p in weak:
         print(f"PROVENANCE: {p}")
+    for p in wrong:
+        print(f"WRONG REWRITE: {p}")
     print(f"guard: {len(files)} changed file(s), {len(bad)} outside the plan, {len(scoped)} out-of-scope "
-          f"edit(s), {len(weak)} provenance problem(s)")
-    return 1 if bad or scoped or weak else 0
+          f"edit(s), {len(weak)} provenance problem(s), {len(wrong)} wrong rewrite(s)")
+    return 1 if bad or scoped or weak or wrong else 0
 
 
 COMMANDS["guard"] = ("fail if a PR touches a topic file the plan does not list", _guard_args, _guard_run)
