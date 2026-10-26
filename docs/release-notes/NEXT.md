@@ -8,7 +8,6 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
-- **A release always has its summary:** the Release PR fails while the new version has a feature or a fix and these notes are empty, so a release can no longer ship with only the changelog, as v0.6.0 did.
 
 ## Upgrade notes
 
