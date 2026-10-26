@@ -1104,5 +1104,58 @@ class DocsImpactTests(unittest.TestCase):
         self.assertTrue(check_pr.docs_impact(["pyproject.toml"], "", docs))   # the same files from a person are flagged
 
 
+class CheckPrFollowUpTests(unittest.TestCase):
+    """Low findings of earlier reviews (umbrella #122), each with a case that failed before the fix."""
+
+    def test_two_scope_lines_do_not_pass(self):
+        # the template lists every option as a 'Scope:' line; keeping two used to pass because only the first was read
+        value, problems = check_pr.declared_scope("- Scope: small\n- Scope: large\n")
+        self.assertIsNone(value)
+        self.assertIn("2 'Scope:' lines", problems[0])
+        self.assertEqual(check_pr.declared_scope("- Scope: medium\n"), ("medium", []))
+
+    def test_the_untouched_provenance_template_is_not_a_named_tool(self):
+        for key in ("backend", "model"):
+            prov = {"author": "ai", "backend": "claude", "model": "Claude Opus 5.5", key: "none | claude | ..."}
+            problems = check_pr.disclosure(prov)
+            self.assertTrue(problems and key.capitalize() in problems[0], key)
+        self.assertEqual(check_pr.disclosure({"author": "ai", "backend": "claude", "model": "Claude Opus 5.5"}), [])
+
+    def test_a_bare_closes_line_does_not_make_the_section_non_empty(self):
+        body = (FIXTURES / "good.md").read_text(encoding="utf-8")
+        start = body.index("## What and why")
+        end = body.index("## Kind")
+        bare = body[:start] + "## What and why\n\nCloses #\n\n" + body[end:]
+        self.assertIn("empty section: ## What and why", check_pr.check("fix(cka): x", bare, TOUCHED))
+
+    def test_the_why_placeholder_does_not_pass_docs_impact(self):
+        docs = {"AGENTS.md": "run scripts/check_pr.py"}
+        pasted = "## Docs impact\n\n- `AGENTS.md` (names `scripts/check_pr.py`): not affected: <why>\n"
+        problems = check_pr.docs_impact(["scripts/check_pr.py"], pasted, docs)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("<why>", problems[0])
+        filled = "## Docs impact\n\n- `AGENTS.md`: not affected: it only cites the DCO check\n"
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], filled, docs), [])
+
+    def test_a_relative_link_to_the_file_counts_as_naming_it(self):
+        docs = {"docs/A.md": "see [the check](../scripts/check_pr.py)", "docs/B.md": "run ./tool.py first",
+                "docs/C.md": "see myscripts/check_pr.py (another path)"}
+        found = check_pr.impact(["scripts/check_pr.py", "tool.py"], docs)
+        self.assertEqual(sorted(found), ["docs/A.md", "docs/B.md"])
+
+    def test_a_renamed_file_also_counts_under_its_old_name(self):
+        status = "R100\tscripts/old_name.py\tscripts/new_name.py\nM\tAGENTS.md\nA\tdocs/x.md\nR087\ta/b.sh\tc/d.sh\n"
+        self.assertEqual(check_pr.old_names(status), ["scripts/old_name.py", "a/b.sh"])
+        docs = {"docs/H.md": "the script scripts/old_name.py does it"}
+        self.assertEqual(list(check_pr.impact(["scripts/new_name.py"], docs)), [])   # the new name alone: not found
+        self.assertEqual(list(check_pr.impact(["scripts/new_name.py"] + check_pr.old_names(status), docs)), ["docs/H.md"])
+
+    def test_a_release_with_only_breaking_changes_needs_an_upgrade_note(self):
+        changelog = "## [0.7.0](https://x) (2026-11-01)\n\n### ⚠ BREAKING CHANGES\n\n* **api:** x (#1)\n"
+        empty = "## Highlights\n\n## Upgrade notes\n\n## Thanks\n"
+        self.assertTrue(check_pr.release_notes_ready(changelog, empty))
+        self.assertEqual(check_pr.release_notes_ready(changelog, "## Upgrade notes\n\n- **API:** renamed x to y.\n"), [])
+
+
 if __name__ == "__main__":
     unittest.main()

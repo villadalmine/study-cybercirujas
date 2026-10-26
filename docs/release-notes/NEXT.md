@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **Stricter PR checks for contributors:** a second `Scope:` line, the untouched `none | claude | ...` provenance template, and the unfilled `not affected: <why>` placeholder of the new Docs impact section now fail the PR description check; Docs impact also sees links like `../scripts/x.py` and renamed files, and a release that only has breaking changes needs an Upgrade note.
 
 ## Upgrade notes
 

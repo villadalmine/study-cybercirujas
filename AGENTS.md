@@ -39,7 +39,7 @@ and merge. This file is the first thing an agent reads.
 5. **Squash merge, by a person.** An agent never merges.
 6. `milestone.yml` sets the milestone by itself; release-please makes the Release PR, the tag, the changelog and the notes.
    A `feat` or `fix` a user or operator will notice adds its line to `docs/release-notes/NEXT.md` in the same PR: the Release
-   PR fails while a release with a `feat` or a `fix` has no summary there (v0.6.0 shipped without one).
+   PR fails while a release with a `feat`, a `fix` or a breaking change has no summary there (v0.6.0 shipped without one).
 7. **Labels**: CI sets `scope:*`, `site:*`, `type:` by path and `lang:`; `size-exception` and `scope-exception` are set only by the
    maintainer; `triage:needed` means someone from outside the project that nobody has looked at yet.
 

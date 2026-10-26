@@ -259,21 +259,21 @@ def is_release_please(head_ref: str | None, files: list[str], author: str | None
             or (NOTES_RESET_BRANCH.fullmatch(head_ref) is not None and all(f in NOTES_RESET_FILES for f in names)))
 
 
-# The Release PR is the human gate (CONTRIBUTING -> Release notes): a release with a feat or a fix
+# The Release PR is the human gate (CONTRIBUTING -> Release notes): a release with a feat, a fix or a breaking change
 # carries its human summary. NEXT.md was the right place and worked in v0.5.0 and v0.5.1; only the
 # control was missing, so v0.6.0 shipped without one.
-USER_VISIBLE = re.compile(r"^### (Features|Bug Fixes)\s*$", re.M)
+USER_VISIBLE = re.compile(r"^### (Features|Bug Fixes|⚠ BREAKING CHANGES)\s*$", re.M)   # a breaking change needs an Upgrade note too
 SUMMARY_SECTIONS = ("Highlights", "Upgrade notes")
 
 
 def release_notes_ready(changelog: str, next_text: str) -> list[str]:
-    """[] when the newest CHANGELOG entry has no feat or fix, or NEXT.md summarises it."""
+    """[] when the newest CHANGELOG entry has no feat, fix or breaking change, or NEXT.md summarises it."""
     newest = (re.split(r"^## \[", changelog, flags=re.M) + ["", ""])[1]
     if not USER_VISIBLE.search(newest):
         return []
     if any(parse_sections(next_text).get(name) for name in SUMMARY_SECTIONS):
         return []
-    return [f"release notes: this release has a feat or a fix and {NEXT_PATH} has no Highlights or Upgrade "
+    return [f"release notes: this release has a feat, a fix or a breaking change and {NEXT_PATH} has no Highlights or Upgrade "
             "notes line; add the human summary in a `docs(release-notes): ...` PR to main (a docs commit shows "
             "in the changelog, so release-please refreshes this PR and the check runs again; a chore does not)"]
 
@@ -312,9 +312,27 @@ def impact(changed: list[str], docs: dict[str, str]) -> dict[str, list[str]]:
         for doc, text in docs.items():
             if doc in changed or doc == path:
                 continue
-            if any(re.search(rf"(?<![\w/.-]){re.escape(n)}(?![\w-])", text) for n in names):
+            # `../scripts/x.py` and `./x.py` are links to the file: the boundary lets a path preceded by `./` through
+            if any(re.search(rf"(?:(?<![\w/.-])|(?<=\./)){re.escape(n)}(?![\w-])", text) for n in names):
                 out.setdefault(doc, []).append(path)
     return dict(sorted(out.items()))
+
+
+def renamed_from(base: str) -> list[str]:
+    """The old paths of the files this PR renames: `git diff --name-only` lists only the new name, so a doc that
+    names the old path would not be found. They count as changed files for the docs impact."""
+    try:
+        result = subprocess.run(["git", "-c", "core.quotePath=false", "diff", "--name-status", "-M", f"{base}...HEAD"],
+                                cwd=REPO, capture_output=True, text=True, check=True)
+    except (subprocess.CalledProcessError, OSError):   # no such base here: the plain file list was already read the same way
+        return []
+    return old_names(result.stdout)
+
+
+def old_names(name_status: str) -> list[str]:
+    """`R100<TAB>old<TAB>new` lines of `git diff --name-status -M` -> the old paths."""
+    return [cols[1] for cols in (line.split("\t") for line in name_status.splitlines())
+            if len(cols) > 2 and cols[0].startswith("R")]
 
 
 def repo_prose(root: Path = REPO) -> dict[str, str]:
@@ -328,6 +346,11 @@ def docs_impact(changed: list[str], body: str, docs: dict[str, str]) -> list[str
     found = impact(changed, docs)
     listed = sections(body).get(IMPACT_SECTION, "")
     lack = [d for d in found if not re.search(rf"(?<![\w/.-]){re.escape(d)}(?![\w-])", listed)]   # a path, not a substring of another
+    # the failure message prints `not affected: <why>`; pasting it unedited must not pass
+    unfilled = [ln.strip() for ln in listed.splitlines() if "<why>" in ln] if found else []
+    if unfilled:
+        return [f"docs impact: {len(unfilled)} line(s) under `## {IMPACT_SECTION}` still say `<why>`: write the reason "
+                f"(or `updated`) instead of the placeholder:\n" + "\n".join(unfilled)]
     if not lack:
         return []
     block = "\n".join(f"- `{d}` (names {', '.join(f'`{p}`' for p in found[d])}): not affected: <why>" for d in lack)
@@ -349,8 +372,9 @@ def disclosure(prov: dict[str, str]) -> list[str]:
         return ["Provenance: 'Author:' must be exactly 'ai' or 'human' (also 'ai' when an AI helped write "
                 "it), then say which Backend and Model"]
     if author == "ai":
+        # '|' is the template's unedited 'none | claude | ...': a list of options, not a named tool or model
         empty = [k.capitalize() for k in ("backend", "model")
-                 if prov.get(k, "").strip().lower() in ("", "none", "n/a")]
+                 if prov.get(k, "").strip().lower() in ("", "none", "n/a") or "|" in prov.get(k, "")]
         if empty:
             return [f"Provenance: Author is ai, so name the tool and model ({' and '.join(empty)} "
                     "is empty or 'none')"]
@@ -437,8 +461,11 @@ CATALOG = "catalog.yaml"
 
 def declared_scope(text: str) -> tuple[str | None, list[str]]:
     """The one scope the Scope section declares, and the problems if it is not exactly one."""
-    line = SCOPE_LINE.search(text)
-    value = line.group(1).strip("`").lower() if line else ""
+    lines = SCOPE_LINE.findall(text)
+    value = lines[0].strip("`").lower() if lines else ""
+    if len(lines) > 1:   # the docs say exactly one: a second 'Scope:' line (an unedited template option) used to pass silently
+        return None, [f"Scope: {len(lines)} 'Scope:' lines found; keep exactly one value "
+                      "(CONTRIBUTING -> How big is my change?)"]
     if value in SCOPES:
         return value, []
     return None, [f"Scope: add a 'Scope: <one of {' | '.join(SCOPES)}>' line with exactly one value "
@@ -879,7 +906,7 @@ def main() -> int:
         read = lambda rel: (REPO / rel).read_text(encoding="utf-8") if (REPO / rel).is_file() else ""  # noqa: E731
         problems += release_notes_ready(read("CHANGELOG.md"), read(NEXT_PATH))
     if files and not is_bot_pr(head_ref, files, author, same_repo):
-        problems += docs_impact(files, body, repo_prose())
+        problems += docs_impact(files + (renamed_from(args.base) if args.base else []), body, repo_prose())
     if args.base:
         problems += dco(commits_of(args.base), author, head_ref, files, same_repo)
     if args.base and CATALOG in files and not is_bot_pr(head_ref, files, author, same_repo):
