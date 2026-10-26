@@ -293,7 +293,9 @@ filter.
 **Docs impact.** A change is not done until every doc that describes it says the same. For each file the PR
 changes (not a doc), `scripts/check_pr.py` finds the docs that name it, by path or by file name, and the PR does
 not touch: each one goes under a `## Docs impact` section of the description, `updated` or
-`not affected: <why>`. CI prints the list ready to paste. History, generated files, study material and tests are
+`not affected: <why>`. CI prints the list ready to paste, and pasting it unedited fails: the reason has to be
+written (the `<why>` placeholder is rejected). A renamed file counts under its old name too, and a link such as
+`../scripts/x.py` counts as naming the file. History, generated files, study material and tests are
 not counted. Without it, a change to `check_pr.py` left three docs describing the old release (#243, fixed in #245).
 
 **Where it ran.** Every PR proves where it ran: under *Evidence*, a
@@ -553,7 +555,7 @@ does is a bug in that PR (the Release PR and the release-notes reset PR are the 
 **Release notes.** `CHANGELOG.md` lists every change; the human summary of a release (Highlights, Upgrade
 notes, Thanks) is [`docs/release-notes/NEXT.md`](docs/release-notes/NEXT.md): **user-visible change? add a
 line to `docs/release-notes/NEXT.md`** in your PR. The Release PR is the gate: when the new version has a
-`feat` or a `fix` and NEXT.md has no Highlights or Upgrade notes line, `scripts/check_pr.py` fails it, and
+`feat`, a `fix` or a breaking change and NEXT.md has no Highlights or Upgrade notes line, `scripts/check_pr.py` fails it, and
 whoever releases writes the summary first, in a `docs(release-notes): ...` PR to `main` (a `docs` commit shows
 in the changelog, so release-please refreshes the Release PR and the check runs again; a `chore` does not). One
 line per story a user notices, not one per PR. When the Release PR is merged, the `notes` job of
