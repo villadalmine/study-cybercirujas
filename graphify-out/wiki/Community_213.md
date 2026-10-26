@@ -1,24 +1,37 @@
 # Community 213
 
-> 3 nodes · cohesion 0.67
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **WhereItRanTests** (3 connections) — `tests/test_check_pr.py`
-- **.test_evidence_without_a_run_fails()** (1 connections) — `tests/test_check_pr.py`
-- **.test_runs_are_read_from_the_subsection()** (1 connections) — `tests/test_check_pr.py`
+- **check_curriculum_consistency.py** (9 connections) — `scripts/check_curriculum_consistency.py`
+- **check()** (8 connections) — `scripts/check_curriculum_consistency.py`
+- **main()** (5 connections) — `scripts/check_curriculum_consistency.py`
+- **key()** (4 connections) — `scripts/curriculum_citations.py`
+- **keys()** (4 connections) — `scripts/curriculum_citations.py`
+- **load_baseline()** (3 connections) — `scripts/check_curriculum_consistency.py`
+- **Path** (2 connections)
+- **CI gate (#220): the repo must say ONE thing about each cert's curriculum. No…** (1 connections) — `scripts/check_curriculum_consistency.py`
+- **(new offenders, stale baseline keys, all offenders).** (1 connections) — `scripts/check_curriculum_consistency.py`
+- **Identity of an offender for the baseline: the file, the text and which repeat…** (1 connections) — `scripts/curriculum_citations.py`
 
 ## Relationships
 
+- [Community 5](Community_5.md) (5 shared connections)
+- [Community 232](Community_232.md) (3 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `scripts/check_curriculum_consistency.py`
+- `scripts/curriculum_citations.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 25 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

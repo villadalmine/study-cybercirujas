@@ -1,6 +1,6 @@
 # main()
 
-> God node · 22 connections · `teach/lab/cli.py`
+> God node · 23 connections · `teach/lab/cli.py`
 
 **Community:** [Community 26](Community_26.md)
 
@@ -8,9 +8,9 @@
 
 ### calls
 - argparse `EXTRACTED`
+- cmd_test() `EXTRACTED`
 - run() `EXTRACTED`
 - run_cli() `EXTRACTED`
-- cmd_test() `EXTRACTED`
 - cmd_export() `EXTRACTED`
 - resolve() `EXTRACTED`
 - down() `EXTRACTED`
@@ -25,8 +25,9 @@
 - _banner() `EXTRACTED`
 - test_plan_dry_run_after_137_keeps_linux_and_skips_k8s_with_a_warning() `EXTRACTED`
 - cmd_hint() `EXTRACTED`
+- test_the_plan_lists_the_provable_labs() `EXTRACTED`
 - test_print_env_after_137_exits_2_with_the_reason() `EXTRACTED`
-- test_print_env_gives_the_three_bootstrap_arguments() `EXTRACTED`
+- *…and 1 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - lab/cli.py `EXTRACTED`

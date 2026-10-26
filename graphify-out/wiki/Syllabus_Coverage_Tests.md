@@ -1,6 +1,6 @@
 # Syllabus Coverage Tests
 
-> 18 nodes · cohesion 0.17
+> 17 nodes · cohesion 0.18
 
 ## Key Concepts
 
@@ -14,7 +14,6 @@
 - **.test_counts_objectives_and_ignores_page_furniture()** (2 connections) — `tests/test_tracker.py`
 - **.test_declaring_no_weights_does_not_excuse_missing_objectives()** (2 connections) — `tests/test_tracker.py`
 - **.test_does_not_count_an_objective_the_exam_withdrew()** (2 connections) — `tests/test_tracker.py`
-- **.test_normalises_a_published_scale_to_exactly_one_hundred()** (2 connections) — `tests/test_tracker.py`
 - **.test_rejects_chapter_headings_extracted_from_a_numbered_document()** (2 connections) — `tests/test_tracker.py`
 - **.test_rejects_weights_computed_from_the_topic_count()** (2 connections) — `tests/test_tracker.py`
 - **.test_unnumbered_document_yields_nothing_rather_than_a_pass()** (2 connections) — `tests/test_tracker.py`
@@ -36,7 +35,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 35 (100%)
+- EXTRACTED: 34 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

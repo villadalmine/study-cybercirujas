@@ -1,60 +1,61 @@
 # Community 34
 
-> 32 nodes · cohesion 0.10
+> 42 nodes · cohesion 0.08
 
 ## Key Concepts
 
 - **check_groundedness.py** (34 connections) — `scripts/check_groundedness.py`
 - **check_topic()** (11 connections) — `scripts/check_groundedness.py`
+- **test_killercoda_publish.py** (11 connections) — `tests/lab/test_killercoda_publish.py`
 - **fixture()** (8 connections) — `scripts/check_groundedness.py`
 - **main()** (8 connections) — `scripts/check_groundedness.py`
 - **cited()** (6 connections) — `scripts/check_groundedness.py`
+- **syllabus()** (6 connections) — `scripts/check_groundedness.py`
 - **Prefilter** (5 connections) — `scripts/check_groundedness.py`
+- **git()** (5 connections) — `tests/lab/test_killercoda_publish.py`
 - **Path** (5 connections)
 - **claims()** (4 connections) — `scripts/check_groundedness.py`
 - **fetch()** (4 connections) — `scripts/check_groundedness.py`
 - **sha()** (4 connections) — `scripts/check_groundedness.py`
 - **write_quality()** (4 connections) — `scripts/check_groundedness.py`
+- **mirror()** (4 connections) — `tests/lab/test_killercoda_publish.py`
+- **publish()** (4 connections) — `tests/lab/test_killercoda_publish.py`
+- **test_publish_adds_keeps_what_was_not_reproven_and_is_idempotent()** (4 connections) — `tests/lab/test_killercoda_publish.py`
 - **best_windows()** (3 connections) — `scripts/check_groundedness.py`
 - **changed()** (3 connections) — `scripts/check_groundedness.py`
 - **download()** (3 connections) — `scripts/check_groundedness.py`
+- **scenario()** (3 connections) — `tests/lab/test_killercoda_publish.py`
+- **test_an_export_without_scenarios_does_not_touch_the_mirror()** (3 connections) — `tests/lab/test_killercoda_publish.py`
 - **guardian()** (2 connections) — `scripts/check_groundedness.py`
 - **.score()** (2 connections) — `scripts/check_groundedness.py`
 - **summary()** (2 connections) — `scripts/check_groundedness.py`
-- **windows()** (2 connections) — `scripts/check_groundedness.py`
-- **fixture_repo()** (2 connections) — `tests/lab/test_kc_meta.py`
-- **docker_calls()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **flush()** (1 connections) — `scripts/check_groundedness.py`
-- **.__init__()** (1 connections) — `scripts/check_groundedness.py`
-- **The top_k windows sharing the most words with the claim; ties keep source order.** (1 connections) — `scripts/check_groundedness.py`
-- **GLiClass as NLI: premise = the source window, label = the claim; score =…** (1 connections) — `scripts/check_groundedness.py`
-- **P("yes" = ungrounded) from Granite Guardian on the llama-server at GUARDIAN_URL.** (1 connections) — `scripts/check_groundedness.py`
-- *... and 7 more nodes in this community*
+- *... and 17 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
+- [Community 61](Community_61.md) (6 shared connections)
 - [Community 127](Community_127.md) (3 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 - [Community 1](Community_1.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
 - [Community 12](Community_12.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/check_groundedness.py`
 - `tests/lab/test_kc_meta.py`
+- `tests/lab/test_killercoda_publish.py`
 - `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 75 (100%)
+- EXTRACTED: 98 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,32 +1,51 @@
 # Community 69
 
-> 6 nodes · cohesion 0.40
+> 18 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **steer.py** (14 connections) — `scripts/steer.py`
-- **set_key()** (4 connections) — `scripts/steer.py`
-- **_cert_block()** (3 connections) — `scripts/steer.py`
-- **Change what the pipeline does, from the command line, safely. Every decision…** (1 connections) — `scripts/steer.py`
-- **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
-- **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
+- **pytest** (23 connections)
+- **test_kc_envs_allowlist.py** (16 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
+- **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **url_allowed()** (5 connections) — `teach/lab/export_killercoda.py`
+- **test_bad_cilium_tag_reaching_cilium_install()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_kubernetes_patch()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_runtime_and_cli_versions()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **parametrize** (5 connections)
+- **test_bad_cilium_supported_minor()** (4 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bootstrap_script_refuses_odd_arguments()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_committed_file_is_valid()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_allowed_urls_pass()** (2 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **bad()** (1 connections) — `teach/lab/export_killercoda.py`
+- **https only, exact host, no userinfo/port, path under an allowed prefix and…** (1 connections) — `teach/lab/export_killercoda.py`
+- **Raise ValueError unless every version, name and URL in the envs file is on the…** (1 connections) — `teach/lab/export_killercoda.py`
+- **killercoda_envs.yaml values are checked against allowlists before they reach a…** (1 connections) — `tests/lab/test_kc_envs_allowlist.py`
 
 ## Relationships
 
-- [Community 62](Community_62.md) (5 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 111](Community_111.md) (6 shared connections)
+- [Community 70](Community_70.md) (4 shared connections)
+- [Community 61](Community_61.md) (3 shared connections)
+- [Community 252](Community_252.md) (2 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/steer.py`
+- `teach/lab/export_killercoda.py`
+- `tests/lab/test_kc_envs_allowlist.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 68 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
