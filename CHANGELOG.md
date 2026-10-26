@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.6.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.0...v0.6.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* **ci:** the Release PR fails while a feat or fix release has no human summary ([#243](https://github.com/villadalmine/study-cybercirujas/issues/243)) ([57bf65d](https://github.com/villadalmine/study-cybercirujas/commit/57bf65d8ae9a6dd130223ddead2ea392ff789698))
+
+
+### Documentation
+
+* AGENTS.md and HOW-IT-WORKS show the release-notes gate ([#245](https://github.com/villadalmine/study-cybercirujas/issues/245)) ([1fb0348](https://github.com/villadalmine/study-cybercirujas/commit/1fb034807a93c0d7f4a4b714560abc2474338611))
+
+
+### Internals
+
+* **pr:** every doc that names a changed file is updated or listed under Docs impact ([#246](https://github.com/villadalmine/study-cybercirujas/issues/246)) ([bfd2e12](https://github.com/villadalmine/study-cybercirujas/commit/bfd2e12d72c00db5885296888cfd5b04c994a1f2))
+
 ## [0.6.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.1...v0.6.0) (2026-10-21)
 
 
