@@ -259,7 +259,7 @@ def is_release_please(head_ref: str | None, files: list[str], author: str | None
             or (NOTES_RESET_BRANCH.fullmatch(head_ref) is not None and all(f in NOTES_RESET_FILES for f in names)))
 
 
-# The Release PR is the human gate (CONTRIBUTING -> Release notes): a release with a feat or a fix
+# The Release PR is the human gate (CONTRIBUTING -> Release notes): a release with a feat, a fix or a breaking change
 # carries its human summary. NEXT.md was the right place and worked in v0.5.0 and v0.5.1; only the
 # control was missing, so v0.6.0 shipped without one.
 USER_VISIBLE = re.compile(r"^### (Features|Bug Fixes|⚠ BREAKING CHANGES)\s*$", re.M)   # a breaking change needs an Upgrade note too
@@ -267,13 +267,13 @@ SUMMARY_SECTIONS = ("Highlights", "Upgrade notes")
 
 
 def release_notes_ready(changelog: str, next_text: str) -> list[str]:
-    """[] when the newest CHANGELOG entry has no feat or fix, or NEXT.md summarises it."""
+    """[] when the newest CHANGELOG entry has no feat, fix or breaking change, or NEXT.md summarises it."""
     newest = (re.split(r"^## \[", changelog, flags=re.M) + ["", ""])[1]
     if not USER_VISIBLE.search(newest):
         return []
     if any(parse_sections(next_text).get(name) for name in SUMMARY_SECTIONS):
         return []
-    return [f"release notes: this release has a feat or a fix and {NEXT_PATH} has no Highlights or Upgrade "
+    return [f"release notes: this release has a feat, a fix or a breaking change and {NEXT_PATH} has no Highlights or Upgrade "
             "notes line; add the human summary in a `docs(release-notes): ...` PR to main (a docs commit shows "
             "in the changelog, so release-please refreshes this PR and the check runs again; a chore does not)"]
 
