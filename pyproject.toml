@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "teach-plat"
-version = "0.6.1"
+version = "0.6.2"
 description = "Plataforma educativa self-service: certificaciones, contenido generado con AI y labs on-demand"
 requires-python = ">=3.11"
 dependencies = [
