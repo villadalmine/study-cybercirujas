@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.1...v0.6.2) (2026-10-26)
+
+
+### Bug Fixes
+
+* **ci:** check_pr follow-ups from earlier reviews (scope, provenance placeholder, docs impact, breaking changes) ([#249](https://github.com/villadalmine/study-cybercirujas/issues/249)) ([ae717f7](https://github.com/villadalmine/study-cybercirujas/commit/ae717f70afc8716dca8342e298908c42694e36da))
+
 ## [0.6.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.0...v0.6.1) (2026-10-26)
 
 
