@@ -41,7 +41,7 @@
 #  Official sources
 #  ----------------
 #      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-#      LPI exam 102-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+#      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 #      ld.so(8)   -- dynamic linker/loader:   https://man7.org/linux/man-pages/man8/ld.so.8.html
 #      ldconfig(8) -- cache/link maintenance: https://man7.org/linux/man-pages/man8/ldconfig.8.html
 #      ldd(1)     -- print shared deps:       https://man7.org/linux/man-pages/man1/ldd.1.html
@@ -596,7 +596,7 @@ exit 0
 #
 #  References
 #      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-#      LPI 102-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+#      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 #      ld.so(8):    https://man7.org/linux/man-pages/man8/ld.so.8.html
 #      ldconfig(8): https://man7.org/linux/man-pages/man8/ldconfig.8.html
 #      ldd(1):      https://man7.org/linux/man-pages/man1/ldd.1.html

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  LPIC-1 (Exam 102-500) — Topic 102.6: Linux as a virtualization guest
+#  LPIC-1 (Exam 101-500) — Topic 102.6: Linux as a virtualization guest
 #  Weight: 1.56
 #
 #  BREAK & FIX LAB — "The guest that lost its identity"
 #
-#  Reference: LPI Exam 102 Objectives
+#  Reference: LPI Exam 101 Objectives
 #             https://www.lpi.org/our-certifications/exam-101-objectives/
 #             (Topic index: https://www.lpi.org/our-certifications/exam-101-objectives/)
 #
@@ -862,7 +862,7 @@ main "$@"
 # ---------------------------------------------------------------------------
 # SOURCES
 # ---------------------------------------------------------------------------
-#   LPI Exam 102 objectives (102.6 Linux as a virtualization guest)
+#   LPI Exam 101 objectives (102.6 Linux as a virtualization guest)
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   LPI certification index
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
