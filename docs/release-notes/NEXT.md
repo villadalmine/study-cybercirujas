@@ -13,6 +13,8 @@
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->
 
+- **Groundedness tooling:** `check_groundedness.py` now verifies the pinned sha256 of the weights every time it loads them (a cache that does not match exits with a message; re-run `--download`), and `--write` together with `--dry-run` or `--fixture` is an error instead of a silent no-op. Warn mode and the recorded scores do not change.
+
 ## Thanks
 
 <!-- Only for credit the script cannot find, e.g. a reviewer or a reporter: `- @user for what (#N)`.
