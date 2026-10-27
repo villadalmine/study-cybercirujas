@@ -8,13 +8,10 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
-- **LPIC-1 objective links:** about 130 citations in the LPIC-1 material pointed at an LPI page that now redirects to the home page; they name the catalog's pinned objectives page, which resolves to the live LPI page, and the consistency gate no longer accepts the dead spelling (#235).
 
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->
-
-- **Groundedness tooling:** `check_groundedness.py` now verifies the pinned sha256 of the weights every time it loads them (a cache that does not match exits with a message; re-run `--download`), and `--write` together with `--dry-run` or `--fixture` is an error instead of a silent no-op. Warn mode and the recorded scores do not change.
 
 ## Thanks
 
