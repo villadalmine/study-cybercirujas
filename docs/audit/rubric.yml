@@ -5,7 +5,7 @@
 #              priority (high|medium|low)}
 #   + foundations: which product principles it serves (ids from the foundations section), automatable: yes|partial|no (can it become
 #   deterministic and programmable?), effort: S|M|L
-#   The priority is NOT an opinion: scripts/audit_compare.py computes it with the formula below (foundations x automatable / effort).
+#   The `priority` you write is your opinion and the ranking ignores it: scripts/audit_compare.py computes the real one with the formula below (foundations x automatable / effort).
 #   Even with score 2 you propose something (cheaper, clearer or more robust). A criterion without a proposal does not count.
 #   0 = only stated (docs) or missing · 1 = partial / only warns / manual · 2 = enforced (CI gate, generated with --check)
 # Two criteria (P1, X3) judge clarity, not enforcement: they carry their own `scale:` and it replaces the line above for them.
@@ -13,7 +13,7 @@
 # POSIX separators) and take `random.Random(42).sample(paths, 10)`. A criterion that samples names its glob (`sample_glob`).
 # Extending = adding criteria with a NEW id; never reuse or rename an id (that is how reports from different days stay comparable).
 version: 3
-# Product foundations (from docs/PRINCIPLES.md). Priority of a proposal = sum of the weights of the foundations it serves
+# Product foundations (derived from docs/PRINCIPLES.md, which has seven principles; F2 labs, F5 valid code and F7 contributing are not among them). Priority of a proposal = sum of the weights of the foundations it serves
 # x automatable factor (yes 1.0, partial 0.6, no 0.3) / effort (S 1, M 2, L 4).
 foundations:
   F1: {weight: 5, name: "what is taught is true: official sources cited, nothing invented"}

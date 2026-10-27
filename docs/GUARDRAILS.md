@@ -53,7 +53,7 @@ flowchart TD
 
 | Check | What it establishes | Path | Today |
 | :--- | :--- | :--- | :--- |
-| Syllabus is frozen and hashed | the syllabus covers the exam's objectives, not only its table of contents, and a change is visible | `catalog.yaml`, `scripts/check_syllabus.py`, `scripts/curriculum_diff.py` | **blocks** (`make verify-ci`) |
+| Syllabus is frozen and hashed | the syllabus covers the exam's objectives, not only its table of contents, and a change is visible | `catalog.yaml`, `scripts/check_syllabus.py`, `scripts/curriculum_diff.py` | **blocks** (`make verify-ci`: `check_syllabus.py` and `tests/test_curriculum_diff.py`; `curriculum_diff.py` itself runs by hand) |
 | Citations come from an official project | the domain belongs to a catalogued project | `scripts/check_sources.py`, `docs/sources.yaml` | **blocks** |
 | The chain syllabus, content, labs, translations declares its origin | nothing drifted from its source unnoticed | `scripts/check_source_chain.py` | **blocks** |
 | Curriculum citations are consistent | every citation names the tracked version and the pinned objectives document, one value per certification | `scripts/check_curriculum_consistency.py` | **blocks** (`make verify-ci`) |
@@ -139,5 +139,5 @@ reads; the same issue covers the schema validation of manifests and linting of l
 
 The three dimensions are independent: a topic can cite perfect sources and teach a broken command, and a lab can be valid and
 unrelated to its objective. So each has its own checks and none stands in for another. Independent review (a second model, then a
-person) is the layer for what no check reaches, and the [charter](https://github.com/villadalmine/study-cybercirujas/blob/main/docs/CHARTER.md)
+person) is the layer for what no check reaches, and the [charter](CHARTER.md)
 says which rules never bend. Anything that is only a convention above is listed so that it can become a check.

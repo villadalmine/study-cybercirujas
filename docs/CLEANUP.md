@@ -275,7 +275,7 @@ call and is listed here so it is not lost.
    session; the README no longer links to it.
 3. **`docs/ORIGINAL_DESIGN.md`** is mostly history now. Either trim it to the principles
    (snapshot, state in files, generate once, CLI first, separate roles — the
-   Curriculum-as-Code core) or rename it `docs/ORIGINAL_DESIGN.md`.
+   Curriculum-as-Code core). The rename from `PLAN.md` is done.
 4. **`docs/BACKLOG.md` vs `docs/ROADMAP.md`** both carry "what is next"; BACKLOG says the
    ordered queue lives in ROADMAP. Merging them would remove one source of drift.
 5. **272 topics with model `claude (unresolved)`** and 207 `agy (unresolved)`

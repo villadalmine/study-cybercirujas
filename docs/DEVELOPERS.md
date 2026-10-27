@@ -238,7 +238,7 @@ so anything built on it can carry the disclosure forward.
 | **Deployment frequency** | `published.json` and the image tags — one deploy per completed certification, plus feature deploys | Several per week when content is being generated |
 | **Lead time for changes** | commit → `make publish-complete` → rollout; the whole path is one command and a few minutes | Minutes for code, hours-to-days for a certification (bounded by quota, not process) |
 | **Change failure rate** | `make verify` before publishing, the pre-commit hook, and the fact that nothing partial can reach `published.json` — completeness is derived from the tree | Failures that do occur are caught at build or verify, not by students |
-| **Time to restore** | `make deploy-local TAG=<previous>` — every image is a tag, rollback is one command | Minutes |
+| **Time to restore** | `helm -n $NS rollback study <REVISION>` — every image is a tag and Helm keeps each revision ([docs/DEPLOY.md](DEPLOY.md) §6) | Minutes |
 
 **Contributing**: every push and pull request runs the free half of
 `make verify` in GitHub Actions (`.github/workflows/verify.yml`) — quality

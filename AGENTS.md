@@ -53,6 +53,6 @@ The long version, with the milestones, every label and the outside-contributor t
 | Pipeline and quality settings | `pipeline.yaml`, `quality_weights.yaml`, `groundedness.yaml` |
 | Code | `teach/` (core, web, `teach/lab` = the `study-lab` runner), `scripts/` (checks and generators), `tests/` |
 | CI | `.github/workflows/` and `make pr-check` locally |
-| Labs on other targets | `deploy/killercoda/`, [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md) |
+| Labs on other targets | `deploy/lab-targets.yaml` (the list of targets), `deploy/killercoda/`, [docs/RUN-A-LAB-ANYWHERE.md](docs/RUN-A-LAB-ANYWHERE.md) |
 | Docs | `docs/` (generated: `docs/STATUS.md`, `docs/MODELS.md`); history: `CHANGELOG.md` and `docs/HISTORY.md` |
 | The idea queue between agents | [docs/AGENTS_SYNC.md](docs/AGENTS_SYNC.md) (check it before starting; delete what you resolve) |

@@ -1,8 +1,8 @@
-# teach-plat — mismas convenciones que online-game (Gateway API + cert-manager acme-dns).
-# Datos reales (dominio/secretos) en values-local.yaml GITIGNORED; ver values-study.example.yaml.
+# teach-plat chart defaults (Gateway API + cert-manager). Defaults are generic: put your real domain,
+# registry and secrets in values-local.yaml (gitignored); see values-study.example.yaml.
 
 image:
-  # Cluster real: build in-cluster (Kaniko) → registry interno, como online-game:
+  # Building in-cluster (Kaniko) into your own registry? Override in values-local.yaml:
   #   repository: registry.registry:5000/teach-plat
   repository: ghcr.io/villadalmine/study-cybercirujas
   tag: "latest"
@@ -23,9 +23,9 @@ app:
       memory: 256Mi
 
 # Exponer vía Gateway API (Cilium). El HTTPRoute se engancha al Gateway existente
-# `name`/`namespace` (cluster-gateway/gateway en el cluster real).
+# `name`/`namespace` (the defaults below are an example: set yours in values-local.yaml).
 # host = dominio principal; extraHosts = otros dominios en la MISMA route
-# (ej: study.cybercirujas.club público + study.cluster.home local).
+# (e.g. a public host plus a local one).
 # OJO: cada host público HTTPS necesita su listener + cert en el Gateway.
 gateway:
   enabled: false
@@ -36,7 +36,7 @@ gateway:
   tls:
     enabled: false
     secretName: ""              # "" = <release>-tls
-    issuer: letsencrypt-prod    # ClusterIssuer (acme-dns DNS-01, ya existe en el cluster)
+    issuer: letsencrypt-prod    # ClusterIssuer that already exists in your cluster (e.g. acme-dns DNS-01)
 
 env:
   ENVIRONMENT: production

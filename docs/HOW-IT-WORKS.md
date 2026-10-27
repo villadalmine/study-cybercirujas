@@ -118,7 +118,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | Quality floor (before writing) | `teach/core/generator.py` | a stub is never saved | |
 | Cited sources belong to an official, catalogued project | `scripts/check_sources.py` (`make verify-ci`) | in `verify.yml` | |
-| Cited URLs resolve, API facts match the project's spec | `scripts/check_citations.py`, `scripts/check_api_facts.py` | | run by hand (`make verify`): network checks, left out of CI because third-party sites are flaky |
+| Cited URLs resolve, API facts match the project's spec | `scripts/check_citations.py`, `scripts/check_api_facts.py` | | run by hand (`scripts/check_citations.py`, `scripts/check_api_facts.py`; `make verify` only prints the commands): network checks, left out of CI because third-party sites are flaky |
 | Embedded YAML parses, no removed Kubernetes API | `scripts/check_manifests.py`, `scripts/check_k8s_apis.py` | in `verify.yml` | |
 | Provenance and source chain | `scripts/check_provenance.py`, `scripts/check_source_chain.py` | in `verify.yml` | |
 | The score in `meta.yaml` is current | `scripts/quality_score.py --check` | in `verify.yml` | |
