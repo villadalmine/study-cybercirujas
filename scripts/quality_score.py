@@ -164,13 +164,14 @@ def lab_check(topic_dir: Path, ctx: Context) -> dict:
 def review_check(meta: dict, w: dict) -> dict:
     """The LATEST review decides (docs/REVIEWS.md): a later fail outweighs an earlier pass.
 
-    Latest by date; on the same date, the one listed last. A result other than
-    pass counts as fail.
+    Latest by date; on the same date, the one listed last. A review without a
+    date is the oldest (it sorts before any ISO date), never the latest. A
+    result other than pass counts as fail.
     """
     reviews = [r for r in meta.get("reviews") or [] if isinstance(r, dict)]
     if not reviews:
         return entry("independent_review", "not_run", w, "no independent review recorded")
-    latest = max(enumerate(reviews), key=lambda ir: (str(ir[1].get("date")), ir[0]))[1]
+    latest = max(enumerate(reviews), key=lambda ir: (str(ir[1].get("date") or ""), ir[0]))[1]
     result = "pass" if latest.get("result") == "pass" else "fail"
     return entry("independent_review", result, w, f"latest of {len(reviews)}: {latest.get('by')}: {latest.get('link')}",
                  ran_at=str(latest.get("date")) if latest.get("date") else None)
@@ -186,13 +187,18 @@ def human_check(meta: dict, w: dict) -> dict:
 
 
 def groundedness_check(meta: dict, w: dict) -> dict:
-    """Keep a recorded `groundedness` entry (written by the classifier lab, not computed here).
+    """Keep the result of a recorded `groundedness` entry (written by scripts/check_groundedness.py).
 
-    Only when none is recorded does it default to not_run.
+    Only the facts of the run are kept (result, evidence, ran_at). The weight and the
+    version are the project's, as for every other check, so quality_weights.yaml decides
+    what it is worth and an edited entry cannot score itself. A result other than
+    pass or fail is not_run. With no entry recorded it defaults to not_run.
     """
     for recorded in (meta.get("quality") or {}).get("checks") or []:
         if isinstance(recorded, dict) and recorded.get("name") == "groundedness":
-            return recorded
+            result = recorded.get("result")
+            return entry("groundedness", result if result in ("pass", "fail") else "not_run", w,
+                         recorded.get("evidence"), ran_at=recorded.get("ran_at"))
     return entry("groundedness", "not_run", w, "pending: the classifier lab decides which model checks it")
 
 

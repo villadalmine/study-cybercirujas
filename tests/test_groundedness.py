@@ -1,10 +1,12 @@
 """check_groundedness.py: segmentation, determinism, no network; the model test needs the pinned weights."""
+import copy
 import json
 import os
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -65,6 +67,46 @@ class Determinism(unittest.TestCase):
                 self.assertEqual(qs.main(["--check", str(TOPIC)]), 0)
         finally:
             meta.write_bytes(before)
+
+
+class WriteUsesTheProjectsWeight(unittest.TestCase):
+    def test_weight_comes_from_quality_weights_not_groundedness_yaml(self):
+        import quality_score as qs
+        before = (meta := TOPIC / "meta.yaml").read_bytes()
+        weights = copy.deepcopy(qs.load_weights())  # load_weights is cached: never mutate it
+        weights["checks"]["groundedness"]["weight"] = 7
+        try:
+            with mock.patch.object(qs, "load_weights", return_value=weights):
+                g.write_quality(TOPIC, {"result": "pass", "evidence": "0 of 3 claims unsupported"})
+            data = g.yaml.safe_load(meta.read_text("utf-8"))["quality"]
+            self.assertEqual([c["weight"] for c in data["checks"] if c["name"] == "groundedness"], [7])
+        finally:
+            meta.write_bytes(before)
+
+
+class WeightsPin(unittest.TestCase):
+    def test_loading_checks_the_sha256_not_only_downloading(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            model = Path(tmp) / "m"
+            model.mkdir()
+            (model / "model.safetensors").write_bytes(b"not the pinned weights")
+            with mock.patch.object(g, "MODEL", model), self.assertRaises(SystemExit) as cm:
+                g.Prefilter()
+        self.assertIn("sha256", str(cm.exception))
+        self.assertIn("model.safetensors", str(cm.exception))
+
+
+class NoModelUntilNeeded(unittest.TestCase):
+    def test_no_changed_topic_loads_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:  # an empty cache has no weights: loading them would exit 1
+            r = run("--base", "HEAD", cache=tmp)
+        self.assertEqual(r.returncode, 0, r.stderr)
+
+    def test_write_with_dry_run_is_an_error_not_a_silent_no_op(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            r = run("--write", "--dry-run", "certs/cka/1.1/en", cache=tmp)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("--write", r.stderr)
 
 
 class NoNetwork(unittest.TestCase):

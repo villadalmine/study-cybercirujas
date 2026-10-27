@@ -57,7 +57,5 @@ retrieval:
   overlap_words: 50
   top_k: 3
 
-# Recorded as the `groundedness` check in meta.yaml `quality:`. The weight is
-# the one quality_weights.yaml gives it in the quality score (PR #11).
-quality:
-  weight: 5
+# The result is recorded as the `groundedness` check in meta.yaml `quality:`;
+# its weight is quality_weights.yaml's (checks.groundedness.weight), not set here.

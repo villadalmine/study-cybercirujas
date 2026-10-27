@@ -223,7 +223,7 @@ What is checked, and what each one actually establishes:
 | Check | Command | Proves | Does not prove |
 |---|---|---|---|
 | Structural floor | `make quality` (its floor report) | Not a stub; has the sections the prompt required | Anything about correctness |
-| Quality score | `make quality` (writes each meta.yaml `quality:` block), `scripts/quality_score.py --check` | Every check that exists ran, or is recorded as not run, and the block is current | Anything a check does not measure (groundedness runs in CI in `warn` mode, see [FAQ](FAQ.md#determinism-and-provenance); it is not part of the score yet) |
+| Quality score | `make quality` (writes each meta.yaml `quality:` block), `scripts/quality_score.py --check` | Every check that exists ran, or is recorded as not run, and the block is current | Anything a check does not measure (groundedness runs in CI in `warn` mode, see [FAQ](FAQ.md#determinism-and-provenance); it counts in the score as `not_run` until someone records a result with `make groundedness`, and a recorded result is kept by `make quality`) |
 | Recap guard | automatic, in the generator | The backend returned material, not a summary of its own actions | — |
 | Citation liveness | `scripts/check_citations.py` | The cited sources exist | That they support the claim made |
 | Manifest syntax | `scripts/check_manifests.py` | Embedded YAML/JSON parses | That the fields are real API fields |

@@ -393,7 +393,7 @@ a findings ledger. Then the maintainer, a human, merges; an agent never does
 **Does a review count for the material?**
 Yes, when recorded: a `reviews:` entry in the topic's `meta.yaml` (`by`,
 `link`, `date`, `result`) feeds `independent_review`; the latest review wins
-([`scripts/quality_score.py:164-176`](../scripts/quality_score.py#L164-L176)).
+([`scripts/quality_score.py:164-177`](../scripts/quality_score.py#L164-L177)).
 A person's edit is a `human_edits:` entry and feeds `human_review`.
 
 ## Contributing
@@ -519,6 +519,6 @@ existing issue or a proposed one (title in *italics*); none is hidden.
 | G8 | No topic is *Verified*: no recorded independent review, few verified labs, almost no human review | `quality:` blocks; `make quality` | [#46](https://github.com/villadalmine/study-cybercirujas/issues/46), [#98](https://github.com/villadalmine/study-cybercirujas/issues/98), [#166](https://github.com/villadalmine/study-cybercirujas/issues/166) |
 | G9 | No test measures how much a regeneration changes structure or facts | — | proposed: *test: regeneration stability on a fixed sample (paid, by hand)* |
 | G10 | No `SECURITY.md`, which CONTRIBUTING refers to | `CONTRIBUTING.md` (Triage table) | proposed: *docs: add SECURITY.md* |
-| G11 | Docs that describe an older state: WORKFLOW says real translation "does not exist yet" and that groundedness and labs are not implemented; AUDITOR_DESIGN says "nothing built"; the RUN-A-LAB-ANYWHERE diagram says "manual push"; `quality_weights.yaml:31` says groundedness is always `not_run` | `docs/WORKFLOW.md:30-34`, `:225`, `:255-266`; `AUDITOR_DESIGN.md:3`; `RUN-A-LAB-ANYWHERE.md:22` | [#124](https://github.com/villadalmine/study-cybercirujas/issues/124), [#120](https://github.com/villadalmine/study-cybercirujas/issues/120) (the `quality_weights.yaml` line) |
+| G11 | Docs that describe an older state: WORKFLOW says real translation "does not exist yet" and that groundedness and labs are not implemented; AUDITOR_DESIGN says "nothing built"; the RUN-A-LAB-ANYWHERE diagram says "manual push"; ~~`quality_weights.yaml:31` says groundedness is always `not_run`~~ (fixed in the #120 groundedness PR) | `docs/WORKFLOW.md:30-34`, `:225`, `:255-266`; `AUDITOR_DESIGN.md:3`; `RUN-A-LAB-ANYWHERE.md:22` | [#124](https://github.com/villadalmine/study-cybercirujas/issues/124), [#120](https://github.com/villadalmine/study-cybercirujas/issues/120) (the `quality_weights.yaml` line) |
 | G12 | Most translations predate `source_sha256` (baseline), so a changed English original is not flagged for them; older Spanish and Portuguese files authored separately have no `translated_from` and are compared with nothing | `scripts/check_source_chain.py --report`; `tests/fixtures/source_chain_baseline.txt` | proposed: *translations: re-derive or re-translate the legacy es/pt so every translation records its source* |
 | G13 | `docs/STATUS.md` can drift from the tree unnoticed: `status_matrix.py --check` is left out of `make verify-ci` (it counts gitignored videos), and `gen_readme_table.py --check` compares the README with the committed docs/STATUS.md | `Makefile` (`verify-ci` comment), `scripts/status_matrix.py --check` | proposed: *ci: check docs/STATUS.md without the video columns* |
