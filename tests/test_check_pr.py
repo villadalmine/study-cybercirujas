@@ -591,6 +591,62 @@ class DcoTests(unittest.TestCase):
         c = commit(email="octo@laptop.local", trailer="Signed-off-by: Octo <1+someoneelse@users.noreply.github.com>")
         self.assertEqual(len(check_pr.dco([c], pr_author="octo")), 1)
 
+    def test_a_carried_commit_is_signed_off_by_its_committer(self):
+        # DCO clause (c): the author is someone else, the person who carries the commit signs it off
+        carried = {**commit(email="orig@example.org", trailer="Signed-off-by: Carrier <carrier@example.org>"),
+                   "committer_email": "Carrier@Example.org"}
+        self.assertEqual(check_pr.dco([carried]), [])
+        stranger = {**carried, "committer_email": "someone@example.org"}
+        self.assertEqual(len(check_pr.dco([stranger])), 1)
+
+    def test_githubs_own_committer_address_vouches_for_no_trailer(self):
+        # web edits and squashes are committed by GitHub <noreply@github.com>: anyone's trailer would match it
+        web = {**commit(email="orig@example.org", trailer="Signed-off-by: Anyone <noreply@github.com>"),
+               "committer_email": "noreply@github.com"}
+        self.assertEqual(len(check_pr.dco([web])), 1)
+
+    def test_commits_of_reads_the_committer_email(self):
+        git = lambda *a, **kw: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True,  # noqa: E731
+                                              text=True, **kw)
+        with tempfile.TemporaryDirectory() as tmp:
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "Dev")
+            git("config", "user.email", "carrier@example.org")
+            git("commit", "-q", "--allow-empty", "-m", "base")
+            git("checkout", "-q", "-b", "carried")
+            git("commit", "-q", "--allow-empty", "-s", "--author", "Orig <orig@example.org>", "-m", "carried")
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                commits = check_pr.commits_of("main")
+        self.assertEqual((commits[0]["email"], commits[0]["committer_email"]), ("orig@example.org", "carrier@example.org"))
+        self.assertEqual(check_pr.dco(commits), [])   # signed off by the carrier, not by the author
+
+    def test_a_merge_commit_needs_no_sign_off(self):
+        git = lambda *a, **kw: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True,  # noqa: E731
+                                              text=True, **kw)
+        with tempfile.TemporaryDirectory() as tmp:
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "Dev")
+            git("config", "user.email", "dev@example.org")
+            git("commit", "-q", "--allow-empty", "-m", "base")
+            git("checkout", "-q", "-b", "pr")
+            git("commit", "-q", "--allow-empty", "-s", "-m", "signed work")
+            git("checkout", "-q", "main")
+            git("commit", "-q", "--allow-empty", "-m", "main moves")
+            git("checkout", "-q", "pr")
+            git("merge", "-q", "--no-ff", "-m", "Merge main into pr, unsigned", "main")
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                commits = check_pr.commits_of("main")
+        self.assertEqual(len(commits), 1)   # the merge is skipped
+        self.assertEqual(check_pr.dco(commits), [])
+
+    def test_a_crlf_sign_off_is_matched(self):
+        c = commit()
+        c["message"] = c["message"].replace("\n", "\r\n")
+        self.assertEqual(check_pr.dco([c]), [])
+
+    def test_the_authors_email_case_does_not_matter(self):
+        self.assertEqual(check_pr.dco([commit(email="Dev@EXAMPLE.org")]), [])
+
     def test_a_sign_off_buried_in_a_line_is_not_a_trailer(self):
         c = commit(trailer="I never wrote Signed-off-by: Dev <dev@example.org>")
         self.assertEqual(len(check_pr.dco([c])), 1)
@@ -1067,10 +1123,14 @@ class DocsImpactTests(unittest.TestCase):
         self.assertTrue(check_pr.docs_impact(["scripts/check_pr.py"], body, docs))
         self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], "## Docs impact\n\n- `README.md`: updated\n", docs), [])
 
-    def test_the_real_repo_lists_what_243_missed(self):
-        found = check_pr.impact(["scripts/check_pr.py", "CONTRIBUTING.md", "docs/FAQ.md"], check_pr.repo_prose())
-        for doc in ("AGENTS.md", "docs/AGENT-GUIDE.md", "docs/HOW-IT-WORKS.md"):
-            self.assertIn(doc, found)
+    def test_the_docs_that_243_missed_are_listed(self):
+        # a fixture of how those three docs name the file, not the live docs: rewording them must not break this test
+        docs = {"AGENTS.md": "`scripts/check_pr.py` fails the PR otherwise and prints the list.",
+                "docs/AGENT-GUIDE.md": "| `check_pr.py` | the PR description |",
+                "docs/HOW-IT-WORKS.md": "see [the check](../scripts/check_pr.py)",
+                "docs/FAQ.md": "nothing about it", "CONTRIBUTING.md": "edited by the PR"}
+        found = check_pr.impact(["scripts/check_pr.py", "CONTRIBUTING.md", "docs/FAQ.md"], docs)
+        self.assertEqual(sorted(found), ["AGENTS.md", "docs/AGENT-GUIDE.md", "docs/HOW-IT-WORKS.md"])
 
     def test_main_runs_it_and_bot_prs_are_exempt(self):
         with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "repo_prose", lambda: self.DOCS):
@@ -1108,7 +1168,7 @@ class CheckPrFollowUpTests(unittest.TestCase):
     """Low findings of earlier reviews (umbrella #122), each with a case that failed before the fix."""
 
     def test_two_scope_lines_do_not_pass(self):
-        # the template lists every option as a 'Scope:' line; keeping two used to pass because only the first was read
+        # the template has one 'Scope:' line (all four options sit on it); a PR with two of them used to pass because only the first was read
         value, problems = check_pr.declared_scope("- Scope: small\n- Scope: large\n")
         self.assertIsNone(value)
         self.assertIn("2 'Scope:' lines", problems[0])
@@ -1142,6 +1202,65 @@ class CheckPrFollowUpTests(unittest.TestCase):
                 "docs/C.md": "see myscripts/check_pr.py (another path)"}
         found = check_pr.impact(["scripts/check_pr.py", "tool.py"], docs)
         self.assertEqual(sorted(found), ["docs/A.md", "docs/B.md"])
+
+    def test_the_prefix_is_part_of_the_match_so_a_dot_slash_in_the_middle_names_nothing(self):
+        docs = {"docs/A.md": "see ../../scripts/check_pr.py", "docs/B.md": "see ./scripts/check_pr.py",
+                "docs/C.md": "see certs/k/./scripts/check_pr.py", "docs/D.md": "see a./scripts/check_pr.py",
+                "docs/E.md": "see .../scripts/check_pr.py", "docs/F.md": "see (./scripts/check_pr.py)"}
+        self.assertEqual(sorted(check_pr.impact(["scripts/check_pr.py"], docs)), ["docs/A.md", "docs/B.md", "docs/F.md"])
+
+    def test_a_dotfile_path_is_still_found_with_and_without_a_prefix(self):
+        docs = {"docs/A.md": "the .github/labels.yml file", "docs/B.md": "the ./.github/labels.yml file"}
+        self.assertEqual(sorted(check_pr.impact([".github/labels.yml"], docs)), ["docs/A.md", "docs/B.md"])
+
+    def test_a_reason_that_quotes_the_placeholder_is_a_reason(self):
+        docs = {"AGENTS.md": "run scripts/check_pr.py"}
+        quoted = "## Docs impact\n\n- `AGENTS.md`: not affected: it never prints the `<why>` hint, only the DCO rule\n"
+        self.assertEqual(check_pr.docs_impact(["scripts/check_pr.py"], quoted, docs), [])
+        for pasted in ("- `AGENTS.md`: not affected: <why>", "- `AGENTS.md`: not affected: `<why>`.", "- `AGENTS.md`: <why>"):
+            with self.subTest(pasted=pasted):
+                body = f"## Docs impact\n\n{pasted}\n"
+                self.assertEqual(len(check_pr.docs_impact(["scripts/check_pr.py"], body, docs)), 1)
+
+    def test_a_placeholder_does_not_hide_the_docs_still_missing(self):
+        docs = {"AGENTS.md": "run scripts/check_pr.py", "docs/HOW.md": "the check_pr.py gate"}
+        body = "## Docs impact\n\n- `AGENTS.md`: not affected: <why>\n"
+        problems = check_pr.docs_impact(["scripts/check_pr.py"], body, docs)
+        self.assertEqual(len(problems), 2)
+        self.assertIn("still say `<why>`", problems[0])
+        self.assertIn("`docs/HOW.md` (names `scripts/check_pr.py`)", problems[1])
+        self.assertNotIn("`AGENTS.md` (names", problems[1])   # it is in the section, only unfilled
+
+    def test_main_wires_renamed_from_through_a_real_git_rename(self):
+        # renamed_from() and its git call had no test, only old_names(): a doc naming the OLD path must be listed
+        docs = {"docs/H.md": "the script scripts/old_name.py does it"}
+        git = lambda *a, **kw: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True,  # noqa: E731
+                                              text=True, **kw)
+        with tempfile.TemporaryDirectory() as tmp:
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "Dev")
+            git("config", "user.email", "dev@example.org")
+            (Path(tmp) / "scripts").mkdir()
+            (Path(tmp) / "scripts" / "old_name.py").write_text("print('hello, a body git can match')\n" * 5)
+            git("add", "-A")
+            git("commit", "-q", "-m", "base")
+            git("checkout", "-q", "-b", "rename")
+            git("mv", "scripts/old_name.py", "scripts/new_name.py")
+            git("commit", "-q", "-m", "rename")
+            with mock.patch.object(check_pr, "REPO", Path(tmp)):
+                self.assertEqual(check_pr.renamed_from("main"), ["scripts/old_name.py"])
+            body = Path(tmp) / "b.md"
+            body.write_text((FIXTURES / "good.md").read_text(encoding="utf-8"), encoding="utf-8")
+            argv = ["check_pr.py", "--title", "docs: x", "--body-file", str(body), "--base", "main",
+                    "--files", "scripts/new_name.py"]
+            out = io.StringIO()
+            with mock.patch.object(sys, "argv", argv), mock.patch.object(check_pr, "REPO", Path(tmp)), \
+                    mock.patch.object(check_pr, "repo_prose", lambda: docs), \
+                    mock.patch.object(check_pr, "base_texts", return_value={}), \
+                    mock.patch.object(check_pr, "site_impact", return_value="none"), \
+                    mock.patch.object(check_pr, "code_lines_changed", return_value=0), redirect_stdout(out):
+                check_pr.main()
+        self.assertIn("`docs/H.md` (names `scripts/old_name.py`)", out.getvalue())
 
     def test_a_renamed_file_also_counts_under_its_old_name(self):
         status = "R100\tscripts/old_name.py\tscripts/new_name.py\nM\tAGENTS.md\nA\tdocs/x.md\nR087\ta/b.sh\tc/d.sh\n"

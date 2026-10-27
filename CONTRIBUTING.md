@@ -73,7 +73,8 @@ git commit -s -m "fix(api): ..."      # adds: Signed-off-by: Your Name <you@exam
 send it, under this project's licence (Apache 2.0). It is the
 [Developer Certificate of Origin](DCO) 1.1, the same one the Linux kernel uses. It is not
 a paper to sign and nobody reviews it: `scripts/check_pr.py` only checks that the line is
-there and that the email is the commit author's (or your GitHub `noreply` address).
+there and that the email is the commit author's, the committer's (a commit you carry from somewhere else is signed off by you; GitHub's own
+`noreply@github.com` committer never counts) or your GitHub `noreply` address.
 
 **You forgot it.** The check tells you which commits:
 
@@ -294,8 +295,9 @@ filter.
 changes (not a doc), `scripts/check_pr.py` finds the docs that name it, by path or by file name, and the PR does
 not touch: each one goes under a `## Docs impact` section of the description, `updated` or
 `not affected: <why>`. CI prints the list ready to paste, and pasting it unedited fails: the reason has to be
-written (the `<why>` placeholder is rejected). A renamed file counts under its old name too, and a link such as
-`../scripts/x.py` counts as naming the file. History, generated files, study material and tests are
+written (a line whose reason is the `<why>` placeholder is rejected, and it is reported together with any doc still missing; a real
+reason that merely quotes `<why>` is fine). A renamed file counts under its old name too, and a link such as
+`../scripts/x.py` counts as naming the file (only leading `./` and `../` count: `a./scripts/x.py` does not). History, generated files, study material and tests are
 not counted. Without it, a change to `check_pr.py` left three docs describing the old release (#243, fixed in #245).
 
 **Where it ran.** Every PR proves where it ran: under *Evidence*, a

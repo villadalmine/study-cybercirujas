@@ -4,8 +4,10 @@ tests/fixtures/curriculum/*.layout.txt are `pdftotext -layout` (poppler 24.02.0)
 CKA_Curriculum_v1.35.pdf @ cncf/curriculum 008b73c and CKAD_Curriculum_v1.35.pdf @ d50919e (CC-BY 4.0,
 Cloud Native Computing Foundation), kept as text so the parser is tested without poppler.
 """
+import contextlib
 import copy
 import hashlib
+import io
 import json
 import os
 import subprocess
@@ -139,6 +141,41 @@ class Extraction(unittest.TestCase):
         a, b = run_twice(args)
         self.assertEqual(a, b)
         self.assertIn(b"Manage role based access control (RBAC)", a)
+
+    # ---- argument combinations that cannot work are refused up front (umbrella #196) ----
+    EXTRACT = ["extract", "--text", str(FIXTURES / "cka_v1.35.layout.txt"), "--cert", "cka", "--version", "1.35",
+               "--repo", "cncf/curriculum", "--commit", "c" * 40, "--path", "CKA_Curriculum_v1.35.pdf",
+               "--committed", "2026-03-03"]
+
+    def refused(self, argv):
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
+            cd.main(argv)
+        self.assertEqual(raised.exception.code, 2)   # argparse's usage error, not a traceback
+        return err.getvalue()
+
+    def test_text_without_sha256_is_refused_not_a_traceback(self):
+        self.assertIn("--text needs --sha256", self.refused(self.EXTRACT))
+
+    def test_check_without_out_is_refused_because_it_could_only_say_stale(self):
+        self.assertIn("--check needs -o", self.refused(self.EXTRACT + ["--sha256", "0" * 64, "--check"]))
+        self.assertIn("--check needs -o", self.refused(["render", "plan.json", "--check"]))
+
+    def test_check_with_out_still_works(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "cka.yaml"
+            argv = self.EXTRACT + ["--sha256", "0" * 64, "-o", str(out)]
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(cd.main(argv), 0)
+                self.assertEqual(cd.main(argv + ["--check"]), 0)   # second run: nothing changes
+            out.write_text("stale", encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(cd.main(argv + ["--check"]), 1)
+
+    def test_guard_help_says_uncommitted_edits_are_not_seen(self):
+        out = subprocess.run([sys.executable, str(SCRIPT), "guard", "--help"], cwd=REPO, check=True,
+                             capture_output=True, text=True).stdout
+        self.assertIn("uncommitted", " ".join(out.split()))
 
 
 # ==== diff ====

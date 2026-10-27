@@ -24,7 +24,8 @@ check instead of a request. It fails when:
   (not only when certs/ changes), and for `ai` the `Backend:` and `Model:` must
   say which tool and model (the AI disclosure, CONTRIBUTING.md);
 - a non-merge commit of the PR has no `Signed-off-by:` trailer (Developer
-  Certificate of Origin, the `DCO` file) whose email is the commit author's or
+  Certificate of Origin, the `DCO` file) whose email is the commit author's, the
+  committer's (a carried commit; never GitHub's own noreply@github.com) or
   the PR author's GitHub noreply address. EVERY commit of base..HEAD (the ones not
   on the base branch yet) is checked, whatever the PR's number or the commit's
   dates: a PR number can be reopened and author/committer dates are set by whoever
@@ -312,8 +313,9 @@ def impact(changed: list[str], docs: dict[str, str]) -> dict[str, list[str]]:
         for doc, text in docs.items():
             if doc in changed or doc == path:
                 continue
-            # `../scripts/x.py` and `./x.py` are links to the file: the boundary lets a path preceded by `./` through
-            if any(re.search(rf"(?:(?<![\w/.-])|(?<=\./)){re.escape(n)}(?![\w-])", text) for n in names):
+            # `../scripts/x.py` and `./x.py` are links to the file: the match may start with any number of `./` or `../`
+            # prefixes, but the prefix is part of the match, so `a./scripts/x.py` and `certs/k/./scripts/x.py` do not name it
+            if any(re.search(rf"(?<![\w/.-])(?:\.{{1,2}}/)*{re.escape(n)}(?![\w-])", text) for n in names):
                 out.setdefault(doc, []).append(path)
     return dict(sorted(out.items()))
 
@@ -341,21 +343,26 @@ def repo_prose(root: Path = REPO) -> dict[str, str]:
             if is_prose(p) and not IMPACT_SKIP.match(p) and (root / p).is_file()}
 
 
+UNFILLED_REASON = re.compile(r":[ \t]*`?<why>`?[ \t]*\.?[ \t]*$")   # `not affected: <why>` / `...: <why>` closing a line
+
+
 def docs_impact(changed: list[str], body: str, docs: dict[str, str]) -> list[str]:
     """Each affected doc is named in the `## Docs impact` section (`updated` or `not affected: <why>`)."""
     found = impact(changed, docs)
     listed = sections(body).get(IMPACT_SECTION, "")
     lack = [d for d in found if not re.search(rf"(?<![\w/.-]){re.escape(d)}(?![\w-])", listed)]   # a path, not a substring of another
-    # the failure message prints `not affected: <why>`; pasting it unedited must not pass
-    unfilled = [ln.strip() for ln in listed.splitlines() if "<why>" in ln] if found else []
+    # the failure message prints `not affected: <why>`; pasting it unedited must not pass. Only a line whose reason IS the
+    # placeholder (it ends with `: <why>`) is unfilled: a real reason that quotes `<why>` in its text is a reason.
+    unfilled = [ln.strip() for ln in listed.splitlines() if UNFILLED_REASON.search(ln)] if found else []
+    problems = []
     if unfilled:
-        return [f"docs impact: {len(unfilled)} line(s) under `## {IMPACT_SECTION}` still say `<why>`: write the reason "
-                f"(or `updated`) instead of the placeholder:\n" + "\n".join(unfilled)]
-    if not lack:
-        return []
-    block = "\n".join(f"- `{d}` (names {', '.join(f'`{p}`' for p in found[d])}): not affected: <why>" for d in lack)
-    return [f"docs impact: {len(lack)} doc(s) name a file this PR changes and are not in the PR; add them under "
-            f"`## {IMPACT_SECTION}` with `not affected: <why>`, or update them:\n## {IMPACT_SECTION}\n\n{block}"]
+        problems.append(f"docs impact: {len(unfilled)} line(s) under `## {IMPACT_SECTION}` still say `<why>`: write the reason "
+                        f"(or `updated`) instead of the placeholder:\n" + "\n".join(unfilled))
+    if lack:   # reported together with the placeholder lines: fixing one must not hide the other until the next round
+        block = "\n".join(f"- `{d}` (names {', '.join(f'`{p}`' for p in found[d])}): not affected: <why>" for d in lack)
+        problems.append(f"docs impact: {len(lack)} doc(s) name a file this PR changes and are not in the PR; add them under "
+                        f"`## {IMPACT_SECTION}` with `not affected: <why>`, or update them:\n## {IMPACT_SECTION}\n\n{block}")
+    return problems
 
 
 def is_bot_pr(head_ref: str | None, files: list[str], author: str | None = None,
@@ -708,21 +715,25 @@ def scope(files: list[str], code_lines: int | None = None, labels: set | None = 
 
 # --- DCO: a human signs off every commit (CONTRIBUTING -> Sign your commits) --
 
-SIGNED_OFF = re.compile(r"^Signed-off-by:[ \t]*(.*?)[ \t]*<([^<>\s]+)>[ \t]*$", re.M | re.I)
+SIGNED_OFF = re.compile(r"^Signed-off-by:[ \t]*(.*?)[ \t]*<([^<>\s]+)>[ \t]*\r?$", re.M | re.I)   # \r?: a CRLF message
 DCO_FIX = ("fix: `git commit --amend -s` (last commit) or `git rebase --signoff origin/main` (all of "
            "them), then `git push --force-with-lease`; see CONTRIBUTING.md -> Sign your commits (DCO)")
 
 
 def commits_of(base: str) -> list[dict]:
-    """The non-merge commits of base..HEAD: sha, author email, message."""
-    result = subprocess.run(["git", "log", "--no-merges", "--format=%H%x1f%ae%x1f%B%x1e", f"{base}..HEAD"],
+    """The non-merge commits of base..HEAD: sha, author email, committer email, message."""
+    result = subprocess.run(["git", "log", "--no-merges", "--format=%H%x1f%ae%x1f%ce%x1f%B%x1e", f"{base}..HEAD"],
                             cwd=REPO, capture_output=True, text=True, check=True)
     out = []
     for record in result.stdout.split("\x1e"):
         if record.strip():
-            sha, email, message = record.strip("\n").split("\x1f", 2)
-            out.append({"sha": sha.strip(), "email": email.strip(), "message": message})
+            sha, email, committer, message = record.strip("\n").split("\x1f", 3)
+            out.append({"sha": sha.strip(), "email": email.strip(), "committer_email": committer.strip(),
+                        "message": message})
     return out
+
+
+GITHUB_COMMITTER = "noreply@github.com"
 
 
 def noreply(email: str, login: str | None) -> bool:
@@ -745,7 +756,13 @@ def dco(commits: list[dict], pr_author: str | None = None,
     problems = []
     for c in commits:
         emails = {m.group(2).lower() for m in SIGNED_OFF.finditer(c["message"])}
-        if c["email"].lower() in emails or any(noreply(e, pr_author) for e in emails):
+        signers = {c["email"].lower()}
+        # DCO clause (c): a commit carried from elsewhere is signed off by whoever carries it, the committer. GitHub's own
+        # committer address (web edits, squash) is shared by everyone, so it never vouches for a trailer.
+        committer = c.get("committer_email", "").lower()
+        if committer and committer != GITHUB_COMMITTER:
+            signers.add(committer)
+        if emails & signers or any(noreply(e, pr_author) for e in emails):
             continue
         subject = c["message"].strip().splitlines()[0] if c["message"].strip() else ""
         problems.append(f"DCO: commit {c['sha'][:7]} ({subject[:60]!r}) has no 'Signed-off-by: Name <email>' "
