@@ -1,17 +1,17 @@
-# Graph Report - study-cybercirujas  (2026-10-21)
+# Graph Report - study-cybercirujas  (2026-10-27)
 
 ## Corpus Check
-- 274 files · ~318,594 words
+- 275 files · ~321,740 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 33 file(s) not represented in the graph (top: (none) 16, .log 12, .example 1)
 
 ## Summary
-- 3675 nodes · 7278 edges · 266 communities (162 shown, 104 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 224 edges (avg confidence: 0.92)
+- 3746 nodes · 7381 edges · 286 communities (171 shown, 115 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 226 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bfd2e12d`
+- Built from commit: `ae69e324`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,7 +26,7 @@
 - generator.py
 - scaffold
 - Which backend authors better material?
-- certs.py
+- get_topic
 - SnapshotStatusTest
 - runner.py
 - check
@@ -39,7 +39,7 @@
 - Syllabus Coverage Tests
 - _verify_translation
 - hashlib
-- FAQ.md
+- CODE_OF_CONDUCT.md
 - Verifying the material is true — design notes
 - ServerSmokeTests
 - lab/cli.py
@@ -60,7 +60,7 @@
 - Project Root
 - pathlib
 - StoredShapeTests
-- verdict
+- probe_tools
 - re
 - Deploying study to Kubernetes with Helm
 - 1. The code graph (Graphify)
@@ -75,12 +75,12 @@
 - curriculum_diff.py
 - EnvScopeTests
 - load_models
-- subprocess
-- steer.py
-- status_matrix.py
+- ocr_pdf.py
+- set_key
+- _render
 - release-please-config.json
 - RejectsDamagedTranslations
-- test_groundedness.py
+- Determinism
 - QualityOnlyTests
 - The phases
 - pytest
@@ -88,7 +88,7 @@
 - bot_loop_check.js
 - Extraction
 - Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)
-- tracker.py
+- core/__init__.py
 - search_topics
 - ComprehensionTests
 - BlockTests
@@ -98,7 +98,7 @@
 - FixtureTests
 - LanguageTests
 - CheckDocsTests
-- Documentation audit — 2026-10-14
+- milestone_sync.py
 - test_web_render.py
 - lab.md
 - translation.md
@@ -124,7 +124,7 @@
 - api.py
 - lab_step.sh
 - RegenerateTests
-- pytest
+- kc_scope.py
 - model_comparison.py
 - .mcp.json
 - pr_check.py
@@ -139,15 +139,15 @@
 - quality_score.py
 - get
 - The routine, start to finish
-- check_citations.py
+- test_source_chain.py
 - MainTests
 - ckad
 - _exec_script_cmd
-- audit_compare.py
+- generate_topic
 - Study bot — design
 - ConfirmTests
-- The loop
-- plan_cert
+- Content Workflow
+- _stream
 - OwnedTeardownTests
 - Automated review (Copilot)
 - What you can contribute
@@ -162,7 +162,7 @@
 - check_config.py
 - PathLanguageTests
 - ImageHardeningTests
-- test_check_pr.py
+- verify_workflow
 - CheckUpdatesDocTests
 - 1.1 Title
 - ScopeSectionTests
@@ -193,7 +193,7 @@
 - IncrementalContractTests
 - LabRunnerLifecycleTests
 - bootstrap-kubeadm.sh
-- ContractTests
+- chain_sha256
 - publish.sh
 - cka-1.1.sh
 - lpic-2-200.1.sh
@@ -224,7 +224,7 @@
 - DocsImpactTests
 - Developers — use the API, run your own copy, build on it
 - Changelog
-- check_curriculum_consistency.py
+- yaml
 - tool_edit_ok
 - Limiter
 - Guard
@@ -232,8 +232,8 @@
 - ToolEditProvenance
 - normalize
 - Within one certification (the only fair comparisons; authoring language `en` only)
-- accepted
-- scan
+- SourceChainTests
+- test_kc_scope.py
 - Roadmap — where this is and where it goes
 - EndpointTests
 - WorkflowTests
@@ -243,11 +243,11 @@
 - smoke.sh
 - Governance
 - unpinned
-- yaml
+- state
 - SmokeValuesRenderTests
 - LabStepIsolationTests
 - CommittedUpgrade
-- SnapshotDocumentTests
+- CheckPrFollowUpTests
 - AGENTS.md
 - Self-audit: how to check this repo yourself
 - How it works
@@ -255,33 +255,53 @@
 - LabUpTests
 - NEXT.md
 - ChartTests
-- lab_up
-- test_curriculum_diff.py
+- enter_hint
+- BelowTopicLevel
 - evidence/README.md
 - AI certification roadmap
-- 2. The wiki (OpenWiki)
-- check_claims.py
+- _extract_run
+- Contributing
 - CitedRunTests
 - ReleaseNotesGateTests
-- models_live.py
-- milestone
+- generate_cert_script
+- main
 - From issue to release
-- mcp_server.py
+- .run_sync
 - Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)
 - Guardrails: what is checked, what blocks, and what is only a convention
 - exam_version_changes
-- From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives
+- Scope
 - verify_runs
 - DeployDocTests
-- test_upgrade_versions.py
-- disclosure
-- _BlockDumper
-- EnterHintTests
+- Using it, in detail
+- load
+- test_runner_guard.py
+- PlanTests
+- bot_stats.py
+- .teach
+- main
+- _reject_if_recap
+- material
+- _english
+- Pull requests
+- Agent guide: commands, content workflow and verification
+- PrCheckTests
+- run
+- RecordedGroundednessIsNotTrustedVerbatim
+- Checking curriculum updates
+- renamed_from
+- has_fix_verb
+- test_ensure_image_builds_locally_and_never_pulls
+- SmokeScriptTests
+- WhereItRanTests
+- ReviewTests
+- The charter
+- row
 
 ## God Nodes (most connected - your core abstractions)
 1. `load()` - 45 edges
 2. `scenario()` - 31 edges
-3. `main()` - 29 edges
+3. `main()` - 30 edges
 4. `History` - 28 edges
 5. `ExamVersionTests` - 27 edges
 6. `generate_topic()` - 24 edges
@@ -293,111 +313,103 @@
 ## Surprising Connections (you probably didn't know these)
 - `Rules (from the code, not judgment)` --references--> `regenerate()`  [INFERRED]
   docs/upgrades/cka-ckad-1.37.md → scripts/check_graph.py
+- `Pull request lifecycle, in detail` --references--> `docs_impact()`  [INFERRED]
+  docs/HOW-IT-WORKS.md → scripts/check_pr.py
 - `2026-09-10` --references--> `survey()`  [INFERRED]
   docs/HISTORY.md → scripts/check_versions.py
 - `Open — worth someone's time` --references--> `kubectl()`  [INFERRED]
   docs/AGENTS_SYNC.md → scripts/clean_registry.py
 - `Prerequisites` --references--> `kubectl()`  [INFERRED]
   docs/DEPLOY.md → scripts/clean_registry.py
-- `DORA, concretely` --references--> `kubectl()`  [INFERRED]
-  docs/DEVELOPERS.md → scripts/clean_registry.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (266 total, 104 thin omitted)
+## Communities (286 total, 115 thin omitted)
 
 ### Community 0 - "teach/cli.py"
 Cohesion: 0.08
-Nodes (18): cert_add(), cert_list(), cert_show(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script(), lab_down() (+10 more)
+Nodes (17): cert_add(), cert_list(), cert_snapshot(), cert_translate(), cert_video(), cert_video_script(), lab_down(), lab_new() (+9 more)
 
 ### Community 1 - "lab/cli.py"
-Cohesion: 0.11
-Nodes (24): Tests, git_repo(), new_lab(), make(), run_cli(), test_all_curated_labs_pass_the_schema(), test_curated_pilot_labs_are_strict_valid_and_verified(), test_from_repo_path_cannot_escape() (+16 more)
+Cohesion: 0.10
+Nodes (26): Tests, docker_ok(), git_repo(), image_ok(), new_lab(), make(), run_cli(), test_all_curated_labs_pass_the_schema() (+18 more)
 
 ### Community 2 - "Operating the pipeline — for maintainers"
-Cohesion: 0.13
-Nodes (15): Checking curriculum updates, Content process, Deploying to Kubernetes, Environment variables, Keeping it honest over time, Operating the pipeline — for maintainers, Quality, Quickstart (maintainers) (+7 more)
+Cohesion: 0.20
+Nodes (10): Content process, Deploying to Kubernetes, Environment variables, Keeping it honest over time, Operating the pipeline — for maintainers, Quality, Quickstart (maintainers), Rate limit (off by default in the chart) (+2 more)
 
 ### Community 3 - "models_live.py"
-Cohesion: 0.22
-Nodes (5): annotate(), AnnotateTests, catalogue(), CompareTests, priced()
+Cohesion: 0.17
+Nodes (9): main(), annotate(), compare(), moved(), per_million(), AnnotateTests, catalogue(), CompareTests (+1 more)
 
 ### Community 4 - "video.py"
-Cohesion: 0.10
-Nodes (33): Video — Technical Debt, 2026-07-17, root(), _ask_scenes(), _base_slide(), _cert_domains(), cert_media_dir(), _concat() (+25 more)
+Cohesion: 0.15
+Nodes (22): _base_slide(), cert_media_dir(), _concat(), _ensure_voice(), _font(), _fonts_for(), media_dir(), _mux_scene() (+14 more)
 
 ### Community 5 - "curriculum_citations.py"
-Cohesion: 0.11
-Nodes (17): cited(), family(), files(), fix_line(), _mask(), meta_ok(), offenders(), parts() (+9 more)
+Cohesion: 0.12
+Nodes (16): cited(), family(), files(), fix_line(), _mask(), meta_ok(), offenders(), parts() (+8 more)
 
 ### Community 6 - "claims.py"
 Cohesion: 0.11
 Nodes (8): active(), claim(), is_claimed(), _path(), _try_lock(), _unlock(), ClaimTest, _try_claim()
 
 ### Community 7 - "generator.py"
-Cohesion: 0.10
-Nodes (20): First, the thing that surprises everyone, cert_generate(), _agent_completer(), complete(), _antigravity_completer(), complete(), _dominant_model(), generate_cert() (+12 more)
+Cohesion: 0.17
+Nodes (12): _agent_completer(), complete(), _antigravity_completer(), complete(), _dominant_model(), GeneratorConfigError, _litellm_completer(), complete() (+4 more)
 
 ### Community 8 - "scaffold"
-Cohesion: 0.18
-Nodes (4): default_spec(), scaffold(), validate_spec(), ContractTests
+Cohesion: 0.17
+Nodes (5): default_spec(), lab_dir(), scaffold(), validate_spec(), ContractTests
 
 ### Community 9 - "Which backend authors better material?"
 Cohesion: 0.25
 Nodes (8): Caveats, fable-5 vs opus-5, within cgoa (2026-08-19), The 62% figure, and why it is not what it looks like, The headline: on every objective check, they tie, The same-topic head-to-head, which reverses the conclusion above, What this means for the choice, Where they differ: volume and shape, Which backend authors better material?
-
-### Community 10 - "certs.py"
-Cohesion: 0.12
-Nodes (12): clear_topic_stale(), content_dir(), get_topic(), load(), md_path(), _read(), save(), scaffold() (+4 more)
 
 ### Community 11 - "SnapshotStatusTest"
 Cohesion: 0.21
 Nodes (3): _apply_snapshot_status(), _topic_identity(), SnapshotStatusTest
 
 ### Community 12 - "runner.py"
-Cohesion: 0.06
-Nodes (45): build(), check(), container_name(), _docker(), down(), ensure_image(), image_for(), _in_time() (+37 more)
+Cohesion: 0.17
+Nodes (23): build(), check(), container_name(), _docker(), down(), ensure_image(), image_for(), _in_time() (+15 more)
 
 ### Community 13 - "check"
 Cohesion: 0.13
-Nodes (5): _reusable(), check(), rules(), QualityFloorTest, QualityThresholdsTest
+Nodes (4): check(), rules(), QualityFloorTest, QualityThresholdsTest
 
 ### Community 14 - "milestone_sync.py"
-Cohesion: 0.07
-Nodes (31): closing_issue_numbers(), git_lines(), GitHub, is_release_pr(), links_an_issue(), main(), pick_milestone(), plan_issue_closed() (+23 more)
+Cohesion: 0.14
+Nodes (15): GitHub, commit_subjects(), compose(), file_at(), main(), maintainers(), merge_body(), merged_prs() (+7 more)
 
 ### Community 15 - "History"
-Cohesion: 0.09
-Nodes (23): 12e01a6 — Paths + Linux Foundation, 1d4bd14 — Multilingual + Deploy, 2026-07-11/12, 2026-07-19, 2026-07-27, 2026-07-28, 2026-07-29, 2026-09-10 (+15 more)
+Cohesion: 0.12
+Nodes (17): 12e01a6 — Paths + Linux Foundation, 1d4bd14 — Multilingual + Deploy, 2026-07-28, 2026-07-29, 2026-09-10, 2026-09-11, 2026-09-14, 2026-09-15 (+9 more)
 
 ### Community 16 - "Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)"
 Cohesion: 0.05
-Nodes (39): Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md), Changed, do not redo, Checks that cost no quota — run them, they are free, Decisions left to the owner, not to us, Division of work — owner's call, 2026-08-07, Every commit is signed off (DCO), First: install the hook. It is the only rule that does not depend on you., Found while wiring this up, not caused by it: check_manifests fails (+31 more)
+Nodes (40): Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md), Changed, do not redo, Checks that cost no quota — run them, they are free, Decisions left to the owner, not to us, Division of work — owner's call, 2026-08-07, Every commit is signed off (DCO), First: install the hook. It is the only rule that does not depend on you., Found while wiring this up, not caused by it: check_manifests fails (+32 more)
 
 ### Community 18 - "re"
-Cohesion: 0.09
-Nodes (23): _env(), _fence(), _footer(), _run_line(), scenario(), select(), split_solution(), tree() (+15 more)
+Cohesion: 0.07
+Nodes (30): cmd_export(), cert_names(), _env(), ExportError, _fence(), _footer(), _run_line(), scenario() (+22 more)
 
 ### Community 19 - "pipeline.py"
-Cohesion: 0.13
-Nodes (16): generate(), generate_with_retries(), main(), pending(), _sort_key(), budget(), is_fatal(), is_retryable() (+8 more)
+Cohesion: 0.10
+Nodes (21): Generation backends, main(), create_block(), main(), show(), budget(), certs(), default_languages() (+13 more)
 
 ### Community 20 - "Syllabus Coverage Tests"
-Cohesion: 0.18
-Nodes (3): objective_ids(), _reject_unreadable_syllabus(), SyllabusCoverageTests
+Cohesion: 0.12
+Nodes (8): From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives, What I need from you, What is now enforced, so this cannot recur, What this means for your work, normalise_weights(), objective_ids(), _reject_unreadable_syllabus(), SyllabusCoverageTests
 
 ### Community 21 - "_verify_translation"
-Cohesion: 0.08
-Nodes (21): Agent guide: commands, content workflow and verification, Agent Idea Synchronization (docs/AGENTS_SYNC.md), Commands, Content Workflow, Pull requests from agents, Rules, 2026-08-03, 2026-08-04 (+13 more)
+Cohesion: 0.15
+Nodes (13): 2026-08-03, 2026-08-04, Can a cheap model do the translation step?, Caveat, Method, Recommendation, Results, Three bugs this study found in our own checks (+5 more)
 
 ### Community 22 - "hashlib"
-Cohesion: 0.20
-Nodes (9): evidence_lines(), in_scope(), main(), rewrite(), run(), run_citations(), sha256(), stamp() (+1 more)
-
-### Community 23 - "FAQ.md"
-Cohesion: 0.28
-Nodes (3): Code of Conduct, How to use it, The charter
+Cohesion: 0.17
+Nodes (10): key(), evidence_lines(), in_scope(), main(), rewrite(), run(), run_citations(), sha256() (+2 more)
 
 ### Community 24 - "Verifying the material is true — design notes"
 Cohesion: 0.20
@@ -405,7 +417,7 @@ Nodes (10): A funnel, cheapest layer first, Honest limits, Layer 0 — what exis
 
 ### Community 26 - "lab/cli.py"
 Cohesion: 0.16
-Nodes (13): _banner(), _clone(), cmd_export(), cmd_hint(), cmd_list(), cmd_migrate(), cmd_new(), cmd_validate() (+5 more)
+Nodes (13): _banner(), _clone(), cmd_hint(), cmd_list(), cmd_migrate(), cmd_new(), cmd_validate(), _lab_dir() (+5 more)
 
 ### Community 27 - "FixLine"
 Cohesion: 0.08
@@ -416,64 +428,68 @@ Cohesion: 0.42
 Nodes (5): deployed_tags(), in_registry(), kubectl(), main(), usage()
 
 ### Community 29 - "load"
-Cohesion: 0.10
-Nodes (24): derived_from(), infer_contract(), load(), load_schema(), migrate(), normalize(), schema_errors(), _verb_present() (+16 more)
+Cohesion: 0.11
+Nodes (22): infer_contract(), load(), load_schema(), migrate(), normalize(), schema_errors(), _verb_present(), test_crlf_script_rejected() (+14 more)
 
 ### Community 30 - "audit_compare.py"
-Cohesion: 0.17
-Nodes (3): AuditCompareTests, load(), run_main()
+Cohesion: 0.09
+Nodes (11): compare(), criterion_ids(), DuplicateAuditor, has_proposal(), load_results(), main(), priority(), valid_score() (+3 more)
 
 ### Community 31 - "re"
 Cohesion: 0.14
 Nodes (13): absolute_url_problems(), anchors(), check_file(), generated_checks(), main(), make_targets(), personal_name_problems(), personal_names() (+5 more)
 
 ### Community 32 - "check_pr.py"
-Cohesion: 0.10
-Nodes (21): base_texts(), changed_files(), check(), cited_runs(), code_lines_changed(), commits_of(), declared(), declared_scope() (+13 more)
+Cohesion: 0.07
+Nodes (29): Contributing, authorship(), base_texts(), _cells(), changed_files(), check(), cited_runs(), code_lines_changed() (+21 more)
 
 ### Community 34 - "check_groundedness.py"
-Cohesion: 0.08
-Nodes (24): best_windows(), changed(), check_topic(), cited(), claims(), download(), fetch(), fixture() (+16 more)
+Cohesion: 0.06
+Nodes (26): best_windows(), changed(), check_topic(), cited(), claims(), download(), fetch(), file_sha() (+18 more)
 
 ### Community 36 - "check_provenance.py"
-Cohesion: 0.60
-Nodes (3): check_cert(), main(), _topics()
+Cohesion: 0.16
+Nodes (10): check_cert(), main(), _topics(), survey(), _topic_count(), is_complete(), _topic_ids(), main() (+2 more)
 
 ### Community 37 - "probe_models.py"
 Cohesion: 0.14
-Nodes (11): ask(), ask_retrying(), catalogue_state(), main(), material(), _price(), probe_one(), probe_tools() (+3 more)
+Nodes (11): catalogue_state(), main(), off_switch(), _price(), probe_one(), reasoning_mandatory(), rejects_reasoning(), tally() (+3 more)
 
 ### Community 40 - "CheckPrTests"
-Cohesion: 0.06
+Cohesion: 0.05
 Nodes (4): CheckPrTests, commit(), DcoMainTests, DcoTests
 
-### Community 44 - "StoredShapeTests"
-Cohesion: 0.20
-Nodes (4): _blank(), load(), record(), StoredShapeTests
+### Community 43 - "pathlib"
+Cohesion: 0.04
+Nodes (15): graphify_bin(), main(), normalized(), rebuild_in_copy(), regenerate(), touches_graph_sources(), generate(), main() (+7 more)
 
-### Community 45 - "verdict"
-Cohesion: 0.16
-Nodes (7): off_switch(), rejects_reasoning(), thinking_mode(), thought(), tool_call_of(), tool_verdict(), verdict()
+### Community 44 - "StoredShapeTests"
+Cohesion: 0.12
+Nodes (5): accepted(), _known_models(), record(), AcceptanceTests, StoredShapeTests
+
+### Community 45 - "probe_tools"
+Cohesion: 0.20
+Nodes (5): material(), probe_tools(), tool_call_of(), tool_verdict(), verdict()
 
 ### Community 46 - "re"
-Cohesion: 0.16
-Nodes (8): authorship(), _cells(), _glob(), ledger_rows(), locked(), LockfileTests, norm(), requirement_names()
+Cohesion: 0.33
+Nodes (4): locked(), LockfileTests, norm(), requirement_names()
 
 ### Community 47 - "Deploying study to Kubernetes with Helm"
 Cohesion: 0.13
 Nodes (15): 1. Your values file, 2. Pick the image, 3. Preflight, 4. Deploy with an explicit tag, 5. Verify, 6. Roll back, 7. Tag what is published, Deploying study to Kubernetes with Helm (+7 more)
 
 ### Community 48 - "1. The code graph (Graphify)"
-Cohesion: 0.25
-Nodes (8): 1. The code graph (Graphify), Optional, costs completions, Semantic enrichment — documented, deliberately not run, Setup, once per clone, The derived wiki (free — no LLM at all), Using it from an agent (MCP), Using it from the CLI, When the code changes
+Cohesion: 0.12
+Nodes (16): 1. The code graph (Graphify), 2. The wiki (OpenWiki), 3. Real metrics, end to end, Developer tools: code graph, wiki, and real metrics, Optional, costs completions, Reading the numbers, Semantic enrichment — documented, deliberately not run, Setup, once (+8 more)
 
 ### Community 49 - "fix_corrupted_content.py"
 Cohesion: 0.11
-Nodes (15): _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main(), _publish_if_complete(), _record_quota_block(), _refresh_status() (+7 more)
+Nodes (14): _cert_topic_ids(), find_bad_combos(), find_missing_videos(), _finish(), main(), _publish_if_complete(), _record_quota_block(), _refresh_status() (+6 more)
 
 ### Community 50 - "json"
-Cohesion: 0.08
-Nodes (23): Verification: what is proven, and what is only assumed, 6. Where the value actually is (owner's question, 2026-08-18), 2026-09-11, Languages, complete_certs(), main(), publish(), _record() (+15 more)
+Cohesion: 0.07
+Nodes (19): Languages, check(), main(), spec_kinds(), tracked_versions(), complete_certs(), main(), publish() (+11 more)
 
 ### Community 52 - "check_labels.py"
 Cohesion: 0.30
@@ -484,76 +500,64 @@ Cohesion: 0.07
 Nodes (21): AlertsTest, CitationsTest, ConntrackLabTest, ConntrackSizeTest, CpuPressureTest, LabContractTest, ListenQueueTest, MathisTest (+13 more)
 
 ### Community 54 - "FAQ — how the ecosystem works, honestly"
-Cohesion: 0.12
-Nodes (16): Content generation, Deployment, FAQ — how the ecosystem works, honestly, Hallucination and groundedness, Killercoda, Known gaps, Labs and the runner, Releases, milestones and the board (+8 more)
+Cohesion: 0.17
+Nodes (12): Deployment, FAQ — how the ecosystem works, honestly, Hallucination and groundedness, Killercoda, Known gaps, Labs and the runner, Releases, milestones and the board, Reviews: AI and human (+4 more)
 
 ### Community 55 - "check_syllabus.py"
-Cohesion: 0.23
-Nodes (5): load_syllabus(), main(), smells(), upstream_objectives(), fetch_text()
+Cohesion: 0.15
+Nodes (7): NVIDIA career track (researched 2026-09-09, owner's request), load_syllabus(), main(), smells(), upstream_objectives(), fetch_text(), SnapshotDocumentTests
 
 ### Community 56 - "test_kc_meta.py"
 Cohesion: 0.09
-Nodes (27): bash_n(), check_tree(), ExportError, banner(), decorate(), human_record(), lab_hash(), provenance() (+19 more)
+Nodes (26): bash_n(), check_tree(), banner(), decorate(), human_record(), lab_hash(), provenance(), source_commit() (+18 more)
 
 ### Community 57 - "curriculum_diff.py"
-Cohesion: 0.10
-Nodes (24): allowed(), _cell(), _diff_args(), _diff_lines(), _diff_run(), dump_json(), dump_yaml(), _extract_args() (+16 more)
+Cohesion: 0.08
+Nodes (36): allowed(), _cell(), _check_needs_out(), citation_files_ok(), classify(), _diff_args(), _diff_lines(), _diff_run() (+28 more)
 
 ### Community 59 - "load_models"
-Cohesion: 0.18
-Nodes (7): main(), get_models(), _refresh_live(), load_models(), models_path(), save_models(), CatalogueWriterTests
+Cohesion: 0.24
+Nodes (6): catalog_path(), load_models(), models_path(), root(), save_models(), CatalogueWriterTests
 
-### Community 61 - "subprocess"
-Cohesion: 0.06
-Nodes (19): graphify_bin(), main(), normalized(), rebuild_in_copy(), regenerate(), touches_graph_sources(), embedded_text(), fetch() (+11 more)
+### Community 61 - "ocr_pdf.py"
+Cohesion: 0.36
+Nodes (4): embedded_text(), fetch(), main(), ocr()
 
-### Community 62 - "steer.py"
-Cohesion: 0.15
-Nodes (11): 2026-10-15, main(), _cert_block(), create_block(), main(), set_key(), show(), certs() (+3 more)
-
-### Community 63 - "status_matrix.py"
-Cohesion: 0.15
-Nodes (11): is_complete(), _topic_ids(), cert_topics(), check(), lab_cell(), lang_cell(), _quality_section(), refresh() (+3 more)
+### Community 63 - "_render"
+Cohesion: 0.29
+Nodes (5): cert_topics(), check(), lab_cell(), lang_cell(), _render()
 
 ### Community 64 - "release-please-config.json"
 Cohesion: 0.18
 Nodes (10): bootstrap-sha, bump-minor-pre-major, bump-patch-for-minor-pre-major, changelog-path, changelog-sections, include-component-in-tag, include-v-in-tag, packages (+2 more)
-
-### Community 65 - "RejectsDamagedTranslations"
-Cohesion: 0.12
-Nodes (4): 2026-09-11, SyncCncfTests, json(), RejectsDamagedTranslations
-
-### Community 66 - "test_groundedness.py"
-Cohesion: 0.20
-Nodes (5): Determinism, NoNetwork, overlap(), run(), Segmentation
 
 ### Community 68 - "The phases"
 Cohesion: 0.13
 Nodes (15): Can it read what we send it? (2026-09-11, second pass), Phase 1.5 — BUILT 2026-09-14 (option A), Phase 1.5 — closing the loop: checks that improve the page, Phase 1 — feedback, and the probe that answers it (2026-09-11), Phase 1 — SHIPPED 2026-09-09, Phase 1 — topic chat with a task harness, Phase 2 — BUILT 2026-09-14, Phase 2 — questions across one certification (+7 more)
 
 ### Community 69 - "pytest"
-Cohesion: 0.25
+Cohesion: 0.24
 Nodes (11): url_allowed(), validate_envs(), _envs(), test_allowed_urls_pass(), test_bad_cilium_supported_minor(), test_bad_cilium_tag_reaching_cilium_install(), test_bad_kubernetes_patch(), test_bad_runtime_and_cli_versions() (+3 more)
 
 ### Community 70 - "test_kc_test.py"
 Cohesion: 0.08
-Nodes (29): cmd_test(), load_envs(), slug(), evidence(), measure(), parse_cni(), resolve_env(), run_scenario() (+21 more)
+Nodes (27): cmd_test(), load_envs(), evidence(), measure(), parse_cni(), resolve_env(), run_scenario(), stage() (+19 more)
 
 ### Community 71 - "bot_loop_check.js"
 Cohesion: 0.06
 Nodes (24): fs, KEY, line, ONLY, path, PORT, REPO, SHAPES (+16 more)
 
 ### Community 72 - "Extraction"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (5): Classes, Diff, Extraction, run_twice(), tree()
 
 ### Community 73 - "Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith)"
 Cohesion: 0.18
 Nodes (10): 1. Graphify — measured pilot, 2026-08-18, 2. OpenWiki — studied, not yet run (every run spends), 3. LangSmith — optional visibility, narrow fit, 4. The plan, 5. Costs, summarized, 7. Decisions that belong to the owner, Agentic Tooling Study: Graphify + OpenWiki (+ LangSmith), Integration cautions (this repo specifically) (+2 more)
 
-### Community 74 - "tracker.py"
-Cohesion: 0.15
-Nodes (10): 2026-07-16, _ai_yaml(), document_text(), fetch_document(), _get(), _get_bytes(), normalise_weights(), snapshot_topics() (+2 more)
+### Community 74 - "core/__init__.py"
+Cohesion: 0.05
+Nodes (5): guardian(), run(), _BlockDumper, document_text(), ContractTests
 
 ### Community 75 - "search_topics"
 Cohesion: 0.17
@@ -567,13 +571,13 @@ Nodes (11): AI-generated content, ⚖️ Aviso Legal y de Marcas Registradas / L
 Cohesion: 0.13
 Nodes (4): OffSwitchTests, response(), ThinkingTests, VerdictTests
 
-### Community 84 - "Documentation audit — 2026-10-14"
-Cohesion: 0.50
-Nodes (4): Documentation audit — 2026-10-14, Fixed in this pass, `graphify-out/` and `openwiki/` — what they are and whether they belong, Needs the owner's decision
+### Community 84 - "milestone_sync.py"
+Cohesion: 0.13
+Nodes (16): closing_issue_numbers(), git_lines(), is_release_pr(), links_an_issue(), main(), pick_milestone(), plan_issue_closed(), plan_pr_merged() (+8 more)
 
 ### Community 85 - "test_web_render.py"
-Cohesion: 0.26
-Nodes (4): renderer_source(), RendererTests, run_js(), StaticTests
+Cohesion: 0.20
+Nodes (5): renderer_source(), RendererTests, run_js(), StaticTests, SyntaxTests
 
 ### Community 86 - "lab.md"
 Cohesion: 0.14
@@ -584,8 +588,8 @@ Cohesion: 0.14
 Nodes (13): Authorship, Depends on, Evidence, Findings ledger, How to test it from a clean clone, Kind, Known gaps, Provenance (+5 more)
 
 ### Community 89 - "argparse"
-Cohesion: 0.09
-Nodes (14): evidence(), main(), main(), main(), classify(), main(), main(), table() (+6 more)
+Cohesion: 0.07
+Nodes (15): evidence(), main(), main(), problems(), _skip(), _VendorTagLoader, main(), classify() (+7 more)
 
 ### Community 90 - "video.md"
 Cohesion: 0.14
@@ -594,6 +598,10 @@ Nodes (13): Authorship, Depends on, Evidence, Findings ledger, How to test it fr
 ### Community 92 - "clone_and_run.sh"
 Cohesion: 0.33
 Nodes (7): fail(), get(), ok(), PYTHONPATH, clone_and_run.sh script, step(), TEACH_OFFLINE
+
+### Community 93 - "Client"
+Cohesion: 0.24
+Nodes (3): ask(), ask_retrying(), Client
 
 ### Community 94 - "pull_request_template.md"
 Cohesion: 0.15
@@ -620,36 +628,36 @@ Cohesion: 0.17
 Nodes (11): Authorship, Depends on, Evidence, Findings ledger, How to test it from a clean clone, Kind, Provenance, Risk and rollback (+3 more)
 
 ### Community 101 - "PlanTests"
-Cohesion: 0.10
-Nodes (4): MainTests, paged(), PlanTests, pr()
+Cohesion: 0.18
+Nodes (3): MainTests, paged(), pr()
 
 ### Community 102 - "datetime"
-Cohesion: 0.11
-Nodes (16): backend_of(), _fmt(), in_tokens(), main(), rows(), session_windows(), _spend_section(), by_topic() (+8 more)
+Cohesion: 0.08
+Nodes (20): frozen(), main(), survey(), backend_of(), _fmt(), in_tokens(), main(), rows() (+12 more)
 
 ### Community 103 - "topics"
-Cohesion: 0.16
-Nodes (9): get_cert(), topics(), get_syllabus(), list_certs(), serve(), get_syllabus(), list_certs(), search_topics() (+1 more)
+Cohesion: 0.13
+Nodes (12): 2026-09-17, get_cert(), cert_show(), get_cert(), topics(), get_syllabus(), list_certs(), serve() (+4 more)
 
 ### Community 104 - "check_source_chain.py"
-Cohesion: 0.09
-Nodes (12): Determinism and provenance, baseline(), Chain, frontmatter(), load_yaml(), main(), rel(), chain_sha256() (+4 more)
+Cohesion: 0.31
+Nodes (6): baseline(), Chain, frontmatter(), load_yaml(), main(), rel()
 
 ### Community 105 - "test_kc_gate.py"
-Cohesion: 0.12
-Nodes (10): provable_labs(), natural(), has_fix_verb(), test_every_tested_lab_has_a_way_to_be_proven(), test_human_tested_entries_match_the_evidence_file(), test_killercoda_jobs_never_fail_a_pr_and_name_no_lab(), test_labs_with_a_fix_verb_or_a_fix_file_are_provable(), test_publish_gate_refuses_a_scenario_without_passing_evidence_for_any_cert() (+2 more)
+Cohesion: 0.18
+Nodes (7): provable_labs(), natural(), test_every_tested_lab_has_a_way_to_be_proven(), test_killercoda_jobs_never_fail_a_pr_and_name_no_lab(), test_labs_with_a_fix_verb_or_a_fix_file_are_provable(), test_the_mirror_gate_needs_a_recorded_proof_for_the_current_lab_hash(), test_the_plan_lists_the_provable_labs()
 
 ### Community 107 - "api.py"
 Cohesion: 0.10
-Nodes (10): BotUsage, get_cert_video(), get_path_video(), login(), LoginBody, logout(), post_bot_used(), rate_limit() (+2 more)
+Nodes (9): BotUsage, login(), LoginBody, logout(), post_bot_used(), rate_limit(), require_user(), _readable() (+1 more)
 
 ### Community 108 - "lab_step.sh"
 Cohesion: 0.53
 Nodes (4): fail(), ok(), ours(), lab_step.sh script
 
-### Community 111 - "pytest"
-Cohesion: 0.09
-Nodes (28): Which labs are on Killercoda: `tested` and `loaded-untested`, cert_names(), check_known(), load(), load_evidence(), load_targets(), main(), reason() (+20 more)
+### Community 111 - "kc_scope.py"
+Cohesion: 0.19
+Nodes (9): check_known(), load(), load_evidence(), load_targets(), ScopeError, test_human_tested_entries_match_the_evidence_file(), test_the_data_names_only_labs_and_certifications_that_exist(), test_only_killercoda_targets_may_allow_the_mirror() (+1 more)
 
 ### Community 112 - "model_comparison.py"
 Cohesion: 0.13
@@ -660,72 +668,72 @@ Cohesion: 0.67
 Nodes (3): .venv/bin/python3, graphify, teach
 
 ### Community 114 - "pr_check.py"
-Cohesion: 0.05
-Nodes (42): Agents, Check before you push, Checks that must pass, Contributing, Conventions, Groundedness (advisory), How a lab gets proven before it is published, How big is my change? (+34 more)
+Cohesion: 0.27
+Nodes (10): The process, changed(), check(), graph_status(), groundedness_cached(), label(), main(), report() (+2 more)
 
 ### Community 116 - "ext_os_release"
 Cohesion: 0.22
 Nodes (4): probe.sh script, probe.sh script, probe.sh script, probe.sh script
 
 ### Community 121 - "up"
-Cohesion: 0.18
-Nodes (19): _break_args(), down(), _down_cluster(), enter_hint(), lab_dir(), _lab_name(), LabError, _load_spec() (+11 more)
+Cohesion: 0.19
+Nodes (18): Labs — what an audit found, 2026-08-08 (design parked, not started), _break_args(), down(), _down_cluster(), _lab_name(), LabError, _load_spec(), _needs_cluster() (+10 more)
 
 ### Community 124 - "quality_score.py"
 Cohesion: 0.06
-Nodes (36): _deliberate(), findings(), main(), main(), problems(), _skip(), _VendorTagLoader, catalogue() (+28 more)
+Nodes (33): _deliberate(), findings(), main(), catalogue(), cited_domains(), duplicate_keys(), main(), block_for() (+25 more)
 
 ### Community 125 - "get"
-Cohesion: 0.13
-Nodes (9): get_bot_stats(), get_catalog(), get_langs(), get_search(), get_status(), healthz(), index(), _status_snapshot() (+1 more)
+Cohesion: 0.10
+Nodes (12): get_bot_stats(), get_catalog(), get_cert_video(), get_langs(), get_path_video(), get_search(), get_status(), healthz() (+4 more)
 
 ### Community 126 - "The routine, start to finish"
 Cohesion: 0.12
 Nodes (17): 1. The container registry (the one that actually fills), 2. Rejected generation output (`.rejected/`), 3. Orphaned topic directories, 4. Local state (`~/.local/state/teach-plat/`), 5. Scratch files in the repository root, Check first, Cleanup — what fills up, and how to reclaim it, Delete (+9 more)
 
-### Community 127 - "check_citations.py"
-Cohesion: 0.09
-Nodes (9): check(), main(), spec_kinds(), tracked_versions(), citations(), main(), status(), section() (+1 more)
+### Community 127 - "test_source_chain.py"
+Cohesion: 0.12
+Nodes (8): citations(), main(), status(), ask(), main(), references(), section(), _free_port()
 
 ### Community 129 - "ckad"
 Cohesion: 0.11
 Nodes (17): cka, ckad, Counts, Drift: frozen `certs/cka.md` vs its own v1.35 PDF, Drift: frozen `certs/ckad.md` vs its own v1.35 PDF, Flow, Impact: frozen `certs/cka.md` -> v1.37 (drives the classes), Impact: frozen `certs/ckad.md` -> v1.37 (drives the classes) (+9 more)
 
-### Community 131 - "audit_compare.py"
-Cohesion: 0.19
-Nodes (8): compare(), criterion_ids(), DuplicateAuditor, has_proposal(), load_results(), main(), priority(), valid_score()
+### Community 131 - "generate_topic"
+Cohesion: 0.13
+Nodes (12): Content generation, First, the thing that surprises everyone, cert_generate(), content_dir(), _read(), topic_langs(), topic_outdated_langs(), generate_cert() (+4 more)
 
 ### Community 132 - "Study bot — design"
 Cohesion: 0.20
 Nodes (10): Alternatives considered, Effort, How a student uses it, How it is maintained, Is it all API?, Operating it, Study bot — design, The insight: explicit selection replaces retrieval (+2 more)
 
 ### Community 133 - "ConfirmTests"
-Cohesion: 0.15
-Nodes (6): confirm(), lines(), markdown(), of(), ConfirmTests, Tty
+Cohesion: 0.20
+Nodes (4): confirm(), lines(), ConfirmTests, Tty
 
-### Community 134 - "The loop"
-Cohesion: 0.12
-Nodes (16): 1. Snapshot the syllabus — once per certification, 2. Generate, 2b. The quality floor — the same standard for every backend, 2c. What "quality" can and cannot be proven mechanically, 4. Status, 5. Commit, Backends, Content Workflow (+8 more)
-
-### Community 135 - "plan_cert"
+### Community 134 - "Content Workflow"
 Cohesion: 0.25
-Nodes (8): classify(), inventory(), load_syllabus(), _needles(), plan(), plan_cert(), planned(), _ref()
+Nodes (8): Backends, Content Workflow, Everything the pipeline produces is declared in `pipeline.yaml`, Failure modes worth knowing, Language flow: author once in English, translate outwards, Switching to Gemini (or any CLI agent), Translating instead of re-authoring, Unattended runs and quota
+
+### Community 135 - "_stream"
+Cohesion: 0.16
+Nodes (11): _stream(), _why(), Lab, test_a_child_that_exits_124_is_not_reported_as_a_timeout(), test_a_stuck_on_timeout_does_not_hang_the_runner(), test_output_and_exit_code_pass_through(), test_scripts_run_under_timeout_inside_the_container(), test_the_backstop_docker_exec_is_bounded() (+3 more)
 
 ### Community 137 - "Automated review (Copilot)"
 Cohesion: 0.29
 Nodes (7): Authorship: who wrote it, who found what, who fixed it, Automated review (Copilot), How it behaves, How we work with it, Recording a review in the material, The graph refresh PR, When a PR is ready
 
 ### Community 138 - "What you can contribute"
-Cohesion: 0.15
-Nodes (9): No braindumps, no NDA material, Provenance is mandatory, Raising a topic's quality score, Sign your commits (DCO), What you can contribute, Quality score, Not done yet, fail() (+1 more)
+Cohesion: 0.29
+Nodes (5): No braindumps, no NDA material, Provenance is mandatory, Sign your commits (DCO), What you can contribute, Model
 
 ### Community 140 - "PureTests"
 Cohesion: 0.13
 Nodes (4): FakeGitHub, pr(), PublishTests, PureTests
 
 ### Community 141 - "Content Status"
-Cohesion: 0.20
-Nodes (9): Certification Videos, Certifications, Content Status, Exam versions, Milestone, Path Videos, Quality, Spend (measured) (+1 more)
+Cohesion: 0.13
+Nodes (11): Certification Videos, Certifications, Content Status, Exam versions, Milestone, Path Videos, Quality, Spend (measured) (+3 more)
 
 ### Community 143 - "probe_languages"
 Cohesion: 0.29
@@ -740,19 +748,15 @@ Cohesion: 0.17
 Nodes (13): Cost: scoped edits versus full regeneration, Curriculum upgrades: deterministic, and only what changed, Efficiency: how this update came out, Kubernetes 1.37 and Killercoda, Lessons, Phase 2, measured (2026-10-21), Phase 2: the edit script, `scripts/upgrade_versions.py`, Phase 2: what will happen, and what guards it (+5 more)
 
 ### Community 147 - "check_config.py"
-Cohesion: 0.22
-Nodes (4): dominant(), main(), recent(), _int_env()
-
-### Community 150 - "test_check_pr.py"
-Cohesion: 0.17
-Nodes (3): verify_workflow(), VerifyWorkflowTests, WhereItRanTests
+Cohesion: 0.11
+Nodes (10): dominant(), effective(), main(), recent(), main(), _money(), rows(), _tokens() (+2 more)
 
 ### Community 152 - "1.1 Title"
 Cohesion: 0.50
 Nodes (3): 1.1 Title, Intro, References
 
 ### Community 154 - "test_legal_notice.py"
-Cohesion: 0.38
+Cohesion: 0.33
 Nodes (3): legal_section(), LegalNoticeTests, owner()
 
 ### Community 156 - "exam_version"
@@ -767,13 +771,9 @@ Nodes (14): Catalog by Categories, CLI, Code Architecture, Data Model, Decoupled
 Cohesion: 0.20
 Nodes (9): 1. Information sovereignty, 2. Curriculum-as-Code, 3. Determinism, 4. With AI or without AI: the same pipeline and the same validator, 5. Honest about limits, 6. Open by default, 7. The source chain, Principles (+1 more)
 
-### Community 160 - "_cli_env"
-Cohesion: 0.22
-Nodes (5): Generation backends, effective(), _cli_env(), generation(), CliEnvTest
-
 ### Community 164 - "docs_impact"
-Cohesion: 0.17
-Nodes (9): Content generation, in detail, Curriculum upgrade, in detail, Labs, in detail, Level 2: each flow, with the scripts and what blocks, Pull request lifecycle, in detail, Release, in detail, docs_impact(), impact() (+1 more)
+Cohesion: 0.25
+Nodes (7): Content generation, in detail, Curriculum upgrade, in detail, Labs, in detail, Level 2: each flow, with the scripts and what blocks, Pull request lifecycle, in detail, Release, in detail, release_notes_ready()
 
 ### Community 165 - "is_bot_pr"
 Cohesion: 0.17
@@ -804,8 +804,8 @@ Cohesion: 0.20
 Nodes (8): Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md), 1. Catalog Tracker (Scraper — nothing is static), 2. Generator (AI, on-demand), 3. Web: Public Landing + Paid Study Zone, Architecture — 3 Components, me(), authenticate(), has_subscription()
 
 ### Community 173 - "load"
-Cohesion: 0.13
-Nodes (11): Phase 1 — AI fundamentals (extends the three cloud careers), tracker_sync(), add_cert(), catalog_path(), load(), save(), generate_paths(), sync_clouds() (+3 more)
+Cohesion: 0.07
+Nodes (25): Phase 1 — AI fundamentals (extends the three cloud careers), 2026-07-16, 1. Snapshot the syllabus — once per certification, 2. Generate, 2b. The quality floor — the same standard for every backend, 2c. What "quality" can and cannot be proven mechanically, 4. Status, 5. Commit (+17 more)
 
 ### Community 175 - "1-1-demo-linux-lab/verify.sh"
 Cohesion: 0.40
@@ -827,9 +827,13 @@ Nodes (4): I_UNDERSTAND_THIS_IS_A_DISPOSABLE_VM, LAB_DISPOSABLE, verify.sh scrip
 Cohesion: 0.50
 Nodes (3): DEBIAN_FRONTEND, KUBECONFIG, bootstrap-kubeadm.sh script
 
+### Community 182 - "chain_sha256"
+Cohesion: 0.17
+Nodes (6): Determinism and provenance, 2026-10-15, chain_sha256(), translation_source_sha256(), derived_from(), ChainHashTests
+
 ### Community 188 - "study-lab — break/fix labs in a throwaway container"
-Cohesion: 0.18
-Nodes (11): Create a lab that follows the template, How it works, Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15), Other places to run it, Pinned versions, Quick start, Run a lab from another repository, State of the 548 curated labs (validate, 2026-10-15) (+3 more)
+Cohesion: 0.13
+Nodes (14): Raising a topic's quality score, Create a lab that follows the template, How it works, Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15), Not done yet, Other places to run it, Pinned versions, Quick start (+6 more)
 
 ### Community 207 - "topic_content"
 Cohesion: 0.22
@@ -840,20 +844,20 @@ Cohesion: 0.18
 Nodes (11): Building features on it, Developers — use the API, run your own copy, build on it, DORA, concretely, Keeping this page true, Licence, Running your own copy, Staying in sync with upstream, ⚠️ The API is beta, and hosted on a home cluster (+3 more)
 
 ### Community 212 - "Changelog"
-Cohesion: 0.09
-Nodes (23): [0.3.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.2.0...v0.3.0) (2026-10-16), [0.4.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.3.0...v0.4.0) (2026-10-20), [0.5.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.4.0...v0.5.0) (2026-10-21), [0.5.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.0...v0.5.1) (2026-10-21), [0.6.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.1...v0.6.0) (2026-10-21), Bug Fixes, Bug Fixes, Bug Fixes (+15 more)
+Cohesion: 0.07
+Nodes (29): [0.3.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.2.0...v0.3.0) (2026-10-16), [0.4.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.3.0...v0.4.0) (2026-10-20), [0.5.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.4.0...v0.5.0) (2026-10-21), [0.5.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.0...v0.5.1) (2026-10-21), [0.6.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.1...v0.6.0) (2026-10-21), [0.6.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.0...v0.6.1) (2026-10-26), [0.6.2](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.1...v0.6.2) (2026-10-26), Bug Fixes (+21 more)
 
-### Community 213 - "check_curriculum_consistency.py"
-Cohesion: 0.29
-Nodes (5): check(), load_baseline(), main(), key(), keys()
+### Community 213 - "yaml"
+Cohesion: 0.18
+Nodes (8): check(), load_baseline(), main(), keys(), main(), status_rows(), table(), lab_dirs_with_safety()
 
 ### Community 214 - "tool_edit_ok"
-Cohesion: 0.18
-Nodes (10): citation_files_ok(), cite_checker(), _git_text(), _guard_run(), _listed(), load_pins(), provenance(), tool_edit_ok() (+2 more)
+Cohesion: 0.24
+Nodes (7): cite_checker(), ok(), _listed(), load_pins(), tool_edit_ok(), uv_rewrite(), wrong_rewrites()
 
 ### Community 215 - "Limiter"
-Cohesion: 0.18
-Nodes (5): client_id(), Limiter, ClientIdentityTests, RateLimitTests, _Req
+Cohesion: 0.15
+Nodes (6): client_id(), _int_env(), Limiter, ClientIdentityTests, RateLimitTests, _Req
 
 ### Community 217 - "Killercoda is an export target, never the source"
 Cohesion: 0.22
@@ -864,24 +868,20 @@ Cohesion: 0.14
 Nodes (11): Result for v1.37 (2026-10-20), check_tree(), diff(), _match_domains(), _match_objectives(), normalize(), number(), sha256_text() (+3 more)
 
 ### Community 220 - "Within one certification (the only fair comparisons; authoring language `en` only)"
-Cohesion: 0.20
-Nodes (10): cgoa, cnpa, kca, kcsa, lpic-1, lpic-3-303, mcpa, Model Comparison (+2 more)
+Cohesion: 0.12
+Nodes (14): Documentation audit — 2026-10-14, Fixed in this pass, `graphify-out/` and `openwiki/` — what they are and whether they belong, Needs the owner's decision, cgoa, cnpa, kca, kcsa (+6 more)
 
-### Community 221 - "accepted"
-Cohesion: 0.29
-Nodes (3): accepted(), _known_models(), AcceptanceTests
-
-### Community 222 - "scan"
-Cohesion: 0.25
-Nodes (5): _headings(), minor_below(), scan(), _sections(), unlisted_edits()
+### Community 222 - "test_kc_scope.py"
+Cohesion: 0.26
+Nodes (10): _ev(), _evfile(), test_a_malformed_evidence_entry_fails_loudly(), test_a_malformed_tracks_file_fails_loudly(), test_a_typo_fails_instead_of_dropping_a_lab_from_the_gate(), test_failed_and_tested_are_mutually_exclusive(), test_proven_for_needs_the_current_hash_and_a_publishing_target(), test_stale_evidence_is_listed_never_silent() (+2 more)
 
 ### Community 223 - "Roadmap — where this is and where it goes"
 Cohesion: 0.25
 Nodes (8): Current focus — set 2026-09-11, Roadmap — where this is and where it goes, Smaller things, when there is an appetite, Standing decisions worth not re-litigating, Study bot — the phases after this one, What is next, Where it is, Where we left off — 2026-09-30
 
 ### Community 227 - "Backlog"
-Cohesion: 0.25
-Nodes (8): Backlog, Content, Deploy — Technical Debt, Labs — Execution Modes (see docs/ORIGINAL_DESIGN.md, SDD section), Labs — what an audit found, 2026-08-08 (design parked, not started), Pipeline Automation, Repo Hygiene, Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
+Cohesion: 0.29
+Nodes (7): Backlog, Content, Deploy — Technical Debt, Labs — Execution Modes (see docs/ORIGINAL_DESIGN.md, SDD section), Pipeline Automation, Repo Hygiene, Verifying the material is TRUE (docs/AUDITOR_DESIGN.md)
 
 ### Community 228 - "sitecustomize.py"
 Cohesion: 0.47
@@ -895,16 +895,12 @@ Nodes (4): cleanup(), diagnose(), smoke.sh script, step()
 Cohesion: 0.29
 Nodes (7): Becoming a maintainer, Code of conduct, Day-to-day changes, Governance, Proposals (RFCs) — for anything that changes how the project works, Releases, Who maintains what, today
 
-### Community 232 - "yaml"
-Cohesion: 0.14
-Nodes (9): frozen(), main(), _same_version(), state(), survey(), main(), status_rows(), table() (+1 more)
-
 ### Community 237 - "AGENTS.md"
 Cohesion: 0.40
 Nodes (4): Hard rules for agents, Read in this order, Where things live, Work flow
 
 ### Community 238 - "Self-audit: how to check this repo yourself"
-Cohesion: 0.40
+Cohesion: 0.33
 Nodes (5): Compare several auditors, Propose a new criterion, Run it, Self-audit: how to check this repo yourself, What is in this folder
 
 ### Community 239 - "How it works"
@@ -915,29 +911,41 @@ Nodes (9): 1. Content generation, 2. Labs, 3. Pull request lifecycle, 4. Release
 Cohesion: 0.50
 Nodes (3): Highlights, Thanks, Upgrade notes
 
+### Community 244 - "enter_hint"
+Cohesion: 0.25
+Nodes (4): lab_up(), enter_hint(), load_spec_for(), EnterHintTests
+
 ### Community 247 - "AI certification roadmap"
-Cohesion: 0.25
-Nodes (8): AI certification roadmap, How each course cites its own syllabus, Model-provider certifications — researched in depth 2026-09-09, NVIDIA career track (researched 2026-09-09, owner's request), Phase 2 — the technical tier, led by market demand, Phase 3 — specialists (need a verification pass before cataloguing), The five filters, Watchlist — official, but they fail a filter today
-
-### Community 248 - "2. The wiki (OpenWiki)"
-Cohesion: 0.25
-Nodes (8): 2. The wiki (OpenWiki), 3. Real metrics, end to end, Developer tools: code graph, wiki, and real metrics, Reading the numbers, Setup, once, Using it, What changed on 2026-08-18 (blind spots closed), When the code changes
-
-### Community 249 - "check_claims.py"
-Cohesion: 0.36
-Nodes (3): ask(), main(), references()
-
-### Community 252 - "models_live.py"
-Cohesion: 0.38
-Nodes (3): compare(), moved(), per_million()
-
-### Community 253 - "milestone"
 Cohesion: 0.29
-Nodes (4): What changed in the machinery this session, and why you should not undo it, in_milestone(), milestone(), milestone_targets()
+Nodes (7): AI certification roadmap, How each course cites its own syllabus, Model-provider certifications — researched in depth 2026-09-09, Phase 2 — the technical tier, led by market demand, Phase 3 — specialists (need a verification pass before cataloguing), The five filters, Watchlist — official, but they fail a filter today
+
+### Community 248 - "_extract_run"
+Cohesion: 0.15
+Nodes (8): dump_yaml(), _extract_run(), _is_marker(), join(), parse_layout(), _right_start(), _segments(), tidy()
+
+### Community 249 - "Contributing"
+Cohesion: 0.17
+Nodes (12): Check before you push, Contributing, Conventions, How a lab gets proven before it is published, Licence and conduct, Merging and deploying the site, Optional: run it automatically before every `git push`, Releases (+4 more)
+
+### Community 250 - "CitedRunTests"
+Cohesion: 0.24
+Nodes (3): Quality score, CitedRunTests, fail()
+
+### Community 252 - "generate_cert_script"
+Cohesion: 0.21
+Nodes (10): Video — Technical Debt, 2026-07-17, _ask_scenes(), _cert_domains(), _domains_voiceover(), generate_cert_script(), generate_script(), _localized_path() (+2 more)
+
+### Community 253 - "main"
+Cohesion: 0.22
+Nodes (7): generate_with_retries(), main(), pending(), _sort_key(), me(), mine(), owner()
 
 ### Community 254 - "From issue to release"
 Cohesion: 0.33
 Nodes (6): Every label, who sets it, From issue to release, Milestones, Review and exceptions, Someone from outside the project, The rules of the flow
+
+### Community 255 - ".run_sync"
+Cohesion: 0.27
+Nodes (3): 2026-09-11, SyncCncfTests, json()
 
 ### Community 256 - "Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)"
 Cohesion: 0.40
@@ -951,29 +959,77 @@ Nodes (5): 1. The content is true, 2. Labs and exercises are true, 3. Code and s
 Cohesion: 0.40
 Nodes (3): exam_version_changes(), load(), objectives_document()
 
-### Community 259 - "From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives"
-Cohesion: 0.50
-Nodes (4): From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives, What I need from you, What is now enforced, so this cannot recur, What this means for your work
+### Community 259 - "Scope"
+Cohesion: 0.31
+Nodes (5): Which labs are on Killercoda: `tested` and `loaded-untested`, reason(), Scope, status(), test_status_is_tested_only_with_killercoda_evidence()
+
+### Community 262 - "Using it, in detail"
+Cohesion: 0.20
+Nodes (10): Ask questions about the material with a local model (RAG), Command line, Practice: break-and-fix labs, REST API, Study offline, sovereign, The study bot on the site (not sovereign — your own key), Use it from your own AI agent (MCP), Use it in 2 minutes (+2 more)
+
+### Community 263 - "load"
+Cohesion: 0.29
+Nodes (6): clear_topic_stale(), load(), md_path(), save(), scaffold(), set_topic_status()
+
+### Community 264 - "test_runner_guard.py"
+Cohesion: 0.38
+Nodes (7): FakeLab, test_check_shell_exec_refuse_a_foreign_container(), test_down_refuses_a_foreign_container(), test_node_image_for_supported_minors(), test_ours_passes_study_lab_containers(), test_run_refuses_a_foreign_container(), test_run_refuses_a_kubernetes_minor_without_a_node_image()
+
+### Community 266 - "bot_stats.py"
+Cohesion: 0.31
+Nodes (5): 6. Where the value actually is (owner's question, 2026-08-18), _blank(), load(), path(), _write()
+
+### Community 267 - ".teach"
+Cohesion: 0.36
+Nodes (3): Checks that must pass, Groundedness (advisory), StudentCliSmokeTests
+
+### Community 268 - "main"
+Cohesion: 0.25
+Nodes (6): Sources and licensing, Glossary, main(), current(), stale_entries(), test_the_stale_report_runs_on_the_real_repo_and_never_fails()
+
+### Community 269 - "_reject_if_recap"
+Cohesion: 0.29
+Nodes (7): 2026-07-11/12, 2026-07-19, 2026-07-27, 3. Audit — never skip this, _reject_if_recap(), _strip_fence(), _system()
+
+### Community 270 - "material"
+Cohesion: 0.32
+Nodes (3): ExamLabel, exams_named(), material()
+
+### Community 272 - "Pull requests"
+Cohesion: 0.29
+Nodes (7): Agents, How big is my change?, How issue forms work, Labels, Pull requests, Size and scope, Triage and response times
+
+### Community 273 - "Agent guide: commands, content workflow and verification"
+Cohesion: 0.29
+Nodes (7): Agent guide: commands, content workflow and verification, Agent Idea Synchronization (docs/AGENTS_SYNC.md), Commands, Content Workflow, Pull requests from agents, Rules, Verification: what is proven, and what is only assumed
+
+### Community 275 - "run"
+Cohesion: 0.40
+Nodes (3): NoModelUntilNeeded, NoNetwork, run()
+
+### Community 277 - "Checking curriculum updates"
+Cohesion: 0.40
+Nodes (5): Checking curriculum updates, Reading the "Exam versions" table in docs/STATUS.md, Reporting it, most severe first, The rule, What `make check-updates` does
 
 ## Knowledge Gaps
 - **24 isolated node(s):** `KUBECONFIG`, `DEBIAN_FRONTEND`, `teach-plat`, `TEACH_AGENT`, `TEACH_OFFLINE` (+19 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1556 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **104 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1589 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **115 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `kubectl()` connect `clean_registry.py` to `Operating the pipeline — for maintainers`, `Backlog`, `video.py`, `Deploying study to Kubernetes with Helm`, `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)`, `topic_content`, `pr_check.py`, `Developers — use the API, run your own copy, build on it`, `_verify_translation`, `study-lab — break/fix labs in a throwaway container`, `subprocess`, `Roadmap — where this is and where it goes`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
+- **Why does `kubectl()` connect `clean_registry.py` to `Operating the pipeline — for maintainers`, `Backlog`, `Using it, in detail`, `pathlib`, `Deploying study to Kubernetes with Helm`, `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)`, `topic_content`, `study-lab — break/fix labs in a throwaway container`, `Developers — use the API, run your own copy, build on it`, `_verify_translation`, `up`, `generate_cert_script`, `Roadmap — where this is and where it goes`?**
+  _High betweenness centrality (0.052) - this node is a cross-community bridge._
 - **What connects `KUBECONFIG`, `DEBIAN_FRONTEND`, `teach-plat` to the rest of the system?**
   _24 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `teach/cli.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.07657657657657657 - nodes in this community are weakly interconnected._
-- **Why does `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)` connect `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)` to `Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)`, `From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives`, `README.md`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+  _Cohesion score 0.08067226890756303 - nodes in this community are weakly interconnected._
+- **Why does `_verify_translation()` connect `_verify_translation` to `Guardrails: what is checked, what blocks, and what is only a convention`, `RejectsDamagedTranslations`, `Content Workflow`, `generator.py`, `_english`, `Agent guide: commands, content workflow and verification`, `json`, `FAQ — how the ecosystem works, honestly`, `quality_score.py`, `Principles`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Should `lab/cli.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.1092436974789916 - nodes in this community are weakly interconnected._
-- **Why does `History` connect `History` to `RejectsDamagedTranslations`, `video.py`, `tracker.py`, `README.md`, `topic_content`, `json`, `_verify_translation`, `steer.py`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Should `Operating the pipeline — for maintainers` be split into smaller, more focused modules?**
-  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09634146341463415 - nodes in this community are weakly interconnected._
+- **Why does `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)` connect `Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)` to `Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)`, `Syllabus Coverage Tests`, `README.md`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Should `video.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.1495798319327731 - nodes in this community are weakly interconnected._

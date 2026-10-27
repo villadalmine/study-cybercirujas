@@ -1,12 +1,12 @@
 # Community 40
 
-> 51 nodes · cohesion 0.06
+> 57 nodes · cohesion 0.05
 
 ## Key Concepts
 
 - **CheckPrTests** (24 connections) — `tests/test_check_pr.py`
-- **commit()** (16 connections) — `tests/test_check_pr.py`
-- **DcoTests** (14 connections) — `tests/test_check_pr.py`
+- **DcoTests** (20 connections) — `tests/test_check_pr.py`
+- **commit()** (20 connections) — `tests/test_check_pr.py`
 - **.body()** (13 connections) — `tests/test_check_pr.py`
 - **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
 - **.run_main()** (4 connections) — `tests/test_check_pr.py`
@@ -29,11 +29,11 @@
 - **.test_the_templates_bare_closes_line_does_not_fill_a_section()** (2 connections) — `tests/test_check_pr.py`
 - **.test_title_must_be_a_conventional_commit()** (2 connections) — `tests/test_check_pr.py`
 - **.test_where_it_ran_outside_evidence_is_not_evidence()** (2 connections) — `tests/test_check_pr.py`
-- *... and 26 more nodes in this community*
+- *... and 32 more nodes in this community*
 
 ## Relationships
 
-- [Community 150](Community_150.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 
 ## Source Files
 
@@ -41,7 +41,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 81 (100%)
+- EXTRACTED: 91 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

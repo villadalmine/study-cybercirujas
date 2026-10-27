@@ -1,9 +1,10 @@
 # Community 238
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
+- **audit/README.md** (5 connections) — `docs/audit/README.md`
 - **Self-audit: how to check this repo yourself** (5 connections) — `docs/audit/README.md`
 - **Compare several auditors** (1 connections) — `docs/audit/README.md`
 - **Propose a new criterion** (1 connections) — `docs/audit/README.md`
@@ -12,7 +13,7 @@
 
 ## Relationships
 
-- [Community 23](Community_23.md) (1 shared connections)
+- [Community 110](Community_110.md) (4 shared connections)
 
 ## Source Files
 
@@ -20,7 +21,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
+- EXTRACTED: 9 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

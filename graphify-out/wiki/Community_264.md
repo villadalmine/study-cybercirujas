@@ -1,24 +1,35 @@
 # Community 264
 
-> 3 nodes · cohesion 0.67
+> 10 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **_BlockDumper** (3 connections) — `teach/core/catalog.py`
-- **.increase_indent()** (1 connections) — `teach/core/catalog.py`
-- **PyYAML, but sequences stay indented under their key. The default dedents every…** (1 connections) — `teach/core/catalog.py`
+- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
+- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
+- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
+- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
+- **parametrize** (4 connections)
+- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
+- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 12](Community_12.md) (7 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/catalog.py`
+- `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 28 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

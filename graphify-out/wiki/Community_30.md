@@ -1,12 +1,21 @@
 # Community 30
 
-> 17 nodes · cohesion 0.17
+> 33 nodes · cohesion 0.09
 
 ## Key Concepts
 
+- **audit_compare.py** (16 connections) — `scripts/audit_compare.py`
 - **AuditCompareTests** (14 connections) — `tests/test_audit_compare.py`
 - **run_main()** (9 connections) — `tests/test_audit_compare.py`
 - **load()** (8 connections) — `tests/test_audit_compare.py`
+- **compare()** (7 connections) — `scripts/audit_compare.py`
+- **load_results()** (5 connections) — `scripts/audit_compare.py`
+- **main()** (5 connections) — `scripts/audit_compare.py`
+- **DuplicateAuditor** (4 connections) — `scripts/audit_compare.py`
+- **has_proposal()** (4 connections) — `scripts/audit_compare.py`
+- **valid_score()** (4 connections) — `scripts/audit_compare.py`
+- **criterion_ids()** (2 connections) — `scripts/audit_compare.py`
+- **priority()** (2 connections) — `scripts/audit_compare.py`
 - **.test_disagreements_are_a_difference_of_at_least_one()** (2 connections) — `tests/test_audit_compare.py`
 - **.test_main_exits_0_when_everything_has_a_proposal()** (2 connections) — `tests/test_audit_compare.py`
 - **.test_main_exits_1_without_results()** (2 connections) — `tests/test_audit_compare.py`
@@ -20,21 +29,23 @@
 - **.test_ranking_formula()** (1 connections) — `tests/test_audit_compare.py`
 - **.test_the_real_rubric_keeps_its_ids_and_foundations()** (1 connections) — `tests/test_audit_compare.py`
 - **.test_two_results_for_the_same_auditor_and_commit_fail()** (1 connections) — `tests/test_audit_compare.py`
-- **Run main() on a temporary results dir holding the named fixtures; return (exit…** (1 connections) — `tests/test_audit_compare.py`
+- *... and 8 more nodes in this community*
 
 ## Relationships
 
-- [Community 150](Community_150.md) (4 shared connections)
-- [Community 131](Community_131.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 213](Community_213.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
+- `scripts/audit_compare.py`
 - `tests/test_audit_compare.py`
 
 ## Audit Trail
 
-- EXTRACTED: 31 (100%)
+- EXTRACTED: 62 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

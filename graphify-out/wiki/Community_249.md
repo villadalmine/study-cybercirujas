@@ -1,34 +1,38 @@
 # Community 249
 
-> 8 nodes · cohesion 0.36
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **check_claims.py** (11 connections) — `scripts/check_claims.py`
-- **main()** (6 connections) — `scripts/check_claims.py`
-- **ask()** (4 connections) — `scripts/check_claims.py`
-- **references()** (3 connections) — `scripts/check_claims.py`
-- **random** (2 connections)
-- **Does the cited page actually SAY what the material claims it says?…** (1 connections) — `scripts/check_claims.py`
-- **(label, url) from the references section only. URLs in the body are examples…** (1 connections) — `scripts/check_claims.py`
-- **Fetch and judge. Deliberately a separate process per claim: one failure should…** (1 connections) — `scripts/check_claims.py`
+- **Contributing** (12 connections) — `CONTRIBUTING.md`
+- **Check before you push** (4 connections) — `CONTRIBUTING.md`
+- **Releases** (2 connections) — `CONTRIBUTING.md`
+- **Conventions** (1 connections) — `CONTRIBUTING.md`
+- **How a lab gets proven before it is published** (1 connections) — `CONTRIBUTING.md`
+- **Licence and conduct** (1 connections) — `CONTRIBUTING.md`
+- **Merging and deploying the site** (1 connections) — `CONTRIBUTING.md`
+- **Optional: run it automatically before every `git push`** (1 connections) — `CONTRIBUTING.md`
+- **Reviews and merging** (1 connections) — `CONTRIBUTING.md`
+- **Run a lab anywhere, and get yours published** (1 connections) — `CONTRIBUTING.md`
+- **Run the audit or propose a criterion** (1 connections) — `CONTRIBUTING.md`
+- **Set up, once** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 272](Community_272.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
+- [Community 267](Community_267.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_claims.py`
+- `CONTRIBUTING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 15 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

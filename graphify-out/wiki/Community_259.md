@@ -1,27 +1,40 @@
 # Community 259
 
-> 4 nodes · cohesion 0.50
+> 10 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `docs/AGENTS_SYNC.md`
-- **What is now enforced, so this cannot recur** (2 connections) — `docs/AGENTS_SYNC.md`
-- **What I need from you** (1 connections) — `docs/AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `docs/AGENTS_SYNC.md`
+- **Scope** (13 connections) — `teach/lab/kc_scope.py`
+- **.tested()** (7 connections) — `teach/lab/kc_scope.py`
+- **reason()** (5 connections) — `teach/lab/kc_scope.py`
+- **test_status_is_tested_only_with_killercoda_evidence()** (5 connections) — `tests/lab/test_kc_scope.py`
+- **.proven_for()** (4 connections) — `teach/lab/kc_scope.py`
+- **status()** (4 connections) — `teach/lab/kc_scope.py`
+- **Which labs are on Killercoda: `tested` and `loaded-untested`** (4 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Why a lab is not `tested` (empty for a tested one).** (1 connections) — `teach/lab/kc_scope.py`
+- **The publish gate: an entry on a target that allows the mirror, for THIS lab…** (1 connections) — `teach/lab/kc_scope.py`
+- **Evidence on a Killercoda target (any hash: a changed lab is re-proven by the…** (1 connections) — `teach/lab/kc_scope.py`
 
 ## Relationships
 
-- [Community 16](Community_16.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
+- [Community 222](Community_222.md) (6 shared connections)
+- [Community 111](Community_111.md) (5 shared connections)
+- [Community 268](Community_268.md) (2 shared connections)
+- [Community 105](Community_105.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 217](Community_217.md) (1 shared connections)
+- [Community 170](Community_170.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
+- `docs/RUN-A-LAB-ANYWHERE.md`
+- `teach/lab/kc_scope.py`
+- `tests/lab/test_kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (80%)
-- INFERRED: 1 (20%)
+- EXTRACTED: 23 (74%)
+- INFERRED: 8 (26%)
 - AMBIGUOUS: 0 (0%)
 
 ---

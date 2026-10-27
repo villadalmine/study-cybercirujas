@@ -1,35 +1,38 @@
 # Community 221
 
-> 10 nodes · cohesion 0.29
+> 15 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **accepted()** (9 connections) — `teach/core/bot_stats.py`
-- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
-- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
-- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
-- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
-- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
+- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
+- **.run_check()** (8 connections) — `tests/test_source_chain.py`
+- **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.meta()** (4 connections) — `tests/test_source_chain.py`
+- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
+- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
+- **.setUp()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
+- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
+- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
+- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [StoredShapeTests](StoredShapeTests.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
+- [Community 127](Community_127.md) (2 shared connections)
+- [Community 182](Community_182.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/core/bot_stats.py`
-- `tests/test_bot_stats.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 25 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

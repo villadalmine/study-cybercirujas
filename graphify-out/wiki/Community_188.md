@@ -1,11 +1,15 @@
 # Community 188
 
-> 11 nodes · cohesion 0.18
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
 - **study-lab — break/fix labs in a throwaway container** (10 connections) — `docs/LABS-RUNNER.md`
+- **shell()** (7 connections) — `teach/lab/runner.py`
+- **.verified()** (3 connections) — `teach/lab/spec.py`
+- **Raising a topic's quality score** (3 connections) — `CONTRIBUTING.md`
 - **How it works** (2 connections) — `docs/LABS-RUNNER.md`
+- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
 - **Quick start** (2 connections) — `docs/LABS-RUNNER.md`
 - **Run a lab from another repository** (2 connections) — `docs/LABS-RUNNER.md`
 - **State of the 548 curated labs (validate, 2026-10-15)** (2 connections) — `docs/LABS-RUNNER.md`
@@ -18,20 +22,27 @@
 
 ## Relationships
 
-- [Community 12](Community_12.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
+- [Community 12](Community_12.md) (4 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 264](Community_264.md) (1 shared connections)
 - [Community 138](Community_138.md) (1 shared connections)
+- [Community 250](Community_250.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 
 ## Source Files
 
+- `CONTRIBUTING.md`
 - `docs/LABS-RUNNER.md`
+- `teach/lab/runner.py`
+- `teach/lab/spec.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (87%)
-- INFERRED: 2 (13%)
+- EXTRACTED: 20 (77%)
+- INFERRED: 6 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,62 +1,53 @@
 # Community 7
 
-> 37 nodes · cohesion 0.10
+> 20 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **generator.py** (50 connections) — `teach/core/generator.py`
-- **generate_topic()** (24 connections) — `teach/core/generator.py`
 - **translate_topic()** (16 connections) — `teach/core/generator.py`
 - **make_completer()** (15 connections) — `teach/core/generator.py`
 - **GeneratorConfigError** (14 connections) — `teach/core/generator.py`
 - **_agent_completer()** (11 connections) — `teach/core/generator.py`
 - **complete()** (9 connections) — `teach/core/generator.py`
 - **_litellm_completer()** (9 connections) — `teach/core/generator.py`
-- **test_translation_verify.py** (8 connections) — `tests/test_translation_verify.py`
 - **complete()** (7 connections) — `teach/core/generator.py`
-- **cert_generate()** (6 connections) — `teach/cli.py`
 - **_antigravity_completer()** (6 connections) — `teach/core/generator.py`
 - **_record_plain_usage()** (6 connections) — `teach/core/generator.py`
 - **_reject_if_substandard()** (6 connections) — `teach/core/generator.py`
-- **_record_usage()** (5 connections) — `teach/core/generator.py`
-- **_write_meta()** (5 connections) — `teach/core/generator.py`
-- **generate_cert()** (4 connections) — `teach/core/generator.py`
-- **_topic_context()** (4 connections) — `teach/core/generator.py`
 - **Completer** (4 connections)
 - **_dominant_model()** (3 connections) — `teach/core/generator.py`
-- **_system()** (3 connections) — `teach/core/generator.py`
-- **First, the thing that surprises everyone** (3 connections) — `docs/WORKFLOW.md`
 - **complete()** (2 connections) — `teach/core/generator.py`
 - **Exception** (1 connections)
-- **Path** (1 connections)
-- *... and 12 more nodes in this community*
+- **The model that actually wrote the answer. A single CLI call bills more than one…** (1 connections) — `teach/core/generator.py`
+- **Usage line for backends without the claude JSON envelope. litellm reports exact…** (1 connections) — `teach/core/generator.py`
+- **Stop generation when material does not meet the pipeline.yaml floor.…** (1 connections) — `teach/core/generator.py`
+- **Backend for active Antigravity AI session (uses IDE session without external…** (1 connections) — `teach/core/generator.py`
+- **`effort` overrides the declared thinking level for THIS completer. "default"…** (1 connections) — `teach/core/generator.py`
+- **Translate an existing topic instead of re-authoring it. `generate_topic` never…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 10](Community_10.md) (11 shared connections)
-- [Community 43](Community_43.md) (8 shared connections)
-- [Community 21](Community_21.md) (7 shared connections)
-- [Community 15](Community_15.md) (6 shared connections)
-- [Community 50](Community_50.md) (6 shared connections)
-- [Community 160](Community_160.md) (5 shared connections)
-- [Community 232](Community_232.md) (4 shared connections)
-- [video.py](video.py.md) (4 shared connections)
-- [Community 0](Community_0.md) (3 shared connections)
-- [Community 61](Community_61.md) (3 shared connections)
+- [Community 50](Community_50.md) (12 shared connections)
+- [Community 131](Community_131.md) (6 shared connections)
 - [Community 19](Community_19.md) (3 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
+- [Community 269](Community_269.md) (2 shared connections)
+- [Community 21](Community_21.md) (2 shared connections)
+- [Community 147](Community_147.md) (2 shared connections)
+- [Community 73](Community_73.md) (2 shared connections)
+- [Community 256](Community_256.md) (2 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 252](Community_252.md) (2 shared connections)
+- [Community 65](Community_65.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/WORKFLOW.md`
-- `teach/cli.py`
 - `teach/core/generator.py`
-- `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 150 (91%)
-- INFERRED: 15 (9%)
+- EXTRACTED: 73 (88%)
+- INFERRED: 10 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

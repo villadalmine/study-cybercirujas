@@ -1,6 +1,6 @@
 # Community 133
 
-> 19 nodes · cohesion 0.15
+> 15 nodes · cohesion 0.20
 
 ## Key Concepts
 
@@ -8,9 +8,7 @@
 - **confirm()** (6 connections) — `teach/lab/safety.py`
 - **.run_confirm()** (6 connections) — `tests/test_lab_safety.py`
 - **lines()** (5 connections) — `teach/lab/safety.py`
-- **of()** (5 connections) — `teach/lab/safety.py`
 - **Tty** (4 connections) — `tests/test_lab_safety.py`
-- **markdown()** (4 connections) — `teach/lab/safety.py`
 - **.test_ctrl_d_or_ctrl_c_is_a_no()** (4 connections) — `tests/test_lab_safety.py`
 - **.test_terminal_needs_an_explicit_yes()** (3 connections) — `tests/test_lab_safety.py`
 - **.test_a_single_risk_written_as_a_string()** (2 connections) — `tests/test_lab_safety.py`
@@ -19,17 +17,14 @@
 - **.test_not_a_terminal_refuses_after_printing()** (2 connections) — `tests/test_lab_safety.py`
 - **ask()** (1 connections) — `tests/test_lab_safety.py`
 - **.isatty()** (1 connections) — `tests/test_lab_safety.py`
-- **The lab's safety block, or None when it declares none.** (1 connections) — `teach/lab/safety.py`
 - **The warning as plain lines (no markup): headline, one line per risk, the lab's…** (1 connections) — `teach/lab/safety.py`
-- **The warning as a Markdown block for a README or the Killercoda intro, or ''.** (1 connections) — `teach/lab/safety.py`
 - **Print the warning and get an explicit yes. True when the lab may start. No…** (1 connections) — `teach/lab/safety.py`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (4 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 18](Community_18.md) (2 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
 - [Community 244](Community_244.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
 
 ## Source Files
 
@@ -38,8 +33,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 33 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 26 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---
