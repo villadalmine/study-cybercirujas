@@ -1293,7 +1293,7 @@ The kernel allows 65 536 supplementary groups, but **NFSv3 with `AUTH_SYS` trans
 
 **LPI**
 - Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Exam 102-500 objectives (Topic 107 lives here) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- Exam 102-500 objectives (Topic 107 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **shadow-utils (upstream project and manual pages)**

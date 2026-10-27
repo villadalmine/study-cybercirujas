@@ -303,7 +303,7 @@ The plan scanned technical lines only, the review finding was deferred to an iss
    is the catalog's pinned URL, not another spelling or version of the same document. The document identity is derived from
    the catalog URL (the commit and the digits are not part of it, so `exam-201-202` and `exam-201` are one document).
    How a citation is written (the introducing words in en/es/pt, the `v`/`versión` marker, the spans to ignore, the reviewed
-   extra spellings of a cert such as LPIC-1's exam 102 page) is data in `scripts/curriculum_patterns.yaml`, one place.
+   extra spellings of a cert such as LPIC-2's canonical exam-201-202 page; LPIC-1's dead exam-102 page was one until #235) is data in `scripts/curriculum_patterns.yaml`, one place.
    A cert the control cannot compare (no pinned URL and no dotted version) fails loudly unless it is listed under `exempt:` with
    its reason; no cert is skipped silently.
 2. **The upgrade window is bounded.** While an upgrade is open the catalog has an `upstream:` block and a citation may name the

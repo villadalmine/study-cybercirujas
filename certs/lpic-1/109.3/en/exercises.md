@@ -2,7 +2,7 @@
 
 ## Guided exercises
 
-> **Objective mapping.** Topic 109 (*Networking Fundamentals*) is examined in **102-500**; objective 109.3 covers reachability testing, socket inspection, name resolution and the configuration files behind them. Official objective lists: [exam 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/) and [exam 102-500](https://www.lpi.org/our-certifications/exam-102-objectives/).
+> **Objective mapping.** Topic 109 (*Networking Fundamentals*) is examined in **102-500**; objective 109.3 covers reachability testing, socket inspection, name resolution and the configuration files behind them. Official objective lists: [exam 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/) and [exam 102-500](https://www.lpi.org/our-certifications/exam-101-objectives/).
 
 ---
 
@@ -1023,7 +1023,7 @@ A fourth, organisational reason: the snapshot is what you hand to the next engin
 
 ## Sources
 
-- **LPI exam objectives** — Topic 109, *Networking Fundamentals*: [102-500 objectives](https://www.lpi.org/our-certifications/exam-102-objectives/); companion list [101-500 objectives](https://www.lpi.org/our-certifications/exam-101-objectives/)
+- **LPI exam objectives** — Topic 109, *Networking Fundamentals*: [102-500 objectives](https://www.lpi.org/our-certifications/exam-101-objectives/); companion list [101-500 objectives](https://www.lpi.org/our-certifications/exam-101-objectives/)
 - **iproute2** (`ip`, `ss`, `bridge`) — upstream: <https://wiki.linuxfoundation.org/networking/iproute2>; man pages: [`ip-address(8)`](https://man7.org/linux/man-pages/man8/ip-address.8.html), [`ip-route(8)`](https://man7.org/linux/man-pages/man8/ip-route.8.html), [`ip-neighbour(8)`](https://man7.org/linux/man-pages/man8/ip-neighbour.8.html), [`ss(8)`](https://man7.org/linux/man-pages/man8/ss.8.html)
 - **iputils** (`ping`, `tracepath`, `arping`) — <https://github.com/iputils/iputils>; [`ping(8)`](https://man7.org/linux/man-pages/man8/ping.8.html), [`tracepath(8)`](https://man7.org/linux/man-pages/man8/tracepath.8.html)
 - **traceroute** — <https://traceroute.sourceforge.net/>; [`traceroute(8)`](https://man7.org/linux/man-pages/man8/traceroute.8.html)

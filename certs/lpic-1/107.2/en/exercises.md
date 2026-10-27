@@ -2,7 +2,7 @@
 ## Guided Exercises
 
 **Exam:** 102-500 (LPIC-1 v5.0), Topic 107
-**Official objective list:** <https://www.lpi.org/our-certifications/exam-102-objectives/> (companion objective set for exam 101: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
+**Official objective list:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (companion objective set for exam 101: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
 
 **Key files, terms and utilities exercised here:** `/etc/cron.{d,daily,hourly,monthly,weekly}`, `/etc/at.deny`, `/etc/at.allow`, `/etc/crontab`, `/etc/cron.allow`, `/etc/cron.deny`, `/var/spool/cron/`, `crontab`, `at`, `atq`, `atrm`, `systemctl`, `systemd-run`.
 
@@ -1269,7 +1269,7 @@ Creating `cron.allow` makes `/etc/cron.deny` irrelevant — remove or leave it, 
 
 ## Sources
 
-- LPI, *LPIC-1 Exam 102 Objectives, version 5.0* — Topic 107.2: <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *LPIC-1 Exam 102 Objectives, version 5.0* — Topic 107.2: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *LPIC-1 Exam 101 Objectives, version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `crontab(5)` — crontab file format, field ranges, special strings, `%` handling: <https://man7.org/linux/man-pages/man5/crontab.5.html>
 - `crontab(1)` — command interface, `cron.allow`/`cron.deny` precedence: <https://man7.org/linux/man-pages/man1/crontab.1.html>

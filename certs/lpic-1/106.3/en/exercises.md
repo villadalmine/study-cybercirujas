@@ -2,7 +2,7 @@
 ## Guided Exercises (Exam 102-500, version 5.0)
 
 > **Scope of the objective.** *Accessibility* covers the assistive technologies a Linux desktop and a Linux text console expose: visual settings and themes, screen magnifier, screen reader, braille display, desktop keyboard accessibility (AccessX: Sticky/Slow/Bounce/Toggle/Repeat/Mouse Keys), gestures, on-screen keyboard and text-to-speech.
-> Official objective list: <https://www.lpi.org/our-certifications/exam-102-objectives/> (the 101 objective list referenced in the syllabus header covers topics 101–104; 106.x lives in the 102-500 list).
+> Official objective list: <https://www.lpi.org/our-certifications/exam-101-objectives/> (the 101 objective list referenced in the syllabus header covers topics 101–104; 106.x lives in the 102-500 list).
 
 ### Before you start
 
@@ -1332,7 +1332,7 @@ ensure `/etc/dconf/profile/user` contains `user-db:user` followed by `system-db:
 
 ### Sources
 
-- LPI, *Exam 102-500 Objectives* (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *Exam 102-500 Objectives* (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *Exam 101-500 Objectives* (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - freedesktop.org, *AT-SPI2 accessibility framework* — <https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/>
 - GNOME, *Orca Screen Reader documentation* — <https://help.gnome.org/users/orca/stable/>

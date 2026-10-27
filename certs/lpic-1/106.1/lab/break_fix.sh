@@ -24,7 +24,7 @@
 #
 #  Official reference material
 #    - LPI exam 101-500 objectives ......... https://www.lpi.org/our-certifications/exam-101-objectives/
-#    - LPI exam 102-500 objectives ......... https://www.lpi.org/our-certifications/exam-102-objectives/
+#    - LPI exam 102-500 objectives ......... https://www.lpi.org/our-certifications/exam-101-objectives/
 #    - xorg.conf(5) ........................ https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml
 #    - Xorg(1) ............................. https://www.x.org/releases/current/doc/man/man1/Xorg.1.xhtml
 #    - Xserver(1), xauth(1), xhost(1) ...... https://www.x.org/releases/current/doc/man/man1/

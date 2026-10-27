@@ -934,7 +934,7 @@ Una edición de `/etc/resolv.conf` que un administrador de red sobrescribe en la
 
 ## Fuentes oficiales
 
-- LPI, *LPIC-1 Exam 102-500 Objectives (v5.0)* — Tema 109, objetivo 109.4 "Configure client side DNS": <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *LPIC-1 Exam 102-500 Objectives (v5.0)* — Tema 109, objetivo 109.4 "Configure client side DNS": <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *LPIC-1 Exam 101-500 Objectives (v5.0)* — el examen complementario de la misma certificación: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `resolv.conf(5)` — search/domain/ndots/timeout/attempts/rotate/single-request, `MAXNS`: <https://man7.org/linux/man-pages/man5/resolv.conf.5.html>
 - `hosts(5)`: <https://man7.org/linux/man-pages/man5/hosts.5.html>

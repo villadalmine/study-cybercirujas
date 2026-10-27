@@ -1182,7 +1182,7 @@ rm -rf /tmp/bobhome /tmp/notes* /tmp/both* /tmp/ada* /tmp/bob* /tmp/c*.txt /tmp/
 ### Official sources
 
 - LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 Objectives (topic 110.3): https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — Exam 102-500 Objectives (topic 110.3): https://www.lpi.org/our-certifications/exam-101-objectives/
 - OpenSSH — `ssh(1)`: https://man.openbsd.org/ssh.1
 - OpenSSH — `ssh_config(5)`: https://man.openbsd.org/ssh_config.5
 - OpenSSH — `ssh-keygen(1)`: https://man.openbsd.org/ssh-keygen.1

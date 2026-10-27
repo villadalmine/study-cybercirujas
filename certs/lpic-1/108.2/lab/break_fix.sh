@@ -11,7 +11,7 @@
 #                  /etc/rsyslog.d/, logger, facilities/severities, /var/log/,
 #                  logrotate, /etc/logrotate.conf, /etc/logrotate.d/
 #  Sources       : https://www.lpi.org/our-certifications/exam-101-objectives/
-#                  https://www.lpi.org/our-certifications/exam-102-objectives/
+#                  https://www.lpi.org/our-certifications/exam-101-objectives/
 #                  https://www.rsyslog.com/doc/configuration/index.html
 #                  https://www.freedesktop.org/software/systemd/man/journald.conf.html
 #                  https://www.freedesktop.org/software/systemd/man/journalctl.html

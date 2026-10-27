@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **LPIC-1 objective links:** about 130 citations in the LPIC-1 material pointed at an LPI page that now redirects to the home page; they name the catalog's pinned objectives page, which resolves to the live LPI page, and the consistency gate no longer accepts the dead spelling (#235).
 
 ## Upgrade notes
 

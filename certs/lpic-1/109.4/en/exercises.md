@@ -934,7 +934,7 @@ An edit to `/etc/resolv.conf` that a network manager overwrites at the next DHCP
 
 ## Official sources
 
-- LPI, *LPIC-1 Exam 102-500 Objectives (v5.0)* — Topic 109, objective 109.4 "Configure client side DNS": <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *LPIC-1 Exam 102-500 Objectives (v5.0)* — Topic 109, objective 109.4 "Configure client side DNS": <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *LPIC-1 Exam 101-500 Objectives (v5.0)* — the companion exam of the same certification: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `resolv.conf(5)` — search/domain/ndots/timeout/attempts/rotate/single-request, `MAXNS`: <https://man7.org/linux/man-pages/man5/resolv.conf.5.html>
 - `hosts(5)`: <https://man7.org/linux/man-pages/man5/hosts.5.html>

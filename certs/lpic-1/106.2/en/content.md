@@ -1119,7 +1119,7 @@ PORT     STATE SERVICE       VERSION
 
 ## 7. References
 
-- LPI — LPIC-1 Exam 102-500 objectives (Topic 106: User Interfaces and Desktops): https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — LPIC-1 Exam 102-500 objectives (Topic 106: User Interfaces and Desktops): https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPI — LPIC-1 Exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 - X.Org Foundation — Xorg server documentation: https://www.x.org/wiki/
 - X.Org — `Xserver(1)` and `Xsecurity(7)` manual pages: https://www.x.org/releases/current/doc/man/man1/Xserver.1.xhtml

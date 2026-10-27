@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  LPIC-1 (Exam 102-500) — Topic 102.6: Linux as a virtualization guest
+#  LPIC-1 (Exam 101-500) — Topic 102.6: Linux as a virtualization guest
 #  Weight: 1.56
 #
 #  BREAK & FIX LAB — "The guest that lost its identity"
 #
-#  Reference: LPI Exam 102 Objectives
-#             https://www.lpi.org/our-certifications/exam-102-objectives/
+#  Reference: LPI Exam 101 Objectives
+#             https://www.lpi.org/our-certifications/exam-101-objectives/
 #             (Topic index: https://www.lpi.org/our-certifications/exam-101-objectives/)
 #
 #  WARNING — DISPOSABLE LAB VM ONLY
@@ -365,7 +365,7 @@ CONCEPTS UNDER TEST (LPI 102.6)
   Tools: systemd-detect-virt, systemd-machine-id-setup, dbus-uuidgen,
          hostnamectl, dmidecode, lsmod, lspci, cloud-init.
 
-Official objectives: https://www.lpi.org/our-certifications/exam-102-objectives/
+Official objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 =============================================================================
 EOF
     chmod 0644 "$BRIEF_FILE"
@@ -862,8 +862,8 @@ main "$@"
 # ---------------------------------------------------------------------------
 # SOURCES
 # ---------------------------------------------------------------------------
-#   LPI Exam 102 objectives (102.6 Linux as a virtualization guest)
-#     https://www.lpi.org/our-certifications/exam-102-objectives/
+#   LPI Exam 101 objectives (102.6 Linux as a virtualization guest)
+#     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   LPI certification index
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   machine-id(5)

@@ -897,7 +897,7 @@ $ diff <(locale) locale.before
 ## References
 
 - LPI, *Exam 101 Objectives* (LPIC-1 v5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI, *Exam 102 Objectives* (LPIC-1 v5.0), objective 107.3 — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *Exam 102 Objectives* (LPIC-1 v5.0), objective 107.3 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - GNU C Library Manual, *Locales and Internationalization* — <https://www.gnu.org/software/libc/manual/html_node/Locales.html>
 - GNU C Library Manual, *Specifying the Time Zone with `TZ`* — <https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html>
 - GNU gettext Manual, *The `LANGUAGE` variable* — <https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html>

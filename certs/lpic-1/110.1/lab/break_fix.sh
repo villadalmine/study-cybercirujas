@@ -6,7 +6,7 @@
 #
 #  Reference (official objectives):
 #    https://www.lpi.org/our-certifications/exam-101-objectives/
-#    https://www.lpi.org/our-certifications/exam-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 #  Key knowledge areas exercised here:
 #    - Audit a system to find files with the SUID/SGID bit set
@@ -725,7 +725,7 @@ main "$@"
 #
 #   Official objectives:
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
-#     https://www.lpi.org/our-certifications/exam-102-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   Manual pages that answer every question above:
 #     find(1) chmod(1) passwd(1) chage(1) usermod(8) shadow(5) sudo(8)
 #     sudoers(5) visudo(8) su(1) limits.conf(5) pam_limits(8) pam_nologin(8)

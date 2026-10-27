@@ -969,7 +969,7 @@
 ## Fuentes
 
 - LPI — *Exam 101-500 Objectives*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — *Exam 102-500 Objectives* (el tema 108.4 se examina acá): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — *Exam 102-500 Objectives* (el tema 108.4 se examina acá): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - Página principal de la documentación de OpenPrinting CUPS: <https://openprinting.github.io/cups/>
 - Páginas de manual de CUPS — `cupsd.conf`: <https://openprinting.github.io/cups/doc/man-cupsd.conf.html> · `cups-files.conf`: <https://openprinting.github.io/cups/doc/man-cups-files.conf.html> · `lpadmin`: <https://openprinting.github.io/cups/doc/man-lpadmin.html> · `lp`: <https://openprinting.github.io/cups/doc/man-lp.html> · `lpr`: <https://openprinting.github.io/cups/doc/man-lpr.html> · `lpstat`: <https://openprinting.github.io/cups/doc/man-lpstat.html> · `cupsenable`/`cupsdisable`: <https://openprinting.github.io/cups/doc/man-cupsenable.html> · `cupsaccept`/`cupsreject`: <https://openprinting.github.io/cups/doc/man-cupsaccept.html> · `lpoptions`: <https://openprinting.github.io/cups/doc/man-lpoptions.html> · `cupsfilter`: <https://openprinting.github.io/cups/doc/man-cupsfilter.html>
 - CUPS — *Printer Accounting Basics* (page_log): <https://openprinting.github.io/cups/doc/accounting.html>

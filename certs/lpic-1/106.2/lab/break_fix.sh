@@ -17,7 +17,7 @@
 #    - Where the desktop session is configured and how it is diagnosed
 #
 #  Official objective reference:
-#    https://www.lpi.org/our-certifications/exam-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-objectives/
 #    https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 #  Documentation the student is expected to consult:

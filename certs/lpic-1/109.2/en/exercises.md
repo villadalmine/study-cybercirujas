@@ -969,7 +969,7 @@ You now have up to three stacks on one host. This exercise injects three realist
 ## Sources
 
 - LPI — Exam 101-500 objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Exam 102-500 objectives, Topic 109 "Networking Fundamentals": <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Exam 102-500 objectives, Topic 109 "Networking Fundamentals": <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `hostnamectl(1)` / `hostname(5)` / `machine-info(5)`: <https://www.freedesktop.org/software/systemd/man/latest/hostnamectl.html>
 - `nsswitch.conf(5)`, GNU C Library NSS: <https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html>
 - `resolv.conf(5)` — man-pages project: <https://man7.org/linux/man-pages/man5/resolv.conf.5.html>

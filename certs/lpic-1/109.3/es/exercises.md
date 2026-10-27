@@ -2,7 +2,7 @@
 
 ## Ejercicios guiados
 
-> **Correspondencia con los objetivos.** El tema 109 (*Fundamentos de redes*) se examina en **102-500**; el objetivo 109.3 cubre pruebas de alcanzabilidad, inspección de sockets, resolución de nombres y los archivos de configuración que están detrás de todo eso. Listas oficiales de objetivos: [examen 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/) y [examen 102-500](https://www.lpi.org/our-certifications/exam-102-objectives/).
+> **Correspondencia con los objetivos.** El tema 109 (*Fundamentos de redes*) se examina en **102-500**; el objetivo 109.3 cubre pruebas de alcanzabilidad, inspección de sockets, resolución de nombres y los archivos de configuración que están detrás de todo eso. Listas oficiales de objetivos: [examen 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/) y [examen 102-500](https://www.lpi.org/our-certifications/exam-101-objectives/).
 
 ---
 
@@ -1023,7 +1023,7 @@ Una cuarta razón, organizacional: la instantánea es lo que le pasás al siguie
 
 ## Fuentes
 
-- **Objetivos del examen LPI** — Tema 109, *Networking Fundamentals*: [objetivos 102-500](https://www.lpi.org/our-certifications/exam-102-objectives/); lista complementaria [objetivos 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/)
+- **Objetivos del examen LPI** — Tema 109, *Networking Fundamentals*: [objetivos 102-500](https://www.lpi.org/our-certifications/exam-101-objectives/); lista complementaria [objetivos 101-500](https://www.lpi.org/our-certifications/exam-101-objectives/)
 - **iproute2** (`ip`, `ss`, `bridge`) — upstream: <https://wiki.linuxfoundation.org/networking/iproute2>; páginas de manual: [`ip-address(8)`](https://man7.org/linux/man-pages/man8/ip-address.8.html), [`ip-route(8)`](https://man7.org/linux/man-pages/man8/ip-route.8.html), [`ip-neighbour(8)`](https://man7.org/linux/man-pages/man8/ip-neighbour.8.html), [`ss(8)`](https://man7.org/linux/man-pages/man8/ss.8.html)
 - **iputils** (`ping`, `tracepath`, `arping`) — <https://github.com/iputils/iputils>; [`ping(8)`](https://man7.org/linux/man-pages/man8/ping.8.html), [`tracepath(8)`](https://man7.org/linux/man-pages/man8/tracepath.8.html)
 - **traceroute** — <https://traceroute.sourceforge.net/>; [`traceroute(8)`](https://man7.org/linux/man-pages/man8/traceroute.8.html)

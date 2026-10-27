@@ -1302,7 +1302,7 @@ PING 10.30.0.6 (10.30.0.6) 8972(9000) bytes of data.
 
 **LPI — objetivos**
 - LPIC-1 Exam 101 objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102 objectives (v5.0), Topic 109.2 — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102 objectives (v5.0), Topic 109.2 — https://www.lpi.org/our-certifications/exam-101-objectives/
 
 **Hostname e identidad**
 - `hostname(5)` — https://www.freedesktop.org/software/systemd/man/latest/hostname.html

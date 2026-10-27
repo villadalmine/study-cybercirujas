@@ -2,7 +2,7 @@
 ## Ejercicios guiados (Examen 102-500, versión 5.0)
 
 > **Alcance del objetivo.** *Accesibilidad* cubre las tecnologías asistivas que exponen un escritorio Linux y una consola de texto Linux: ajustes visuales y temas, magnificador de pantalla, lector de pantalla, línea braille, accesibilidad de teclado en el escritorio (AccessX: Sticky/Slow/Bounce/Toggle/Repeat/Mouse Keys), gestos, teclado en pantalla y síntesis de voz.
-> Lista oficial de objetivos: <https://www.lpi.org/our-certifications/exam-102-objectives/> (la lista de objetivos 101 referenciada en el encabezado del temario cubre los temas 101–104; 106.x vive en la lista 102-500).
+> Lista oficial de objetivos: <https://www.lpi.org/our-certifications/exam-101-objectives/> (la lista de objetivos 101 referenciada en el encabezado del temario cubre los temas 101–104; 106.x vive en la lista 102-500).
 
 ### Antes de empezar
 
@@ -1332,7 +1332,7 @@ asegurate de que `/etc/dconf/profile/user` contenga `user-db:user` seguido de `s
 
 ### Fuentes
 
-- LPI, *Exam 102-500 Objectives* (LPIC-1 versión 5.0) — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *Exam 102-500 Objectives* (LPIC-1 versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *Exam 101-500 Objectives* (LPIC-1 versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - freedesktop.org, *AT-SPI2 accessibility framework* — <https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/>
 - GNOME, *Orca Screen Reader documentation* — <https://help.gnome.org/users/orca/stable/>

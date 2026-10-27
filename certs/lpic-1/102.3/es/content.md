@@ -1,6 +1,6 @@
 # 102.3 — Gestionar bibliotecas compartidas
 
-> **Examen:** LPIC-1 / 102-500 · **Objetivo:** 102.3 · **Peso:** 1.56
+> **Examen:** LPIC-1 / 101-500 · **Objetivo:** 102.3 · **Peso:** 1.56
 > **Conocimientos clave:** identificar bibliotecas compartidas · identificar ubicaciones típicas de las bibliotecas del sistema · cargar bibliotecas compartidas
 > **Archivos, términos y utilidades listados en el examen:** `ldd`, `ldconfig`, `/etc/ld.so.conf`, `LD_LIBRARY_PATH`
 
@@ -1805,7 +1805,7 @@ $ ls -l /opt/greet/lib/
 
 **LPI — objetivos oficiales del examen**
 - LPIC-1 Exam 101 objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102 objectives (v5.0), objetivo 102.3: https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 101 objectives (v5.0), objetivo 102.3: https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Documentación de referencia de glibc y del cargador dinámico**

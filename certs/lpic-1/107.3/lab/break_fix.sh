@@ -6,7 +6,7 @@
 # Topic 107.3 -- Localisation and internationalisation   (exam weight: 0)
 #
 # Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#            https://www.lpi.org/our-certifications/exam-102-objectives/
+#            https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 # WHAT THIS IS
 #   A controlled "break & fix" drill. It sabotages the locale, timezone and

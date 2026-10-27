@@ -1425,7 +1425,7 @@ Los dos invariantes que vale la pena llevarse de este tema:
 ## Referencias
 
 - LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 Objectives (Topic 108, Essential System Services): https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — Exam 102-500 Objectives (Topic 108, Essential System Services): https://www.lpi.org/our-certifications/exam-101-objectives/
 - OpenPrinting CUPS — Documentation index: https://openprinting.github.io/cups/
 - CUPS — `cupsd.conf(5)` man page: https://openprinting.github.io/cups/doc/man-cupsd.conf.html
 - CUPS — `cups-files.conf(5)` man page: https://openprinting.github.io/cups/doc/man-cups-files.conf.html

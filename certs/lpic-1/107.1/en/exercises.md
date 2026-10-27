@@ -966,7 +966,7 @@ awk -F: -v gid=999 '$4==gid {print $1}' /etc/passwd
 ## Sources
 
 - LPI — Exam 101-500 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Exam 102-500 Objectives, where Topic 107.1 is examined: <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Exam 102-500 Objectives, where Topic 107.1 is examined: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - shadow-utils (upstream of `useradd`, `usermod`, `userdel`, `chage`, `gpasswd`, `pwck`, `vipw`): <https://github.com/shadow-maint/shadow>
 - `passwd(5)` — format of the password file: <https://man7.org/linux/man-pages/man5/passwd.5.html>
 - `shadow(5)` — format of the shadowed password file: <https://man7.org/linux/man-pages/man5/shadow.5.html>

@@ -1026,7 +1026,7 @@ main "$@"
 # SOURCES
 # ---------------------------------------------------------------------------
 #   LPI Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-#   LPI Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-102-objectives/
+#   LPI Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
 #   crontab(5), crontab(1), cron(8), anacron(8), anacrontab(5), at(1),
 #     run-parts(8) — man-pages shipped with cron/anacron/at on the system
 #   systemd.timer(5)  — https://www.freedesktop.org/software/systemd/man/systemd.timer.html

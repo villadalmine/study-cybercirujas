@@ -7,7 +7,7 @@
 #
 #  Official references:
 #    - LPI exam objectives (101-500): https://www.lpi.org/our-certifications/exam-101-objectives/
-#    - LPI exam objectives (102-500): https://www.lpi.org/our-certifications/exam-102-objectives/
+#    - LPI exam objectives (102-500): https://www.lpi.org/our-certifications/exam-101-objectives/
 #    - GNU Bash Reference Manual, "Bash Startup Files":
 #        https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 #    - bash(1) — INVOCATION, PROMPTING, HISTORY sections
