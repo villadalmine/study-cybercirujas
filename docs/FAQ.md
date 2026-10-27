@@ -306,8 +306,8 @@ evidence ([RUN-A-LAB-ANYWHERE.md](RUN-A-LAB-ANYWHERE.md)).
 No: Killercoda is an optional publishing channel and never blocks a PR
 ([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)).
 It offers a kubeadm cluster and an Ubuntu VM, nothing else, so not every
-certification can have a lab there; the Kubernetes labs (CKA and CKAD) are the
-ones tried. Every lab has one of two Killercoda statuses. **`tested`**: it has
+certification can have a lab there; which labs have been tried, and where, is
+`deploy/lab-evidence.yaml`. Every lab has one of two Killercoda statuses. **`tested`**: it has
 evidence on a `killercoda-*` or `human-killercoda` target in
 `deploy/lab-evidence.yaml`. **`loaded-untested`**: it stays in the repo and runs
 locally with `study-lab`, but nothing proves it on Killercoda yet. A loaded-untested

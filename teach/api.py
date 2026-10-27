@@ -340,7 +340,7 @@ def get_topic_preview(cert_id: str, topic_id: str, lang: str = certs.DEFAULT_LAN
     }
 
 
-# --- zona de estudio: login + plan activo ---
+# --- study material: public too, no login or plan (/api/login and /api/me above are a stub the web no longer uses) ---
 
 @app.get("/api/certs/{cert_id}/topics/{topic_id}")
 def get_topic(

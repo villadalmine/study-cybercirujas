@@ -218,7 +218,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
       - uses: villadalmine/study-cybercirujas/.github/actions/validate-lab@main
         with:
           path: labs          # one lab or a tree

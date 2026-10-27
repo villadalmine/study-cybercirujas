@@ -1,8 +1,8 @@
-# teach-plat — mismas convenciones que online-game (Gateway API + cert-manager acme-dns).
-# Datos reales (dominio/secretos) en values-local.yaml GITIGNORED; ver values-study.example.yaml.
+# teach-plat chart defaults (Gateway API + cert-manager). Defaults are generic: put your real domain,
+# registry and secrets in values-local.yaml (gitignored); see values-study.example.yaml.
 
 image:
-  # Cluster real: build in-cluster (Kaniko) → registry interno, como online-game:
+  # Building in-cluster (Kaniko) into your own registry? Override in values-local.yaml:
   #   repository: registry.registry:5000/teach-plat
   repository: ghcr.io/villadalmine/study-cybercirujas
   tag: "latest"
@@ -22,11 +22,11 @@ app:
       cpu: 500m
       memory: 256Mi
 
-# Exponer vía Gateway API (Cilium). El HTTPRoute se engancha al Gateway existente
-# `name`/`namespace` (cluster-gateway/gateway en el cluster real).
-# host = dominio principal; extraHosts = otros dominios en la MISMA route
-# (ej: study.cybercirujas.club público + study.cluster.home local).
-# OJO: cada host público HTTPS necesita su listener + cert en el Gateway.
+# Expose through the Gateway API (Cilium). The HTTPRoute attaches to the existing Gateway
+# `name`/`namespace` (the defaults below are an example: set yours in values-local.yaml).
+# host = main domain; extraHosts = other domains on the SAME route
+# (e.g. a public host plus a local one).
+# NOTE: every public HTTPS host needs its listener and certificate on the Gateway.
 gateway:
   enabled: false
   host: study.cluster.home
@@ -36,12 +36,12 @@ gateway:
   tls:
     enabled: false
     secretName: ""              # "" = <release>-tls
-    issuer: letsencrypt-prod    # ClusterIssuer (acme-dns DNS-01, ya existe en el cluster)
+    issuer: letsencrypt-prod    # ClusterIssuer that already exists in your cluster (e.g. acme-dns DNS-01)
 
 env:
   ENVIRONMENT: production
-  # TEACH_SECRET (firma de cookies de sesión) va por Secret y es OBLIGATORIO: sin valor
-  # (o con el de ejemplo, o de menos de 32 caracteres) el render falla. Setealo en values-local.
+  # TEACH_SECRET (signs the session cookies) goes in a Secret and is REQUIRED: without a value
+  # (or with the example one, or under 32 characters) the render fails. Set it in values-local.
   TEACH_SECRET: ""
   # Rate limit per client, requests/min ("0" = off, the default). It needs the REAL client address:
   # with a TCP-passthrough edge (HAProxy without PROXY protocol) every visitor arrives from the same
@@ -51,11 +51,11 @@ env:
   TEACH_RATE_SEARCH: "0"
   TEACH_TRUST_PROXY: "0"
 
-# Generación de contenido DESDE el pod (opcional). Normalmente el contenido se
-# genera local (claude/codex) y va horneado en la imagen; esto es para usar el
-# LiteLLM del cluster desde adentro. apiKey va a un Secret.
+# Content generation FROM the pod (optional). Normally the content is generated locally
+# (claude/codex) and baked into the image; this is to use the cluster's LiteLLM from
+# inside. apiKey goes in a Secret.
 llm:
-  baseUrl: ""                   # ej http://litellm.litellm:4000/v1
+  baseUrl: ""                   # e.g. http://litellm.litellm:4000/v1
   model: ""
   apiKey: ""
 

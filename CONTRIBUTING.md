@@ -616,6 +616,9 @@ Dependencies install from `requirements.lock` (exact versions, sha256 hashes), t
 with `--no-deps`. After changing `dependencies` in `pyproject.toml`, run `make lock` (needs `uv`)
 and commit the lock in the same PR; `tests/test_lockfile.py` fails if a dependency is missing from it.
 
+In `.github/`, every third-party action is pinned to a full commit SHA with a `# vX.Y.Z` comment, never to a tag
+(`uses: owner/action@<40 hex>  # v1.2.3`); `tests/test_actions_pinned.py` fails on a tag, so pin before you push.
+
 | Flow | Test | Command |
 |---|---|---|
 | clone → setup → serve → site, API, CLI → Docker lab → cleanup | `tests/e2e/clone_and_run.sh` | `make test-e2e` (needs Docker for the lab step; clones your **committed** HEAD) |
