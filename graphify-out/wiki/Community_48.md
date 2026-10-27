@@ -1,21 +1,30 @@
 # Community 48
 
-> 8 nodes · cohesion 0.25
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **1. The code graph (Graphify)** (8 connections) — `docs/DEVTOOLS.md`
+- **2. The wiki (OpenWiki)** (4 connections) — `docs/DEVTOOLS.md`
+- **3. Real metrics, end to end** (4 connections) — `docs/DEVTOOLS.md`
+- **Developer tools: code graph, wiki, and real metrics** (4 connections) — `docs/DEVTOOLS.md`
 - **Optional, costs completions** (1 connections) — `docs/DEVTOOLS.md`
+- **Reading the numbers** (1 connections) — `docs/DEVTOOLS.md`
 - **Semantic enrichment — documented, deliberately not run** (1 connections) — `docs/DEVTOOLS.md`
+- **Setup, once** (1 connections) — `docs/DEVTOOLS.md`
 - **Setup, once per clone** (1 connections) — `docs/DEVTOOLS.md`
 - **The derived wiki (free — no LLM at all)** (1 connections) — `docs/DEVTOOLS.md`
+- **Using it** (1 connections) — `docs/DEVTOOLS.md`
 - **Using it from an agent (MCP)** (1 connections) — `docs/DEVTOOLS.md`
 - **Using it from the CLI** (1 connections) — `docs/DEVTOOLS.md`
+- **What changed on 2026-08-18 (blind spots closed)** (1 connections) — `docs/DEVTOOLS.md`
+- **When the code changes** (1 connections) — `docs/DEVTOOLS.md`
 - **When the code changes** (1 connections) — `docs/DEVTOOLS.md`
 
 ## Relationships
 
-- [Community 248](Community_248.md) (1 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
@@ -23,8 +32,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 16 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

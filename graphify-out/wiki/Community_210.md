@@ -12,13 +12,13 @@
 - **.test_each_affected_doc_must_be_in_the_section()** (1 connections) — `tests/test_check_pr.py`
 - **.test_history_generated_material_and_tests_are_not_docs()** (1 connections) — `tests/test_check_pr.py`
 - **.test_main_runs_it_and_bot_prs_are_exempt()** (1 connections) — `tests/test_check_pr.py`
-- **.test_the_real_repo_lists_what_243_missed()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_docs_that_243_missed_are_listed()** (1 connections) — `tests/test_check_pr.py`
 - **.test_the_release_pr_is_exempt_through_main()** (1 connections) — `tests/test_check_pr.py`
 - **#243 changed scripts/check_pr.py and left AGENTS.md, AGENT-GUIDE and HOW-IT-…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 

@@ -18,8 +18,8 @@
 
 ## Relationships
 
-- [Community 107](Community_107.md) (6 shared connections)
-- [Community 125](Community_125.md) (3 shared connections)
+- [Community 107](Community_107.md) (5 shared connections)
+- [Community 125](Community_125.md) (4 shared connections)
 - [Community 10](Community_10.md) (2 shared connections)
 - [Community 207](Community_207.md) (2 shared connections)
 - [Community 173](Community_173.md) (1 shared connections)

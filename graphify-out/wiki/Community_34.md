@@ -1,22 +1,23 @@
 # Community 34
 
-> 42 nodes · cohesion 0.08
+> 45 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **check_groundedness.py** (34 connections) — `scripts/check_groundedness.py`
 - **check_topic()** (11 connections) — `scripts/check_groundedness.py`
 - **test_killercoda_publish.py** (11 connections) — `tests/lab/test_killercoda_publish.py`
 - **fixture()** (8 connections) — `scripts/check_groundedness.py`
 - **main()** (8 connections) — `scripts/check_groundedness.py`
 - **cited()** (6 connections) — `scripts/check_groundedness.py`
 - **syllabus()** (6 connections) — `scripts/check_groundedness.py`
+- **Path** (6 connections)
+- **LazyPrefilter** (5 connections) — `scripts/check_groundedness.py`
 - **Prefilter** (5 connections) — `scripts/check_groundedness.py`
+- **verify_weights()** (5 connections) — `scripts/check_groundedness.py`
 - **git()** (5 connections) — `tests/lab/test_killercoda_publish.py`
-- **Path** (5 connections)
 - **claims()** (4 connections) — `scripts/check_groundedness.py`
 - **fetch()** (4 connections) — `scripts/check_groundedness.py`
-- **sha()** (4 connections) — `scripts/check_groundedness.py`
+- **file_sha()** (4 connections) — `scripts/check_groundedness.py`
 - **write_quality()** (4 connections) — `scripts/check_groundedness.py`
 - **mirror()** (4 connections) — `tests/lab/test_killercoda_publish.py`
 - **publish()** (4 connections) — `tests/lab/test_killercoda_publish.py`
@@ -24,27 +25,23 @@
 - **best_windows()** (3 connections) — `scripts/check_groundedness.py`
 - **changed()** (3 connections) — `scripts/check_groundedness.py`
 - **download()** (3 connections) — `scripts/check_groundedness.py`
+- **sha()** (3 connections) — `scripts/check_groundedness.py`
 - **scenario()** (3 connections) — `tests/lab/test_killercoda_publish.py`
 - **test_an_export_without_scenarios_does_not_touch_the_mirror()** (3 connections) — `tests/lab/test_killercoda_publish.py`
-- **guardian()** (2 connections) — `scripts/check_groundedness.py`
-- **.score()** (2 connections) — `scripts/check_groundedness.py`
-- **summary()** (2 connections) — `scripts/check_groundedness.py`
-- *... and 17 more nodes in this community*
+- **.__call__()** (2 connections) — `scripts/check_groundedness.py`
+- *... and 20 more nodes in this community*
 
 ## Relationships
 
-- [Community 61](Community_61.md) (6 shared connections)
-- [Community 127](Community_127.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 10](Community_10.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
+- [Community 74](Community_74.md) (18 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 1](Community_1.md) (2 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
+- [Community 263](Community_263.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 264](Community_264.md) (1 shared connections)
+- [Community 69](Community_69.md) (1 shared connections)
 
 ## Source Files
 
@@ -55,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 98 (100%)
+- EXTRACTED: 90 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

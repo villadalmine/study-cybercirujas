@@ -1,11 +1,10 @@
 # Community 247
 
-> 8 nodes · cohesion 0.25
+> 7 nodes · cohesion 0.29
 
 ## Key Concepts
 
 - **AI certification roadmap** (8 connections) — `docs/AI_ROADMAP.md`
-- **NVIDIA career track (researched 2026-09-09, owner's request)** (2 connections) — `docs/AI_ROADMAP.md`
 - **Watchlist — official, but they fail a filter today** (2 connections) — `docs/AI_ROADMAP.md`
 - **How each course cites its own syllabus** (1 connections) — `docs/AI_ROADMAP.md`
 - **Model-provider certifications — researched in depth 2026-09-09** (1 connections) — `docs/AI_ROADMAP.md`
@@ -25,8 +24,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 9 (90%)
-- INFERRED: 1 (10%)
+- EXTRACTED: 9 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

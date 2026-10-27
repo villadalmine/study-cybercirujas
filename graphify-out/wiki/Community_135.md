@@ -1,38 +1,45 @@
 # Community 135
 
-> 11 nodes · cohesion 0.25
+> 18 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **plan_cert()** (14 connections) — `scripts/curriculum_diff.py`
-- **load_syllabus()** (9 connections) — `scripts/curriculum_diff.py`
-- **Path** (8 connections)
-- **plan()** (6 connections) — `scripts/curriculum_diff.py`
-- **classify()** (3 connections) — `scripts/curriculum_diff.py`
-- **inventory()** (3 connections) — `scripts/curriculum_diff.py`
-- **_ref()** (3 connections) — `scripts/curriculum_diff.py`
-- **_needles()** (2 connections) — `scripts/curriculum_diff.py`
-- **planned()** (2 connections) — `scripts/curriculum_diff.py`
-- **A syllabus as {version, domains, file_sha256}: a snapshot YAML, or a frozen…** (1 connections) — `scripts/curriculum_diff.py`
-- **old topic id -> (class, reasons, new objective id, similarity), by CLASS_RULES…** (1 connections) — `scripts/curriculum_diff.py`
+- **_stream()** (14 connections) — `teach/lab/runner.py`
+- **test_stream.py** (14 connections) — `tests/lab/test_stream.py`
+- **_why()** (5 connections) — `teach/lab/runner.py`
+- **Lab** (4 connections) — `tests/lab/test_stream.py`
+- **test_a_child_that_exits_124_is_not_reported_as_a_timeout()** (3 connections) — `tests/lab/test_stream.py`
+- **test_scripts_run_under_timeout_inside_the_container()** (3 connections) — `tests/lab/test_stream.py`
+- **test_the_backstop_docker_exec_is_bounded()** (3 connections) — `tests/lab/test_stream.py`
+- **test_a_stuck_on_timeout_does_not_hang_the_runner()** (2 connections) — `tests/lab/test_stream.py`
+- **test_output_and_exit_code_pass_through()** (2 connections) — `tests/lab/test_stream.py`
+- **test_the_message_names_the_phase_timeout_not_the_host_backstop()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_fires_while_the_child_is_silent()** (2 connections) — `tests/lab/test_stream.py`
+- **test_timeout_stops_what_runs_inside_the_container()** (2 connections) — `tests/lab/test_stream.py`
+- **pump()** (1 connections) — `teach/lab/runner.py`
+- **stop()** (1 connections) — `teach/lab/runner.py`
+- **.__init__()** (1 connections) — `tests/lab/test_stream.py`
+- **Run, echo output live, and return (exit code, full output). `timeout` is the…** (1 connections) — `teach/lab/runner.py`
+- **`exit N`, plus what 124 most likely means (coreutils timeout's status).** (1 connections) — `teach/lab/runner.py`
+- **Per-phase timeouts hold even when the lab prints nothing (review of PR #2). The…** (1 connections) — `tests/lab/test_stream.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (12 shared connections)
-- [Community 219](Community_219.md) (3 shared connections)
-- [Community 232](Community_232.md) (3 shared connections)
-- [Community 214](Community_214.md) (3 shared connections)
-- [Community 222](Community_222.md) (2 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
+- [Community 12](Community_12.md) (9 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 215](Community_215.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/curriculum_diff.py`
+- `teach/lab/runner.py`
+- `tests/lab/test_stream.py`
 
 ## Audit Trail
 
-- EXTRACTED: 38 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 36 (95%)
+- INFERRED: 2 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

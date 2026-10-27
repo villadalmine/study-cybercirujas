@@ -1,32 +1,42 @@
 # Community 248
 
-> 8 nodes · cohesion 0.25
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **2. The wiki (OpenWiki)** (4 connections) — `docs/DEVTOOLS.md`
-- **3. Real metrics, end to end** (4 connections) — `docs/DEVTOOLS.md`
-- **Developer tools: code graph, wiki, and real metrics** (4 connections) — `docs/DEVTOOLS.md`
-- **Reading the numbers** (1 connections) — `docs/DEVTOOLS.md`
-- **Setup, once** (1 connections) — `docs/DEVTOOLS.md`
-- **Using it** (1 connections) — `docs/DEVTOOLS.md`
-- **What changed on 2026-08-18 (blind spots closed)** (1 connections) — `docs/DEVTOOLS.md`
-- **When the code changes** (1 connections) — `docs/DEVTOOLS.md`
+- **_extract_run()** (7 connections) — `scripts/curriculum_diff.py`
+- **parse_layout()** (7 connections) — `scripts/curriculum_diff.py`
+- **unicodedata** (7 connections)
+- **tidy()** (6 connections) — `scripts/curriculum_diff.py`
+- **join()** (4 connections) — `scripts/curriculum_diff.py`
+- **_right_start()** (4 connections) — `scripts/curriculum_diff.py`
+- **dump_yaml()** (3 connections) — `scripts/curriculum_diff.py`
+- **_is_marker()** (2 connections) — `scripts/curriculum_diff.py`
+- **_segments()** (2 connections) — `scripts/curriculum_diff.py`
+- **The first column of the right-hand column, or None if the page has one column.** (1 connections) — `scripts/curriculum_diff.py`
+- **Domains with their weight and objectives, from `pdftotext -layout` output.** (1 connections) — `scripts/curriculum_diff.py`
+- **Display text: NFKC (the PDF's `ﬁ` ligature becomes `fi`) and single spaces.** (1 connections) — `scripts/curriculum_diff.py`
+- **Append a continuation line, undoing the PDF's line-end hyphenation.** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 158](Community_158.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
-- [Community 48](Community_48.md) (1 shared connections)
+- [Community 57](Community_57.md) (11 shared connections)
+- [Community 219](Community_219.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 75](Community_75.md) (2 shared connections)
+- [Community 213](Community_213.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/DEVTOOLS.md`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 9 (90%)
-- INFERRED: 1 (10%)
+- EXTRACTED: 33 (97%)
+- INFERRED: 1 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---
