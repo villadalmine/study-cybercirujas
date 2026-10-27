@@ -1,5 +1,5 @@
 # LPIC-1 102.6 — Linux como invitado de virtualización
-## Ejercicios guiados (Examen 102-500, versión 5.0 del temario — peso 1)
+## Ejercicios guiados (Examen 101-500, versión 5.0 del temario — peso 1)
 
 > **Alcance del objetivo.** Máquinas virtuales frente a contenedores; elementos de IaaS (instancias de cómputo, almacenamiento en bloque, redes); propiedades que deben hacerse únicas cuando un sistema se clona o se usa como plantilla; imágenes de sistema; extensiones de integración del invitado (guest drivers); `cloud-init`.
 > Texto oficial del objetivo: <https://www.lpi.org/our-certifications/exam-101-objectives/> (102.6). Objetivos del examen 101, para el examen complementario: <https://www.lpi.org/our-certifications/exam-101-objectives/>
@@ -1378,7 +1378,7 @@ Notá la tensión con el paso 11 del ejercicio: fijar `Name=uplink0` por `MACAdd
 
 ## Fuentes
 
-- LPI — LPIC-1 Exam 102-500 Objectives, v5.0, objetivo 102.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — LPIC-1 Exam 101-500 Objectives, v5.0, objetivo 102.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — LPIC-1 Exam 101-500 Objectives, v5.0: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `systemd` — `machine-id(5)`: <https://www.freedesktop.org/software/systemd/man/latest/machine-id.html>
 - `systemd` — `systemd-machine-id-setup(1)`: <https://www.freedesktop.org/software/systemd/man/latest/systemd-machine-id-setup.html>

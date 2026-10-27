@@ -1459,7 +1459,7 @@ Group membership is applied at process creation, not at usermod time.
 ## References
 
 - LPI — Exam 101 Objectives (v5.0), Topic 104.5: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
 - `chmod(1)` — GNU coreutils manual: https://www.gnu.org/software/coreutils/manual/html_node/chmod-invocation.html
 - `chown(1)` — GNU coreutils manual: https://www.gnu.org/software/coreutils/manual/html_node/chown-invocation.html
 - `chgrp(1)` — GNU coreutils manual: https://www.gnu.org/software/coreutils/manual/html_node/chgrp-invocation.html

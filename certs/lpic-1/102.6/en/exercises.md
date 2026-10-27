@@ -1,5 +1,5 @@
 # LPIC-1 102.6 — Linux as a Virtualization Guest
-## Guided Exercises (Exam 102-500, syllabus version 5.0 — weight 1)
+## Guided Exercises (Exam 101-500, syllabus version 5.0 — weight 1)
 
 > **Objective scope.** Virtual machines vs. containers; IaaS elements (compute instances, block storage, networking); properties that must be made unique when a system is cloned or used as a template; system images; guest integration extensions (guest drivers); `cloud-init`.
 > Official objective text: <https://www.lpi.org/our-certifications/exam-101-objectives/> (102.6). Exam-101 objectives, for the companion exam: <https://www.lpi.org/our-certifications/exam-101-objectives/>
@@ -1378,7 +1378,7 @@ Note the tension with step 11 of the exercise: pinning `Name=uplink0` by `MACAdd
 
 ## Sources
 
-- LPI — LPIC-1 Exam 102-500 Objectives, v5.0, objective 102.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — LPIC-1 Exam 101-500 Objectives, v5.0, objective 102.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — LPIC-1 Exam 101-500 Objectives, v5.0: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `systemd` — `machine-id(5)`: <https://www.freedesktop.org/software/systemd/man/latest/machine-id.html>
 - `systemd` — `systemd-machine-id-setup(1)`: <https://www.freedesktop.org/software/systemd/man/latest/systemd-machine-id-setup.html>

@@ -1,6 +1,6 @@
 # 102.5 — Uso de la gestión de paquetes RPM y YUM
 
-**LPIC-1 · Examen 102-500 · Objetivo 102.5 · Peso 4.69**
+**LPIC-1 · Examen 101-500 · Objetivo 102.5 · Peso 4.69**
 
 **Áreas de conocimiento clave:** instalar, reinstalar, actualizar y eliminar paquetes usando `rpm`, `yum`/`dnf` y `zypper`; obtener información de paquetes (versión, estado, dependencias, integridad, firmas); determinar qué archivos provee un paquete y qué paquete es dueño de un archivo dado.
 
@@ -2395,7 +2395,7 @@ rpm2cpio <file.rpm> | cpio -idmv   # extract without installing
 ## 9. Referencias
 
 **LPI**
-- LPIC-1 Exam 102 objectives (v5.0), Topic 102.5 — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 101 objectives (v5.0), Topic 102.5 — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 Exam 101 objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 

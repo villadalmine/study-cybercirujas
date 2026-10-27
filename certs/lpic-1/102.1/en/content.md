@@ -1,6 +1,6 @@
 # 102.1 — Design Hard Disk Layout
 
-**LPIC-1 v5.0 · Exam 102-500 · Weight 3.13**
+**LPIC-1 v5.0 · Exam 101-500 · Weight 3.13**
 **Profile: Principal Platform Architect / SRE — production depth**
 
 ---
@@ -1781,7 +1781,7 @@ Run this before every install. It is the whole objective in operational form.
 
 **Certification objectives**
 - LPI — Exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 objectives (topic 102.1 lives here): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 objectives (topic 102.1 lives here): https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Standards and specifications**
