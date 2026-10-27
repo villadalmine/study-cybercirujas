@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.3](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.2...v0.6.3) (2026-10-27)
+
+
+### Bug Fixes
+
+* **ci:** check_pr and curriculum_diff follow-ups from earlier reviews ([#254](https://github.com/villadalmine/study-cybercirujas/issues/254)) ([45d75fa](https://github.com/villadalmine/study-cybercirujas/commit/45d75fa3d3c1e3ffed10447414dbfb7b86442838))
+* **groundedness:** pin weights on load, one weight source, lazy model, undated review ([#252](https://github.com/villadalmine/study-cybercirujas/issues/252)) ([b24c5d7](https://github.com/villadalmine/study-cybercirujas/commit/b24c5d7e87c5774ae24a478b91301b004d0710e4))
+* **lpic-1:** re-point the dead exam-102 objectives citations to the catalog's pinned page ([#257](https://github.com/villadalmine/study-cybercirujas/issues/257)) ([ae69e32](https://github.com/villadalmine/study-cybercirujas/commit/ae69e32429e459a6c6c1e43d4c901b3152696473))
+
+
+### Documentation
+
+* fix stale docs, comments and file modes from the umbrella follow-ups ([#253](https://github.com/villadalmine/study-cybercirujas/issues/253)) ([9038a78](https://github.com/villadalmine/study-cybercirujas/commit/9038a781b4f82064f61a9934c38bb4e62df2f5bf))
+
 ## [0.6.2](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.1...v0.6.2) (2026-10-26)
 
 
