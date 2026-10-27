@@ -273,7 +273,7 @@ call and is listed here so it is not lost.
 2. **`docs/ROADMAP.md` "Where we left off"** is a session note, not a roadmap. Keep
    it short (open items only) or move it to docs/HISTORY.md at the end of each
    session; the README no longer links to it.
-3. **`docs/ORIGINAL_DESIGN.md`** is mostly history now. Either trim it to the principles
+3. **`docs/ORIGINAL_DESIGN.md`** is mostly history now. Trim it to the principles
    (snapshot, state in files, generate once, CLI first, separate roles — the
    Curriculum-as-Code core). The rename from `PLAN.md` is done.
 4. **`docs/BACKLOG.md` vs `docs/ROADMAP.md`** both carry "what is next"; BACKLOG says the

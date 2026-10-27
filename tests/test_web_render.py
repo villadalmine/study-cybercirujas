@@ -7,6 +7,7 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -49,6 +50,23 @@ class StaticTests(unittest.TestCase):
         self.assertIn("&quot;", src)
         self.assertIn("&#39;", src)
         self.assertIsNone(re.search(r"<summary>\.\*<\\/summary>\$/\.test", src))
+
+
+@unittest.skipIf(NODE is None, "node not installed")
+class SyntaxTests(unittest.TestCase):
+    """One unescaped apostrophe in a UI string breaks the single inline script and blanks the whole site (#253)."""
+
+    def test_every_inline_script_parses(self):
+        html = INDEX.read_text(encoding="utf-8")
+        scripts = re.findall(r"<script(?![^>]*src=)([^>]*)>(.*?)</script>", html, re.S | re.I)
+        self.assertTrue(scripts, "no inline <script> found in teach/web/index.html")
+        with tempfile.TemporaryDirectory() as tmp:
+            for n, (attrs, code) in enumerate(scripts):
+                ext = ".mjs" if "module" in attrs else ".js"
+                path = Path(tmp) / f"inline{n}{ext}"
+                path.write_text(code, encoding="utf-8")
+                done = subprocess.run([NODE, "--check", str(path)], capture_output=True, text=True, timeout=60)
+                self.assertEqual(done.returncode, 0, f"inline script {n} does not parse: {done.stderr}")
 
 
 @unittest.skipIf(NODE is None, "node not installed")
