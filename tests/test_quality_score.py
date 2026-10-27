@@ -114,6 +114,10 @@ class ReviewTests(unittest.TestCase):
         ([{"date": "2026-10-15", "result": "fail"}, {"date": "2026-10-01", "result": "pass"}], "fail"),
         ([{"date": "2026-10-01", "result": "fail"}, {"date": "2026-10-15", "result": "pass"}], "pass"),
         ([{"date": "2026-10-15", "result": "pass"}, {"date": "2026-10-15", "result": "fail"}], "fail"),
+        # an undated review is the oldest, not the latest (None used to sort after any ISO date)
+        ([{"result": "fail"}, {"date": "2026-10-01", "result": "pass"}], "pass"),
+        ([{"date": "2026-10-01", "result": "pass"}, {"result": "fail"}], "pass"),
+        ([{"date": None, "result": "fail"}, {"date": "2026-10-01", "result": "pass"}], "pass"),
     ]
 
     def test_table(self):
@@ -153,6 +157,29 @@ class GroundednessTests(unittest.TestCase):
         kept = [c for c in block["checks"] if c["name"] == "groundedness"]
         self.assertEqual(kept, [recorded])
         self.assertEqual(block["checks"][-1], recorded)
+
+
+class RecordedGroundednessIsNotTrustedVerbatim(unittest.TestCase):
+    """A recorded entry keeps its result, evidence and date; the weight and version are the project's (#120)."""
+
+    def recorded(self, **over):
+        return {"name": "groundedness", "version": "1", "result": "pass", "weight": 5, "ran_at": "2026-10-16",
+                "evidence": "0 of 3 claims unsupported", **over}
+
+    def test_its_own_weight_and_version_are_replaced(self):
+        got = quality_score.groundedness_check({"quality": {"checks": [self.recorded(weight=500, version="9")]}}, W)
+        self.assertEqual((got["weight"], got["version"]), (W["checks"]["groundedness"]["weight"], quality_score.CHECK_VERSION))
+        self.assertEqual((got["result"], got["ran_at"], got["evidence"]), ("pass", "2026-10-16", "0 of 3 claims unsupported"))
+
+    def test_a_result_other_than_pass_or_fail_is_not_run(self):
+        for bad in ("PASS", "ok", None, True):
+            with self.subTest(result=bad):
+                got = quality_score.groundedness_check({"quality": {"checks": [self.recorded(result=bad)]}}, W)
+                self.assertEqual(got["result"], "not_run")
+
+    def test_the_entry_keeps_the_keys_and_order_of_every_other_check(self):
+        got = quality_score.groundedness_check({"quality": {"checks": [self.recorded(extra="x")]}}, W)
+        self.assertEqual(list(got), ["name", "version", "result", "weight", "ran_at", "evidence"])
 
 
 class VisibleTests(unittest.TestCase):

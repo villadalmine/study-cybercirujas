@@ -48,6 +48,15 @@ def sha(data: str | bytes) -> str:
     return hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()
 
 
+def file_sha(path: Path) -> str:
+    """sha256 of a file read in blocks: the weights are 1.7 GB."""
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for block in iter(lambda: f.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
 def claims(text: str, min_words: int = CFG["segmentation"]["min_words"]) -> list[dict]:
     """Sentences of the prose (no code, headings, tables, comments or References),
     each with a stable id L<line of its paragraph>.<n>."""
@@ -129,13 +138,20 @@ def best_windows(claim: str, wins: list[tuple[str, str]]) -> list[tuple[str, str
     return [wins[i] for i in ranked[:CFG["retrieval"]["top_k"]]]
 
 
+def verify_weights() -> None:
+    """The pinned sha256 of every weight file, at download and at every load: a cache that was
+    swapped or half-written must not score claims."""
+    for name, digest in CFG["prefilter"]["sha256"].items():
+        if not (MODEL / name).exists() or file_sha(MODEL / name) != digest:
+            raise SystemExit(f"groundedness: the sha256 of {name} is not the one in groundedness.yaml "
+                             "(run scripts/check_groundedness.py --download)")
+
+
 def download() -> None:
     from huggingface_hub import snapshot_download
     p = CFG["prefilter"]
     snapshot_download(p["repo"], revision=p["revision"], local_dir=MODEL)
-    for name, digest in p["sha256"].items():
-        if sha((MODEL / name).read_bytes()) != digest:
-            raise SystemExit(f"groundedness: the sha256 of {name} is not the one in groundedness.yaml")
+    verify_weights()
     print(f"groundedness: {p['repo']}@{p['revision'][:12]} in {MODEL}")
 
 
@@ -146,6 +162,7 @@ class Prefilter:
         p = CFG["prefilter"]
         if not (MODEL / "model.safetensors").exists():
             raise SystemExit("groundedness: no weights; run scripts/check_groundedness.py --download first")
+        verify_weights()
         os.environ["HF_HUB_OFFLINE"] = "1"
         import torch
         from gliclass import GLiClassModel, ZeroShotClassificationPipeline
@@ -158,6 +175,17 @@ class Prefilter:
 
     def score(self, premise: str, claim: str) -> float:
         return round(float(self.pipe(premise, [claim], threshold=0.0)[0][0]["score"]), 4)
+
+
+class LazyPrefilter:
+    """Loads the 1.7 GB model on the first claim to score, so a run with nothing to score never pays for it."""
+
+    def __init__(self):
+        self.model = None
+
+    def __call__(self, premise: str, claim: str) -> float:
+        self.model = self.model or Prefilter()
+        return self.model.score(premise, claim)
 
 
 def guardian(premise: str, claim: str) -> float:
@@ -220,8 +248,7 @@ def write_quality(lang_dir: Path, report: dict) -> None:
     text = path.read_text(encoding="utf-8")
     block = (yaml.safe_load(text) or {}).get("quality") or {}
     block["checks"] = [c for c in block.get("checks") or [] if c.get("name") != "groundedness"] + [
-        {"name": "groundedness", "version": qs.CHECK_VERSION, "result": report["result"],
-         "weight": CFG["quality"]["weight"], "ran_at": None, "evidence": report["evidence"]}]
+        qs.entry("groundedness", report["result"], qs.load_weights(), report["evidence"])]
     for rescore in (False, True):  # 2nd pass: score the tree with the entry now recorded
         block = qs.block_for(lang_dir, qs.Context()) if rescore else block
         with open(path, "w", encoding="utf-8", newline="\n") as handle:
@@ -274,11 +301,13 @@ def main() -> int:
     ap.add_argument("--json", type=Path, help="write the full report here")
     ap.add_argument("--summary", type=Path, help="append the Markdown summary here ($GITHUB_STEP_SUMMARY)")
     a = ap.parse_args()
+    if a.write and (a.dry_run or a.fixture):
+        ap.error("--write records a model's verdict in meta.yaml: it cannot be combined with --dry-run or --fixture")
     if a.download:
         download()
         if not (a.topics or a.base or a.fixture):
             return 0
-    score = None if a.dry_run or (a.fixture and a.deep) else Prefilter().score
+    score = None if a.dry_run or (a.fixture and a.deep) else LazyPrefilter()
     deep = guardian if a.deep else None
     if a.fixture:
         reports = [fixture(a.fixture, score, deep)]

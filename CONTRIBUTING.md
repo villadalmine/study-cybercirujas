@@ -155,7 +155,7 @@ To raise a topic's score, turn its `not_run` and `fail` entries into `pass`:
 | `independent_review` | a `reviews:` entry in meta.yaml: `{by, link, date, result: pass}` — `fable (revisor-pr)` or Copilot, with the review's link |
 | `human_review` | a `human_edits:` entry (see *Provenance is mandatory*) |
 | `citations_resolve` | not run in CI today (network); it stays `not_run` |
-| `groundedness` | `make groundedness DIRS=certs/<cert>/<topic>/<lang>` and commit the `meta.yaml` it writes (see *Groundedness (advisory)* below); CI reports the same run but does not commit, so the entry stays `not_run` until you run it |
+| `groundedness` | `make groundedness DIRS=certs/<cert>/<topic>/<lang>` and commit the `meta.yaml` it writes (see *Groundedness (advisory)* below); CI reports the same run but does not commit, so the entry stays `not_run` until you run it; once recorded, `make quality` keeps its result and evidence (and gives it the weight of `quality_weights.yaml`) |
 
 *Verified* needs a score of 85 or more **and** a passed lab and independent
 review; a high score from automatic checks alone stops at *AI beta*.
@@ -659,6 +659,14 @@ artifact. It is `mode: warn` — it never fails on a finding, and it is not one
 of the required checks. A flagged claim means *look*: reword it to what the
 source says, cite the source that says it, or reply in the PR why the
 classifier is wrong.
+
+The weights are checked against the sha256 pinned in `groundedness.yaml` every
+time they are loaded, not only by `--download`. The model is loaded only when
+there is a claim to score, so a run with no changed topic costs nothing.
+`--write` cannot be combined with `--dry-run` or `--fixture` (nothing is scored,
+so there is nothing to record). A recorded `groundedness` entry survives
+`make quality`: its result, evidence and date are kept, its weight is
+`quality_weights.yaml`'s.
 
 ## Licence and conduct
 
