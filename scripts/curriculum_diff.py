@@ -219,7 +219,19 @@ def _extract_args(p: argparse.ArgumentParser) -> None:
     for flag in ("--cert", "--version", "--repo", "--commit", "--path", "--committed"):
         p.add_argument(flag, required=True)
     p.add_argument("-o", "--out")
-    p.add_argument("--check", action="store_true", help="fail if --out is not what the PDF produces")
+    p.add_argument("--check", action="store_true", help="fail if --out is not what the PDF produces (needs -o)")
+
+
+def _extract_validate(args) -> str | None:
+    if args.text and not args.sha256:   # the digest is of the PDF, which --text does not have: it cannot be computed
+        return "--text needs --sha256 (the PDF's digest cannot be computed from its text)"
+    return _check_needs_out(args)
+
+
+def _check_needs_out(args) -> str | None:
+    if args.check and not args.out:     # nothing to compare with: it would report STALE every time
+        return "--check needs -o/--out (the file to compare with)"
+    return None
 
 
 def _extract_run(args) -> int:
@@ -1095,7 +1107,7 @@ def render(p: dict) -> str:
 def _render_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("plan", type=Path)
     p.add_argument("-o", "--out")
-    p.add_argument("--check", action="store_true", help="fail if --out is not what the plan produces")
+    p.add_argument("--check", action="store_true", help="fail if --out is not what the plan produces (needs -o)")
 
 
 def _render_run(args) -> int:
@@ -1107,12 +1119,21 @@ COMMANDS["render"] = ("the plan as a markdown report", _render_args, _render_run
 
 # ==== main ====
 
+# Argument combinations argparse cannot express: name -> (args) -> the error, or None. Refused with exit code 2, like any usage error.
+VALIDATORS = {"extract": _extract_validate, "render": _check_needs_out}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
+    parsers = {}
     for name, (help_, add_arguments, _) in COMMANDS.items():
-        add_arguments(sub.add_parser(name, help=help_))
+        parsers[name] = sub.add_parser(name, help=help_)
+        add_arguments(parsers[name])
     args = ap.parse_args(argv)
+    problem = VALIDATORS[args.cmd](args) if args.cmd in VALIDATORS else None
+    if problem:
+        parsers[args.cmd].error(problem)
     return COMMANDS[args.cmd][2](args)
 
 
