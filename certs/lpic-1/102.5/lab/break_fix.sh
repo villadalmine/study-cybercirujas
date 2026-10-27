@@ -14,7 +14,7 @@
 #
 #  Official references
 #    LPI 101 objectives ....... https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI 102 objectives ....... https://www.lpi.org/our-certifications/exam-102-objectives/
+#    LPI 102 objectives ....... https://www.lpi.org/our-certifications/exam-101-objectives/
 #    rpm(8) / rpm macros ...... https://rpm-software-management.github.io/rpm/manual/
 #    dnf configuration ........ https://dnf.readthedocs.io/en/latest/conf_ref.html
 #    dnf command reference .... https://dnf.readthedocs.io/en/latest/command_ref.html

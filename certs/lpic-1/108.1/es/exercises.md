@@ -839,7 +839,7 @@ La implementación de referencia `ntpd` (y su bifurcación `ntpsec`) sigue siend
 ## Fuentes
 
 - LPI, *Exam 101 Objectives, version 5.0* — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI, *Exam 102 Objectives, version 5.0* (el objetivo 108.1 vive acá) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI, *Exam 102 Objectives, version 5.0* (el objetivo 108.1 vive acá) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - `date(1)`, GNU coreutils — https://man7.org/linux/man-pages/man1/date.1.html
 - `hwclock(8)`, util-linux — https://man7.org/linux/man-pages/man8/hwclock.8.html
 - `adjtime_config(5)` — https://man7.org/linux/man-pages/man5/adjtime_config.5.html

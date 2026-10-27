@@ -2110,7 +2110,7 @@ The facts LPI is likely to test, stated flatly:
 
 **LPI — certification objectives**
 - LPIC-1 Exam 101 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPIC-1 Exam 102 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPIC-1 Exam 102 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **systemd — machine identity and virtualization detection**

@@ -4,7 +4,7 @@
 #  LPIC-1 (LPI 101-500 / 102-500, syllabus version 5.0)
 #  Topic 102.1 — Design hard disk layout   (exam weight: 3.13)
 #  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#             https://www.lpi.org/our-certifications/exam-102-objectives/
+#             https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 #  BREAK & FIX LAB — controlled damage on a DISPOSABLE lab VM.
 #

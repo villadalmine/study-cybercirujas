@@ -4,6 +4,13 @@ backend: claude
 model: claude-opus-5
 sources:
 - https://www.lpi.org/our-certifications/exam-101-objectives/
+tool_edit:
+  tool: scripts/upgrade_versions.py
+  script_sha256: 9808e780d6e95cd5c4c87ca14a0a23d78192930855d12752be62cd670883b867
+  plan: docs/upgrades/cka-ckad-1.37.plan.json
+  plan_sha256: 445e569ff8252c6a2642e84df964ef1c0054b90056b091e4c630615d60630688
+  pins_sha256: cbd9c8f3921b170d5bfa46e93acbddbe56fa2f3e70e4ad791925d12c4c974a1d
+  date: '2026-10-21'
 quality:
   weights_version: 1
   score: 69.4

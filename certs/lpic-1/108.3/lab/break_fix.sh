@@ -9,7 +9,7 @@
 #
 #  Official reference sources
 #    LPI 101-500 objectives : https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI 102-500 objectives : https://www.lpi.org/our-certifications/exam-102-objectives/
+#    LPI 102-500 objectives : https://www.lpi.org/our-certifications/exam-101-objectives/
 #    postconf(5)            : https://www.postfix.org/postconf.5.html
 #    local(8)               : https://www.postfix.org/local.8.html
 #    aliases(5)             : https://www.postfix.org/aliases.5.html
@@ -681,5 +681,5 @@ esac
 #
 #  Citations: postconf(5), local(8), aliases(5), postqueue(1), postsuper(1) and
 #  postalias(1) at https://www.postfix.org/documentation.html ; objective wording
-#  at https://www.lpi.org/our-certifications/exam-102-objectives/
+#  at https://www.lpi.org/our-certifications/exam-101-objectives/
 # ==============================================================================

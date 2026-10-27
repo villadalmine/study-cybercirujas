@@ -1,7 +1,7 @@
 # LPIC-1 — Tema 108.3: Fundamentos del Mail Transfer Agent (MTA)
 ## Ejercicios guiados (Examen 102-500, versión 5.0)
 
-**Referencia oficial del objetivo:** <https://www.lpi.org/our-certifications/exam-102-objectives/> (el tema 108.3 pertenece al examen 102-500; la lista de objetivos del 101-500 está en <https://www.lpi.org/our-certifications/exam-101-objectives/>).
+**Referencia oficial del objetivo:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (el tema 108.3 pertenece al examen 102-500; la lista de objetivos del 101-500 está en <https://www.lpi.org/our-certifications/exam-101-objectives/>).
 
 La propia nota de alcance del objetivo dice *"no configuration of MTAs is required"* — lo que se evalúa son los **aliases**, el **reenvío**, la **capa de comandos compatible con sendmail** y el **conocimiento de los cuatro MTA clásicos**. Estos ejercicios cubren ese núcleo examinable y después avanzan hacia los diagnósticos de producción que un SRE realmente necesita: anatomía de la cola, motivos de diferimiento, detección de bucles y evidencia del agente de entrega en los logs.
 
@@ -878,7 +878,7 @@ La solución duradera es estructural y pertenece a la revisión post-incidente: 
 
 ## Fuentes oficiales
 
-- LPI, *Exam 102-500 Objectives* (LPIC-1 v5.0), tema 108.3 — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *Exam 102-500 Objectives* (LPIC-1 v5.0), tema 108.3 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - Postfix, *Postfix Basic Configuration Readme* — <https://www.postfix.org/BASIC_CONFIGURATION_README.html>
 - Postfix, *página de manual `aliases(5)`* — <https://www.postfix.org/aliases.5.html>

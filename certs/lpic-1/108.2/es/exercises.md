@@ -1059,7 +1059,7 @@ El journal se rota a sí mismo. **Los archivos de texto plano escritos por rsysl
 
 ## Fuentes
 
-- LPI — Objetivos del Examen 102-500 (tema 108.2): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Objetivos del Examen 102-500 (tema 108.2): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — Objetivos del Examen 101-500: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `journalctl(1)`: <https://www.freedesktop.org/software/systemd/man/latest/journalctl.html>
 - `journald.conf(5)`: <https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html>

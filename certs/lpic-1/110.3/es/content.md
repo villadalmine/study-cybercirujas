@@ -1575,7 +1575,7 @@ Los pasos 3 y 5 son los que se saltean, y son los que importan. La revocación c
 
 **Objetivos de certificación LPI**
 - Objetivos del examen 101-500 — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Objetivos del examen 102-500 (el tema 110.3 vive acá) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- Objetivos del examen 102-500 (el tema 110.3 vive acá) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - Panorama de la certificación LPIC-1 — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **OpenSSH — documentación del proyecto y páginas de manual**

@@ -1,7 +1,7 @@
 # LPIC-1 — Topic 108.3: Mail Transfer Agent (MTA) Basics
 ## Guided Exercises (Exam 102-500, version 5.0)
 
-**Official objective reference:** <https://www.lpi.org/our-certifications/exam-102-objectives/> (topic 108.3 lives in the 102-500 exam; the 101-500 objective list is at <https://www.lpi.org/our-certifications/exam-101-objectives/>).
+**Official objective reference:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (topic 108.3 lives in the 102-500 exam; the 101-500 objective list is at <https://www.lpi.org/our-certifications/exam-101-objectives/>).
 
 The objective's own scope note says *"no configuration of MTAs is required"* — what is examined is **aliases**, **forwarding**, the **sendmail-compatible command layer**, and **awareness of the four classic MTAs**. These exercises cover that examinable core and then push into the production diagnostics an SRE actually needs: queue anatomy, deferral reasons, loop detection, and delivery-agent evidence in the logs.
 
@@ -878,7 +878,7 @@ The durable fix is structural and belongs in the post-incident review: make root
 
 ## Official Sources
 
-- LPI, *Exam 102-500 Objectives* (LPIC-1 v5.0), topic 108.3 — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *Exam 102-500 Objectives* (LPIC-1 v5.0), topic 108.3 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - Postfix, *Postfix Basic Configuration Readme* — <https://www.postfix.org/BASIC_CONFIGURATION_README.html>
 - Postfix, *`aliases(5)` manual page* — <https://www.postfix.org/aliases.5.html>

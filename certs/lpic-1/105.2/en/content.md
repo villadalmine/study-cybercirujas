@@ -2104,7 +2104,7 @@ artifact-gc.bats
 ## 15. References
 
 **LPI — certification objectives**
-- LPIC-1 Exam 102 objectives, v5.0 (contains Topic 105.2): https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102 objectives, v5.0 (contains Topic 105.2): https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 Exam 101 objectives, v5.0: https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 

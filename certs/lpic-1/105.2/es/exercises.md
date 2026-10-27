@@ -1630,7 +1630,7 @@ Puntos de la implementación que vale la pena señalar:
 ## Fuentes
 
 - LPI — Exam 101-500 Objectives: <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Exam 102-500 Objectives (el tema 105.2 vive acá): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Exam 102-500 Objectives (el tema 105.2 vive acá): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - The Open Group — POSIX.1-2017, Shell Command Language: <https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html>
 - GNU Bash Reference Manual: <https://www.gnu.org/software/bash/manual/bash.html>
 - `execve(2)` — scripts con intérprete, y la omisión de set-user-ID en scripts: <https://man7.org/linux/man-pages/man2/execve.2.html>

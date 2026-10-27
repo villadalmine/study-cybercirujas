@@ -2,7 +2,7 @@
 ## Ejercicios guiados
 
 > **Alcance del objetivo:** direccionamiento IPv4/IPv6, máscaras de red y CIDR, rangos privados y reservados, la diferencia entre TCP, UDP e ICMP, y los puertos y servicios bien conocidos de `/etc/services`.
-> **Lista oficial de objetivos:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (el objetivo 109.1 pertenece al examen 102-500: <https://www.lpi.org/our-certifications/exam-102-objectives/>)
+> **Lista oficial de objetivos:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (el objetivo 109.1 pertenece al examen 102-500: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
 
 ---
 
@@ -994,7 +994,7 @@ Notá que la inversión va en *ambos* sentidos: una MAC globalmente única (asig
 
 ## Fuentes
 
-- Objetivos del examen LPI 102-500, tema 109.1 — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- Objetivos del examen LPI 102-500, tema 109.1 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - Objetivos del examen LPI 101-500 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - RFC 791 — Internet Protocol (IPv4) — <https://www.rfc-editor.org/rfc/rfc791>
 - RFC 792 — Internet Control Message Protocol — <https://www.rfc-editor.org/rfc/rfc792>

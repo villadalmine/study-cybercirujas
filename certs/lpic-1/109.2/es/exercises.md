@@ -969,7 +969,7 @@ Ahora tenés hasta tres pilas en un solo host. Este ejercicio inyecta tres falla
 ## Fuentes
 
 - LPI — Objetivos del examen 101-500 (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Objetivos del examen 102-500, Tema 109 "Networking Fundamentals": <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Objetivos del examen 102-500, Tema 109 "Networking Fundamentals": <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `hostnamectl(1)` / `hostname(5)` / `machine-info(5)`: <https://www.freedesktop.org/software/systemd/man/latest/hostnamectl.html>
 - `nsswitch.conf(5)`, NSS de la biblioteca GNU C: <https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html>
 - `resolv.conf(5)` — proyecto man-pages: <https://man7.org/linux/man-pages/man5/resolv.conf.5.html>

@@ -2110,7 +2110,7 @@ Los hechos que LPI probablemente evalúe, enunciados llanamente:
 
 **LPI — objetivos de certificación**
 - Objetivos del examen LPIC-1 101 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- Objetivos del examen LPIC-1 102 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- Objetivos del examen LPIC-1 102 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - Panorama de la certificación LPIC-1 — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **systemd — identidad de máquina y detección de virtualización**

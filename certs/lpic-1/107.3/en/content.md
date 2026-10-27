@@ -1271,7 +1271,7 @@ The durable fix is to stop depending on glibc for ordering at all: create the da
 
 **LPI — objetivos oficiales**
 - LPIC-1 Exam 101 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102 objectives (contiene 107.3) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102 objectives (contiene 107.3) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **glibc / locale**

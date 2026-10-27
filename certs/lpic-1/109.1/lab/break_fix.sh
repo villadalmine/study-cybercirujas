@@ -25,7 +25,7 @@
 #    * Knowledge of the basic features of IPv6
 #
 #  Reference (official, authoritative):
-#    LPI Exam 102-500 objectives -- https://www.lpi.org/our-certifications/exam-102-objectives/
+#    LPI Exam 102-500 objectives -- https://www.lpi.org/our-certifications/exam-101-objectives/
 #    LPI certification catalogue  -- https://www.lpi.org/our-certifications/exam-101-objectives/
 #    RFC 1918 (private IPv4 space) -- https://www.rfc-editor.org/rfc/rfc1918
 #    RFC 4291 (IPv6 addressing)    -- https://www.rfc-editor.org/rfc/rfc4291

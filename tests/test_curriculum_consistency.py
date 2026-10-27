@@ -106,10 +106,14 @@ class FixLine(unittest.TestCase):
         self.assertEqual(cc.fix_line(page, cc.wanted(alias, "lpic-2")), page)               # accepted for lpic-2 (data, with its reason)
         self.assertNotEqual(cc.fix_line(page, cc.wanted(alias, "lpic-9")), page)            # not for a cert that has no such entry
 
-    def test_a_reviewed_extra_spelling_is_accepted(self):
-        lpic1 = cc.wanted(entry("5.0", LPI), "lpic-1")                       # exam 102 is accepted for lpic-1 (data)
-        page = "https://www.lpi.org/our-certifications/exam-102-objectives/"
-        self.assertEqual(cc.fix_line(page, lpic1), page)
+    def test_lpic1s_dead_exam_102_page_is_not_a_reviewed_spelling(self):
+        # #235: .../exam-102-objectives/ redirects to the LPI home page (checked 2026-10-27). It was accepted for lpic-1 only until the
+        # citations were re-pointed; now it is an offender like any other spelling, and the fix writes the catalog's pinned page.
+        lpic1 = cc.wanted(entry("5.0", LPI), "lpic-1")
+        self.assertNotIn("https://www.lpi.org/our-certifications/exam-102-objectives/", lpic1["urls"])
+        dead = "see https://www.lpi.org/our-certifications/exam-102-objectives/"
+        self.assertEqual(cc.fix_line(dead, lpic1), "see " + LPI)
+        self.assertEqual(cc.fix_line("see " + LPI, lpic1), "see " + LPI)                  # idempotent
 
     def test_a_cert_without_a_numeric_version_is_checked_on_its_link_only(self):
         kcsa = strict(entry("2024-06-24", "https://github.com/cncf/curriculum/raw/master/KCSA%20Curriculum.pdf"), "kcsa")

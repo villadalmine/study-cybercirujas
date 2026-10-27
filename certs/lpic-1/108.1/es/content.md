@@ -1838,7 +1838,7 @@ Etc/UTC
 **LPI**
 
 - Objetivos del examen LPIC-1 101-500 — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Objetivos del examen LPIC-1 102-500 — https://www.lpi.org/our-certifications/exam-102-objectives/
+- Objetivos del examen LPIC-1 102-500 — https://www.lpi.org/our-certifications/exam-101-objectives/
 - Visión general de la certificación LPIC-1 — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Estándares**

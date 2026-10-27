@@ -1960,7 +1960,7 @@ Esa línea `!! IGNORED BY CRON` es una clase real de incidente: alguien dejó `b
 **Oficiales de LPI**
 
 - LPIC-1 Exam 101-500 Objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 Objectives (el tema 107.2 está acá) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102-500 Objectives (el tema 107.2 está acá) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 - LPI Learning Materials, LPIC-1 102 — https://learning.lpi.org/en/learning-materials/102-500/
 

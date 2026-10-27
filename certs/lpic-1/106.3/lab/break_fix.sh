@@ -9,7 +9,7 @@
 #  BREAK & FIX LAB -- accessibility subsystem sabotage
 #
 #  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#             https://www.lpi.org/our-certifications/exam-102-objectives/
+#             https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 # ----------------------------------------------------------------------------
 #  !!  DESTRUCTIVE  !!  RUN ONLY ON A DISPOSABLE LAB VM.
@@ -1009,7 +1009,7 @@ main "$@"
 #   LPI Exam 101-500 objectives
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   LPI Exam 102-500 objectives (topic 106 lives here)
-#     https://www.lpi.org/our-certifications/exam-102-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   X.Org -- setxkbmap(1), xset(1), xorg.conf(5), xorg.conf.d
 #     https://www.x.org/releases/current/doc/man/man1/setxkbmap.1.xhtml
 #     https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml

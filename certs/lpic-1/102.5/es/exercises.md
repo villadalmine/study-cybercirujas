@@ -1485,7 +1485,7 @@ $ podman rm -f lpic-rpm lpic-zypper
 
 ## Fuentes oficiales
 
-- LPI — *Exam 102-500 Objectives, version 5.0* (objetivo 102.5): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — *Exam 102-500 Objectives, version 5.0* (objetivo 102.5): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — *Exam 101-500 Objectives, version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - RPM Project — *RPM Documentation* (`rpm(8)`, `rpm2cpio(8)`, `rpmkeys(8)`, formatos de consulta, flags de verificación): <https://rpm-software-management.github.io/rpm/manual/>
 - RPM Project — *Package signing and verification*: <https://rpm-software-management.github.io/rpm/manual/signatures_digests.html>

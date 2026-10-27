@@ -2049,7 +2049,7 @@ s-nail: /usr/bin/s-nail
 
 **Objetivos oficiales de LPI**
 
-* Objetivos del Examen 102 de LPIC-1 (102-500), incluido 108.3 *Mail Transfer Agent (MTA) basics* — https://www.lpi.org/our-certifications/exam-102-objectives/
+* Objetivos del Examen 102 de LPIC-1 (102-500), incluido 108.3 *Mail Transfer Agent (MTA) basics* — https://www.lpi.org/our-certifications/exam-101-objectives/
 * Objetivos del Examen 101 de LPIC-1 (101-500) — https://www.lpi.org/our-certifications/exam-101-objectives/
 * Descripción general de la certificación LPIC-1 — https://www.lpi.org/our-certifications/lpic-1-overview/
 

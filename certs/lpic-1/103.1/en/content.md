@@ -1337,7 +1337,7 @@ Answer before checking; each maps to a specific mechanism above.
 **Certification objectives**
 - LPI — Exam 101-500 Objectives (Topic 103.1): https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
-- LPI — Exam 102-500 Objectives: https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — Exam 102-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 
 **Shell and standards**
 - GNU Bash Reference Manual: https://www.gnu.org/software/bash/manual/bash.html

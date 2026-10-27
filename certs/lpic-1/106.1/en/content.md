@@ -1304,7 +1304,7 @@ The last check is the one that matters for security review: **an X server listen
 
 **LPI — objectives**
 - LPIC-1 Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 objectives (topic 106 lives here) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102-500 objectives (topic 106 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **X.Org Foundation — upstream documentation and manual pages**

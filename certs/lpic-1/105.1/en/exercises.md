@@ -1592,7 +1592,7 @@ Neither reliably removes a deleted definition. The only clean reload is `exec ba
 ## Sources
 
 - LPI — *Exam 101 Objectives, LPIC-1 version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — *Exam 102 Objectives, LPIC-1 version 5.0* (Topic 105.1 is examined in 102-500): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — *Exam 102 Objectives, LPIC-1 version 5.0* (Topic 105.1 is examined in 102-500): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - GNU — *Bash Reference Manual, "Bash Startup Files"*: <https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html>
 - GNU — *Bash Reference Manual, "Shell Variables"* (`BASH_ENV`, `PROMPT_COMMAND`, `PS1`–`PS4`, `SHLVL`): <https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html>
 - GNU — *Bash Reference Manual, "Aliases"*: <https://www.gnu.org/software/bash/manual/html_node/Aliases.html>

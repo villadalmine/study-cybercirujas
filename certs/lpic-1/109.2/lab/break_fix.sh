@@ -32,7 +32,7 @@
 #
 #  Reference (official objectives):
 #    https://www.lpi.org/our-certifications/exam-101-objectives/
-#    https://www.lpi.org/our-certifications/exam-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 #  USAGE
 #    sudo LAB_CONFIRM=yes ./lpic1-109.2-break-and-fix.sh break     # break it
@@ -1066,7 +1066,7 @@ esac
 # Sources
 # ----------------------------------------------------------------------------
 #   LPI Exam 101-500 objectives -- https://www.lpi.org/our-certifications/exam-101-objectives/
-#   LPI Exam 102-500 objectives -- https://www.lpi.org/our-certifications/exam-102-objectives/
+#   LPI Exam 102-500 objectives -- https://www.lpi.org/our-certifications/exam-101-objectives/
 #   systemd.network(5)          -- https://www.freedesktop.org/software/systemd/man/systemd.network.html
 #   systemd-resolved(8)         -- https://www.freedesktop.org/software/systemd/man/systemd-resolved.service.html
 #   hostnamectl(1)              -- https://www.freedesktop.org/software/systemd/man/hostnamectl.html

@@ -16,7 +16,7 @@
 #     systemd-resolved awareness (resolvectl, /run/systemd/resolve/*)
 #
 #  Official reference:
-#     https://www.lpi.org/our-certifications/exam-102-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-objectives/
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
 #     man 5 resolv.conf   |  man 5 hosts  |  man 5 nsswitch.conf
 #     man 1 dig           |  man 1 host   |  man 1 getent
@@ -917,7 +917,7 @@ main "$@"
 #  ---------------------------------------------------------------------------
 #
 #   LPI Exam 102-500 Objectives, topic 109.4 "Configure client side DNS"
-#     https://www.lpi.org/our-certifications/exam-102-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   LPI Exam 101-500 Objectives
 #     https://www.lpi.org/our-certifications/exam-101-objectives/
 #   resolv.conf(5)   https://man7.org/linux/man-pages/man5/resolv.conf.5.html

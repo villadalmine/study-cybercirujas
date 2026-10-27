@@ -1337,7 +1337,7 @@ Respondé antes de verificar; cada uno se corresponde con un mecanismo específi
 **Objetivos de la certificación**
 - LPI — Objetivos del examen 101-500 (Tema 103.1): https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPI — Panorama de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
-- LPI — Objetivos del examen 102-500: https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — Objetivos del examen 102-500: https://www.lpi.org/our-certifications/exam-101-objectives/
 
 **Shell y estándares**
 - GNU Bash Reference Manual: https://www.gnu.org/software/bash/manual/bash.html

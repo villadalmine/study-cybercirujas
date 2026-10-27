@@ -1660,7 +1660,7 @@ Fijate en el destino del primer paquete: `ff02::1:ff00:5` — el **grupo multica
 
 **Objetivos oficiales de certificación de LPI**
 
-- LPI — Objetivos del examen 102-500 (Tema 109, donde vive el objetivo 109.1): <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Objetivos del examen 102-500 (Tema 109, donde vive el objetivo 109.1): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — Objetivos del examen 101-500: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — Visión general de la certificación LPIC-1: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 

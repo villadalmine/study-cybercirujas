@@ -29,7 +29,7 @@
 #
 #  Reference (exam objectives):
 #    https://www.lpi.org/our-certifications/exam-101-objectives/
-#    https://www.lpi.org/our-certifications/exam-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-objectives/
 #
 #  The full, step-by-step solution is at the BOTTOM of this file, commented out.
 #  Do not scroll there until you have spent real time with ip(8), ss(8),
@@ -888,7 +888,7 @@ main "$@"
 # -----------------------------------------------------------------------------
 #  Sources
 #    LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI exam 102-500 objectives: https://www.lpi.org/our-certifications/exam-102-objectives/
+#    LPI exam 102-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
 #    ip(8), ip-route(8), ip-address(8): https://man7.org/linux/man-pages/man8/ip.8.html
 #    nsswitch.conf(5): https://man7.org/linux/man-pages/man5/nsswitch.conf.5.html
 #    resolv.conf(5):   https://man7.org/linux/man-pages/man5/resolv.conf.5.html

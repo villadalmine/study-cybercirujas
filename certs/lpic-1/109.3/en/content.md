@@ -1739,7 +1739,7 @@ Facts that are examined literally and are easy to lose:
 
 **Official certification objectives**
 
-- LPI — Exam 102-500 Objectives (LPIC-1 v5.0), Topic 109.3 *Basic network troubleshooting*: <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI — Exam 102-500 Objectives (LPIC-1 v5.0), Topic 109.3 *Basic network troubleshooting*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — Exam 101-500 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI — LPIC-1 Linux Administrator certification overview: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 

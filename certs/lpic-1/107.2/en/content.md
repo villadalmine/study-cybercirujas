@@ -1960,7 +1960,7 @@ That `!! IGNORED BY CRON` line is a real class of incident: someone dropped `bac
 **LPI official**
 
 - LPIC-1 Exam 101-500 Objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 Objectives (Topic 107.2 lives here) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102-500 Objectives (Topic 107.2 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 - LPI Learning Materials, LPIC-1 102 — https://learning.lpi.org/en/learning-materials/102-500/
 

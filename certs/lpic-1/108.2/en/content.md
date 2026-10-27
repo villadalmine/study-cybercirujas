@@ -1329,7 +1329,7 @@ Aug 26 22:41:07 db-03 kernel: EXT4-fs error (device dm-1): ext4_journal_check_st
 ## References
 
 - LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 Objectives (Topic 108.2 lives here): https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPI — Exam 102-500 Objectives (Topic 108.2 lives here): https://www.lpi.org/our-certifications/exam-101-objectives/
 - RFC 5424 — The Syslog Protocol: https://www.rfc-editor.org/rfc/rfc5424
 - RFC 3164 — The BSD Syslog Protocol: https://www.rfc-editor.org/rfc/rfc3164
 - RFC 5425 — TLS Transport Mapping for Syslog: https://www.rfc-editor.org/rfc/rfc5425

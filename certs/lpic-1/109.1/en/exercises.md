@@ -2,7 +2,7 @@
 ## Guided Exercises
 
 > **Scope of the objective:** IPv4/IPv6 addressing, netmasks and CIDR, private and reserved ranges, the difference between TCP, UDP and ICMP, and the well-known ports and services in `/etc/services`.
-> **Official objective list:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (objective 109.1 belongs to exam 102-500: <https://www.lpi.org/our-certifications/exam-102-objectives/>)
+> **Official objective list:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (objective 109.1 belongs to exam 102-500: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
 
 ---
 
@@ -994,7 +994,7 @@ Note the flip goes *both* ways: a globally-unique (OUI-assigned) MAC has the U/L
 
 ## Sources
 
-- LPI Exam 102-500 objectives, topic 109.1 — <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI Exam 102-500 objectives, topic 109.1 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI Exam 101-500 objectives — <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - RFC 791 — Internet Protocol (IPv4) — <https://www.rfc-editor.org/rfc/rfc791>
 - RFC 792 — Internet Control Message Protocol — <https://www.rfc-editor.org/rfc/rfc792>

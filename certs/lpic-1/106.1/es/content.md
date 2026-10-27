@@ -1304,7 +1304,7 @@ La última verificación es la que importa para la revisión de seguridad: **un 
 
 **LPI — objetivos**
 - LPIC-1 Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 objectives (acá vive el tema 106) — https://www.lpi.org/our-certifications/exam-102-objectives/
+- LPIC-1 Exam 102-500 objectives (acá vive el tema 106) — https://www.lpi.org/our-certifications/exam-101-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **X.Org Foundation — documentación upstream y páginas de manual**

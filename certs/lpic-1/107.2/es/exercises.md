@@ -2,7 +2,7 @@
 ## Ejercicios guiados
 
 **Examen:** 102-500 (LPIC-1 v5.0), Tema 107
-**Lista oficial de objetivos:** <https://www.lpi.org/our-certifications/exam-102-objectives/> (conjunto de objetivos complementario para el examen 101: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
+**Lista oficial de objetivos:** <https://www.lpi.org/our-certifications/exam-101-objectives/> (conjunto de objetivos complementario para el examen 101: <https://www.lpi.org/our-certifications/exam-101-objectives/>)
 
 **Archivos, términos y utilidades clave que se ejercitan acá:** `/etc/cron.{d,daily,hourly,monthly,weekly}`, `/etc/at.deny`, `/etc/at.allow`, `/etc/crontab`, `/etc/cron.allow`, `/etc/cron.deny`, `/var/spool/cron/`, `crontab`, `at`, `atq`, `atrm`, `systemctl`, `systemd-run`.
 
@@ -1269,7 +1269,7 @@ Crear `cron.allow` vuelve irrelevante a `/etc/cron.deny` — eliminalo o dejalo,
 
 ## Fuentes
 
-- LPI, *LPIC-1 Exam 102 Objectives, version 5.0* — Tema 107.2: <https://www.lpi.org/our-certifications/exam-102-objectives/>
+- LPI, *LPIC-1 Exam 102 Objectives, version 5.0* — Tema 107.2: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - LPI, *LPIC-1 Exam 101 Objectives, version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
 - `crontab(5)` — formato del archivo crontab, rangos de campos, cadenas especiales, manejo de `%`: <https://man7.org/linux/man-pages/man5/crontab.5.html>
 - `crontab(1)` — interfaz del comando, precedencia de `cron.allow`/`cron.deny`: <https://man7.org/linux/man-pages/man1/crontab.1.html>
