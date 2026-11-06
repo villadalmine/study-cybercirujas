@@ -126,9 +126,10 @@ def refresh() -> bool:
 
 
 def _tracked_media() -> set[str]:
-    """Paths under media/ that git tracks. media/ is gitignored, so a video
-    rendered on one machine must not make the committed dashboard differ from
-    what CI renders (#261): the committed file counts only what is in the tree."""
+    """Paths under media/ that git tracks. media/**/*.mp4 is gitignored, so a
+    video rendered on one machine must not make the committed dashboard differ
+    from what CI renders (#261): the committed file counts a video by its tracked
+    thumbnail.png, written only after _concat succeeds (teach/core/video.py:720)."""
     import subprocess
     try:
         out = subprocess.run(["git", "ls-files", "-z", "media"], cwd=REPO,
@@ -274,7 +275,7 @@ def _render() -> str:
             continue  # achievements/info do not have video
         row = [f"`{slug}`"]
         for lang in VIDEO_LANGS:
-            video = f"media/paths/{slug}/{lang}/video.mp4"
+            video = f"media/paths/{slug}/{lang}/thumbnail.png"
             row.append("✅" if video in tracked else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
@@ -290,7 +291,7 @@ def _render() -> str:
             if lang not in declared:
                 row.append("–")
                 continue
-            rendered = f"media/certs/{cert_id}/{lang}/video.mp4"
+            rendered = f"media/certs/{cert_id}/{lang}/thumbnail.png"
             row.append("✅" if rendered in tracked else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
