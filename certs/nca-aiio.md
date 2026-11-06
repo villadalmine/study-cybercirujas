@@ -8,7 +8,7 @@ topics:
 - id: '1.1'
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
-  status: pending
+  status: generated
   title: Describe the NVIDIA software stack used in an AI environment
   topic: 1 - Essential AI Knowledge
   weight: 4.75
