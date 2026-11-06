@@ -47,7 +47,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `aws-aif` | 14 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ai-901` | 7 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `gcp-gail` | 15 | ❌ | ❌ | – | – | – | – | – | ❌ |
-| `nca-aiio` | 22 | ❌ | ❌ | – | – | – | – | – | ❌ |
+| `nca-aiio` | 22 | ❌ | 🔶 1/22c·1/22e | – | – | – | – | – | 🔶 1/22 |
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
@@ -137,6 +137,7 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 | `aws-clf` | 38 | 79.0 | 0 | 38 | 0 | 0 |
 | `az-900` | 22 | 79.0 | 0 | 22 | 0 | 0 |
 | `gcp-cdl` | 28 | 79.0 | 0 | 28 | 0 | 0 |
+| `nca-aiio` | 1 | 80.6 | 0 | 1 | 0 | 0 |
 | `mcpa` | 17 | 75.3 | 0 | 17 | 0 | 0 |
 | `ckne` | 22 | 80.6 | 0 | 22 | 0 | 0 |
 
@@ -144,8 +145,8 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 
 | Path | ES | EN | DE | ZH |
 |---|---|---|---|---|
-| `kubernetes` | ❌ | ❌ | ❌ | ❌ |
-| `linux-admin` | ❌ | ❌ | ❌ | ❌ |
+| `kubernetes` | ✅ | ✅ | ✅ | ❌ |
+| `linux-admin` | ✅ | ✅ | ✅ | ❌ |
 | `linux-devops` | ❌ | ❌ | ❌ | ❌ |
 | `kubernetes-security` | ❌ | ❌ | ❌ | ❌ |
 | `gitops-platform` | ❌ | ❌ | ❌ | ❌ |
@@ -161,38 +162,38 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 
 | Cert | ES | EN | DE | ZH |
 |---|---|---|---|---|
-| `lpi-010-160` | ❌ | – | – | – |
+| `lpi-010-160` | ✅ | – | – | – |
 | `lpi-020-100` | ❌ | ❌ | – | – |
-| `lpic-1` | ❌ | ❌ | – | – |
+| `lpic-1` | ✅ | ✅ | – | – |
 | `lpic-2` | ❌ | ❌ | – | – |
 | `lpic-3-300` | ❌ | ❌ | – | – |
-| `lpic-3-303` | ❌ | ❌ | – | – |
-| `lpic-3-305` | ❌ | ❌ | – | – |
-| `lpic-3-306` | ❌ | ❌ | – | – |
-| `lpi-devops` | ❌ | ❌ | – | – |
-| `cka` | ❌ | – | – | – |
-| `ckad` | ❌ | – | – | – |
-| `cks` | ❌ | ❌ | – | – |
-| `kcna` | ❌ | ❌ | – | – |
-| `kcsa` | ❌ | ❌ | – | – |
-| `cgoa` | ❌ | ❌ | – | – |
+| `lpic-3-303` | ✅ | ✅ | – | – |
+| `lpic-3-305` | ✅ | ✅ | – | – |
+| `lpic-3-306` | ✅ | ✅ | – | – |
+| `lpi-devops` | ✅ | ✅ | – | – |
+| `cka` | ✅ | – | – | – |
+| `ckad` | ✅ | – | – | – |
+| `cks` | ✅ | ✅ | – | – |
+| `kcna` | ✅ | ✅ | – | – |
+| `kcsa` | ✅ | ✅ | – | – |
+| `cgoa` | ✅ | ✅ | – | – |
 | `capa` | – | – | – | – |
 | `cba` | – | – | – | – |
-| `cnpa` | ❌ | – | – | – |
-| `cnpe` | ❌ | – | – | – |
-| `cca` | ❌ | ❌ | – | – |
-| `ica` | ❌ | ❌ | – | – |
-| `kca` | ❌ | ❌ | – | – |
-| `otca` | ❌ | ❌ | – | – |
-| `pca` | ❌ | ❌ | – | – |
-| `lpi-030-100` | ❌ | ❌ | – | – |
-| `lpi-050-100` | ❌ | ❌ | – | – |
-| `lpi-702` | ❌ | ❌ | – | – |
+| `cnpa` | ✅ | – | – | – |
+| `cnpe` | ✅ | – | – | – |
+| `cca` | ✅ | ✅ | – | – |
+| `ica` | ✅ | ✅ | – | – |
+| `kca` | ✅ | ✅ | – | – |
+| `otca` | ✅ | ✅ | – | – |
+| `pca` | ✅ | ✅ | – | – |
+| `lpi-030-100` | ✅ | ✅ | – | – |
+| `lpi-050-100` | ✅ | ✅ | – | – |
+| `lpi-702` | ✅ | ✅ | – | – |
 | `lfcs` | – | – | – | – |
 | `lfca` | – | – | – | – |
-| `aws-clf` | ❌ | ❌ | – | – |
-| `az-900` | ❌ | ❌ | – | – |
-| `gcp-cdl` | ❌ | ❌ | – | – |
+| `aws-clf` | ✅ | ✅ | – | – |
+| `az-900` | ✅ | ✅ | – | – |
+| `gcp-cdl` | ✅ | ✅ | – | – |
 | `aws-aif` | – | – | – | – |
 | `ai-901` | – | – | – | – |
 | `gcp-gail` | – | – | – | – |
@@ -208,4 +209,6 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-Nothing recorded yet.
+- 2,723 completions · 68,023,397 output tokens · $2,178.06 API-equivalent
+- 75 session windows observed · median 761,850 output tokens per window
+- per stage: author 1562 · translate 879 · probe 205 · video-script 22 · untagged 21 · snapshot 19 · judge 8 · catalog-sync 7

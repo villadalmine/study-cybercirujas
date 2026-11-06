@@ -256,6 +256,15 @@ certs:
     active: false
     owner: claude
     languages: [en, es]
+  nca-aiio:
+    # Started 2026-11-06, one topic at a time, the first NVIDIA certification
+    # (docs/ROADMAP.md: nca-aiio alone before the other 70 NVIDIA objectives).
+    # NOT active yet, like ckne: fix_corrupted_content.py fills whatever is
+    # missing, so `active: true` would author the remaining 21 topics
+    # unattended. Audited by hand until the owner flips it.
+    active: false
+    owner: claude
+    languages: [en, es]
   terraform-associate:
     # Syllabus only, on the owner's call (2026-09-29): catalogued so the exam
     # is on the map, nothing authored. Flip when it is time to spend on it.

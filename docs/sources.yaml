@@ -119,6 +119,13 @@ projects:
   # --- Public clouds (practitioner tier added 2026-09-03) ---------------------
   google-cloud: {domains: [cloud.google.com, services.google.com],                 docs: https://cloud.google.com/docs/, versioned: false}
 
+  # --- NVIDIA (added 2026-11-06, with the first nca-aiio topic) ---------------
+  # One vendor, several hosts: product docs, developer pages, the NGC catalogue
+  # and the marketing site that holds the certification pages themselves.
+  # dam-cdn.nvd.orangelogic.com is NVIDIA's asset CDN: the exam blueprints live there.
+  nvidia:       {domains: [docs.nvidia.com, developer.nvidia.com, www.nvidia.com, catalog.ngc.nvidia.com, docs.ngc.nvidia.com, nvidia.github.io, run-ai-docs.nvidia.com, dam-cdn.nvd.orangelogic.com], docs: https://docs.nvidia.com/, versioned: true}
+  rapids:       {domains: [docs.rapids.ai, rapids.ai], docs: https://docs.rapids.ai/, versioned: true}
+
   # --- Batch catalogued 2026-09-11: the 70 most-cited uncatalogued domains,
   # 2,627 of 4,735 unattributed citations. Every one is a project's own
   # documentation or manual; nothing here is a blog or an aggregator.
