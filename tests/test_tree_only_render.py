@@ -69,6 +69,7 @@ class TreeOnlyRender(unittest.TestCase):
         saved, model_comparison.USAGE = model_comparison.USAGE, log
         try:
             self.assertEqual(before, model_comparison.render_markdown())
+            self.assertNotIn("| 0.0 |", before)
             # the console path still sees the log
             measured = model_comparison.observations(None, local=True)
             self.assertTrue(any(r["tokens"] for r in measured))
