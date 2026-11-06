@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **NVIDIA, first topic:** `nca-aiio` 1.1 (the NVIDIA software stack in an AI environment) is studyable in English, the start of the first NVIDIA certification.
 
 ## Upgrade notes
 
