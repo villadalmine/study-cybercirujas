@@ -545,8 +545,10 @@ and a deprecation policy. New content does not raise the MAJOR number.
 **How a release happens.** Every merged PR is one Conventional Commit on `main` (its title). After each merge
 release-please keeps **one open Release PR** (branch `release-please--branches--main`, title
 `chore(main): release X.Y.Z`) that bumps the version (`.release-please-manifest.json` and
-`pyproject.toml`, the version file) and writes the new section of [CHANGELOG.md](CHANGELOG.md): `feat` is a minor bump, `fix` a
-patch, `!` or a `BREAKING CHANGE:` footer a breaking change (while 0.x, still a minor bump). Sections:
+`pyproject.toml`, the version file) and writes the new section of [CHANGELOG.md](CHANGELOG.md). While 0.x the
+second number is the big step: `feat` and `fix` are a patch (a new topic or syllabus is `0.6.3` → `0.6.4`), `!`
+or a `BREAKING CHANGE:` footer is a minor (`0.6.x` → `0.7.0`); `release-please-config.json` says so
+(`bump-minor-pre-major` and `bump-patch-for-minor-pre-major`, both `true`, decided 2026-11-06, #263). Sections:
 Features (`feat`), Bug Fixes (`fix`), Documentation (`docs`), Internals (`ci`, `refactor`, `perf`);
 `chore`, `test` and `build` are not listed. **Merging the Release PR is the human gate**: the maintainer
 reads the changelog, picks the moment and merges (squash). That creates the tag `vX.Y.Z` and the GitHub
@@ -579,8 +581,8 @@ release; the Release PR is what actually happened (the notes come from the commi
 `.github/workflows/milestone.yml` keeps them current without hand edits: a PR merged into `main` without a
 milestone, and an issue closed as completed without one, get the open `v*` milestone due first (Release PRs are
 skipped; a PR whose description has no `Closes #N`, `Fixes #N` or `Part of #N` gets a warning in the job
-summary, never a failure). Those are a plan: release-please decides the version only at release time (`fix` is a
-patch, `feat` a minor), so **a release milestone is created or completed at release time from what actually
+summary, never a failure). Those are a plan: release-please decides the version only at release time (`feat` and
+`fix` are a patch, a breaking change a minor, while 0.x), so **a release milestone is created or completed at release time from what actually
 shipped**. When release `vX.Y.Z` is published, the milestone `vX.Y.Z` is created if it does not exist (due date =
 release date), every PR merged and every issue closed as completed between the previous release tag and this one
 moves into it (whatever milestone it was in; `<CERT> upgrade` ones are never touched), whatever is still open in it
