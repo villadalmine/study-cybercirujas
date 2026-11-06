@@ -42,8 +42,8 @@ starts it.
 **`ckne` is the first certification authored on `claude-opus-5-5` at default
 effort**, on the owner's call after a blind + executed comparison on two topics
 (the 2026-09-30 entry in docs/HISTORY.md has the numbers).
-Pinned by `TEACH_CLAUDE_MODEL` for this cert only — `pipeline.yaml` still says
-opus-5 xhigh until the owner decides the default. `ckne` stays `active: false`
+It was pinned by `TEACH_CLAUDE_MODEL` at the time; since #262 `pipeline.yaml`
+declares `claude-opus-5-5` at default effort as the pipeline default. `ckne` stays `active: false`
 on purpose: `fix_corrupted_content.py` fills what is missing, and with `es`
 declared it would start 22 translations unattended. Audited by hand instead:
 88 files, 0 below the floor, 0 fence-wrapped, provenance consistent, every

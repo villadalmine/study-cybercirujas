@@ -14,6 +14,7 @@ configuration in one command instead of prose someone has to remember.
     scripts/steer.py languages kcsa en es pt          # what it must have
     scripts/steer.py video kcsa en es                 # which videos to render
     scripts/steer.py budget 3                         # topics per run
+    scripts/steer.py model claude-opus-5-5 --effort default   # who authors, how hard
     scripts/steer.py milestone lpic-3-306 en es       # what the timer works toward
     scripts/steer.py milestone --clear                # timer idles
 
@@ -106,8 +107,56 @@ def set_key(cert: str, key: str, value: str) -> bool:
     return True
 
 
+EFFORTS = ("default", "low", "medium", "high", "xhigh", "max")
+
+
+def set_generation(model: str, effort: str | None) -> bool:
+    """Set `generation.model` (and `generation.effort`) — the authoring decision.
+
+    The one value that most changes what the corpus says had no command, so it was
+    edited by hand. Full ids only: the `opus` alias moves under you mid-run, and a
+    `[1m]` variant bills the whole window on every call (pipeline.yaml explains both).
+    Line-based like the rest of this file, so the comments explaining the choice stay.
+    """
+    if not model.startswith("claude-") or "[" in model or model.count("-") < 2:
+        raise SystemExit(f"'{model}' is not a full model id (e.g. claude-opus-5-5): "
+                         f"no aliases, no [1m] variants.")
+    if effort is not None and effort not in EFFORTS:
+        raise SystemExit(f"effort must be one of {', '.join(EFFORTS)}")
+    lines = PIPELINE.read_text(encoding="utf-8").splitlines()
+    start = next((i for i, l in enumerate(lines) if l.startswith("generation:")), None)
+    if start is None:
+        raise SystemExit("pipeline.yaml has no `generation:` block")
+    end = next((i for i in range(start + 1, len(lines))
+                if lines[i] and not lines[i].startswith(" ")), len(lines))
+    changed = False
+    for key, value in (("model", model), ("effort", effort)):
+        if value is None:
+            continue
+        wanted = f"  {key}: {value}"
+        for i in range(start + 1, end):
+            if lines[i].startswith(f"  {key}:"):
+                if lines[i].rstrip() == wanted:
+                    print(f"generation.{key} is already {value} — nothing to do.")
+                else:
+                    print(f"generation.{key}: {lines[i].split(':', 1)[1].strip()} -> {value}")
+                    lines[i] = wanted
+                    changed = True
+                break
+        else:
+            print(f"generation.{key}: (unset) -> {value}")
+            lines.insert(start + 1, wanted)
+            end += 1
+            changed = True
+    if changed:
+        PIPELINE.write_text("\n".join(lines) + "\n")
+    return changed
+
+
 def show() -> None:
     config = pipeline.load()
+    gen = config.get("generation") or {}
+    print(f"generation.model:      {gen.get('model')} (effort {gen.get('effort') or 'default'})")
     print(f"budget.topics_per_run: {config['budget']['topics_per_run']}")
     print(f"languages.default:     {config['languages']['default']}")
     print(f"this agent (TEACH_AGENT): {pipeline.me()}\n")
@@ -132,6 +181,8 @@ def main() -> int:
     p = sub.add_parser("languages"); p.add_argument("cert"); p.add_argument("langs", nargs="+")
     p = sub.add_parser("video"); p.add_argument("cert"); p.add_argument("langs", nargs="*")
     p = sub.add_parser("budget"); p.add_argument("topics", type=int)
+    p = sub.add_parser("model"); p.add_argument("model")
+    p.add_argument("--effort", default=None, choices=EFFORTS)
     p = sub.add_parser("milestone")
     p.add_argument("cert", nargs="?"); p.add_argument("langs", nargs="*")
     p.add_argument("--clear", action="store_true")
@@ -220,6 +271,9 @@ def main() -> int:
         print("milestone -> " + ("(none: the timer will not generate)"
                                  if args.clear else block[1].split(": ", 1)[1]))
         changed = True
+
+    elif args.command == "model":
+        changed = set_generation(args.model, args.effort)
 
     elif args.command == "budget":
         if not 1 <= args.topics <= 10:
