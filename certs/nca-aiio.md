@@ -15,7 +15,7 @@ topics:
 - id: '1.2'
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
-  status: pending
+  status: generated
   title: Compare and contrast training and inference architecture requirements and
     considerations
   topic: 1 - Essential AI Knowledge
