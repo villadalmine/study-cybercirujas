@@ -1,36 +1,29 @@
 # Community 252
 
-> 7 nodes · cohesion 0.38
+> 7 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **models_live.py** (11 connections) — `teach/core/models_live.py`
-- **compare()** (10 connections) — `teach/core/models_live.py`
-- **copy** (7 connections)
-- **moved()** (3 connections) — `teach/core/models_live.py`
-- **per_million()** (3 connections) — `teach/core/models_live.py`
-- **Is the catalogue still true right now? — checked out of band, never in the…** (1 connections) — `teach/core/models_live.py`
-- **{model id: what upstream says that the catalogue does not}. An entry appears…** (1 connections) — `teach/core/models_live.py`
+- **PrCheckTests** (6 connections) — `tests/test_pr_check.py`
+- **run()** (4 connections) — `tests/test_pr_check.py`
+- **.test_a_broken_description_fails()** (2 connections) — `tests/test_pr_check.py`
+- **.test_without_a_description_it_only_warns()** (2 connections) — `tests/test_pr_check.py`
+- **.test_graph_ok_marker_is_ok_and_anything_else_is_warn()** (1 connections) — `tests/test_pr_check.py`
+- **.test_pre_push_hook_is_inert_unless_opted_in()** (1 connections) — `tests/test_pr_check.py`
+- **.test_targets_exist()** (1 connections) — `tests/test_pr_check.py`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (8 shared connections)
-- [Community 59](Community_59.md) (3 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 69](Community_69.md) (2 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 107](Community_107.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
-- [Community 173](Community_173.md) (1 shared connections)
-- [Community 245](Community_245.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/models_live.py`
+- `tests/test_pr_check.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

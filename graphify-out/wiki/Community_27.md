@@ -20,9 +20,9 @@
 - **.test_a_citation_and_its_link_become_the_catalogs()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_a_consistent_line_does_not_change_twice()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_a_marker_after_its_introducing_word()** (2 connections) — `tests/test_curriculum_consistency.py`
-- **.test_a_reviewed_extra_spelling_is_accepted()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_another_certs_id_or_a_number_that_is_not_a_version_is_not_a_citation()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_every_form_the_repo_uses()** (2 connections) — `tests/test_curriculum_consistency.py`
+- **.test_lpic1s_dead_exam_102_page_is_not_a_reviewed_spelling()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_lpic2s_canonical_page_is_a_reviewed_spelling_of_the_catalogs_alias()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_titles_and_parenthesised_forms_that_name_the_cert_without_an_introducing_word()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_what_is_not_a_curriculum_citation_stays()** (2 connections) — `tests/test_curriculum_consistency.py`
@@ -33,7 +33,7 @@
 
 ## Relationships
 
-- [Community 150](Community_150.md) (7 shared connections)
+- [Community 43](Community_43.md) (7 shared connections)
 - [Community 5](Community_5.md) (1 shared connections)
 
 ## Source Files

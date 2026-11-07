@@ -1,38 +1,32 @@
 # Community 166
 
-> 12 nodes · cohesion 0.18
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **test_corpus.py** (9 connections) — `tests/test_corpus.py`
-- **get_topic()** (6 connections) — `teach/core/corpus.py`
-- **ContractTests** (3 connections) — `tests/test_corpus.py`
-- **TopicTests** (3 connections) — `tests/test_corpus.py`
-- **get_topic()** (2 connections) — `teach/mcp_server.py`
-- **.test_a_missing_language_says_so_rather_than_pretending()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_material_travels_with_its_sources()** (2 connections) — `tests/test_corpus.py`
-- **.test_it_is_the_four_functions_the_design_names()** (1 connections) — `tests/test_corpus.py`
-- **.test_nothing_in_the_contract_can_write()** (1 connections) — `tests/test_corpus.py`
-- **The material for one topic: theory, exercises, and where it came from.…** (1 connections) — `teach/core/corpus.py`
-- **The four functions a study agent gets — and the boundary around them. Phase 2…** (1 connections) — `tests/test_corpus.py`
-- **inspect** (1 connections)
+- **test_lpic1_exam_labels.py** (7 connections) — `tests/test_lpic1_exam_labels.py`
+- **material()** (5 connections) — `tests/test_lpic1_exam_labels.py`
+- **ExamLabel** (4 connections) — `tests/test_lpic1_exam_labels.py`
+- **exams_named()** (4 connections) — `tests/test_lpic1_exam_labels.py`
+- **.test_every_topic_line_that_names_one_exam_names_its_own()** (3 connections) — `tests/test_lpic1_exam_labels.py`
+- **.test_the_label_finder()** (2 connections) — `tests/test_lpic1_exam_labels.py`
+- **.test_the_scan_covers_the_lab_scripts_and_not_the_bookkeeping()** (2 connections) — `tests/test_lpic1_exam_labels.py`
+- **Path** (1 connections)
+- **LPIC-1 is two exams and the official page (.../exam-101-102-objectives/) splits…** (1 connections) — `tests/test_lpic1_exam_labels.py`
+- **Every file of a topic that holds text a learner reads or runs (content,…** (1 connections) — `tests/test_lpic1_exam_labels.py`
 
 ## Relationships
 
-- [Community 75](Community_75.md) (3 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
-- `teach/mcp_server.py`
-- `tests/test_corpus.py`
+- `tests/test_lpic1_exam_labels.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

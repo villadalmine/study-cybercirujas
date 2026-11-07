@@ -18,10 +18,10 @@
 
 - [Community 10](Community_10.md) (3 shared connections)
 - [Community 167](Community_167.md) (2 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 232](Community_232.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
-- [Community 166](Community_166.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 130](Community_130.md) (1 shared connections)

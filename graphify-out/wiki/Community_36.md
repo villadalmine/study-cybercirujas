@@ -1,33 +1,35 @@
 # Community 36
 
-> 5 nodes · cohesion 0.60
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **check_provenance.py** (11 connections) — `scripts/check_provenance.py`
-- **check_cert()** (6 connections) — `scripts/check_provenance.py`
-- **main()** (3 connections) — `scripts/check_provenance.py`
-- **_topics()** (3 connections) — `scripts/check_provenance.py`
-- **Guardrails: content must be traceable, accounted for, and authored correctly.…** (1 connections) — `scripts/check_provenance.py`
+- **CheckPrFollowUpTests** (14 connections) — `tests/test_check_pr.py`
+- **.test_a_bare_closes_line_does_not_make_the_section_non_empty()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_dotfile_path_is_still_found_with_and_without_a_prefix()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_placeholder_does_not_hide_the_docs_still_missing()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_reason_that_quotes_the_placeholder_is_a_reason()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_relative_link_to_the_file_counts_as_naming_it()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_release_with_only_breaking_changes_needs_an_upgrade_note()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_renamed_file_also_counts_under_its_old_name()** (1 connections) — `tests/test_check_pr.py`
+- **.test_main_wires_renamed_from_through_a_real_git_rename()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_prefix_is_part_of_the_match_so_a_dot_slash_in_the_middle_names_nothing()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_untouched_provenance_template_is_not_a_named_tool()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_why_placeholder_does_not_pass_docs_impact()** (1 connections) — `tests/test_check_pr.py`
+- **.test_two_scope_lines_do_not_pass()** (1 connections) — `tests/test_check_pr.py`
+- **Low findings of earlier reviews (umbrella #122), each with a case that failed…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 232](Community_232.md) (3 shared connections)
-- [Community 6](Community_6.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_provenance.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

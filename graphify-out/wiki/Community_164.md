@@ -13,7 +13,7 @@
 - **Content generation, in detail** (1 connections) — `docs/HOW-IT-WORKS.md`
 - **Curriculum upgrade, in detail** (1 connections) — `docs/HOW-IT-WORKS.md`
 - **Labs, in detail** (1 connections) — `docs/HOW-IT-WORKS.md`
-- **[] when the newest CHANGELOG entry has no feat or fix, or NEXT.md summarises it.** (1 connections) — `scripts/check_pr.py`
+- **[] when the newest CHANGELOG entry has no feat, fix or breaking change, or…** (1 connections) — `scripts/check_pr.py`
 - **{doc: [changed files it names]} for docs the PR does not touch; a file is named…** (1 connections) — `scripts/check_pr.py`
 - **Each affected doc is named in the `## Docs impact` section (`updated` or `not…** (1 connections) — `scripts/check_pr.py`
 

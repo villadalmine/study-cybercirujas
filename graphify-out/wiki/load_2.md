@@ -15,8 +15,8 @@
 - generate_script() `EXTRACTED`
 - [main()](main.md) `EXTRACTED`
 - list_certs() `EXTRACTED`
-- sync_lpi() `EXTRACTED`
 - copy `EXTRACTED`
+- sync_lpi() `EXTRACTED`
 - generate_paths() `EXTRACTED`
 - translate_paths() `EXTRACTED`
 - get_paths() `EXTRACTED`

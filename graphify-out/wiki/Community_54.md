@@ -1,12 +1,11 @@
 # Community 54
 
-> 16 nodes · cohesion 0.12
+> 14 nodes · cohesion 0.14
 
 ## Key Concepts
 
 - **FAQ — how the ecosystem works, honestly** (17 connections) — `docs/FAQ.md`
 - **current()** (5 connections) — `teach/lab/kc_scope.py`
-- **Releases, milestones and the board** (3 connections) — `docs/FAQ.md`
 - **Glossary** (3 connections) — `docs/HOW-IT-WORKS.md`
 - **Content generation** (2 connections) — `docs/FAQ.md`
 - **Killercoda** (2 connections) — `docs/FAQ.md`
@@ -14,7 +13,6 @@
 - **Translations** (2 connections) — `docs/FAQ.md`
 - **Deployment** (1 connections) — `docs/FAQ.md`
 - **Hallucination and groundedness** (1 connections) — `docs/FAQ.md`
-- **Known gaps** (1 connections) — `docs/FAQ.md`
 - **Labs and the runner** (1 connections) — `docs/FAQ.md`
 - **Reviews: AI and human** (1 connections) — `docs/FAQ.md`
 - **Security** (1 connections) — `docs/FAQ.md`
@@ -29,10 +27,10 @@
 - [Community 7](Community_7.md) (1 shared connections)
 - [Community 23](Community_23.md) (1 shared connections)
 - [Community 104](Community_104.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
-- [Community 263](Community_263.md) (1 shared connections)
+- [Community 218](Community_218.md) (1 shared connections)
+- [Community 32](Community_32.md) (1 shared connections)
 - [Community 146](Community_146.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 - [Community 239](Community_239.md) (1 shared connections)
 
@@ -44,8 +42,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (69%)
-- INFERRED: 9 (31%)
+- EXTRACTED: 20 (74%)
+- INFERRED: 7 (26%)
 - AMBIGUOUS: 0 (0%)
 
 ---
