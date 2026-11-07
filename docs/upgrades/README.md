@@ -235,8 +235,8 @@ labs are one PR each and need the maintainer's `scope-exception` label, which is
 
 ### Cost: scoped edits versus full regeneration
 
-The generator is `claude-opus-5` at effort `xhigh` (`pipeline.yaml`), priced in `models.yaml` at 5 USD per million input
-tokens and 25 USD per million output tokens. Authoring a topic is about two completions (~30 k input, ~40 k output
+The generator is `claude-opus-5-5` at effort `default` (`pipeline.yaml`; when this estimate was written it declared `claude-opus-5` at `xhigh`, priced in `models.yaml` at 5 USD per million input
+tokens and 25 USD per million output tokens). Authoring a topic is about two completions (~30 k input, ~40 k output
 with thinking each) plus one translation (~15 k in, ~15 k out): about 2.8 USD per topic in en + es (range 1.5 to 5).
 A scoped edit of one file (the listed lines or section, the syllabus text and the excerpt, ~6 k in, ~1.5 k out) is
 about 0.07 USD.
