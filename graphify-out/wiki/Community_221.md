@@ -1,54 +1,51 @@
 # Community 221
 
-> 19 nodes · cohesion 0.14
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
-- **accepted()** (9 connections) — `teach/core/bot_stats.py`
-- **path()** (8 connections) — `teach/core/bot_stats.py`
-- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
-- **_write()** (5 connections) — `teach/core/bot_stats.py`
-- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
-- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **_blank()** (2 connections) — `teach/core/bot_stats.py`
-- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
-- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
+- **_reject_if_recap()** (10 connections) — `teach/core/generator.py`
+- **_strip_fence()** (8 connections) — `teach/core/generator.py`
+- **Agent guide: commands, content workflow and verification** (7 connections) — `docs/AGENT-GUIDE.md`
+- **2026-07-19** (4 connections) — `docs/HISTORY.md`
+- **_system()** (3 connections) — `teach/core/generator.py`
+- **Rules** (3 connections) — `docs/AGENT-GUIDE.md`
+- **2026-07-27** (3 connections) — `docs/HISTORY.md`
 - **Verification: what is proven, and what is only assumed** (2 connections) — `docs/AGENT-GUIDE.md`
-- **Which models the study bot is used with — counters, never events. The bot runs…** (1 connections) — `teach/core/bot_stats.py`
-- **Atomic replace, so a crash mid-write cannot leave a truncated file.** (1 connections) — `teach/core/bot_stats.py`
-- **Where the counters live. A PVC in the cluster, the repo root locally.** (1 connections) — `teach/core/bot_stats.py`
-- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
-- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
+- **2026-07-11/12** (2 connections) — `docs/HISTORY.md`
+- **3. Audit — never skip this** (2 connections) — `docs/WORKFLOW.md`
+- **Backends** (2 connections) — `docs/WORKFLOW.md`
+- **Switching to Gemini (or any CLI agent)** (2 connections) — `docs/WORKFLOW.md`
+- **Agent Idea Synchronization (docs/AGENTS_SYNC.md)** (1 connections) — `docs/AGENT-GUIDE.md`
+- **Commands** (1 connections) — `docs/AGENT-GUIDE.md`
+- **Content Workflow** (1 connections) — `docs/AGENT-GUIDE.md`
+- **Pull requests from agents** (1 connections) — `docs/AGENT-GUIDE.md`
+- **Backends sometimes wrap the whole response in a ```markdown ... ``` fence even…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [StoredShapeTests](StoredShapeTests.md) (6 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 59](Community_59.md) (3 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 215](Community_215.md) (1 shared connections)
-- [Community 107](Community_107.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 15](Community_15.md) (3 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 134](Community_134.md) (2 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
+- [Community 215](Community_215.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/AGENT-GUIDE.md`
-- `docs/AGENTIC_TOOLING_STUDY.md`
-- `teach/core/bot_stats.py`
-- `tests/test_bot_stats.py`
+- `docs/HISTORY.md`
+- `docs/WORKFLOW.md`
+- `teach/core/generator.py`
 
 ## Audit Trail
 
-- EXTRACTED: 43 (91%)
-- INFERRED: 4 (9%)
+- EXTRACTED: 25 (69%)
+- INFERRED: 11 (31%)
 - AMBIGUOUS: 0 (0%)
 
 ---

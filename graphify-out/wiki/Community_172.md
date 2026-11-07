@@ -1,41 +1,38 @@
 # Community 172
 
-> 12 nodes · cohesion 0.20
+> 10 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **has_subscription()** (6 connections) — `teach/core/auth.py`
-- **authenticate()** (5 connections) — `teach/core/auth.py`
-- **auth.py** (5 connections) — `teach/core/auth.py`
-- **Architecture — 3 Components** (4 connections) — `docs/ORIGINAL_DESIGN.md`
-- **me()** (3 connections) — `teach/api.py`
-- **Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md)** (3 connections) — `docs/BACKLOG.md`
-- **3. Web: Public Landing + Paid Study Zone** (3 connections) — `docs/ORIGINAL_DESIGN.md`
-- **1. Catalog Tracker (Scraper — nothing is static)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
-- **2. Generator (AI, on-demand)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
-- **Authentication — a minimal interface so real users/OIDC can be plugged in later…** (1 connections) — `teach/core/auth.py`
-- **Always denies. Real auth pending (OIDC/social login).** (1 connections) — `teach/core/auth.py`
-- **Always denies. Payment gateway pending (Stripe or similar).** (1 connections) — `teach/core/auth.py`
+- **_agent_completer()** (18 connections) — `teach/core/generator.py`
+- **AgentCompleterProvenanceTest** (9 connections) — `tests/test_agent_completer.py`
+- **.test_claude_keeps_the_declared_model_and_effort_flags()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_codex_and_custom_never_inherit_the_claude_model()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_custom_records_explicit_model_flag_when_present()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_env_override_beats_default_and_rejects_split_turns()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_error_envelope_raises_generator_config_error()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_oversized_prompt_raises_generator_config_error()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_pins_model_before_print_flag_and_parses_agy_json_envelope()** (2 connections) — `tests/test_agent_completer.py`
+- **.setUp()** (1 connections) — `tests/test_agent_completer.py`
 
 ## Relationships
 
-- [Community 107](Community_107.md) (4 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
+- [Community 7](Community_7.md) (6 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 227](Community_227.md) (1 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/BACKLOG.md`
-- `docs/ORIGINAL_DESIGN.md`
-- `teach/api.py`
-- `teach/core/auth.py`
+- `teach/core/generator.py`
+- `tests/test_agent_completer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 17 (81%)
-- INFERRED: 4 (19%)
+- EXTRACTED: 26 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

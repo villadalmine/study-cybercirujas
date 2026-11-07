@@ -1,11 +1,10 @@
 # Community 15
 
-> 18 nodes · cohesion 0.11
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **History** (28 connections) — `docs/HISTORY.md`
-- **2026-07-11/12** (2 connections) — `docs/HISTORY.md`
 - **2026-07-29** (2 connections) — `docs/HISTORY.md`
 - **2026-09-10** (2 connections) — `docs/HISTORY.md`
 - **2026-09-14** (2 connections) — `docs/HISTORY.md`
@@ -25,18 +24,18 @@
 
 ## Relationships
 
-- [Community 7](Community_7.md) (3 shared connections)
-- [Community 21](Community_21.md) (2 shared connections)
+- [Community 221](Community_221.md) (3 shared connections)
 - [Community 49](Community_49.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
 - [Community 143](Community_143.md) (1 shared connections)
 - [Community 10](Community_10.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 - [Community 232](Community_232.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 65](Community_65.md) (1 shared connections)
+- [Community 2](Community_2.md) (1 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
 - [Community 207](Community_207.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
 
 ## Source Files
 
@@ -44,8 +43,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 28 (85%)
-- INFERRED: 5 (15%)
+- EXTRACTED: 28 (88%)
+- INFERRED: 4 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

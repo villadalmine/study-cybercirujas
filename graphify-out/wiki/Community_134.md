@@ -6,11 +6,11 @@
 
 - **The loop** (10 connections) — `docs/WORKFLOW.md`
 - **Content Workflow** (9 connections) — `docs/WORKFLOW.md`
+- **_topic_context()** (4 connections) — `teach/core/generator.py`
+- **First, the thing that surprises everyone** (3 connections) — `docs/WORKFLOW.md`
+- **Content generation** (2 connections) — `docs/FAQ.md`
 - **1. Snapshot the syllabus — once per certification** (2 connections) — `docs/WORKFLOW.md`
 - **2. Generate** (2 connections) — `docs/WORKFLOW.md`
-- **3. Audit — never skip this** (2 connections) — `docs/WORKFLOW.md`
-- **Backends** (2 connections) — `docs/WORKFLOW.md`
-- **Switching to Gemini (or any CLI agent)** (2 connections) — `docs/WORKFLOW.md`
 - **The syllabus-change trigger** (2 connections) — `docs/WORKFLOW.md`
 - **Translating instead of re-authoring** (2 connections) — `docs/WORKFLOW.md`
 - **2b. The quality floor — the same standard for every backend** (1 connections) — `docs/WORKFLOW.md`
@@ -24,20 +24,25 @@
 
 ## Relationships
 
-- [Community 7](Community_7.md) (4 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
 - [Community 74](Community_74.md) (2 shared connections)
+- [Community 221](Community_221.md) (2 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 - [Community 207](Community_207.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/FAQ.md`
 - `docs/WORKFLOW.md`
+- `teach/core/generator.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (80%)
-- INFERRED: 5 (20%)
+- EXTRACTED: 22 (79%)
+- INFERRED: 6 (21%)
 - AMBIGUOUS: 0 (0%)
 
 ---

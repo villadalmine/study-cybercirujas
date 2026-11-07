@@ -1,25 +1,28 @@
 # Community 261
 
-> 4 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **DeployDocTests** (4 connections) — `tests/test_deploy_guide.py`
-- **.test_covers_the_operator_steps()** (1 connections) — `tests/test_deploy_guide.py`
-- **.test_example_values_hold_no_cluster_specific_names()** (1 connections) — `tests/test_deploy_guide.py`
-- **.test_never_deploys_latest()** (1 connections) — `tests/test_deploy_guide.py`
+- **VerdictTests** (6 connections) — `tests/test_model_probe.py`
+- **.test_a_different_answer_is_alive_but_not_obedient()** (2 connections) — `tests/test_model_probe.py`
+- **.test_the_expected_word_is_ok()** (2 connections) — `tests/test_model_probe.py`
+- **.test_two_hundred_with_no_content_is_empty()** (2 connections) — `tests/test_model_probe.py`
+- **.test_each_failure_keeps_its_own_name()** (1 connections) — `tests/test_model_probe.py`
+- **.test_rate_limited_is_not_dead()** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
+- [Community 206](Community_206.md) (3 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_deploy_guide.py`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 9 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

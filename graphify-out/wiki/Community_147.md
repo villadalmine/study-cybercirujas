@@ -1,42 +1,40 @@
 # Community 147
 
-> 9 nodes · cohesion 0.31
+> 10 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **collections** (13 connections)
-- **window_budget.py** (12 connections) — `scripts/window_budget.py`
-- **main()** (6 connections) — `scripts/window_budget.py`
-- **_load()** (4 connections) — `scripts/window_budget.py`
-- **_kind()** (3 connections) — `scripts/window_budget.py`
-- **_week()** (2 connections) — `scripts/window_budget.py`
-- **Path** (1 connections)
-- **How much quota is left this week, in the unit that actually runs out. The…** (1 connections) — `scripts/window_budget.py`
-- **What the API actually said the limit was: spend | weekly | "". Read from the…** (1 connections) — `scripts/window_budget.py`
+- **Scope** (13 connections) — `teach/lab/kc_scope.py`
+- **.tested()** (7 connections) — `teach/lab/kc_scope.py`
+- **reason()** (5 connections) — `teach/lab/kc_scope.py`
+- **test_status_is_tested_only_with_killercoda_evidence()** (5 connections) — `tests/lab/test_kc_scope.py`
+- **.proven_for()** (4 connections) — `teach/lab/kc_scope.py`
+- **status()** (4 connections) — `teach/lab/kc_scope.py`
+- **Which labs are on Killercoda: `tested` and `loaded-untested`** (4 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **Why a lab is not `tested` (empty for a tested one).** (1 connections) — `teach/lab/kc_scope.py`
+- **The publish gate: an entry on a target that allows the mirror, for THIS lab…** (1 connections) — `teach/lab/kc_scope.py`
+- **Evidence on a Killercoda target (any hash: a changed lab is re-proven by the…** (1 connections) — `teach/lab/kc_scope.py`
 
 ## Relationships
 
-- [Community 112](Community_112.md) (3 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 160](Community_160.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 250](Community_250.md) (1 shared connections)
-- [Community 215](Community_215.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
+- [Community 44](Community_44.md) (6 shared connections)
+- [Community 111](Community_111.md) (5 shared connections)
+- [Community 213](Community_213.md) (2 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 217](Community_217.md) (1 shared connections)
+- [Community 170](Community_170.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/window_budget.py`
+- `docs/RUN-A-LAB-ANYWHERE.md`
+- `teach/lab/kc_scope.py`
+- `tests/lab/test_kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 23 (74%)
+- INFERRED: 8 (26%)
 - AMBIGUOUS: 0 (0%)
 
 ---

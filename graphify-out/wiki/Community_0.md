@@ -1,6 +1,6 @@
 # Community 0
 
-> 41 nodes · cohesion 0.09
+> 39 nodes · cohesion 0.09
 
 ## Key Concepts
 
@@ -9,7 +9,6 @@
 - **typer** (20 connections)
 - **lab_validate()** (7 connections) — `teach/cli.py`
 - **tracker_sync()** (7 connections) — `teach/cli.py`
-- **cert_add()** (6 connections) — `teach/cli.py`
 - **cert_show()** (6 connections) — `teach/cli.py`
 - **cert_translate()** (6 connections) — `teach/cli.py`
 - **cert_list()** (5 connections) — `teach/cli.py`
@@ -29,22 +28,23 @@
 - **Platform CLI. Calls core directly (local files, no API).** (1 connections) — `teach/cli.py`
 - **Tear down a topic lab.** (1 connections) — `teach/cli.py`
 - **Check a lab against the contract (lab.yaml keys, provider, OS, bash -n).…** (1 connections) — `teach/cli.py`
-- *... and 16 more nodes in this community*
+- **Create a lab from the template, without AI: lab.yaml + a break_fix.sh to fill…** (1 connections) — `teach/cli.py`
+- *... and 14 more nodes in this community*
 
 ## Relationships
 
-- [Community 7](Community_7.md) (5 shared connections)
+- [Community 10](Community_10.md) (6 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
 - [video.py](video.py.md) (5 shared connections)
 - [Community 59](Community_59.md) (4 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
 - [Community 121](Community_121.md) (3 shared connections)
 - [Community 8](Community_8.md) (3 shared connections)
-- [Community 244](Community_244.md) (3 shared connections)
-- [Community 173](Community_173.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
+- [Community 173](Community_173.md) (3 shared connections)
+- [Community 241](Community_241.md) (3 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
+- [Community 247](Community_247.md) (1 shared connections)
 
 ## Source Files
 
@@ -52,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 114 (99%)
+- EXTRACTED: 111 (99%)
 - INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 

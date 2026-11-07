@@ -1,18 +1,20 @@
 # Community 212
 
-> 32 nodes · cohesion 0.06
+> 36 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **Changelog** (10 connections) — `CHANGELOG.md`
+- **Changelog** (11 connections) — `CHANGELOG.md`
 - **[0.4.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.3.0...v0.4.0) (2026-10-20)** (5 connections) — `CHANGELOG.md`
 - **[0.5.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.4.0...v0.5.0) (2026-10-21)** (5 connections) — `CHANGELOG.md`
 - **[0.5.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.0...v0.5.1) (2026-10-21)** (4 connections) — `CHANGELOG.md`
 - **[0.6.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.5.1...v0.6.0) (2026-10-21)** (4 connections) — `CHANGELOG.md`
 - **[0.6.1](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.0...v0.6.1) (2026-10-26)** (4 connections) — `CHANGELOG.md`
+- **[0.6.4](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.3...v0.6.4) (2026-11-07)** (4 connections) — `CHANGELOG.md`
 - **[0.3.0](https://github.com/villadalmine/study-cybercirujas/compare/v0.2.0...v0.3.0) (2026-10-16)** (3 connections) — `CHANGELOG.md`
 - **[0.6.3](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.2...v0.6.3) (2026-10-27)** (3 connections) — `CHANGELOG.md`
 - **[0.6.2](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.1...v0.6.2) (2026-10-26)** (2 connections) — `CHANGELOG.md`
+- **Bug Fixes** (1 connections) — `CHANGELOG.md`
 - **Bug Fixes** (1 connections) — `CHANGELOG.md`
 - **Bug Fixes** (1 connections) — `CHANGELOG.md`
 - **Bug Fixes** (1 connections) — `CHANGELOG.md`
@@ -27,9 +29,7 @@
 - **Documentation** (1 connections) — `CHANGELOG.md`
 - **Documentation** (1 connections) — `CHANGELOG.md`
 - **Documentation** (1 connections) — `CHANGELOG.md`
-- **Features** (1 connections) — `CHANGELOG.md`
-- **Features** (1 connections) — `CHANGELOG.md`
-- *... and 7 more nodes in this community*
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
@@ -41,7 +41,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 32 (100%)
+- EXTRACTED: 36 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

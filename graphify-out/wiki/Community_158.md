@@ -1,10 +1,11 @@
 # Community 158
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
 - **parse_layout()** (7 connections) — `scripts/curriculum_diff.py`
+- **unicodedata** (7 connections)
 - **tidy()** (6 connections) — `scripts/curriculum_diff.py`
 - **join()** (4 connections) — `scripts/curriculum_diff.py`
 - **_right_start()** (4 connections) — `scripts/curriculum_diff.py`
@@ -19,8 +20,11 @@
 
 - [Community 57](Community_57.md) (7 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
+- [Community 31](Community_31.md) (2 shared connections)
+- [Community 75](Community_75.md) (2 shared connections)
 - [Community 219](Community_219.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 135](Community_135.md) (1 shared connections)
+- [Community 105](Community_105.md) (1 shared connections)
 
 ## Source Files
 
@@ -28,7 +32,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 26 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
