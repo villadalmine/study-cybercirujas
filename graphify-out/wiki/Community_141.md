@@ -1,44 +1,34 @@
 # Community 141
 
-> 15 nodes · cohesion 0.13
+> 11 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Content Status** (8 connections) — `docs/STATUS.md`
-- **get_models()** (7 connections) — `teach/api.py`
-- **_refresh_live()** (6 connections) — `teach/api.py`
-- **upstream()** (5 connections) — `teach/core/models_live.py`
-- **Exam versions** (2 connections) — `docs/STATUS.md`
-- **BackgroundTasks** (1 connections)
-- **Certification Videos** (1 connections) — `docs/STATUS.md`
-- **Certifications** (1 connections) — `docs/STATUS.md`
-- **Milestone** (1 connections) — `docs/STATUS.md`
-- **Path Videos** (1 connections) — `docs/STATUS.md`
-- **Quality** (1 connections) — `docs/STATUS.md`
-- **Spend (measured)** (1 connections) — `docs/STATUS.md`
-- **Compare the catalogue against OpenRouter, at most every few hours. Never raises…** (1 connections) — `teach/api.py`
-- **The study bot's model catalogue, from `models.yaml`, plus what is live. Served…** (1 connections) — `teach/api.py`
-- **{id: model} as OpenRouter publishes it right now. Raises on failure.** (1 connections) — `teach/core/models_live.py`
+- **ToolEditProvenance** (12 connections) — `tests/test_upgrade_versions.py`
+- **.ok()** (7 connections) — `tests/test_upgrade_versions.py`
+- **.base()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.meta()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_another_tool_or_a_sha_the_pins_do_not_name()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.test_accepted_for_the_line_the_script_writes()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_guard_flags_a_wrong_rewrite_of_any_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_an_edit_outside_the_plan()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_other_content_on_a_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_the_committed_pins_name_this_script()** (1 connections) — `tests/test_upgrade_versions.py`
+- **curriculum_diff.tool_edit_ok / wrong_rewrites: a scripted edit counts only for…** (1 connections) — `tests/test_upgrade_versions.py`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (3 shared connections)
-- [Community 59](Community_59.md) (2 shared connections)
-- [Community 107](Community_107.md) (2 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 2](Community_2.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/STATUS.md`
-- `teach/api.py`
-- `teach/core/models_live.py`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (92%)
-- INFERRED: 2 (8%)
+- EXTRACTED: 20 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

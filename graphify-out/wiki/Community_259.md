@@ -4,30 +4,27 @@
 
 ## Key Concepts
 
-- **run_cert.py** (12 connections) — `scripts/run_cert.py`
-- **main()** (6 connections) — `scripts/run_cert.py`
-- **run()** (3 connections) — `scripts/run_cert.py`
-- **pending_topics()** (2 connections) — `scripts/run_cert.py`
-- **# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and** (1 connections) — `scripts/run_cert.py`
-- **The ONE way to take a certification from nothing to finished. Every agent and…** (1 connections) — `scripts/run_cert.py`
+- **_cli_env()** (7 connections) — `teach/core/generator.py`
+- **CliEnvTest** (4 connections) — `tests/test_split_answer.py`
+- **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
+- **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
+- **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
+- **Environment for the agent CLI: ours, plus the declared output ceiling. The…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 - [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/run_cert.py`
+- `teach/core/generator.py`
+- `tests/test_split_answer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,12 +1,11 @@
 # Community 66
 
-> 22 nodes · cohesion 0.11
+> 19 nodes · cohesion 0.13
 
 ## Key Concepts
 
 - **test_groundedness.py** (19 connections) — `tests/test_groundedness.py`
 - **run()** (6 connections) — `tests/test_groundedness.py`
-- **Model** (4 connections) — `tests/test_groundedness.py`
 - **Determinism** (3 connections) — `tests/test_groundedness.py`
 - **NoModelUntilNeeded** (3 connections) — `tests/test_groundedness.py`
 - **overlap()** (3 connections) — `tests/test_groundedness.py`
@@ -15,7 +14,6 @@
 - **WeightsPin** (2 connections) — `tests/test_groundedness.py`
 - **WriteUsesTheProjectsWeight** (2 connections) — `tests/test_groundedness.py`
 - **.test_same_tree_same_cache_same_bytes()** (2 connections) — `tests/test_groundedness.py`
-- **.test_pr6_traps_caught_offline_and_byte_for_byte()** (2 connections) — `tests/test_groundedness.py`
 - **.test_no_changed_topic_loads_nothing()** (2 connections) — `tests/test_groundedness.py`
 - **.test_write_with_dry_run_is_an_error_not_a_silent_no_op()** (2 connections) — `tests/test_groundedness.py`
 - **.test_dry_run_and_fetch_with_the_network_blocked()** (2 connections) — `tests/test_groundedness.py`
@@ -23,18 +21,17 @@
 - **.test_prose_and_list_items_only_with_stable_ids()** (1 connections) — `tests/test_groundedness.py`
 - **.test_loading_checks_the_sha256_not_only_downloading()** (1 connections) — `tests/test_groundedness.py`
 - **.test_weight_comes_from_quality_weights_not_groundedness_yaml()** (1 connections) — `tests/test_groundedness.py`
-- **skipUnless** (1 connections)
 - **check_groundedness.py: segmentation, determinism, no network; the model test…** (1 connections) — `tests/test_groundedness.py`
 - **A stand-in scorer with no model: the share of the claim's words found in the…** (1 connections) — `tests/test_groundedness.py`
 
 ## Relationships
 
 - [Community 43](Community_43.md) (5 shared connections)
+- [Community 138](Community_138.md) (2 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
 - [Community 34](Community_34.md) (1 shared connections)
 - [Community 69](Community_69.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 
 ## Source Files
 
@@ -42,8 +39,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 35 (95%)
-- INFERRED: 2 (5%)
+- EXTRACTED: 33 (97%)
+- INFERRED: 1 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

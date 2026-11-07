@@ -1,48 +1,62 @@
 # Community 215
 
-> 20 nodes · cohesion 0.15
+> 54 nodes · cohesion 0.06
 
 ## Key Concepts
 
+- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
+- **StoredShapeTests** (13 connections) — `tests/test_bot_stats.py`
+- **record()** (13 connections) — `teach/core/bot_stats.py`
+- **load()** (10 connections) — `teach/core/bot_stats.py`
 - **ratelimit.py** (10 connections) — `teach/core/ratelimit.py`
+- **accepted()** (9 connections) — `teach/core/bot_stats.py`
+- **path()** (8 connections) — `teach/core/bot_stats.py`
 - **Limiter** (7 connections) — `teach/core/ratelimit.py`
+- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
 - **ClientIdentityTests** (6 connections) — `tests/test_catalog_cache_ratelimit.py`
 - **client_id()** (6 connections) — `teach/core/ratelimit.py`
 - **_Req** (5 connections) — `tests/test_catalog_cache_ratelimit.py`
+- **_write()** (5 connections) — `teach/core/bot_stats.py`
+- **.test_the_file_does_not_grow_with_the_number_of_answers()** (5 connections) — `tests/test_bot_stats.py`
 - **threading** (4 connections)
 - **RateLimitTests** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
+- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
 - **.hit()** (3 connections) — `teach/core/ratelimit.py`
+- **._shape()** (3 connections) — `tests/test_bot_stats.py`
+- **._stored()** (3 connections) — `tests/test_bot_stats.py`
+- **.test_a_corrupt_file_does_not_take_the_endpoint_down()** (3 connections) — `tests/test_bot_stats.py`
+- **.test_no_timestamp_is_written_per_request()** (3 connections) — `tests/test_bot_stats.py`
+- **.test_since_is_the_first_day_and_never_moves()** (3 connections) — `tests/test_bot_stats.py`
+- **.test_the_breakdown_counts_each_characteristic_independently()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_extra_trusted_hops_and_missing_header()** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.test_peer_is_used_unless_the_proxy_is_trusted()** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.test_trusted_proxy_uses_the_right_most_entry()** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.test_limiter_window()** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **_int_env()** (2 connections) — `teach/core/ratelimit.py`
-- **.test_different_visitors_behind_the_proxy_have_their_own_bucket()** (2 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.test_rotating_a_spoofed_header_does_not_escape_the_limit()** (2 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.test_search_endpoint_returns_429()** (2 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **.__init__()** (1 connections) — `teach/core/ratelimit.py`
-- **.__init__()** (1 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **A small in-process rate limiter for the public API (sliding window, per…** (1 connections) — `teach/core/ratelimit.py`
-- **0 if the request is allowed, else the seconds to wait.** (1 connections) — `teach/core/ratelimit.py`
+- *... and 29 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
+- [Community 43](Community_43.md) (11 shared connections)
+- [Community 59](Community_59.md) (3 shared connections)
+- [Community 125](Community_125.md) (3 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
 - [Community 107](Community_107.md) (2 shared connections)
 - [Community 12](Community_12.md) (2 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [Community 147](Community_147.md) (1 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
 - [Community 221](Community_221.md) (1 shared connections)
+- [Community 267](Community_267.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [Community 160](Community_160.md) (1 shared connections)
 
 ## Source Files
 
+- `teach/core/bot_stats.py`
 - `teach/core/ratelimit.py`
+- `tests/test_bot_stats.py`
 - `tests/test_catalog_cache_ratelimit.py`
 
 ## Audit Trail
 
-- EXTRACTED: 39 (98%)
-- INFERRED: 1 (2%)
+- EXTRACTED: 112 (97%)
+- INFERRED: 4 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

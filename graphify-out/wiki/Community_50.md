@@ -1,43 +1,45 @@
 # Community 50
 
-> 9 nodes · cohesion 0.28
+> 14 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **quality.py** (17 connections) — `teach/core/quality.py`
-- **translation_study.py** (16 connections) — `scripts/translation_study.py`
-- **main()** (7 connections) — `scripts/translation_study.py`
-- **evaluate()** (5 connections) — `scripts/translation_study.py`
-- **master_key()** (4 connections) — `scripts/translation_study.py`
-- **Run the pipeline's own two gates. Verdict plus the reasons it failed.** (1 connections) — `scripts/translation_study.py`
-- **Measure what a translation actually costs, and whether it survives…** (1 connections) — `scripts/translation_study.py`
-- **Read the proxy key from the cluster rather than from a file on disk. It is only…** (1 connections) — `scripts/translation_study.py`
-- **Quality floor for generated material, identical for every backend. A different…** (1 connections) — `teach/core/quality.py`
+- **run_batch.py** (15 connections) — `scripts/run_batch.py`
+- **main()** (11 connections) — `scripts/run_batch.py`
+- **generate_with_retries()** (8 connections) — `scripts/run_batch.py`
+- **me()** (6 connections) — `teach/core/pipeline.py`
+- **pending()** (5 connections) — `scripts/run_batch.py`
+- **mine()** (5 connections) — `teach/core/pipeline.py`
+- **owner()** (5 connections) — `teach/core/pipeline.py`
+- **generate()** (3 connections) — `scripts/run_batch.py`
+- **_sort_key()** (2 connections) — `scripts/run_batch.py`
+- **Generate a bounded batch of topics, honouring the budget in pipeline.yaml.…** (1 connections) — `scripts/run_batch.py`
+- **Topics still missing for this combination, in syllabus order.** (1 connections) — `scripts/run_batch.py`
+- **One topic, start to finish. Returns done | failed | skipped | fatal. The claim…** (1 connections) — `scripts/run_batch.py`
+- **Which agent takes this certification by default; 'any' if unassigned. NOT a…** (1 connections) — `teach/core/pipeline.py`
+- **This agent's name, from TEACH_AGENT. Unset means 'claude' — the historical…** (1 connections) — `teach/core/pipeline.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (6 shared connections)
-- [Community 13](Community_13.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
+- [Community 19](Community_19.md) (9 shared connections)
+- [Community 49](Community_49.md) (4 shared connections)
+- [Community 61](Community_61.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 6](Community_6.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
-- [Community 80](Community_80.md) (2 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
-- [Community 49](Community_49.md) (2 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
+- [Community 112](Community_112.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/translation_study.py`
-- `teach/core/quality.py`
+- `scripts/run_batch.py`
+- `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 43 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 45 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -29,10 +29,12 @@
 
 ## Relationships
 
-- [Community 50](Community_50.md) (3 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
 - [Community 19](Community_19.md) (2 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 - [Community 49](Community_49.md) (1 shared connections)
 

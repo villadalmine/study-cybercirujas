@@ -1,13 +1,11 @@
 # Community 69
 
-> 21 nodes · cohesion 0.21
+> 18 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **pytest** (23 connections)
 - **test_kc_envs_allowlist.py** (16 connections) — `tests/lab/test_kc_envs_allowlist.py`
 - **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
-- **load_envs()** (9 connections) — `teach/lab/export_killercoda.py`
 - **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
 - **copy** (8 connections)
 - **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
@@ -23,23 +21,20 @@
 - **bad()** (1 connections) — `teach/lab/export_killercoda.py`
 - **https only, exact host, no userinfo/port, path under an allowed prefix and…** (1 connections) — `teach/lab/export_killercoda.py`
 - **Raise ValueError unless every version, name and URL in the envs file is on the…** (1 connections) — `teach/lab/export_killercoda.py`
-- **What Killercoda runs, pinned in deploy/killercoda/killercoda_envs.yaml (with…** (1 connections) — `teach/lab/export_killercoda.py`
 - **killercoda_envs.yaml values are checked against allowlists before they reach a…** (1 connections) — `tests/lab/test_kc_envs_allowlist.py`
 
 ## Relationships
 
-- [Community 18](Community_18.md) (8 shared connections)
-- [Community 111](Community_111.md) (7 shared connections)
-- [Community 70](Community_70.md) (5 shared connections)
-- [Community 1](Community_1.md) (3 shared connections)
+- [Community 44](Community_44.md) (6 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
 - [Community 61](Community_61.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
 - [Community 3](Community_3.md) (2 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 - [Community 173](Community_173.md) (1 shared connections)
 - [Community 59](Community_59.md) (1 shared connections)
 - [Community 66](Community_66.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
 
 ## Source Files
 
@@ -48,7 +43,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 81 (100%)
+- EXTRACTED: 57 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

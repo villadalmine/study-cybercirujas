@@ -1,36 +1,41 @@
 # Community 55
 
-> 9 nodes · cohesion 0.31
+> 14 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **main()** (5 connections) — `scripts/check_syllabus.py`
-- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
-- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
-- **smells()** (3 connections) — `scripts/check_syllabus.py`
-- **Path** (1 connections)
-- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
-- **Does the frozen syllabus cover the exam, or only its table of contents? The…** (1 connections) — `scripts/check_syllabus.py`
-- **Structural signs the topic list was computed rather than read. Offline.…** (1 connections) — `scripts/check_syllabus.py`
+- **get_syllabus()** (11 connections) — `teach/core/corpus.py`
+- **list_certs()** (8 connections) — `teach/core/corpus.py`
+- **serve()** (6 connections) — `teach/mcp_server.py`
+- **ListAndSyllabusTests** (5 connections) — `tests/test_corpus.py`
+- **.test_every_listed_certification_can_be_opened()** (3 connections) — `tests/test_corpus.py`
+- **.test_the_count_matches_what_the_syllabus_holds()** (3 connections) — `tests/test_corpus.py`
+- **get_syllabus()** (2 connections) — `teach/mcp_server.py`
+- **list_certs()** (2 connections) — `teach/mcp_server.py`
+- **search_topics()** (2 connections) — `teach/mcp_server.py`
+- **.test_availability_is_reported_not_assumed()** (2 connections) — `tests/test_corpus.py`
+- **.test_the_syllabus_is_small_enough_to_hand_a_model_whole()** (2 connections) — `tests/test_corpus.py`
+- **Every certification, with enough to choose one and nothing more. `topics` and…** (1 connections) — `teach/core/corpus.py`
+- **One certification's objectives: what the model picks from. This IS the phase-2…** (1 connections) — `teach/core/corpus.py`
+- **Run the stdio server, as `.mcp.json` starts it.** (1 connections) — `teach/mcp_server.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 111](Community_111.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
+- [Community 75](Community_75.md) (6 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
+- [Community 253](Community_253.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_syllabus.py`
+- `teach/core/corpus.py`
+- `teach/mcp_server.py`
+- `tests/test_corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
+- EXTRACTED: 31 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

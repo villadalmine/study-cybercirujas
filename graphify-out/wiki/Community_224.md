@@ -1,30 +1,31 @@
 # Community 224
 
-> 8 nodes · cohesion 0.25
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **EndpointTests** (7 connections) — `tests/test_models_live.py`
-- **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
-- **.setUp()** (1 connections) — `tests/test_models_live.py`
-- **.tearDown()** (1 connections) — `tests/test_models_live.py`
-- **.test_a_fresh_check_is_not_repeated_on_every_request()** (1 connections) — `tests/test_models_live.py`
-- **explode()** (1 connections) — `tests/test_models_live.py`
-- **.test_findings_reach_the_page()** (1 connections) — `tests/test_models_live.py`
-- **The guard must never be able to break the page it protects.** (1 connections) — `tests/test_models_live.py`
+- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
+- **.fetch()** (4 connections) — `tests/test_check_pr.py`
+- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
+- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
+- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 3](Community_3.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_models_live.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (88%)
-- INFERRED: 1 (12%)
+- EXTRACTED: 12 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

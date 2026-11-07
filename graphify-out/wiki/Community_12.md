@@ -1,11 +1,10 @@
 # Community 12
 
-> 73 nodes · cohesion 0.06
+> 72 nodes · cohesion 0.06
 
 ## Key Concepts
 
 - **runner.py** (43 connections) — `teach/lab/runner.py`
-- **hashlib** (26 connections)
 - **Lab** (21 connections) — `teach/lab/spec.py`
 - **run()** (20 connections) — `teach/lab/runner.py`
 - **_stream()** (14 connections) — `teach/lab/runner.py`
@@ -29,22 +28,23 @@
 - **inspect()** (6 connections) — `teach/lab/runner.py`
 - **_mode_cmd()** (6 connections) — `teach/lab/runner.py`
 - **image_for()** (5 connections) — `teach/lab/runner.py`
-- *... and 48 more nodes in this community*
+- **spec_hash()** (5 connections) — `teach/lab/runner.py`
+- *... and 47 more nodes in this community*
 
 ## Relationships
 
-- [Community 26](Community_26.md) (9 shared connections)
-- [Community 43](Community_43.md) (9 shared connections)
+- [Community 26](Community_26.md) (7 shared connections)
+- [Community 56](Community_56.md) (7 shared connections)
 - [Community 61](Community_61.md) (6 shared connections)
-- [Community 70](Community_70.md) (5 shared connections)
-- [Community 56](Community_56.md) (5 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
 - [Community 29](Community_29.md) (4 shared connections)
 - [Community 46](Community_46.md) (4 shared connections)
-- [Community 1](Community_1.md) (4 shared connections)
-- [Community 5](Community_5.md) (4 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
+- [Community 70](Community_70.md) (3 shared connections)
+- [Community 1](Community_1.md) (2 shared connections)
 - [Community 215](Community_215.md) (2 shared connections)
-- [Community 34](Community_34.md) (2 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
+- [Community 227](Community_227.md) (1 shared connections)
 
 ## Source Files
 
@@ -56,8 +56,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 212 (91%)
-- INFERRED: 22 (9%)
+- EXTRACTED: 189 (90%)
+- INFERRED: 22 (10%)
 - AMBIGUOUS: 0 (0%)
 
 ---

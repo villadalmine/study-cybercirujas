@@ -4,27 +4,24 @@
 
 ## Key Concepts
 
-- **_mux_scene()** (5 connections) — `teach/core/video.py`
-- **_working_encoder()** (5 connections) — `teach/core/video.py`
-- **_wav_duration()** (3 connections) — `teach/core/video.py`
-- **From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix** (2 connections) — `docs/AGENTS_SYNC.md`
-- **Probe with a real 3-frame encode, once per process, and remember.** (1 connections) — `teach/core/video.py`
+- **Checking curriculum updates** (5 connections) — `docs/OPERATING.md`
+- **Reading the "Exam versions" table in docs/STATUS.md** (1 connections) — `docs/OPERATING.md`
+- **Reporting it, most severe first** (1 connections) — `docs/OPERATING.md`
+- **The rule** (1 connections) — `docs/OPERATING.md`
+- **What `make check-updates` does** (1 connections) — `docs/OPERATING.md`
 
 ## Relationships
 
-- [video.py](video.py.md) (5 shared connections)
-- [Community 22](Community_22.md) (2 shared connections)
-- [Community 16](Community_16.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
-- `teach/core/video.py`
+- `docs/OPERATING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (92%)
-- INFERRED: 1 (8%)
+- EXTRACTED: 5 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

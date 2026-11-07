@@ -1,38 +1,40 @@
 # Community 22
 
-> 15 nodes · cohesion 0.34
+> 17 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **Path** (15 connections)
-- **_base_slide()** (9 connections) — `teach/core/video.py`
-- **_font()** (8 connections) — `teach/core/video.py`
-- **_fonts_for()** (8 connections) — `teach/core/video.py`
-- **_render_slide()** (8 connections) — `teach/core/video.py`
-- **_slide_domains()** (8 connections) — `teach/core/video.py`
-- **_slide_bullets()** (7 connections) — `teach/core/video.py`
-- **_slide_path()** (7 connections) — `teach/core/video.py`
-- **_slide_title()** (7 connections) — `teach/core/video.py`
-- **_wrap()** (7 connections) — `teach/core/video.py`
-- **FreeTypeFont** (2 connections)
-- **ImageDraw** (2 connections)
-- **Image** (1 connections)
-- **(bold, regular) — Noto Sans CJK for zh/ja when installed, otherwise it falls…** (1 connections) — `teach/core/video.py`
-- **Barras horizontales con el peso de cada dominio del examen — dato real (sumado…** (1 connections) — `teach/core/video.py`
+- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
+- **.run_check()** (8 connections) — `tests/test_source_chain.py`
+- **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.__init__()** (5 connections) — `tests/test_source_chain.py`
+- **.meta()** (4 connections) — `tests/test_source_chain.py`
+- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
+- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
+- **.setUp()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
+- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
+- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
+- **Path** (1 connections)
+- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [video.py](video.py.md) (17 shared connections)
-- [Community 264](Community_264.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 2](Community_2.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/core/video.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 55 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 28 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

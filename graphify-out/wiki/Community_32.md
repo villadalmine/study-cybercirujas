@@ -1,6 +1,6 @@
 # Community 32
 
-> 46 nodes · cohesion 0.08
+> 45 nodes · cohesion 0.08
 
 ## Key Concepts
 
@@ -10,9 +10,8 @@
 - **sections()** (7 connections) — `scripts/check_pr.py`
 - **cited_runs()** (6 connections) — `scripts/check_pr.py`
 - **Path** (6 connections)
-- **authorship()** (5 connections) — `scripts/check_pr.py`
-- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
 - **quality_only()** (5 connections) — `scripts/check_pr.py`
+- **renamed_from()** (5 connections) — `scripts/check_pr.py`
 - **repo_prose()** (5 connections) — `scripts/check_pr.py`
 - **site_impact()** (5 connections) — `scripts/check_pr.py`
 - **base_texts()** (4 connections) — `scripts/check_pr.py`
@@ -29,22 +28,23 @@
 - **tracked_versions()** (4 connections) — `scripts/check_pr.py`
 - **changed_files()** (3 connections) — `scripts/check_pr.py`
 - **code_lines_changed()** (3 connections) — `scripts/check_pr.py`
-- *... and 21 more nodes in this community*
+- **old_names()** (3 connections) — `scripts/check_pr.py`
+- *... and 20 more nodes in this community*
 
 ## Relationships
 
+- [Community 46](Community_46.md) (11 shared connections)
 - [Community 165](Community_165.md) (10 shared connections)
-- [Community 46](Community_46.md) (9 shared connections)
-- [Community 61](Community_61.md) (7 shared connections)
+- [Community 61](Community_61.md) (8 shared connections)
 - [Community 164](Community_164.md) (7 shared connections)
-- [Community 111](Community_111.md) (5 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
 - [Community 170](Community_170.md) (5 shared connections)
 - [Community 156](Community_156.md) (4 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
 - [Community 260](Community_260.md) (3 shared connections)
-- [Community 267](Community_267.md) (3 shared connections)
 - [Community 258](Community_258.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 
 ## Source Files
 
@@ -53,7 +53,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 147 (99%)
+- EXTRACTED: 145 (99%)
 - INFERRED: 2 (1%)
 - AMBIGUOUS: 0 (0%)
 

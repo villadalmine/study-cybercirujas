@@ -1,20 +1,19 @@
 # Community 59
 
-> 21 nodes · cohesion 0.15
+> 20 nodes · cohesion 0.16
 
 ## Key Concepts
 
 - **catalog.py** (31 connections) — `teach/core/catalog.py`
 - **root()** (13 connections) — `teach/core/catalog.py`
 - **main()** (11 connections) — `scripts/probe_models.py`
-- **save()** (11 connections) — `teach/core/catalog.py`
 - **load_models()** (10 connections) — `teach/core/catalog.py`
+- **list_certs()** (8 connections) — `teach/core/catalog.py`
 - **save_models()** (8 connections) — `teach/core/catalog.py`
 - **models_path()** (6 connections) — `teach/core/catalog.py`
 - **catalog_path()** (5 connections) — `teach/core/catalog.py`
 - **get_cert()** (5 connections) — `teach/core/catalog.py`
 - **Path** (5 connections)
-- **add_cert()** (4 connections) — `teach/core/catalog.py`
 - **_BlockDumper** (3 connections) — `teach/core/catalog.py`
 - **CatalogueWriterTests** (3 connections) — `tests/test_model_probe.py`
 - **.test_the_header_and_the_shape_survive_a_rewrite()** (3 connections) — `tests/test_model_probe.py`
@@ -29,17 +28,17 @@
 ## Relationships
 
 - [Community 43](Community_43.md) (7 shared connections)
-- [Community 74](Community_74.md) (6 shared connections)
-- [Community 111](Community_111.md) (5 shared connections)
-- [Community 173](Community_173.md) (5 shared connections)
+- [Community 125](Community_125.md) (6 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 3](Community_3.md) (5 shared connections)
 - [Community 37](Community_37.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 173](Community_173.md) (4 shared connections)
 - [Community 0](Community_0.md) (4 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
 - [video.py](video.py.md) (4 shared connections)
-- [Community 125](Community_125.md) (3 shared connections)
-- [Community 3](Community_3.md) (3 shared connections)
-- [Community 221](Community_221.md) (3 shared connections)
-- [Community 75](Community_75.md) (2 shared connections)
+- [Community 215](Community_215.md) (3 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [Community 55](Community_55.md) (2 shared connections)
 
 ## Source Files
 
@@ -49,7 +48,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 93 (100%)
+- EXTRACTED: 88 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

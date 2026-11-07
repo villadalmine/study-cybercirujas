@@ -1,34 +1,39 @@
 # Community 213
 
-> 9 nodes · cohesion 0.36
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
-- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
-- **main()** (6 connections) — `scripts/ocr_pdf.py`
-- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
-- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
-- **Path** (3 connections)
-- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
-- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
-- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
+- **main()** (6 connections) — `teach/lab/kc_scope.py`
+- **current()** (5 connections) — `teach/lab/kc_scope.py`
+- **stale_entries()** (5 connections) — `teach/lab/kc_scope.py`
+- **Glossary** (3 connections) — `docs/HOW-IT-WORKS.md`
+- **test_the_stale_report_runs_on_the_real_repo_and_never_fails()** (2 connections) — `tests/lab/test_kc_scope.py`
+- **Sources and licensing** (2 connections) — `docs/FAQ.md`
+- **(lab, target, recorded hash, current hash) for every evidence entry recorded…** (1 connections) — `teach/lab/kc_scope.py`
+- **`python -m teach.lab.kc_scope`: one ::warning:: per stale evidence entry. Never…** (1 connections) — `teach/lab/kc_scope.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 111](Community_111.md) (3 shared connections)
+- [Community 44](Community_44.md) (2 shared connections)
+- [Community 147](Community_147.md) (2 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 239](Community_239.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/ocr_pdf.py`
+- `docs/FAQ.md`
+- `docs/HOW-IT-WORKS.md`
+- `teach/lab/kc_scope.py`
+- `tests/lab/test_kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 26 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 14 (78%)
+- INFERRED: 4 (22%)
 - AMBIGUOUS: 0 (0%)
 
 ---

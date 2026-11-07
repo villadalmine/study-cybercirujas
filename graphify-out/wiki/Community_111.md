@@ -1,62 +1,54 @@
 # Community 111
 
-> 50 nodes · cohesion 0.09
+> 21 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **yaml** (141 connections)
 - **kc_scope.py** (21 connections) — `teach/lab/kc_scope.py`
-- **test_kc_scope.py** (20 connections) — `tests/lab/test_kc_scope.py`
 - **load()** (17 connections) — `teach/lab/kc_scope.py`
-- **Scope** (13 connections) — `teach/lab/kc_scope.py`
 - **load_evidence()** (9 connections) — `teach/lab/kc_scope.py`
 - **load_targets()** (8 connections) — `teach/lab/kc_scope.py`
-- **.tested()** (7 connections) — `teach/lab/kc_scope.py`
-- **_ev()** (7 connections) — `tests/lab/test_kc_scope.py`
 - **ScopeError** (6 connections) — `teach/lab/kc_scope.py`
 - **check_known()** (6 connections) — `teach/lab/kc_scope.py`
-- **main()** (6 connections) — `teach/lab/kc_scope.py`
-- **test_a_malformed_evidence_entry_fails_loudly()** (6 connections) — `tests/lab/test_kc_scope.py`
-- **test_a_malformed_tracks_file_fails_loudly()** (6 connections) — `tests/lab/test_kc_scope.py`
-- **test_failed_and_tested_are_mutually_exclusive()** (6 connections) — `tests/lab/test_kc_scope.py`
 - **has_fix_verb()** (5 connections) — `teach/lab/kc_scope.py`
-- **reason()** (5 connections) — `teach/lab/kc_scope.py`
-- **stale_entries()** (5 connections) — `teach/lab/kc_scope.py`
-- **_evfile()** (5 connections) — `tests/lab/test_kc_scope.py`
-- **test_a_typo_fails_instead_of_dropping_a_lab_from_the_gate()** (5 connections) — `tests/lab/test_kc_scope.py`
-- **test_status_is_tested_only_with_killercoda_evidence()** (5 connections) — `tests/lab/test_kc_scope.py`
-- **.proven_for()** (4 connections) — `teach/lab/kc_scope.py`
-- **status()** (4 connections) — `teach/lab/kc_scope.py`
 - **test_human_tested_entries_match_the_evidence_file()** (4 connections) — `tests/lab/test_kc_gate.py`
-- **test_the_data_names_only_labs_and_certifications_that_exist()** (4 connections) — `tests/lab/test_kc_gate.py`
-- *... and 25 more nodes in this community*
+- **test_the_committed_evidence_file_is_valid()** (3 connections) — `tests/lab/test_kc_scope.py`
+- **test_the_standard_targets_are_fixed()** (3 connections) — `tests/lab/test_kc_scope.py`
+- **Path** (3 connections)
+- **test_fix_verb_detection()** (2 connections) — `tests/lab/test_kc_scope.py`
+- **dataclasses** (2 connections)
+- **ValueError** (1 connections)
+- **Killercoda scope and per-target evidence (data: deploy/killercoda/tracks.yaml,…** (1 connections) — `teach/lab/kc_scope.py`
+- **A typo would silently drop a lab from the gate: fail loudly instead.** (1 connections) — `teach/lab/kc_scope.py`
+- **The lab script itself carries a reference fix (a `fix)` case), so it can be…** (1 connections) — `teach/lab/kc_scope.py`
+- **lab-evidence.yaml: {lab: {target: {date, lab_hash, evidence, runner}}}; a…** (1 connections) — `teach/lab/kc_scope.py`
+- **human_tested.yaml drives the scenario banner; lab-evidence.yaml is the…** (1 connections) — `tests/lab/test_kc_gate.py`
+- **Other agents record proofs with these ids. Changing this list is a decision,…** (1 connections) — `tests/lab/test_kc_scope.py`
+- **The real file, not a fixture: an unknown target id or a malformed entry fails…** (1 connections) — `tests/lab/test_kc_scope.py`
 
 ## Relationships
 
-- [Community 124](Community_124.md) (13 shared connections)
-- [Community 70](Community_70.md) (11 shared connections)
-- [Community 26](Community_26.md) (9 shared connections)
-- [Community 5](Community_5.md) (9 shared connections)
-- [Community 29](Community_29.md) (8 shared connections)
-- [Community 69](Community_69.md) (7 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 18](Community_18.md) (6 shared connections)
-- [Community 63](Community_63.md) (6 shared connections)
-- [Community 32](Community_32.md) (5 shared connections)
-- [Community 59](Community_59.md) (5 shared connections)
-- [Community 56](Community_56.md) (4 shared connections)
+- [Community 44](Community_44.md) (9 shared connections)
+- [Community 26](Community_26.md) (6 shared connections)
+- [Community 147](Community_147.md) (5 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 56](Community_56.md) (5 shared connections)
+- [Community 213](Community_213.md) (3 shared connections)
+- [Community 18](Community_18.md) (2 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/RUN-A-LAB-ANYWHERE.md`
 - `teach/lab/kc_scope.py`
 - `tests/lab/test_kc_gate.py`
 - `tests/lab/test_kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 259 (97%)
-- INFERRED: 9 (3%)
+- EXTRACTED: 68 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

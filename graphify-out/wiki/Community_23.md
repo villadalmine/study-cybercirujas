@@ -1,6 +1,6 @@
 # Community 23
 
-> 18 nodes · cohesion 0.29
+> 19 nodes · cohesion 0.27
 
 ## Key Concepts
 
@@ -12,6 +12,7 @@
 - **CHARTER.md** (10 connections) — `docs/CHARTER.md`
 - **GUARDRAILS.md** (9 connections) — `docs/GUARDRAILS.md`
 - **ISSUE-TO-RELEASE.md** (8 connections) — `docs/ISSUE-TO-RELEASE.md`
+- **REVIEWS.md** (7 connections) — `docs/REVIEWS.md`
 - **GOVERNANCE.md** (6 connections) — `docs/GOVERNANCE.md`
 - **RUN-A-LAB-ANYWHERE.md** (6 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **audit/README.md** (5 connections) — `docs/audit/README.md`
@@ -25,7 +26,8 @@
 
 ## Relationships
 
-- [Community 110](Community_110.md) (37 shared connections)
+- [Community 110](Community_110.md) (35 shared connections)
+- [Community 145](Community_145.md) (2 shared connections)
 - [Community 254](Community_254.md) (1 shared connections)
 - [Community 257](Community_257.md) (1 shared connections)
 - [Community 239](Community_239.md) (1 shared connections)
@@ -36,7 +38,6 @@
 - [Community 54](Community_54.md) (1 shared connections)
 - [Community 230](Community_230.md) (1 shared connections)
 - [Community 188](Community_188.md) (1 shared connections)
-- [Community 218](Community_218.md) (1 shared connections)
 
 ## Source Files
 
@@ -52,13 +53,14 @@
 - `docs/ISSUE-TO-RELEASE.md`
 - `docs/LABS-RUNNER.md`
 - `docs/PRINCIPLES.md`
+- `docs/REVIEWS.md`
 - `docs/RUN-A-LAB-ANYWHERE.md`
 - `docs/audit/README.md`
 - `docs/upgrades/README.md`
 
 ## Audit Trail
 
-- EXTRACTED: 95 (100%)
+- EXTRACTED: 99 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

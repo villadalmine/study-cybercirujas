@@ -1,30 +1,35 @@
 # Community 206
 
-> 5 nodes · cohesion 0.50
+> 10 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **_owner_label()** (5 connections) — `teach/core/labs.py`
-- **OwnerLabelTests** (3 connections) — `tests/test_labs_ownership.py`
-- **.test_no_token_no_label()** (2 connections) — `tests/test_labs_ownership.py`
-- **.test_token_becomes_a_label()** (2 connections) — `tests/test_labs_ownership.py`
-- **`--label` that stamps who created the container, when that is known.…** (1 connections) — `teach/core/labs.py`
+- **response()** (14 connections) — `tests/test_model_probe.py`
+- **ThinkingTests** (8 connections) — `tests/test_model_probe.py`
+- **.test_a_refused_parameter_is_none()** (2 connections) — `tests/test_model_probe.py`
+- **.test_accepted_and_never_used_is_ignored()** (2 connections) — `tests/test_model_probe.py`
+- **.test_an_unreachable_second_probe_decides_nothing()** (2 connections) — `tests/test_model_probe.py`
+- **.test_effort_works_when_off_is_really_off()** (2 connections) — `tests/test_model_probe.py`
+- **.test_thinking_is_visible_in_three_different_shapes()** (2 connections) — `tests/test_model_probe.py`
+- **.test_thinking_with_the_field_omitted_is_always()** (2 connections) — `tests/test_model_probe.py`
+- **.test_a_generic_error_is_not_read_as_a_refused_parameter()** (1 connections) — `tests/test_model_probe.py`
+- **A successful completion, overridden field by field.** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 209](Community_209.md) (1 shared connections)
-- [Community 121](Community_121.md) (1 shared connections)
+- [Community 261](Community_261.md) (3 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 265](Community_265.md) (2 shared connections)
+- [Community 267](Community_267.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/labs.py`
-- `tests/test_labs_ownership.py`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 21 (95%)
+- INFERRED: 1 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

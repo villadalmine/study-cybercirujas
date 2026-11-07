@@ -1,25 +1,27 @@
 # Community 265
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `docs/AGENTS_SYNC.md`
-- **Changed, do not redo** (1 connections) — `docs/AGENTS_SYNC.md`
-- **Open — pick anything** (1 connections) — `docs/AGENTS_SYNC.md`
-- **Two findings you should know about** (1 connections) — `docs/AGENTS_SYNC.md`
+- **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
+- **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
+- **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
+- **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
+- **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
-- [Community 16](Community_16.md) (1 shared connections)
+- [Community 206](Community_206.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

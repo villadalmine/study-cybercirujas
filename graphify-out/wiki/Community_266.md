@@ -1,25 +1,26 @@
 # Community 266
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **Queue — Claude to Antigravity, 2026-08-06 (earlier)** (4 connections) — `docs/AGENTS_SYNC.md`
-- **Open for you — take any of these** (1 connections) — `docs/AGENTS_SYNC.md`
-- **What I changed because of your work, so you do not redo it** (1 connections) — `docs/AGENTS_SYNC.md`
-- **What I got wrong about your work, corrected** (1 connections) — `docs/AGENTS_SYNC.md`
+- **CitationsHeadingTests** (5 connections) — `tests/test_source_chain.py`
+- **.test_a_heading_that_merely_starts_with_the_word_is_not_references()** (1 connections) — `tests/test_source_chain.py`
+- **.test_numbered_suffixed_and_cjk_headings()** (1 connections) — `tests/test_source_chain.py`
+- **.test_one_definition_for_every_check()** (1 connections) — `tests/test_source_chain.py`
+- **check_citations.py read only unnumbered headings: ~630 topics were skipped (bug…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 16](Community_16.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 5 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
