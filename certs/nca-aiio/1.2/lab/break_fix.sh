@@ -497,13 +497,9 @@ test_training() {
 
   # 2. Check Interconnect Fabric Configuration
   echo "[-] Inspecting Interconnect Fabric & NCCL Transport..."
-  if [[ "${NCCL_IB_DISABLE:-0}" == "1" ]]; then
+  if [[ "${NCCL_IB_DISABLE:-1}" == "1" ]]; then
     echo "    FATAL: NCCL_IB_DISABLE=1 detected!"
     echo "    NCCL WARN: InfiniBand/RoCE verbs disabled. Falling back to Linux TCP sockets."
-  fi
-
-  if [[ "${NCCL_IB_DISABLE:-1}" == "1" ]]; then
-    echo "    FATAL: NCCL_IB_DISABLE=1 detected! InfiniBand/RoCE is disabled."
     return 1
   fi
   if [[ "${NCCL_SOCKET_IFNAME:-}" == "eth0" ]]; then
@@ -530,6 +526,12 @@ test_training() {
 
   # 4. Check Gang Scheduling Semantics
   echo "[-] Inspecting Kubernetes Lifecycle & Scheduling Strategy..."
+  if grep -q "kind: Deployment" "$LAB/manifests/training-job.yaml"; then
+    echo "    FATAL: Training manifest is using 'kind: Deployment'!"
+    echo "    Architectural Violation: Distributed training requires atomic batch controllers (PyTorchJob, JobSet, Volcano)."
+    echo "    Deployments manage pods independently without all-or-nothing semantics, risking cluster deadlock."
+    return 1
+  fi
   if grep -q "type: RollingUpdate" "$LAB/manifests/training-job.yaml"; then
     echo "    FATAL: Training manifest is using 'RollingUpdate' strategy!"
     echo "    Architectural Violation: Distributed training requires atomic gang scheduling."
@@ -724,7 +726,9 @@ run_check "Pillar 3B: Inference engine KV-cache configured within bounded memory
 
 # Check 7: Training Orchestration (Gang scheduling semantics)
 check_training_gang() {
+  ! grep -q "kind: Deployment" "$LAB/manifests/training-job.yaml" && \
   ! grep -q "type: RollingUpdate" "$LAB/manifests/training-job.yaml" && \
+  grep -q -E "(PyTorchJob|JobSet|Volcano|Job)" "$LAB/manifests/training-job.yaml" && \
   grep -q -E "(queue-name|pod-group|kueue|volcano)" "$LAB/manifests/training-job.yaml"
 }
 run_check "Pillar 4A: Training manifest uses atomic gang-scheduling semantics without rolling updates" check_training_gang
@@ -925,48 +929,75 @@ exit 0
 #
 # Commands:
 #   # 1. Mount /dev/shm in manifests/training-job.yaml:
-#   # Replace the spec with a valid volume and volumeMount:
+#   # Replace the spec with a PyTorchJob supporting gang scheduling and shared memory:
 #   cat > $NVLAB_ROOT/manifests/training-job.yaml << 'EOF'
-# apiVersion: apps/v1
-# kind: Deployment
+# apiVersion: kubeflow.org/v1
+# kind: PyTorchJob
 # metadata:
-#   name: pytorch-distributed-training-worker
+#   name: pytorch-distributed-training
 #   namespace: ai-workloads
 #   labels:
 #     kueue.x-k8s.io/queue-name: training-queue
 # spec:
-#   replicas: 2
-#   selector:
-#     matchLabels:
-#       app: pytorch-worker
-#   template:
-#     metadata:
-#       labels:
-#         app: pytorch-worker
-#         kueue.x-k8s.io/queue-name: training-queue
-#     spec:
-#       restartPolicy: Always
-#       containers:
-#         - name: pytorch-trainer
-#           image: nvcr.io/nvidia/pytorch:24.04-py3
-#           command: ["torchrun", "train.py"]
-#           resources:
-#             limits:
-#               nvidia.com/gpu: "1"
-#               cpu: "16"
-#               memory: "64Gi"
-#             requests:
-#               nvidia.com/gpu: "1"
-#               cpu: "16"
-#               memory: "64Gi"
-#           volumeMounts:
-#             - mountPath: /dev/shm
-#               name: dshm
-#       volumes:
-#         - name: dshm
-#           emptyDir:
-#             medium: Memory
-#             sizeLimit: 16Gi
+#   pytorchReplicaSpecs:
+#     Master:
+#       replicas: 1
+#       restartPolicy: OnFailure
+#       template:
+#         metadata:
+#           labels:
+#             app: pytorch-master
+#         spec:
+#           containers:
+#             - name: pytorch-trainer
+#               image: nvcr.io/nvidia/pytorch:24.04-py3
+#               command: ["python3", "-m", "torch.distributed.run", "train.py"]
+#               resources:
+#                 limits:
+#                   nvidia.com/gpu: "1"
+#                   cpu: "16"
+#                   memory: "64Gi"
+#                 requests:
+#                   nvidia.com/gpu: "1"
+#                   cpu: "16"
+#                   memory: "64Gi"
+#               volumeMounts:
+#                 - mountPath: /dev/shm
+#                   name: dshm
+#           volumes:
+#             - name: dshm
+#               emptyDir:
+#                 medium: Memory
+#                 sizeLimit: 16Gi
+#     Worker:
+#       replicas: 1
+#       restartPolicy: OnFailure
+#       template:
+#         metadata:
+#           labels:
+#             app: pytorch-worker
+#         spec:
+#           containers:
+#             - name: pytorch-trainer
+#               image: nvcr.io/nvidia/pytorch:24.04-py3
+#               command: ["python3", "-m", "torch.distributed.run", "train.py"]
+#               resources:
+#                 limits:
+#                   nvidia.com/gpu: "1"
+#                   cpu: "16"
+#                   memory: "64Gi"
+#                 requests:
+#                   nvidia.com/gpu: "1"
+#                   cpu: "16"
+#                   memory: "64Gi"
+#               volumeMounts:
+#                 - mountPath: /dev/shm
+#                   name: dshm
+#           volumes:
+#             - name: dshm
+#               emptyDir:
+#                 medium: Memory
+#                 sizeLimit: 16Gi
 # EOF
 #
 #   # 2. Adjust KV-cache parameters in etc/ai-platform/inference-engine.yaml:

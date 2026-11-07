@@ -609,15 +609,15 @@ $ lsmod | grep nvidia_peermem
 $ sudo modprobe nvidia-peermem
 $ dmesg | grep -i peermem
 [ 4210.124512] nvidia_peermem: loading out-of-tree module
-[ 4210.125901] nvidia-peermem: registered ib_register_peer_memory_client successfully
+[ 4210.125901] nvidia_peermem: registered client nvidia-peermem with ib_peer_mem
 
 # Step 3: Verify NCCL debug logs in the training pod
-$ kubectl logs pod/nccl-multinode-training-worker-0 | grep -E "(NET/IB|GDR)"
+$ kubectl logs pod/nccl-multinode-training-master-0 | grep -E "(NET/IB|GDR)"
 # Expected Output (GPUDirect RDMA active):
-# [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/RoCE [1]mlx5_1:1/RoCE ; OSOp 0; GDR 1
+# [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB ; OOB ib0:10.240.0.10<0>
 # [0] NCCL INFO NET/IB : GPU Direct RDMA Enabled for HCA [0]mlx5_0:1
 # Bad Output (Disabled / kernel module missing):
-# [0] NCCL INFO NET/IB : GPU Direct RDMA Disabled for HCA [0]mlx5_0:1 (GDR 0; fallback to host bounce buffer)
+# [0] NCCL INFO NET/IB : GPU Direct RDMA Disabled for HCA 0 'mlx5_0' (no module)
 ```
 
 ---

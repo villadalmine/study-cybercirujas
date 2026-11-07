@@ -329,112 +329,164 @@ Kubernetes resource managers treat training and inference workloads with fundame
 
 ### Steps
 
-1. Inspect the production Kubernetes manifest for a multi-rail distributed training worker node:
+1. Inspect the production Kubernetes manifest for a multi-rail distributed training PyTorchJob managed by the Kubeflow Training Operator and Kueue gang scheduler:
 
    ```yaml
-   apiVersion: apps/v1
-   kind: Deployment
+   apiVersion: kubeflow.org/v1
+   kind: PyTorchJob
    metadata:
-     name: nccl-multinode-training-worker
+     name: nccl-multinode-training
      namespace: ml-training
      labels:
-       app.kubernetes.io/name: "distributed-trainer"
-       app.kubernetes.io/component: "training-worker"
+       kueue.x-k8s.io/queue-name: "training-queue"
    spec:
-     replicas: 2
-     selector:
-       matchLabels:
-         app.kubernetes.io/name: "distributed-trainer"
-     template:
-       metadata:
-         labels:
-           app.kubernetes.io/name: "distributed-trainer"
-           app.kubernetes.io/component: "training-worker"
-       spec:
-         hostNetwork: true
-         hostIPC: true
-         dnsPolicy: ClusterFirstWithHostNet
-         affinity:
-           nodeAffinity:
-             requiredDuringSchedulingIgnoredDuringExecution:
-               nodeSelectorTerms:
-                 - matchExpressions:
-                     - key: "nvidia.com/gpu.product"
-                       operator: In
-                       values:
-                         - "NVIDIA-H100-80GB-HBM3"
-                     - key: "topology.kubernetes.io/network-rail"
-                       operator: In
-                       values:
-                         - "rail-1"
-           podAntiAffinity:
-             requiredDuringSchedulingIgnoredDuringExecution:
-               - labelSelector:
-                   matchExpressions:
-                     - key: "app.kubernetes.io/name"
-                       operator: In
-                       values:
-                         - "distributed-trainer"
-                 topologyKey: "kubernetes.io/hostname"
-         containers:
-           - name: pytorch-cell
-             image: "nvcr.io/nvidia/pytorch:24.07-py3"
-             imagePullPolicy: IfNotPresent
-             command:
-               - "/bin/bash"
-               - "-c"
-               - |
-                 export OMP_NUM_THREADS=8
-                 export NCCL_DEBUG=INFO
-                 export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
-                 export NCCL_IB_DISABLE=0
-                 export NCCL_IB_CUDA_SUPPORT=1
-                 export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
-                 export NCCL_IB_GID_INDEX=3
-                 export NCCL_NET_GDR_LEVEL=5
-                 
-                 torchrun \
-                   --nnodes=2 \
-                   --nproc_per_node=8 \
-                   --rdzv_id=pretrain_run_42 \
-                   --rdzv_backend=c10d \
-                   --rdzv_endpoint=training-coordinator.ml-training.svc.cluster.local:29500 \
-                   /workspace/pretrain.py --config /configs/h100-parallel.yaml
-             securityContext:
-               capabilities:
-                 add:
-                   - IPC_LOCK
-                   - SYS_PTRACE
-               privileged: false
-             volumeMounts:
+     pytorchReplicaSpecs:
+       Master:
+         replicas: 1
+         restartPolicy: OnFailure
+         template:
+           metadata:
+             labels:
+               app.kubernetes.io/name: "distributed-trainer"
+               app.kubernetes.io/component: "master"
+           spec:
+             hostNetwork: true
+             hostIPC: true
+             dnsPolicy: ClusterFirstWithHostNet
+             affinity:
+               nodeAffinity:
+                 requiredDuringSchedulingIgnoredDuringExecution:
+                   nodeSelectorTerms:
+                     - matchExpressions:
+                         - key: "nvidia.com/gpu.product"
+                           operator: In
+                           values:
+                             - "NVIDIA-H100-80GB-HBM3"
+                         - key: "topology.kubernetes.io/network-rail"
+                           operator: In
+                           values:
+                             - "rail-1"
+             containers:
+               - name: pytorch
+                 image: "nvcr.io/nvidia/pytorch:24.07-py3"
+                 imagePullPolicy: IfNotPresent
+                 command:
+                   - "/bin/bash"
+                   - "-c"
+                   - |
+                     export OMP_NUM_THREADS=8
+                     export NCCL_DEBUG=INFO
+                     export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
+                     export NCCL_IB_DISABLE=0
+                     export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+                     export NCCL_IB_GID_INDEX=3
+                     export NCCL_NET_GDR_LEVEL=5
+                     
+                     python3 -m torch.distributed.run \
+                       --nproc_per_node=8 \
+                       /workspace/pretrain.py --config /configs/h100-parallel.yaml
+                 volumeMounts:
+                   - name: dshm
+                     mountPath: "/dev/shm"
+                   - name: persistent-dataset-gds
+                     mountPath: "/dataset"
+                   - name: checkpoints-storage
+                     mountPath: "/checkpoints"
+                 resources:
+                   requests:
+                     nvidia.com/gpu: "8"
+                     rdma/hca_shared_devices: "8"
+                     cpu: "112"
+                     memory: "850Gi"
+                   limits:
+                     nvidia.com/gpu: "8"
+                     rdma/hca_shared_devices: "8"
+                     cpu: "112"
+                     memory: "850Gi"
+             volumes:
                - name: dshm
-                 mountPath: "/dev/shm"
+                 emptyDir:
+                   medium: Memory
+                   sizeLimit: "256Gi"
                - name: persistent-dataset-gds
-                 mountPath: "/dataset"
+                 persistentVolumeClaim:
+                   claimName: "weka-fs-dataset-pvc"
                - name: checkpoints-storage
-                 mountPath: "/checkpoints"
-             resources:
-               requests:
-                 nvidia.com/gpu: "8"
-                 rdma/hca_shared_devices: "8"
-                 cpu: "112"
-                 memory: "850Gi"
-               limits:
-                 nvidia.com/gpu: "8"
-                 rdma/hca_shared_devices: "8"
-                 cpu: "112"
-                 memory: "850Gi"
-         volumes:
-           - name: dshm
-             emptyDir:
-               medium: Memory
-               sizeLimit: "256Gi"
-           - name: persistent-dataset-gds
-             persistentVolumeClaim:
-               claimName: "weka-fs-dataset-pvc"
-           - name: checkpoints-storage
-             persistentVolumeClaim:
-               claimName: "weka-fs-checkpoints-pvc"
+                 persistentVolumeClaim:
+                   claimName: "weka-fs-checkpoints-pvc"
+       Worker:
+         replicas: 1
+         restartPolicy: OnFailure
+         template:
+           metadata:
+             labels:
+               app.kubernetes.io/name: "distributed-trainer"
+               app.kubernetes.io/component: "worker"
+           spec:
+             hostNetwork: true
+             hostIPC: true
+             dnsPolicy: ClusterFirstWithHostNet
+             affinity:
+               nodeAffinity:
+                 requiredDuringSchedulingIgnoredDuringExecution:
+                   nodeSelectorTerms:
+                     - matchExpressions:
+                         - key: "nvidia.com/gpu.product"
+                           operator: In
+                           values:
+                             - "NVIDIA-H100-80GB-HBM3"
+                         - key: "topology.kubernetes.io/network-rail"
+                           operator: In
+                           values:
+                             - "rail-1"
+             containers:
+               - name: pytorch
+                 image: "nvcr.io/nvidia/pytorch:24.07-py3"
+                 imagePullPolicy: IfNotPresent
+                 command:
+                   - "/bin/bash"
+                   - "-c"
+                   - |
+                     export OMP_NUM_THREADS=8
+                     export NCCL_DEBUG=INFO
+                     export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
+                     export NCCL_IB_DISABLE=0
+                     export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+                     export NCCL_IB_GID_INDEX=3
+                     export NCCL_NET_GDR_LEVEL=5
+                     
+                     python3 -m torch.distributed.run \
+                       --nproc_per_node=8 \
+                       /workspace/pretrain.py --config /configs/h100-parallel.yaml
+                 volumeMounts:
+                   - name: dshm
+                     mountPath: "/dev/shm"
+                   - name: persistent-dataset-gds
+                     mountPath: "/dataset"
+                   - name: checkpoints-storage
+                     mountPath: "/checkpoints"
+                 resources:
+                   requests:
+                     nvidia.com/gpu: "8"
+                     rdma/hca_shared_devices: "8"
+                     cpu: "112"
+                     memory: "850Gi"
+                   limits:
+                     nvidia.com/gpu: "8"
+                     rdma/hca_shared_devices: "8"
+                     cpu: "112"
+                     memory: "850Gi"
+             volumes:
+               - name: dshm
+                 emptyDir:
+                   medium: Memory
+                   sizeLimit: "256Gi"
+               - name: persistent-dataset-gds
+                 persistentVolumeClaim:
+                   claimName: "weka-fs-dataset-pvc"
+               - name: checkpoints-storage
+                 persistentVolumeClaim:
+                   claimName: "weka-fs-checkpoints-pvc"
    ```
 
 2. Inspect the production Kubernetes manifest for a Triton Inference Server deployment using MIG partitions and KEDA autoscaling based on queue duration:
@@ -650,22 +702,24 @@ In production, platform engineers face distinct failure modes: a single degraded
    3, 43, 1980 MHz, 0x0000000000000000
    ```
 
-   *Bitmask analysis:* `0x000000000000000c` corresponds to `sw_thermal_slowdown` (bit 3) and `hw_thermal_slowdown` (bit 2).
+   *Bitmask analysis:* `0x0000000000000048` corresponds to `hw_slowdown` (0x08, bit 3) and `hw_thermal_slowdown` (0x40, bit 6) active simultaneously.
 
-2. **Inspecting Memory Health and ECC Failures:**
+2. **Inspecting Memory Health, Page Retirement, and Row Remapping:**
 
    ```bash
    nvidia-smi --query-gpu=index,ecc.errors.uncorrected.volatile.total,retired_pages.pending,retired_pages.double_bit.count --format=csv
+   # Note: On Hopper and Ampere architectures, page retirement is superseded by dynamic row remapping:
+   nvidia-smi -q -d ROW_REMAPPER
    ```
 
    Representative output:
 
    ```
    index, ecc.errors.uncorrected.volatile.total, retired_pages.pending, retired_pages.double_bit.count
-   0, 0, 0
-   1, 0, 0
+   0, 0, 0, 0
+   1, 0, 0, 0
    2, 3, 1, 1
-   3, 0, 0
+   3, 0, 0, 0
    ```
 
 3. **Cordoning and Draining the Faulty Node:**
@@ -712,7 +766,7 @@ In production, platform engineers face distinct failure modes: a single degraded
 
 **7.1** In synchronous distributed data-parallel (DDP) training, why does a single throttled GPU on one node cause GPU utilization to drop across all healthy nodes in the cluster?
 
-**7.2** What is the operational risk of running a multi-week training job on a node that reports `ecc.errors.retired.pending > 0`?
+**7.2** What is the operational risk of running a multi-week training job on a node that reports `retired_pages.pending > 0` or pending row remappings in `nvidia-smi -q -d ROW_REMAPPER`?
 
 **7.3** How does NUMA misalignment between the host network interface card (NIC) and the GPU degrade inference throughput and latency?
 
@@ -767,10 +821,11 @@ In production, platform engineers face distinct failure modes: a single degraded
   MIG completely disables NVLink and cross-instance peer-to-peer (P2P) memory access. Consequently, NCCL cannot use NVLink or direct P2P DMA between MIG instances on the same card; it must fall back to host shared memory or local sockets. Furthermore, distributed training requires maximum compute and memory capacity. Slicing a GPU into smaller partitions introduces communication bottlenecks and limits the batch size that can fit into local memory.
 
 **3.3**  
-- **Calculation:**  
-  An 80 GB H100 has 7 compute slices and 8 memory slices (7 user-addressable). Each `3g.40gb` profile consumes 3 compute slices and 4 memory slices (half the memory).  
-  - Compute slices allocated: $3 + 3 = 6$ slices out of 7.  
-  - Unallocated compute slices: $7 - 6 = 1$ compute slice remaining (which can host a single `1g.10gb` slice, but no additional `2g` or `3g` slices).
+- **Calculation & Architectural Constraint:**  
+  An 80 GB H100 has 7 compute slices (GPU instances) and 8 memory slices (each corresponding to 10 GB HBM3). Each `3g.40gb` profile consumes 3 compute slices and 4 memory slices (half the card's total memory).  
+  - Compute slices allocated: $3 + 3 = 6$ slices out of 7 ($7 - 6 = 1$ unallocated compute slice remaining).  
+  - Memory slices allocated: $4 + 4 = 8$ slices out of 8 ($8 - 8 = 0$ memory slices remaining).  
+  - **Result:** Although 1 compute slice is physically free, it is **stranded and unusable**. Any MIG profile requires at least 1 memory slice (even a `1g.10gb` instance requires 1 compute slice and 1 memory slice). Because both `3g.40gb` instances completely exhaust all 8 memory slices, two `3g.40gb` instances represent a **terminal configuration** on an 80 GB GPU (per the NVIDIA MIG User Guide supported profile combinations table).
 
 ---
 
@@ -827,7 +882,7 @@ In production, platform engineers face distinct failure modes: a single degraded
 
 **7.2**  
 - **Explanation:**  
-  A pending retired page (`ecc.errors.retired.pending > 0`) indicates that the GPU's memory controller has detected a failing physical memory cell and scheduled that page for dynamic retirement upon the next driver reload or system reboot. If the training job accesses that degraded cell before retirement takes place, an uncorrectable double-bit ECC fault will trigger an XID error (e.g., XID 48 or XID 63), crashing the CUDA context. In a multi-node training run, this single crash aborts the entire job, wasting all compute cycles since the last checkpoint.
+  A pending retired page (`retired_pages.pending > 0`, or uncorrectable pending row remappings in Hopper/Ampere hardware) indicates that the GPU's memory controller has detected degraded physical DRAM/HBM cells and scheduled them for dynamic retirement or row remapping upon the next driver reload or system reboot. If the training job accesses a degraded cell before remapping/retirement takes place, an uncorrectable double-bit ECC fault triggers an XID error (e.g., XID 48 or XID 63), crashing the CUDA context. In a multi-node training run, this single crash aborts the entire job across thousands of GPUs, wasting all compute cycles since the last checkpoint.
 
 **7.3**  
 - **Explanation:**  
