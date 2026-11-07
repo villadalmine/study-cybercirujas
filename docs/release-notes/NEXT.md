@@ -8,7 +8,6 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
-- **Honest provenance on non-Claude CLI backends:** `gemini` (`agy`), `codex` and `custom` no longer inherit `generation.model` from `pipeline.yaml`, and `gemini` pins `gemini-4-argon-high` with JSON token telemetry (#269).
 
 ## Upgrade notes
 
