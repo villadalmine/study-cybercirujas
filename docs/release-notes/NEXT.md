@@ -8,7 +8,6 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
-- **NVIDIA NCA-AIIO 1.2 (AI Architecture):** Compare and contrast training and inference architecture requirements in English, authored via Gemini (Antigravity) on `gemini-3.8-flash-high` (#270).
 
 ## Upgrade notes
 
