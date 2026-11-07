@@ -59,11 +59,16 @@ AVAILABLE, EXHAUSTED, BROKEN = 0, 1, 2
 # project context whatever it is asked. At one probe every 20 minutes that is
 # real money spent to learn nothing but "yes" or "no".
 PROBE_MODEL = "haiku"
+PROBE_MODELS = {
+    "claude": "haiku",
+    "gemini": "gemini-3.8-flash-low",
+}
 
 
 def probe(backend: str = "claude") -> tuple[int, str]:
     """Returns (exit-style status, detail). Cheap by construction: the prompt
-    asks for two characters, and on `claude` it is pinned to the cheapest model.
+    asks for two characters, and on `claude` and `gemini` it is pinned to the
+    cheapest probe model.
 
     The teach imports are local to this function so that `--history`, which only
     reads a file, keeps working even where the package is unavailable.
@@ -77,7 +82,10 @@ def probe(backend: str = "claude") -> tuple[int, str]:
 
     if backend == "claude":
         # Insert before the `--` terminator, which must stay last.
-        command = [*command[:-1], "--model", PROBE_MODEL, command[-1]]
+        command = [*command[:-1], "--model", PROBE_MODELS["claude"], command[-1]]
+    elif backend == "gemini":
+        # Insert before `-p`, which consumes the prompt as the next argument.
+        command = [*command[:-1], "--model", PROBE_MODELS["gemini"], command[-1]]
 
     result = subprocess.run(
         [*command, PROBE_PROMPT],

@@ -36,7 +36,7 @@ NETGUARD = REPO / "tests" / "netguard"
 MODEL_CLIS = ("claude", "codex", "gemini", "agy", "ollama")
 MODEL_ENV_PREFIXES = ("LITELLM_", "OPENROUTER", "ANTHROPIC", "OPENAI", "GEMINI",
                       "GOOGLE_API", "TEACH_BACKEND", "TEACH_TRANSLATE", "TEACH_AGENT_CMD",
-                      "TEACH_CLAUDE_")
+                      "TEACH_CLAUDE_", "TEACH_GEMINI_")
 
 # Prints every derived artefact the site and the repository serve. Run in a
 # fresh interpreter each time, so nothing is shared between the two runs.
