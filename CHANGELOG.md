@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.4...v0.6.5) (2026-11-07)
+
+
+### Bug Fixes
+
+* **generator:** isolate non-claude backend provenance and pin gemini model ([#272](https://github.com/villadalmine/study-cybercirujas/issues/272)) ([18df544](https://github.com/villadalmine/study-cybercirujas/commit/18df544cb71b903021149678bc94463fda936ef4))
+
 ## [0.6.4](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.3...v0.6.4) (2026-11-07)
 
 
