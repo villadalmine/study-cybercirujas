@@ -646,7 +646,7 @@ In production, platform engineers face distinct failure modes: a single degraded
    index, temperature.gpu, clocks.current.graphics [MHz], clocks_event_reasons.active
    0, 42, 1980 MHz, 0x0000000000000000
    1, 41, 1980 MHz, 0x0000000000000000
-   2, 89, 1050 MHz, 0x000000000000000c
+   2, 89, 1050 MHz, 0x0000000000000048
    3, 43, 1980 MHz, 0x0000000000000000
    ```
 
@@ -655,16 +655,16 @@ In production, platform engineers face distinct failure modes: a single degraded
 2. **Inspecting Memory Health and ECC Failures:**
 
    ```bash
-   nvidia-smi --query-gpu=index,ecc.errors.uncorrected.volatile.total,ecc.errors.retired.pending --format=csv
+   nvidia-smi --query-gpu=index,ecc.errors.uncorrected.volatile.total,retired_pages.pending,retired_pages.double_bit.count --format=csv
    ```
 
    Representative output:
 
    ```
-   index, ecc.errors.uncorrected.volatile.total, ecc.errors.retired.pending
+   index, ecc.errors.uncorrected.volatile.total, retired_pages.pending, retired_pages.double_bit.count
    0, 0, 0
    1, 0, 0
-   2, 3, 1
+   2, 3, 1, 1
    3, 0, 0
    ```
 

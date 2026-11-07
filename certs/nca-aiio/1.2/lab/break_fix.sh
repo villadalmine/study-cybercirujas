@@ -192,6 +192,7 @@ GPU_TARGET_INDEX=0
 # BROKEN SETTINGS:
 # The junior engineer disabled InfiniBand and routed NCCL over 1GbE management!
 NCCL_IB_DISABLE=1
+NCCL_IB_HCA="none"
 NCCL_NET_GDR_LEVEL=0
 NCCL_SOCKET_IFNAME="eth0"
 NCCL_DEBUG="INFO"
@@ -230,9 +231,9 @@ cat > "$LAB/etc/ai-platform/inference-engine.yaml" <<'EOF'
 apiVersion: inference.nvidia.com/v1alpha1
 kind: EngineConfig
 metadata:
-  name: llama-70b-streaming-service
+  name: llama-8b-streaming-service
 spec:
-  model: "meta-llama/Llama-2-70b-chat-hf"
+  model: "meta-llama/Meta-Llama-3-8B-Instruct"
   tensor_parallel_size: 1
   pipeline_parallel_size: 1
   # BROKEN SETTINGS:
@@ -501,18 +502,19 @@ test_training() {
     echo "    NCCL WARN: InfiniBand/RoCE verbs disabled. Falling back to Linux TCP sockets."
   fi
 
-  if [[ "${NCCL_SOCKET_IFNAME:-}" == "eth0" ]]; then
-    echo "    FATAL: NCCL_SOCKET_IFNAME is set to 'eth0' (1 Gbps management link)!"
-    echo "    NCCL INFO: NET/Socket: Using interface eth0 (10.240.0.10) for inter-node communication"
-    echo "    NCCL WARN: AllReduce ring latency: 85,200 us (Expected: < 4.2 us on 400G NDR InfiniBand)"
-    echo "    NCCL WARN: Watchdog caught collective timeout after 600 seconds. Job stalled."
-    return 1
-  elif [[ "${NCCL_SOCKET_IFNAME:-}" =~ (mlx5|ib) && "${NCCL_IB_DISABLE:-0}" == "0" ]]; then
-    echo "    [OK] NCCL is utilizing InfiniBand/RoCE multi-rail fabric (${NCCL_SOCKET_IFNAME}) with GPUDirect RDMA."
-  else
-    echo "    FATAL: Invalid NCCL transport configuration: NCCL_SOCKET_IFNAME=${NCCL_SOCKET_IFNAME:-empty}, NCCL_IB_DISABLE=${NCCL_IB_DISABLE:-empty}"
+  if [[ "${NCCL_IB_DISABLE:-1}" == "1" ]]; then
+    echo "    FATAL: NCCL_IB_DISABLE=1 detected! InfiniBand/RoCE is disabled."
     return 1
   fi
+  if [[ "${NCCL_SOCKET_IFNAME:-}" == "eth0" ]]; then
+    echo "    FATAL: NCCL_SOCKET_IFNAME is set to 'eth0' (1 Gbps management link)! Set to 'ib0' or 'bond0'."
+    return 1
+  fi
+  if [[ -z "${NCCL_IB_HCA:-}" || "${NCCL_IB_HCA}" == "none" ]]; then
+    echo "    FATAL: NCCL_IB_HCA is unset or 'none'! Set to 'mlx5_0,mlx5_1' or 'mlx5_*'."
+    return 1
+  fi
+  echo "    [OK] NCCL transport: HCA=${NCCL_IB_HCA}, Socket=${NCCL_SOCKET_IFNAME}, IB_DISABLE=${NCCL_IB_DISABLE}"
 
   # 3. Check DataLoader Shared Memory (/dev/shm)
   echo "[-] Inspecting Worker Shared Memory Subsystem (/dev/shm)..."
@@ -582,11 +584,14 @@ test_inference() {
   # 3. Check KV Cache Allocation & Arithmetic Intensity Limits
   echo "[-] Inspecting KV-Cache Configuration & Memory Budget..."
   local mem_util max_len kv_dtype
-  mem_util="$(python3 -c "import yaml; d=yaml.safe_load(open('$LAB/etc/ai-platform/inference-engine.yaml')); print(d['spec']['gpu_memory_utilization'])")"
-  max_len="$(python3 -c "import yaml; d=yaml.safe_load(open('$LAB/etc/ai-platform/inference-engine.yaml')); print(d['spec']['max_model_len'])")"
-  kv_dtype="$(python3 -c "import yaml; d=yaml.safe_load(open('$LAB/etc/ai-platform/inference-engine.yaml')); print(d['spec']['kv_cache_dtype'])")"
+  mem_util="$(grep -E "^\s*gpu_memory_utilization:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
+  max_len="$(grep -E "^\s*max_model_len:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
+  kv_dtype="$(grep -E "^\s*kv_cache_dtype:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
 
-  if (( $(echo "$mem_util > 0.90" | bc -l) )) || [ "$max_len" -gt 16384 ] || [ "$kv_dtype" == "fp32" ]; then
+  local mem_pct
+  mem_pct="$(awk -v u="${mem_util:-1.0}" 'BEGIN { printf "%d", u * 100 }')"
+
+  if [ "$mem_pct" -gt 90 ] || [ "${max_len:-65536}" -gt 16384 ] || [ "${kv_dtype:-fp32}" == "fp32" ]; then
     echo "    FATAL: Invalid Inference Memory Sizing in inference-engine.yaml!"
     echo "    Parameters: gpu_memory_utilization=$mem_util, max_model_len=$max_len, kv_cache_dtype=$kv_dtype"
     echo "    RuntimeError: CUDA out of memory during KV-cache pre-allocation!"
@@ -689,7 +694,7 @@ run_check "Pillar 1B: GPU 1 has MIG Enabled with active hardware slices (Inferen
 # Check 3: Training Network Fabric (InfiniBand/RoCE enabled with GPUDirect RDMA)
 check_training_fabric() {
   source "$LAB/etc/ai-platform/training-cluster.env"
-  [[ "${NCCL_IB_DISABLE:-1}" == "0" ]] && [[ "${NCCL_SOCKET_IFNAME:-}" =~ (mlx5|ib) ]]
+  [[ "${NCCL_IB_DISABLE:-1}" == "0" ]] && [[ "${NCCL_SOCKET_IFNAME:-}" =~ (ib|bond|eth[1-9]) ]] && [[ "${NCCL_IB_HCA:-}" =~ mlx5 ]]
 }
 run_check "Pillar 2A: Training cluster configured for Lossless RDMA fabric (NCCL_IB_DISABLE=0, InfiniBand/RoCE interface)" check_training_fabric
 
@@ -708,14 +713,12 @@ run_check "Pillar 3A: Training manifest mounts RAM-backed /dev/shm to prevent Da
 
 # Check 6: Inference KV Cache Sizing (Bounded memory utilization and context)
 check_inference_kv() {
-  python3 -c "
-import yaml, sys
-d = yaml.safe_load(open('$LAB/etc/ai-platform/inference-engine.yaml'))['spec']
-if float(d['gpu_memory_utilization']) > 0.90: sys.exit(1)
-if int(d['max_model_len']) > 16384: sys.exit(1)
-if str(d['kv_cache_dtype']).lower() not in ['fp8', 'fp16', 'auto']: sys.exit(1)
-sys.exit(0)
-"
+  local util max_len kv_dtype pct
+  util="$(grep -E "^\s*gpu_memory_utilization:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
+  max_len="$(grep -E "^\s*max_model_len:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
+  kv_dtype="$(grep -E "^\s*kv_cache_dtype:" "$LAB/etc/ai-platform/inference-engine.yaml" | awk '{print $2}' | tr -d '"' | tr -d "'")"
+  pct="$(awk -v u="${util:-1.0}" 'BEGIN { printf "%d", u * 100 }')"
+  [ "$pct" -le 90 ] && [ "${max_len:-65536}" -le 16384 ] && [[ "${kv_dtype:-fp32}" =~ ^(fp8|fp16|auto)$ ]]
 }
 run_check "Pillar 3B: Inference engine KV-cache configured within bounded memory budget (<=90% util, <=16k len, FP8/FP16)" check_inference_kv
 
@@ -812,7 +815,7 @@ YOUR MISSION:
            nvidia-smi -i 1 -cgi 3g.40gb
      - Interconnect Fabric:
          In '$LAB/etc/ai-platform/training-cluster.env', enable InfiniBand RDMA
-         (NCCL_IB_DISABLE=0, bind NCCL_SOCKET_IFNAME to 'mlx5_0:1' or 'ib0').
+         (NCCL_IB_DISABLE=0, set NCCL_IB_HCA='mlx5_0,mlx5_1', bind NCCL_SOCKET_IFNAME to 'ib0' or 'bond0').
          In '$LAB/etc/ai-platform/inference-serving.env', switch fabric mode
          to standard Ethernet/TCP ('tcp').
      - Memory Subsystems:
@@ -898,8 +901,9 @@ exit 0
 # Commands:
 #   # 1. Fix training-cluster.env:
 #   sed -i 's/NCCL_IB_DISABLE=1/NCCL_IB_DISABLE=0/' $NVLAB_ROOT/etc/ai-platform/training-cluster.env
+#   sed -i 's/NCCL_IB_HCA="none"/NCCL_IB_HCA="mlx5_0,mlx5_1"/' $NVLAB_ROOT/etc/ai-platform/training-cluster.env
 #   sed -i 's/NCCL_NET_GDR_LEVEL=0/NCCL_NET_GDR_LEVEL=5/' $NVLAB_ROOT/etc/ai-platform/training-cluster.env
-#   sed -i 's/NCCL_SOCKET_IFNAME="eth0"/NCCL_SOCKET_IFNAME="mlx5_0:1"/' $NVLAB_ROOT/etc/ai-platform/training-cluster.env
+#   sed -i 's/NCCL_SOCKET_IFNAME="eth0"/NCCL_SOCKET_IFNAME="ib0"/' $NVLAB_ROOT/etc/ai-platform/training-cluster.env
 #
 #   # 2. Fix inference-serving.env:
 #   sed -i 's/INFERENCE_FABRIC_MODE="infiniband_rdma"/INFERENCE_FABRIC_MODE="tcp"/' $NVLAB_ROOT/etc/ai-platform/inference-serving.env
@@ -970,9 +974,9 @@ exit 0
 # apiVersion: inference.nvidia.com/v1alpha1
 # kind: EngineConfig
 # metadata:
-#   name: llama-70b-streaming-service
+#   name: llama-8b-streaming-service
 # spec:
-#   model: "meta-llama/Llama-2-70b-chat-hf"
+#   model: "meta-llama/Meta-Llama-3-8B-Instruct"
 #   tensor_parallel_size: 1
 #   pipeline_parallel_size: 1
 #   gpu_memory_utilization: 0.85

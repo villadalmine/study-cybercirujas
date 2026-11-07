@@ -74,7 +74,7 @@ The following matrix contrasts the architectural pillars across both domains:
 | **Job Lifecycle & Predictability** | Long-running batch execution (days to months). Monolithic state. Static resource reservation. | Ephemeral, stateless request-response or persistent duplex streaming sessions (gRPC/HTTP2). Highly elastic and diurnal. |
 | **Numeric Precision Formats** | Mixed precision: FP32 (master weights, optimizer updates), BF16/FP16 (activations/gradients), FP8 (Transformer Engine). | Quantized low precision: FP8, INT8, INT4 (AWQ, GPTQ), SmoothQuant. Focus is on weight compression to fit within local HBM. |
 | **System Form Factor** | SXM5 / OAM baseboards. Direct board-level liquid or high-airflow chassis (e.g., DGX H100, HGX H200, DGX GB200 NVL72). | PCIe add-in cards (L4, L40S, H100 NVL, A10G) or partitioned SXM units. Density and rack footprint optimized. |
-| **Intra-Node Interconnect** | Ultra-high-bandwidth all-to-all NVLink (900 GB/s on H100, 1.8 TB/s on Blackwell) backed by dedicated NVSwitch chips. | PCIe Gen5 x16 (64 GB/s bi-directional) or direct point-to-point NVLink bridge between dual GPU pairs (H100 NVL). |
+| **Intra-Node Interconnect** | Ultra-high-bandwidth all-to-all NVLink (900 GB/s on H100, 1.8 TB/s on Blackwell) backed by dedicated NVSwitch chips. | PCIe Gen5 x16 (64 GB/s per direction, 128 GB/s bi-directional) or direct point-to-point NVLink bridge between dual GPU pairs (H100 NVL). |
 | **Inter-Node Fabric** | Rail-optimized, non-blocking InfiniBand (Quantum-2 400 Gb/s / Quantum-X800) or lossless RoCEv2 (PFC + ECN). 1:1 GPU-to-HCA ratio. | Standard leaf-spine Datacenter Ethernet (25/100 GbE) for northbound ingress. Dedicated RoCE only if running multi-node Tensor Parallelism. |
 | **Storage Subsystem & I/O** | High-concurrency parallel file system (Lustre, Weka, GPFS). GPUDirect Storage (GDS). Huge burst write I/O for checkpoints. | Local high-speed NVMe (PCIe Gen4/5) for model weight staging/caching; container image registries; lightweight S3/Blob backing. |
 | **Hardware Partitioning** | None. Exclusive bare-metal GPU access. Full physical device allocation. | Multi-Instance GPU (MIG) for strict hardware QoS isolation, or Multi-Process Service (MPS) for memory and kernel interleaving. |
@@ -85,122 +85,151 @@ The following matrix contrasts the architectural pillars across both domains:
 
 ## 3. Production-Grade Manifests & Infrastructure Specs
 
-### 3.1 Distributed Training: PyTorch Elastic Training with Multi-Rail RDMA and Shared Memory
+### 3.1 Distributed Training: Kubeflow PyTorchJob with Multi-Rail RDMA and Gang Scheduling
 
-In a production Kubernetes cluster managed by the NVIDIA GPU Operator and Network Operator, a multi-node training job requires:
-- Injection of host IPC and hugepages.
-- Explicit resource reservation for both GPUs (`nvidia.com/gpu`) and dedicated InfiniBand HCAs (`nvidia.com/hostdev` or SR-IOV RDMA resources).
-- Mounting high-speed shared memory (`/dev/shm`) backed by RAM to prevent PyTorch DataLoader deadlock.
-- Strict node affinity to guarantee co-location on rail-aligned switches.
+In a production Kubernetes cluster managed by the NVIDIA GPU Operator and Network Operator, a multi-node distributed training workload must **never** be deployed as a standard Kubernetes `apps/v1 Deployment`. Deployments enforce independent pod lifecycle management without all-or-nothing gang scheduling; if cluster GPU capacity is partially constrained, a Deployment will schedule only a subset of workers, deadlocking the PyTorch collective while holding GPU quota indefinitely.
+
+Production distributed training uses batch controllers such as the Kubeflow Training Operator (`kubeflow.org/v1 PyTorchJob`), JobSet, or Volcano, integrated with **Kueue** for gang scheduling (`kueue.x-k8s.io/queue-name`):
+
+- **All-or-Nothing Gang Scheduling:** Guarantees that either all $N$ workers schedule simultaneously or none do, avoiding quota deadlocks.
+- **Multi-Rail RDMA Binding:** Binds each GPU to its dedicated Mellanox ConnectX-7 HCA (`rdma/hca_shared_devices` or SR-IOV device plugins) with GPUDirect RDMA.
+- **Shared Memory Injection:** Mounts high-speed RAM-backed `/dev/shm` to prevent PyTorch DataLoader multi-processing deadlocks.
+- **Rail-Aligned Node Affinity:** Guarantees co-location across identical InfiniBand spine-leaf rail switches.
 
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: kubeflow.org/v1
+kind: PyTorchJob
 metadata:
-  name: nccl-multinode-training-worker
+  name: nccl-multinode-training
   namespace: ml-training
   labels:
-    app.kubernetes.io/name: "distributed-trainer"
-    app.kubernetes.io/component: "training-worker"
+    kueue.x-k8s.io/queue-name: "training-queue"
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: "distributed-trainer"
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: "distributed-trainer"
-        app.kubernetes.io/component: "training-worker"
-    spec:
-      hostNetwork: true
-      hostIPC: true
-      dnsPolicy: ClusterFirstWithHostNet
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: "nvidia.com/gpu.product"
-                    operator: In
-                    values:
-                      - "NVIDIA-H100-80GB-HBM3"
-                  - key: "topology.kubernetes.io/network-rail"
-                    operator: In
-                    values:
-                      - "rail-1"
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: "app.kubernetes.io/name"
-                    operator: In
-                    values:
-                      - "distributed-trainer"
-              topologyKey: "kubernetes.io/hostname"
-      containers:
-        - name: pytorch-cell
-          image: "nvcr.io/nvidia/pytorch:24.07-py3"
-          imagePullPolicy: IfNotPresent
-          command:
-            - "/bin/bash"
-            - "-c"
-            - |
-              export OMP_NUM_THREADS=8
-              export NCCL_DEBUG=INFO
-              export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
-              export NCCL_IB_DISABLE=0
-              export NCCL_IB_CUDA_SUPPORT=1
-              export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
-              export NCCL_IB_GID_INDEX=3
-              export NCCL_IB_TC=106
-              export NCCL_IB_SL=0
-              export NCCL_NET_GDR_LEVEL=5
-              
-              torchrun \
-                --nnodes=2 \
-                --nproc_per_node=8 \
-                --rdzv_id=pretrain_run_42 \
-                --rdzv_backend=c10d \
-                --rdzv_endpoint=training-coordinator.ml-training.svc.cluster.local:29500 \
-                /workspace/pretrain.py --config /configs/h100-parallel.yaml
-          securityContext:
-            capabilities:
-              add:
-                - IPC_LOCK
-                - SYS_PTRACE
-            privileged: false
-            readOnlyRootFilesystem: false
-            runAsNonRoot: false
-          volumeMounts:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: "distributed-trainer"
+            app.kubernetes.io/component: "master"
+        spec:
+          hostNetwork: true
+          hostIPC: true
+          dnsPolicy: ClusterFirstWithHostNet
+          containers:
+            - name: pytorch
+              image: "nvcr.io/nvidia/pytorch:24.07-py3"
+              imagePullPolicy: IfNotPresent
+              command:
+                - "/bin/bash"
+                - "-c"
+                - |
+                  export OMP_NUM_THREADS=8
+                  export NCCL_DEBUG=INFO
+                  export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
+                  export NCCL_IB_DISABLE=0
+                  export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+                  export NCCL_IB_GID_INDEX=3
+                  export NCCL_IB_TC=106
+                  export NCCL_IB_SL=0
+                  export NCCL_NET_GDR_LEVEL=5
+                  
+                  python3 -m torch.distributed.run \
+                    --nproc_per_node=8 \
+                    /workspace/pretrain.py --config /configs/h100-parallel.yaml
+              volumeMounts:
+                - name: dshm
+                  mountPath: "/dev/shm"
+                - name: persistent-dataset-gds
+                  mountPath: "/dataset"
+                - name: checkpoints-storage
+                  mountPath: "/checkpoints"
+              resources:
+                requests:
+                  nvidia.com/gpu: "8"
+                  rdma/hca_shared_devices: "8"
+                  cpu: "112"
+                  memory: "850Gi"
+                limits:
+                  nvidia.com/gpu: "8"
+                  rdma/hca_shared_devices: "8"
+                  cpu: "112"
+                  memory: "850Gi"
+          volumes:
             - name: dshm
-              mountPath: "/dev/shm"
+              emptyDir:
+                medium: Memory
+                sizeLimit: "256Gi"
             - name: persistent-dataset-gds
-              mountPath: "/dataset"
+              persistentVolumeClaim:
+                claimName: "weka-fs-dataset-pvc"
             - name: checkpoints-storage
-              mountPath: "/checkpoints"
-          resources:
-            requests:
-              nvidia.com/gpu: "8"
-              rdma/hca_shared_devices: "8"
-              cpu: "112"
-              memory: "850Gi"
-            limits:
-              nvidia.com/gpu: "8"
-              rdma/hca_shared_devices: "8"
-              cpu: "112"
-              memory: "850Gi"
-      volumes:
-        - name: dshm
-          emptyDir:
-            medium: Memory
-            sizeLimit: "256Gi"
-        - name: persistent-dataset-gds
-          persistentVolumeClaim:
-            claimName: "weka-fs-dataset-pvc"
-        - name: checkpoints-storage
-          persistentVolumeClaim:
-            claimName: "weka-fs-checkpoints-pvc"
+              persistentVolumeClaim:
+                claimName: "weka-fs-checkpoints-pvc"
+    Worker:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: "distributed-trainer"
+            app.kubernetes.io/component: "worker"
+        spec:
+          hostNetwork: true
+          hostIPC: true
+          dnsPolicy: ClusterFirstWithHostNet
+          containers:
+            - name: pytorch
+              image: "nvcr.io/nvidia/pytorch:24.07-py3"
+              imagePullPolicy: IfNotPresent
+              command:
+                - "/bin/bash"
+                - "-c"
+                - |
+                  export OMP_NUM_THREADS=8
+                  export NCCL_DEBUG=INFO
+                  export NCCL_DEBUG_SUBSYS=INIT,ENV,COLL
+                  export NCCL_IB_DISABLE=0
+                  export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+                  export NCCL_IB_GID_INDEX=3
+                  export NCCL_IB_TC=106
+                  export NCCL_IB_SL=0
+                  export NCCL_NET_GDR_LEVEL=5
+                  
+                  python3 -m torch.distributed.run \
+                    --nproc_per_node=8 \
+                    /workspace/pretrain.py --config /configs/h100-parallel.yaml
+              volumeMounts:
+                - name: dshm
+                  mountPath: "/dev/shm"
+                - name: persistent-dataset-gds
+                  mountPath: "/dataset"
+                - name: checkpoints-storage
+                  mountPath: "/checkpoints"
+              resources:
+                requests:
+                  nvidia.com/gpu: "8"
+                  rdma/hca_shared_devices: "8"
+                  cpu: "112"
+                  memory: "850Gi"
+                limits:
+                  nvidia.com/gpu: "8"
+                  rdma/hca_shared_devices: "8"
+                  cpu: "112"
+                  memory: "850Gi"
+          volumes:
+            - name: dshm
+              emptyDir:
+                medium: Memory
+                sizeLimit: "256Gi"
+            - name: persistent-dataset-gds
+              persistentVolumeClaim:
+                claimName: "weka-fs-dataset-pvc"
+            - name: checkpoints-storage
+              persistentVolumeClaim:
+                claimName: "weka-fs-checkpoints-pvc"
 ```
 
 ---
@@ -244,7 +273,6 @@ spec:
             - "--repository-poll-secs=30"
             - "--strict-model-config=true"
             - "--log-verbose=0"
-            - "--allow-srf=true"
           ports:
             - containerPort: 8000
               name: "http"
@@ -547,7 +575,7 @@ $ nvidia-smi --query-gpu=index,temperature.gpu,clocks.current.graphics,clocks_ev
 index, temperature.gpu, clocks.current.graphics [MHz], clocks_event_reasons.active
 0, 42, 1980 MHz, 0x0000000000000000
 1, 41, 1980 MHz, 0x0000000000000000
-2, 88, 1020 MHz, 0x000000000000000c  <-- THERMAL / HW SLOWDOWN DETECTED
+2, 88, 1020 MHz, 0x0000000000000048  <-- THERMAL / HW SLOWDOWN DETECTED (0x40 HW Thermal + 0x08 HW Slowdown)
 3, 43, 1980 MHz, 0x0000000000000000
 
 # Step 2: Check for uncorrectable ECC errors in memory
@@ -585,11 +613,11 @@ $ dmesg | grep -i peermem
 
 # Step 3: Verify NCCL debug logs in the training pod
 $ kubectl logs pod/nccl-multinode-training-worker-0 | grep -E "(NET/IB|GDR)"
-# Expected Output:
-# [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/RoCE [1]mlx5_1:1/RoCE ...
-# [0] NCCL INFO NET/IB : Using GPUDirect RDMA: Yes
-# Bad Output:
-# [0] NCCL INFO NET/IB : Using GPUDirect RDMA: No (Falling back to system memory buffer)
+# Expected Output (GPUDirect RDMA active):
+# [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/RoCE [1]mlx5_1:1/RoCE ; OSOp 0; GDR 1
+# [0] NCCL INFO NET/IB : GPU Direct RDMA Enabled for HCA [0]mlx5_0:1
+# Bad Output (Disabled / kernel module missing):
+# [0] NCCL INFO NET/IB : GPU Direct RDMA Disabled for HCA [0]mlx5_0:1 (GDR 0; fallback to host bounce buffer)
 ```
 
 ---
@@ -627,12 +655,12 @@ The following runbook table contains critical CLI utilities required to validate
 | **Fabric Manager Service** | `systemctl status nvidia-fabricmanager` | `Active: active (running)` | Mandatory on NVSwitch (SXM) architectures. If dead, training fails instantly with CUDA initialization errors. |
 | **GPUDirect Storage (GDS)** | `/usr/local/cuda/gds/tools/gdscheck -p` | `NVFS driver status: Available` | Confirms direct DMA between NVMe parallel storage and GPU memory, bypassing CPU cache during dataset loading. |
 | **PCIe Link Speed & Width** | `nvidia-smi --query-gpu=gpu_name,pcie.link.gen.current,pcie.link.width.current --format=csv` | `Gen 5, 16x` | Prevents fallback to Gen 3 or 8x lanes due to seated socket dust or motherboard bus degradation. |
-| **ECC Page Retirement Count** | `nvidia-smi --query-gpu=ecc.errors.retired.pending,ecc.errors.retired.double --format=csv` | `0, 0` | If pending retirements > 0, host must be rebooted or drained. Degraded memory triggers mid-epoch training panics. |
+| **ECC Page Retirement Count** | `nvidia-smi --query-gpu=retired_pages.pending,retired_pages.double_bit.count --format=csv` | `0, 0` | If pending retirements > 0, host must be rebooted or drained. Degraded memory triggers mid-epoch training panics. |
 | **Persistence Mode** | `nvidia-smi -pm 1` | `Enabled` | Prevents driver teardown and multi-second CUDA context reload latency between inference requests. |
 
 ---
 
-## 7. Referencias
+## 7. References
 
 - NVIDIA AI Infrastructure Reference Architecture:  
   https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
