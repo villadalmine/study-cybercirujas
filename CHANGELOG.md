@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.6](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.5...v0.6.6) (2026-11-07)
+
+
+### Features
+
+* **nca-aiio:** author 1.2 architecture requirements in English with Gemini ([#270](https://github.com/villadalmine/study-cybercirujas/issues/270)) ([#275](https://github.com/villadalmine/study-cybercirujas/issues/275)) ([ac2d7ab](https://github.com/villadalmine/study-cybercirujas/commit/ac2d7abea150c0b536c0438d7c6d4c573d219fc5))
+
 ## [0.6.5](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.4...v0.6.5) (2026-11-07)
 
 
