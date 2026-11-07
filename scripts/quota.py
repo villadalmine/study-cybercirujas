@@ -93,6 +93,18 @@ def probe(backend: str = "claude") -> tuple[int, str]:
     )
     output = (result.stdout + result.stderr).strip()
     if result.returncode == 0:
+        if backend == "gemini":
+            try:
+                data = json.loads(result.stdout.strip())
+                if isinstance(data, dict):
+                    if data.get("status") == "ERROR" or data.get("error"):
+                        err = str(data.get("error") or data.get("status"))
+                        if pipeline.is_fatal(err):
+                            return EXHAUSTED, err[:200]
+                        return BROKEN, err[:200]
+                    return AVAILABLE, (data.get("response") or "ok").splitlines()[0][:80]
+            except (json.JSONDecodeError, AttributeError):
+                pass
         return AVAILABLE, output.splitlines()[0][:80] if output else "ok"
     if pipeline.is_fatal(output):
         return EXHAUSTED, output.splitlines()[-1][:200]

@@ -475,7 +475,13 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
         # reads a piped prompt exactly like an argument one. Small prompts keep
         # the argv path with stdin closed, because agent CLIs stall waiting on
         # an open stdin that never delivers.
-        if _prompt_on_stdin(prompt, command) and command[-1] not in ("-p", "--print"):
+        if _prompt_on_stdin(prompt, command):
+            if command[-1] in ("-p", "--print"):
+                raise GeneratorConfigError(
+                    f"Prompt size ({len(prompt.encode())} bytes) exceeds the argv limit "
+                    f"for '{command[0]}', which requires the prompt as an argument. "
+                    f"Consider splitting the context or using a backend that supports stdin."
+                )
             run_command = command[:-1] if command[-1] == "--" else list(command)
             stdin_kwargs = {"input": prompt}
         else:

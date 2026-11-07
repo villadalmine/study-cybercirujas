@@ -152,13 +152,20 @@ class AgentCompleterProvenanceTest(unittest.TestCase):
                     complete("sys", "usr")
             self.assertIn("quota exhausted", str(ctx.exception))
 
+    def test_gemini_oversized_prompt_raises_generator_config_error(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            complete, _ = generator._agent_completer("gemini")
+            oversized = "x" * (generator._ARGV_LIMIT_POSIX_BYTES + 100)
+            with self.assertRaises(generator.GeneratorConfigError) as ctx:
+                complete(oversized, "")
+            self.assertIn("exceeds the argv limit for 'agy'", str(ctx.exception))
+
 
 
 class QuotaProbeCommandTest(unittest.TestCase):
     def test_probe_claude_pins_haiku_before_terminator(self):
         proc = subprocess.CompletedProcess(args=[], returncode=0, stdout="OK", stderr="")
-        with mock.patch("scripts.quota.subprocess.run" if "scripts.quota" in sys.modules else "quota.subprocess.run",
-                        return_value=proc) as run:
+        with mock.patch.object(quota.subprocess, "run", return_value=proc) as run:
             status, detail = quota.probe("claude")
         self.assertEqual(status, quota.AVAILABLE)
         self.assertEqual(detail, "OK")
@@ -170,9 +177,9 @@ class QuotaProbeCommandTest(unittest.TestCase):
         self.assertEqual(cmd[-1], quota.PROBE_PROMPT)
 
     def test_probe_gemini_pins_cheap_flash_model_before_print_flag(self):
-        proc = subprocess.CompletedProcess(args=[], returncode=0, stdout="OK", stderr="")
-        with mock.patch("scripts.quota.subprocess.run" if "scripts.quota" in sys.modules else "quota.subprocess.run",
-                        return_value=proc) as run:
+        agy_env = {"status": "SUCCESS", "response": "OK", "usage": {}}
+        proc = subprocess.CompletedProcess(args=[], returncode=0, stdout=json.dumps(agy_env), stderr="")
+        with mock.patch.object(quota.subprocess, "run", return_value=proc) as run:
             status, detail = quota.probe("gemini")
         self.assertEqual(status, quota.AVAILABLE)
         self.assertEqual(detail, "OK")
@@ -184,6 +191,14 @@ class QuotaProbeCommandTest(unittest.TestCase):
         self.assertEqual(cmd[m_idx + 1], "gemini-3.8-flash-low")
         self.assertEqual(cmd[-2], "-p")
         self.assertEqual(cmd[-1], quota.PROBE_PROMPT)
+
+    def test_probe_gemini_error_envelope_maps_to_exhausted(self):
+        err_env = {"status": "ERROR", "error": "Resource exhausted: usage limit reached"}
+        proc = subprocess.CompletedProcess(args=[], returncode=0, stdout=json.dumps(err_env), stderr="")
+        with mock.patch.object(quota.subprocess, "run", return_value=proc):
+            status, detail = quota.probe("gemini")
+        self.assertEqual(status, quota.EXHAUSTED)
+        self.assertIn("usage limit", detail)
 
 
 if __name__ == "__main__":
