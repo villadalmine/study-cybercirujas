@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.4](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.3...v0.6.4) (2026-11-07)
+
+
+### Features
+
+* **nca-aiio:** 1.1 the NVIDIA software stack in an AI environment, English, claude-opus-5-5 ([#259](https://github.com/villadalmine/study-cybercirujas/issues/259)) ([6d41496](https://github.com/villadalmine/study-cybercirujas/commit/6d414962b6a7172aecce9a59b985f1beaa4e292b))
+
+
+### Bug Fixes
+
+* **pipeline:** declare claude-opus-5-5 at default effort, set with a new `steer.py model` ([#267](https://github.com/villadalmine/study-cybercirujas/issues/267)) ([ff32760](https://github.com/villadalmine/study-cybercirujas/commit/ff32760a74e9e2136d5ea8b0e1d0e75bd2887b49))
+* **status:** STATUS.md and MODELS.md render from the tree only, the same bytes on any machine ([#266](https://github.com/villadalmine/study-cybercirujas/issues/266)) ([281e533](https://github.com/villadalmine/study-cybercirujas/commit/281e5339f9308cddb8652fc918e78dc8876366ec))
+
+
+### Internals
+
+* **release:** new content is a patch while 0.x, a breaking change the minor ([#264](https://github.com/villadalmine/study-cybercirujas/issues/264)) ([35b8ac1](https://github.com/villadalmine/study-cybercirujas/commit/35b8ac1ea391a8d7f569800e891d63b9c1431d93))
+
 ## [0.6.3](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.2...v0.6.3) (2026-10-27)
 
 
