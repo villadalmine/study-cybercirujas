@@ -1,31 +1,34 @@
 # Community 231
 
-> 7 nodes · cohesion 0.38
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **test_actions_pinned.py** (7 connections) — `tests/test_actions_pinned.py`
-- **unpinned()** (5 connections) — `tests/test_actions_pinned.py`
-- **ActionsPinnedTests** (3 connections) — `tests/test_actions_pinned.py`
-- **.test_a_tag_or_a_missing_comment_is_reported()** (2 connections) — `tests/test_actions_pinned.py`
-- **.test_every_action_is_pinned_by_sha_with_version_comment()** (2 connections) — `tests/test_actions_pinned.py`
-- **Path** (1 connections)
-- **Every third-party action in .github/ is pinned to a full commit SHA with a `#…** (1 connections) — `tests/test_actions_pinned.py`
+- **.teach()** (7 connections) — `tests/test_smoke.py`
+- **StudentCliSmokeTests** (6 connections) — `tests/test_smoke.py`
+- **Checks that must pass** (3 connections) — `CONTRIBUTING.md`
+- **.test_cert_list()** (2 connections) — `tests/test_smoke.py`
+- **.test_cert_show()** (2 connections) — `tests/test_smoke.py`
+- **.test_lab_help()** (2 connections) — `tests/test_smoke.py`
+- **Groundedness (advisory)** (1 connections) — `CONTRIBUTING.md`
+- **The CLI commands the README offers a student — no key, no model.** (1 connections) — `tests/test_smoke.py`
 
 ## Relationships
 
-- [Community 46](Community_46.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
+- [Community 131](Community_131.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_actions_pinned.py`
+- `CONTRIBUTING.md`
+- `tests/test_smoke.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (79%)
+- INFERRED: 3 (21%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,30 +1,32 @@
 # Community 250
 
-> 8 nodes · cohesion 0.36
+> 7 nodes · cohesion 0.43
 
 ## Key Concepts
 
-- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **.fetch()** (4 connections) — `tests/test_check_pr.py`
-- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
+- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
+- **main()** (6 connections) — `scripts/topic_cost.py`
+- **by_topic()** (3 connections) — `scripts/topic_cost.py`
+- **records()** (3 connections) — `scripts/topic_cost.py`
+- **dominant()** (2 connections) — `scripts/topic_cost.py`
+- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
+- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 102](Community_102.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `scripts/topic_cost.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

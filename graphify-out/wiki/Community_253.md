@@ -1,34 +1,29 @@
 # Community 253
 
-> 7 nodes · cohesion 0.29
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **milestone()** (7 connections) — `teach/core/pipeline.py`
-- **milestone_targets()** (7 connections) — `teach/core/pipeline.py`
-- **in_milestone()** (4 connections) — `teach/core/pipeline.py`
-- **What changed in the machinery this session, and why you should not undo it** (2 connections) — `docs/AGENTS_SYNC.md`
-- **Is this cert/language part of the declared goal?** (1 connections) — `teach/core/pipeline.py`
-- **The bounded goal the unattended timer is working toward, or {}. The timer used…** (1 connections) — `teach/core/pipeline.py`
-- **[(cert, [langs])] for the milestone, or None when none is declared. None and []…** (1 connections) — `teach/core/pipeline.py`
+- **From claude — 2026-08-14: where this stands, and how to resume** (7 connections) — `docs/AGENTS_SYNC.md`
+- **Decisions left to the owner, not to us** (1 connections) — `docs/AGENTS_SYNC.md`
+- **Resume in three commands** (1 connections) — `docs/AGENTS_SYNC.md`
+- **Two measurement traps that cost me real time** (1 connections) — `docs/AGENTS_SYNC.md`
+- **What is done** (1 connections) — `docs/AGENTS_SYNC.md`
+- **What is pending, in the order I would do it** (1 connections) — `docs/AGENTS_SYNC.md`
 
 ## Relationships
 
-- [Community 19](Community_19.md) (4 shared connections)
-- [Community 49](Community_49.md) (3 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
 - [Community 16](Community_16.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/AGENTS_SYNC.md`
-- `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 16 (94%)
-- INFERRED: 1 (6%)
+- EXTRACTED: 7 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

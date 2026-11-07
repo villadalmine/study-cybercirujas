@@ -1,24 +1,25 @@
 # Community 265
 
-> 2 nodes · cohesion 1.00
+> 4 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **EnterHintTests** (2 connections) — `tests/test_labs.py`
-- **.test_container_lab_names_the_shell()** (2 connections) — `tests/test_labs.py`
+- **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `docs/AGENTS_SYNC.md`
+- **Changed, do not redo** (1 connections) — `docs/AGENTS_SYNC.md`
+- **Open — pick anything** (1 connections) — `docs/AGENTS_SYNC.md`
+- **Two findings you should know about** (1 connections) — `docs/AGENTS_SYNC.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 121](Community_121.md) (1 shared connections)
+- [Community 16](Community_16.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_labs.py`
+- `docs/AGENTS_SYNC.md`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 4 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

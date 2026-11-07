@@ -1,77 +1,77 @@
 # Community 43
 
-> 73 nodes · cohesion 0.05
+> 78 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **pathlib** (115 connections)
-- **core/__init__.py** (54 connections) — `teach/core/__init__.py`
-- **unittest** (51 connections)
+- **pathlib** (118 connections)
+- **sys** (84 connections)
+- **core/__init__.py** (55 connections) — `teach/core/__init__.py`
+- **unittest** (54 connections)
 - **os** (49 connections)
-- **teach/cli.py** (34 connections) — `teach/cli.py`
-- **catalog.py** (31 connections) — `teach/core/catalog.py`
-- **test_lab_safety.py** (20 connections) — `tests/test_lab_safety.py`
+- **tempfile** (34 connections)
+- **test_curriculum_diff.py** (23 connections) — `tests/test_curriculum_diff.py`
 - **test_catalog_cache_ratelimit.py** (19 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **bot_stats.py** (17 connections) — `teach/core/bot_stats.py`
+- **test_curriculum_consistency.py** (19 connections) — `tests/test_curriculum_consistency.py`
+- **test_quality_score.py** (18 connections) — `tests/test_quality_score.py`
 - **test_model_probe.py** (17 connections) — `tests/test_model_probe.py`
 - **test_mcp_server.py** (14 connections) — `tests/test_mcp_server.py`
+- **test_audit_compare.py** (13 connections) — `tests/test_audit_compare.py`
 - **test_labs.py** (13 connections) — `tests/test_labs.py`
+- **test_tree_only_render.py** (13 connections) — `tests/test_tree_only_render.py`
+- **test_upgrade_versions.py** (13 connections) — `tests/test_upgrade_versions.py`
 - **test_bot_stats.py** (12 connections) — `tests/test_bot_stats.py`
 - **test_determinism.py** (12 connections) — `tests/test_determinism.py`
 - **test_labs_host_guard.py** (12 connections) — `tests/test_labs_host_guard.py`
+- **io** (12 connections)
+- **test_check_graph.py** (11 connections) — `tests/test_check_graph.py`
+- **test_check_labels.py** (11 connections) — `tests/test_check_labels.py`
+- **test_deploy_guide.py** (11 connections) — `tests/test_deploy_guide.py`
 - **test_milestone_sync.py** (11 connections) — `tests/test_milestone_sync.py`
 - **test_api_404_paths.py** (10 connections) — `tests/test_api_404_paths.py`
-- **test_labs_ownership.py** (10 connections) — `tests/test_labs_ownership.py`
-- **test_tracker.py** (10 connections) — `tests/test_tracker.py`
-- **test_claims.py** (9 connections) — `tests/test_claims.py`
-- **test_env_scope.py** (9 connections) — `tests/test_env_scope.py`
-- **test_stale_cycle.py** (9 connections) — `tests/test_stale_cycle.py`
-- **check_models.py** (8 connections) — `scripts/check_models.py`
-- **test_paths_lang.py** (8 connections) — `tests/test_paths_lang.py`
-- **test_prompt_transport.py** (8 connections) — `tests/test_prompt_transport.py`
-- *... and 48 more nodes in this community*
+- *... and 53 more nodes in this community*
 
 ## Relationships
 
-- [Community 61](Community_61.md) (44 shared connections)
-- [Community 89](Community_89.md) (23 shared connections)
-- [Community 0](Community_0.md) (19 shared connections)
-- [Community 50](Community_50.md) (17 shared connections)
-- [Community 127](Community_127.md) (12 shared connections)
-- [Community 10](Community_10.md) (10 shared connections)
-- [Community 150](Community_150.md) (10 shared connections)
-- [Community 7](Community_7.md) (8 shared connections)
-- [Community 107](Community_107.md) (8 shared connections)
-- [Community 232](Community_232.md) (8 shared connections)
-- [Community 102](Community_102.md) (8 shared connections)
-- [Community 121](Community_121.md) (7 shared connections)
+- [Community 61](Community_61.md) (39 shared connections)
+- [Community 127](Community_127.md) (19 shared connections)
+- [Community 124](Community_124.md) (18 shared connections)
+- [Community 70](Community_70.md) (14 shared connections)
+- [Community 6](Community_6.md) (10 shared connections)
+- [Community 5](Community_5.md) (9 shared connections)
+- [Community 12](Community_12.md) (9 shared connections)
+- [Community 10](Community_10.md) (8 shared connections)
+- [Community 30](Community_30.md) (8 shared connections)
+- [Community 89](Community_89.md) (8 shared connections)
+- [Community 19](Community_19.md) (7 shared connections)
+- [Community 62](Community_62.md) (7 shared connections)
 
 ## Source Files
 
-- `scripts/check_models.py`
+- `scripts/quality_report.py`
 - `teach/__init__.py`
-- `teach/cli.py`
 - `teach/core/__init__.py`
-- `teach/core/bot_stats.py`
-- `teach/core/catalog.py`
 - `tests/test_api_404_paths.py`
+- `tests/test_audit_compare.py`
 - `tests/test_bot_stats.py`
 - `tests/test_catalog_cache_ratelimit.py`
-- `tests/test_check_claims.py`
-- `tests/test_check_updates_doc.py`
+- `tests/test_check_docs.py`
+- `tests/test_check_graph.py`
+- `tests/test_check_labels.py`
 - `tests/test_claims.py`
+- `tests/test_curriculum_consistency.py`
+- `tests/test_curriculum_diff.py`
+- `tests/test_deploy_guide.py`
 - `tests/test_determinism.py`
 - `tests/test_docker_multiarch.py`
 - `tests/test_env_scope.py`
-- `tests/test_image_hardening.py`
-- `tests/test_issue_to_release_doc.py`
 - `tests/test_k8s_apis.py`
-- `tests/test_lab_safety.py`
 - `tests/test_labs.py`
+- `tests/test_labs_host_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 525 (100%)
+- EXTRACTED: 640 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

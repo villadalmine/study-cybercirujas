@@ -1,67 +1,58 @@
 # Community 89
 
-> 36 nodes · cohesion 0.09
+> 22 nodes · cohesion 0.14
 
 ## Key Concepts
 
 - **argparse** (84 connections)
-- **sys** (82 connections)
-- **run_cert.py** (12 connections) — `scripts/run_cert.py`
-- **run_until_complete.py** (11 connections) — `scripts/run_until_complete.py`
-- **safety.py** (10 connections) — `teach/lab/safety.py`
-- **backfill_model.py** (8 connections) — `scripts/backfill_model.py`
+- **usage_report.py** (10 connections) — `scripts/usage_report.py`
+- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
 - **fix_fences.py** (8 connections) — `scripts/fix_fences.py`
-- **check_units.py** (7 connections) — `scripts/check_units.py`
-- **manifest_rate.py** (7 connections) — `scripts/manifest_rate.py`
-- **main()** (6 connections) — `scripts/run_cert.py`
-- **main()** (6 connections) — `scripts/run_until_complete.py`
 - **gen_api_docs.py** (6 connections) — `scripts/gen_api_docs.py`
-- **evidence()** (4 connections) — `scripts/backfill_model.py`
-- **main()** (4 connections) — `scripts/backfill_model.py`
-- **main()** (4 connections) — `scripts/check_units.py`
+- **main()** (5 connections) — `scripts/usage_report.py`
 - **classify()** (4 connections) — `scripts/fix_fences.py`
-- **main()** (4 connections) — `scripts/manifest_rate.py`
+- **table()** (4 connections) — `scripts/gen_readme_table.py`
 - **main()** (3 connections) — `scripts/fix_fences.py`
 - **main()** (3 connections) — `scripts/gen_api_docs.py`
 - **table()** (3 connections) — `scripts/gen_api_docs.py`
-- **run()** (3 connections) — `scripts/run_cert.py`
-- **pending()** (3 connections) — `scripts/run_until_complete.py`
-- **main()** (2 connections) — `scripts/curriculum_diff.py`
-- **pending_topics()** (2 connections) — `scripts/run_cert.py`
-- **filecmp** (2 connections)
-- *... and 11 more nodes in this community*
+- **main()** (3 connections) — `scripts/gen_readme_table.py`
+- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
+- **rows()** (3 connections) — `scripts/usage_report.py`
+- **_money()** (2 connections) — `scripts/usage_report.py`
+- **_tokens()** (2 connections) — `scripts/usage_report.py`
+- **Retag fenced blocks whose label promises something the content is not.…** (1 connections) — `scripts/fix_fences.py`
+- **console' | 'jsonl' | None — None means leave it alone.** (1 connections) — `scripts/fix_fences.py`
+- **Regenerate the API reference inside docs/DEVELOPERS.md from the running app.…** (1 connections) — `scripts/gen_api_docs.py`
+- **Regenerate the certification table in README.md from docs/STATUS.md.…** (1 connections) — `scripts/gen_readme_table.py`
+- **The `## Certifications` table of docs/STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
+- **What the pipeline actually spent, per model and per topic. The quota is the…** (1 connections) — `scripts/usage_report.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (23 shared connections)
-- [Community 61](Community_61.md) (19 shared connections)
-- [Community 50](Community_50.md) (17 shared connections)
-- [Community 232](Community_232.md) (10 shared connections)
-- [Community 124](Community_124.md) (10 shared connections)
-- [Community 127](Community_127.md) (9 shared connections)
-- [Community 49](Community_49.md) (7 shared connections)
-- [Community 19](Community_19.md) (6 shared connections)
-- [Community 102](Community_102.md) (6 shared connections)
-- [Community 14](Community_14.md) (6 shared connections)
-- [Community 112](Community_112.md) (6 shared connections)
-- [Community 37](Community_37.md) (5 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 70](Community_70.md) (6 shared connections)
+- [Community 61](Community_61.md) (6 shared connections)
+- [Community 124](Community_124.md) (6 shared connections)
+- [Community 127](Community_127.md) (4 shared connections)
+- [Community 147](Community_147.md) (3 shared connections)
+- [Community 14](Community_14.md) (3 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 30](Community_30.md) (2 shared connections)
+- [Community 249](Community_249.md) (2 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
 
 ## Source Files
 
-- `scripts/backfill_model.py`
-- `scripts/check_units.py`
-- `scripts/curriculum_diff.py`
 - `scripts/fix_fences.py`
 - `scripts/gen_api_docs.py`
-- `scripts/manifest_rate.py`
-- `scripts/run_cert.py`
-- `scripts/run_until_complete.py`
-- `teach/lab/safety.py`
+- `scripts/gen_readme_table.py`
+- `scripts/usage_report.py`
 
 ## Audit Trail
 
-- EXTRACTED: 243 (100%)
-- INFERRED: 1 (0%)
+- EXTRACTED: 125 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

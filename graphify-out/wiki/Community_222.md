@@ -1,6 +1,6 @@
 # Community 222
 
-> 9 nodes · cohesion 0.25
+> 12 nodes · cohesion 0.18
 
 ## Key Concepts
 
@@ -8,7 +8,10 @@
 - **_sections()** (5 connections) — `scripts/curriculum_diff.py`
 - **_headings()** (4 connections) — `scripts/curriculum_diff.py`
 - **unlisted_edits()** (4 connections) — `scripts/curriculum_diff.py`
+- **Efficiency: how this update came out** (3 connections) — `docs/upgrades/README.md`
 - **minor_below()** (2 connections) — `scripts/curriculum_diff.py`
+- **Phase 2, measured (2026-10-21)** (2 connections) — `docs/upgrades/README.md`
+- **Cost: scoped edits versus full regeneration** (1 connections) — `docs/upgrades/README.md`
 - **Per line: is it a markdown heading? A `# ...` line inside a code fence is a…** (1 connections) — `scripts/curriculum_diff.py`
 - **(first line number, heading, body) per markdown section; text before the first…** (1 connections) — `scripts/curriculum_diff.py`
 - **Sections that name a changed field, and lines that name the tracked version.…** (1 connections) — `scripts/curriculum_diff.py`
@@ -20,17 +23,18 @@
 - [Community 135](Community_135.md) (2 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 - [Community 5](Community_5.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
 - [Community 214](Community_214.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/upgrades/README.md`
 - `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (95%)
-- INFERRED: 1 (5%)
+- EXTRACTED: 22 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

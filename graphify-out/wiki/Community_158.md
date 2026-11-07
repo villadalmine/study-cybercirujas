@@ -4,36 +4,32 @@
 
 ## Key Concepts
 
-- **Principles** (8 connections) — `docs/PRINCIPLES.md`
-- **7. The source chain** (6 connections) — `docs/PRINCIPLES.md`
-- **topic()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.setUp()** (2 connections) — `tests/test_upgrade_versions.py`
-- **1. Information sovereignty** (1 connections) — `docs/PRINCIPLES.md`
-- **2. Curriculum-as-Code** (1 connections) — `docs/PRINCIPLES.md`
-- **3. Determinism** (1 connections) — `docs/PRINCIPLES.md`
-- **4. With AI or without AI: the same pipeline and the same validator** (1 connections) — `docs/PRINCIPLES.md`
-- **5. Honest about limits** (1 connections) — `docs/PRINCIPLES.md`
-- **6. Open by default** (1 connections) — `docs/PRINCIPLES.md`
+- **parse_layout()** (7 connections) — `scripts/curriculum_diff.py`
+- **tidy()** (6 connections) — `scripts/curriculum_diff.py`
+- **join()** (4 connections) — `scripts/curriculum_diff.py`
+- **_right_start()** (4 connections) — `scripts/curriculum_diff.py`
+- **_is_marker()** (2 connections) — `scripts/curriculum_diff.py`
+- **_segments()** (2 connections) — `scripts/curriculum_diff.py`
+- **The first column of the right-hand column, or None if the page has one column.** (1 connections) — `scripts/curriculum_diff.py`
+- **Domains with their weight and objectives, from `pdftotext -layout` output.** (1 connections) — `scripts/curriculum_diff.py`
+- **Display text: NFKC (the PDF's `ﬁ` ligature becomes `fi`) and single spaces.** (1 connections) — `scripts/curriculum_diff.py`
+- **Append a continuation line, undoing the PDF's line-end hyphenation.** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 218](Community_218.md) (1 shared connections)
-- [Community 248](Community_248.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
+- [Community 57](Community_57.md) (7 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 219](Community_219.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/PRINCIPLES.md`
-- `tests/test_upgrade_versions.py`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (62%)
-- INFERRED: 6 (38%)
+- EXTRACTED: 20 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

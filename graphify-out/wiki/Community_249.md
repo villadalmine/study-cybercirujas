@@ -1,33 +1,33 @@
 # Community 249
 
-> 8 nodes · cohesion 0.36
+> 7 nodes · cohesion 0.43
 
 ## Key Concepts
 
-- **check_claims.py** (11 connections) — `scripts/check_claims.py`
-- **main()** (6 connections) — `scripts/check_claims.py`
-- **ask()** (4 connections) — `scripts/check_claims.py`
-- **references()** (3 connections) — `scripts/check_claims.py`
-- **random** (2 connections)
-- **Does the cited page actually SAY what the material claims it says?…** (1 connections) — `scripts/check_claims.py`
-- **(label, url) from the references section only. URLs in the body are examples…** (1 connections) — `scripts/check_claims.py`
-- **Fetch and judge. Deliberately a separate process per claim: one failure should…** (1 connections) — `scripts/check_claims.py`
+- **check_api_facts.py** (12 connections) — `scripts/check_api_facts.py`
+- **main()** (4 connections) — `scripts/check_api_facts.py`
+- **spec_kinds()** (4 connections) — `scripts/check_api_facts.py`
+- **tracked_versions()** (4 connections) — `scripts/check_api_facts.py`
+- **check()** (3 connections) — `scripts/check_api_facts.py`
+- **Do the manifests use apiVersion/kind pairs that exist in the tracked release?…** (1 connections) — `scripts/check_api_facts.py`
+- **{(apiVersion, kind)} served by that release, from the published spec.** (1 connections) — `scripts/check_api_facts.py`
 
 ## Relationships
 
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 - [Community 127](Community_127.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_claims.py`
+- `scripts/check_api_facts.py`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 20 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

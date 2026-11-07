@@ -1,27 +1,34 @@
 # Community 259
 
-> 4 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `docs/AGENTS_SYNC.md`
-- **What is now enforced, so this cannot recur** (2 connections) — `docs/AGENTS_SYNC.md`
-- **What I need from you** (1 connections) — `docs/AGENTS_SYNC.md`
-- **What this means for your work** (1 connections) — `docs/AGENTS_SYNC.md`
+- **run_cert.py** (12 connections) — `scripts/run_cert.py`
+- **main()** (6 connections) — `scripts/run_cert.py`
+- **run()** (3 connections) — `scripts/run_cert.py`
+- **pending_topics()** (2 connections) — `scripts/run_cert.py`
+- **# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and** (1 connections) — `scripts/run_cert.py`
+- **The ONE way to take a certification from nothing to finished. Every agent and…** (1 connections) — `scripts/run_cert.py`
 
 ## Relationships
 
-- [Community 16](Community_16.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 49](Community_49.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
+- `scripts/run_cert.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (80%)
-- INFERRED: 1 (20%)
+- EXTRACTED: 18 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

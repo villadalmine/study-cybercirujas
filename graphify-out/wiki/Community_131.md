@@ -1,42 +1,34 @@
 # Community 131
 
-> 16 nodes · cohesion 0.19
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **audit_compare.py** (16 connections) — `scripts/audit_compare.py`
-- **compare()** (7 connections) — `scripts/audit_compare.py`
-- **load_results()** (5 connections) — `scripts/audit_compare.py`
-- **main()** (5 connections) — `scripts/audit_compare.py`
-- **DuplicateAuditor** (4 connections) — `scripts/audit_compare.py`
-- **has_proposal()** (4 connections) — `scripts/audit_compare.py`
-- **valid_score()** (4 connections) — `scripts/audit_compare.py`
-- **criterion_ids()** (2 connections) — `scripts/audit_compare.py`
-- **priority()** (2 connections) — `scripts/audit_compare.py`
-- **Path** (1 connections)
-- **ValueError** (1 connections)
-- **Compare the outputs of several auditors against docs/audit/rubric.yml. Prints a…** (1 connections) — `scripts/audit_compare.py`
-- **A proposal counts only if it says what to change, what it implies and how to…** (1 connections) — `scripts/audit_compare.py`
-- **Two result files share the same auditor and commit.** (1 connections) — `scripts/audit_compare.py`
-- **The score of a criterion, or None if it is missing, not 0/1/2, or has no…** (1 connections) — `scripts/audit_compare.py`
-- **Return (report, disagreements, refused).** (1 connections) — `scripts/audit_compare.py`
+- **Using it, in detail** (7 connections) — `docs/USING.md`
+- **Study offline, sovereign** (4 connections) — `docs/USING.md`
+- **Command line** (2 connections) — `docs/USING.md`
+- **Practice: break-and-fix labs** (2 connections) — `docs/USING.md`
+- **Ask questions about the material with a local model (RAG)** (1 connections) — `docs/USING.md`
+- **REST API** (1 connections) — `docs/USING.md`
+- **The study bot on the site (not sovereign — your own key)** (1 connections) — `docs/USING.md`
+- **Use it from your own AI agent (MCP)** (1 connections) — `docs/USING.md`
+- **Use it in 2 minutes** (1 connections) — `docs/USING.md`
+- **What you get** (1 connections) — `docs/USING.md`
 
 ## Relationships
 
-- [Community 232](Community_232.md) (3 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 30](Community_30.md) (2 shared connections)
-- [Community 150](Community_150.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 231](Community_231.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/audit_compare.py`
+- `docs/USING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 10 (83%)
+- INFERRED: 2 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

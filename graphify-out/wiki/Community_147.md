@@ -1,45 +1,41 @@
 # Community 147
 
-> 11 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **check_config.py** (14 connections) — `scripts/check_config.py`
 - **collections** (13 connections)
-- **ratelimit.py** (10 connections) — `teach/core/ratelimit.py`
-- **quality_report.py** (8 connections) — `scripts/quality_report.py`
-- **main()** (6 connections) — `scripts/check_config.py`
-- **recent()** (3 connections) — `scripts/check_config.py`
-- **dominant()** (2 connections) — `scripts/check_config.py`
-- **_int_env()** (2 connections) — `teach/core/ratelimit.py`
-- **Is the pipeline running on what it says it runs on? `pipeline.yaml` declares…** (1 connections) — `scripts/check_config.py`
-- **Per-certification quality report. Generates nothing and spends no budget.…** (1 connections) — `scripts/quality_report.py`
-- **A small in-process rate limiter for the public API (sliding window, per…** (1 connections) — `teach/core/ratelimit.py`
+- **window_budget.py** (12 connections) — `scripts/window_budget.py`
+- **main()** (6 connections) — `scripts/window_budget.py`
+- **_load()** (4 connections) — `scripts/window_budget.py`
+- **_kind()** (3 connections) — `scripts/window_budget.py`
+- **_week()** (2 connections) — `scripts/window_budget.py`
+- **Path** (1 connections)
+- **How much quota is left this week, in the unit that actually runs out. The…** (1 connections) — `scripts/window_budget.py`
+- **What the API actually said the limit was: spend | weekly | "". Read from the…** (1 connections) — `scripts/window_budget.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 89](Community_89.md) (4 shared connections)
-- [Community 50](Community_50.md) (4 shared connections)
-- [Community 160](Community_160.md) (3 shared connections)
-- [Community 215](Community_215.md) (3 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 12](Community_12.md) (2 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
+- [Community 112](Community_112.md) (3 shared connections)
+- [Community 89](Community_89.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [Community 102](Community_102.md) (2 shared connections)
-- [Community 112](Community_112.md) (2 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 124](Community_124.md) (2 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
+- [Community 160](Community_160.md) (1 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
+- [Community 250](Community_250.md) (1 shared connections)
+- [Community 215](Community_215.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_config.py`
-- `scripts/quality_report.py`
-- `teach/core/ratelimit.py`
+- `scripts/window_budget.py`
 
 ## Audit Trail
 
-- EXTRACTED: 49 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

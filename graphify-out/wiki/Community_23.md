@@ -1,6 +1,6 @@
 # Community 23
 
-> 18 nodes · cohesion 0.28
+> 18 nodes · cohesion 0.29
 
 ## Key Concepts
 
@@ -9,9 +9,9 @@
 - **HOW-IT-WORKS.md** (14 connections) — `docs/HOW-IT-WORKS.md`
 - **AGENTS.md** (13 connections) — `AGENTS.md`
 - **PRINCIPLES.md** (11 connections) — `docs/PRINCIPLES.md`
-- **CHARTER.md** (9 connections) — `docs/CHARTER.md`
+- **CHARTER.md** (10 connections) — `docs/CHARTER.md`
+- **GUARDRAILS.md** (9 connections) — `docs/GUARDRAILS.md`
 - **ISSUE-TO-RELEASE.md** (8 connections) — `docs/ISSUE-TO-RELEASE.md`
-- **GUARDRAILS.md** (8 connections) — `docs/GUARDRAILS.md`
 - **GOVERNANCE.md** (6 connections) — `docs/GOVERNANCE.md`
 - **RUN-A-LAB-ANYWHERE.md** (6 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **audit/README.md** (5 connections) — `docs/audit/README.md`
@@ -36,7 +36,7 @@
 - [Community 54](Community_54.md) (1 shared connections)
 - [Community 230](Community_230.md) (1 shared connections)
 - [Community 188](Community_188.md) (1 shared connections)
-- [Community 158](Community_158.md) (1 shared connections)
+- [Community 218](Community_218.md) (1 shared connections)
 
 ## Source Files
 
@@ -58,7 +58,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 94 (100%)
+- EXTRACTED: 95 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
