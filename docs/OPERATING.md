@@ -48,6 +48,7 @@ scripts/steer.py own kcsa claude            # who takes it by default
 scripts/steer.py languages kcsa en es pt    # which languages it must have
 scripts/steer.py video kcsa en es           # which videos to render
 scripts/steer.py budget 3                   # topics per run
+scripts/steer.py model claude-opus-5-5 --effort default  # who authors, how hard
 scripts/steer.py milestone kcsa en es       # what the timer works toward
 scripts/steer.py milestone --clear          # timer idles
 ```
@@ -133,9 +134,12 @@ reproduced, compared or rolled back. `scripts/check_provenance.py` enforces it.
 
 ```yaml
 generation:
-  model: claude-opus-5
-  effort: xhigh
+  model: claude-opus-5-5
+  effort: default
 ```
+
+Change it with `scripts/steer.py model <full-id> --effort <level>`, never by editing the file:
+it refuses aliases and `[1m]` variants and keeps the comments that record why.
 
 Every path reads it — the timer, `make milestone`, `make cert`, a command typed
 by hand — so none of them can quietly use something else. `TEACH_CLAUDE_MODEL`

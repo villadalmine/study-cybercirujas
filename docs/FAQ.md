@@ -89,7 +89,7 @@ sources, groundedness, review), not enforced at write time. See [Known gaps](#kn
 
 **Which models and backends?**
 `pipeline.yaml → generation` pins the authoring model by full id
-(`claude-opus-5`, effort `xhigh`) for every path: timer, `make next`, a
+(`claude-opus-5-5`, effort `default`; set with `scripts/steer.py model`) for every path: timer, `make next`, a
 hand-typed command ([`generator.py:425-447`](../teach/core/generator.py#L425-L447)).
 Backends: the `claude` CLI (tools disabled, JSON envelope), LiteLLM / any
 OpenAI-compatible API such as OpenRouter, `codex`, `gemini`, or a `custom`
