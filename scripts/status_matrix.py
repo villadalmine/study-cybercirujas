@@ -125,6 +125,20 @@ def refresh() -> bool:
     return STATUS.read_text(encoding="utf-8") != before
 
 
+def _tracked_media() -> set[str]:
+    """Paths under media/ that git tracks. media/**/*.mp4 is gitignored, so a
+    video rendered on one machine must not make the committed dashboard differ
+    from what CI renders (#261): the committed file counts a video by its tracked
+    thumbnail.png, written only after _concat succeeds (teach/core/video.py:720)."""
+    import subprocess
+    try:
+        out = subprocess.run(["git", "ls-files", "-z", "media"], cwd=REPO,
+                             capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return set()
+    return {p for p in out.split("\0") if p}
+
+
 def check() -> list[str]:
     """[] if docs/STATUS.md matches the filesystem; the differing lines otherwise.
 
@@ -252,6 +266,7 @@ def _render() -> str:
 
     lines += _quality_section(catalog)
 
+    tracked = _tracked_media()
     lines += ["", "## Path Videos", "",
               "| Path | " + " | ".join(l.upper() for l in VIDEO_LANGS) + " |",
               "|---|" + "---|" * len(VIDEO_LANGS)]
@@ -260,8 +275,8 @@ def _render() -> str:
             continue  # achievements/info do not have video
         row = [f"`{slug}`"]
         for lang in VIDEO_LANGS:
-            video = REPO / "media" / "paths" / slug / lang / "video.mp4"
-            row.append("✅" if video.exists() else "❌")
+            video = f"media/paths/{slug}/{lang}/thumbnail.png"
+            row.append("✅" if video in tracked else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
     lines += ["", "## Certification Videos", "",
@@ -276,8 +291,8 @@ def _render() -> str:
             if lang not in declared:
                 row.append("–")
                 continue
-            rendered = REPO / "media" / "certs" / cert_id / lang / "video.mp4"
-            row.append("✅" if rendered.exists() else "❌")
+            rendered = f"media/certs/{cert_id}/{lang}/thumbnail.png"
+            row.append("✅" if rendered in tracked else "❌")
         lines.append("| " + " | ".join(row) + " |")
 
     lines += _spend_section()

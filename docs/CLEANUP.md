@@ -216,7 +216,7 @@ Only delete after deciding they will never be salvaged.
 
 | File | Delete? |
 |---|---|
-| `usage.jsonl` | **No.** Every spend figure, model comparison and forecast is derived from it. Deleting it makes `make metrics`, `docs/MODELS.md` and `topic_cost.py` lie by omission |
+| `usage.jsonl` | **No.** Every spend figure, token-based model comparison and forecast is derived from it. Deleting it makes `make metrics`, `scripts/model_comparison.py` (console) and `topic_cost.py` lie by omission |
 | `quota-history.jsonl` | **No.** Same: window measurements come from here |
 | `resume.log`, `milestone.log` | Yes, once read — they are append-only narration |
 | `claims/` | Only while nothing is generating (`claims.active()` empty). Claims die with their process anyway |
