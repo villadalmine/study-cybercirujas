@@ -121,7 +121,7 @@ scripts/run_batch.py kcsa --lang en --anyway   # override deliberately
   Requires `LITELLM_BASE_URL`, `LITELLM_API_KEY`, `LITELLM_MODEL`.
 - `claude` — local Claude Code CLI (`claude -p`).
 - `codex` — local OpenAI Codex CLI (`codex exec`).
-- `gemini` — local Gemini CLI (`gemini -p`).
+- `gemini` — local Antigravity Gemini CLI (`agy --mode plan --disable-slash-commands --output-format json -p`, pinned to `gemini-4-argon-high` or `TEACH_GEMINI_MODEL`).
 - `custom` — your command in `TEACH_AGENT_CMD` (receives the prompt as its last argument).
 
 **Any backend may author; none may author untraceably.** Which provider you use

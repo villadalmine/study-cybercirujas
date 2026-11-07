@@ -59,11 +59,16 @@ AVAILABLE, EXHAUSTED, BROKEN = 0, 1, 2
 # project context whatever it is asked. At one probe every 20 minutes that is
 # real money spent to learn nothing but "yes" or "no".
 PROBE_MODEL = "haiku"
+PROBE_MODELS = {
+    "claude": "haiku",
+    "gemini": "gemini-3.8-flash-low",
+}
 
 
 def probe(backend: str = "claude") -> tuple[int, str]:
     """Returns (exit-style status, detail). Cheap by construction: the prompt
-    asks for two characters, and on `claude` it is pinned to the cheapest model.
+    asks for two characters, and on `claude` and `gemini` it is pinned to the
+    cheapest probe model.
 
     The teach imports are local to this function so that `--history`, which only
     reads a file, keeps working even where the package is unavailable.
@@ -77,7 +82,10 @@ def probe(backend: str = "claude") -> tuple[int, str]:
 
     if backend == "claude":
         # Insert before the `--` terminator, which must stay last.
-        command = [*command[:-1], "--model", PROBE_MODEL, command[-1]]
+        command = [*command[:-1], "--model", PROBE_MODELS["claude"], command[-1]]
+    elif backend == "gemini":
+        # Insert before `-p`, which consumes the prompt as the next argument.
+        command = [*command[:-1], "--model", PROBE_MODELS["gemini"], command[-1]]
 
     result = subprocess.run(
         [*command, PROBE_PROMPT],
@@ -85,6 +93,18 @@ def probe(backend: str = "claude") -> tuple[int, str]:
     )
     output = (result.stdout + result.stderr).strip()
     if result.returncode == 0:
+        if backend == "gemini":
+            try:
+                data = json.loads(result.stdout.strip())
+                if isinstance(data, dict):
+                    if data.get("status") == "ERROR" or data.get("error"):
+                        err = str(data.get("error") or data.get("status"))
+                        if pipeline.is_fatal(err):
+                            return EXHAUSTED, err[:200]
+                        return BROKEN, err[:200]
+                    return AVAILABLE, (data.get("response") or "ok").splitlines()[0][:80]
+            except (json.JSONDecodeError, AttributeError):
+                pass
         return AVAILABLE, output.splitlines()[0][:80] if output else "ok"
     if pipeline.is_fatal(output):
         return EXHAUSTED, output.splitlines()[-1][:200]

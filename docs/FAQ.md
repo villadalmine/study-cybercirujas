@@ -90,9 +90,11 @@ sources, groundedness, review), not enforced at write time. See [Known gaps](#kn
 **Which models and backends?**
 `pipeline.yaml → generation` pins the authoring model by full id
 (`claude-opus-5-5`, effort `default`; set with `scripts/steer.py model`) for every path: timer, `make next`, a
-hand-typed command ([`generator.py:425-447`](../teach/core/generator.py#L425-L447)).
-Backends: the `claude` CLI (tools disabled, JSON envelope), LiteLLM / any
-OpenAI-compatible API such as OpenRouter, `codex`, `gemini`, or a `custom`
+hand-typed command ([`generator.py:425-455`](../teach/core/generator.py#L425-L455)).
+Backends: the `claude` CLI (tools disabled, JSON envelope), `gemini` (`agy` in
+read-only plan mode, JSON envelope, pinned to `gemini-4-argon-high` unless
+`TEACH_GEMINI_MODEL` overrides it), LiteLLM / any OpenAI-compatible API such as
+OpenRouter, `codex`, or a `custom`
 command ([OPERATING → Generation backends](OPERATING.md#generation-backends)).
 Translation may use a cheaper model, which was measured safe because its
 failures are mechanical ([TRANSLATION_STUDY.md](TRANSLATION_STUDY.md)).

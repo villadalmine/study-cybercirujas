@@ -65,10 +65,11 @@ class GeneratorConfigError(Exception):
 _CLAUDE_NO_TOOLS = "*"
 
 # `--output-format json` is what makes spend measurable. The plain text mode
-# answers and tells you nothing; the JSON envelope carries `result` (the answer)
-# plus `usage`, `modelUsage` and `total_cost_usd`, so every completion can be
-# attributed to a model and a token count instead of being guessed at from the
-# wall clock. Only the claude CLI has it — the others stay plain text.
+# answers and tells you nothing; the JSON envelope carries `result` (or `response`
+# on `agy`) plus token usage, so every completion can be attributed to a model
+# and a token count instead of being guessed at from the wall clock.
+DEFAULT_GEMINI_MODEL = "gemini-4-argon-high"
+
 AGENT_COMMANDS = {
     # `--model` and `--effort` are appended below from pipeline.yaml `generation`
     # (or the matching env var). Neither is hardcoded here: what authors is a
@@ -76,7 +77,7 @@ AGENT_COMMANDS = {
     "claude": ["claude", "-p", "--output-format", "json",
                "--disallowedTools", _CLAUDE_NO_TOOLS, "--"],
     "codex": ["codex", "exec"],
-    "gemini": ["agy", "-p"],
+    "gemini": ["agy", "--mode", "plan", "--disable-slash-commands", "--output-format", "json", "-p"],
 }
 
 # Where a prompt stops fitting on the command line. Linux caps ONE argv element
@@ -422,8 +423,17 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
     # produced untraceable content: two CAPA video scripts came out on opus-5
     # while everything else was opus-4-8, because a hand-typed command had no
     # TEACH_CLAUDE_MODEL and nothing else declared one.
-    pinned = os.environ.get("TEACH_CLAUDE_MODEL") or pipeline.generation().get("model")
-    if pinned and backend == "claude" and "--model" not in command:
+    if backend == "claude":
+        pinned = os.environ.get("TEACH_CLAUDE_MODEL") or pipeline.generation().get("model")
+    elif backend == "gemini":
+        pinned = (os.environ.get("TEACH_GEMINI_MODEL")
+                  or pipeline.generation().get("gemini_model")
+                  or DEFAULT_GEMINI_MODEL)
+    elif "--model" in command and command.index("--model") + 1 < len(command):
+        pinned = command[command.index("--model") + 1]
+    else:
+        pinned = None
+    if pinned and backend in ("claude", "gemini") and "--model" not in command:
         command = [*command[:-1], "--model", pinned, command[-1]]
 
     # Same argument, for thinking level. It was never set, so the whole corpus so
@@ -466,6 +476,12 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
         # the argv path with stdin closed, because agent CLIs stall waiting on
         # an open stdin that never delivers.
         if _prompt_on_stdin(prompt, command):
+            if command[-1] in ("-p", "--print"):
+                raise GeneratorConfigError(
+                    f"Prompt size ({len(prompt.encode())} bytes) exceeds the argv limit "
+                    f"for '{command[0]}', which requires the prompt as an argument. "
+                    f"Consider splitting the context or using a backend that supports stdin."
+                )
             run_command = command[:-1] if command[-1] == "--" else list(command)
             stdin_kwargs = {"input": prompt}
         else:
@@ -513,9 +529,33 @@ def _agent_completer(backend: str, effort: str | None = None) -> tuple[Completer
         # Losing a measurement is cheap; losing a completion costs a quota window.
         try:
             envelope = json.loads(output)
-            answer = envelope.get("result")
         except (json.JSONDecodeError, AttributeError):
             return output
+        if not isinstance(envelope, dict):
+            return output
+        if backend == "gemini":
+            if envelope.get("status") == "ERROR" or envelope.get("error"):
+                raise GeneratorConfigError(
+                    f"'{command[0]}' reported an error: {envelope.get('error') or output}"
+                )
+            answer = envelope.get("response")
+            if not isinstance(answer, str):
+                return output
+            split = _split_answer(envelope)
+            if split:
+                raise GeneratorConfigError(split)
+            usage = envelope.get("usage") or {}
+            duration_s = envelope.get("duration_seconds")
+            _record_plain_usage(
+                "gemini", meta.get("model"),
+                input_tokens=usage.get("input_tokens"),
+                output_tokens=usage.get("output_tokens"),
+                output_chars=len(answer),
+                duration_ms=(int(duration_s * 1000) if isinstance(duration_s, (int, float))
+                             else int((time.monotonic() - started) * 1000)),
+            )
+            return answer.strip()
+        answer = envelope.get("result")
         if not isinstance(answer, str):
             return output
         _record_usage(envelope)
