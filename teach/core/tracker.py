@@ -883,6 +883,9 @@ def _drop_running_heads(pages: list[list[tuple[str, str, str]]]) -> list[tuple[s
             if page and key(page[position]):
                 seen[key(page[position])] = seen.get(key(page[position]), 0) + 1
         repeated |= {k for k, n in seen.items() if n > 1}
+    # A reading heading repeated at the top of two pages is a list continuing,
+    # not a running head: dropping it would never open the list.
+    repeated = {k for k in repeated if not _opens_reading_list(k)}
     return [item for page in pages for item in page if key(item) not in repeated]
 
 
@@ -921,7 +924,10 @@ def _name_pattern(name: str) -> re.Pattern:
     domain-1 list was filed under whatever domain came before it."""
     words = []
     for word in name.split():
-        stem = word[:-1] if word.lower().endswith("s") and not word.lower().endswith("ss") else word
+        # Only a letter before the s makes it a plural: "Cloud's" keeps its
+        # apostrophe-s, or the name stops matching itself (gcp-gail).
+        plural = len(word) > 2 and word[-1] in "sS" and word[-2].isalpha() and word[-2] not in "sS"
+        stem = word[:-1] if plural else word
         words.append(re.escape(stem) + ("s?" if stem[-1:].isalpha() else ""))
     return re.compile(r"(?<!\w)" + r"\s+".join(words) + r"(?!\w)", re.I)
 
@@ -983,7 +989,7 @@ def readings_by_domain(stream: list[tuple[str, str, str]], topics: list[dict]) -
     domain, open_, gap = None, False, 0
     for kind, value, title in stream:
         if kind == "link":
-            if open_ and domain and not CALL_TO_ACTION.match(title):
+            if open_ and domain and not CALL_TO_ACTION.search(title):
                 if all(r["url"] != value for r in found.setdefault(domain, [])):
                     found[domain].append({"title": title, "url": value})
                 gap = 0

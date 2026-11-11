@@ -357,6 +357,17 @@ class ReadingsTests(unittest.TestCase):
                  [("text", "x", ""), ("text", "Guide | 3", ""), ("text", "(c) notice", "")]]
         self.assertEqual([v for _, v, _ in tracker._drop_running_heads(pages)], ["a", "b", "x", "(c) notice"])
 
+    def test_a_possessive_domain_name_still_matches_itself(self):
+        topics = [{"id": "3.1", "topic": "3 - Google Cloud's gen AI offerings"}]
+        self.assertEqual(tracker._domain_of("Google Cloud's gen AI offerings", tracker._domain_markers(topics)),
+                         "3 - Google Cloud's gen AI offerings")
+
+    def test_a_reading_heading_heading_two_pages_is_not_a_running_head(self):
+        pages = [[("text", "Suggested Readings", ""), ("text", "a", "")],
+                 [("text", "Suggested Readings", ""), ("text", "b", "")]]
+        self.assertEqual([v for _, v, _ in tracker._drop_running_heads(pages)],
+                         ["Suggested Readings", "a", "Suggested Readings", "b"])
+
     def test_a_bare_domain_number_is_not_a_marker(self):
         # LFCS numbers its domains 1 to 5; a lone digit is every page number.
         topics = [{"id": "1", "topic": "1 - Operations"}, {"id": "2", "topic": "2 - Networking"}]
@@ -365,6 +376,7 @@ class ReadingsTests(unittest.TestCase):
     def test_registering_for_the_exam_is_not_a_reading(self):
         self.assertTrue(tracker.CALL_TO_ACTION.search("Register for NCA-GENL Exam"))
         self.assertTrue(tracker.CALL_TO_ACTION.search("Contact us here."))
+        self.assertTrue(tracker.CALL_TO_ACTION.search("Questions? Contact us here."))
         self.assertFalse(tracker.CALL_TO_ACTION.search("NVIDIA DCGM, NVIDIA Developer"))
 
     def test_same_reading_needs_a_long_shared_prefix(self):
