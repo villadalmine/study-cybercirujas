@@ -61,8 +61,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 
 | Cert | Built on | Snapshot | Upstream | Upstream changed | Checked | State |
 |---|---|---|---|---|---|---|
-| `ai-901` | 2026-04-15 | 2026-09-06 | unknown | – | 2026-09-06 | – unknown |
-| `aws-aif` | 1.4 | 2026-09-06 | unknown | – | 2026-09-06 | – unknown |
+| `ai-901` | 2026-04-15 | 2026-09-06 | unknown | – | 2026-11-11 | – unknown |
+| `aws-aif` | 1.4 | 2026-09-06 | unknown | – | 2026-11-11 | – unknown |
 | `aws-clf` | 1.0 | 2026-09-03 | 1.0 | – | 2026-09-04 | ✅ current |
 | `az-900` | 2026-07-20 | 2026-09-03 | AZ-900 | 2026-06-22 | 2026-09-04 | ✅ current |
 | `capa` | unknown | 2026-08-12 | 2024-10-21 | 2025-11-28 | 2026-09-03 | ✅ current |
@@ -76,7 +76,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `cnpa` | 2025-04-01 | 2026-07-30 | 2025-04-01 | 2025-04-01 | 2026-09-03 | ✅ current |
 | `cnpe` | unknown | 2026-07-30 | 2025-12-03 | 2025-12-03 | 2026-09-03 | ✅ current |
 | `gcp-cdl` | 2026-08-12 | 2026-09-03 | unknown | 2026-08-12 | 2026-09-04 | ✅ current |
-| `gcp-gail` | unknown | 2026-09-06 | unknown | – | 2026-09-06 | – unknown |
+| `gcp-gail` | unknown | 2026-09-06 | unknown | – | 2026-11-11 | – unknown |
 | `ica` | unknown | 2026-08-08 | 2025-08-12 | 2025-08-12 | 2026-09-03 | ✅ current |
 | `kca` | unknown | 2026-08-12 | 2024-11-28 | 2024-11-28 | 2026-09-03 | ✅ current |
 | `kcna` | unknown | 2026-07-17 | 2025-11-24 | 2025-11-24 | 2026-09-03 | ✅ current |
@@ -95,10 +95,10 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpic-3-303` | 3.0.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-305` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-306` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
-| `mcpa` | 2026-07-28 | 2026-09-17 | MCP 2026-07-28 | 2026-07-28 | 2026-09-17 | ✅ current |
-| `nca-aiio` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
-| `nca-genl` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
-| `ncp-aii` | unknown | 2026-09-09 | unknown | – | 2026-09-09 | – unknown |
+| `mcpa` | 2026-07-28 | 2026-09-17 | MCP 2026-07-28 | 2026-07-28 | 2026-11-11 | ✅ current |
+| `nca-aiio` | unknown | 2026-09-09 | unknown | – | 2026-11-11 | – unknown |
+| `nca-genl` | unknown | 2026-09-09 | unknown | – | 2026-11-11 | – unknown |
+| `ncp-aii` | unknown | 2026-09-09 | unknown | – | 2026-11-11 | – unknown |
 | `otca` | unknown | 2026-08-08 | 2024-11-28 | 2024-11-28 | 2026-09-03 | ✅ current |
 | `pca` | unknown | 2026-08-08 | 2022-08-31 | 2022-08-31 | 2026-09-03 | ✅ current |
 | `terraform-advanced` | Terraform 1.6 | 2026-09-29 | Terraform 1.6 | – | 2026-09-29 | – unknown |

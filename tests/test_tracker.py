@@ -462,7 +462,93 @@ class AttachReadingsTests(unittest.TestCase):
         self.assertEqual((result["domains"], saved), ({}, []))
 
 
+class SyncAiTests(unittest.TestCase):
+    """`teach tracker sync --provider ai` (#271): drift by hash, level and validity by the page."""
 
+    GUIDE = make_pdf([[(700, "1.1 Describe the NVIDIA software stack.", None)]])
+    GUIDE_V2 = make_pdf([[(700, "1.1 Describe the NVIDIA software stack and more.", None)]])
+
+    def run_sync(self, cert: dict, answer: dict | None = None, frozen: str | None = None,
+                 body: bytes | None = None, url: str = "https://v.example/g.pdf", kind: str = "application/pdf"):
+        """One sync over a catalog holding `cert`; the same dict is updated, so calls chain like runs."""
+        import frontmatter
+        cert.setdefault("category", "ai")
+        cert.setdefault("sources", {"objectives": url, "overview": "https://v.example/page"})
+        data = {"certs": {"nca-aiio": cert, "cka": {"category": "cloud-native"}}}
+        post = frontmatter.Post("", **({"source_sha256": frozen} if frozen else {}))
+        with mock.patch.object(tracker.catalog, "load", return_value=data), \
+                mock.patch.object(tracker.catalog, "save"), \
+                mock.patch.object(tracker.certs, "load", return_value=post), \
+                mock.patch.object(tracker.certs, "md_path", return_value=Path(__file__)), \
+                mock.patch.object(tracker, "_get_bytes", return_value=(body or self.GUIDE, kind)), \
+                mock.patch.object(tracker, "fetch_text", return_value="Certification level: Associate"), \
+                mock.patch.object(tracker, "_ai_yaml", return_value=answer or {}) as ai:
+            changes = tracker.sync_ai()
+        self.assertEqual(ai.call_count, 1)                              # the cka entry is not read
+        return cert, changes
+
+    def test_reads_level_and_validity_without_rewording_an_agreeing_validity(self):
+        cert, changes = self.run_sync({"level": "essentials", "validity": "2 años"},
+                                      {"level": "Associate", "validity_years": 2})
+        self.assertEqual((cert["level"], cert["validity"]), ("associate", "2 años"))
+        self.assertIn("nca-aiio: level essentials -> associate", changes)
+
+    def test_an_experience_level_is_not_a_tier(self):
+        # MCPA prints "Experience Level: Beginner"; the certification is an Associate.
+        cert, _ = self.run_sync({"level": "associate"}, {"level": "beginner"})
+        self.assertEqual(cert["level"], "associate")
+
+    def test_unknown_changes_nothing(self):
+        cert, _ = self.run_sync({"level": "essentials", "validity": "2 años"},
+                                {"level": "unknown", "validity_years": "unknown"})
+        self.assertEqual((cert["level"], cert["validity"]), ("essentials", "2 años"))
+
+    def test_baseline_then_same_then_changed_then_back(self):
+        # All seven AI syllabi predate source_sha256, so this is the path they take.
+        cert = {"tracked_version": "unknown", "upstream_status": "current"}
+        _, changes = self.run_sync(cert)
+        self.assertIn("baseline recorded", " ".join(changes))
+        self.assertEqual(cert["upstream_status"], "current")             # a baseline is not a verdict
+        _, changes = self.run_sync(cert)
+        self.assertEqual((cert["upstream_status"], changes), ("current", ["ai: no upstream changes"]))
+        _, changes = self.run_sync(cert, body=self.GUIDE_V2)
+        self.assertEqual(cert["upstream_status"], "outdated")
+        self.assertIn("changed upstream", " ".join(changes))
+        self.assertEqual(cert["tracked_version"], "unknown")             # #63
+        _, changes = self.run_sync(cert, body=self.GUIDE_V2)
+        self.assertEqual(changes, ["ai: no upstream changes"])          # reported once, not every run
+        _, changes = self.run_sync(cert)
+        self.assertEqual(cert["upstream_status"], "current")
+        self.assertNotIn("objectives_drift", cert)
+        self.assertIn("matches again", " ".join(changes))
+
+    def test_drift_never_opens_an_upgrade_window_the_consistency_check_rejects(self):
+        # An `upstream:` block is an upgrade window (version, snapshot, milestone);
+        # check_curriculum_consistency failed on a hash-only one.
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+        import curriculum_citations
+        cert = {"tracked_version": "unknown", "objectives_sha256": "0" * 64}
+        self.run_sync(cert)
+        self.assertEqual(cert["upstream_status"], "outdated")
+        self.assertNotIn("upstream", cert)
+        self.assertEqual(curriculum_citations.window(cert), (None, []))
+
+    def test_a_page_is_compared_by_its_text_not_its_bytes(self):
+        # MCPA's WordPress page changes a nonce on every fetch.
+        page = b"<html><input name='_wpnonce' value='%s'><p>Exam objectives: MCP</p></html>"
+        cert = {}
+        self.run_sync(cert, body=page % b"a1", url="https://v.example/mcpa/", kind="text/html")
+        _, changes = self.run_sync(cert, body=page % b"b2", url="https://v.example/mcpa/", kind="text/html")
+        self.assertEqual((cert.get("upstream_status"), changes), ("current", ["ai: no upstream changes"]))
+
+    def test_the_frozen_pdf_hash_supersedes_a_baseline(self):
+        digest = hashlib.sha256(self.GUIDE).hexdigest()
+        cert = {"upstream_status": "outdated", "objectives_sha256": "x" * 64,
+                "objectives_drift": {"sha256": "y"}}
+        self.run_sync(cert, frozen=digest)
+        self.assertEqual(cert["upstream_status"], "current")
+        self.assertNotIn("objectives_sha256", cert)
+        self.assertNotIn("objectives_drift", cert)
 
 if __name__ == "__main__":
     unittest.main()
