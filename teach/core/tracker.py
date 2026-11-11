@@ -665,6 +665,264 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     }
 
 
+# ---------------------------------------------------------------- official readings
+
+# What opens a vendor's list of study material for one domain. NVIDIA prints
+# "Recommended Training", "Suggested Readings" and "Suggested Reading List"; those
+# are the words any study guide uses, so this is not a rule about one vendor.
+READING_HEADING = re.compile(
+    r"\b(suggested|recommended|further|additional)\s+"
+    r"(reading\s+list|readings?|training|resources)\b", re.I)
+
+# Characters of prose between two links that mean the list has ended. A reading
+# list is one title after another; what follows it — a copyright notice, a footer,
+# the next domain's description — is sentences.
+READING_GAP = 300
+
+ANCHOR = re.compile(r"<a\b[^>]*?\bhref\s*=\s*([\"'])(.*?)\1[^>]*>(.*?)</a\s*>", re.S | re.I)
+
+
+# Calls to action sit next to reading lists and are never a reading: the guide's
+# "Questions? Contact us here." footer link landed after the last list otherwise.
+CALL_TO_ACTION = re.compile(r"^\W*(click\s+here|here|contact\s+us(\s+here)?)\W*$|"
+                            r"^\W*(register|schedule)\b.*\bexam\W*$", re.I)
+
+BLOCK_TAG = re.compile(r"<(?:/?(?:p|div|li|ul|ol|h[1-6]|tr|td|th|section|br|dt|dd))\b[^>]*>", re.I)
+
+
+def _plain(fragment: str, lines: bool = False) -> str:
+    """Tags stripped, entities decoded, whitespace collapsed — keeping line breaks
+    at block elements when `lines`, so a heading is still at the start of a line."""
+    if lines:
+        fragment = BLOCK_TAG.sub("\n", fragment)
+    text = html_lib.unescape(re.sub(r"<[^>]+>", " ", fragment))
+    if not lines:
+        return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"[^\S\n]+", " ", text)
+    return re.sub(r"\s*\n\s*", "\n", text).strip()
+
+
+def _opens_reading_list(text: str) -> bool:
+    """A reading heading at the start of a line, the way a heading is laid out.
+
+    In running prose ("…certification exam, recommended training, and suggested
+    reading to prepare…") the same words introduce nothing, and the guide's cover
+    link to the certification portal was filed as a reading because of them."""
+    for line in text.split("\n"):
+        line = re.sub(r"^[\s>•·*\-–—]+", "", line).strip()
+        # A heading is short and is not a sentence. NCP-AII's cover wraps a
+        # sentence so that one line *starts* "recommended training and suggested
+        # reading to help prepare for the exam." — prose, ending in a full stop.
+        if READING_HEADING.match(line) and len(line) <= 100 and not line.endswith("."):
+            return True
+    return False
+
+
+def document_stream(url: str, body: bytes, content_type: str) -> list[tuple[str, str, str]]:
+    """The document in reading order, links kept: ('text', text, '') and ('link', href, title).
+
+    `document_text` is what the snapshot model reads, and it drops every link: an
+    `<a href>` loses its href to the tag stripper and pypdf's text never includes
+    the `/URI` annotations at all. That threw away the one part of a study guide
+    that says *where to read* — NVIDIA's per-domain Suggested Readings reached the
+    generator as nothing, and every topic cited only the study guide PDF (#271).
+    """
+    if url.lower().endswith(".pdf") or "pdf" in content_type:
+        return _pdf_stream(body)
+    return _html_stream(body.decode("utf-8", "replace"))
+
+
+def _html_stream(page: str) -> list[tuple[str, str, str]]:
+    # Navigation, header and footer are page furniture: Microsoft Learn's footer
+    # ("Privacy", "Terms of Use", "Trademarks") followed AI-901's last reading list
+    # with nothing but short link titles in between, so no prose gap closed it.
+    page = re.sub(r"<(script|style|noscript|nav|header|footer)\b[^>]*>.*?</\1\s*>", " ", page,
+                  flags=re.S | re.I)
+    items: list[tuple[str, str, str]] = []
+    last = 0
+    for match in ANCHOR.finditer(page):
+        text = _plain(page[last:match.start()], lines=True)
+        if text:
+            items.append(("text", text, ""))
+        href, title = html_lib.unescape(match.group(2)).strip(), _plain(match.group(3))
+        if href.startswith(("http://", "https://")):
+            items.append(("link", href, title))
+        elif title:
+            items.append(("text", title, ""))   # an in-page anchor is navigation, not a source
+        last = match.end()
+    tail = _plain(page[last:], lines=True)
+    if tail:
+        items.append(("text", tail, ""))
+    return items
+
+
+def _pdf_page_items(fragments: list[tuple[float, str]],
+                    links: list[tuple[float, float, str]]) -> list[tuple[str, str, str]]:
+    """One page: text fragments (y, text) and link rectangles (y_low, y_high, uri) in reading order.
+
+    A PDF link is an annotation drawn over the page, not part of the text, so the
+    only thing tying it to its title is position: the line it covers."""
+    # Fragments keep the order the page draws them; a superscript (the ™ in
+    # "DGX SuperPOD™ Reference Architecture") sits a few points higher and must
+    # stay on its line, or it becomes a "line" of its own that takes the link.
+    lines: list[list] = []                         # [y, text, uris]
+    for y, text in fragments:
+        line = next((l for l in lines if abs(l[0] - y) < 4), None)
+        if line:
+            line[1] += text
+        else:
+            lines.append([y, text, []])
+    lines.sort(key=lambda l: -l[0])
+    placed: set[int] = set()
+    for index, (low, high, uri) in enumerate(links):
+        for line in lines:
+            if low - 2 <= line[0] <= high + 2:
+                line[2].append(uri)
+                placed.add(index)
+                break
+    rows: list[tuple[float, tuple[str, str, str]]] = []
+    for y, text, uris in lines:
+        text = re.sub(r"\s+", " ", text).strip()
+        uris = list(dict.fromkeys(uris))
+        # Two columns put two readings on one line ("Activation Function> Training
+        # Hidden Units…"). When the bullets split the line into as many titles as it
+        # has links, each link gets its own; otherwise the whole line is the title.
+        parts = [p for p in re.split(r"\s*>\s*", text) if p.strip()]
+        titles = parts if len(uris) > 1 and len(parts) == len(uris) else [text] * len(uris)
+        for uri, title in zip(uris, titles):
+            rows.append((y, ("link", uri, re.sub(r"^[\s>•·*\-–—]+", "", title).strip())))
+        if not uris and text:
+            rows.append((y, ("text", text, "")))
+    for index, (low, high, uri) in enumerate(links):
+        if index not in placed:                    # an image or an empty box: keep the order
+            rows.append((high, ("link", uri, "")))
+    rows.sort(key=lambda r: -r[0])
+    return [item for _, item in rows]
+
+
+def _drop_running_heads(pages: list[list[tuple[str, str, str]]]) -> list[tuple[str, str, str]]:
+    """Join the pages, minus the header or footer line every page repeats.
+
+    The NCA-AIIO guide heads each page "AI Infrastructure and Operations Study
+    Guide | 3" — which names a domain, and would hand the next page to it."""
+    def key(item):
+        return re.sub(r"\d+", "#", item[1]) if item[0] == "text" else None
+
+    repeated = set()
+    for position in (0, -1):
+        seen: dict = {}
+        for page in pages:
+            if page and key(page[position]):
+                seen[key(page[position])] = seen.get(key(page[position]), 0) + 1
+        repeated |= {k for k, n in seen.items() if n > 1}
+    out: list[tuple[str, str, str]] = []
+    for page in pages:
+        for index, item in enumerate(page):
+            if index in (0, len(page) - 1) and key(item) in repeated:
+                continue
+            out.append(item)
+    return out
+
+
+def _pdf_stream(body: bytes) -> list[tuple[str, str, str]]:
+    from pypdf import PdfReader
+
+    pages = []
+    for page in PdfReader(io.BytesIO(body)).pages:
+        fragments: list[tuple[float, str]] = []
+
+        def visit(text, cm, tm, *_):
+            if text.strip():
+                fragments.append((tm[4] * cm[1] + tm[5] * cm[3] + cm[5], text))
+
+        page.extract_text(visitor_text=visit)
+        links = []
+        for annotation in page.get("/Annots") or []:
+            annotation = annotation.get_object()
+            action = annotation.get("/A")
+            uri = action.get_object().get("/URI") if action is not None else None
+            rect = annotation.get("/Rect")
+            if uri and rect:
+                low, high = sorted((float(rect[1]), float(rect[3])))
+                links.append((low, high, str(uri)))
+        pages.append(_pdf_page_items(fragments, links))
+    return _drop_running_heads(pages)
+
+
+def _domain_markers(topics: list[dict]) -> list[tuple[re.Pattern, str]]:
+    """(pattern, domain) for each domain's name and each of its objective ids.
+
+    The domain is the syllabus `topic` field ('1 - Essential AI Knowledge'), so the
+    vocabulary comes from the frozen syllabus, never from a list kept here."""
+    markers = []
+    for topic in topics:
+        domain = str(topic.get("topic") or "").strip()
+        if not domain:
+            continue
+        name = re.sub(r"^\s*[\w.]+\s+-\s+", "", domain)
+        markers.append((re.compile(r"(?<!\w)" + r"\s+".join(map(re.escape, name.split())) + r"(?!\w)",
+                                   re.I), domain))
+        markers.append((re.compile(r"(?<![\d.])" + re.escape(str(topic.get("id"))) + r"(?!\.?\d)"),
+                        domain))
+    return markers
+
+
+def readings_by_domain(stream: list[tuple[str, str, str]], topics: list[dict]) -> dict[str, list[dict]]:
+    """The links a study guide lists under each domain's reading heading.
+
+    Readings are published per domain, not per objective — NVIDIA prints one
+    list after each domain's objectives — so this assigns each link to the domain
+    whose section it sits in. A link counts only inside a reading list: one opens
+    at a heading (READING_HEADING), and closes when another domain starts or when
+    prose runs longer than READING_GAP. Page navigation, the cover's "can be
+    found here" and the footer's contact link are outside every list.
+    """
+    markers = _domain_markers(topics)
+    found: dict[str, list[dict]] = {}
+    domain, open_, gap = None, False, 0
+    for kind, value, title in stream:
+        if kind == "link":
+            if open_ and domain and not CALL_TO_ACTION.match(title):
+                if all(r["url"] != value for r in found.setdefault(domain, [])):
+                    found[domain].append({"title": title, "url": value})
+                gap = 0
+            continue
+        hits = [(m.end(), d) for pattern, d in markers for m in pattern.finditer(value)]
+        if hits:
+            latest = max(hits)[1]
+            if latest != domain:
+                domain, open_ = latest, False
+        if _opens_reading_list(value):
+            open_, gap = True, 0
+        elif open_:
+            gap += len(value)
+            if gap > READING_GAP:
+                open_ = False
+    return found
+
+
+def _same_reading(a: dict, b: dict) -> bool:
+    if a["url"] == b["url"]:
+        return True
+    ta, tb = (re.sub(r"[^a-z0-9]", "", x["title"].lower()) for x in (a, b))
+    short, long_ = sorted((ta, tb), key=len)
+    return len(short) >= 20 and long_.startswith(short)
+
+
+def merge_readings(primary: dict, secondary: dict) -> dict:
+    """Readings from two documents, the first one winning on the same title.
+
+    The overview page and the study-guide PDF list the same readings, and the
+    page is the one the vendor keeps editing: NVIDIA moved three NCA-AIIO links
+    on the page that the January PDF still prints. Same title, different URL
+    means the URL moved, so the page's is kept."""
+    merged = {domain: list(items) for domain, items in primary.items()}
+    for domain, items in secondary.items():
+        bucket = merged.setdefault(domain, [])
+        bucket.extend(item for item in items if not any(_same_reading(item, kept) for kept in bucket))
+    return merged
+
+
 # ---------------------------------------------------------------- paths
 
 TRANSLATABLE_PATH_FIELDS = ("name", "description", "how_to_obtain", "rules")

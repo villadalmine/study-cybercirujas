@@ -193,5 +193,135 @@ class SyncCncfTests(unittest.TestCase):
         self.assertNotIn("upstream publishes", " ".join(changes))
 
 
+
+def make_pdf(pages: list[list[tuple[float, str, str | None]]]) -> bytes:
+    """A minimal PDF: per page, lines of (y, text, link uri or None).
+
+    Written by hand so the test needs no PDF library beyond the reader under test,
+    and no network: the real NVIDIA guides are what this was tuned on, the shape is
+    what is pinned here."""
+    objects: list[bytes] = []
+
+    def add(body: str) -> int:
+        objects.append(body.encode("latin-1"))
+        return len(objects)
+
+    font = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
+    page_ids = []
+    pages_id = len(objects) + 1 + 2 * len(pages) + sum(sum(1 for l in p if l[2]) for p in pages)
+    for lines in pages:
+        stream = "".join(
+            f"BT /F1 10 Tf 1 0 0 1 40 {y} Tm ({text.replace('(', '[').replace(')', ']')}) Tj ET\n"
+            for y, text, _ in lines)
+        content = add(f"<< /Length {len(stream)} >>\nstream\n{stream}endstream")
+        annots = [add(f"<< /Type /Annot /Subtype /Link /Rect [40 {y - 2} 400 {y + 9}] "
+                      f"/A << /S /URI /URI ({uri}) >> >>")
+                  for y, _, uri in lines if uri]
+        refs = " ".join(f"{a} 0 R" for a in annots)
+        page_ids.append(add(f"<< /Type /Page /Parent {pages_id} 0 R /MediaBox [0 0 612 792] "
+                            f"/Resources << /Font << /F1 {font} 0 R >> >> /Contents {content} 0 R "
+                            f"/Annots [{refs}] >>"))
+    assert add(f"<< /Type /Pages /Kids [{' '.join(f'{p} 0 R' for p in page_ids)}] "
+               f"/Count {len(page_ids)} >>") == pages_id
+    catalog_id = add(f"<< /Type /Catalog /Pages {pages_id} 0 R >>")
+    out, offsets = b"%PDF-1.4\n", []
+    for number, body in enumerate(objects, 1):
+        offsets.append(len(out))
+        out += f"{number} 0 obj\n".encode() + body + b"\nendobj\n"
+    xref = len(out)
+    out += f"xref\n0 {len(objects) + 1}\n0000000000 65535 f \n".encode()
+    out += b"".join(f"{o:010d} 00000 n \n".encode() for o in offsets)
+    out += (f"trailer\n<< /Size {len(objects) + 1} /Root {catalog_id} 0 R >>\n"
+            f"startxref\n{xref}\n%%EOF\n").encode()
+    return out
+
+
+TOPICS = [{"id": "1.1", "topic": "1 - Essential AI Knowledge"},
+          {"id": "1.2", "topic": "1 - Essential AI Knowledge"},
+          {"id": "2.1", "topic": "2 - AI Infrastructure"}]
+
+
+class ReadingsTests(unittest.TestCase):
+    """The vendor's per-domain readings reach the syllabus with their links (#271)."""
+
+    def test_html_links_are_kept_and_filed_under_their_domain(self):
+        page = (b"<nav><a href='https://x.example/home'>Home</a></nav>"
+                b"<h2>Essential AI Knowledge</h2><p>Potential exam topics.</p>"
+                b"<h3>Suggested Reading</h3><ul>"
+                b"<li><a href='https://developer.nvidia.com/tensorrt'>NVIDIA TensorRT</a></li>"
+                b"<li><a href='https://medium.com/post'>A blog</a></li></ul>"
+                b"<h2>AI Infrastructure</h2><h3>Recommended Training</h3>"
+                b"<a href='https://academy.nvidia.com/course'>Course</a>"
+                b"<a href='#ai-operations'>AI Operations</a>"
+                b"<footer><a href='https://x.example/privacy'>Privacy</a></footer>")
+        stream = tracker.document_stream("https://v.example/overview", page, "text/html")
+        found = tracker.readings_by_domain(stream, TOPICS)
+        self.assertEqual(found, {
+            "1 - Essential AI Knowledge": [
+                {"title": "NVIDIA TensorRT", "url": "https://developer.nvidia.com/tensorrt"},
+                {"title": "A blog", "url": "https://medium.com/post"}],
+            "2 - AI Infrastructure": [{"title": "Course", "url": "https://academy.nvidia.com/course"}]})
+
+    def test_the_heading_words_in_running_prose_open_nothing(self):
+        # The NCA-AIIO cover: "...exam, recommended training, and suggested reading
+        # to prepare for the exam." followed by a link to the certification portal.
+        page = (b"<p>Essential AI Knowledge guide.</p><p>recommended training and suggested reading "
+                b"to help prepare for the exam.</p><a href='https://v.example/certs'>found here</a>")
+        stream = tracker.document_stream("https://v.example/o", page, "text/html")
+        self.assertEqual(tracker.readings_by_domain(stream, TOPICS), {})
+
+    def test_prose_after_a_list_closes_it(self):
+        page = (b"<h2>AI Infrastructure</h2><h3>Suggested Readings</h3>"
+                b"<a href='https://docs.nvidia.com/a'>A</a><p>" + b"Copyright notice. " * 30 +
+                b"</p><a href='https://www.nvidia.com/contact'>Questions</a>")
+        stream = tracker.document_stream("https://v.example/o", page, "text/html")
+        self.assertEqual([r["url"] for r in tracker.readings_by_domain(stream, TOPICS)["2 - AI Infrastructure"]],
+                         ["https://docs.nvidia.com/a"])
+
+    def test_pdf_link_annotations_are_read_with_the_line_they_cover(self):
+        # pypdf's extract_text never includes /URI annotations: this is the part
+        # of the study guide document_text threw away.
+        body = make_pdf([
+            [(760, "NVIDIA Associate | Study Guide | 1", None),
+             (700, "Essential AI knowledge: Exam Weight 38%", None),
+             (680, "1.1 Describe the NVIDIA software stack.", None),
+             (660, "Suggested Readings", None),
+             (640, "> NVIDIA TensorRT, NVIDIA Developer", "https://developer.nvidia.com/tensorrt")],
+            [(760, "NVIDIA Associate | Study Guide | 2", None),
+             (700, "2.1 Identify hardware requirements.", None),
+             (680, "Suggested Reading List", None),
+             (660, "> DGX SuperPOD Reference Architecture", "https://docs.nvidia.com/superpod"),
+             (520, "Questions?", None),
+             (500, "Contact us here.", "https://www.nvidia.com/contact")]])
+        stream = tracker.document_stream("https://v.example/guide.pdf", body, "application/pdf")
+        self.assertNotIn("Study Guide", " ".join(v for _, v, _ in stream))   # running head dropped
+        found = tracker.readings_by_domain(stream, TOPICS)
+        self.assertEqual(found["1 - Essential AI Knowledge"],
+                         [{"title": "NVIDIA TensorRT, NVIDIA Developer",
+                           "url": "https://developer.nvidia.com/tensorrt"}])
+        self.assertEqual([r["url"] for r in found["2 - AI Infrastructure"]],
+                         ["https://docs.nvidia.com/superpod"])
+
+    def test_two_links_on_one_pdf_line_each_get_their_own_title(self):
+        items = tracker._pdf_page_items(
+            [(600.0, "> Activation Function> Training Hidden Units")],
+            [(598.0, 609.0, "https://a.example/1"), (598.0, 609.0, "https://a.example/2")])
+        self.assertEqual(items, [("link", "https://a.example/1", "Activation Function"),
+                                 ("link", "https://a.example/2", "Training Hidden Units")])
+
+    def test_the_page_wins_over_the_pdf_on_the_same_title(self):
+        # NVIDIA moved three NCA-AIIO links on the page the January PDF still prints.
+        page = {"d": [{"title": "Understanding Machine Learning Inference, Run:ai",
+                       "url": "https://developer.nvidia.com/topics/ai/ai-inference"}]}
+        pdf = {"d": [{"title": "Understanding Machine Learning Inference, Run:ai",
+                      "url": "https://www.run.ai/guides/inference"},
+                     {"title": "Only in the PDF", "url": "https://docs.nvidia.com/x"}]}
+        merged = tracker.merge_readings(page, pdf)
+        self.assertEqual([r["url"] for r in merged["d"]],
+                         ["https://developer.nvidia.com/topics/ai/ai-inference", "https://docs.nvidia.com/x"])
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
