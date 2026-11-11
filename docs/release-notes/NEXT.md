@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **Official readings for the NVIDIA certifications:** the Recommended Training and Suggested Readings NVIDIA lists per domain now reach the syllabus and, on official hosts, the sources each topic is written from (#271).
 
 ## Upgrade notes
 

@@ -397,6 +397,48 @@ class ReadingsTests(unittest.TestCase):
                          ["https://developer.nvidia.com/topics/ai/ai-inference", "https://docs.nvidia.com/x"])
 
 
+class AttachReadingsTests(unittest.TestCase):
+    """Catalogued hosts reach the generator's sources; nothing else does, and nothing goes stale."""
+
+    def run_attach(self, metadata: dict, page: bytes):
+        import frontmatter
+        post = frontmatter.Post("", **metadata)
+        data = {"certs": {"c": {"sources": {"objectives": "https://v.example/o.html"}}}}
+        saved = []
+        with mock.patch.object(tracker.catalog, "load", return_value=data), \
+                mock.patch.object(tracker.certs, "load", return_value=post), \
+                mock.patch.object(tracker.certs, "save", side_effect=lambda c, p: saved.append(p)), \
+                mock.patch.object(tracker, "official_domains", return_value={"docs.nvidia.com"}), \
+                mock.patch.object(tracker, "_get_bytes", return_value=(page, "text/html")):
+            result = tracker.attach_readings("c")
+        return post, result, saved
+
+    PAGE = (b"<h2>AI Infrastructure</h2><h3>Suggested Readings</h3>"
+            b"<a href='https://docs.nvidia.com/dgx'>DGX</a><a href='https://medium.com/p'>Blog</a>")
+
+    def test_only_catalogued_hosts_join_the_topic_sources(self):
+        topic = {"id": "2.1", "topic": "2 - AI Infrastructure", "title": "t", "weight": 10,
+                 "status": "generated", "sources": ["https://v.example/o.html", "https://hand.example/x"]}
+        post, result, _ = self.run_attach({"topics": [topic]}, self.PAGE)
+        self.assertEqual(topic["sources"], ["https://v.example/o.html", "https://hand.example/x",
+                                            "https://docs.nvidia.com/dgx"])
+        self.assertEqual(topic["status"], "generated")                 # sources are not identity
+        self.assertEqual(len(post.metadata["readings"]["2 - AI Infrastructure"]), 2)
+        self.assertEqual(result["uncatalogued"], ["medium.com"])
+
+    def test_running_it_again_replaces_its_own_additions(self):
+        topic = {"id": "2.1", "topic": "2 - AI Infrastructure", "sources": [
+            "https://v.example/o.html", "https://docs.nvidia.com/moved-away"]}
+        readings = {"2 - AI Infrastructure": [{"title": "Old", "url": "https://docs.nvidia.com/moved-away"}]}
+        self.run_attach({"topics": [topic], "readings": readings}, self.PAGE)
+        self.assertEqual(topic["sources"], ["https://v.example/o.html", "https://docs.nvidia.com/dgx"])
+
+    def test_nothing_to_change_writes_nothing(self):
+        topic = {"id": "2.1", "topic": "2 - AI Infrastructure", "sources": ["https://v.example/o.html"]}
+        _, result, saved = self.run_attach({"topics": [topic]}, b"<p>No reading lists here.</p>")
+        self.assertEqual((result["domains"], saved), ({}, []))
+
+
 
 
 if __name__ == "__main__":

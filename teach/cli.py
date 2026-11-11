@@ -215,6 +215,34 @@ def cert_snapshot(
             f"{', '.join(result['edited_changed'])}\n"
             f"  -> not touched automatically; review and regenerate with --force if appropriate."
         )
+    if result.get("readings"):
+        _echo_readings(result["readings"])
+
+
+def _echo_readings(result: dict) -> None:
+    for domain, count in (result.get("domains") or {}).items():
+        typer.echo(f"  readings {domain}: {count}")
+    if result.get("in_prompt") is not None:
+        typer.echo(f"  in the generator's sources: {len(result['in_prompt'])} (catalogued in docs/sources.yaml)")
+    if result.get("uncatalogued"):
+        typer.echo(f"  recorded but not in the prompt (uncatalogued hosts): {', '.join(result['uncatalogued'])}")
+    for error in result.get("errors") or []:
+        typer.echo(f"  readings not read: {error}", err=True)
+
+
+@cert_app.command("readings")
+def cert_readings(cert_id: str) -> None:
+    """Attach the vendor's per-domain readings to the frozen syllabus (no model, no stale)."""
+    from .core import tracker
+
+    try:
+        result = tracker.attach_readings(cert_id)
+    except Exception as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(1)
+    if not result["domains"]:
+        typer.echo(f"  {cert_id}: the official documents list no readings under a reading heading")
+    _echo_readings(result)
 
 
 @cert_app.command("translate")

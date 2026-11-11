@@ -655,6 +655,14 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     cert["upstream_status"] = "current"
     cert["last_checked"] = datetime.date.today().isoformat()
     catalog.save(data)
+
+    # The readings are deterministic and cost no model call, so a snapshot takes
+    # them along. They are not worth losing the paid extraction over: a page that
+    # fails to load leaves the syllabus saved and says so.
+    try:
+        readings = attach_readings(cert_id)
+    except (TrackerError, httpx.HTTPError, OSError) as error:
+        readings = {"errors": [str(error)]}
     return {
         "cert": cert_id,
         "topics": len(topics),
@@ -662,6 +670,7 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
         "added": added,
         "stale": stale,
         "edited_changed": edited_changed,
+        "readings": readings,
     }
 
 
@@ -1028,6 +1037,89 @@ def merge_readings(primary: dict, secondary: dict) -> dict:
         bucket = merged.setdefault(domain, [])
         bucket.extend(item for item in items if not any(_same_reading(item, kept) for kept in bucket))
     return merged
+
+
+def _host(url: str) -> str:
+    return re.sub(r"^https?://", "", url).split("/")[0].split(":")[0].lower()
+
+
+def official_domains() -> set[str]:
+    """Hosts docs/sources.yaml catalogues: every project's domains plus the neutral ones."""
+    path = catalog.root() / "docs" / "sources.yaml"
+    if not path.exists():
+        return set()
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    hosts = {d.lower() for d in data.get("neutral_domains") or []}
+    for project in (data.get("projects") or {}).values():
+        hosts |= {d.lower() for d in (project or {}).get("domains") or []}
+    return hosts
+
+
+def attach_readings(cert_id: str) -> dict:
+    """Put the vendor's per-domain readings into the frozen syllabus. No model involved.
+
+    Every link the overview page and the objectives document list for a domain is
+    recorded under the syllabus' `readings:`. The ones on a host docs/sources.yaml
+    catalogues also join the `sources` of every topic in that domain — those are
+    what `_topic_context` hands the generator as references. The rest (Medium, a
+    LinkedIn post, a vendor's marketing page) stay recorded but out of the prompt:
+    the corpus cites primary sources, and a blog the model is told to rely on is
+    one it will cite. Catalogue a domain in docs/sources.yaml and the next run
+    picks it up.
+
+    `sources` is outside a topic's identity, so this never marks content stale.
+    Running it again replaces what the previous run added and keeps anything a
+    person added by hand.
+    """
+    data = catalog.load()
+    cert = data["certs"].get(cert_id)
+    if not cert:
+        raise TrackerError(f"'{cert_id}' is not in the catalog")
+    sources = cert.get("sources") or {}
+    post = certs.load(cert_id)
+    topics = post.metadata.get("topics") or []
+    if not topics:
+        raise TrackerError(f"'{cert_id}' has no syllabus yet: snapshot it first")
+
+    found: dict[str, list[dict]] = {}
+    errors = []
+    for key in ("overview", "objectives"):            # the page first: it is the one kept current
+        url = sources.get(key)
+        if not url:
+            continue
+        try:
+            body, content_type = _get_bytes(url)
+        except TrackerError as error:
+            errors.append(f"{key}: {error}")
+            continue
+        found = merge_readings(found, readings_by_domain(document_stream(url, body, content_type), topics))
+
+    before = yaml.safe_dump(post.metadata, sort_keys=True)
+    official = official_domains()
+    previous = {r["url"] for items in (post.metadata.get("readings") or {}).values() for r in items}
+    current = {r["url"] for items in found.values() for r in items}
+    objectives = sources.get("objectives")
+    for topic in topics:
+        kept = [s for s in topic.get("sources") or [] if s not in previous and s not in current]
+        links = [r["url"] for r in found.get(str(topic.get("topic") or "").strip(), [])
+                 if _host(r["url"]) in official]
+        topic["sources"] = list(dict.fromkeys((kept or ([objectives] if objectives else [])) + links))
+
+    order = list(dict.fromkeys(str(t.get("topic") or "").strip() for t in topics))
+    found = {domain: found[domain] for domain in order if domain in found}
+    if found:
+        post.metadata["readings"] = found
+    else:
+        post.metadata.pop("readings", None)
+    if yaml.safe_dump(post.metadata, sort_keys=True) != before:   # a no-op leaves the file untouched
+        certs.save(cert_id, post)
+    return {
+        "cert": cert_id,
+        "domains": {domain: len(items) for domain, items in found.items()},
+        "in_prompt": sorted({u for t in topics for u in t["sources"]} & current),
+        "uncatalogued": sorted({_host(u) for u in current} - official),
+        "errors": errors,
+    }
 
 
 # ---------------------------------------------------------------- paths

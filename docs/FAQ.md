@@ -72,7 +72,9 @@ and the budget live in [`pipeline.yaml`](../pipeline.yaml); the commands are in
 
 **What goes into the prompt?**
 Only the syllabus entry: certification, exam, version, topic id and title,
-the exam weight, and the topic's source URLs (`_topic_context`,
+the exam weight, and the topic's source URLs — the objectives document plus,
+where the vendor lists them, its per-domain readings on catalogued hosts
+(`teach cert readings`, kept under the syllabus' `readings:`) (`_topic_context`,
 [`generator.py:652-660`](../teach/core/generator.py#L652-L660)), plus a fixed
 system prompt with the code-block rules learned from real defects
 ([`:616-649`](../teach/core/generator.py#L616-L649)) and a fixed instruction
