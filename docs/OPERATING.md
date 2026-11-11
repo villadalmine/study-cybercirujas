@@ -324,6 +324,7 @@ make check-updates
 | Step | What it is | Cost |
 |---|---|---|
 | `teach tracker sync --backend claude` | the **AI part**: scrapes what each vendor currently publishes and writes only the upstream fields of `catalog.yaml`. It can never touch a frozen syllabus (a sync once overwrote the very comparison it was meant to enable). | a few completions |
+| `teach tracker sync --provider ai` | part of the above for `category: ai`: the objectives document's sha256 against the syllabus' `source_sha256` (or the `objectives_sha256` baseline the first sync records, for syllabi frozen before that hash) decides `upstream_status`; level and validity come from the overview page | one completion per AI certification |
 | `scripts/status_matrix.py` | regenerates `docs/STATUS.md`, including the **Exam versions** table | free |
 | `scripts/check_versions.py` | the **deterministic part**: the verdict per certification, built-on version vs upstream version | free |
 

@@ -518,7 +518,7 @@ certs:
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-06'
+    last_checked: '2026-11-11'
     file: certs/aws-aif.md
     sources:
       objectives: https://d1.awsstatic.com/training-and-certification/docs-ai-practitioner/AWS-Certified-AI-Practitioner_Exam-Guide.pdf
@@ -527,13 +527,14 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
+    objectives_sha256: 8312f72b60721241388f06805cb9a91a4792178bf8338a020a8eaea17871d368
   ai-901:
     name: Microsoft Azure AI Fundamentals (AI-901)
     exam: AI-901
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-06'
+    last_checked: '2026-11-11'
     file: certs/ai-901.md
     sources:
       objectives: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ai-901
@@ -542,13 +543,14 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
+    objectives_sha256: 7a7c2016e24adcd94b9247f9ce72143b1a86da9d450a01afcfe949bff21fae5f
   gcp-gail:
     name: Google Cloud Generative AI Leader
     exam: Generative AI Leader
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-06'
+    last_checked: '2026-11-11'
     file: certs/gcp-gail.md
     sources:
       objectives: https://services.google.com/fh/files/misc/generative_ai_leader_exam_guide_english.pdf
@@ -557,43 +559,46 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
+    objectives_sha256: 0c79729e3cd033407176fec9b8e91e39ff03f79bbe71a8ba60bd95b0f7b4806e
   nca-aiio:
     name: 'NVIDIA-Certified Associate: AI Infrastructure and Operations'
     exam: NCA-AIIO
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-09'
+    last_checked: '2026-11-11'
     file: certs/nca-aiio.md
     sources:
       objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
       overview: https://www.nvidia.com/en-us/learn/certification/ai-infrastructure-operations-associate/
     vendor: NVIDIA
-    level: essentials
+    level: associate
     validity: 2 años
     requires: []
+    objectives_sha256: e16c9fb77f5ecfd9d5340910d8006467c4e3bbda628d9a4fad6cfe48b9ba3d37
   nca-genl:
     name: 'NVIDIA-Certified Associate: Generative AI LLM'
     exam: NCA-GENL
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-09'
+    last_checked: '2026-11-11'
     file: certs/nca-genl.md
     sources:
       objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/ik3amm6oy7871nv371600i4h7drvex5m.pdf
       overview: https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/
     vendor: NVIDIA
-    level: essentials
+    level: associate
     validity: 2 años
     requires: []
+    objectives_sha256: a528f47d2fd72041fd19ea5db46b48be4f2762eda01b60021ee4facc22b34325
   ncp-aii:
     name: 'NVIDIA-Certified Professional: AI Infrastructure'
     exam: NCP-AII
     category: ai
     tracked_version: unknown
     upstream_status: current
-    last_checked: '2026-09-09'
+    last_checked: '2026-11-11'
     file: certs/ncp-aii.md
     sources:
       objectives: https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
@@ -603,13 +608,14 @@ certs:
     validity: 2 años
     requires:
     - nca-aiio
+    objectives_sha256: 2799dffcda5481f6709d85297c81c91ab597be67780badbfa78d58db291cd5b6
   mcpa:
     name: Model Context Protocol Associate (MCPA)
     exam: MCPA
     category: ai
     tracked_version: MCP 2026-07-28
     upstream_status: current
-    last_checked: '2026-09-17'
+    last_checked: '2026-11-11'
     file: certs/mcpa.md
     sources:
       objectives: https://training.linuxfoundation.org/certification/model-context-protocol-associate-mcpa/
@@ -618,6 +624,7 @@ certs:
     validity: 2 years
     curriculum_updated: '2026-07-28'
     requires: []
+    objectives_sha256: 61bb68c4ba0d978a8288407e763f32bba6aafc425982000638b7c7ab6fd1a870
   ckne:
     name: Certified Kubernetes Network Engineer (CKNE)
     exam: CKNE

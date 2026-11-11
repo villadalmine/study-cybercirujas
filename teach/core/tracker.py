@@ -335,6 +335,130 @@ def sync_lpi(backend: str | None = None) -> list[str]:
     return changes or ["lpi: no changes"]
 
 
+# ---------------------------------------------------------------- AI vendors
+
+# Words a vendor prints for the tier of a certification, mapped to the catalog's
+# levels. Read by the model off the page, translated here: the vocabulary of
+# catalog.yaml is ours, and a model asked to use it maps "Associate" to whatever
+# it guesses we mean (NCA-AIIO had sat at `essentials` since 2026-09-09).
+#
+# Only tier words. "Beginner", "Intermediate" and "Advanced" describe the
+# candidate's expected experience, not the credential: the MCPA page prints
+# "Experience Level: Beginner" for a certification named Associate, and the
+# first real sync turned it into `essentials` on that word.
+AI_LEVELS = {
+    "foundational": "essentials", "fundamentals": "essentials", "foundation": "essentials",
+    "associate": "associate", "professional": "professional", "expert": "professional",
+    "specialty": "specialty",
+}
+
+# Where an overview page states its facts. The page is long — NCA-AIIO's is
+# 380 KB of HTML — and the facts sit in one block, so the model reads that block.
+EXAM_FACTS = re.compile(r"certification\s+level|validity|valid\s+for|number\s+of\s+questions|"
+                        r"exam\s+duration|duration", re.I)
+
+
+def _exam_facts(text: str, width: int = 6000) -> str:
+    match = EXAM_FACTS.search(text)
+    start = max(0, match.start() - width // 3) if match else 0
+    return text[start:start + width]
+
+
+def _validity(current: str | None, years) -> str | None:
+    """The catalog's validity string for a vendor's figure, or None if nothing changes.
+
+    The catalog writes "2 años" for some vendors and "2 years" for others; the
+    number is the fact, so a sync that agrees on it leaves the wording alone."""
+    if years in (None, "unknown", ""):
+        return None
+    if str(years).lower() == "lifetime":
+        return None if current == "lifetime" else "lifetime"
+    try:
+        years = int(years)
+    except (TypeError, ValueError):
+        return None
+    numbers = re.findall(r"\d+", str(current or ""))
+    if numbers and int(numbers[0]) == years:
+        return None
+    unit = "years" if "year" in str(current or "") else "años"
+    return f"{years} {unit}"
+
+
+def sync_ai(backend: str | None = None) -> list[str]:
+    """Upstream facts for the AI certifications (category: ai).
+
+    No sync knew this category, so six certifications kept the values they were
+    catalogued with: NCA-AIIO stayed `essentials` with `tracked_version: unknown`
+    while NVIDIA publishes it as Associate (#271). Two kinds of fact, read two ways:
+
+    - **Drift**, deterministic: the sha256 of the objectives document is compared
+      with the one the syllabus was frozen from (`source_sha256`). Syllabi frozen
+      before the snapshot recorded it have no such hash; for those the first sync
+      records a baseline (`objectives_sha256`) and says so, because "the same as
+      the day we started looking" is not "the same as what we froze". A change
+      goes to `upstream:` and `upstream_status: outdated`; `tracked_version` is
+      never written (#63).
+    - **Level and validity**, read by the model from the overview page, the way
+      sync_lpi reads LPI's. "unknown" is a correct answer and changes nothing.
+    """
+    data = catalog.load()
+    changes = []
+    today = datetime.date.today().isoformat()
+    for cert_id, cert in data["certs"].items():
+        if cert.get("category") != "ai":
+            continue
+        sources = cert.get("sources") or {}
+        objectives = sources.get("objectives")
+        if not objectives:
+            continue
+        body, content_type = _get_bytes(objectives)
+        digest = hashlib.sha256(body).hexdigest()
+        frozen = certs.load(cert_id).metadata.get("source_sha256") if certs.md_path(cert_id).exists() else None
+        baseline = frozen or cert.get("objectives_sha256")
+        block = cert.get("upstream") or {}
+        if not baseline:
+            cert["objectives_sha256"] = digest
+            changes.append(f"{cert_id}: objectives baseline recorded ({digest[:12]}); the syllabus "
+                           "predates source_sha256, so drift is measured from today")
+        elif baseline == digest:
+            cert["upstream_status"] = "current"
+            cert.pop("upstream", None)
+        else:
+            cert["upstream_status"] = "outdated"
+            if block.get("sha256") != digest:
+                cert["upstream"] = {**block, "objectives": objectives, "sha256": digest,
+                                    "detected": today}
+                changes.append(f"{cert_id}: the objectives document changed upstream "
+                               f"(tracked_version stays {cert.get('tracked_version')})")
+
+        overview = sources.get("overview") or objectives
+        page = document_text(objectives, body, content_type) if overview == objectives else fetch_text(overview, limit=10**7)
+        result = _ai_yaml(
+            backend,
+            usage={"op": "catalog-sync", "kind": "ai", "cert": cert_id},
+            prompt=f"Official page of the {cert.get('exam')} exam ({cert.get('name')}), "
+            f"plain text:\n{_exam_facts(page)}\n\n"
+            "Return YAML with exactly this shape:\n"
+            "level: <the TIER of the certification THE PAGE PRINTS, one word, lower case "
+            "(foundational, associate, professional, expert, specialty…). Not the candidate's "
+            "experience level ('Experience Level: Beginner' is not a tier); 'unknown' if it prints none>\n"
+            "validity_years: <how many years the certification stays valid, as an integer; "
+            "'lifetime' if it never expires; 'unknown' if the page does not say>\n"
+            "Copy only what the page states. 'unknown' is a correct answer.",
+        )
+        cert["last_checked"] = today
+        level = AI_LEVELS.get(str(result.get("level") or "").strip().lower())
+        if level and cert.get("level") != level:
+            changes.append(f"{cert_id}: level {cert.get('level')} -> {level}")
+            cert["level"] = level
+        validity = _validity(cert.get("validity"), result.get("validity_years"))
+        if validity:
+            changes.append(f"{cert_id}: validity {cert.get('validity')} -> {validity}")
+            cert["validity"] = validity
+        catalog.save(data)  # incremental: a later fetch failing loses nothing
+    return changes or ["ai: no upstream changes"]
+
+
 # ---------------------------------------------------------------- syllabus
 
 def _topic_identity(topic: dict) -> tuple:
