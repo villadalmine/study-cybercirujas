@@ -433,6 +433,29 @@ class AttachReadingsTests(unittest.TestCase):
         self.run_attach({"topics": [topic], "readings": readings}, self.PAGE)
         self.assertEqual(topic["sources"], ["https://v.example/o.html", "https://docs.nvidia.com/dgx"])
 
+    def test_a_hand_added_source_the_vendor_also_lists_is_kept(self):
+        # Uncatalogued, so attach never added it: it can only be a person's.
+        topic = {"id": "2.1", "topic": "2 - AI Infrastructure",
+                 "sources": ["https://v.example/o.html", "https://medium.com/p"]}
+        self.run_attach({"topics": [topic]}, self.PAGE)
+        self.assertIn("https://medium.com/p", topic["sources"])
+
+    def test_a_document_that_cannot_be_read_writes_nothing(self):
+        import frontmatter
+        readings = {"2 - AI Infrastructure": [{"title": "DGX", "url": "https://docs.nvidia.com/dgx"}]}
+        topic = {"id": "2.1", "topic": "2 - AI Infrastructure",
+                 "sources": ["https://v.example/o.html", "https://docs.nvidia.com/dgx"]}
+        post = frontmatter.Post("", topics=[topic], readings=readings)
+        data = {"certs": {"c": {"sources": {"objectives": "https://v.example/o.pdf"}}}}
+        with mock.patch.object(tracker.catalog, "load", return_value=data), \
+                mock.patch.object(tracker.certs, "load", return_value=post), \
+                mock.patch.object(tracker.certs, "save") as save, \
+                mock.patch.object(tracker, "_get_bytes", return_value=(b"<html>404</html>", "text/html; but .pdf")), \
+                self.assertRaises(tracker.TrackerError):
+            tracker.attach_readings("c")
+        save.assert_not_called()
+        self.assertEqual(post.metadata["readings"], readings)
+
     def test_nothing_to_change_writes_nothing(self):
         topic = {"id": "2.1", "topic": "2 - AI Infrastructure", "sources": ["https://v.example/o.html"]}
         _, result, saved = self.run_attach({"topics": [topic]}, b"<p>No reading lists here.</p>")

@@ -3,7 +3,7 @@ cert: ncp-aii
 exam: NCP-AII
 readings:
   1 - Systems and Server Bring-Up:
-  - title: 'Course reference: AI Infrastructure Professional'
+  - title: AI Infrastructure Professional Workshop
     url: https://academy.nvidia.com/en/ai-infrastructure-public-training/
   - title: NVIDIA System Management Interface
     url: https://docs.nvidia.com/deploy/nvidia-smi/index.html
@@ -14,7 +14,7 @@ readings:
   - title: NVIDIA Virtual GPU Software
     url: https://docs.nvidia.com/vgpu/16.0/index.html
   - title: InfiniBand Fabric Utilities
-    url: https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
+    url: https://networking-docs.nvidia.com/mlnxofedswum/24.10-5.1.6.1lts/infiniband-fabric-utilities
   - title: Getting Started With the NGC Command-Line Interface (CLI)
     url: https://docs.ngc.nvidia.com/cli/cmd.html
   - title: NVIDIA LinkX® Cables and Transceivers
@@ -30,7 +30,7 @@ readings:
   - title: DGX Superpod Administration Guide
     url: https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
   - title: DGX CentOS Install Guide
-    url: https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+    url: https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - title: 'Choosing the Right Storage: Blog'
     url: https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - title: 'Protecting Sensitive Data and AI Models: Blog'
@@ -40,7 +40,7 @@ readings:
   - title: Datacenter Efficiency Metrics
     url: https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
   - title: DGXOS User Guide
-    url: https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+    url: https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - title: Using NVSM
     url: https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - title: DGX Superpod Design Guide
@@ -51,6 +51,8 @@ readings:
     url: https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - title: DGX A100 Service Manual
     url: https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - title: DGXOS User Guide
+    url: https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   2 - Physical Layer Management:
   - title: AI Infrastructure Professional Workshop
     url: https://academy.nvidia.com/en/ai-infrastructure-public-training/
@@ -149,52 +151,6 @@ readings:
   5 - Troubleshooting and Optimization:
   - title: AI Infrastructure Professional Workshop
     url: https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - title: NVIDIA System Management Interface
-    url: https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - title: NVIDIA System Management User Guide
-    url: https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - title: NVIDIA CUDA® Compiler Driver NVCC
-    url: https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - title: NVIDIA Virtual GPU Software
-    url: https://docs.nvidia.com/vgpu/16.0/index.html
-  - title: InfiniBand Fabric Utilities
-    url: https://networking-docs.nvidia.com/mlnxofedswum/24.10-5.1.6.1lts/infiniband-fabric-utilities
-  - title: Getting Started With the NGC Command-Line Interface (CLI)
-    url: https://docs.ngc.nvidia.com/cli/cmd.html
-  - title: NVIDIA LinkX® Cables and Transceivers
-    url: https://www.nvidia.com/en-us/networking/interconnect/
-  - title: DGX Basepod Deployment Guide
-    url: https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - title: 'NVIDIA DGX H100/H200 User Guide: Quickstart and Basic Operation'
-    url: https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - title: AI Factory Whitepaper
-    url: https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - title: DGX Superpod Deployment Guide
-    url: https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - title: DGX Superpod Administration Guide
-    url: https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - title: DGX CentOS Install Guide
-    url: https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - title: 'Choosing the Right Storage: Blog'
-    url: https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - title: 'Protecting Sensitive Data and AI Models: Blog'
-    url: https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - title: DGX Superpod Data Center Design
-    url: https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - title: Datacenter Efficiency Metrics
-    url: https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - title: DGXOS User Guide
-    url: https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - title: Using NVSM
-    url: https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - title: DGX Superpod Design Guide
-    url: https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - title: Cabling Data Centers
-    url: https://docs.nvidia.com/cabling-data-centers.pdf
-  - title: DGX H100 User Guide
-    url: https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - title: DGX A100 Service Manual
-    url: https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - title: NVIDIA SMI
     url: https://developer.download.nvidia.com/compute/DCGM/docs/nvidia-smi-367.38.pdf
   - title: 'DGX-2 Service Manual: DGX Systems Documentation'
@@ -209,6 +165,8 @@ readings:
     url: https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - title: Overview — NVIDIA DCGM Documentation
     url: https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - title: NVIDIA System Management User Guide
+    url: https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - title: Using the NVSM CLI — NVIDIA System Management User Guide
     url: https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - title: Introduction to the NVIDIA DGX A100 System
@@ -216,6 +174,9 @@ readings:
   - title: RAPIDS cuDF Accelerates pandas Nearly 150x With Zero Code Changes | NVIDIA
       Technical Blog
     url: https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - title: Choose the Right Storage for Enterprise AI Workloads | NVIDIA Technical
+      Blog
+    url: https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - title: 'Spotlight: NVIDIA BlueField DPUs Power the VAST Data Platform for AI Workload
       Optimization'
     url: https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
@@ -233,7 +194,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -241,17 +201,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Describe the sequence of events for deployment and validation
   topic: 1 - Systems and Server Bring-Up
@@ -264,7 +225,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -272,17 +232,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Describe network topologies for AI Factories
   topic: 1 - Systems and Server Bring-Up
@@ -295,7 +256,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -303,17 +263,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Perform initial configuration of BMC, OOB, and TPM
   topic: 1 - Systems and Server Bring-Up
@@ -326,7 +287,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -334,17 +294,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Perform firmware upgrades (including on NVIDIA HGX systems) and fault detection
   topic: 1 - Systems and Server Bring-Up
@@ -357,7 +318,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -365,17 +325,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Validate power and cooling parameters
   topic: 1 - Systems and Server Bring-Up
@@ -388,7 +349,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -396,17 +356,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Install GPU-based servers (SMI)
   topic: 1 - Systems and Server Bring-Up
@@ -419,7 +380,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -427,17 +387,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Validate installed hardware
   topic: 1 - Systems and Server Bring-Up
@@ -450,7 +411,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -458,17 +418,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Describe and validate cable types and transceivers
   topic: 1 - Systems and Server Bring-Up
@@ -481,7 +442,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -489,17 +449,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Install physical GPUs
   topic: 1 - Systems and Server Bring-Up
@@ -512,7 +473,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -520,17 +480,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Validate hardware operation for workloads
   topic: 1 - Systems and Server Bring-Up
@@ -543,7 +504,6 @@ topics:
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
   - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
   - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.nvidia.com/networking/display/mlnxofedv51258060/infiniband+fabric+utilities#
   - https://docs.ngc.nvidia.com/cli/cmd.html
   - https://www.nvidia.com/en-us/networking/interconnect/
   - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
@@ -551,17 +511,18 @@ topics:
   - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
   - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
   - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos-install-guide/using-dgx-station-custom-utilities.html
+  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
   - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
   - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
   - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
+  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
   - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
   - https://docs.nvidia.com/cabling-data-centers.pdf
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
   - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
+  - https://docs.nvidia.com/dgx/dgx-os-5-user-guide/index.html
   status: pending
   title: Configure initial parameters for third party storage
   topic: 1 - Systems and Server Bring-Up
@@ -1022,37 +983,17 @@ topics:
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
   - https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.ngc.nvidia.com/cli/cmd.html
-  - https://www.nvidia.com/en-us/networking/interconnect/
-  - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - https://docs.nvidia.com/cabling-data-centers.pdf
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - https://docs.nvidia.com/dgx-systems/index.html
   - https://developer.nvidia.com/dcgm
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/debugging-and-troubleshooting.html
   - https://docs.nvidia.com/nvidia-system-management-nvsm/index.html
   - https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html
   - https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
   - https://academy.nvidia.com/course/view.php?id=600
   status: pending
@@ -1063,37 +1004,17 @@ topics:
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
   - https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.ngc.nvidia.com/cli/cmd.html
-  - https://www.nvidia.com/en-us/networking/interconnect/
-  - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - https://docs.nvidia.com/cabling-data-centers.pdf
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - https://docs.nvidia.com/dgx-systems/index.html
   - https://developer.nvidia.com/dcgm
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/debugging-and-troubleshooting.html
   - https://docs.nvidia.com/nvidia-system-management-nvsm/index.html
   - https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html
   - https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
   - https://academy.nvidia.com/course/view.php?id=600
   status: pending
@@ -1104,37 +1025,17 @@ topics:
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
   - https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.ngc.nvidia.com/cli/cmd.html
-  - https://www.nvidia.com/en-us/networking/interconnect/
-  - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - https://docs.nvidia.com/cabling-data-centers.pdf
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - https://docs.nvidia.com/dgx-systems/index.html
   - https://developer.nvidia.com/dcgm
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/debugging-and-troubleshooting.html
   - https://docs.nvidia.com/nvidia-system-management-nvsm/index.html
   - https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html
   - https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
   - https://academy.nvidia.com/course/view.php?id=600
   status: pending
@@ -1145,37 +1046,17 @@ topics:
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
   - https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.ngc.nvidia.com/cli/cmd.html
-  - https://www.nvidia.com/en-us/networking/interconnect/
-  - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - https://docs.nvidia.com/cabling-data-centers.pdf
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - https://docs.nvidia.com/dgx-systems/index.html
   - https://developer.nvidia.com/dcgm
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/debugging-and-troubleshooting.html
   - https://docs.nvidia.com/nvidia-system-management-nvsm/index.html
   - https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html
   - https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
   - https://academy.nvidia.com/course/view.php?id=600
   status: pending
@@ -1186,37 +1067,17 @@ topics:
   sources:
   - https://dam-cdn.nvd.orangelogic.com/AssetLink/8gauup66xn2gv80pu4m166li0bhyytk4.pdf
   - https://academy.nvidia.com/en/ai-infrastructure-public-training/
-  - https://docs.nvidia.com/deploy/nvidia-smi/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/
-  - https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html
-  - https://docs.nvidia.com/vgpu/16.0/index.html
-  - https://docs.ngc.nvidia.com/cli/cmd.html
-  - https://www.nvidia.com/en-us/networking/interconnect/
-  - https://docs.nvidia.com/dgx-basepod/deployment-guide-dgx-basepod/latest/gpu-health.html
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/quickstart-basics.html
-  - https://docs.nvidia.com/ai-enterprise/planning-resource/ai-factory-white-paper/latest/deployment-strategies.html
-  - https://docs.nvidia.com/dgx-superpod/deployment-guide-dgx-superpod/latest/validation.html
-  - https://docs.nvidia.com/dgx-superpod/administration-guide-dgx-superpod/latest/system-health.html
-  - https://docs.nvidia.com/dgx/dgx-centos8-install-guide/introduction-rhel-dgx.html
-  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
-  - https://developer.nvidia.com/blog/protecting-sensitive-data-and-ai-models-with-confidential-computing/
-  - https://docs.nvidia.com/dgx-superpod/design-guides/dgx-superpod-data-center-design-h100/latest/cooling.html
-  - https://blogs.nvidia.com/blog/datacenter-efficiency-metrics-isc/
-  - https://docs.nvidia.com/dgx/dgx-os-6-user-guide/index.html
-  - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#examining-system-health
-  - https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/switch-ports.html
-  - https://docs.nvidia.com/cabling-data-centers.pdf
-  - https://docs.nvidia.com/dgx/dgxh100-user-guide/dgxh100-user-guide.pdf
-  - https://docs.nvidia.com/dgx/pdf/dgxa100-service-manual.pdf
   - https://docs.nvidia.com/dgx-systems/index.html
   - https://developer.nvidia.com/dcgm
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/debugging-and-troubleshooting.html
   - https://docs.nvidia.com/nvidia-system-management-nvsm/index.html
   - https://docs.nvidia.com/certification-programs/nvidia-certified-systems/index.html
   - https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/index.html
+  - https://docs.nvidia.com/datacenter/nvsm/latest/nvsm-user-guide/index.html
   - https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html#list-of-basic-commands
   - https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html
   - https://developer.nvidia.com/blog/rapids-cudf-accelerates-pandas-nearly-150x-with-zero-code-changes/
+  - https://developer.nvidia.com/blog/choosing-the-right-storage-for-enterprise-ai-workloads/
   - https://developer.nvidia.com/blog/spotlight-nvidia-bluefield-dpus-power-the-vast-data-platform-for-ai-workload-optimization/
   - https://academy.nvidia.com/course/view.php?id=600
   status: pending

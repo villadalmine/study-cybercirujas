@@ -31,12 +31,26 @@ readings:
     url: https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
   - title: Hugging Face LLM Course — Datasets
     url: https://huggingface.co/learn/llm-course/chapter5/1
+  - title: 'Course reference: Fundamentals of Deep Learning, Getting Started With
+      Deep Learning'
+    url: https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
+  - title: 'Course reference: Introduction to Transformer-Based Natural Language Processing'
+    url: https://courses.nvidia.com/courses/course-v1:DLI+S-FX-08+V1/
+  - title: 'Course reference: Building Transformer-Based Natural Language Processing
+      Applications'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-03+V3
+  - title: 'Course reference: Fundamentals of Accelerated Data Science'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-DS-02+V2
+  - title: 'Course reference: Building LLM Applications With Prompt Engineering'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-11+V1
+  - title: 'Course reference: Rapid Application Development With Large Language Models
+      (LLMs)'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-09+V2
   - title: Autoregressive Model
     url: https://en.wikipedia.org/wiki/Autoregressive_model
   - title: Activation Function
     url: https://en.wikipedia.org/wiki/Activation_function
-  - title: Implementing Deep Learning Methods and Feature Diffusion-Based Models,
-      NVIDIA Technical Blog
+  - title: Implementing Deep Learning Methods and Feature Engineering for Text Data
     url: https://www.kdnuggets.com/2018/04/implementing-deep-learning-methods-feature-engineering-text-data-cbow.html
   - title: Training Hidden Units With Back Propagation
     url: https://web.stanford.edu/group/pdplab/pdphandbook/handbookch6.html
@@ -57,6 +71,21 @@ readings:
     url: https://docs.nvidia.com/cudf/latest/
   - title: scikit-learn — Metrics and Scoring
     url: https://scikit-learn.org/stable/modules/model_evaluation.html
+  - title: 'Course reference: Fundamentals of Deep Learning, Getting Started With
+      Deep Learning'
+    url: https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
+  - title: 'Course reference: Introduction to Transformer-Based Natural Language Processing'
+    url: https://courses.nvidia.com/courses/course-v1:DLI+S-FX-08+V1/
+  - title: 'Course reference: Building Transformer-Based Natural Language Processing
+      Applications'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-03+V3
+  - title: 'Course reference: Building LLM Applications With Prompt Engineering'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-11+V1
+  - title: 'Course reference: Rapid Application Development With Large Language Models
+      (LLMs)'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-09+V2
+  - title: 'Course reference: Fundamentals of Accelerated Data Science'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-DS-02+V2
   - title: RAPIDS
     url: https://rapids.ai/
   - title: GPU Accelerated Data Science With RAPIDS
@@ -84,6 +113,21 @@ readings:
     url: https://huggingface.co/blog/rlhf
   - title: LM Evaluation Harness
     url: https://github.com/EleutherAI/lm-evaluation-harness
+  - title: 'Course reference: Fundamentals of Deep Learning, Getting Started With
+      Deep Learning'
+    url: https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
+  - title: 'Course reference: Introduction to Transformer-Based Natural Language Processing'
+    url: https://courses.nvidia.com/courses/course-v1:DLI+S-FX-08+V1/
+  - title: 'Course reference: Building Transformer-Based Natural Language Processing
+      Applications'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-03+V3
+  - title: 'Course reference: Fundamentals of Accelerated Data Science'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-DS-02+V2
+  - title: 'Course reference: Rapid Application Development With Large Language Models
+      (LLMs)'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-09+V2
+  - title: 'Course reference: Building LLM Applications With Prompt Engineering'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-11+V1
   - title: How to Conduct A/B Testing in Machine Learning?
     url: https://censius.ai/blogs/how-to-conduct-a-b-testing-in-machine-learning
   - title: Zero-Shot Testing
@@ -125,6 +169,21 @@ readings:
     url: https://spacy.io/usage
   - title: scikit-learn User Guide
     url: https://scikit-learn.org/stable/user_guide.html
+  - title: 'Course reference: Fundamentals of Deep Learning, Getting Started With
+      Deep Learning'
+    url: https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
+  - title: 'Course reference: Introduction to Transformer-Based Natural Language Processing'
+    url: https://courses.nvidia.com/courses/course-v1:DLI+S-FX-08+V1/
+  - title: 'Course reference: Building Transformer-Based Natural Language Processing
+      Applications'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-03+V3
+  - title: 'Course reference: Fundamentals of Accelerated Data Science'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-DS-02+V2
+  - title: 'Course reference: Rapid Application Development With Large Language Models
+      (LLMs)'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-09+V2
+  - title: 'Course reference: Building LLM Applications With Prompt Engineering'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-12+V2
   - title: Achieving FP32 Accuracy for INT8 Inference Using Quantization-Aware Training
       With NVIDIA TensorRT
     url: https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
@@ -149,6 +208,9 @@ readings:
     url: https://www.nist.gov/itl/ai-risk-management-framework
   - title: Google Responsible AI Practices
     url: https://ai.google/responsibility/responsible-ai-practices/
+  - title: 'Course reference: Rapid Application Development With Large Language Models
+      (LLMs)'
+    url: https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+C-FX-09+V2
   - title: What Is Retrieval-Augmented Generation aka RAG?, NVIDIA Blogs
     url: https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
 snapshot_date: '2026-09-09'
@@ -165,6 +227,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Assist in deployment and evaluation of model scalability, performance, and
     reliability under the supervision of senior team members
@@ -180,6 +243,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Awareness of the process of extracting insights from large datasets using
     data mining, data visualization, and similar techniques
@@ -195,6 +259,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Build LLM use cases such as retrieval-augmented generation (RAG), chatbots,
     and summarizers
@@ -210,6 +275,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Curate and embed content datasets for RAGs
   topic: 1 - Core Machine Learning and AI Knowledge
@@ -224,6 +290,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Familiarity with the fundamentals of machine learning (feature engineering,
     model comparison, cross validation)
@@ -239,6 +306,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Familiarity with the capabilities of Python natural language packages (spaCy,
     NumPy, vector databases, etc.)
@@ -254,6 +322,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Read research papers (articles, conference papers, etc.) to identify emerging
     LLM trends and technologies
@@ -269,6 +338,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Select and use models to create text embeddings
   topic: 1 - Core Machine Learning and AI Knowledge
@@ -283,6 +353,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Use prompt engineering principles to create prompts to achieve desired results
   topic: 1 - Core Machine Learning and AI Knowledge
@@ -297,6 +368,7 @@ topics:
   - https://blogs.nvidia.com/blog/what-are-foundation-models/
   - https://developer.nvidia.com/blog/generative-ai-research-spotlight-demystifying-diffusion-based-models/
   - https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Use Python packages (spaCy, NumPy, Keras, etc.) to implement specific traditional
     machine learning analyses
@@ -309,6 +381,7 @@ topics:
   - https://docs.rapids.ai/api/cuml/stable/
   - https://developer.nvidia.com/blog/get-started-with-gpu-acceleration-for-data-science/
   - https://docs.nvidia.com/cudf/latest/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://rapids.ai/
   - https://www.nvidia.com/en-us/deep-learning-ai/software/rapids/
   status: pending
@@ -323,6 +396,7 @@ topics:
   - https://docs.rapids.ai/api/cuml/stable/
   - https://developer.nvidia.com/blog/get-started-with-gpu-acceleration-for-data-science/
   - https://docs.nvidia.com/cudf/latest/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://rapids.ai/
   - https://www.nvidia.com/en-us/deep-learning-ai/software/rapids/
   status: pending
@@ -337,6 +411,7 @@ topics:
   - https://docs.rapids.ai/api/cuml/stable/
   - https://developer.nvidia.com/blog/get-started-with-gpu-acceleration-for-data-science/
   - https://docs.nvidia.com/cudf/latest/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://rapids.ai/
   - https://www.nvidia.com/en-us/deep-learning-ai/software/rapids/
   status: pending
@@ -350,6 +425,7 @@ topics:
   - https://docs.rapids.ai/api/cuml/stable/
   - https://developer.nvidia.com/blog/get-started-with-gpu-acceleration-for-data-science/
   - https://docs.nvidia.com/cudf/latest/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://rapids.ai/
   - https://www.nvidia.com/en-us/deep-learning-ai/software/rapids/
   status: pending
@@ -364,6 +440,7 @@ topics:
   - https://docs.rapids.ai/api/cuml/stable/
   - https://developer.nvidia.com/blog/get-started-with-gpu-acceleration-for-data-science/
   - https://docs.nvidia.com/cudf/latest/
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://rapids.ai/
   - https://www.nvidia.com/en-us/deep-learning-ai/software/rapids/
   status: pending
@@ -377,6 +454,7 @@ topics:
   - https://github.com/NVDLI/fundamentals-of-deep-learning
   - https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
   - https://github.com/EleutherAI/lm-evaluation-harness
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Awareness of the process of extracting insights from large datasets using
     data mining, data visualization, and similar techniques
@@ -388,6 +466,7 @@ topics:
   - https://github.com/NVDLI/fundamentals-of-deep-learning
   - https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
   - https://github.com/EleutherAI/lm-evaluation-harness
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Compare models using statistical performance metrics, such as loss functions
     or proportion of explained variance
@@ -399,6 +478,7 @@ topics:
   - https://github.com/NVDLI/fundamentals-of-deep-learning
   - https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
   - https://github.com/EleutherAI/lm-evaluation-harness
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Conduct data analysis under the supervision of a senior team member
   topic: 3 - Experimentation
@@ -409,6 +489,7 @@ topics:
   - https://github.com/NVDLI/fundamentals-of-deep-learning
   - https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
   - https://github.com/EleutherAI/lm-evaluation-harness
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Create graphs, charts, or other visualizations to convey the results of data
     analysis using specialized software
@@ -420,6 +501,7 @@ topics:
   - https://github.com/NVDLI/fundamentals-of-deep-learning
   - https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
   - https://github.com/EleutherAI/lm-evaluation-harness
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   status: pending
   title: Identify relationships and trends or any factors that could affect the results
     of research
@@ -433,6 +515,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Assist in the deployment and evaluations of model scalability, performance,
@@ -447,6 +530,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Build LLM use cases such as RAGs, chatbots, and summarizers
@@ -460,6 +544,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Familiarity with the capabilities of Python natural language packages (spaCy,
@@ -474,6 +559,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Identify system data, hardware, or software components required to meet user
@@ -488,6 +574,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Monitor functioning of data collection, experiments, and other software processes
@@ -501,6 +588,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Use Python packages (spaCy, NumPy, Keras, etc.) to implement specific traditional
@@ -515,6 +603,7 @@ topics:
   - https://developer.nvidia.com/tensorrt-getting-started
   - https://docs.nvidia.com/deeplearning/nemo/best-practices/index.html
   - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+  - https://www.nvidia.com/en-us/training/instructor-led-workshops/fundamentals-of-deep-learning/
   - https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
   status: pending
   title: Write software components or scripts under the supervision of a senior team

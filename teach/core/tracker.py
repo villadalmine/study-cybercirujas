@@ -661,7 +661,7 @@ def snapshot_topics(cert_id: str, backend: str | None = None, force: bool = Fals
     # fails to load leaves the syllabus saved and says so.
     try:
         readings = attach_readings(cert_id)
-    except (TrackerError, httpx.HTTPError, OSError) as error:
+    except Exception as error:   # noqa: BLE001 — the snapshot is saved; any failure here is reported, not raised
         readings = {"errors": [str(error)]}
     return {
         "cert": cert_id,
@@ -1068,8 +1068,11 @@ def attach_readings(cert_id: str) -> dict:
     picks it up.
 
     `sources` is outside a topic's identity, so this never marks content stale.
-    Running it again replaces what the previous run added and keeps anything a
-    person added by hand.
+    Running it again replaces what the previous run added (the catalogued URLs of
+    the previous `readings:`) and keeps anything else in `sources`, including a URL
+    a person added that the vendor also lists. If either document cannot be read
+    or parsed, nothing is written: half the readings would look like the vendor
+    removing the other half.
     """
     data = catalog.load()
     cert = data["certs"].get(cert_id)
@@ -1082,25 +1085,25 @@ def attach_readings(cert_id: str) -> dict:
         raise TrackerError(f"'{cert_id}' has no syllabus yet: snapshot it first")
 
     found: dict[str, list[dict]] = {}
-    errors = []
     for key in ("overview", "objectives"):            # the page first: it is the one kept current
         url = sources.get(key)
         if not url:
             continue
         try:
             body, content_type = _get_bytes(url)
-        except TrackerError as error:
-            errors.append(f"{key}: {error}")
-            continue
-        found = merge_readings(found, readings_by_domain(document_stream(url, body, content_type), topics))
+            stream = document_stream(url, body, content_type)
+        except Exception as error:   # fetch or parse (pypdf raises its own types): either way, unread
+            raise TrackerError(f"{cert_id}: {key} could not be read ({error}); syllabus left as it was") from error
+        found = merge_readings(found, readings_by_domain(stream, topics))
 
     before = yaml.safe_dump(post.metadata, sort_keys=True)
     official = official_domains()
-    previous = {r["url"] for items in (post.metadata.get("readings") or {}).values() for r in items}
+    added_before = {r["url"] for items in (post.metadata.get("readings") or {}).values() for r in items
+                    if _host(r["url"]) in official}
     current = {r["url"] for items in found.values() for r in items}
     objectives = sources.get("objectives")
     for topic in topics:
-        kept = [s for s in topic.get("sources") or [] if s not in previous and s not in current]
+        kept = [s for s in topic.get("sources") or [] if s not in added_before]
         links = [r["url"] for r in found.get(str(topic.get("topic") or "").strip(), [])
                  if _host(r["url"]) in official]
         topic["sources"] = list(dict.fromkeys((kept or ([objectives] if objectives else [])) + links))
@@ -1118,7 +1121,6 @@ def attach_readings(cert_id: str) -> dict:
         "domains": {domain: len(items) for domain, items in found.items()},
         "in_prompt": sorted({u for t in topics for u in t["sources"]} & current),
         "uncatalogued": sorted({_host(u) for u in current} - official),
-        "errors": errors,
     }
 
 
