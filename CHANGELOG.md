@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.7](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.6...v0.6.7) (2026-11-11)
+
+
+### Features
+
+* **cli:** teach cert readings attaches the vendor's readings to the syllabus ([#280](https://github.com/villadalmine/study-cybercirujas/issues/280)) ([b0d968a](https://github.com/villadalmine/study-cybercirujas/commit/b0d968a87ac8a3b4428d198ff415941cff606967))
+* **tracker:** read the links a study guide lists per domain ([#279](https://github.com/villadalmine/study-cybercirujas/issues/279)) ([e618c4a](https://github.com/villadalmine/study-cybercirujas/commit/e618c4ae38b7e4b4eb069dc27254252c093d4acb))
+* **tracker:** sync the AI certifications (category: ai) ([#281](https://github.com/villadalmine/study-cybercirujas/issues/281)) ([142d132](https://github.com/villadalmine/study-cybercirujas/commit/142d1327f624acc395b65a3e0cc340e9d6bb6162))
+
 ## [0.6.6](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.5...v0.6.6) (2026-11-07)
 
 
