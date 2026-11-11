@@ -123,7 +123,12 @@ projects:
   # One vendor, several hosts: product docs, developer pages, the NGC catalogue
   # and the marketing site that holds the certification pages themselves.
   # dam-cdn.nvd.orangelogic.com is NVIDIA's asset CDN: the exam blueprints live there.
-  nvidia:       {domains: [docs.nvidia.com, developer.nvidia.com, www.nvidia.com, catalog.ngc.nvidia.com, docs.ngc.nvidia.com, nvidia.github.io, run-ai-docs.nvidia.com, dam-cdn.nvd.orangelogic.com], docs: https://docs.nvidia.com/, versioned: true}
+  # academy.nvidia.com and blogs.nvidia.com (2026-11-11, #271): the NVIDIA Academy course
+  # and the NVIDIA Blog are what the study guides list under Recommended Training and
+  # Suggested Readings; `teach cert readings` hands catalogued hosts to the generator.
+  # Like every host here, they also count as official for every certification's
+  # citations (check_sources, quality_score), not only for the readings.
+  nvidia:       {domains: [docs.nvidia.com, developer.nvidia.com, www.nvidia.com, catalog.ngc.nvidia.com, docs.ngc.nvidia.com, nvidia.github.io, run-ai-docs.nvidia.com, dam-cdn.nvd.orangelogic.com, academy.nvidia.com, blogs.nvidia.com], docs: https://docs.nvidia.com/, versioned: true}
   rapids:       {domains: [docs.rapids.ai, rapids.ai], docs: https://docs.rapids.ai/, versioned: true}
 
   # --- Batch catalogued 2026-09-11: the 70 most-cited uncatalogued domains,

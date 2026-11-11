@@ -31,6 +31,7 @@ Principle: **All catalog data is derived from an official scraped source**; noth
 
 - `teach tracker sync --provider cncf` — deterministic, without AI: GitHub API calls over `cncf/curriculum`; the date of the last commit of each PDF is the curriculum version; marks `new-version-available` if upstream changed.
 - `teach tracker sync --provider lpi --backend <ai>` — scrapes `lpi.org` and AI converts the page into structured updates (level/validity/requires).
+- `teach cert readings <id>` — deterministic, without AI: keeps the links a study guide lists under *Recommended Training* / *Suggested Readings* (PDF `/URI` annotations and HTML `<a href>`), filed per domain under the syllabus' `readings:`. Those on a host catalogued in `docs/sources.yaml` join the `sources` of that domain's topics, which is what the generator receives; the page wins over the PDF on the same title. `sources` is not part of a topic's identity, so nothing goes stale. `teach cert snapshot` runs it after freezing.
 - `teach cert snapshot <id> --backend <ai>` — downloads the official objectives (HTML or **PDF**, parsed via `pypdf`) and AI converts them into frozen YAML topics in the MD. Existing statuses are preserved; `--force` to re-snapshot.
 - `teach paths generate --backend <ai>` — AI proposes career paths from the catalog (respecting `requires`); paths with `edited: true` (e.g., those encoding scraped data from Kubestronaut/CARE) are never overwritten.
 - Runs periodically (cron); never touches generated content — only the catalog, and alerts on changes.
