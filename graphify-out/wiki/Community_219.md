@@ -1,43 +1,53 @@
 # Community 219
 
-> 11 nodes · cohesion 0.20
+> 19 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **tree_sha256()** (8 connections) — `scripts/curriculum_diff.py`
-- **_extract_run()** (7 connections) — `scripts/curriculum_diff.py`
-- **number()** (6 connections) — `scripts/curriculum_diff.py`
-- **check_tree()** (4 connections) — `scripts/curriculum_diff.py`
+- **hashlib** (27 connections)
+- **upgrade_versions.py** (20 connections) — `scripts/upgrade_versions.py`
+- **run()** (11 connections) — `scripts/upgrade_versions.py`
+- **run_citations()** (11 connections) — `scripts/upgrade_versions.py`
+- **rewrite()** (5 connections) — `scripts/upgrade_versions.py`
+- **sha256()** (5 connections) — `scripts/upgrade_versions.py`
 - **sha256_text()** (4 connections) — `scripts/curriculum_diff.py`
-- **snapshot()** (4 connections) — `scripts/curriculum_diff.py`
-- **dump_yaml()** (3 connections) — `scripts/curriculum_diff.py`
-- **Result for v1.37 (2026-10-20)** (2 connections) — `docs/upgrades/README.md`
-- **What a real curriculum always satisfies: domains, objectives in each, weights…** (1 connections) — `scripts/curriculum_diff.py`
-- **Hash of the objective tree itself, so two PDFs with the same objectives compare…** (1 connections) — `scripts/curriculum_diff.py`
-- **A weight as the document means it: 10, not 10.0; 3.33 stays 3.33.** (1 connections) — `scripts/curriculum_diff.py`
+- **stamp()** (4 connections) — `scripts/upgrade_versions.py`
+- **stamp_block()** (4 connections) — `scripts/upgrade_versions.py`
+- **Path** (4 connections)
+- **evidence_lines()** (3 connections) — `scripts/upgrade_versions.py`
+- **main()** (3 connections) — `scripts/upgrade_versions.py`
+- **in_scope()** (2 connections) — `scripts/upgrade_versions.py`
+- **move()** (1 connections) — `scripts/upgrade_versions.py`
+- **meta.yaml text with its tool_edit block replaced (or appended): a top-level key…** (1 connections) — `scripts/upgrade_versions.py`
+- **Every curriculum citation and `sources` link of the material, made to say what…** (1 connections) — `scripts/upgrade_versions.py`
+- **Apply a Kubernetes version bump to exactly the lines an upgrade plan lists…** (1 connections) — `scripts/upgrade_versions.py`
+- **The line with its version tokens moved, or unchanged when it already names the…** (1 connections) — `scripts/upgrade_versions.py`
+- **Line numbers inside lab.yaml's `verified:` block: the record of a proof that…** (1 connections) — `scripts/upgrade_versions.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (7 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 5](Community_5.md) (6 shared connections)
+- [Community 141](Community_141.md) (4 shared connections)
+- [Community 57](Community_57.md) (3 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
+- [Community 26](Community_26.md) (2 shared connections)
 - [Community 70](Community_70.md) (2 shared connections)
-- [Community 105](Community_105.md) (2 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 158](Community_158.md) (1 shared connections)
-- [Community 167](Community_167.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
 
 ## Source Files
 
-- `docs/upgrades/README.md`
 - `scripts/curriculum_diff.py`
+- `scripts/upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (93%)
-- INFERRED: 2 (7%)
+- EXTRACTED: 76 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

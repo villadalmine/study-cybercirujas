@@ -1,29 +1,35 @@
 # Community 244
 
-> 7 nodes · cohesion 0.29
+> 11 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **Principles** (8 connections) — `docs/PRINCIPLES.md`
-- **1. Information sovereignty** (1 connections) — `docs/PRINCIPLES.md`
-- **2. Curriculum-as-Code** (1 connections) — `docs/PRINCIPLES.md`
-- **3. Determinism** (1 connections) — `docs/PRINCIPLES.md`
-- **4. With AI or without AI: the same pipeline and the same validator** (1 connections) — `docs/PRINCIPLES.md`
-- **5. Honest about limits** (1 connections) — `docs/PRINCIPLES.md`
-- **6. Open by default** (1 connections) — `docs/PRINCIPLES.md`
+- **_domain_markers()** (8 connections) — `teach/core/tracker.py`
+- **_domain_of()** (6 connections) — `teach/core/tracker.py`
+- **_name_pattern()** (5 connections) — `teach/core/tracker.py`
+- **_heading_like()** (3 connections) — `teach/core/tracker.py`
+- **.test_a_bare_domain_number_is_not_a_marker()** (3 connections) — `tests/test_tracker.py`
+- **.test_a_possessive_domain_name_still_matches_itself()** (3 connections) — `tests/test_tracker.py`
+- **Pattern** (2 connections)
+- **A domain name, tolerant of the plural a vendor drops or adds between documents.…** (1 connections) — `teach/core/tracker.py`
+- **(name pattern, objective-id pattern, domain) per syllabus topic. The domain is…** (1 connections) — `teach/core/tracker.py`
+- **Short and not a sentence: how a heading, a tab or a domain title is laid out.** (1 connections) — `teach/core/tracker.py`
+- **The domain a line announces, if it is laid out to announce one. A domain's name…** (1 connections) — `teach/core/tracker.py`
 
 ## Relationships
 
-- [Community 23](Community_23.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 104](Community_104.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
 
 ## Source Files
 
-- `docs/PRINCIPLES.md`
+- `teach/core/tracker.py`
+- `tests/test_tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

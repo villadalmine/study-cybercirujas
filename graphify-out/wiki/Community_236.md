@@ -1,29 +1,47 @@
 # Community 236
 
-> 6 nodes · cohesion 0.47
+> 12 nodes · cohesion 0.27
 
 ## Key Concepts
 
-- **SnapshotDocumentTests** (6 connections) — `tests/test_tracker.py`
-- **.fetch()** (4 connections) — `tests/test_tracker.py`
-- **.test_fetch_text_still_cuts_for_its_other_callers()** (2 connections) — `tests/test_tracker.py`
-- **.test_refuses_a_document_longer_than_the_limit_instead_of_truncating()** (2 connections) — `tests/test_tracker.py`
-- **.test_returns_the_full_text_and_the_sha256_of_the_bytes()** (2 connections) — `tests/test_tracker.py`
-- **The snapshot reads the whole objectives document and records its hash (#63;…** (1 connections) — `tests/test_tracker.py`
+- **Lab** (21 connections) — `teach/lab/spec.py`
+- **down()** (10 connections) — `teach/lab/runner.py`
+- **check()** (8 connections) — `teach/lab/runner.py`
+- **container_name()** (8 connections) — `teach/lab/runner.py`
+- **_require_running()** (8 connections) — `teach/lab/runner.py`
+- **_run_mode()** (8 connections) — `teach/lab/runner.py`
+- **_ours()** (7 connections) — `teach/lab/runner.py`
+- **shell()** (7 connections) — `teach/lab/runner.py`
+- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
+- **.contract_ok()** (1 connections) — `teach/lab/spec.py`
+- **.lab_id()** (1 connections) — `teach/lab/spec.py`
+- **`info` if the container is a study-lab one; refuse to touch it otherwise. run()…** (1 connections) — `teach/lab/runner.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 12](Community_12.md) (25 shared connections)
+- [Community 256](Community_256.md) (4 shared connections)
+- [Community 29](Community_29.md) (3 shared connections)
+- [Community 26](Community_26.md) (3 shared connections)
+- [Community 280](Community_280.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 114](Community_114.md) (2 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
+- [Community 219](Community_219.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_tracker.py`
+- `teach/lab/runner.py`
+- `teach/lab/spec.py`
+- `tests/lab/test_runner_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 49 (77%)
+- INFERRED: 15 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

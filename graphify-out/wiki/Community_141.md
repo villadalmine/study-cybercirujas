@@ -1,33 +1,51 @@
 # Community 141
 
-> 11 nodes · cohesion 0.33
+> 17 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **ToolEditProvenance** (12 connections) — `tests/test_upgrade_versions.py`
-- **.ok()** (7 connections) — `tests/test_upgrade_versions.py`
-- **.base()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.meta()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_another_tool_or_a_sha_the_pins_do_not_name()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.test_accepted_for_the_line_the_script_writes()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_guard_flags_a_wrong_rewrite_of_any_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_an_edit_outside_the_plan()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_other_content_on_a_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_the_committed_pins_name_this_script()** (1 connections) — `tests/test_upgrade_versions.py`
-- **curriculum_diff.tool_edit_ok / wrong_rewrites: a scripted edit counts only for…** (1 connections) — `tests/test_upgrade_versions.py`
+- **yaml** (143 connections)
+- **check_curriculum_consistency.py** (9 connections) — `scripts/check_curriculum_consistency.py`
+- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
+- **check()** (8 connections) — `scripts/check_curriculum_consistency.py`
+- **main()** (5 connections) — `scripts/check_curriculum_consistency.py`
+- **key()** (4 connections) — `scripts/curriculum_citations.py`
+- **keys()** (4 connections) — `scripts/curriculum_citations.py`
+- **table()** (4 connections) — `scripts/gen_readme_table.py`
+- **load_baseline()** (3 connections) — `scripts/check_curriculum_consistency.py`
+- **main()** (3 connections) — `scripts/gen_readme_table.py`
+- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
+- **Path** (2 connections)
+- **CI gate (#220): the repo must say ONE thing about each cert's curriculum. No…** (1 connections) — `scripts/check_curriculum_consistency.py`
+- **(new offenders, stale baseline keys, all offenders).** (1 connections) — `scripts/check_curriculum_consistency.py`
+- **Identity of an offender for the baseline: the file, the text and which repeat…** (1 connections) — `scripts/curriculum_citations.py`
+- **Regenerate the certification table in README.md from docs/STATUS.md.…** (1 connections) — `scripts/gen_readme_table.py`
+- **The `## Certifications` table of docs/STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 43](Community_43.md) (15 shared connections)
+- [Community 124](Community_124.md) (9 shared connections)
+- [Community 5](Community_5.md) (8 shared connections)
+- [Community 89](Community_89.md) (8 shared connections)
+- [Community 63](Community_63.md) (7 shared connections)
+- [Community 59](Community_59.md) (6 shared connections)
+- [Community 111](Community_111.md) (6 shared connections)
+- [Community 32](Community_32.md) (5 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
+- [Community 29](Community_29.md) (5 shared connections)
+- [Community 219](Community_219.md) (4 shared connections)
+- [Community 214](Community_214.md) (4 shared connections)
 
 ## Source Files
 
-- `tests/test_upgrade_versions.py`
+- `scripts/check_curriculum_consistency.py`
+- `scripts/curriculum_citations.py`
+- `scripts/gen_readme_table.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 177 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

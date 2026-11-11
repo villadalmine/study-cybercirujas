@@ -1,29 +1,33 @@
 # Community 250
 
-> 7 nodes · cohesion 0.38
+> 11 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **test_actions_pinned.py** (7 connections) — `tests/test_actions_pinned.py`
-- **unpinned()** (5 connections) — `tests/test_actions_pinned.py`
-- **ActionsPinnedTests** (3 connections) — `tests/test_actions_pinned.py`
-- **.test_a_tag_or_a_missing_comment_is_reported()** (2 connections) — `tests/test_actions_pinned.py`
-- **.test_every_action_is_pinned_by_sha_with_version_comment()** (2 connections) — `tests/test_actions_pinned.py`
-- **Path** (1 connections)
-- **Every third-party action in .github/ is pinned to a full commit SHA with a `#…** (1 connections) — `tests/test_actions_pinned.py`
+- **SyncAiTests** (10 connections) — `tests/test_tracker.py`
+- **.run_sync()** (10 connections) — `tests/test_tracker.py`
+- **.test_a_page_is_compared_by_its_text_not_its_bytes()** (2 connections) — `tests/test_tracker.py`
+- **.test_an_experience_level_is_not_a_tier()** (2 connections) — `tests/test_tracker.py`
+- **.test_baseline_then_same_then_changed_then_back()** (2 connections) — `tests/test_tracker.py`
+- **.test_drift_never_opens_an_upgrade_window_the_consistency_check_rejects()** (2 connections) — `tests/test_tracker.py`
+- **.test_reads_level_and_validity_without_rewording_an_agreeing_validity()** (2 connections) — `tests/test_tracker.py`
+- **.test_the_frozen_pdf_hash_supersedes_a_baseline()** (2 connections) — `tests/test_tracker.py`
+- **.test_unknown_changes_nothing()** (2 connections) — `tests/test_tracker.py`
+- **`teach tracker sync --provider ai` (#271): drift by hash, level and validity by…** (1 connections) — `tests/test_tracker.py`
+- **One sync over a catalog holding `cert`; the same dict is updated, so calls…** (1 connections) — `tests/test_tracker.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_actions_pinned.py`
+- `tests/test_tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (100%)
+- EXTRACTED: 19 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

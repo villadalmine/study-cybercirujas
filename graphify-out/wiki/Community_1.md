@@ -1,10 +1,11 @@
 # Community 1
 
-> 40 nodes · cohesion 0.10
+> 42 nodes · cohesion 0.09
 
 ## Key Concepts
 
 - **test_cli.py** (23 connections) — `tests/lab/test_cli.py`
+- **lab/__init__.py** (20 connections) — `teach/lab/__init__.py`
 - **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
@@ -28,27 +29,27 @@
 - **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
 - **skipif** (3 connections)
-- **make()** (2 connections) — `tests/lab/conftest.py`
-- *... and 15 more nodes in this community*
+- *... and 17 more nodes in this community*
 
 ## Relationships
 
+- [Community 26](Community_26.md) (8 shared connections)
 - [Community 61](Community_61.md) (7 shared connections)
-- [Community 26](Community_26.md) (7 shared connections)
-- [Community 29](Community_29.md) (5 shared connections)
-- [Community 56](Community_56.md) (5 shared connections)
-- [Community 18](Community_18.md) (3 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
+- [Community 29](Community_29.md) (6 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
+- [Community 70](Community_70.md) (3 shared connections)
+- [Community 69](Community_69.md) (3 shared connections)
 - [Community 34](Community_34.md) (2 shared connections)
-- [Community 12](Community_12.md) (2 shared connections)
-- [Community 44](Community_44.md) (2 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
+- [Community 236](Community_236.md) (1 shared connections)
+- [Community 0](Community_0.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/LABS-RUNNER.md`
+- `teach/lab/__init__.py`
 - `tests/lab/conftest.py`
 - `tests/lab/test_cli.py`
 - `tests/lab/test_e2e.py`
@@ -56,8 +57,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 114 (97%)
-- INFERRED: 3 (3%)
+- EXTRACTED: 131 (98%)
+- INFERRED: 3 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

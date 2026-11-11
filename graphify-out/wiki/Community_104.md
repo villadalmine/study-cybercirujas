@@ -1,48 +1,54 @@
 # Community 104
 
-> 17 nodes · cohesion 0.31
+> 34 nodes · cohesion 0.09
 
 ## Key Concepts
 
-- **check_source_chain.py** (19 connections) — `scripts/check_source_chain.py`
-- **Chain** (11 connections) — `scripts/check_source_chain.py`
-- **.labs()** (8 connections) — `scripts/check_source_chain.py`
-- **.content_and_translations()** (7 connections) — `scripts/check_source_chain.py`
-- **.videos()** (7 connections) — `scripts/check_source_chain.py`
-- **rel()** (7 connections) — `scripts/check_source_chain.py`
-- **.count()** (6 connections) — `scripts/check_source_chain.py`
-- **.lack()** (6 connections) — `scripts/check_source_chain.py`
-- **.syllabi()** (6 connections) — `scripts/check_source_chain.py`
-- **load_yaml()** (6 connections) — `scripts/check_source_chain.py`
-- **.run()** (5 connections) — `scripts/check_source_chain.py`
-- **main()** (5 connections) — `scripts/check_source_chain.py`
-- **frontmatter()** (4 connections) — `scripts/check_source_chain.py`
-- **Path** (3 connections)
-- **baseline()** (2 connections) — `scripts/check_source_chain.py`
-- **.__init__()** (2 connections) — `scripts/check_source_chain.py`
-- **Does every link of the source chain say where it comes from? docs/PRINCIPLES.md…** (1 connections) — `scripts/check_source_chain.py`
+- **ReadingsTests** (19 connections) — `tests/test_tracker.py`
+- **readings_by_domain()** (14 connections) — `teach/core/tracker.py`
+- **document_stream()** (12 connections) — `teach/core/tracker.py`
+- **_pdf_page_items()** (10 connections) — `teach/core/tracker.py`
+- **_drop_running_heads()** (7 connections) — `teach/core/tracker.py`
+- **_pdf_stream()** (6 connections) — `teach/core/tracker.py`
+- **_opens_reading_list()** (5 connections) — `teach/core/tracker.py`
+- **make_pdf()** (4 connections) — `tests/test_tracker.py`
+- **.test_pdf_link_annotations_are_read_with_the_line_they_cover()** (4 connections) — `tests/test_tracker.py`
+- **.test_a_domain_named_with_another_plural_is_still_that_domain()** (3 connections) — `tests/test_tracker.py`
+- **.test_an_unrecognised_section_is_dropped_not_filed_under_the_last_domain()** (3 connections) — `tests/test_tracker.py`
+- **.test_html_links_are_kept_and_filed_under_their_domain()** (3 connections) — `tests/test_tracker.py`
+- **.test_prose_after_a_list_closes_it()** (3 connections) — `tests/test_tracker.py`
+- **.test_relative_links_are_resolved_against_the_page()** (3 connections) — `tests/test_tracker.py`
+- **.test_the_heading_words_in_running_prose_open_nothing()** (3 connections) — `tests/test_tracker.py`
+- **.test_a_box_over_the_publisher_only_still_gets_the_title()** (2 connections) — `tests/test_tracker.py`
+- **.test_a_reading_heading_heading_two_pages_is_not_a_running_head()** (2 connections) — `tests/test_tracker.py`
+- **.test_a_running_footer_is_dropped_wherever_it_sits()** (2 connections) — `tests/test_tracker.py`
+- **.test_a_title_wrapped_onto_two_boxes_is_one_reading()** (2 connections) — `tests/test_tracker.py`
+- **.test_two_columns_each_link_gets_its_own_column()** (2 connections) — `tests/test_tracker.py`
+- **key()** (1 connections) — `teach/core/tracker.py`
+- **col_start()** (1 connections) — `teach/core/tracker.py`
+- **column()** (1 connections) — `teach/core/tracker.py`
+- **on()** (1 connections) — `teach/core/tracker.py`
+- **visit()** (1 connections) — `teach/core/tracker.py`
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [Community 63](Community_63.md) (4 shared connections)
-- [Community 2](Community_2.md) (3 shared connections)
+- [Community 74](Community_74.md) (9 shared connections)
+- [Community 244](Community_244.md) (4 shared connections)
 - [Community 43](Community_43.md) (3 shared connections)
-- [Community 124](Community_124.md) (2 shared connections)
-- [Community 70](Community_70.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
+- [Community 274](Community_274.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 160](Community_160.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 188](Community_188.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_source_chain.py`
+- `teach/core/tracker.py`
+- `tests/test_tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 60 (95%)
-- INFERRED: 3 (5%)
+- EXTRACTED: 71 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

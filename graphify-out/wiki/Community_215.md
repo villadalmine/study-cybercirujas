@@ -1,6 +1,6 @@
 # Community 215
 
-> 54 nodes · cohesion 0.06
+> 36 nodes · cohesion 0.09
 
 ## Key Concepts
 
@@ -8,55 +8,54 @@
 - **StoredShapeTests** (13 connections) — `tests/test_bot_stats.py`
 - **record()** (13 connections) — `teach/core/bot_stats.py`
 - **load()** (10 connections) — `teach/core/bot_stats.py`
-- **ratelimit.py** (10 connections) — `teach/core/ratelimit.py`
 - **accepted()** (9 connections) — `teach/core/bot_stats.py`
 - **path()** (8 connections) — `teach/core/bot_stats.py`
-- **Limiter** (7 connections) — `teach/core/ratelimit.py`
 - **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
-- **ClientIdentityTests** (6 connections) — `tests/test_catalog_cache_ratelimit.py`
-- **client_id()** (6 connections) — `teach/core/ratelimit.py`
-- **_Req** (5 connections) — `tests/test_catalog_cache_ratelimit.py`
 - **_write()** (5 connections) — `teach/core/bot_stats.py`
 - **.test_the_file_does_not_grow_with_the_number_of_answers()** (5 connections) — `tests/test_bot_stats.py`
-- **threading** (4 connections)
-- **RateLimitTests** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
 - **_known_models()** (3 connections) — `teach/core/bot_stats.py`
-- **.hit()** (3 connections) — `teach/core/ratelimit.py`
 - **._shape()** (3 connections) — `tests/test_bot_stats.py`
 - **._stored()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_a_corrupt_file_does_not_take_the_endpoint_down()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_no_timestamp_is_written_per_request()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_since_is_the_first_day_and_never_moves()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_the_breakdown_counts_each_characteristic_independently()** (3 connections) — `tests/test_bot_stats.py`
-- **.test_extra_trusted_hops_and_missing_header()** (3 connections) — `tests/test_catalog_cache_ratelimit.py`
-- *... and 29 more nodes in this community*
+- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
+- **_blank()** (2 connections) — `teach/core/bot_stats.py`
+- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_refused_event_writes_nothing_at_all()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_an_unwritable_path_is_swallowed()** (2 connections) — `tests/test_bot_stats.py`
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (11 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
 - [Community 59](Community_59.md) (3 shared connections)
-- [Community 125](Community_125.md) (3 shared connections)
-- [Community 56](Community_56.md) (3 shared connections)
+- [Community 103](Community_103.md) (3 shared connections)
 - [Community 107](Community_107.md) (2 shared connections)
-- [Community 12](Community_12.md) (2 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
 - [Community 89](Community_89.md) (1 shared connections)
-- [Community 221](Community_221.md) (1 shared connections)
-- [Community 267](Community_267.md) (1 shared connections)
+- [Community 114](Community_114.md) (1 shared connections)
 - [Community 10](Community_10.md) (1 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [Community 160](Community_160.md) (1 shared connections)
+- [Community 221](Community_221.md) (1 shared connections)
+- [Community 73](Community_73.md) (1 shared connections)
+- [Community 249](Community_249.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/AGENT-GUIDE.md`
+- `docs/AGENTIC_TOOLING_STUDY.md`
 - `teach/core/bot_stats.py`
-- `teach/core/ratelimit.py`
 - `tests/test_bot_stats.py`
-- `tests/test_catalog_cache_ratelimit.py`
 
 ## Audit Trail
 
-- EXTRACTED: 112 (97%)
-- INFERRED: 4 (3%)
+- EXTRACTED: 76 (95%)
+- INFERRED: 4 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

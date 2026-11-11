@@ -1,63 +1,60 @@
 # Community 74
 
-> 41 nodes · cohesion 0.09
+> 33 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **tracker.py** (40 connections) — `teach/core/tracker.py`
-- **snapshot_topics()** (18 connections) — `teach/core/tracker.py`
-- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **fetch_text()** (12 connections) — `teach/core/tracker.py`
-- **sync_cncf()** (12 connections) — `teach/core/tracker.py`
-- **save()** (11 connections) — `teach/core/catalog.py`
-- **_ai_yaml()** (10 connections) — `teach/core/tracker.py`
-- **TrackerError** (9 connections) — `teach/core/tracker.py`
-- **_get_bytes()** (9 connections) — `teach/core/tracker.py`
-- **main()** (8 connections) — `scripts/check_versions.py`
+- **tracker.py** (60 connections) — `teach/core/tracker.py`
+- **snapshot_topics()** (19 connections) — `teach/core/tracker.py`
+- **attach_readings()** (17 connections) — `teach/core/tracker.py`
+- **sync_ai()** (15 connections) — `teach/core/tracker.py`
+- **_ai_yaml()** (11 connections) — `teach/core/tracker.py`
+- **_get_bytes()** (11 connections) — `teach/core/tracker.py`
+- **TrackerError** (10 connections) — `teach/core/tracker.py`
+- **document_text()** (8 connections) — `teach/core/tracker.py`
 - **fetch_document()** (8 connections) — `teach/core/tracker.py`
-- **sync_lpi()** (8 connections) — `teach/core/tracker.py`
-- **httpx** (8 connections)
-- **document_text()** (7 connections) — `teach/core/tracker.py`
-- **generate_paths()** (7 connections) — `teach/core/tracker.py`
-- **translate_paths()** (6 connections) — `teach/core/tracker.py`
-- **main()** (5 connections) — `scripts/check_syllabus.py`
-- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
+- **normalise_weights()** (7 connections) — `teach/core/tracker.py`
 - **_get()** (5 connections) — `teach/core/tracker.py`
-- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
+- **_html_stream()** (5 connections) — `teach/core/tracker.py`
+- **official_domains()** (5 connections) — `teach/core/tracker.py`
+- **_plain()** (5 connections) — `teach/core/tracker.py`
+- **html** (5 connections)
+- **_validity()** (4 connections) — `teach/core/tracker.py`
 - **2026-07-16** (4 connections) — `docs/HISTORY.md`
-- **smells()** (3 connections) — `scripts/check_syllabus.py`
-- **published_version()** (3 connections) — `teach/core/tracker.py`
-- **html** (3 connections)
+- **_host()** (3 connections) — `teach/core/tracker.py`
+- **urllib_parse** (3 connections)
+- **_exam_facts()** (2 connections) — `teach/core/tracker.py`
 - **Response** (1 connections)
-- *... and 16 more nodes in this community*
+- **Exception** (1 connections)
+- **Tracker/scraper: nothing is static — the whole catalog derives from sources. -…** (1 connections) — `teach/core/tracker.py`
+- **(full text, sha256 of the bytes served) of an objectives document, for a…** (1 connections) — `teach/core/tracker.py`
+- **Hosts docs/sources.yaml catalogues: every project's domains plus the neutral…** (1 connections) — `teach/core/tracker.py`
+- *... and 8 more nodes in this community*
 
 ## Relationships
 
-- [Community 63](Community_63.md) (10 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (9 shared connections)
-- [Community 173](Community_173.md) (7 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 0](Community_0.md) (6 shared connections)
-- [Community 247](Community_247.md) (5 shared connections)
-- [Community 46](Community_46.md) (5 shared connections)
-- [Community 59](Community_59.md) (4 shared connections)
+- [Community 59](Community_59.md) (15 shared connections)
+- [Community 247](Community_247.md) (9 shared connections)
+- [Community 104](Community_104.md) (9 shared connections)
+- [Community 46](Community_46.md) (7 shared connections)
+- [Community 10](Community_10.md) (7 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (6 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 141](Community_141.md) (4 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
 - [Community 61](Community_61.md) (4 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
+- [Community 244](Community_244.md) (4 shared connections)
+- [Community 274](Community_274.md) (3 shared connections)
 
 ## Source Files
 
 - `docs/HISTORY.md`
-- `scripts/check_syllabus.py`
-- `scripts/check_versions.py`
-- `teach/core/catalog.py`
 - `teach/core/tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 159 (97%)
-- INFERRED: 5 (3%)
+- EXTRACTED: 158 (98%)
+- INFERRED: 4 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

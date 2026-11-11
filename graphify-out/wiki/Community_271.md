@@ -1,26 +1,29 @@
 # Community 271
 
-> 4 nodes · cohesion 0.50
+> 5 nodes · cohesion 0.50
 
 ## Key Concepts
 
-- **set_key()** (4 connections) — `scripts/steer.py`
-- **_cert_block()** (3 connections) — `scripts/steer.py`
-- **(start, end) line indices of a certification's block, so edits are surgical.…** (1 connections) — `scripts/steer.py`
-- **Set one key inside one certification. True if the file changed.** (1 connections) — `scripts/steer.py`
+- **_owner_label()** (5 connections) — `teach/core/labs.py`
+- **OwnerLabelTests** (3 connections) — `tests/test_labs_ownership.py`
+- **.test_no_token_no_label()** (2 connections) — `tests/test_labs_ownership.py`
+- **.test_token_becomes_a_label()** (2 connections) — `tests/test_labs_ownership.py`
+- **`--label` that stamps who created the container, when that is known.…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 209](Community_209.md) (1 shared connections)
+- [Community 121](Community_121.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/steer.py`
+- `teach/core/labs.py`
+- `tests/test_labs_ownership.py`
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 8 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

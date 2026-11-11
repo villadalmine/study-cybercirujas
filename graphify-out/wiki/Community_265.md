@@ -1,27 +1,29 @@
 # Community 265
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
-- **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
-- **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
-- **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
-- **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
+- **_video_info()** (5 connections) — `teach/api.py`
+- **get_cert_video()** (4 connections) — `teach/api.py`
+- **get_path_video()** (4 connections) — `teach/api.py`
+- **Info about a video (path or cert) if it has been generated: URL of the mp4…** (1 connections) — `teach/api.py`
+- **A path's video (if it has been generated).** (1 connections) — `teach/api.py`
+- **A single certification's video (if it has been generated).** (1 connections) — `teach/api.py`
 
 ## Relationships
 
-- [Community 206](Community_206.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 107](Community_107.md) (3 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
+- [Community 173](Community_173.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `teach/api.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

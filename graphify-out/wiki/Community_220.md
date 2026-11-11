@@ -1,10 +1,10 @@
 # Community 220
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **Within one certification (the only fair comparisons; authoring language `en` only)** (8 connections) — `docs/MODELS.md`
+- **Within one certification (the only fair comparisons; authoring language `en` only)** (9 connections) — `docs/MODELS.md`
 - **Model Comparison** (3 connections) — `docs/MODELS.md`
 - **cgoa** (1 connections) — `docs/MODELS.md`
 - **cnpa** (1 connections) — `docs/MODELS.md`
@@ -13,6 +13,7 @@
 - **lpic-1** (1 connections) — `docs/MODELS.md`
 - **lpic-3-303** (1 connections) — `docs/MODELS.md`
 - **mcpa** (1 connections) — `docs/MODELS.md`
+- **nca-aiio** (1 connections) — `docs/MODELS.md`
 - **Whole corpus, per model (context, not a verdict)** (1 connections) — `docs/MODELS.md`
 
 ## Relationships
@@ -25,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
+- EXTRACTED: 11 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

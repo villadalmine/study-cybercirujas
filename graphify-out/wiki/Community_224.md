@@ -1,30 +1,49 @@
 # Community 224
 
-> 8 nodes · cohesion 0.36
+> 13 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **.fetch()** (4 connections) — `tests/test_check_pr.py`
-- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
-- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
-- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
+- **test_kc_gate.py** (21 connections) — `tests/lab/test_kc_gate.py`
+- **provable_labs()** (9 connections) — `teach/lab/cli.py`
+- **has_fix_verb()** (5 connections) — `teach/lab/kc_scope.py`
+- **natural()** (4 connections) — `teach/lab/export_killercoda.py`
+- **test_every_tested_lab_has_a_way_to_be_proven()** (4 connections) — `tests/lab/test_kc_gate.py`
+- **test_labs_with_a_fix_verb_or_a_fix_file_are_provable()** (3 connections) — `tests/lab/test_kc_gate.py`
+- **test_the_plan_lists_the_provable_labs()** (3 connections) — `tests/lab/test_kc_gate.py`
+- **test_killercoda_jobs_never_fail_a_pr_and_name_no_lab()** (2 connections) — `tests/lab/test_kc_gate.py`
+- **test_fix_verb_detection()** (2 connections) — `tests/lab/test_kc_scope.py`
+- **(cert, topic) of every lab that has a reference fix: a file in fixes/, or a…** (1 connections) — `teach/lab/cli.py`
+- **The lab script itself carries a reference fix (a `fix)` case), so it can be…** (1 connections) — `teach/lab/kc_scope.py`
+- **Killercoda is an optional channel: a lab is `tested` or `loaded-untested`, a…** (1 connections) — `tests/lab/test_kc_gate.py`
+- **A lab with Killercoda evidence and no reference fix could never be re-proven:…** (1 connections) — `tests/lab/test_kc_gate.py`
 
 ## Relationships
 
+- [Community 111](Community_111.md) (6 shared connections)
+- [Community 18](Community_18.md) (5 shared connections)
+- [Community 70](Community_70.md) (4 shared connections)
+- [Community 26](Community_26.md) (4 shared connections)
+- [Community 46](Community_46.md) (3 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
+- [Community 44](Community_44.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `teach/lab/cli.py`
+- `teach/lab/export_killercoda.py`
+- `teach/lab/kc_scope.py`
+- `tests/lab/test_kc_gate.py`
+- `tests/lab/test_kc_scope.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
+- EXTRACTED: 44 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

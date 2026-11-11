@@ -1,6 +1,6 @@
 # Community 8
 
-> 19 nodes · cohesion 0.17
+> 21 nodes · cohesion 0.15
 
 ## Key Concepts
 
@@ -8,6 +8,7 @@
 - **validate_spec()** (13 connections) — `teach/core/labs.py`
 - **ContractTests** (11 connections) — `tests/test_labs.py`
 - **lab_dir()** (11 connections) — `teach/core/labs.py`
+- **load_spec_for()** (5 connections) — `teach/core/labs.py`
 - **default_spec()** (4 connections) — `teach/core/labs.py`
 - **.test_malformed_nested_fields_are_reported_not_raised()** (4 connections) — `tests/test_labs.py`
 - **.test_a_broken_lab_is_reported()** (3 connections) — `tests/test_labs.py`
@@ -22,17 +23,19 @@
 - **The lab.yaml every topic starts from — one definition, used by the AI generator…** (1 connections) — `teach/core/labs.py`
 - **Problems with a lab directory, [] when it honours the contract. Deterministic…** (1 connections) — `teach/core/labs.py`
 - **Write a lab from the template, no model involved. Returns its directory.** (1 connections) — `teach/core/labs.py`
+- **The lab.yaml of a topic as written, {} when the topic has no lab (lab up then…** (1 connections) — `teach/core/labs.py`
 - **The lab contract (lab.yaml + setup scripts), checked offline.** (1 connections) — `tests/test_labs.py`
 
 ## Relationships
 
 - [Community 121](Community_121.md) (8 shared connections)
-- [Community 209](Community_209.md) (4 shared connections)
-- [Community 10](Community_10.md) (3 shared connections)
-- [Community 0](Community_0.md) (3 shared connections)
-- [Community 241](Community_241.md) (2 shared connections)
-- [Community 63](Community_63.md) (2 shared connections)
+- [Community 209](Community_209.md) (5 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
+- [Community 141](Community_141.md) (3 shared connections)
+- [Community 126](Community_126.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
+- [Community 273](Community_273.md) (1 shared connections)
+- [Community 227](Community_227.md) (1 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
@@ -42,7 +45,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 53 (100%)
+- EXTRACTED: 57 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

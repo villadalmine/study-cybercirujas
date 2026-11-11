@@ -1,29 +1,34 @@
 # Community 257
 
-> 5 nodes · cohesion 0.40
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **Guardrails: what is checked, what blocks, and what is only a convention** (5 connections) — `docs/GUARDRAILS.md`
-- **2. Labs and exercises are true** (2 connections) — `docs/GUARDRAILS.md`
-- **3. Code and syntax are valid** (2 connections) — `docs/GUARDRAILS.md`
-- **1. The content is true** (1 connections) — `docs/GUARDRAILS.md`
-- **How the three fit together** (1 connections) — `docs/GUARDRAILS.md`
+- **Content Workflow** (9 connections) — `docs/WORKFLOW.md`
+- **Backends** (2 connections) — `docs/WORKFLOW.md`
+- **Switching to Gemini (or any CLI agent)** (2 connections) — `docs/WORKFLOW.md`
+- **Translating instead of re-authoring** (2 connections) — `docs/WORKFLOW.md`
+- **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `docs/WORKFLOW.md`
+- **Failure modes worth knowing** (1 connections) — `docs/WORKFLOW.md`
+- **Language flow: author once in English, translate outwards** (1 connections) — `docs/WORKFLOW.md`
+- **Unattended runs and quota** (1 connections) — `docs/WORKFLOW.md`
 
 ## Relationships
 
-- [Community 2](Community_2.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 273](Community_273.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
+- [Community 221](Community_221.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/GUARDRAILS.md`
+- `docs/WORKFLOW.md`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (71%)
-- INFERRED: 2 (29%)
+- EXTRACTED: 10 (83%)
+- INFERRED: 2 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---
