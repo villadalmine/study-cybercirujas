@@ -391,13 +391,17 @@ def sync_ai(backend: str | None = None) -> list[str]:
     catalogued with: NCA-AIIO stayed `essentials` with `tracked_version: unknown`
     while NVIDIA publishes it as Associate (#271). Two kinds of fact, read two ways:
 
-    - **Drift**, deterministic: the sha256 of the objectives document is compared
-      with the one the syllabus was frozen from (`source_sha256`). Syllabi frozen
-      before the snapshot recorded it have no such hash; for those the first sync
-      records a baseline (`objectives_sha256`) and says so, because "the same as
-      the day we started looking" is not "the same as what we froze". A change
-      goes to `upstream:` and `upstream_status: outdated`; `tracked_version` is
-      never written (#63).
+    - **Drift**, deterministic. A PDF's bytes are compared with the hash the
+      syllabus was frozen from (`source_sha256`). A page is compared by its
+      extracted text, never its bytes: WordPress pages (MCPA's) carry nonces that
+      change the bytes on every fetch. Syllabi frozen before the snapshot recorded
+      a hash — all seven AI ones — get a baseline (`objectives_sha256`) on the
+      first sync, said so, because "the same as the day we started looking" is
+      not "the same as what we froze". A change is recorded in
+      `objectives_drift:` with `upstream_status: outdated`. Not in `upstream:`:
+      that block is an upgrade window (version, frozen snapshot, milestone) that
+      check_curriculum_consistency validates, and a hash is none of those.
+      `tracked_version` is never written (#63).
     - **Level and validity**, read by the model from the overview page, the way
       sync_lpi reads LPI's. "unknown" is a correct answer and changes nothing.
     """
@@ -412,27 +416,33 @@ def sync_ai(backend: str | None = None) -> list[str]:
         if not objectives:
             continue
         body, content_type = _get_bytes(objectives)
-        digest = hashlib.sha256(body).hexdigest()
+        is_pdf = objectives.lower().endswith(".pdf") or "pdf" in content_type
+        text = document_text(objectives, body, content_type)
         frozen = certs.load(cert_id).metadata.get("source_sha256") if certs.md_path(cert_id).exists() else None
-        baseline = frozen or cert.get("objectives_sha256")
-        block = cert.get("upstream") or {}
+        if frozen and is_pdf:
+            digest, baseline = hashlib.sha256(body).hexdigest(), frozen
+            cert.pop("objectives_sha256", None)            # the frozen hash supersedes any baseline
+        else:
+            digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+            baseline = cert.get("objectives_sha256")
         if not baseline:
             cert["objectives_sha256"] = digest
             changes.append(f"{cert_id}: objectives baseline recorded ({digest[:12]}); the syllabus "
-                           "predates source_sha256, so drift is measured from today")
+                           "has no comparable hash, so drift is measured from today")
         elif baseline == digest:
+            if cert.get("upstream_status") == "outdated" or cert.get("objectives_drift"):
+                changes.append(f"{cert_id}: the objectives document matches again -> current")
             cert["upstream_status"] = "current"
-            cert.pop("upstream", None)
+            cert.pop("objectives_drift", None)
         else:
             cert["upstream_status"] = "outdated"
-            if block.get("sha256") != digest:
-                cert["upstream"] = {**block, "objectives": objectives, "sha256": digest,
-                                    "detected": today}
+            if (cert.get("objectives_drift") or {}).get("sha256") != digest:
+                cert["objectives_drift"] = {"sha256": digest, "detected": today}
                 changes.append(f"{cert_id}: the objectives document changed upstream "
                                f"(tracked_version stays {cert.get('tracked_version')})")
 
         overview = sources.get("overview") or objectives
-        page = document_text(objectives, body, content_type) if overview == objectives else fetch_text(overview, limit=10**7)
+        page = text if overview == objectives else fetch_text(overview, limit=10**7)
         result = _ai_yaml(
             backend,
             usage={"op": "catalog-sync", "kind": "ai", "cert": cert_id},

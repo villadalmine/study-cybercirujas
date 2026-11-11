@@ -60,8 +60,8 @@ and the budget live in [`pipeline.yaml`](../pipeline.yaml); the commands are in
    or PDF, asks a model to return the topics as YAML, then checks the answer in
    code before saving it: weights are renormalised and must sum to 100, a
    uniform split nobody published is refused, chapter headings in place of
-   objectives are refused, and `scripts/check_syllabus.py` checks it again (`teach/core/tracker.py:679-799`, prompt at
-   `:697-728`). The result is frozen in `certs/<cert>.md` and is never changed
+   objectives are refused, and `scripts/check_syllabus.py` checks it again (`teach/core/tracker.py:689-808`, prompt at
+   `:707-738`). The result is frozen in `certs/<cert>.md` and is never changed
    by a sync ([OPERATING → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)).
 2. **Author.** For each topic, three completions: content, exercises and the
    lab script (`teach/core/generator.py:663-822`).
@@ -75,9 +75,9 @@ Only the syllabus entry: certification, exam, version, topic id and title,
 the exam weight, and the topic's source URLs — the objectives document plus,
 where the vendor lists them, its per-domain readings on catalogued hosts
 (`teach cert readings`, kept under the syllabus' `readings:`) (`_topic_context`,
-[`generator.py:652-660`](../teach/core/generator.py#L652-L660)), plus a fixed
+[`generator.py:692-700`](../teach/core/generator.py#L692-L700)), plus a fixed
 system prompt with the code-block rules learned from real defects
-([`:616-649`](../teach/core/generator.py#L616-L649)) and a fixed instruction
+([`:656-689`](../teach/core/generator.py#L656-L689)) and a fixed instruction
 per file (content [`:732-737`](../teach/core/generator.py#L732-L737),
 exercises `:756-759`, lab `:791-795`). The prompts are in Spanish on purpose:
 the corpus was produced with them, and changing them is a content decision
@@ -164,7 +164,7 @@ older than 2026-10-15 are excused one by one in
 
 **Is there RAG?**
 Not in generation. The prompt carries the syllabus entry and the source URLs,
-not retrieved text ([`generator.py:652-660`](../teach/core/generator.py#L652-L660)).
+not retrieved text ([`generator.py:692-700`](../teach/core/generator.py#L692-L700)).
 The study bot does not use RAG either: the student picks the topic, so the
 whole file is sent ("explicit selection replaces retrieval",
 [STUDY_BOT_DESIGN.md](STUDY_BOT_DESIGN.md#the-insight-explicit-selection-replaces-retrieval)).
@@ -513,12 +513,12 @@ existing issue or a proposed one (title in *italics*); none is hidden.
 
 | # | Gap | Evidence | Issue |
 |---|---|---|---|
-| G1 | Authoring is not grounded at write time: the model gets URLs, not their text, and chooses its own References. [PRINCIPLES §7](PRINCIPLES.md#7-the-source-chain) says a model "never supplies the source"; that holds for the syllabus, not for the cited pages | `generator.py:652-660`, `:728-740` | proposed: *docs(principles): say authoring is not retrieval-grounded; evaluate feeding the source text* |
+| G1 | Authoring is not grounded at write time: the model gets URLs, not their text, and chooses its own References. [PRINCIPLES §7](PRINCIPLES.md#7-the-source-chain) says a model "never supplies the source"; that holds for the syllabus, not for the cited pages | `generator.py:692-700`, `:728-740` | proposed: *docs(principles): say authoring is not retrieval-grounded; evaluate feeding the source text* |
 | G2 | Groundedness never blocks and its results are not committed: no topic records a groundedness result | `groundedness.yaml:20`, `.github/workflows/groundedness.yml` uploads an artifact only | [#41](https://github.com/villadalmine/study-cybercirujas/issues/41), [#120](https://github.com/villadalmine/study-cybercirujas/issues/120) |
 | G3 | `provenance` passes when `model` is a CLI or alias name (`claude`, `agy`, `cheap`), which is most of the older corpus; OPERATING says the real model is enforced | `scripts/quality_score.py:81-87`, `scripts/check_provenance.py:99-103` | proposed: *check_provenance: a CLI or alias name is not a model id* |
 | G4 | Some English `meta.yaml` files say `lang: es` (e.g. `certs/cka/1.1/en/meta.yaml`): their provenance is a copy of the Spanish record | `scripts/check_provenance.py` does not compare `lang` with the directory | proposed: *check_provenance: meta.yaml lang must match its directory* |
 | G5 | `meta.yaml` does not record effort, prompt version or hash, temperature or CLI version; effort lives only in the local usage log | `generator.py:198-207`, `:335-352` | proposed: *meta.yaml: record effort and a prompt hash* |
-| G6 | Syllabi frozen before 2026-10-20 do not record the vendor document's hash (new snapshots do, and refuse a truncated text); cited pages are not pinned, so a page can change under its URL | `check_source_chain.py:106-123`, `tracker.py:93-106` | proposed: *snapshot: record the objectives document's sha256 and refuse a truncated text*; cited pages: [AUDITOR_DESIGN step 3](AUDITOR_DESIGN.md#what-i-would-build-in-order) (crawl + diff), proposed issue |
+| G6 | Syllabi frozen before 2026-10-20 do not record the vendor document's hash (new snapshots do, and refuse a truncated text); cited pages are not pinned, so a page can change under its URL | `check_source_chain.py:106-123`, `tracker.py:105-119` | proposed: *snapshot: record the objectives document's sha256 and refuse a truncated text*; cited pages: [AUDITOR_DESIGN step 3](AUDITOR_DESIGN.md#what-i-would-build-in-order) (crawl + diff), proposed issue |
 | G7 | `citations_resolve` and `check_api_facts.py` need the network and are not in CI, so `citations_resolve` is `not_run` everywhere | `quality_weights.yaml` (`citations_resolve`), `Makefile` `verify-ci` | proposed: *ci: scheduled citation and API-facts run that records results* |
 | G8 | No topic is *Verified*: no recorded independent review, few verified labs, almost no human review | `quality:` blocks; `make quality` | [#46](https://github.com/villadalmine/study-cybercirujas/issues/46), [#98](https://github.com/villadalmine/study-cybercirujas/issues/98), [#166](https://github.com/villadalmine/study-cybercirujas/issues/166) |
 | G9 | No test measures how much a regeneration changes structure or facts | — | proposed: *test: regeneration stability on a fixed sample (paid, by hand)* |

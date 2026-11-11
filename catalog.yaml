@@ -527,7 +527,7 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
-    objectives_sha256: 8312f72b60721241388f06805cb9a91a4792178bf8338a020a8eaea17871d368
+    objectives_sha256: dde205ae6088d77227b28c7e379c328ef811591e80f022757ba85c7756511082
   ai-901:
     name: Microsoft Azure AI Fundamentals (AI-901)
     exam: AI-901
@@ -543,7 +543,7 @@ certs:
     level: essentials
     validity: lifetime
     requires: []
-    objectives_sha256: 7a7c2016e24adcd94b9247f9ce72143b1a86da9d450a01afcfe949bff21fae5f
+    objectives_sha256: 38bfad0f7f20d05de3c275fa2e179ed1581681b31f0277441ce2a465d3aa1924
   gcp-gail:
     name: Google Cloud Generative AI Leader
     exam: Generative AI Leader
@@ -559,7 +559,7 @@ certs:
     level: essentials
     validity: 3 años
     requires: []
-    objectives_sha256: 0c79729e3cd033407176fec9b8e91e39ff03f79bbe71a8ba60bd95b0f7b4806e
+    objectives_sha256: 5d3a18207028dad99ad5eeaa5b67d3fd10ab976c9f64ebccd802832af7ba816a
   nca-aiio:
     name: 'NVIDIA-Certified Associate: AI Infrastructure and Operations'
     exam: NCA-AIIO
@@ -575,7 +575,7 @@ certs:
     level: associate
     validity: 2 años
     requires: []
-    objectives_sha256: e16c9fb77f5ecfd9d5340910d8006467c4e3bbda628d9a4fad6cfe48b9ba3d37
+    objectives_sha256: eb5679c586b10685ab54c5a5c2b6e5c811129e29e3e5366cc15dcdc17ef0d2fb
   nca-genl:
     name: 'NVIDIA-Certified Associate: Generative AI LLM'
     exam: NCA-GENL
@@ -591,7 +591,7 @@ certs:
     level: associate
     validity: 2 años
     requires: []
-    objectives_sha256: a528f47d2fd72041fd19ea5db46b48be4f2762eda01b60021ee4facc22b34325
+    objectives_sha256: ca799a38167d7de01586fdaad8f436b9f44e3065f32e4ca64e98cde3c2b7f3cc
   ncp-aii:
     name: 'NVIDIA-Certified Professional: AI Infrastructure'
     exam: NCP-AII
@@ -608,7 +608,7 @@ certs:
     validity: 2 años
     requires:
     - nca-aiio
-    objectives_sha256: 2799dffcda5481f6709d85297c81c91ab597be67780badbfa78d58db291cd5b6
+    objectives_sha256: 0b1447f8a3282068acbc99ae55f9ad0e79fc0b8b61d8452c21264b3a9f492ec4
   mcpa:
     name: Model Context Protocol Associate (MCPA)
     exam: MCPA
@@ -624,7 +624,7 @@ certs:
     validity: 2 years
     curriculum_updated: '2026-07-28'
     requires: []
-    objectives_sha256: 61bb68c4ba0d978a8288407e763f32bba6aafc425982000638b7c7ab6fd1a870
+    objectives_sha256: dffd2acbae4017c8dfa80a848ae565b6aa821479754b7d1fd90c733d9f1c0f33
   ckne:
     name: Certified Kubernetes Network Engineer (CKNE)
     exam: CKNE
