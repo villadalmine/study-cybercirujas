@@ -60,8 +60,8 @@ and the budget live in [`pipeline.yaml`](../pipeline.yaml); the commands are in
    or PDF, asks a model to return the topics as YAML, then checks the answer in
    code before saving it: weights are renormalised and must sum to 100, a
    uniform split nobody published is refused, chapter headings in place of
-   objectives are refused, and `scripts/check_syllabus.py` checks it again (`teach/core/tracker.py:514-621`, prompt at
-   `:532-563`). The result is frozen in `certs/<cert>.md` and is never changed
+   objectives are refused, and `scripts/check_syllabus.py` checks it again (`teach/core/tracker.py:679-799`, prompt at
+   `:697-728`). The result is frozen in `certs/<cert>.md` and is never changed
    by a sync ([OPERATING → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)).
 2. **Author.** For each topic, three completions: content, exercises and the
    lab script (`teach/core/generator.py:663-822`).
