@@ -282,12 +282,12 @@ class ReadingsTests(unittest.TestCase):
         # pypdf's extract_text never includes /URI annotations: this is the part
         # of the study guide document_text threw away.
         body = make_pdf([
-            [(760, "NVIDIA Associate | Study Guide | 1", None),
+            [(760, "NVIDIA AI Infrastructure Associate | Study Guide | 1", None),
              (700, "Essential AI knowledge: Exam Weight 38%", None),
              (680, "1.1 Describe the NVIDIA software stack.", None),
              (660, "Suggested Readings", None),
              (640, "> NVIDIA TensorRT, NVIDIA Developer", "https://developer.nvidia.com/tensorrt")],
-            [(760, "NVIDIA Associate | Study Guide | 2", None),
+            [(760, "NVIDIA AI Infrastructure Associate | Study Guide | 2", None),
              (700, "2.1 Identify hardware requirements.", None),
              (680, "Suggested Reading List", None),
              (660, "> DGX SuperPOD Reference Architecture", "https://docs.nvidia.com/superpod"),
@@ -302,12 +302,76 @@ class ReadingsTests(unittest.TestCase):
         self.assertEqual([r["url"] for r in found["2 - AI Infrastructure"]],
                          ["https://docs.nvidia.com/superpod"])
 
-    def test_two_links_on_one_pdf_line_each_get_their_own_title(self):
+    def test_two_columns_each_link_gets_its_own_column(self):
+        # NCA-GENL: the bullet sits 9 points left of its box, and the right
+        # column's baseline differs from the left one by a few points.
         items = tracker._pdf_page_items(
-            [(600.0, "> Activation Function> Training Hidden Units")],
-            [(598.0, 609.0, "https://a.example/1"), (598.0, 609.0, "https://a.example/2")])
-        self.assertEqual(items, [("link", "https://a.example/1", "Activation Function"),
-                                 ("link", "https://a.example/2", "Training Hidden Units")])
+            [(36, 140, "> Attention Is All You Need"), (294, 141, "> Autoregressive Model")],
+            [(45, 152, 138, 149, "https://a.example/1"), (303, 396, 138, 149, "https://a.example/2")])
+        self.assertEqual(items, [("link", "https://a.example/1", "Attention Is All You Need"),
+                                 ("link", "https://a.example/2", "Autoregressive Model")])
+
+    def test_a_title_wrapped_onto_two_boxes_is_one_reading(self):
+        # The other column's row sits between the two boxes of the left link.
+        items = tracker._pdf_page_items(
+            [(36, 126, "> End-to-End AI for PCs: Transitioning "), (45, 116, "AI Models With ONNX"),
+             (294, 126, "> What Are Foundation Models?"), (303, 126, ", NVIDIA Blog")],
+            [(45, 267, 124, 135, "https://a.example/e2e"), (45, 140, 113, 124, "https://a.example/e2e"),
+             (303, 432, 124, 135, "https://a.example/fm")])
+        self.assertEqual(items, [("link", "https://a.example/e2e", "End-to-End AI for PCs: Transitioning AI Models With ONNX"),
+                                 ("link", "https://a.example/fm", "What Are Foundation Models?, NVIDIA Blog")])
+
+    def test_a_box_over_the_publisher_only_still_gets_the_title(self):
+        items = tracker._pdf_page_items([(36, 500, "> What Is Trustworthy AI?"), (160, 500, ", NVIDIA Blog")],
+                                        [(160, 220, 498, 509, "https://blogs.nvidia.com/x")])
+        self.assertEqual(items, [("link", "https://blogs.nvidia.com/x", "What Is Trustworthy AI?, NVIDIA Blog")])
+
+    def test_a_domain_named_with_another_plural_is_still_that_domain(self):
+        # NCP-AII's page: "System and Server Bring-Up"; the syllabus: "Systems…".
+        topics = [{"id": "1.1", "topic": "1 - Systems and Server Bring-Up"},
+                  {"id": "5.1", "topic": "5 - Troubleshooting and Optimization"}]
+        page = (b"<ul><li>System and Server Bring-Up</li><li>Troubleshooting and Optimization</li></ul>"
+                b"<h2>System and Server Bring-Up</h2><h3>Suggested Reading</h3>"
+                b"<a href='https://docs.nvidia.com/smi'>nvidia-smi</a>")
+        found = tracker.readings_by_domain(tracker.document_stream("https://v.example/p", page, "text/html"), topics)
+        self.assertEqual(list(found), ["1 - Systems and Server Bring-Up"])
+
+    def test_an_unrecognised_section_is_dropped_not_filed_under_the_last_domain(self):
+        page = (b"<h2>AI Infrastructure</h2><h3>Suggested Readings</h3><a href='https://docs.nvidia.com/a'>A</a>"
+                b"<p>" + b"A long paragraph about something else entirely. " * 10 + b"</p>"
+                b"<h2>Some Domain We Do Not Know</h2><h3>Suggested Readings</h3><a href='https://docs.nvidia.com/b'>B</a>")
+        found = tracker.readings_by_domain(tracker.document_stream("https://v.example/p", page, "text/html"), TOPICS)
+        self.assertEqual([r["url"] for r in found["2 - AI Infrastructure"]], ["https://docs.nvidia.com/a"])
+
+    def test_relative_links_are_resolved_against_the_page(self):
+        # Microsoft Learn's resources are all relative: dropping them dropped the list.
+        page = (b"<h2>AI Infrastructure</h2><h3>Additional resources</h3>"
+                b"<a href='/en-us/azure/ai/x'>X</a><a href='#top'>Back to top</a><a href='mailto:a@b.c'>Mail</a>")
+        found = tracker.readings_by_domain(
+            tracker.document_stream("https://learn.microsoft.com/en-us/guide", page, "text/html"), TOPICS)
+        self.assertEqual(found, {"2 - AI Infrastructure": [{"title": "X", "url": "https://learn.microsoft.com/en-us/azure/ai/x"}]})
+
+    def test_a_running_footer_is_dropped_wherever_it_sits(self):
+        pages = [[("text", "Guide | 1", ""), ("text", "a", "")],
+                 [("text", "Guide | 2", ""), ("text", "b", "")],
+                 [("text", "x", ""), ("text", "Guide | 3", ""), ("text", "(c) notice", "")]]
+        self.assertEqual([v for _, v, _ in tracker._drop_running_heads(pages)], ["a", "b", "x", "(c) notice"])
+
+    def test_a_bare_domain_number_is_not_a_marker(self):
+        # LFCS numbers its domains 1 to 5; a lone digit is every page number.
+        topics = [{"id": "1", "topic": "1 - Operations"}, {"id": "2", "topic": "2 - Networking"}]
+        self.assertIsNone(tracker._domain_of("2", tracker._domain_markers(topics)))
+
+    def test_registering_for_the_exam_is_not_a_reading(self):
+        self.assertTrue(tracker.CALL_TO_ACTION.search("Register for NCA-GENL Exam"))
+        self.assertTrue(tracker.CALL_TO_ACTION.search("Contact us here."))
+        self.assertFalse(tracker.CALL_TO_ACTION.search("NVIDIA DCGM, NVIDIA Developer"))
+
+    def test_same_reading_needs_a_long_shared_prefix(self):
+        a = {"title": "Power Constraints and AI Workloads: The Hidden", "url": "u1"}
+        b = {"title": "Power Constraints and AI Workloads: The Hidden Challenges, LinkedIn", "url": "u2"}
+        self.assertTrue(tracker._same_reading(a, b))
+        self.assertFalse(tracker._same_reading({"title": "RAPIDS", "url": "u3"}, {"title": "RAPIDS cuDF", "url": "u4"}))
 
     def test_the_page_wins_over_the_pdf_on_the_same_title(self):
         # NVIDIA moved three NCA-AIIO links on the page the January PDF still prints.
