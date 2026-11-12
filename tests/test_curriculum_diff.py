@@ -583,6 +583,36 @@ class Switch(unittest.TestCase):
         self.assertTrue(rescored.endswith("quality:\n  score: 71\n"))
         self.assertEqual(cd.with_revalidated("lang: en\n", {"a": 1}), "lang: en\nrevalidated:\n  a: 1\n")
 
+    def test_the_lab_title_follows_the_objective_and_the_guard_accepts_only_that(self):
+        # review of #306: the lab's title stayed "End to End" while the syllabus said "End-to-End" (Killercoda R5)
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        self.run_switch(domains)
+        root = Path(self._roots[-1])
+        lab = "certs/c/2.3/lab/lab.yaml"
+        (root / lab).parent.mkdir(parents=True)
+        old = "cert: c\ntopic: '2.3'\ntitle: Use the Gateway API to manage Ingress traffic\nprovider: local\n"
+        (root / lab).write_text(old, encoding="utf-8")
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md", "target": "syllabi/c/v2026-10-01.yaml"}}}
+        _, files, _ = cd.switch(root, spec)
+        self.assertEqual(files[lab], old.replace("Ingress traffic", "Ingress-traffic"))   # only the title line
+        (root / lab).write_text(files[lab], encoding="utf-8")
+        self.assertNotIn(lab, cd.switch(root, spec)[1])                                    # already there: no write
+        self.assertEqual(cd.lab_with_title("title: a: b\n", "x: y"), "title: 'x: y'\n")    # quoted when YAML needs it
+
+        target = (root / "syllabi/c/v2026-10-01.yaml").read_text(encoding="utf-8")
+        row = {"topic": "2.3", "class": "revalidate", "maps_to": "2.3"}
+        plan = {"certs": {"c": {"target": {"file": "syllabi/c/v2026-10-01.yaml"}, "topics": [row]}}}
+        base = lambda f: target if f.startswith("syllabi/") else old   # noqa: E731
+        self.assertTrue(cd.lab_title_ok(plan, lab, base, lambda f: files[lab]))
+        for head in (old.replace("Ingress traffic", "anything else"),            # another title
+                     files[lab] + "runner_image: evil\n",                          # the title plus another line
+                     old.replace("provider: local", "provider: killercoda")):     # not the title at all
+            self.assertFalse(cd.lab_title_ok(plan, lab, base, lambda f, h=head: h))
+        regen = {"certs": {"c": {"target": {"file": "syllabi/c/v2026-10-01.yaml"}, "topics": [dict(row, **{"class": "regenerate"})]}}}
+        self.assertFalse(cd.lab_title_ok(regen, lab, base, lambda f: files[lab]))  # planned_files covers those
+        self.assertFalse(cd.lab_title_ok(plan, "certs/c/2.3/lab/setup.sh", base, lambda f: files[lab]))
+
     def test_refused_while_content_must_change(self):
         domains = copy.deepcopy(BASE["domains"])
         domains[0]["objectives"].append({"id": "1.3", "text": "Configure volume snapshots and restore them"})

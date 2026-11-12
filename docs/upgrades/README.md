@@ -158,7 +158,9 @@ flowchart TD
    current`, the `upstream:` window removed; in `certs/<cert>.md`, `version`, `snapshot_date` (the target's `source.committed`: `check_versions` compares it with
    `curriculum_updated` when the version is a date), the PDF URL appended to `sources` (the
    page the material was written from stays cited) and each topic's title set to the objective text it maps to
-   (directory ids unchanged, see *Topic ids at the switch*); the body of `certs/<cert>.md` keeps its dated notes and
+   (directory ids and the `topic:` domain labels unchanged, see *Topic ids at the switch*), in `certs/<cert>.md` and in
+   the topic's `lab/lab.yaml` `title:` line, which Killercoda's rule R5 compares with the syllabus; `guard` accepts
+   that one line in a kept or revalidated topic's `lab.yaml` and nothing else in it. The body of `certs/<cert>.md` keeps its dated notes and
    gets one line saying the snapshot was superseded, by which document and upgrade. Each `revalidate` topic gets a
    `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why, and `committed`:
    the target curriculum's date, not the day of the check), before
@@ -325,9 +327,10 @@ the figures are quota, not a bill.
 
 Snapshot ids are positional (domains in header order, top to bottom then left to right). CNCF does not number
 objectives, and the frozen files used two different orders, so new ids differ from today's directory names for most
-topics (the report's *Maps to* column). The switch should keep today's directory names and update each topic's domain
-and title in `certs/<cert>.md`; renumbering would rename 51 directories and break every link for no change in content.
-That is the maintainer's call, in the switch PR.
+topics (the report's *Maps to* column). The switch keeps today's directory names and each topic's `topic:` domain label, and updates only
+its title (in `certs/<cert>.md` and the lab's `lab.yaml`); renumbering would rename 51 directories and break every link
+for no change in content. CKNE GA is the case where the label disagrees with the PDF (our `5 - Observability` is the
+PDF's domain 4); the plan's *Maps to* records it. Renumbering stays the maintainer's call, in the switch PR.
 
 ## Phase 2: the edit script, `scripts/upgrade_versions.py`
 
