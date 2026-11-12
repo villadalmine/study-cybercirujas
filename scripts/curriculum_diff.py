@@ -15,6 +15,7 @@ import argparse
 import difflib
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -772,8 +773,12 @@ def with_revalidated(meta_text: str, block: dict) -> str:
 
 
 def superseded_note(version: str, url: str, upgrade: str) -> str:
-    return (f"**Superseded by the curriculum {version}** ({url}), switched by `{upgrade}`. The notes above are dated and "
+    return (f"{superseded_mark(version)} ({url}), switched by `{upgrade}`. The notes above are dated and "
             "describe the snapshot they were written for.")
+
+
+def superseded_mark(version: str) -> str:
+    return f"**Superseded by the curriculum {version}**"
 
 
 def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str, str], list[str]]:
@@ -814,14 +819,15 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
         post.metadata["sources"] = sources if url in sources else [*sources, url]
         note = superseded_note(version, url, spec_path or "the upgrade spec")
         body = post.content.rstrip("\n")
-        if note not in body:
+        if superseded_mark(version) not in body:
             post.content = f"{body}\n\n{note}" if body else note
         files[str(md.relative_to(root))] = frontmatter.dumps(post) + "\n"
         for row in c["topics"]:
             if row["class"] != "revalidate":
                 continue
             block = {"upgrade": spec_path or None, "against": s["target"], "version": version,
-                     "objective": texts.get(row["maps_to"]), "reasons": list(row["reasons"]), "date": str(committed)}
+                     "objective": texts.get(row["maps_to"]), "reasons": list(row["reasons"]),
+                     "committed": str(committed)}   # the target curriculum's date, not the day it was re-checked
             for meta in sorted((root / "certs" / cert / row["topic"]).glob("*/meta.yaml")):
                 files[str(meta.relative_to(root))] = with_revalidated(meta.read_text(encoding="utf-8"), block)
         entry["tracked_version"] = version
@@ -838,7 +844,7 @@ def _switch_args(p: argparse.ArgumentParser) -> None:
 
 def _switch_run(args) -> int:
     spec = yaml.safe_load((REPO / args.spec).read_text(encoding="utf-8"))
-    catalog, files, why = switch(REPO, spec, args.spec)
+    catalog, files, why = switch(REPO, spec, Path(os.path.normpath(args.spec)).as_posix())
     if why:
         print("\n".join(why), file=sys.stderr)
         return 1

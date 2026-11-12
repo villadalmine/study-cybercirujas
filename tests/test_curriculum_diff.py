@@ -574,6 +574,13 @@ class Switch(unittest.TestCase):
         (root / "certs/c.md").write_text(files["certs/c.md"], encoding="utf-8")
         _, again, _ = cd.switch(root, spec, "docs/upgrades/u.yaml")
         self.assertEqual(again["certs/c.md"].count("Superseded by"), 1)         # the note is not repeated
+        _, again, _ = cd.switch(root, spec, "./docs/upgrades/u.yaml")            # nor for another spelling of the spec
+        self.assertEqual(again["certs/c.md"].count("Superseded by"), 1)
+        self.assertIn("committed: '2026-10-01'", text)                           # the target's date, named as such
+        import quality_score
+        rescored = quality_score.render(text, {"score": 71})
+        self.assertEqual(cd.with_revalidated(rescored, yaml.safe_load(text)["revalidated"]), rescored)
+        self.assertTrue(rescored.endswith("quality:\n  score: 71\n"))
         self.assertEqual(cd.with_revalidated("lang: en\n", {"a": 1}), "lang: en\nrevalidated:\n  a: 1\n")
 
     def test_refused_while_content_must_change(self):

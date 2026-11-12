@@ -137,7 +137,8 @@ flowchart TD
    page the material was written from stays cited) and each topic's title set to the objective text it maps to
    (directory ids unchanged, see *Topic ids at the switch*); the body of `certs/<cert>.md` keeps its dated notes and
    gets one line saying the snapshot was superseded, by which document and upgrade. Each `revalidate` topic gets a
-   `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why), before
+   `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why, and `committed`:
+   the target curriculum's date, not the day of the check), before
    `quality:`; `check_pr` treats it like `quality:`, a check record and not authorship. It refuses while any topic is
    `regenerate` or `retire` or a new objective has no topic: content changes first. After it,
    `make quality CERT=<cert>` re-runs every check (its result is the `quality:` block next to `revalidated:`), and
