@@ -748,7 +748,7 @@ COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone 
 #   Topic ids at the switch): the snapshot's positional ids are not the frozen file's.
 #
 # The same serializers teach.core uses (yaml.safe_dump for the catalog, frontmatter.dumps for the syllabus).
-# A domain renamed or reweighted is not rewritten into each topic's `topic:`/`weight:` (#120).
+# A domain renamed or reweighted is not rewritten into each topic's `topic:`/`weight:` (#124).
 
 
 def switch(root: Path, spec: dict) -> tuple[dict, dict[str, str], list[str]]:
