@@ -101,6 +101,7 @@ projects:
   jaeger:       {domains: [www.jaegertracing.io, jaegertracing.io], docs: https://www.jaegertracing.io/docs/, versioned: true}
   fluent-bit:   {domains: [docs.fluentbit.io],        docs: https://docs.fluentbit.io/,         versioned: true}
   keda:         {domains: [keda.sh],                  docs: https://keda.sh/docs/,              versioned: true}
+  kubeflow:     {domains: [www.kubeflow.org, kubeflow.org], docs: https://www.kubeflow.org/docs/, versioned: true}
   vllm:         {domains: [docs.vllm.ai],             docs: https://docs.vllm.ai/,              versioned: true}
   llm-d:        {domains: [llm-d.ai],                 docs: https://llm-d.ai/docs/,             versioned: false}
   frrouting:    {domains: [docs.frrouting.org],       docs: https://docs.frrouting.org/,        versioned: true}
