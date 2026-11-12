@@ -366,8 +366,10 @@ Pick the biggest line that applies:
 say which curriculum version the material was built against. Moving them means the whole cert must be re-evaluated
 (table of contents, every topic), so it only happens in the **final PR of an upgrade milestone**
 ([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)). `check_pr` fails any PR that changes them
-unless the PR's **real GitHub milestone** is the upgrade milestone of those certs and that version (named like
-"CKA & CKAD v1.37 upgrade": it must name every cert whose version or objectives change, and its version must equal
+unless the PR's **real GitHub milestone** is the release milestone (`vX.Y.Z`) that an upgrade spec on the base
+(`docs/upgrades/*.yaml`, `milestone:`) names for those certs, with each target at their new `tracked_version`
+([#291](https://github.com/villadalmine/study-cybercirujas/issues/291)), or the older upgrade milestone of those certs
+and that version (named like "CKA & CKAD v1.37 upgrade": it must name every cert whose version or objectives change, and its version must equal
 their new `tracked_version`: the last word before "upgrade", with or without a leading `v`, so `v1.37`, `2025-11-24`,
 `unknown` or `beta`; for a value like `Terraform 1.12` its last word, `v1.12`) **and**
 its description declares `Scope: exam-version`. The `scope:exam-version` label is only classification, and text

@@ -906,6 +906,46 @@ class ExamVersionTests(unittest.TestCase):
             with self.subTest(milestone=milestone):
                 self.assertEqual(len(check_pr.exam_version(["lpic-1"], milestone, "exam-version", {"lpic-1": "1"})), 1)
 
+    SPECS = {"v0.6.10": {"ckne": "2026-10-01"}}
+
+    def test_a_versioned_milestone_authorizes_through_its_upgrade_spec(self):
+        # #291: every milestone is vX.Y.Z; the spec on the base says which certs and versions it moves
+        ok = check_pr.exam_version(["ckne"], "v0.6.10", "exam-version", {"ckne": "2026-10-01"}, self.SPECS)
+        self.assertEqual(ok, [])
+
+    def test_a_versioned_milestone_without_its_spec_does_not_authorize(self):
+        cases = (
+            (["ckne"], "v0.6.11", {"ckne": "2026-10-01"}, "named by no upgrade spec"),   # no spec names it
+            (["cka"], "v0.6.10", {"cka": "1.37"}, "does not cover cka"),                  # another cert
+            (["ckne"], "v0.6.10", {"ckne": "2026-11-01"}, "its spec targets"),           # another version
+            (["ckne"], "v0.6.10", {"ckne": "2026-10-01"}, "named by no upgrade spec"),   # no specs at all
+        )
+        for i, (changed, milestone, versions, why) in enumerate(cases):
+            with self.subTest(milestone=milestone, changed=changed):
+                specs = {} if i == 3 else self.SPECS
+                problems = check_pr.exam_version(changed, milestone, "exam-version", versions, specs)
+                self.assertEqual(len(problems), 1)
+                self.assertIn(why, problems[0])
+
+    def test_upgrade_specs_are_read_from_the_base_only(self):
+        import subprocess
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(check_pr, "REPO", Path(tmp)):
+            git = lambda *a: subprocess.run(["git", *a], cwd=tmp, check=True, capture_output=True)  # noqa: E731
+            git("init", "-q")
+            (Path(tmp) / "docs/upgrades").mkdir(parents=True)
+            (Path(tmp) / "syllabi/ckne").mkdir(parents=True)
+            (Path(tmp) / "docs/upgrades/ckne-ga.yaml").write_text(
+                "milestone: v0.6.10\ncerts:\n  ckne:\n    target: syllabi/ckne/v2026-10-01.yaml\n", encoding="utf-8")
+            (Path(tmp) / "syllabi/ckne/v2026-10-01.yaml").write_text("version: '2026-10-01'\n", encoding="utf-8")
+            (Path(tmp) / "docs/upgrades/README.md").write_text("# not a spec\n", encoding="utf-8")
+            git("add", "-A")
+            git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+            (Path(tmp) / "docs/upgrades/self.yaml").write_text(   # written by the PR itself: not on the base
+                "milestone: v0.6.11\ncerts:\n  cka:\n    target: syllabi/ckne/v2026-10-01.yaml\n", encoding="utf-8")
+            self.assertEqual(check_pr.upgrade_specs("HEAD"), self.SPECS)
+            self.assertEqual(check_pr.upgrade_specs("no-such-ref"), {})
+
     def test_every_changed_cert_must_be_named(self):
         both = {"cka": "1.37", "ckad": "1.37"}
         self.assertEqual(check_pr.exam_version(["cka", "ckad"], self.UPGRADE, "exam-version", both), [])
