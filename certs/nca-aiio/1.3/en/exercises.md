@@ -129,7 +129,7 @@ Artificial Intelligence is the broad field of making machines perform tasks that
    Expected output:
 
    ```
-   SPAM score=9 rules=["mentions 'free money'", "mentions 'winner'", "contains 'click here'", 'more than 3 exclamation marks', 'mostly uppercase']
+   SPAM score=8 rules=["mentions 'free money'", "mentions 'winner'", "contains 'click here'", 'more than 3 exclamation marks']
          'Congratulations WINNER!!!! Click here to claim your FREE MONEY'
    HAM  score=0 rules=[]
          'Hi team, the GPU cluster maintenance window moves to Friday.'

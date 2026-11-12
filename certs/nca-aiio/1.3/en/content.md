@@ -177,7 +177,7 @@ Training (mixed precision, Adam):
   ≈ 16 bytes/param × 7e9  ≈ 112 GB  (+ activations)
 ```
 
-So a single 80 GB GPU can **serve** a 7B model comfortably. **Training** it requires sharding (ZeRO/FSDP, tensor parallelism) across several GPUs. A classical XGBoost model on the same platform might be 50 MB. That is a difference of five orders of magnitude, and it is why the hierarchy matters to operators.
+So a single 80 GB GPU can **serve** a 7B model comfortably. **Training** it requires sharding (ZeRO/FSDP, tensor parallelism) across several GPUs. A classical XGBoost model on the same platform might be 50 MB. That is a difference of more than three orders of magnitude (112 GB / 50 MB ≈ 2,240×), and it is why the hierarchy matters to operators.
 
 ---
 
@@ -281,7 +281,7 @@ metadata:
   namespace: ai-workloads
 spec:
   hard:
-    requests.nvidia.com/gpu: "8"
+    requests.nvidia.com/gpu: "12"   # the 12 GPUs of gpu-pool-h1 (8) and gpu-pool-l1 (4)
     limits.cpu: "128"
     limits.memory: 1Ti
 ---
@@ -871,7 +871,8 @@ Throughput scales far faster than latency grows, because Triton coalesces reques
 
 | Symptom | Likely cause | How to check | Fix |
 |---|---|---|---|
-| DL pod `Pending`, event `0/4 nodes are available: 4 Insufficient nvidia.com/gpu` | GPUs all allocated, device plugin not running, or quota exhausted | `kubectl describe pod`; `kubectl get pods -n gpu-operator`; `kubectl describe resourcequota -n ai-workloads` | Free GPUs, fix the operator, raise the quota, or right-size the request |
+| DL pod `Pending`, event `0/4 nodes are available: 4 Insufficient nvidia.com/gpu` | GPUs all allocated, or device plugin not running | `kubectl describe pod`; `kubectl get pods -n gpu-operator` | Free GPUs, fix the operator, or right-size the request |
+| Job's pod never created; Job event `exceeded quota: gpu-quota, requested: requests.nvidia.com/gpu=…` | the namespace `ResourceQuota` is used up: quota is checked at admission, so the pod is rejected, not left `Pending` | `kubectl describe resourcequota -n ai-workloads`; `kubectl describe job <name>` | Wait for running GPU pods to finish, raise the quota, or right-size the request |
 | Node shows `nvidia.com/gpu: 0` allocatable | Driver/toolkit not ready, or the validator failed | `kubectl logs -n gpu-operator -l app=nvidia-operator-validator`; `kubectl logs ds/nvidia-driver-daemonset -n gpu-operator` | Check kernel/driver compatibility, Secure Boot module signing, then restart the driver pod |
 | `RuntimeError: CUDA out of memory` | DL training memory (weights + grads + optimizer + activations) exceeds HBM | `nvidia-smi` memory.used; `torch.cuda.max_memory_allocated()` | Lower the batch size, enable mixed precision/activation checkpointing, shard (FSDP/ZeRO), use larger-memory GPUs |
 | `ERROR: Unexpected bus error encountered in worker` / `Bus error (core dumped)` | `/dev/shm` defaults to 64 MiB in containers | `kubectl exec ... -- df -h /dev/shm` | Mount `emptyDir` with `medium: Memory` at `/dev/shm` (see 5.5) |
