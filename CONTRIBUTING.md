@@ -339,6 +339,12 @@ and for AI the model). Details and an example: [docs/REVIEWS.md](docs/REVIEWS.md
 | code | **≤ ~400 changed lines** (generated files excluded) | over 400 fails; split into stacked PRs, each saying `Depends on: #N` |
 | any | material and code are never mixed; generated files (`docs/STATUS.md`, `docs/MODELS.md`) are regenerated, never edited by hand | fails |
 
+A batch authors topics two at a time in one checkout; each one leaves it on its own branch with
+`scripts/topic_pr.py <cert> <topic> --agent <agent> [--issue N]`: a worktree off `origin/main` with only
+that topic, its syllabus status, the quality blocks and `docs/STATUS.md` / `docs/MODELS.md` regenerated
+(`status_matrix.py --keep-spend` keeps the committed spend footer), one commit per language. A rebase that
+conflicts in `docs/STATUS.md` is resolved the same way: `status_matrix.py --keep-spend`, never by hand.
+
 A maintainer can waive scope or size for one PR with the label
 `scope-exception` or `size-exception`, saying why in the PR. Setting or
 removing the label re-runs `pr-format` on its own (it reads the labels live),
