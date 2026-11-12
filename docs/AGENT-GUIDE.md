@@ -44,7 +44,7 @@ memory. The checks form a ladder, and it matters which rung a claim rests on —
 |---|---|---|
 | Is it a stub, or missing required structure? | quality floor, **before writing** | free |
 | What did every check say about this topic, and how much does it add up to? | `make quality` → meta.yaml `quality:` (`scripts/quality_score.py --check` in CI) | free |
-| Does the cited URL resolve? | `scripts/check_citations.py` | free |
+| Does the cited URL resolve? | `scripts/check_citations.py`; a moved page is fixed with `scripts/fix_citation.py <cert> <topic> OLD NEW` (every language, translations re-stamped, never re-translated) | free |
 | Is the citation an official project source, and whose? | `scripts/check_sources.py` + [docs/sources.yaml](sources.yaml) | free |
 | Does the embedded YAML parse? | `scripts/check_manifests.py` | free |
 | Does it teach a removed Kubernetes API? | `scripts/check_k8s_apis.py` | free |
