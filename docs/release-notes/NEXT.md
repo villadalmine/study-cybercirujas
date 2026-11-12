@@ -9,6 +9,8 @@
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 
+- **Labs that run:** a generated lab now has the `break`, `verify` and `cleanup` modes the lab runner needs and never waits at a prompt, or it is not written; `teach cert lab` rewrites only a topic's lab.
+
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->
