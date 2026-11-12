@@ -213,7 +213,8 @@ flowchart TD
 flowchart TD
     W["watcher<br/>make check-updates, scripts/check_versions.py"] --> UP["catalog.yaml upstream: block<br/>upstream_status: current or outdated"]
     UP --> EX["curriculum_diff.py extract<br/>syllabi/&lt;cert&gt;/v&lt;new&gt;.yaml"]
-    EX --> DF["curriculum_diff.py diff<br/>upstream, drift, impact"]
+    EX --> WN["curriculum_diff.py window<br/>upstream.snapshot + milestone"]
+    WN --> DF["curriculum_diff.py diff<br/>upstream, drift, impact"]
     DF --> PL["curriculum_diff.py plan<br/>docs/upgrades/&lt;upgrade&gt;.plan.json"]
     PL --> GD["curriculum_diff.py guard --base origin/main"]
     GD --> ED["phase 2 PRs<br/>only planned files, sections and lines"]
@@ -223,6 +224,7 @@ flowchart TD
 | Step | Script or workflow | Blocks | Warns |
 | :--- | :--- | :--- | :--- |
 | The vendor document is frozen with its hash | `scripts/curriculum_diff.py extract` | refuses a tree with no domains or weights not summing to 100 | |
+| The upgrade window names the frozen snapshot and the milestone | `curriculum_diff.py window <spec>` (refuses when the tracker's version or URL is not the snapshot's) | `check_curriculum_consistency.py` fails without it | |
 | The committed plan and report are what their inputs produce | `tests/test_curriculum_diff.py`, run by `make verify-ci` | in `verify.yml` | |
 | An upgrade PR changes only planned files | `curriculum_diff.py guard --base origin/main` | | run by hand; its logic is unit-tested, but no workflow runs it on each PR |
 | The version bump touches only the lines the plan lists | `scripts/upgrade_versions.py` | | a scripted edit, checked with `--check`; by hand |
