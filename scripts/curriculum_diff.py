@@ -661,6 +661,57 @@ def _plan_run(args) -> int:
 COMMANDS["plan"] = ("classify every topic of an upgrade spec", _plan_args, _plan_run)
 
 
+# ==== window ====
+#
+#   scripts/curriculum_diff.py window docs/upgrades/<upgrade>.yaml [--check]
+#
+# Opens the upgrade window in catalog.yaml: for each cert of the spec, the `upstream:` block that
+# `teach tracker sync` wrote gets `snapshot` (the spec's target) and `milestone` (the spec's). That is
+# what curriculum_citations.window() validates, and the plan reads it, so run this before `plan`.
+# Refused, writing nothing, when the block is missing or names another version or document than the
+# frozen snapshot: the tracker and the snapshot must agree before the window opens.
+
+def open_window(catalog: dict, spec: dict, root: Path = REPO) -> list[str]:
+    """Fill upstream.snapshot and upstream.milestone in place; the reasons it cannot, if any."""
+    why = []
+    for cert, s in sorted(spec["certs"].items()):
+        up = ((catalog.get("certs") or {}).get(cert) or {}).get("upstream")
+        target = load_syllabus(root / s["target"]) if (root / s["target"]).is_file() else None
+        url = (target or {}).get("source", {}).get("url")
+        if not up:
+            why.append(f"{cert}: no upstream block in catalog.yaml (run `teach tracker sync` first)")
+        elif target is None:
+            why.append(f"{cert}: {s['target']} does not exist (run `extract` first)")
+        elif str(up.get("version")) != str(target.get("version")) or up.get("objectives") != url:
+            why.append(f"{cert}: upstream {up.get('version')} at {up.get('objectives')} is not "
+                       f"{s['target']} ({target.get('version')} at {url})")
+        else:
+            up["snapshot"] = s["target"]
+            up["milestone"] = spec.get("milestone")
+    return why
+
+
+def _window_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("spec", help="the upgrade spec, relative to the repository root")
+    p.add_argument("--check", action="store_true", help="fail if catalog.yaml does not already say this")
+
+
+def _window_run(args) -> int:
+    spec = yaml.safe_load((REPO / args.spec).read_text(encoding="utf-8"))
+    path = REPO / "catalog.yaml"
+    catalog = yaml.safe_load(path.read_text(encoding="utf-8"))
+    why = open_window(catalog, spec)
+    if why:
+        print("\n".join(why), file=sys.stderr)
+        return 1
+    # The same writer as teach.core.catalog.save, so the tracker and this command never reformat each other.
+    return write(yaml.safe_dump(catalog, sort_keys=False, allow_unicode=True), str(path), args.check)
+
+
+COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone in catalog.yaml",
+                      _window_args, _window_run)
+
+
 # ==== guard ====
 #
 #   scripts/curriculum_diff.py guard docs/upgrades/<upgrade>.plan.json [--base origin/main | --files ...]

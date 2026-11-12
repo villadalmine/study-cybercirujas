@@ -188,6 +188,40 @@ class Extraction(unittest.TestCase):
 
 # ==== diff ====
 
+class Window(unittest.TestCase):
+    """`window` writes upstream.snapshot and milestone only when the tracker and the frozen snapshot agree."""
+
+    URL = "https://github.com/cncf/curriculum/raw/c/CKS_Curriculum%20v1.37.pdf"
+    SPEC = {"milestone": "CKS v1.37 upgrade", "certs": {"cks": {"target": "syllabi/cks/v1.37.yaml"}}}
+
+    def run_window(self, upstream):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "syllabi" / "cks").mkdir(parents=True)
+            snap = cd.snapshot(BASE["domains"], cert="cks", version="1.37", repo="cncf/curriculum", commit="c",
+                               path="CKS_Curriculum v1.37.pdf", committed="d", sha256="s")
+            (root / "syllabi" / "cks" / "v1.37.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+            catalog = {"certs": {"cks": {"tracked_version": "1.34", **({"upstream": upstream} if upstream else {})}}}
+            return cd.open_window(catalog, self.SPEC, root), catalog["certs"]["cks"].get("upstream")
+
+    def test_opens_when_the_tracker_and_the_snapshot_agree(self):
+        why, up = self.run_window({"version": "1.37", "objectives": self.URL, "sha256": "s"})
+        self.assertEqual(why, [])
+        self.assertEqual(up["snapshot"], "syllabi/cks/v1.37.yaml")
+        self.assertEqual(up["milestone"], "CKS v1.37 upgrade")
+        self.assertEqual(up["sha256"], "s")   # what the tracker wrote stays
+
+    def test_refused_without_an_upstream_block(self):
+        why, up = self.run_window(None)
+        self.assertIn("no upstream block", why[0])
+        self.assertIsNone(up)
+
+    def test_refused_when_the_snapshot_is_another_document(self):
+        why, up = self.run_window({"version": "1.37", "objectives": self.URL.replace("/c/", "/other/")})
+        self.assertIn("is not syllabi/cks/v1.37.yaml", why[0])
+        self.assertNotIn("snapshot", up)
+
+
 class Diff(unittest.TestCase):
     def test_identical(self):
         d = cd.diff(BASE, copy.deepcopy(BASE))
