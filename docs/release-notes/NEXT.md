@@ -9,6 +9,8 @@
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 
+- **Moved citations, fixed in one step:** `scripts/fix_citation.py` replaces a dead documentation URL in every language of a topic and keeps the translations' source chain current, without paying for a re-translation.
+
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->
