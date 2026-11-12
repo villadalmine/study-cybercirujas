@@ -325,6 +325,16 @@ class Guard(unittest.TestCase):
         self.assertFalse(cd.citation_files_ok(plan, f, base, self.head(fixed), same))
         self.assertFalse(cd.citation_files_ok(plan, f, base, self.head(fixed + " extra"), switched))
 
+    def test_a_window_on_the_head_does_not_become_the_target(self):
+        # review of #305: check_pr gates tracked_version and objectives, not an upstream block added on the head
+        base_cat = yaml.safe_dump({"certs": {"cka": entry(tracked="1.37", url=NEW)}})
+        head_cat = yaml.safe_dump({"certs": {"cka": entry(tracked="1.38", url=NEW, upstream={
+            "version": "1.39", "objectives": NEW.replace("b3c8", "c4d9")})}})
+        base = lambda f: base_cat if f == "catalog.yaml" else "# t\n- CNCF CKA Curriculum v1.37\nend\n"  # noqa: E731
+        ok = cd.cite_checker(base, lambda f: head_cat)
+        self.assertTrue(cd.citation_files_ok(self.PLAN, self.F, base, self.head("- CNCF CKA Curriculum v1.38"), ok))
+        self.assertFalse(cd.citation_files_ok(self.PLAN, self.F, base, self.head("- CNCF CKA Curriculum v1.39"), ok))
+
     def test_a_regenerated_topic_is_not_covered(self):
         plan = {"certs": {"cka": {"new": [], "topics": [dict(self.TOPIC, **{"class": "regenerate"})]}}}
         self.assertFalse(cd.citation_files_ok(plan, self.F, self.base, self.head(LINE_NEW), self.ok))

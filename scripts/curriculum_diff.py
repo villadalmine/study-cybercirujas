@@ -921,7 +921,12 @@ def cite_checker(base_text, head_text=None):
                 if c in base and isinstance(e, dict) and e.get("tracked_version") != base[c].get("tracked_version")}
 
     def wants(cert: str) -> list[dict]:
-        return [cc.wanted(x[cert], cert, strict=True) for x in (base, switched) if cert in x]
+        # the head entry without its `upstream:` window: check_pr gates only tracked_version and sources.objectives, so
+        # an ungated window on the head must not become the target (the switch removes the window anyway)
+        out = [cc.wanted(base[cert], cert, strict=True)] if cert in base else []
+        if cert in switched:
+            out.append(cc.wanted({**switched[cert], "upstream": None}, cert, strict=True))
+        return out
 
     def ok(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
