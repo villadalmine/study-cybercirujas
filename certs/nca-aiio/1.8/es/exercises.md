@@ -18,7 +18,7 @@ Estos ejercicios van desde inspeccionar hardware real, pasando por razonar sobre
 - Panorama del GPU Operator: https://developer.nvidia.com/blog/nvidia-gpu-operator-simplifying-gpu-management-in-kubernetes
 - Escalar el almacenamiento para IA: https://developer.nvidia.com/blog/tips-on-scaling-storage-for-ai-training-and-inferencing/
 - Casos de uso de LLM: https://blogs.nvidia.com/blog/what-are-large-language-models-used-for/
-- CUDA C++ Programming Guide: https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+- CUDA C++ Programming Guide: https://docs.nvidia.com/cuda/cuda-programming-guide/
 - CUDA C++ Best Practices Guide: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/
 - Documentación de `nvidia-smi`: https://docs.nvidia.com/deploy/nvidia-smi/index.html
 

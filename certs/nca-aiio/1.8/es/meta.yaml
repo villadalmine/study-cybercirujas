@@ -1,7 +1,7 @@
 generated_at: '2026-11-12T03:11:27'
 lang: es
 translated_from: en
-source_sha256: 3066fa9799927991dae79ccb4d432b0397690a66a4154ea2361b463ae15d284a
+source_sha256: d17c050adc2886795fc7866f26b01b8309c1c4726da310685a8c7eef7b54fe82
 backend: claude
 model: claude-opus-5-5
 sources:

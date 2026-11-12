@@ -18,7 +18,7 @@ These exercises go from inspecting real hardware, to reasoning about peak comput
 - GPU Operator overview: https://developer.nvidia.com/blog/nvidia-gpu-operator-simplifying-gpu-management-in-kubernetes
 - Scaling storage for AI: https://developer.nvidia.com/blog/tips-on-scaling-storage-for-ai-training-and-inferencing/
 - LLM use cases: https://blogs.nvidia.com/blog/what-are-large-language-models-used-for/
-- CUDA C++ Programming Guide: https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+- CUDA C++ Programming Guide: https://docs.nvidia.com/cuda/cuda-programming-guide/
 - CUDA C++ Best Practices Guide: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/
 - `nvidia-smi` documentation: https://docs.nvidia.com/deploy/nvidia-smi/index.html
 

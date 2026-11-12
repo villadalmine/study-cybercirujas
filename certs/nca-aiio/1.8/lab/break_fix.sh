@@ -75,7 +75,7 @@
 #   - NVIDIA GPU Operator in Kubernetes:
 #     https://developer.nvidia.com/blog/nvidia-gpu-operator-simplifying-gpu-management-in-kubernetes
 #   - CUDA C++ Programming Guide (SIMT, warps, SMs):
-#     https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+#     https://docs.nvidia.com/cuda/cuda-programming-guide/
 # =============================================================================
 
 set -euo pipefail

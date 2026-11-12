@@ -831,7 +831,7 @@ The `label_replace` joins the DCGM `Hostname` label to the node-exporter `instan
 - What Are Large Language Models Used For?: https://blogs.nvidia.com/blog/what-are-large-language-models-used-for/
 - NVIDIA GPU Operator: Simplifying GPU Management in Kubernetes: https://developer.nvidia.com/blog/nvidia-gpu-operator-simplifying-gpu-management-in-kubernetes
 - NVIDIA Hopper Architecture In-Depth: https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/
-- CUDA C++ Programming Guide (hardware implementation, SIMT): https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+- CUDA C++ Programming Guide (hardware implementation, SIMT): https://docs.nvidia.com/cuda/cuda-programming-guide/
 - NVIDIA GPU Operator documentation (time-slicing, MIG): https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/
 - NVIDIA DCGM documentation: https://docs.nvidia.com/datacenter/dcgm/latest/
 - NVIDIA XID errors reference: https://docs.nvidia.com/deploy/xid-errors/
