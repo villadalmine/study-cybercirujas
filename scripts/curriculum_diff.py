@@ -288,8 +288,18 @@ def load_syllabus(path: Path) -> dict:
         d = domains.setdefault(did, {"id": did, "name": name, "weight": 0.0, "objectives": []})
         d["weight"] += float(t.get("weight") or 0)
         d["objectives"].append({"id": str(t["id"]), "text": tidy(str(t.get("title") or ""))})
+    # A frozen file stores per-objective weights, the domain's split evenly and rounded to two decimals, so the
+    # sum carries up to 0.01 per objective of rounding (ckne: 25 -> 25.02). `derived` lets the diff tell that
+    # from a published change; a snapshot's weight is the document's own number and is compared exactly.
     return {"cert": front.get("cert"), "version": str(front.get("version")), "file_sha256": sha256_text(text),
-            "domains": [dict(d, weight=number(d["weight"])) for d in domains.values()]}
+            "domains": [dict(d, weight=number(d["weight"]), derived=True) for d in domains.values()]}
+
+
+def same_weight(old: dict, new: dict) -> bool:
+    """Equal domain weights, allowing a derived (summed) weight its rounding: 0.01 per objective."""
+    a, b = float(old["weight"]), float(new["weight"])
+    slack = 0.01 * max(len(d.get("objectives") or []) for d in (old, new)) if (old.get("derived") or new.get("derived")) else 0
+    return abs(a - b) <= slack + 1e-9
 
 
 def _match_domains(old: list[dict], new: list[dict]) -> dict[str, str]:
@@ -361,7 +371,7 @@ def diff(old: dict, new: dict) -> dict:
         if normalize(odom[oid]["name"]) != normalize(ndom[nid]["name"]):
             domains["renamed"].append({"old_id": oid, "new_id": nid, "old": odom[oid]["name"],
                                        "new": ndom[nid]["name"]})
-        if number(odom[oid]["weight"]) != number(ndom[nid]["weight"]):
+        if not same_weight(odom[oid], ndom[nid]):
             domains["weight_changed"].append({"old_id": oid, "new_id": nid, "domain": ndom[nid]["name"],
                                               "old": number(odom[oid]["weight"]),
                                               "new": number(ndom[nid]["weight"])})
@@ -526,7 +536,9 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
 
     Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
     line there is `technical`, since the runner and the Killercoda export read them."""
-    ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)")
+    # A tracked "version" with no digit ("beta", "unknown": a curriculum frozen before it had a number) is not a
+    # version any line can name; matching the word would list every "<unknown>" in a kubectl output (ckne GA).
+    ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)") if re.search(r"\d", version) else None
     major, _, minor = version.partition(".")
     companion = (re.compile(rf"(^|[^0-9.])v{major}\.({minor_below(minor)})\.\d+(?!\d)")
                  if minor.isdigit() and int(minor) > 2 else None)
@@ -549,7 +561,7 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
         heads = _headings(text) if is_doc else [False] * len(text.splitlines())
         found = []
         for n, (line, heading) in enumerate(zip(text.splitlines(), heads), 1):
-            if not ver.search(line):
+            if ver is None or not ver.search(line):
                 continue
             if is_doc and "curriculum" in line.casefold():
                 lines["curriculum"] += 1
@@ -716,6 +728,87 @@ def _window_run(args) -> int:
 
 COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone in catalog.yaml",
                       _window_args, _window_run)
+
+
+# ==== switch ====
+#
+#   scripts/curriculum_diff.py switch docs/upgrades/<upgrade>.yaml [--check]
+#
+# The last step of an upgrade: what the catalog and the frozen syllabus say moves from the tracked curriculum
+# to the target. Until this command it was a hand edit of catalog.yaml (CKA & CKAD v1.37). From the live plan:
+#
+# - refused while any topic is `regenerate` or `retire`, or any objective is `new`: their content PRs come
+#   first, and this command only closes upgrades whose material stays (keep and revalidate);
+# - catalog.yaml: `tracked_version` -> the target's version, `sources.objectives` -> the target's pinned PDF,
+#   `upstream_status: current`, and the `upstream:` window removed;
+# - certs/<cert>.md: `version` -> the target's, the PDF added to `sources`, and each topic's title -> the
+#   target objective it maps to when the wording changed. Directory names stay (README -> Topic ids at the
+#   switch): the snapshot's positional ids are not the frozen file's.
+#
+# The same writers as teach.core (catalog.save, certs.save), so nothing else reformats the files.
+
+
+def switch(root: Path, spec: dict) -> tuple[dict, dict[str, str], list[str]]:
+    """(new catalog, {path: new text} for the frozen syllabi, the reasons it cannot) without writing."""
+    import frontmatter
+
+    catalog = yaml.safe_load((root / "catalog.yaml").read_text(encoding="utf-8"))
+    files, why = {}, []
+    for cert, s in sorted(spec["certs"].items()):
+        entry = (catalog.get("certs") or {}).get(cert)
+        if entry is None:
+            why.append(f"{cert}: not in catalog.yaml")
+            continue
+        c = plan_cert(root, cert, s)
+        pending = [f"{t['topic']} ({t['class']})" for t in c["topics"] if t["class"] in ("regenerate", "retire")]
+        pending += [f"{n['objective']} (new)" for n in c.get("new") or []]
+        if pending:
+            why.append(f"{cert}: content changes first: {', '.join(pending)}")
+            continue
+        target = load_syllabus(root / s["target"])
+        url, version = (target.get("source") or {}).get("url"), str(target["version"])
+        if not url:
+            why.append(f"{cert}: {s['target']} has no source.url")
+            continue
+        texts = {o["id"]: o["text"] for d in target["domains"] for o in d["objectives"]}
+        rows = {t["topic"]: t for t in c["topics"]}
+        md = root / (s.get("tracked") or f"certs/{cert}.md")
+        post = frontmatter.load(md)
+        for topic in post.metadata.get("topics") or []:
+            row = rows.get(str(topic.get("id")))
+            new = texts.get(row["maps_to"]) if row else None
+            if new and tidy(str(topic.get("title") or "")) != new:
+                topic["title"] = new
+        post.metadata["version"] = version
+        sources = list(post.metadata.get("sources") or [])
+        post.metadata["sources"] = sources if url in sources else [*sources, url]
+        files[str(md.relative_to(root))] = frontmatter.dumps(post) + "\n"
+        entry["tracked_version"] = version
+        entry.setdefault("sources", {})["objectives"] = url
+        entry["upstream_status"] = "current"
+        entry.pop("upstream", None)
+    return catalog, files, why
+
+
+def _switch_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("spec", help="the upgrade spec, relative to the repository root")
+    p.add_argument("--check", action="store_true", help="fail if the files do not already say this")
+
+
+def _switch_run(args) -> int:
+    spec = yaml.safe_load((REPO / args.spec).read_text(encoding="utf-8"))
+    catalog, files, why = switch(REPO, spec)
+    if why:
+        print("\n".join(why), file=sys.stderr)
+        return 1
+    status = write(yaml.safe_dump(catalog, sort_keys=False, allow_unicode=True), str(REPO / "catalog.yaml"), args.check)
+    for rel, text in files.items():
+        status |= write(text, str(REPO / rel), args.check)
+    return status
+
+
+COMMANDS["switch"] = ("close an upgrade: tracked_version, objectives and the frozen syllabus move to the target",
+                      _switch_args, _switch_run)
 
 
 # ==== guard ====

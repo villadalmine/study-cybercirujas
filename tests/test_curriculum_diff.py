@@ -413,6 +413,110 @@ class BelowTopicLevel(unittest.TestCase):
                           "certs/cka/4.2/lab/lab.yaml:1", "certs/cka/4.2/lab/lab.yaml:2"])
 
 
+class FrozenFromABeta(unittest.TestCase):
+    """CKNE GA (#285): a beta frozen from a web page, with summed weights and no version number."""
+
+    def test_a_summed_weight_carries_its_rounding_not_a_change(self):
+        frozen = {"weight": 25.02, "derived": True, "objectives": [{}] * 6}   # 6 x 4.17
+        self.assertTrue(cd.same_weight(frozen, {"weight": 25, "objectives": [{}] * 6}))
+        self.assertFalse(cd.same_weight(dict(frozen, weight=26), {"weight": 25, "objectives": [{}] * 6}))
+        self.assertFalse(cd.same_weight({"weight": 25.02, "objectives": []}, {"weight": 25, "objectives": []}))
+
+    def test_a_version_without_digits_names_no_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs/ckne/1.1/en").mkdir(parents=True)
+            (root / "certs/ckne/1.1/en/content.md").write_text("# T\n\nNAME  <unknown>  beta\n", encoding="utf-8")
+            for version in ("unknown", "beta", "None"):
+                found = cd.scan(root, "ckne", "1.1", ["en"], version, [])
+                self.assertEqual(found["version_lines"]["technical"], [], version)
+
+
+FROZEN_MD = """---
+cert: c
+exam: C
+sources:
+- https://vendor.example/page/
+topics:
+- id: '1.1'
+  status: generated
+  title: Implement storage classes and dynamic volume provisioning
+  topic: 1 - Storage
+  weight: 20.0
+- id: '1.2'
+  status: generated
+  title: Manage persistent volumes and persistent volume claims
+  topic: 1 - Storage
+  weight: 20.0
+- id: '2.1'
+  status: generated
+  title: Define and enforce Network Policies
+  topic: 2 - Networking
+  weight: 20.0
+- id: '2.2'
+  status: generated
+  title: Understand and use CoreDNS
+  topic: 2 - Networking
+  weight: 20.0
+- id: '2.3'
+  status: generated
+  title: Use the Gateway API to manage Ingress traffic
+  topic: 2 - Networking
+  weight: 20.0
+version: beta
+---
+"""
+
+
+class Switch(unittest.TestCase):
+    """`switch` closes an upgrade whose material stays: catalog and frozen syllabus move to the target."""
+
+    URL = "https://github.com/cncf/curriculum/raw/c/C_Curriculum.pdf"
+
+    def run_switch(self, target_domains):
+        import frontmatter
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        (root / "certs").mkdir()
+        (root / "syllabi" / "c").mkdir(parents=True)
+        md = root / "certs" / "c.md"
+        md.write_text(frontmatter.dumps(frontmatter.loads(FROZEN_MD)) + "\n", encoding="utf-8")
+        snap = cd.snapshot(target_domains, cert="c", version="2026-10-01", repo="cncf/curriculum", commit="c",
+                           path="C_Curriculum.pdf", committed="2026-10-01", sha256="s")
+        (root / "syllabi" / "c" / "v2026-10-01.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+        catalog = {"certs": {"c": {"tracked_version": "beta", "upstream_status": "outdated",
+                                   "sources": {"objectives": "https://vendor.example/page/"},
+                                   "upstream": {"version": "x"}}}}
+        (root / "catalog.yaml").write_text(yaml.safe_dump(catalog, sort_keys=False), encoding="utf-8")
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md",
+                                                        "target": "syllabi/c/v2026-10-01.yaml"}}}
+        return cd.switch(root, spec)
+
+    def test_a_reworded_objective_moves_the_title_and_the_version(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        catalog, files, why = self.run_switch(domains)
+        self.assertEqual(why, [])
+        entry = catalog["certs"]["c"]
+        self.assertEqual((entry["tracked_version"], entry["sources"]["objectives"], entry["upstream_status"]),
+                         ("2026-10-01", self.URL, "current"))
+        self.assertNotIn("upstream", entry)
+        text = files["certs/c.md"]
+        self.assertIn("title: Use the Gateway API to manage Ingress-traffic", text)
+        self.assertIn("version: '2026-10-01'", text)
+        self.assertIn(f"- {self.URL}", text)
+        self.assertIn("- https://vendor.example/page/", text)   # the material was written from it: kept
+
+    def test_refused_while_content_must_change(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[0]["objectives"].append({"id": "1.3", "text": "Configure volume snapshots and restore them"})
+        catalog, files, why = self.run_switch(domains)
+        self.assertTrue(why and "content changes first" in why[0] and "(new)" in why[0])
+        self.assertEqual(files, {})
+        self.assertEqual(catalog["certs"]["c"]["tracked_version"], "beta")
+
+
 # ==== guard ====
 
 class Guard(unittest.TestCase):
