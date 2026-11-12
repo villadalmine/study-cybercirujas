@@ -248,7 +248,7 @@ flowchart TD
 | **tier A, B, C** | Labs by what can be proven: A real break/fix on our infra, B code-only for clouds, C theory only ([#210](https://github.com/villadalmine/study-cybercirujas/issues/210)). |
 | **umbrella issue** | One issue that collects many small findings or tasks (low review findings, an epic's children) so none is lost and none needs its own PR. |
 | **epic** | A long-lived umbrella: #124 docs, #166 quality, #167 labs. |
-| **milestone** | A release plan: `vX.Y.0` is the next release; `<CERT> <version> upgrade` is a curriculum upgrade. |
+| **milestone** | A release plan: `vX.Y.Z`. A curriculum upgrade names its `vX.Y.Z` milestone in its spec (`docs/upgrades/*.yaml`); older ones used `<CERT> <version> upgrade`. |
 | **Release PR** | The one pull request release-please keeps open; merging it releases. |
 | **site tag** | `site-YYYY-MM-DD`: marks the commit that is live at study.cybercirujas.club. |
 | **groundedness** | A check that each sentence is supported by the sources the topic cites. It warns today; it does not block. |

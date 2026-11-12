@@ -456,9 +456,10 @@ change only what the plan lists (`guard`, with provenance in `meta.yaml`), and t
 A CI gate (`scripts/check_curriculum_consistency.py`) keeps every cert's curriculum citations and `sources` links equal to the catalog's `tracked_version` and pinned objectives URL (read from the catalog, so any cert, with the patterns as data in `scripts/curriculum_patterns.yaml`), so the repo cannot say two versions at once; the plan lists those lines, `upgrade_versions.py --scope citations --cert <cert>` fixes them, and the switch fails while any disagrees (#220). The first runs, CKA & CKAD v1.37 and CKS v1.37, regenerated nothing: [docs/upgrades/README.md](upgrades/README.md).
 
 **What are milestones for?**
-`vX.Y.0` milestones plan a release. `<CERT> <version> upgrade` milestones are
-the only place a tracked exam version may change, enforced by `check_pr.py`
-([#63](https://github.com/villadalmine/study-cybercirujas/issues/63)).
+`vX.Y.0` milestones plan a release. A tracked exam version changes only in a PR whose milestone an upgrade
+spec on the base (`docs/upgrades/*.yaml`, `milestone: vX.Y.Z`) names for that cert, and only to that spec's
+target version and document; older upgrades used `<CERT> <version> upgrade` milestones. Enforced by `check_pr.py`
+([#63](https://github.com/villadalmine/study-cybercirujas/issues/63), [#291](https://github.com/villadalmine/study-cybercirujas/issues/291)).
 `.github/workflows/milestone.yml` keeps them current: a merged PR or a completed issue without a
 milestone gets the open `v*` one due first (a plan, since the version is not known yet). A release milestone is
 created or completed at release time from what actually shipped: publishing `vX.Y.Z` creates the milestone if it

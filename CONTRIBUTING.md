@@ -596,8 +596,9 @@ release date), every PR merged and every issue closed as completed between the p
 moves into it (whatever milestone it was in; `<CERT> upgrade` ones are never touched), whatever is still open in it
 moves to the next `v*` milestone by due date, with a comment, and `vX.Y.Z` is closed (`scripts/milestone_sync.py`).
 To settle a past release, run the workflow from Actions with its `tag` (same result, safe to repeat).
-The `<CERT> <version> upgrade` milestones are separate and stay as they are: `check_pr.py` reads them by
-name (see [Size and scope](#size-and-scope)).
+The older `<CERT> <version> upgrade` milestones are separate and stay as they are: `check_pr.py` still reads them
+by name. New upgrades use the `vX.Y.Z` milestone their spec in `docs/upgrades/` names, and `check_pr.py` reads that
+spec from the base (see [Size and scope](#size-and-scope), #291).
 
 **Three versions, not one.**
 
