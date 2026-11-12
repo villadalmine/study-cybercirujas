@@ -60,9 +60,7 @@ def lab_only(cert: str, topic: str, lang: str, repo: Path = REPO) -> bool:
     if lang != certs.DEFAULT_LANG:
         return False
     topic_dir = repo / "certs" / cert / topic
-    material = [topic_dir / lang / kind for kind in ("content.md", "exercises.md")]
-    return (not (topic_dir / "lab" / "break_fix.sh").exists()
-            and all(f.exists() and not quality.check_file(f) for f in material))
+    return not (topic_dir / "lab" / "break_fix.sh").exists() and quality.authored(topic_dir / lang)
 
 
 def command(cert: str, topic: str, lang: str, backend: str) -> list[str]:

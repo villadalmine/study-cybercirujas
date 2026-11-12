@@ -5,6 +5,7 @@ confirmation that waited for a terminal, and a lab.yaml sized at a fixed 1 CPU.
 These pin the gate (`labs.contract_problems`), the sizing (`# lab-resources:`),
 the retry in `generator._write_lab`, and run_batch's lab-only repair.
 """
+import os
 import sys
 import tempfile
 import unittest
@@ -16,7 +17,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO))
 
 import run_batch  # noqa: E402
-from teach.core import generator, labs  # noqa: E402
+from teach.core import certs, generator, labs  # noqa: E402
 from teach.lab import spec  # noqa: E402
 
 PAD = "# " + "x" * 400 + "\n"  # past the recap guard's 400-character floor
@@ -46,6 +47,12 @@ class Contract(unittest.TestCase):
         self.assertEqual(labs.contract_problems(guarded), [])
         self.assertEqual(labs.contract_problems(GOOD.replace("case", "read -r ans </dev/tty\ncase", 1))[0][-24:],
                          "so it hangs under the runner"[-24:])
+
+    def test_prompt_heuristic_edges(self):
+        self.assertTrue(labs.TERMINAL_READ.search("read ans < /dev/tty\n"))
+        self.assertTrue(labs.TERMINAL_READ.search("  read -rp 'go? ' a\n"))
+        self.assertFalse(labs.TERMINAL_READ.search("while read -r d; do mkdir -p \"$d\"; done < list\n"))
+        self.assertFalse(labs.TERMINAL_READ.search("read -r pid | ps -p \"$pid\"\n"))
 
     def test_reading_a_file_or_a_comment_is_not_a_prompt(self):
         loops = GOOD + 'while IFS= read -r line; do :; done < f\nIFS=. read -r a b <<<"$v"\n# read -p in a comment\n'
@@ -105,6 +112,76 @@ class WriteLab(unittest.TestCase):
         self.assertFalse(lab_dir.exists())
         self.assertIn("below the quality floor", error)  # pipeline.yaml budget.retry_errors
         self.assertTrue((root / ".rejected" / "c-1.1-lab.sh").exists())
+
+
+SYLLABUS = """---
+cert: c
+exam: "C"
+topics:
+- id: '1.1'
+  title: T
+  weight: 3
+  status: {status}
+---
+"""
+
+
+class GenerateLab(unittest.TestCase):
+    """Status and accounting of a lab written on its own (#299 review)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        patcher = mock.patch.dict(os.environ, {"TEACH_ROOT": str(self.root)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        (self.root / "certs").mkdir()
+        self.seen = []
+
+    def cert(self, status: str, exercises: bool = True) -> None:
+        (self.root / "certs" / "c.md").write_text(SYLLABUS.format(status=status), encoding="utf-8")
+        en = self.root / "certs" / "c" / "1.1" / "en"
+        en.mkdir(parents=True)
+        (en / "content.md").write_text("content", encoding="utf-8")
+        if exercises:
+            (en / "exercises.md").write_text("exercises", encoding="utf-8")
+
+    def run_lab(self, floor_ok: bool = True):
+        def complete(system, prompt):
+            self.seen.append(dict(generator._usage_context))
+            return GOOD
+
+        generator._usage_context.update({"cert": "previous", "topic": "9.9"})
+        with mock.patch("teach.core.quality.check_file", return_value=[] if floor_ok else ["thin"]):
+            return generator.generate_lab("c", "1.1", completer=(complete, {}))
+
+    def test_a_pending_topic_is_finished_and_billed_to_itself(self):
+        self.cert("pending")
+        self.assertIn("written", self.run_lab())
+        self.assertEqual(certs.get_topic("c", "1.1")["status"], "generated")
+        self.assertEqual({k: self.seen[0][k] for k in ("op", "cert", "topic", "lang", "kind")},
+                         {"op": "author", "cert": "c", "topic": "1.1", "lang": "en", "kind": "lab"})
+
+    def test_a_half_written_topic_stays_pending(self):
+        self.cert("pending", exercises=False)
+        self.run_lab()
+        self.assertEqual(certs.get_topic("c", "1.1")["status"], "pending")
+
+    def test_a_stale_topic_rebuilt_in_every_language_is_cleared(self):
+        self.cert("stale")
+        with mock.patch.object(certs, "topic_outdated_langs", return_value=[]):
+            self.run_lab()
+        self.assertEqual(certs.get_topic("c", "1.1")["status"], "generated")
+
+    def test_a_verified_lab_is_not_replaced(self):
+        self.cert("generated")
+        lab = self.root / "certs" / "c" / "1.1" / "lab"
+        lab.mkdir()
+        (lab / "break_fix.sh").write_text("#!/bin/bash\n", encoding="utf-8")
+        (lab / "lab.yaml").write_text("verified: {status: pass}\n", encoding="utf-8")
+        with self.assertRaises(generator.GeneratorConfigError):
+            generator.generate_lab("c", "1.1", force=True, completer=(None, {}))
 
 
 class BatchRepairsOnlyTheLab(unittest.TestCase):

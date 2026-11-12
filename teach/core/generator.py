@@ -760,24 +760,42 @@ def _write_lab(complete, system: str, context: str, cert_id: str, topic_id: str,
     )
 
 
-def generate_lab(cert_id: str, topic_id: str, backend: str | None = None, force: bool = False) -> dict:
+def generate_lab(cert_id: str, topic_id: str, backend: str | None = None, force: bool = False,
+                 completer: tuple | None = None) -> dict:
     """Write only a topic's lab, from the syllabus entry, in the authoring language.
 
     For a lab that is missing or fails the runner's contract while its content is
     fine: regenerating the whole topic would pay for content and exercises again
-    and break the translations' source chain. `teach cert lab` calls this.
+    and break the translations' source chain. `teach cert lab` calls this;
+    `generate_topic` passes the completer it already built.
     """
     lab_dir = certs.content_dir(cert_id, topic_id) / "lab"
     if (lab_dir / "break_fix.sh").exists() and not force:
         return {"topic": topic_id, "skipped": "lab exists (use --force)"}
-    complete, _ = make_completer(backend)
+    if force and (yaml.safe_load((lab_dir / "lab.yaml").read_text(encoding="utf-8")) or {}
+                  if (lab_dir / "lab.yaml").exists() else {}).get("verified"):
+        # A lab that ran its cycle carries modes, env and evidence written for
+        # THAT script; replacing it silently would drop all of it (#299 review).
+        raise GeneratorConfigError(f"{cert_id} {topic_id}: the lab is verified; replace it by hand, not with --force")
+    complete, _ = completer or make_completer(backend)
     topic = certs.get_topic(cert_id, topic_id)
+    # Its own accounting: called standalone, or right after another topic in a
+    # generate_cert loop, the context would otherwise bill this lab to whatever
+    # was there before.
+    _usage_context.clear()
+    _usage_context.update({"op": "author", "cert": cert_id, "topic": topic_id,
+                           "lang": certs.DEFAULT_LANG, "kind": "lab", "weight": topic.get("weight", 1)})
     context = _topic_context(certs.load(cert_id).metadata, topic)
     _write_lab(complete, _system(certs.DEFAULT_LANG), context, cert_id, topic_id, topic["title"], lab_dir)
-    # generate_topic marks a topic generated after its lab; when the lab was the
-    # part rejected, this is where the topic is finished.
-    if topic.get("status", "pending") == "pending" and certs.DEFAULT_LANG in certs.topic_langs(cert_id, topic_id):
-        certs.set_topic_status(cert_id, topic_id, "generated")
+    # generate_topic finishes a topic after its lab; when the lab was the part
+    # rejected, the topic is finished here, the same way, and only when its
+    # authoring-language material is complete.
+    if quality.authored(certs.content_dir(cert_id, topic_id) / certs.DEFAULT_LANG):
+        status = topic.get("status", "pending")
+        if status == "pending":
+            certs.set_topic_status(cert_id, topic_id, "generated")
+        elif status == "stale" and not certs.topic_outdated_langs(cert_id, topic_id):
+            certs.clear_topic_stale(cert_id, topic_id)
     return {"topic": topic_id, "written": str(lab_dir)}
 
 
@@ -810,8 +828,10 @@ def generate_topic(
     if already and not force and not outdated:
         # A lab rejected for its contract leaves the content written and the lab
         # missing; the next run writes only the lab instead of skipping forever.
-        if lang == certs.DEFAULT_LANG and not (certs.content_dir(cert_id, topic_id) / "lab" / "break_fix.sh").exists():
-            return generate_lab(cert_id, topic_id, backend=backend)
+        directory = certs.content_dir(cert_id, topic_id)
+        if (lang == certs.DEFAULT_LANG and not (directory / "lab" / "break_fix.sh").exists()
+                and quality.authored(directory / lang)):
+            return generate_lab(cert_id, topic_id, completer=(complete, backend_meta))
         return {"topic": topic_id, "skipped": f"already generated in {lang} (use --force)"}
 
     system = _system(lang)
