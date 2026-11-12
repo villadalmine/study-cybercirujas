@@ -232,6 +232,7 @@ make quality                      # floor report, then rescore and write each me
 make audit                        # pending/corrupt combos, and unrendered videos
 make test                         # floor and stale-invalidation tests
 scripts/check_citations.py        # do the cited sources exist?
+scripts/fix_citation.py <cert> <topic> OLD NEW   # a moved URL, fixed in every language; current translations re-stamped, no model
 scripts/check_manifests.py        # do the embedded manifests parse?
 scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught?
 scripts/check_api_facts.py        # do manifests use APIs the tracked release serves?
