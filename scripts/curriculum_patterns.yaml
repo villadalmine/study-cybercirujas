@@ -28,6 +28,12 @@ ignore:
 # A version is only compared when the catalog's tracked_version is a dotted number; a date or "unknown" has nothing to compare.
 numeric_tracked: '^\d+(?:\.\d+)+$'
 
+# A citation that says the curriculum had no published version yet. True while a cert tracks a beta frozen from a web page
+# (tracked_version `beta` or `unknown`); once tracked_version is a published version (`published_tracked`: a dotted number or
+# a date) the phrase disagrees with the catalog, and fix_line writes "version <tracked_version>" in its place (CKNE GA, #285).
+unpublished: '(?i)\bversion not yet published\b|\bversi[oó]n (?:a[uú]n )?(?:no|sin) publicar\b|\bversi[oó]n (?:a[uú]n )?no publicada\b'
+published_tracked: '^(?:\d+(?:\.\d+)+|\d{4}-\d{2}-\d{2})$'
+
 # Per-vendor overrides of the block above, keyed by a substring of the catalog's objectives URL (or by cert id).
 # A vendor that writes its version another way is one entry here, never code.
 vendors: {}

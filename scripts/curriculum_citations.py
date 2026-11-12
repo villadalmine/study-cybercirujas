@@ -29,6 +29,8 @@ URL = re.compile(PATTERNS["url"])
 FAMILY = [(re.compile(a), b) for a, b in PATTERNS["family"]]
 NUMERIC = re.compile(PATTERNS["numeric_tracked"])
 IGNORE = [re.compile(x) for x in PATTERNS.get("ignore") or []]
+UNPUBLISHED = re.compile(PATTERNS["unpublished"]) if PATTERNS.get("unpublished") else None
+PUBLISHED = re.compile(PATTERNS.get("published_tracked") or r"(?!)")
 TRAIL = ".,;:*_"
 
 
@@ -132,7 +134,9 @@ def wanted(entry: dict, cert: str = "", root: Path | None = None, strict: bool =
             "target_version": target_v if numeric else "", "target_url": target_u, "pinned_url": pinned,
             "families": {family(u) for u in [pinned, target_u] if u},
             "topic_ids": {p.name for p in (root / "certs" / cert).glob("*") if p.is_dir()} if root and cert else set(),
-            "regexes": version_regexes(rule_for(entry, cert), tracked, cert) if numeric else []}
+            "regexes": version_regexes(rule_for(entry, cert), tracked, cert) if numeric else [],
+            # a published tracked_version: a line saying the version is not published yet disagrees with it
+            "published": tracked if PUBLISHED.match(tracked) else ""}
 
 
 def _urls(line: str):
@@ -146,7 +150,9 @@ def fix_line(line: str, want: dict) -> str:
     """The line with its curriculum links pinned to the catalog's and its cited version set to the catalog's.
 
     A link of the pinned document's family that is not an accepted spelling becomes the target URL; a cited version that is
-    not an accepted one becomes the target version. A line that already agrees comes back unchanged."""
+    not an accepted one becomes the target version, and a phrase saying the version is not published yet (`unpublished` in
+    curriculum_patterns.yaml) names the tracked version once it is a published one. A line that already agrees comes back
+    unchanged."""
     if want["target_url"]:
         out, last = [], 0
         for a, b, url in _urls(line):
@@ -161,6 +167,8 @@ def fix_line(line: str, want: dict) -> str:
                 out += [line[last:a], want["target_version"]]
                 last = b
         line = "".join(out) + line[last:] if out else line
+    if UNPUBLISHED is not None and want.get("published"):
+        line = UNPUBLISHED.sub(f"version {want['published']}", line)
     return line
 
 
