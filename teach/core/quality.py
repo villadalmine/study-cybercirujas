@@ -72,3 +72,16 @@ def check_file(path) -> list[str]:
         return check(kind, path.read_text(encoding="utf-8", errors="replace"))
     except OSError as error:
         return [f"unreadable: {error}"]
+
+
+def authored(lang_dir) -> bool:
+    """Both content.md and exercises.md exist in `lang_dir` and clear the floor.
+
+    `certs.topic_langs` looks at content.md alone, so a topic whose exercises call
+    failed counts there as written in that language. Deciding that only its lab is
+    missing needs both files (generator.generate_topic, run_batch.lab_only; #299).
+    """
+    from pathlib import Path
+
+    files = [Path(lang_dir) / name for name in KINDS]
+    return all(f.exists() and not check_file(f) for f in files)

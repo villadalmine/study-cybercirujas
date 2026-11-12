@@ -43,7 +43,7 @@ flowchart LR
 | Milestone | What it is | Rule |
 | :--- | :--- | :--- |
 | `vX.Y.0` (with a due date) | the planning unit of a release | the Release PR is what actually happened; the milestone of a release, patches included, is created or completed at release time from what shipped, what is still open moves to the next `v*` milestone and `vX.Y.0` closes |
-| `<CERT> <version> upgrade` | one curriculum upgrade (for example CKA and CKAD v1.37) | separate from the releases; `scripts/check_pr.py` reads it by name, and only its final PR may be `Scope: exam-version` |
+| `<CERT> <version> upgrade` (until 2026-11) | one curriculum upgrade (for example CKA and CKAD v1.37) | superseded by #291: an upgrade now uses the `vX.Y.Z` milestone its spec in `docs/upgrades/*.yaml` names (`milestone:`); `scripts/check_pr.py` accepts that milestone for `Scope: exam-version` only through a spec on the base, and only the upgrade's final PR may move the version |
 | none | epics and umbrellas (#124 docs, #166 quality, #167 labs, the `Follow-ups: ...` issues) | they are long-lived; they have no milestone and the stale workflow never touches them |
 
 ## Review and exceptions
