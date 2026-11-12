@@ -5,15 +5,15 @@
 
 ## Qué vas a construir
 
-En estos ejercicios resolvés problemas relacionados de tres maneras, para que puedas ver dónde están los límites entre los tres conceptos:
+En estos ejercicios resolvés problemas relacionados de tres maneras, para que veas dónde están los límites entre los tres conceptos:
 
 | Capa | Qué implementás | Quién diseña la lógica de decisión |
 |---|---|---|
 | **AI** (el paraguas) | Un filtro de spam basado en reglas | Una persona escribe reglas explícitas |
-| **Machine Learning** (un subconjunto de AI) | Un clasificador de dígitos con regresión logística, primero sobre features diseñadas a mano y después sobre píxeles crudos | El algoritmo aprende los pesos; una persona suele diseñar las features |
-| **Deep Learning** (un subconjunto de ML) | Una red neuronal convolucional (CNN) pequeña sobre los mismos dígitos | La red aprende tanto las features como la frontera de decisión, capa por capa |
+| **Machine Learning** (un subconjunto de AI) | Un clasificador de dígitos con regresión logística, primero sobre features diseñadas a mano y después sobre píxeles crudos | El algoritmo aprende los pesos; normalmente una persona diseña las features |
+| **Deep Learning** (un subconjunto de ML) | Una red neuronal convolucional (CNN) chica sobre los mismos dígitos | La red aprende tanto las features como la frontera de decisión, capa por capa |
 
-Después conectás los conceptos con la infraestructura: por qué el deep learning impulsa la demanda de GPU, en qué se diferencia el entrenamiento de la inferencia, cómo TensorRT optimiza un modelo entrenado y cómo Kubernetes programa cargas de trabajo con GPU a través del NVIDIA GPU Operator.
+Después conectás los conceptos con la infraestructura: por qué el deep learning impulsa la demanda de GPU, en qué se diferencia el entrenamiento de la inferencia, cómo TensorRT optimiza un modelo ya entrenado y cómo Kubernetes agenda workloads de GPU a través del NVIDIA GPU Operator.
 
 ## Requisitos previos
 
@@ -34,7 +34,7 @@ Después conectás los conceptos con la infraestructura: por qué el deep learni
    python -m pip install --upgrade pip
    ```
 
-2. Instalá las bibliotecas. `scikit-learn` cubre el ML clásico, `torch` cubre el deep learning, y `onnx`/`onnxscript` se necesitan más adelante para exportar el modelo:
+2. Instalá las bibliotecas. `scikit-learn` cubre el ML clásico, `torch` cubre el deep learning, y `onnx`/`onnxscript` hacen falta más adelante para exportar el modelo:
 
    ```bash
    pip install numpy scikit-learn torch onnx onnxscript
@@ -72,7 +72,7 @@ Después conectás los conceptos con la infraestructura: por qué el deep learni
 **Preguntas de comprensión — Paso 1**
 
 - **Q1.1** Instalaste dos bibliotecas distintas, `scikit-learn` y `torch`. Según la tabla del principio, ¿a qué capa conceptual sirve principalmente cada una?
-- **Q1.2** `torch.cuda.is_available()` devolvió `False`, pero el resto del laboratorio igual funciona. ¿Qué te dice esto sobre la relación entre el deep learning y las GPU: es un requisito funcional o un requisito de rendimiento?
+- **Q1.2** `torch.cuda.is_available()` devolvió `False`, pero el resto del laboratorio funciona igual. ¿Qué te dice esto sobre la relación entre deep learning y GPUs: es un requisito funcional o un requisito de rendimiento?
 
 ---
 
@@ -129,7 +129,7 @@ La Inteligencia Artificial es el campo amplio que busca que las máquinas realic
    Salida esperada:
 
    ```
-   SPAM score=9 rules=["mentions 'free money'", "mentions 'winner'", "contains 'click here'", 'more than 3 exclamation marks', 'mostly uppercase']
+   SPAM score=8 rules=["mentions 'free money'", "mentions 'winner'", "contains 'click here'", 'more than 3 exclamation marks']
          'Congratulations WINNER!!!! Click here to claim your FREE MONEY'
    HAM  score=0 rules=[]
          'Hi team, the GPU cluster maintenance window moves to Friday.'
@@ -144,16 +144,16 @@ La Inteligencia Artificial es el campo amplio que busca que las máquinas realic
 **Preguntas de comprensión — Paso 2**
 
 - **Q2.1** ¿Este programa es AI? ¿Es machine learning? Justificá ambas respuestas usando las definiciones.
-- **Q2.2** Para detectar `fr33 m0ney` tenés que agregar una regla nueva a mano. ¿Qué revela esto sobre cómo escalan los sistemas basados en reglas a medida que crece el espacio del problema?
-- **Q2.3** Nombrá una ventaja que este sistema basado en reglas tiene sobre los modelos de ML y DL que vas a construir a continuación. Pensá en la explicabilidad y el costo de cómputo.
+- **Q2.2** Para atrapar `fr33 m0ney` tenés que agregar una regla nueva a mano. ¿Qué revela esto sobre cómo escalan los sistemas basados en reglas a medida que crece el espacio del problema?
+- **Q2.3** Nombrá una ventaja que este sistema basado en reglas tiene frente a los modelos de ML y DL que vas a construir a continuación. Pensá en la explicabilidad y el costo de cómputo.
 
 ---
 
 ## Paso 3 — Machine learning: aprender pesos a partir de datos
 
-Machine Learning es un subconjunto de AI en el que un sistema mejora en una tarea aprendiendo patrones a partir de datos, en lugar de seguir reglas programadas explícitamente. En el ML clásico, normalmente una persona decide **qué features** ve el modelo (feature engineering), y el algoritmo aprende **cómo ponderarlas**.
+Machine Learning es un subconjunto de AI en el que un sistema mejora en una tarea aprendiendo patrones a partir de datos en lugar de seguir reglas programadas explícitamente. En el ML clásico, normalmente una persona decide **qué features** ve el modelo (feature engineering), y el algoritmo aprende **cómo ponderarlas**.
 
-Vas a usar el dataset `digits` de scikit-learn: 1.797 imágenes en escala de grises de dígitos manuscritos, cada una de 8×8 píxeles (64 valores de 0 a 16).
+Vas a usar el dataset `digits` de scikit-learn: 1.797 imágenes en escala de grises de dígitos escritos a mano, cada una de 8×8 píxeles (64 valores de 0 a 16).
 
 1. Creá `classic_ml.py`:
 
@@ -212,7 +212,7 @@ Vas a usar el dataset `digits` de scikit-learn: 1.797 imágenes en escala de gri
    python classic_ml.py
    ```
 
-   Salida esperada (la accuracy y los tiempos varían levemente según la versión de la biblioteca y la CPU):
+   Salida esperada (la accuracy y los tiempos varían un poco según la versión de la biblioteca y la CPU):
 
    ```
    dataset shape (samples, features): (1797, 64)
@@ -221,7 +221,7 @@ Vas a usar el dataset `digits` de scikit-learn: 1.797 imágenes en escala de gri
    learned parameters in [B]: 650 -> (10, 64) weights + (10,) biases
    ```
 
-   Deberías ver que el modelo con features diseñadas a mano obtiene un resultado notablemente inferior al modelo con píxeles crudos. Con esta configuración, la diferencia suele ser de alrededor de 0.85–0.90 contra alrededor de 0.96–0.98.
+   Deberías ver que el modelo con features diseñadas a mano obtiene un puntaje notablemente menor que el modelo con píxeles crudos. Con esta configuración la diferencia suele ser de alrededor de 0.85–0.90 frente a alrededor de 0.96–0.98.
 
 **Preguntas de comprensión — Paso 3**
 
@@ -234,7 +234,7 @@ Vas a usar el dataset `digits` de scikit-learn: 1.797 imágenes en escala de gri
 
 ## Paso 4 — Deep learning: aprender también las features
 
-Deep Learning es un subconjunto de ML que usa redes neuronales artificiales de múltiples capas (profundas). La diferencia que lo define es el **representation learning**. Las primeras capas aprenden features de bajo nivel, como bordes y trazos, y las capas posteriores las combinan en conceptos de más alto nivel. Esto reemplaza la mayor parte del feature engineering manual. El costo es más parámetros, más datos y muchísimo más cómputo. Ese cómputo consiste mayoritariamente en multiplicaciones de matrices, que las GPU paralelizan muy bien.
+Deep Learning es un subconjunto de ML que usa redes neuronales artificiales de múltiples capas (profundas). La diferencia que lo define es el **representation learning**. Las primeras capas aprenden features de bajo nivel, como bordes y trazos, y las capas posteriores las combinan en conceptos de más alto nivel. Esto reemplaza la mayor parte del feature engineering manual. El costo es más parámetros, más datos y muchísimo más cómputo. Ese cómputo consiste abrumadoramente en multiplicaciones de matrices, que las GPUs paralelizan muy bien.
 
 1. Creá `deep_learning.py`:
 
@@ -340,15 +340,15 @@ Deep Learning es un subconjunto de ML que usa redes neuronales artificiales de m
 **Preguntas de comprensión — Paso 4**
 
 - **Q4.1** En este script no existe ninguna función `engineer()`, y sin embargo la CNN iguala o supera a la regresión logística. ¿Qué parte de la red reemplaza el feature engineering manual?
-- **Q4.2** La CNN tiene 13.706 parámetros contra 650 de la regresión logística, unas 21 veces más, para una tarea así de pequeña. Extrapolá: ¿qué pasa con las necesidades de cómputo y memoria cuando los modelos llegan a miles de millones de parámetros, como los large language models?
-- **Q4.3** Nombrá las tres operaciones dentro del loop de entrenamiento que se ejecutan en cada mini-batch. ¿Cuáles de ellas existen solo durante el entrenamiento?
-- **Q4.4** ¿Esta CNN también es "machine learning"? ¿También es "AI"? Describí con palabras, como si fuera un diagrama, la relación entre los tres términos.
+- **Q4.2** La CNN tiene 13.706 parámetros frente a 650 de la regresión logística, unas 21 veces más, para una tarea así de chica. Extrapolá: ¿qué pasa con las necesidades de cómputo y memoria cuando los modelos llegan a miles de millones de parámetros, como los large language models?
+- **Q4.3** Nombrá las tres operaciones dentro del loop de entrenamiento que se ejecutan en cada mini-batch. ¿Cuáles existen solo durante el entrenamiento?
+- **Q4.4** ¿Esta CNN también es "machine learning"? ¿También es "AI"? Dibujá la relación entre los tres términos como un diagrama en palabras.
 
 ---
 
 ## Paso 5 — Por qué el deep learning impulsa la infraestructura de GPU
 
-La carga de trabajo del Paso 4 es demasiado pequeña para mostrar la ventaja de la GPU. Acá medís la operación que domina el deep learning: la multiplicación densa de matrices (GEMM).
+El workload del Paso 4 es demasiado chico para mostrar la ventaja de la GPU. Acá medís la operación que domina el deep learning: la multiplicación densa de matrices (GEMM).
 
 1. Creá `gemm_bench.py`:
 
@@ -406,14 +406,14 @@ La carga de trabajo del Paso 4 es demasiado pequeña para mostrar la ventaja de 
 **Preguntas de comprensión — Paso 5**
 
 - **Q5.1** ¿Por qué el script llama a `torch.cuda.synchronize()` antes de leer el timer? ¿Qué mostraría la medición sin esa llamada?
-- **Q5.2** FP16 es mucho más rápido que FP32 en la GPU. ¿Qué unidades de hardware especializadas de las GPU NVIDIA son responsables, y por qué esto importa más para el deep learning que para el sistema basado en reglas del Paso 2?
-- **Q5.3** En una oración, para un stakeholder no técnico: ¿por qué fue el auge del deep learning, y no la AI en general, lo que creó demanda de data centers acelerados por GPU?
+- **Q5.2** FP16 es mucho más rápido que FP32 en la GPU. ¿Qué unidades de hardware especializadas de las GPUs NVIDIA son responsables, y por qué esto importa más para el deep learning que para el sistema basado en reglas del Paso 2?
+- **Q5.3** En una oración para un stakeholder no técnico: ¿por qué fue el auge del deep learning, y no la AI en general, lo que creó la demanda de data centers acelerados por GPU?
 
 ---
 
 ## Paso 6 — Entrenamiento vs. inferencia
 
-El entrenamiento construye el modelo: forward pass, backward pass y actualización de pesos, repetidos sobre grandes datasets. La inferencia usa el modelo entrenado para hacer predicciones sobre datos nuevos: solo forward pass. Estas dos fases tienen perfiles de infraestructura muy distintos. El entrenamiento necesita throughput, memoria para activaciones y gradientes, y almacenamiento rápido para alimentar los datos. La inferencia necesita baja latencia, alto throughput por watt y escalar a usuarios concurrentes.
+El entrenamiento construye el modelo: forward pass, backward pass y actualización de pesos, repetidos sobre datasets grandes. La inferencia usa el modelo entrenado para hacer predicciones sobre datos nuevos: solo forward pass. Estas dos fases tienen perfiles de infraestructura muy distintos. El entrenamiento necesita throughput, memoria para activaciones y gradientes, y storage rápido para alimentar los datos. La inferencia necesita baja latencia, alto throughput por watt y escalar a usuarios concurrentes.
 
 1. Creá `inference.py`:
 
@@ -476,7 +476,7 @@ El entrenamiento construye el modelo: forward pass, backward pass y actualizaci�
    exported digits_cnn.onnx
    ```
 
-3. **[GPU]** Optimizá el modelo exportado con NVIDIA TensorRT, el SDK para inferencia de deep learning de alto rendimiento. Ejecutalo desde un contenedor de NGC, eligiendo un tag actual del catálogo de NGC:
+3. **[GPU]** Optimizá el modelo exportado con NVIDIA TensorRT, el SDK para inferencia de deep learning de alto rendimiento. Ejecutalo desde un container de NGC, eligiendo un tag actual del catálogo de NGC:
 
    ```bash
    docker run --rm --gpus all -v "$PWD":/work \
@@ -497,15 +497,15 @@ El entrenamiento construye el modelo: forward pass, backward pass y actualizaci�
 **Preguntas de comprensión — Paso 6**
 
 - **Q6.1** ¿Qué desactiva `torch.inference_mode()`, y por qué eso reduce el uso de memoria en comparación con el entrenamiento?
-- **Q6.2** La latencia por llamada creció con el tamaño del batch, pero el throughput subió muchísimo. ¿Qué métrica importa más para un chatbot interactivo y cuál importa más para el scoring por lotes nocturno de millones de registros?
+- **Q6.2** La latencia por llamada creció con el tamaño del batch, pero el throughput subió muchísimo. ¿Qué métrica importa más para un chatbot interactivo, y cuál importa más para el scoring por lotes nocturno de millones de registros?
 - **Q6.3** TensorRT optimiza un modelo que ya fue entrenado. ¿Se aplica a la AI basada en reglas (Paso 2), al ML clásico (Paso 3) o al deep learning (Paso 4)? ¿Por qué?
-- **Q6.4** El engine `.plan` se construye para una GPU y una versión de TensorRT específicas. ¿Qué consecuencia operativa tiene esto cuando actualizás la flota de GPU?
+- **Q6.4** El engine `.plan` se construye para una GPU y una versión de TensorRT específicas. ¿Qué consecuencia operativa tiene esto cuando actualizás la flota de GPUs?
 
 ---
 
 ## Paso 7 — Clasificar escenarios del mundo real
 
-Usá solo las definiciones. Para cada escenario, anotá la etiqueta correcta **más específica** (solo AI, ML pero no DL, o DL), más una justificación de una línea.
+Usá solo las definiciones. Para cada escenario, anotá la etiqueta correcta **más específica** (solo AI, ML pero no DL, o DL), junto con una justificación de una línea.
 
 | # | Escenario |
 |---|---|
@@ -514,7 +514,7 @@ Usá solo las definiciones. Para cada escenario, anotá la etiqueta correcta **m
 | c | Un large language model (LLM) que resume tickets de incidentes |
 | d | Un motor de ajedrez que usa búsqueda minimax con una función de evaluación ajustada a mano |
 | e | Un modelo basado en transformers que transcribe notas de voz de técnicos del data center |
-| f | Una regresión lineal que pronostica la demanda de horas de GPU del mes próximo a partir del uso pasado |
+| f | Una regresión lineal que pronostica la demanda de horas de GPU del mes siguiente a partir del uso pasado |
 | g | Una CNN de detección de objetos que cuenta personas en una sala de servidores a partir de video de CCTV |
 | h | Un termostato que enciende la refrigeración por encima de 27 °C |
 
@@ -523,15 +523,15 @@ Usá solo las definiciones. Para cada escenario, anotá la etiqueta correcta **m
 - **Q7.1** ¿Qué escenarios son **AI pero no ML**?
 - **Q7.2** ¿Cuáles son **ML pero no DL**?
 - **Q7.3** ¿Cuáles son **DL**? ¿Qué característica arquitectónica comparten todos?
-- **Q7.4** El escenario (h) es discutible. Argumentá si un termostato de un solo umbral debería contar como AI.
+- **Q7.4** El escenario (h) es discutible. Argumentá si un termostato de un solo umbral debería contar siquiera como AI.
 
 ---
 
 ## Paso 8 — Mapear los conceptos a la infraestructura de GPU en Kubernetes (cluster opcional)
 
-En producción, las cargas de trabajo de deep learning corren en clusters, y Kubernetes necesita una forma de exponer las GPU como recursos programables. El NVIDIA GPU Operator automatiza los componentes necesarios: el driver, NVIDIA Container Toolkit, el device plugin de Kubernetes, GPU Feature Discovery y el monitoreo basado en DCGM. Una vez que corre, los nodos anuncian el extended resource `nvidia.com/gpu`.
+Los workloads de deep learning en producción corren en clusters, y Kubernetes necesita una forma de exponer las GPUs como recursos agendables. El NVIDIA GPU Operator automatiza los componentes necesarios: el driver, NVIDIA Container Toolkit, el device plugin de Kubernetes, GPU Feature Discovery y el monitoreo basado en DCGM. Una vez que corre, los nodos anuncian el extended resource `nvidia.com/gpu`.
 
-1. Comprobá qué nodos exponen GPU:
+1. Comprobá qué nodos exponen GPUs:
 
    ```bash
    kubectl get nodes -o custom-columns='NAME:.metadata.name,GPUS:.status.allocatable.nvidia\.com/gpu'
@@ -611,7 +611,7 @@ En producción, las cargas de trabajo de deep learning corren en clusters, y Kub
 **Preguntas de comprensión — Paso 8**
 
 - **Q8.1** No pedirías `nvidia.com/gpu` para el filtro basado en reglas del Paso 2. ¿Lo pedirías para el modelo de ML clásico del Paso 3? ¿Para el job de entrenamiento de la CNN? ¿Para un servicio de inferencia de LLM en producción? Justificá cada caso.
-- **Q8.2** ¿Por qué `nvidia.com/gpu` se define bajo `limits`, y qué le pasa al Pod si ningún nodo tiene una GPU libre?
+- **Q8.2** ¿Por qué `nvidia.com/gpu` se define en `limits`, y qué le pasa al Pod si ningún nodo tiene una GPU libre?
 - **Q8.3** ¿Qué componente del GPU Operator hace que `nvidia.com/gpu` aparezca en los recursos allocatable del nodo, y qué componente usarías para enviar métricas de utilización de GPU a Prometheus?
 
 ---
@@ -622,10 +622,10 @@ En producción, las cargas de trabajo de deep learning corren en clusters, y Kub
 |---|---|---|---|
 | Relación | Término paraguas | Subconjunto de AI | Subconjunto de ML |
 | Cómo se obtiene el comportamiento | Reglas, búsqueda, lógica o aprendizaje | Aprendido a partir de datos | Aprendido a partir de datos con redes neuronales de múltiples capas |
-| Feature engineering | No aplica en sistemas basados en reglas | Generalmente manual | Aprendido automáticamente (representation learning) |
-| Volumen de datos típico | Nulo a pequeño | Pequeño a mediano | Grande a masivo |
-| Cómputo típico | CPU | Mayormente CPU, a veces GPU | GPU/aceleradores, a menudo multinodo |
-| Explicabilidad | Alta | Media | Menor; requiere herramientas específicas |
+| Feature engineering | N/A para sistemas basados en reglas | Normalmente manual | Aprendido automáticamente (representation learning) |
+| Volumen de datos típico | Ninguno a pequeño | Pequeño a mediano | Grande a masivo |
+| Cómputo típico | CPU | Mayormente CPU, a veces GPU | GPU/aceleradores, a menudo multi-nodo |
+| Explicabilidad | Alta | Media | Más baja; necesita herramientas dedicadas |
 | Ejemplos | Sistemas expertos, motores de reglas, AI de juegos basada en búsqueda | Regresión lineal/logística, árboles de decisión, random forests, SVM, gradient boosting | CNNs, RNNs, transformers, LLMs, modelos de difusión |
 
 ---
@@ -637,8 +637,8 @@ En producción, las cargas de trabajo de deep learning corren en clusters, y Kub
 
 ### Paso 1
 
-- **A1.1** `scikit-learn` sirve al **machine learning clásico**: modelos lineales, árboles, SVMs y clustering. `torch` sirve al **deep learning**: redes neuronales, autograd y tensores en GPU. Ninguna de las dos bibliotecas es necesaria para la AI basada en reglas del Paso 2, que usa Python puro.
-- **A1.2** La GPU es un requisito de **rendimiento**, no funcional. Las redes neuronales son matemática y corren en cualquier procesador. Las GPU hacen que la aritmética matricial masivamente paralela del deep learning sea lo bastante rápida como para ser práctica a escala.
+- **A1.1** `scikit-learn` sirve al **machine learning clásico**: modelos lineales, árboles, SVMs y clustering. `torch` sirve al **deep learning**: redes neuronales, autograd y tensores en GPU. Ninguna de las dos bibliotecas hace falta para la AI basada en reglas del Paso 2, que usa Python puro.
+- **A1.2** La GPU es un requisito de **rendimiento**, no funcional. Las redes neuronales son matemática y corren en cualquier procesador. Las GPUs hacen que la aritmética matricial masivamente paralela del deep learning sea lo suficientemente rápida como para ser práctica a escala.
 
 ### Paso 2
 
@@ -648,54 +648,54 @@ En producción, las cargas de trabajo de deep learning corren en clusters, y Kub
 
 ### Paso 3
 
-- **A3.1** En `rules_ai.py` una persona escribió tanto las features (los predicados) como los pesos de decisión y el umbral. En `classic_ml.py` una persona eligió las features (sumas de filas y columnas en [A], o píxeles crudos en [B]) y la familia de modelos. **Los pesos y biases se aprendieron a partir de datos etiquetados** mediante optimización.
+- **A3.1** En `rules_ai.py` una persona escribió tanto las features (los predicados) como los pesos de decisión y el umbral. En `classic_ml.py` una persona eligió las features (sumas de filas y columnas en [A], o píxeles crudos en [B]) y la familia de modelos. Los **pesos y biases se aprendieron a partir de datos etiquetados** mediante optimización.
 - **A3.2** La calidad de un modelo de ML clásico está limitada por las features que le da una persona. Las sumas de filas y columnas descartan información espacial. Por ejemplo, el 6 y el 9 pueden tener perfiles de tinta similares. Un mal diseño de features pone un techo a la accuracy, sea cual sea el algoritmo.
-- **A3.3** La regresión logística para 10 clases aprende un peso por feature por clase (64 × 10 = 640) más un bias por clase (10), lo que da 650 parámetros. Es "shallow" porque mapea entradas a salidas con una **única transformación lineal**, sin capas ocultas apiladas que construyan representaciones intermedias.
-- **A3.4** No de forma significativa. La carga de trabajo es mínima: 1.347 muestras de entrenamiento y 650 parámetros. El overhead de lanzamiento de kernels y de transferencia de datos a la GPU superaría cualquier aceleración. Las GPU rinden cuando la aritmética es grande y altamente paralela.
+- **A3.3** La regresión logística para 10 clases aprende un peso por feature por clase (64 × 10 = 640) más un bias por clase (10), lo que da 650 parámetros. Es "shallow" porque mapea entradas a salidas con una **única transformación lineal** y sin capas ocultas apiladas que construyan representaciones intermedias.
+- **A3.4** No de manera significativa. El workload es minúsculo: 1.347 muestras de entrenamiento y 650 parámetros. El overhead de lanzamiento de kernels y de transferencia de datos de la GPU superaría cualquier aceleración. Las GPUs rinden cuando la aritmética es grande y altamente paralela.
 
 ### Paso 4
 
 - **A4.1** Las **capas convolucionales (`self.features`)**. Sus filtros de 3×3 se aprenden durante el entrenamiento y se convierten en detectores de trazos, bordes y curvas. La segunda convolución los combina en patrones de más alto nivel. Esto es representation learning, el sello distintivo del deep learning.
-- **A4.2** El cómputo (FLOPs por token o imagen), la memoria (pesos, activaciones, gradientes y estado del optimizador) y los requisitos de datos crecen en muchos órdenes de magnitud. Los modelos de miles de millones de parámetros necesitan memoria de GPU muy por encima de un solo dispositivo, entrenamiento multi-GPU o multinodo con interconexiones de alto ancho de banda, almacenamiento rápido para mantener alimentadas las GPU y stacks de inferencia optimizados. Por eso existe la infraestructura de AI de NVIDIA.
+- **A4.2** El cómputo (FLOPs por token o imagen), la memoria (pesos, activaciones, gradientes y estado del optimizador) y los requisitos de datos crecen en muchos órdenes de magnitud. Los modelos de miles de millones de parámetros necesitan memoria de GPU muy por encima de lo que tiene un solo dispositivo, entrenamiento multi-GPU o multi-nodo con interconexiones de alto ancho de banda, storage rápido para mantener alimentadas a las GPUs y stacks de inferencia optimizados. Por eso existe la infraestructura de AI de NVIDIA.
 - **A4.3** El forward pass (`model(xb)` y la loss), el **backward pass** (`loss.backward()`, que calcula los gradientes) y la **actualización de pesos** (`opt.step()`). El backward pass y la actualización de pesos existen solo durante el entrenamiento. La inferencia ejecuta solo el forward pass.
 - **A4.4** Sí a ambas. Pensá en tres círculos anidados: **AI ⊃ ML ⊃ DL**. Todo modelo de deep learning es un modelo de machine learning, y todo modelo de machine learning es una técnica de AI. Lo inverso no es cierto.
 
 ### Paso 5
 
 - **A5.1** Los lanzamientos de kernels de CUDA son **asíncronos**: la llamada de Python retorna apenas el trabajo queda encolado. Sin `synchronize()` el timer mediría solo el tiempo de encolado, lo que reporta TFLOPS imposiblemente altos.
-- **A5.2** Los **Tensor Cores** son unidades especializadas de multiply-accumulate de matrices que ejecutan precisión reducida y mixta (FP16, BF16, FP8, INT8) mucho más rápido que los CUDA cores FP32 de propósito general. El deep learning está dominado por matemática de matrices densas y tolera bien la precisión reducida. Un sistema basado en reglas hace comparaciones de strings y bifurcaciones, que no ganan nada con hardware de matrices.
-- **A5.3** El deep learning alcanza su precisión ejecutando cantidades enormes de aritmética idéntica y paralela sobre grandes datasets, y las GPU hacen ese tipo de trabajo órdenes de magnitud más rápido y con más eficiencia que las CPU, mientras que la AI basada en reglas y la mayor parte del ML clásico nunca necesitaron cómputo a esa escala.
+- **A5.2** Los **Tensor Cores** son unidades especializadas de multiplicación-acumulación de matrices que ejecutan precisión reducida y mixta (FP16, BF16, FP8, INT8) mucho más rápido que los CUDA cores generales en FP32. El deep learning está dominado por matemática matricial densa y tolera bien la precisión reducida. Un sistema basado en reglas hace comparaciones de strings y ramificaciones, que no ganan nada con hardware matricial.
+- **A5.3** El deep learning alcanza su accuracy ejecutando cantidades enormes de aritmética idéntica y paralela sobre datasets grandes, y las GPUs hacen ese tipo de trabajo órdenes de magnitud más rápido y de forma más eficiente que las CPUs, mientras que la AI basada en reglas y la mayor parte del ML clásico nunca necesitaron cómputo a esa escala.
 
 ### Paso 6
 
-- **A6.1** Desactiva autograd: no se registra ningún grafo de cómputo y no se guardan activaciones intermedias para un backward pass. También omite el seguimiento de contadores de versión. Sin activaciones ni gradientes almacenados, el uso de memoria y el overhead bajan en comparación con el entrenamiento.
-- **A6.2** A un chatbot interactivo le importa sobre todo la **latencia**, es decir, el tiempo hasta el primer token y la latencia por token para cada usuario. Al scoring por lotes nocturno le importa sobre todo el **throughput**: ítems totales por segundo y costo por ítem. Las plataformas de inferencia ajustan el tamaño de batch, la precisión y la concurrencia para equilibrar ambos.
-- **A6.3** TensorRT apunta al **deep learning**: redes neuronales entrenadas, normalmente importadas desde ONNX o mediante integraciones con frameworks. Aplica fusión de capas y tensores, calibración de precisión (FP16, INT8, FP8) y auto-tuning de kernels para la GPU de destino. El código basado en reglas no tiene un grafo de red que optimizar, y los modelos de ML clásico normalmente se sirven con otras herramientas.
-- **A6.4** Tenés que **reconstruir los engines** para la nueva arquitectura de GPU y la nueva versión de TensorRT, y volver a validarlos. El CI/CD de inferencia debería tratar la construcción de engines como un artefacto por plataforma y no como un archivo portable.
+- **A6.1** Desactiva autograd: no se registra ningún grafo de cómputo y no se guardan activaciones intermedias para un backward pass. También omite el seguimiento de version counters. Sin activaciones ni gradientes almacenados, el uso de memoria y el overhead bajan en comparación con el entrenamiento.
+- **A6.2** A un chatbot interactivo le importa más la **latencia**, es decir, el time to first token y la latencia por token para cada usuario. Al scoring por lotes nocturno le importa más el **throughput**: ítems totales por segundo y costo por ítem. Las plataformas de inferencia ajustan el tamaño de batch, la precisión y la concurrencia para equilibrar ambas.
+- **A6.3** TensorRT apunta al **deep learning**: redes neuronales entrenadas, típicamente importadas desde ONNX o mediante integraciones con frameworks. Aplica fusión de capas y tensores, calibración de precisión (FP16, INT8, FP8) y auto-tuning de kernels para la GPU de destino. El código basado en reglas no tiene un grafo de red que optimizar, y los modelos de ML clásico normalmente se sirven con otras herramientas.
+- **A6.4** Tenés que **reconstruir los engines** para la nueva arquitectura de GPU y la nueva versión de TensorRT, y validarlos de nuevo. El CI/CD de inferencia debería tratar la construcción de engines como un artefacto por plataforma y no como un archivo portable.
 
 ### Paso 7
 
 | # | Etiqueta | Justificación |
 |---|---|---|
-| a | Solo AI (basada en reglas) | Firmas escritas a mano; nada se aprende |
-| b | ML, no DL | El random forest aprende de los datos; features elegidas por una persona; no es una red neuronal |
+| a | Solo AI (basada en reglas) | Firmas escritas a mano; no se aprende nada |
+| b | ML, no DL | El random forest aprende a partir de datos; las features las elige una persona; no es una red neuronal |
 | c | DL | Los LLMs son redes neuronales transformer con miles de millones de parámetros |
 | d | Solo AI | Búsqueda más una evaluación ajustada a mano; AI clásica simbólica o de búsqueda |
-| e | DL | Los modelos de voz basados en transformers son redes neuronales profundas |
-| f | ML, no DL | La regresión lineal se aprende de los datos, pero es un modelo shallow |
+| e | DL | Los modelos de voz transformer son redes neuronales profundas |
+| f | ML, no DL | La regresión lineal se aprende a partir de datos, pero es un modelo shallow |
 | g | DL | Detección de objetos basada en CNN |
 | h | Caso límite; como mucho, solo AI | Una única regla fija; ver A7.4 |
 
 - **A7.1** a, d y, discutiblemente, h.
 - **A7.2** b, f.
 - **A7.3** c, e, g. Todos usan **redes neuronales artificiales de múltiples capas** que aprenden representaciones jerárquicas directamente a partir de datos crudos (texto, audio o píxeles).
-- **A7.4** A favor de "no es AI": un único umbral es un sistema de control sin razonamiento, representación del conocimiento, búsqueda ni aprendizaje. Llamarlo AI estira el término hasta vaciarlo de significado. A favor de "es AI": bajo la definición más amplia, cualquier agente de toma de decisiones automatizada califica. Para el examen, la postura segura es que es **como mucho AI basada en reglas**, y definitivamente **no es ML ni DL**.
+- **A7.4** A favor de "no es AI": un único umbral es un sistema de control sin razonamiento, representación del conocimiento, búsqueda ni aprendizaje. Llamarlo AI estira el término hasta que no significa nada. A favor de "es AI": bajo la definición más amplia, cualquier agente automatizado de toma de decisiones califica. Para el examen, la postura segura es que es **como mucho AI basada en reglas**, y que definitivamente **no es ML ni DL**.
 
 ### Paso 8
 
-- **A8.1** ML clásico (Paso 3): normalmente **no**. Entrena en milisegundos en CPU, y una GPU quedaría ociosa desperdiciando un recurso escaso. Las bibliotecas aceleradas por GPU, como RAPIDS cuML, pueden ayudar con datasets tabulares muy grandes. Entrenamiento de la CNN: **sí**, una vez que crecen los datos y el tamaño del modelo, ya que una GPU acelera el forward y el backward pass. Inferencia de LLM en producción: **sí, prácticamente siempre**. Solo los pesos del modelo pueden necesitar de decenas a cientos de GB de memoria de GPU, y los objetivos de latencia requieren el throughput de GPU, a menudo repartido entre varias GPU.
-- **A8.2** Los extended resources como `nvidia.com/gpu` deben especificarse en `limits`. Si se define `requests`, debe ser igual a `limits`, y por defecto las GPU no se pueden sobreasignar ni pedir de forma fraccionaria a través de este recurso; MIG o time-slicing son configuraciones aparte. Si ningún nodo tiene una GPU libre, el Pod queda en **`Pending`** con un evento `FailedScheduling` que informa `Insufficient nvidia.com/gpu`.
-- **A8.3** El **NVIDIA Kubernetes device plugin** (`nvidia-device-plugin-daemonset`) registra `nvidia.com/gpu` en el kubelet. Las métricas de GPU para Prometheus vienen de **DCGM Exporter** (`nvidia-dcgm-exporter`).
+- **A8.1** ML clásico (Paso 3): normalmente **no**. Entrena en milisegundos en CPU, y una GPU quedaría ociosa desperdiciando un recurso escaso. Bibliotecas aceleradas por GPU como RAPIDS cuML pueden ayudar con datasets tabulares muy grandes. Entrenamiento de la CNN: **sí**, una vez que crecen los datos y el tamaño del modelo, ya que una GPU acelera el forward y el backward pass. Inferencia de LLM en producción: **sí, prácticamente siempre**. Solo los pesos del modelo pueden necesitar de decenas a cientos de GB de memoria de GPU, y los objetivos de latencia requieren el throughput de una GPU, a menudo repartido entre varias GPUs.
+- **A8.2** Los extended resources como `nvidia.com/gpu` deben especificarse en `limits`. Si se define `requests`, debe ser igual a `limits`, y por defecto las GPUs no se pueden sobrecomprometer ni pedir de forma fraccionaria a través de este recurso; MIG o time-slicing son configuraciones aparte. Si ningún nodo tiene una GPU libre, el Pod queda en **`Pending`** con un evento `FailedScheduling` que reporta `Insufficient nvidia.com/gpu`.
+- **A8.3** El **NVIDIA Kubernetes device plugin** (`nvidia-device-plugin-daemonset`) registra `nvidia.com/gpu` ante el kubelet. Las métricas de GPU para Prometheus vienen de **DCGM Exporter** (`nvidia-dcgm-exporter`).
 
 </details>
 

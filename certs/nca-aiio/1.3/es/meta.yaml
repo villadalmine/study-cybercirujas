@@ -1,7 +1,7 @@
-generated_at: '2026-11-11T19:31:23'
+generated_at: '2026-11-12T02:45:18'
 lang: es
 translated_from: en
-source_sha256: 17a34195cc961abcdd380e899af515e9d54f19e925198bb5eee3e28f13e385f6
+source_sha256: ce15da052b308bc13f37d503e5c68c7cbac3ee2271a098b0c3acf1eb6b7a3da0
 backend: claude
 model: claude-opus-5-5
 sources:
@@ -28,7 +28,7 @@ quality:
     result: pass
     weight: 10
     ran_at: null
-    evidence: claude / claude-opus-5-5, 2026-11-11
+    evidence: claude / claude-opus-5-5, 2026-11-12
   - name: sources
     version: '1'
     result: pass
