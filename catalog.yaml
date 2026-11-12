@@ -193,7 +193,7 @@ certs:
       published: '2026-11-03'
       detected: '2026-11-11'
       snapshot: syllabi/cks/v1.37.yaml
-      milestone: CKS v1.37 upgrade
+      milestone: v0.6.9
   kcna:
     name: Kubernetes and Cloud Native Associate (KCNA)
     exam: KCNA

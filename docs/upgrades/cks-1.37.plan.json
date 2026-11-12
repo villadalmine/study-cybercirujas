@@ -2319,7 +2319,7 @@
     }
   },
   "issue": 287,
-  "milestone": "CKS v1.37 upgrade",
+  "milestone": "v0.6.9",
   "planned_files": {
     "keep": [],
     "new": [

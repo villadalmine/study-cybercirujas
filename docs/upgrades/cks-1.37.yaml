@@ -9,7 +9,7 @@
 # upstream_base: the old curriculum frozen from ITS official PDF, so the report can tell what the vendor
 #                changed apart from where our frozen file already differed from its own PDF
 upgrade: CKS v1.37
-milestone: CKS v1.37 upgrade
+milestone: v0.6.9
 issue: 287
 certs:
   cks:
