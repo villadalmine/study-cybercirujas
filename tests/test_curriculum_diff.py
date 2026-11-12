@@ -5,6 +5,7 @@ CKA_Curriculum_v1.35.pdf @ cncf/curriculum 008b73c and CKAD_Curriculum_v1.35.pdf
 Cloud Native Computing Foundation), kept as text so the parser is tested without poppler.
 """
 import contextlib
+import argparse
 import copy
 import hashlib
 import io
@@ -15,6 +16,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -411,6 +413,152 @@ class BelowTopicLevel(unittest.TestCase):
         self.assertEqual(found["version_lines"]["technical"],
                          ["certs/cka/4.2/en/content.md:4", "certs/cka/4.2/lab/break_fix.sh:2",
                           "certs/cka/4.2/lab/lab.yaml:1", "certs/cka/4.2/lab/lab.yaml:2"])
+
+
+class FrozenFromABeta(unittest.TestCase):
+    """CKNE GA (#285): a beta frozen from a web page, with summed weights and no version number."""
+
+    def test_a_summed_weight_carries_its_rounding_not_a_change(self):
+        frozen = {"weight": 25.02, "derived": True, "objectives": [{}] * 6}   # 6 x 4.17
+        self.assertTrue(cd.same_weight(frozen, {"weight": 25, "objectives": [{}] * 6}))
+        self.assertFalse(cd.same_weight(dict(frozen, weight=26), {"weight": 25, "objectives": [{}] * 6}))
+        self.assertFalse(cd.same_weight({"weight": 25.02, "objectives": []}, {"weight": 25, "objectives": []}))
+
+    def test_a_version_without_digits_names_no_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs/ckne/1.1/en").mkdir(parents=True)
+            (root / "certs/ckne/1.1/en/content.md").write_text("# T\n\nNAME  <unknown>  beta\n", encoding="utf-8")
+            for version in ("unknown", "beta", "None"):
+                found = cd.scan(root, "ckne", "1.1", ["en"], version, [])
+                self.assertEqual(found["version_lines"]["technical"], [], version)
+
+
+FROZEN_MD = """---
+cert: c
+exam: C
+sources:
+- https://vendor.example/page/
+topics:
+- id: '1.1'
+  status: generated
+  title: Implement storage classes and dynamic volume provisioning
+  topic: 1 - Storage
+  weight: 20.0
+- id: '1.2'
+  status: generated
+  title: Manage persistent volumes and persistent volume claims
+  topic: 1 - Storage
+  weight: 20.0
+- id: '2.1'
+  status: generated
+  title: Define and enforce Network Policies
+  topic: 2 - Networking
+  weight: 20.0
+- id: '2.2'
+  status: generated
+  title: Understand and use CoreDNS
+  topic: 2 - Networking
+  weight: 20.0
+- id: '2.3'
+  status: generated
+  title: Use the Gateway API to manage Ingress traffic
+  topic: 2 - Networking
+  weight: 20.0
+version: beta
+---
+"""
+
+
+class Switch(unittest.TestCase):
+    """`switch` closes an upgrade whose material stays: catalog and frozen syllabus move to the target."""
+
+    URL = "https://github.com/cncf/curriculum/raw/c/C_Curriculum.pdf"
+
+    def run_switch(self, target_domains):
+        import frontmatter
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self._roots = getattr(self, "_roots", []) + [tmp.name]
+        root = Path(tmp.name)
+        (root / "certs").mkdir()
+        (root / "syllabi" / "c").mkdir(parents=True)
+        md = root / "certs" / "c.md"
+        md.write_text(frontmatter.dumps(frontmatter.loads(FROZEN_MD)) + "\n", encoding="utf-8")
+        snap = cd.snapshot(target_domains, cert="c", version="2026-10-01", repo="cncf/curriculum", commit="c",
+                           path="C_Curriculum.pdf", committed="2026-10-01", sha256="s")
+        (root / "syllabi" / "c" / "v2026-10-01.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+        catalog = {"certs": {"c": {"tracked_version": "beta", "upstream_status": "outdated",
+                                   "sources": {"objectives": "https://vendor.example/page/"},
+                                   "upstream": {"version": "x"}}}}
+        (root / "catalog.yaml").write_text(yaml.safe_dump(catalog, sort_keys=False), encoding="utf-8")
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md",
+                                                        "target": "syllabi/c/v2026-10-01.yaml"}}}
+        return cd.switch(root, spec)
+
+    def test_a_reworded_objective_moves_the_title_and_the_version(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        catalog, files, why = self.run_switch(domains)
+        self.assertEqual(why, [])
+        entry = catalog["certs"]["c"]
+        self.assertEqual((entry["tracked_version"], entry["sources"]["objectives"], entry["upstream_status"]),
+                         ("2026-10-01", self.URL, "current"))
+        self.assertNotIn("upstream", entry)
+        text = files["certs/c.md"]
+        self.assertIn("title: Use the Gateway API to manage Ingress-traffic", text)
+        self.assertIn("version: '2026-10-01'", text)
+        self.assertIn("snapshot_date: '2026-10-01'", text)   # check_versions reads it when the version is a date
+        self.assertIn(f"- {self.URL}", text)
+        self.assertIn("- https://vendor.example/page/", text)   # the material was written from it: kept
+
+    def test_reordered_domains_land_each_title_on_its_own_objective(self):
+        # CKNE: the PDF lists Observability before Security, so our 4.x map to 5.x and back
+        domains = copy.deepcopy(BASE["domains"])
+        domains.reverse()
+        for i, d in enumerate(domains, 1):
+            d["id"] = str(i)
+            for j, o in enumerate(d["objectives"], 1):
+                o["id"] = f"{i}.{j}"
+        domains[0]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        catalog, files, why = self.run_switch(domains)
+        self.assertEqual(why, [])
+        import frontmatter
+        titles = {t["id"]: t["title"] for t in frontmatter.loads(files["certs/c.md"]).metadata["topics"]}
+        self.assertEqual(titles["2.3"], "Use the Gateway API to manage Ingress-traffic")   # dir id kept
+        self.assertEqual(titles["1.1"], "Implement storage classes and dynamic volume provisioning")
+
+    def test_a_retired_objective_is_refused(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[0]["objectives"].pop(1)
+        domains[0]["objectives"].append({"id": "1.2", "text": "Operate an etcd backup schedule with restores"})
+        _, files, why = self.run_switch(domains)
+        self.assertTrue(why and "content changes first" in why[0])
+        self.assertEqual(files, {})
+
+    def test_the_command_writes_once_and_check_agrees(self):
+        domains = copy.deepcopy(BASE["domains"])
+        self.run_switch(domains)
+        root = Path(self._roots[-1])
+        (root / "docs/upgrades").mkdir(parents=True)
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md",
+                                                        "target": "syllabi/c/v2026-10-01.yaml"}}}
+        (root / "docs/upgrades/u.yaml").write_text(yaml.safe_dump(spec), encoding="utf-8")
+        run = lambda check: cd._switch_run(argparse.Namespace(spec="docs/upgrades/u.yaml", check=check))  # noqa: E731
+        with mock.patch.object(cd, "REPO", root), redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+            self.assertNotEqual(run(True), 0)     # before: stale
+            self.assertEqual(run(False), 0)
+            self.assertEqual(run(True), 0)        # after: what the inputs produce
+        self.assertEqual(yaml.safe_load((root / "catalog.yaml").read_text())["certs"]["c"]["tracked_version"],
+                         "2026-10-01")
+
+    def test_refused_while_content_must_change(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[0]["objectives"].append({"id": "1.3", "text": "Configure volume snapshots and restore them"})
+        catalog, files, why = self.run_switch(domains)
+        self.assertTrue(why and "content changes first" in why[0] and "(new)" in why[0])
+        self.assertEqual(files, {})
+        self.assertEqual(catalog["certs"]["c"]["tracked_version"], "beta")
 
 
 # ==== guard ====

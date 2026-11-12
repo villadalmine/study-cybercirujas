@@ -130,6 +130,16 @@ flowchart TD
    fences are not headings, and every version line of `lab/lab.yaml` and `lab/*.sh` is `technical`.
 5. **Issues**: one per `regenerate` or `new` topic, as a sub-issue of the umbrella issue. For v1.37 there are none.
 6. **Phase 2** (below), then the **switch**: the final PR moves `tracked_version` and `sources.objectives`.
+   `scripts/curriculum_diff.py switch docs/upgrades/<upgrade>.yaml` writes it (`--check` reports without writing): per
+   cert, `tracked_version` = the target snapshot's version, `sources.objectives` = its PDF URL, `upstream_status:
+   current`, the `upstream:` window removed; in `certs/<cert>.md`, `version`, `snapshot_date` (the target's `source.committed`: `check_versions` compares it with
+   `curriculum_updated` when the version is a date), the PDF URL appended to `sources` (the
+   page the material was written from stays cited) and each topic's title set to the objective text it maps to
+   (directory ids unchanged, see *Topic ids at the switch*). It refuses while any topic is `regenerate` or `retire` or a
+   new objective has no topic: content changes first. After it, `make quality CERT=<cert>` re-runs every check and
+   records it in each `meta.yaml` (that is the `revalidate` step), and `check_curriculum_consistency.py` must pass.
+   The PR's milestone is the release milestone `vX.Y.Z` that the upgrade spec names (`milestone:`), with `Scope:
+   exam-version`; `check_pr` reads the spec **from the base**, so the spec PR merges before the switch PR (#291).
 
 Reproduce it (no network once the PDFs are downloaded, no model):
 
@@ -199,7 +209,7 @@ Phase 2 ran on 2026-10-21 and it was small: no topic is regenerated, no model is
 | revalidate | cka 3.6, ckad 2.4, ckad 5.4 | every check re-run against the new objective text; result recorded in each `meta.yaml`. No prose edit: the listed sections are titles carrying our (correct) spelling | `quality_score.py --check`; `guard` (only `meta.yaml` and the listed sections) |
 | version lines | 220 lines in 76 files: 111 in 22 CKA material files, 109 in 54 lab files | rewrite each listed line in place to the 1.37 equivalent, with versions read from `pkgs.k8s.io` and the kind node images (a package or image that does not exist is not written), record the edit in the topic's `meta.yaml`; then the lab of each topic on a 1.37 cluster | `guard` (any other line changed fails); `check_k8s_apis`; `check_api_facts`; lab verification |
 | regenerate / new | none for v1.37 | one PR per topic. The prompt carries the frozen syllabus text and the official documentation excerpts the topic cites (grounding at write time, only for these topics) | below |
-| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` `version` and `sources` (no re-snapshot: the date stays the real one), and the citations: `upgrade_versions.py --scope citations --cert <cert>` runs before the switch and the consistency gate fails the switch while any citation or `sources` link still disagrees with the catalog | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done; `check_curriculum_consistency.py` |
+| switch | the cert | `tracked_version` 1.35 -> 1.37, `sources.objectives` -> the v1.37 PDF, `certs/<cert>.md` `version` and `sources` (the v1.37 switch kept `snapshot_date` as it was; `curriculum_diff.py switch` now sets it to the target's `source.committed`, step 6), and the citations: `upgrade_versions.py --scope citations --cert <cert>` runs before the switch and the consistency gate fails the switch while any citation or `sources` link still disagrees with the catalog | `check_pr`: milestone *CKA & CKAD v1.37 upgrade* and `Scope: exam-version`; every plan row done; `check_curriculum_consistency.py` |
 
 Every phase-2 PR that rewrites `content.md` or `exercises.md` passes, on **those files only**:
 
@@ -357,6 +367,16 @@ A consistency finding in a review blocks the merge and the release. It is never 
 
 ## Lessons
 
+- **A beta frozen from a web page has no version and summed weights (#285, CKNE GA, 2026-11-12).** The CKNE beta was
+  snapshotted from the Linux Foundation exam page, so `tracked_version` is `unknown` and each domain weight in
+  `certs/ckne.md` is the sum of evenly split objective weights (6 x 4.17 = 25.02). Two false positives followed, both
+  closed in the tool: every domain looked reweighted (a derived weight now carries a 0.01-per-objective rounding slack;
+  a published one is still compared exactly), and `scan` listed every line containing `unknown` as a version line (a
+  version with no digit names no line). No `upstream_base`: there is no previous PDF, so the upstream diff is empty.
+- **Every milestone is versioned (#291, 2026-11-12).** `<CERT> v<version> upgrade` milestones were one more name to
+  keep apart from releases. The upgrade spec now names the release milestone (`milestone: v0.6.10`), and `check_pr`
+  accepts a `vX.Y.Z` milestone for an exam-version change only through a spec on the base that covers each changed cert
+  with a target at the new `tracked_version`. The older names still pass for past upgrades.
 - **Release milestones are settled at release time (#238, 2026-10-21).** The upgrade milestones above are planned, but
   release milestones (`vX.Y.Z`) cannot be: release-please picks the version only at release time (`fix` is a patch), so
   v0.5.1 shipped with its PRs sitting in v0.6.0 and no v0.5.1 milestone. Control: on `release: published`,
