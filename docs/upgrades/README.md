@@ -58,9 +58,9 @@ The second run of the process, on a cert that did not shape it. `teach tracker s
 ([`94f35b0`](https://github.com/cncf/curriculum/raw/94f35b01ae65763117de7fd5fcd5d57feacae68c/CKS_Curriculum%20v1.34.pdf),
 sha256 `a755a568…` for both) and both trees hash `d1abe1fe…`.
 
-| Cert | keep | revalidate | regenerate | new | retire | topic files | planned | version lines (curriculum / label / technical) |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cks | 26 | 0 | 0 | 0 | 0 | 208 | 98 | 108 / 92 / 706 |
+| Cert | keep | revalidate | regenerate | new | retire | topic files | in scope | sections | version lines (curriculum / label / technical) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| cks | 26 | 0 | 0 | 0 | 0 | 208 | 128 | 0 | 108 / 92 / 706 |
 
 No objective moves and our frozen `certs/cks.md` has no drift from its own PDF: phase 2 is the version bump only.
 
