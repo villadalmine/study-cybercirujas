@@ -601,17 +601,35 @@ class Switch(unittest.TestCase):
         self.assertEqual(cd.lab_with_title("title: a: b\n", "x: y"), "title: 'x: y'\n")    # quoted when YAML needs it
 
         target = (root / "syllabi/c/v2026-10-01.yaml").read_text(encoding="utf-8")
+        switched_md = cd.switch(root, spec)[1]["certs/c.md"]
         row = {"topic": "2.3", "class": "revalidate", "maps_to": "2.3"}
-        plan = {"certs": {"c": {"target": {"file": "syllabi/c/v2026-10-01.yaml"}, "topics": [row]}}}
+        plan = {"certs": {"c": {"target": {"file": "syllabi/c/v2026-10-01.yaml"}, "tracked": {"file": "certs/c.md"},
+                                "topics": [row]}}}
         base = lambda f: target if f.startswith("syllabi/") else old   # noqa: E731
-        self.assertTrue(cd.lab_title_ok(plan, lab, base, lambda f: files[lab]))
-        for head in (old.replace("Ingress traffic", "anything else"),            # another title
+        head = lambda text: lambda f: switched_md if f == "certs/c.md" else text   # noqa: E731
+        self.assertTrue(cd.lab_title_ok(plan, lab, base, head(files[lab])))
+        for text in (old.replace("Ingress traffic", "anything else"),            # another title
                      files[lab] + "runner_image: evil\n",                          # the title plus another line
                      old.replace("provider: local", "provider: killercoda")):     # not the title at all
-            self.assertFalse(cd.lab_title_ok(plan, lab, base, lambda f, h=head: h))
-        regen = {"certs": {"c": {"target": {"file": "syllabi/c/v2026-10-01.yaml"}, "topics": [dict(row, **{"class": "regenerate"})]}}}
-        self.assertFalse(cd.lab_title_ok(regen, lab, base, lambda f: files[lab]))  # planned_files covers those
-        self.assertFalse(cd.lab_title_ok(plan, "certs/c/2.3/lab/setup.sh", base, lambda f: files[lab]))
+            self.assertFalse(cd.lab_title_ok(plan, lab, base, head(text)))
+        # a lab-only edit, without the switch moving the syllabus title: refused, or lab and syllabus split
+        self.assertFalse(cd.lab_title_ok(plan, lab, base, lambda f: FROZEN_MD if f == "certs/c.md" else files[lab]))
+        keep = {"certs": {"c": {**plan["certs"]["c"], "topics": [dict(row, **{"class": "keep"})]}}}
+        self.assertTrue(cd.lab_title_ok(keep, lab, base, head(files[lab])))          # keep with a reworded maps_to
+        regen = {"certs": {"c": {**plan["certs"]["c"], "topics": [dict(row, **{"class": "regenerate"})]}}}
+        self.assertFalse(cd.lab_title_ok(regen, lab, base, head(files[lab])))     # planned_files covers those
+        self.assertFalse(cd.lab_title_ok(plan, "certs/c/2.3/lab/setup.sh", base, head(files[lab])))
+
+    def test_a_folded_or_block_lab_title_is_replaced_whole(self):
+        # review of #307: PyYAML folds a long title onto an indented line (certs/cks/1.2/lab/lab.yaml)
+        for title in ("Use CIS benchmark to review the security configuration\n  (etcd, kubelet)",
+                      ">-\n  Use CIS benchmark to review\n  the configuration", "|\n  one\n  two"):
+            with self.subTest(title):
+                text = f"cert: c\ntopic: '1.2'\ntitle: {title}\nprovider: local\nresources:\n  vms: []\n"
+                out = cd.lab_with_title(text, "New title")
+                self.assertEqual(out, "cert: c\ntopic: '1.2'\ntitle: New title\nprovider: local\nresources:\n  vms: []\n")
+                self.assertEqual(yaml.safe_load(out)["title"], "New title")
+        self.assertEqual(cd.lab_with_title("cert: c\n", "x"), "cert: c\n")          # no title line: unchanged
 
     def test_refused_while_content_must_change(self):
         domains = copy.deepcopy(BASE["domains"])

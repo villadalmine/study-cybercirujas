@@ -781,7 +781,9 @@ def superseded_mark(version: str) -> str:
     return f"**Superseded by the curriculum {version}**"
 
 
-LAB_TITLE = re.compile(r"^title:.*$", re.M)
+# the top-level `title:` scalar with its continuation lines: PyYAML folds a long title onto an indented second line
+# (21 labs in the tree), and `>-`/`|` block scalars are indented too (review of #307)
+LAB_TITLE = re.compile(r"^title:[^\n]*(?:\n[ \t]+\S[^\n]*)*", re.M)
 
 
 def lab_with_title(text: str, title: str) -> str:
@@ -994,7 +996,17 @@ def lab_title_ok(plan_data: dict, f: str, base_text, head_text) -> bool:
         return False
     texts = {o["id"]: o["text"] for d in (yaml.safe_load(target) or {}).get("domains") or [] for o in d["objectives"]}
     want = texts.get(row.get("maps_to"))
-    return bool(want) and new == lab_with_title(old, want)
+    if not want or new != lab_with_title(old, want):
+        return False
+    # only together with the switch: the head's frozen syllabus already gives the topic that title, so the lab and the
+    # syllabus cannot be split by a lab-only edit (review of #307)
+    tracked = c.get("tracked") or {}
+    md = head_text(tracked.get("file") or f"certs/{parts[1]}.md") if isinstance(tracked, dict) else None
+    try:
+        topics = (yaml.safe_load(md.split("---", 2)[1]) or {}).get("topics") or [] if md and md.startswith("---") else []
+    except yaml.YAMLError:
+        return False
+    return any(str(t.get("id")) == parts[2] and tidy(str(t.get("title") or "")) == want for t in topics)
 
 
 TOOLS = {"scripts/upgrade_versions.py"}      # the only scripted editor a meta.yaml may name in `tool_edit`
