@@ -1,39 +1,40 @@
 # Community 232
 
-> 8 nodes · cohesion 0.36
+> 12 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **quota.py** (16 connections) — `scripts/quota.py`
-- **probe()** (7 connections) — `scripts/quota.py`
-- **main()** (6 connections) — `scripts/quota.py`
-- **record()** (3 connections) — `scripts/quota.py`
-- **show_history()** (3 connections) — `scripts/quota.py`
-- **2026-09-11** (2 connections) — `docs/HISTORY.md`
-- **Detect whether the AI backend currently has quota, and record the history.…** (1 connections) — `scripts/quota.py`
-- **Returns (exit-style status, detail). Cheap by construction: the prompt asks for…** (1 connections) — `scripts/quota.py`
+- **test_corpus.py** (9 connections) — `tests/test_corpus.py`
+- **get_topic()** (6 connections) — `teach/core/corpus.py`
+- **ContractTests** (3 connections) — `tests/test_corpus.py`
+- **TopicTests** (3 connections) — `tests/test_corpus.py`
+- **get_topic()** (2 connections) — `teach/mcp_server.py`
+- **.test_a_missing_language_says_so_rather_than_pretending()** (2 connections) — `tests/test_corpus.py`
+- **.test_the_material_travels_with_its_sources()** (2 connections) — `tests/test_corpus.py`
+- **.test_it_is_the_four_functions_the_design_names()** (1 connections) — `tests/test_corpus.py`
+- **.test_nothing_in_the_contract_can_write()** (1 connections) — `tests/test_corpus.py`
+- **The material for one topic: theory, exercises, and where it came from.…** (1 connections) — `teach/core/corpus.py`
+- **The four functions a study agent gets — and the boundary around them. Phase 2…** (1 connections) — `tests/test_corpus.py`
+- **inspect** (1 connections)
 
 ## Relationships
 
-- [Community 56](Community_56.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 37](Community_37.md) (2 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
+- [Community 253](Community_253.md) (2 shared connections)
+- [Community 55](Community_55.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/HISTORY.md`
-- `scripts/quota.py`
+- `teach/core/corpus.py`
+- `teach/mcp_server.py`
+- `tests/test_corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 20 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

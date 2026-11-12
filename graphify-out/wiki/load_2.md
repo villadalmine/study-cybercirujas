@@ -1,14 +1,16 @@
 # load()
 
-> God node · 22 connections · `teach/core/catalog.py`
+> God node · 24 connections · `teach/core/catalog.py`
 
-**Community:** [Community 173](Community_173.md)
+**Community:** [Community 59](Community_59.md)
 
 ## Connections by Relation
 
 ### calls
 - yaml `EXTRACTED`
 - snapshot_topics() `EXTRACTED`
+- attach_readings() `EXTRACTED`
+- sync_ai() `EXTRACTED`
 - sync_cncf() `EXTRACTED`
 - generate_cert_script() `EXTRACTED`
 - sync_clouds() `EXTRACTED`
@@ -25,8 +27,7 @@
 - _resolve_stages() `EXTRACTED`
 - .test_load_parses_once_and_returns_copies() `EXTRACTED`
 - .test_load_sees_a_changed_file() `EXTRACTED`
-- .test_missing_catalog_is_empty() `EXTRACTED`
-- .setUp() `EXTRACTED`
+- *…and 2 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - catalog.py `EXTRACTED`

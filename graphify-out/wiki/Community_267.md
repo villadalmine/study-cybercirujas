@@ -1,34 +1,39 @@
 # Community 267
 
-> 4 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **translate()** (8 connections) — `scripts/translation_study.py`
-- **6. Where the value actually is (owner's question, 2026-08-18)** (3 connections) — `docs/AGENTIC_TOOLING_STUDY.md`
-- **Languages** (2 connections) — `docs/OPERATING.md`
-- **One completion through the proxy. Returns text plus what it cost.** (1 connections) — `scripts/translation_study.py`
+- **complete()** (9 connections) — `teach/core/generator.py`
+- **complete()** (7 connections) — `teach/core/generator.py`
+- **_record_plain_usage()** (6 connections) — `teach/core/generator.py`
+- **_dominant_model()** (3 connections) — `teach/core/generator.py`
+- **The model that actually wrote the answer. A single CLI call bills more than one…** (1 connections) — `teach/core/generator.py`
+- **Usage line for backends without the claude JSON envelope. litellm reports exact…** (1 connections) — `teach/core/generator.py`
 
 ## Relationships
 
-- [Community 127](Community_127.md) (2 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [Community 206](Community_206.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
+- [Community 172](Community_172.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 122](Community_122.md) (1 shared connections)
+- [Community 259](Community_259.md) (1 shared connections)
+- [Community 142](Community_142.md) (1 shared connections)
+- [Community 273](Community_273.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 73](Community_73.md) (1 shared connections)
-- [Community 215](Community_215.md) (1 shared connections)
-- [Community 80](Community_80.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENTIC_TOOLING_STUDY.md`
-- `docs/OPERATING.md`
-- `scripts/translation_study.py`
+- `teach/core/generator.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (64%)
-- INFERRED: 4 (36%)
+- EXTRACTED: 18 (82%)
+- INFERRED: 4 (18%)
 - AMBIGUOUS: 0 (0%)
 
 ---

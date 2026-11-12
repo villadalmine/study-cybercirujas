@@ -1,18 +1,22 @@
 # Community 0
 
-> 39 nodes · cohesion 0.09
+> 48 nodes · cohesion 0.08
 
 ## Key Concepts
 
-- **teach/cli.py** (34 connections) — `teach/cli.py`
-- **command** (20 connections)
-- **typer** (20 connections)
+- **teach/cli.py** (36 connections) — `teach/cli.py`
+- **typer** (22 connections)
+- **command** (21 connections)
+- **lab_up()** (8 connections) — `teach/cli.py`
+- **tracker_sync()** (8 connections) — `teach/cli.py`
 - **lab_validate()** (7 connections) — `teach/cli.py`
-- **tracker_sync()** (7 connections) — `teach/cli.py`
+- **cert_add()** (6 connections) — `teach/cli.py`
+- **cert_generate()** (6 connections) — `teach/cli.py`
+- **cert_readings()** (6 connections) — `teach/cli.py`
 - **cert_show()** (6 connections) — `teach/cli.py`
+- **cert_snapshot()** (6 connections) — `teach/cli.py`
 - **cert_translate()** (6 connections) — `teach/cli.py`
 - **cert_list()** (5 connections) — `teach/cli.py`
-- **cert_snapshot()** (5 connections) — `teach/cli.py`
 - **cert_video()** (5 connections) — `teach/cli.py`
 - **cert_video_script()** (5 connections) — `teach/cli.py`
 - **lab_down()** (5 connections) — `teach/cli.py`
@@ -23,28 +27,24 @@
 - **paths_video()** (5 connections) — `teach/cli.py`
 - **paths_video_script()** (5 connections) — `teach/cli.py`
 - **status()** (5 connections) — `teach/cli.py`
+- **_echo_readings()** (4 connections) — `teach/cli.py`
 - **serve()** (3 connections) — `teach/cli.py`
-- **main()** (1 connections) — `teach/cli.py`
-- **Platform CLI. Calls core directly (local files, no API).** (1 connections) — `teach/cli.py`
-- **Tear down a topic lab.** (1 connections) — `teach/cli.py`
-- **Check a lab against the contract (lab.yaml keys, provider, OS, bash -n).…** (1 connections) — `teach/cli.py`
-- **Create a lab from the template, without AI: lab.yaml + a break_fix.sh to fill…** (1 connections) — `teach/cli.py`
-- *... and 14 more nodes in this community*
+- *... and 23 more nodes in this community*
 
 ## Relationships
 
-- [Community 10](Community_10.md) (6 shared connections)
-- [Community 74](Community_74.md) (6 shared connections)
+- [Community 59](Community_59.md) (6 shared connections)
 - [video.py](video.py.md) (5 shared connections)
-- [Community 59](Community_59.md) (4 shared connections)
-- [Community 43](Community_43.md) (4 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
+- [Community 10](Community_10.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 8](Community_8.md) (4 shared connections)
 - [Community 121](Community_121.md) (3 shared connections)
-- [Community 8](Community_8.md) (3 shared connections)
-- [Community 173](Community_173.md) (3 shared connections)
-- [Community 241](Community_241.md) (3 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [Community 247](Community_247.md) (1 shared connections)
+- [Community 273](Community_273.md) (2 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
+- [Community 247](Community_247.md) (2 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [Community 133](Community_133.md) (1 shared connections)
 
 ## Source Files
 
@@ -52,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 111 (99%)
+- EXTRACTED: 132 (99%)
 - INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 

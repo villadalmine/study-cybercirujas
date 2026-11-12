@@ -1,13 +1,12 @@
 # Syllabus Coverage Tests
 
-> 20 nodes · cohesion 0.15
+> 18 nodes · cohesion 0.17
 
 ## Key Concepts
 
 - **SyllabusCoverageTests** (14 connections) — `tests/test_tracker.py`
 - **_reject_unreadable_syllabus()** (12 connections) — `teach/core/tracker.py`
 - **objective_ids()** (8 connections) — `teach/core/tracker.py`
-- **normalise_weights()** (7 connections) — `teach/core/tracker.py`
 - **.test_normalising_does_not_disguise_weights_taken_from_the_count()** (3 connections) — `tests/test_tracker.py`
 - **.test_accepts_a_full_extraction()** (2 connections) — `tests/test_tracker.py`
 - **.test_accepts_an_even_split_when_the_vendor_publishes_no_weights()** (2 connections) — `tests/test_tracker.py`
@@ -21,15 +20,14 @@
 - **.test_unnumbered_document_yields_nothing_rather_than_a_pass()** (2 connections) — `tests/test_tracker.py`
 - **.test_strips_backend_diagnostics_that_are_not_the_answer()** (1 connections) — `tests/test_tracker.py`
 - **Numbered objectives present in a syllabus document. Empty when the document…** (1 connections) — `teach/core/tracker.py`
-- **Scale the published weights to percentages summing to exactly 100. Syllabi…** (1 connections) — `teach/core/tracker.py`
 - **Refuse a topic list that the source document does not support. Both checks…** (1 connections) — `teach/core/tracker.py`
 - **A snapshot must be refused when the document does not support it. Seven…** (1 connections) — `tests/test_tracker.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (9 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 16](Community_16.md) (1 shared connections)
 
 ## Source Files
 
@@ -38,8 +36,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 39 (98%)
-- INFERRED: 1 (2%)
+- EXTRACTED: 35 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

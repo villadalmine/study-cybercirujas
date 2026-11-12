@@ -1,40 +1,63 @@
 # Community 22
 
-> 17 nodes · cohesion 0.19
+> 49 nodes · cohesion 0.08
 
 ## Key Concepts
 
+- **check_source_chain.py** (19 connections) — `scripts/check_source_chain.py`
+- **chain_sha256()** (14 connections) — `teach/core/certs.py`
 - **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
+- **Chain** (11 connections) — `scripts/check_source_chain.py`
+- **.labs()** (8 connections) — `scripts/check_source_chain.py`
+- **translation_source_sha256()** (8 connections) — `teach/core/certs.py`
 - **.run_check()** (8 connections) — `tests/test_source_chain.py`
+- **.content_and_translations()** (7 connections) — `scripts/check_source_chain.py`
+- **.videos()** (7 connections) — `scripts/check_source_chain.py`
+- **rel()** (7 connections) — `scripts/check_source_chain.py`
+- **.count()** (6 connections) — `scripts/check_source_chain.py`
+- **.lack()** (6 connections) — `scripts/check_source_chain.py`
+- **.syllabi()** (6 connections) — `scripts/check_source_chain.py`
+- **load_yaml()** (6 connections) — `scripts/check_source_chain.py`
 - **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.run()** (5 connections) — `scripts/check_source_chain.py`
+- **main()** (5 connections) — `scripts/check_source_chain.py`
+- **state()** (5 connections) — `scripts/check_versions.py`
 - **.__init__()** (5 connections) — `tests/test_source_chain.py`
+- **ChainHashTests** (4 connections) — `tests/test_source_chain.py`
+- **frontmatter()** (4 connections) — `scripts/check_source_chain.py`
+- **_same_version()** (4 connections) — `scripts/check_versions.py`
+- **.test_line_endings_are_not_part_of_the_hash()** (4 connections) — `tests/test_source_chain.py`
 - **.meta()** (4 connections) — `tests/test_source_chain.py`
-- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
-- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
-- **.setUp()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
-- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
-- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
-- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
-- **Path** (1 connections)
-- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
+- **.setUp()** (3 connections) — `tests/test_labs_host_guard.py`
+- *... and 24 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 2](Community_2.md) (2 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 141](Community_141.md) (3 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [Community 124](Community_124.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
+- [Community 102](Community_102.md) (2 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 
 ## Source Files
 
+- `scripts/check_source_chain.py`
+- `scripts/check_versions.py`
+- `teach/core/certs.py`
+- `tests/test_labs_host_guard.py`
 - `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (93%)
-- INFERRED: 2 (7%)
+- EXTRACTED: 115 (93%)
+- INFERRED: 9 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

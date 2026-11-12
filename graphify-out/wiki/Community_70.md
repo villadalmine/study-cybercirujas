@@ -1,14 +1,16 @@
 # Community 70
 
-> 42 nodes · cohesion 0.08
+> 47 nodes · cohesion 0.08
 
 ## Key Concepts
 
 - **test_kc_test.py** (26 connections) — `tests/lab/test_kc_test.py`
-- **hashlib** (26 connections)
 - **kc_test.py** (24 connections) — `teach/lab/kc_test.py`
+- **cmd_test()** (20 connections) — `teach/lab/cli.py`
 - **resolve_env()** (12 connections) — `teach/lab/kc_test.py`
 - **valid_for()** (10 connections) — `teach/lab/kc_test.py`
+- **_forged()** (10 connections) — `tests/lab/test_kc_gate.py`
+- **load_envs()** (9 connections) — `teach/lab/export_killercoda.py`
 - **_ev()** (9 connections) — `tests/lab/test_kc_test.py`
 - **_scenario()** (9 connections) — `tests/lab/test_kc_test.py`
 - **evidence()** (7 connections) — `teach/lab/kc_test.py`
@@ -27,33 +29,34 @@
 - **test_hash_ignores_evidence_files()** (3 connections) — `tests/lab/test_kc_test.py`
 - **test_k8s_version_follows_the_schedule()** (3 connections) — `tests/lab/test_kc_test.py`
 - **stage()** (2 connections) — `teach/lab/kc_test.py`
-- **today()** (2 connections) — `teach/lab/kc_test.py`
-- **test_a_skipped_k8s_lab_does_not_break_the_evidence_or_publish_steps()** (2 connections) — `tests/lab/test_kc_test.py`
-- *... and 17 more nodes in this community*
+- *... and 22 more nodes in this community*
 
 ## Relationships
 
-- [Community 56](Community_56.md) (14 shared connections)
-- [Community 26](Community_26.md) (13 shared connections)
-- [Community 18](Community_18.md) (8 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
+- [Community 18](Community_18.md) (15 shared connections)
+- [Community 103](Community_103.md) (7 shared connections)
+- [Community 26](Community_26.md) (7 shared connections)
+- [Community 29](Community_29.md) (5 shared connections)
+- [Community 224](Community_224.md) (4 shared connections)
+- [Community 69](Community_69.md) (4 shared connections)
 - [Community 61](Community_61.md) (4 shared connections)
-- [Community 5](Community_5.md) (4 shared connections)
-- [Community 29](Community_29.md) (3 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 12](Community_12.md) (3 shared connections)
-- [Community 104](Community_104.md) (2 shared connections)
-- [Community 44](Community_44.md) (2 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 1](Community_1.md) (3 shared connections)
+- [Community 141](Community_141.md) (2 shared connections)
 - [Community 219](Community_219.md) (2 shared connections)
+- [Community 22](Community_22.md) (2 shared connections)
 
 ## Source Files
 
+- `teach/lab/cli.py`
+- `teach/lab/export_killercoda.py`
 - `teach/lab/kc_test.py`
+- `tests/lab/test_kc_gate.py`
 - `tests/lab/test_kc_test.py`
 
 ## Audit Trail
 
-- EXTRACTED: 140 (99%)
+- EXTRACTED: 143 (99%)
 - INFERRED: 2 (1%)
 - AMBIGUOUS: 0 (0%)
 

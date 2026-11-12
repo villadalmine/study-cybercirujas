@@ -1,62 +1,48 @@
 # Community 10
 
-> 27 nodes · cohesion 0.15
+> 15 nodes · cohesion 0.26
 
 ## Key Concepts
 
 - **certs.py** (48 connections) — `teach/core/certs.py`
-- **generate_topic()** (24 connections) — `teach/core/generator.py`
 - **topics()** (13 connections) — `teach/core/certs.py`
-- **content_dir()** (11 connections) — `teach/core/certs.py`
-- **get_topic()** (10 connections) — `teach/core/certs.py`
-- **load()** (10 connections) — `teach/core/certs.py`
-- **topic_outdated_langs()** (9 connections) — `teach/core/certs.py`
-- **topic_langs()** (8 connections) — `teach/core/certs.py`
+- **load()** (12 connections) — `teach/core/certs.py`
+- **save()** (8 connections) — `teach/core/certs.py`
 - **clear_topic_stale()** (7 connections) — `teach/core/certs.py`
-- **save()** (7 connections) — `teach/core/certs.py`
-- **cert_generate()** (6 connections) — `teach/cli.py`
-- **md_path()** (6 connections) — `teach/core/certs.py`
+- **md_path()** (7 connections) — `teach/core/certs.py`
 - **scaffold()** (5 connections) — `teach/core/certs.py`
-- **.test_cycle_closes_when_none_are_left()** (5 connections) — `tests/test_stale_cycle.py`
 - **set_topic_status()** (4 connections) — `teach/core/certs.py`
-- **generate_cert()** (4 connections) — `teach/core/generator.py`
 - **Path** (4 connections)
 - **_read()** (3 connections) — `teach/core/certs.py`
 - **frontmatter** (3 connections)
 - **Post** (2 connections)
-- **Generate content with AI for pending/stale topics. This AUTHORS from the…** (1 connections) — `teach/cli.py`
 - **Read/write the per-certification MD (syllabus snapshot + status). The MD with…** (1 connections) — `teach/core/certs.py`
 - **Close the cycle for a stale topic: back to 'generated' and drop the timestamp,…** (1 connections) — `teach/core/certs.py`
 - **Crea el MD template de una cert nueva. El temario se completa a mano (TODO:…** (1 connections) — `teach/core/certs.py`
-- **Idiomas en los que existe contenido de un tema.** (1 connections) — `teach/core/certs.py`
-- *... and 2 more nodes in this community*
 
 ## Relationships
 
-- [Community 7](Community_7.md) (10 shared connections)
 - [Community 43](Community_43.md) (9 shared connections)
 - [Community 126](Community_126.md) (8 shared connections)
-- [Community 0](Community_0.md) (6 shared connections)
-- [Community 125](Community_125.md) (6 shared connections)
-- [Community 207](Community_207.md) (4 shared connections)
-- [Community 63](Community_63.md) (4 shared connections)
-- [Community 59](Community_59.md) (3 shared connections)
-- [Community 8](Community_8.md) (3 shared connections)
+- [Community 74](Community_74.md) (7 shared connections)
+- [Community 273](Community_273.md) (4 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
 - [Community 34](Community_34.md) (3 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 55](Community_55.md) (3 shared connections)
+- [Community 207](Community_207.md) (3 shared connections)
+- [Community 22](Community_22.md) (3 shared connections)
+- [Community 59](Community_59.md) (2 shared connections)
+- [Community 55](Community_55.md) (2 shared connections)
+- [video.py](video.py.md) (2 shared connections)
+- [Community 253](Community_253.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/cli.py`
 - `teach/core/certs.py`
-- `teach/core/generator.py`
-- `tests/test_stale_cycle.py`
 
 ## Audit Trail
 
-- EXTRACTED: 138 (97%)
-- INFERRED: 4 (3%)
+- EXTRACTED: 91 (99%)
+- INFERRED: 1 (1%)
 - AMBIGUOUS: 0 (0%)
 
 ---

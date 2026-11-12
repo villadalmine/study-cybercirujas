@@ -20,7 +20,7 @@
 - [Community 44](Community_44.md) (6 shared connections)
 - [Community 111](Community_111.md) (5 shared connections)
 - [Community 213](Community_213.md) (2 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
 - [Community 54](Community_54.md) (1 shared connections)
 - [Community 217](Community_217.md) (1 shared connections)
 - [Community 170](Community_170.md) (1 shared connections)

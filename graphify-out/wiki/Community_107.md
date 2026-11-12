@@ -1,55 +1,55 @@
 # Community 107
 
-> 26 nodes · cohesion 0.09
+> 22 nodes · cohesion 0.13
 
 ## Key Concepts
 
+- **api.py** (51 connections) — `teach/api.py`
 - **login()** (6 connections) — `teach/api.py`
-- **has_subscription()** (6 connections) — `teach/core/auth.py`
 - **post_bot_used()** (5 connections) — `teach/api.py`
 - **rate_limit()** (5 connections) — `teach/api.py`
-- **authenticate()** (5 connections) — `teach/core/auth.py`
-- **auth.py** (5 connections) — `teach/core/auth.py`
 - **BotUsage** (4 connections) — `teach/api.py`
 - **Request** (4 connections)
-- **Architecture — 3 Components** (4 connections) — `docs/ORIGINAL_DESIGN.md`
 - **LoginBody** (3 connections) — `teach/api.py`
 - **logout()** (3 connections) — `teach/api.py`
-- **me()** (3 connections) — `teach/api.py`
 - **post** (3 connections)
-- **Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md)** (3 connections) — `docs/BACKLOG.md`
-- **3. Web: Public Landing + Paid Study Zone** (3 connections) — `docs/ORIGINAL_DESIGN.md`
 - **require_user()** (2 connections) — `teach/api.py`
 - **BaseModel** (2 connections)
 - **middleware** (1 connections)
-- **1. Catalog Tracker (Scraper — nothing is static)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
-- **2. Generator (AI, on-demand)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
+- **Platform API. Public (no login): catalog, syllabi and paths — the landing page…** (1 connections) — `teach/api.py`
 - **Per-client request budget on /api (in-process, per worker; see…** (1 connections) — `teach/api.py`
 - **What the page reports after an answer. Six closed-set fields, no more. Pydantic…** (1 connections) — `teach/api.py`
 - **Count one bot answer, anonymously and only if the student left it on. The page…** (1 connections) — `teach/api.py`
-- **Authentication — a minimal interface so real users/OIDC can be plugged in later…** (1 connections) — `teach/core/auth.py`
-- **Always denies. Real auth pending (OIDC/social login).** (1 connections) — `teach/core/auth.py`
-- *... and 1 more nodes in this community*
+- **fastapi** (1 connections)
+- **fastapi_responses** (1 connections)
+- **fastapi_staticfiles** (1 connections)
+- **pydantic** (1 connections)
+- **secrets** (1 connections)
+- **starlette_middleware_sessions** (1 connections)
 
 ## Relationships
 
-- [Community 125](Community_125.md) (10 shared connections)
+- [Community 125](Community_125.md) (8 shared connections)
+- [Community 43](Community_43.md) (7 shared connections)
+- [Community 173](Community_173.md) (6 shared connections)
+- [Community 231](Community_231.md) (4 shared connections)
+- [Community 265](Community_265.md) (3 shared connections)
 - [Community 215](Community_215.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 227](Community_227.md) (1 shared connections)
-- [Community 157](Community_157.md) (1 shared connections)
+- [Community 253](Community_253.md) (2 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 167](Community_167.md) (2 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/BACKLOG.md`
-- `docs/ORIGINAL_DESIGN.md`
 - `teach/api.py`
-- `teach/core/auth.py`
 
 ## Audit Trail
 
-- EXTRACTED: 41 (91%)
-- INFERRED: 4 (9%)
+- EXTRACTED: 70 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

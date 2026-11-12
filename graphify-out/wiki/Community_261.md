@@ -1,29 +1,30 @@
 # Community 261
 
-> 6 nodes · cohesion 0.33
+> 8 nodes · cohesion 0.25
 
 ## Key Concepts
 
-- **VerdictTests** (6 connections) — `tests/test_model_probe.py`
-- **.test_a_different_answer_is_alive_but_not_obedient()** (2 connections) — `tests/test_model_probe.py`
-- **.test_the_expected_word_is_ok()** (2 connections) — `tests/test_model_probe.py`
-- **.test_two_hundred_with_no_content_is_empty()** (2 connections) — `tests/test_model_probe.py`
-- **.test_each_failure_keeps_its_own_name()** (1 connections) — `tests/test_model_probe.py`
-- **.test_rate_limited_is_not_dead()** (1 connections) — `tests/test_model_probe.py`
+- **EndpointTests** (7 connections) — `tests/test_models_live.py`
+- **.test_an_unreachable_provider_still_serves_the_catalogue()** (2 connections) — `tests/test_models_live.py`
+- **.setUp()** (1 connections) — `tests/test_models_live.py`
+- **.tearDown()** (1 connections) — `tests/test_models_live.py`
+- **.test_a_fresh_check_is_not_repeated_on_every_request()** (1 connections) — `tests/test_models_live.py`
+- **explode()** (1 connections) — `tests/test_models_live.py`
+- **.test_findings_reach_the_page()** (1 connections) — `tests/test_models_live.py`
+- **The guard must never be able to break the page it protects.** (1 connections) — `tests/test_models_live.py`
 
 ## Relationships
 
-- [Community 206](Community_206.md) (3 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 3](Community_3.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `tests/test_models_live.py`
 
 ## Audit Trail
 
-- EXTRACTED: 9 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 7 (88%)
+- INFERRED: 1 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

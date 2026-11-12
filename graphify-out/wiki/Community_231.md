@@ -1,34 +1,41 @@
 # Community 231
 
-> 8 nodes · cohesion 0.36
+> 12 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **.teach()** (7 connections) — `tests/test_smoke.py`
-- **StudentCliSmokeTests** (6 connections) — `tests/test_smoke.py`
-- **Checks that must pass** (3 connections) — `CONTRIBUTING.md`
-- **.test_cert_list()** (2 connections) — `tests/test_smoke.py`
-- **.test_cert_show()** (2 connections) — `tests/test_smoke.py`
-- **.test_lab_help()** (2 connections) — `tests/test_smoke.py`
-- **Groundedness (advisory)** (1 connections) — `CONTRIBUTING.md`
-- **The CLI commands the README offers a student — no key, no model.** (1 connections) — `tests/test_smoke.py`
+- **has_subscription()** (6 connections) — `teach/core/auth.py`
+- **authenticate()** (5 connections) — `teach/core/auth.py`
+- **auth.py** (5 connections) — `teach/core/auth.py`
+- **Architecture — 3 Components** (4 connections) — `docs/ORIGINAL_DESIGN.md`
+- **me()** (3 connections) — `teach/api.py`
+- **Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md)** (3 connections) — `docs/BACKLOG.md`
+- **3. Web: Public Landing + Paid Study Zone** (3 connections) — `docs/ORIGINAL_DESIGN.md`
+- **1. Catalog Tracker (Scraper — nothing is static)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
+- **2. Generator (AI, on-demand)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
+- **Authentication — a minimal interface so real users/OIDC can be plugged in later…** (1 connections) — `teach/core/auth.py`
+- **Always denies. Real auth pending (OIDC/social login).** (1 connections) — `teach/core/auth.py`
+- **Always denies. Payment gateway pending (Stripe or similar).** (1 connections) — `teach/core/auth.py`
 
 ## Relationships
 
-- [Community 127](Community_127.md) (1 shared connections)
-- [Community 2](Community_2.md) (1 shared connections)
-- [Community 131](Community_131.md) (1 shared connections)
-- [Community 114](Community_114.md) (1 shared connections)
+- [Community 107](Community_107.md) (4 shared connections)
+- [Community 125](Community_125.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 227](Community_227.md) (1 shared connections)
+- [Community 157](Community_157.md) (1 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
-- `tests/test_smoke.py`
+- `docs/BACKLOG.md`
+- `docs/ORIGINAL_DESIGN.md`
+- `teach/api.py`
+- `teach/core/auth.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (79%)
-- INFERRED: 3 (21%)
+- EXTRACTED: 17 (81%)
+- INFERRED: 4 (19%)
 - AMBIGUOUS: 0 (0%)
 
 ---

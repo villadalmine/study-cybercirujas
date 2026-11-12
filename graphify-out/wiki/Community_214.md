@@ -1,30 +1,37 @@
 # Community 214
 
-> 11 nodes · cohesion 0.24
+> 15 nodes · cohesion 0.18
 
 ## Key Concepts
 
+- **_guard_run()** (12 connections) — `scripts/curriculum_diff.py`
 - **tool_edit_ok()** (9 connections) — `scripts/curriculum_diff.py`
 - **cite_checker()** (8 connections) — `scripts/curriculum_diff.py`
 - **wrong_rewrites()** (8 connections) — `scripts/curriculum_diff.py`
 - **provenance()** (6 connections) — `scripts/curriculum_diff.py`
 - **load_pins()** (5 connections) — `scripts/curriculum_diff.py`
+- **citation_files_ok()** (3 connections) — `scripts/curriculum_diff.py`
+- **_git_text()** (3 connections) — `scripts/curriculum_diff.py`
 - **_listed()** (3 connections) — `scripts/curriculum_diff.py`
 - **uv_rewrite()** (3 connections) — `scripts/curriculum_diff.py`
 - **(file, old line, new line) -> True when the new line is what the citation fix…** (1 connections) — `scripts/curriculum_diff.py`
+- **A file the plan does not list may still change when every changed line is the…** (1 connections) — `scripts/curriculum_diff.py`
 - **The upgrade's pins file as committed on the base (`<spec>.pins.yaml` next to…** (1 connections) — `scripts/curriculum_diff.py`
 - **A scripted edit stands in for a model's effort and prompt hash, and only for…** (1 connections) — `scripts/curriculum_diff.py`
 - **A technical version line the plan lists may only become what the upgrade's own…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (7 shared connections)
-- [Community 63](Community_63.md) (4 shared connections)
-- [Community 167](Community_167.md) (3 shared connections)
+- [Community 57](Community_57.md) (11 shared connections)
+- [Community 141](Community_141.md) (4 shared connections)
+- [Community 135](Community_135.md) (3 shared connections)
 - [Community 5](Community_5.md) (2 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
+- [Community 222](Community_222.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 70](Community_70.md) (1 shared connections)
+- [Community 219](Community_219.md) (1 shared connections)
 
 ## Source Files
 
@@ -32,8 +39,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 31 (94%)
-- INFERRED: 2 (6%)
+- EXTRACTED: 43 (93%)
+- INFERRED: 3 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---
