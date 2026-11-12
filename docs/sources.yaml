@@ -209,4 +209,9 @@ neutral_domains:
   - media.defense.gov
   - www.cisa.gov
   - linux.die.net
+  # Research papers: the primary source for a model architecture or a scaling law (the
+  # Transformer, AlexNet, Chinchilla), cited by the AI certs. Many authors, no single project.
+  - arxiv.org
+  - papers.nips.cc
+  - proceedings.neurips.cc
   - teamtopologies.com
