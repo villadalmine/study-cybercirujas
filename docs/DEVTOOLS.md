@@ -297,6 +297,8 @@ the vehicle for a table of record, which is why this is code, not OpenWiki.
 
 `docs/STATUS.md` carries the same numbers as a **Spend (measured)** footer,
 regenerated on every refresh (`make cert`, `make publish`, `teach status`).
+A PR that only re-renders the ledger (a topic PR, a rebase conflict) uses
+`status_matrix.py --keep-spend`, which keeps the footer committed at `HEAD`.
 The footer sits below a marker that `status_matrix.py --check` deliberately
 ignores: spend moves without content moving (a rejected completion bills
 and lands nothing), and the gate must only fail when the content ledger
