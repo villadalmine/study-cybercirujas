@@ -1,0 +1,90 @@
+cert: cks
+version: '1.34'
+source:
+  repo: cncf/curriculum
+  commit: 94f35b01ae65763117de7fd5fcd5d57feacae68c
+  path: CKS_Curriculum v1.34.pdf
+  url: https://github.com/cncf/curriculum/raw/94f35b01ae65763117de7fd5fcd5d57feacae68c/CKS_Curriculum%20v1.34.pdf
+  sha256: a755a5680bec6978de4a3074d7f0c7fe978bd7a9ad5e4f1681597aedda6f6637
+  committed: '2025-10-30'
+extraction:
+  tool: scripts/curriculum_diff.py extract
+  method: pdftotext -layout; two columns split at the widest gap between marker starts
+tree_sha256: d1abe1fec1cca25e5ac50752e15de854c85b4b192673165659b8f1dca3351d39
+domains:
+- id: '1'
+  name: Cluster Setup
+  weight: 15
+  objectives:
+  - id: '1.1'
+    text: Use Network security policies to restrict cluster level access
+  - id: '1.2'
+    text: Use CIS benchmark to review the security configuration of Kubernetes components (etcd, kubelet, kubedns, kubeapi)
+  - id: '1.3'
+    text: Properly set up Ingress objects with TLS
+  - id: '1.4'
+    text: Protect node metadata and endpoints
+  - id: '1.5'
+    text: Verify platform binaries before deploying
+- id: '2'
+  name: Minimize Microservice Vulnerabilities
+  weight: 20
+  objectives:
+  - id: '2.1'
+    text: Use appropriate pod security standards
+  - id: '2.2'
+    text: Manage kubernetes secrets
+  - id: '2.3'
+    text: Understand and implement isolation techniques (multi-tenancy, sandboxed containers, etc.)
+  - id: '2.4'
+    text: Implement Pod-to-Pod encryption (Cilium, Istio)
+- id: '3'
+  name: Cluster Hardening
+  weight: 15
+  objectives:
+  - id: '3.1'
+    text: Use Role Based Access Controls to minimize exposure
+  - id: '3.2'
+    text: Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones
+  - id: '3.3'
+    text: Restrict access to Kubernetes API
+  - id: '3.4'
+    text: Upgrade Kubernetes to avoid vulnerabilities
+- id: '4'
+  name: Supply Chain Security
+  weight: 20
+  objectives:
+  - id: '4.1'
+    text: Minimize base image footprint
+  - id: '4.2'
+    text: Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)
+  - id: '4.3'
+    text: Secure your supply chain (permitted registries, sign and validate artifacts, etc.)
+  - id: '4.4'
+    text: Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)
+- id: '5'
+  name: System Hardening
+  weight: 10
+  objectives:
+  - id: '5.1'
+    text: Minimize host OS footprint (reduce attack surface)
+  - id: '5.2'
+    text: Using least-privilege identity and access management
+  - id: '5.3'
+    text: Minimize external access to the network
+  - id: '5.4'
+    text: Appropriately use kernel hardening tools such as AppArmor, seccomp
+- id: '6'
+  name: Monitoring, Logging and Runtime Security
+  weight: 20
+  objectives:
+  - id: '6.1'
+    text: Perform behavioral analytics to detect malicious activities
+  - id: '6.2'
+    text: Detect threats within physical infrastructure, apps, networks, data, users and workloads
+  - id: '6.3'
+    text: Investigate and identify phases of attack and bad actors within the environment
+  - id: '6.4'
+    text: Ensure immutability of containers at runtime
+  - id: '6.5'
+    text: Use Kubernetes audit logs to monitor access

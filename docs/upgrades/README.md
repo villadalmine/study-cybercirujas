@@ -10,6 +10,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.yaml](cka-ckad-1.37.yaml) | the upgrade spec: tracked syllabus, target and upstream base per cert | a person |
 | [cka-ckad-1.37.plan.json](cka-ckad-1.37.plan.json) | three diffs per cert, one class per topic, the sections and lines in scope | `scripts/curriculum_diff.py plan` |
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
+| [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md) | the same three for **CKS v1.37** (milestone *CKS v1.37 upgrade*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)) | a person / `plan` / `render` |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
 The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the others), frozen from the official PDFs.
@@ -47,6 +48,23 @@ title sections should stay as they are. No prose needs a model.
 
 Besides those, 195 lines cite "Curriculum v1.35" (mostly with a dead `raw/master` link) and 43 are headings or banners:
 mechanical, for the switch PR.
+
+## Result for CKS v1.37 (2026-11-12)
+
+The second run of the process, on a cert that did not shape it. `teach tracker sync --provider cncf` (last run on
+2026-09-03, which is why nothing flagged it before) found `CKS_Curriculum v1.37.pdf` (cncf/curriculum
+[`4de0c31`](https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf),
+2026-11-03) and wrote the `upstream:` block. Same pattern as CKA & CKAD: the v1.37 PDF is byte-identical to v1.34
+([`94f35b0`](https://github.com/cncf/curriculum/raw/94f35b01ae65763117de7fd5fcd5d57feacae68c/CKS_Curriculum%20v1.34.pdf),
+sha256 `a755a568…` for both) and both trees hash `d1abe1fe…`.
+
+| Cert | keep | revalidate | regenerate | new | retire | topic files | planned | version lines (curriculum / label / technical) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| cks | 26 | 0 | 0 | 0 | 0 | 208 | 98 | 108 / 92 / 706 |
+
+No objective moves and our frozen `certs/cks.md` has no drift from its own PDF: phase 2 is the version bump only.
+The one gap the run found was in the tool: the CKS file name has a space, and `extract` wrote it raw into the source
+URL, breaking the report's links. It is percent-encoded now (`tests/test_curriculum_diff.py`).
 
 ## Sources, pinned by commit
 
