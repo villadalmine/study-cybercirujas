@@ -742,10 +742,13 @@ COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone 
 # - catalog.yaml: `tracked_version` -> the target's version, `sources.objectives` -> the target's pinned PDF,
 #   `upstream_status: current`, and the `upstream:` window removed;
 # - certs/<cert>.md: `version` -> the target's, the PDF added to `sources`, and each topic's title -> the
-#   target objective it maps to when the wording changed. Directory names stay (README -> Topic ids at the
-#   switch): the snapshot's positional ids are not the frozen file's.
+#   target objective it maps to when the wording changed, and `snapshot_date` -> the target's `source.committed`
+#   (the date of the curriculum it now follows: check_versions compares it with `curriculum_updated` when the
+#   version is a date, and a fixed input keeps `--check` stable across days). Directory names stay (README ->
+#   Topic ids at the switch): the snapshot's positional ids are not the frozen file's.
 #
-# The same writers as teach.core (catalog.save, certs.save), so nothing else reformats the files.
+# The same serializers teach.core uses (yaml.safe_dump for the catalog, frontmatter.dumps for the syllabus).
+# A domain renamed or reweighted is not rewritten into each topic's `topic:`/`weight:` (#120).
 
 
 def switch(root: Path, spec: dict) -> tuple[dict, dict[str, str], list[str]]:
@@ -766,9 +769,10 @@ def switch(root: Path, spec: dict) -> tuple[dict, dict[str, str], list[str]]:
             why.append(f"{cert}: content changes first: {', '.join(pending)}")
             continue
         target = load_syllabus(root / s["target"])
-        url, version = (target.get("source") or {}).get("url"), str(target["version"])
-        if not url:
-            why.append(f"{cert}: {s['target']} has no source.url")
+        source = target.get("source") or {}
+        url, version, committed = source.get("url"), str(target["version"]), source.get("committed")
+        if not url or not committed:
+            why.append(f"{cert}: {s['target']} has no source.url or source.committed")
             continue
         texts = {o["id"]: o["text"] for d in target["domains"] for o in d["objectives"]}
         rows = {t["topic"]: t for t in c["topics"]}
@@ -780,6 +784,7 @@ def switch(root: Path, spec: dict) -> tuple[dict, dict[str, str], list[str]]:
             if new and tidy(str(topic.get("title") or "")) != new:
                 topic["title"] = new
         post.metadata["version"] = version
+        post.metadata["snapshot_date"] = str(committed)
         sources = list(post.metadata.get("sources") or [])
         post.metadata["sources"] = sources if url in sources else [*sources, url]
         files[str(md.relative_to(root))] = frontmatter.dumps(post) + "\n"
