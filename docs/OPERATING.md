@@ -199,6 +199,7 @@ falls back along `en → es`.
 ```bash
 teach cert generate  <cert> --lang en --backend claude    # author (from the syllabus)
 teach cert translate <cert> --to es --backend litellm     # translate (from English)
+teach cert lab       <cert> --topic <id> --backend claude  # only the lab, checked against study-lab's contract
 ```
 
 The distinction matters and is easy to get wrong: `generate --lang <x>` does

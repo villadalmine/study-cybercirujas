@@ -700,6 +700,87 @@ def _topic_context(cert_meta: dict, topic: dict) -> str:
     )
 
 
+LAB_PROMPT = (
+    "Escribí un script bash 'break & fix' para este tema: rompe algo de forma controlada y segura "
+    "en una VM de laboratorio descartable y le explica al estudiante qué síntoma va a ver y qué debe "
+    "lograr para arreglarlo. Incluí al final, comentada, la solución paso a paso.\n"
+    "Contrato del runner (study-lab, teach/lab/spec.py), obligatorio:\n"
+    "- Un `case \"${1:-break}\" in` con tres modos: `break` (también sin argumentos: prepara y rompe), "
+    "`verify` (sale 0 solo cuando el estudiante lo arregló, distinto de 0 si no) y `cleanup` "
+    "(deja la VM como estaba). Los tres idempotentes.\n"
+    "- Nunca esperes a una persona: si pedís confirmación, saltala cuando STUDY_LAB=1 o "
+    "LAB_DISPOSABLE=yes (el runner los exporta siempre, sin terminal).\n"
+    "- En la cabecera, una línea `# lab-resources: cpus=N ram_mb=M` con lo que el script necesita "
+    "de verdad (1-8 CPU, 256-16384 MB).\n"
+    "Respondé SOLO con el script bash, sin markdown."
+)
+LAB_ATTEMPTS = 2
+
+
+def _write_lab(complete, system: str, context: str, cert_id: str, topic_id: str,
+               title: str, lab_dir: Path) -> Path:
+    """Write break_fix.sh and lab.yaml, or raise without writing either.
+
+    A lab that the runner cannot drive (no verify or cleanup mode, a prompt that
+    waits for a terminal) is rejected here, below the quality floor, rather than
+    found by `study-lab validate --strict` after it was committed: nca-aiio 1.2,
+    1.4 and 1.5 reached review that way (#297). One retry tells the model what
+    was missing; the rejected script is kept under .rejected/ like the content.
+    """
+    from . import labs
+
+    # Without this the lab's spend is billed to "exercises", because the
+    # context still holds whatever the previous call set. It is not a rounding
+    # error: on kcsa/1.1 the lab was the LARGEST completion of the three
+    # (42,558 tokens against 14,217), so the mislabel made a topic look like
+    # it cost two calls when it costs three.
+    _usage_context["kind"] = "lab"
+    prompt = f"{context}\n{LAB_PROMPT}"
+    problems: list[str] = []
+    for _ in range(LAB_ATTEMPTS):
+        script = _reject_if_recap(complete(system, prompt), "el script break&fix")
+        problems = labs.contract_problems(script)
+        if not problems:
+            lab_dir.mkdir(parents=True, exist_ok=True)
+            (lab_dir / "break_fix.sh").write_text(script, encoding="utf-8")
+            (lab_dir / "lab.yaml").write_text(yaml.safe_dump(
+                labs.default_spec(cert_id, topic_id, title, script), sort_keys=False, allow_unicode=True))
+            return lab_dir
+        prompt = (f"{context}\n{LAB_PROMPT}\n\nUn intento anterior no cumplía el contrato: "
+                  + "; ".join(problems) + ". Corregilo.")
+    try:
+        debris = pipeline.REPO / ".rejected" / f"{cert_id}-{topic_id}-lab.sh"
+        debris.parent.mkdir(parents=True, exist_ok=True)
+        debris.write_text(f"# rejected: {'; '.join(problems)}\n{script}", encoding="utf-8")
+    except OSError:
+        pass
+    raise GeneratorConfigError(
+        f"lab for {cert_id} {topic_id} is below the quality floor: {'; '.join(problems)} "
+        f"(after {LAB_ATTEMPTS} attempts). Rejected script kept in .rejected/{cert_id}-{topic_id}-lab.sh"
+    )
+
+
+def generate_lab(cert_id: str, topic_id: str, backend: str | None = None, force: bool = False) -> dict:
+    """Write only a topic's lab, from the syllabus entry, in the authoring language.
+
+    For a lab that is missing or fails the runner's contract while its content is
+    fine: regenerating the whole topic would pay for content and exercises again
+    and break the translations' source chain. `teach cert lab` calls this.
+    """
+    lab_dir = certs.content_dir(cert_id, topic_id) / "lab"
+    if (lab_dir / "break_fix.sh").exists() and not force:
+        return {"topic": topic_id, "skipped": "lab exists (use --force)"}
+    complete, _ = make_completer(backend)
+    topic = certs.get_topic(cert_id, topic_id)
+    context = _topic_context(certs.load(cert_id).metadata, topic)
+    _write_lab(complete, _system(certs.DEFAULT_LANG), context, cert_id, topic_id, topic["title"], lab_dir)
+    # generate_topic marks a topic generated after its lab; when the lab was the
+    # part rejected, this is where the topic is finished.
+    if topic.get("status", "pending") == "pending" and certs.DEFAULT_LANG in certs.topic_langs(cert_id, topic_id):
+        certs.set_topic_status(cert_id, topic_id, "generated")
+    return {"topic": topic_id, "written": str(lab_dir)}
+
+
 def generate_topic(
     cert_id: str,
     topic_id: str,
@@ -727,6 +808,10 @@ def generate_topic(
     if status == "edited" and lang == certs.DEFAULT_LANG and not force:
         return {"topic": topic_id, "skipped": "edited (use --force to overwrite)"}
     if already and not force and not outdated:
+        # A lab rejected for its contract leaves the content written and the lab
+        # missing; the next run writes only the lab instead of skipping forever.
+        if lang == certs.DEFAULT_LANG and not (certs.content_dir(cert_id, topic_id) / "lab" / "break_fix.sh").exists():
+            return generate_lab(cert_id, topic_id, backend=backend)
         return {"topic": topic_id, "skipped": f"already generated in {lang} (use --force)"}
 
     system = _system(lang)
@@ -814,35 +899,10 @@ def generate_topic(
     # rejects exactly that shape.
     _write_meta(lang_dir, lang, backend_meta, topic)
 
-    # el lab es compartido entre idiomas: se crea una vez (o se regenera con
-    # --force en el idioma default)
-    lab_dir = directory / "lab"
-    if not (lab_dir / "break_fix.sh").exists() or (force and lang == certs.DEFAULT_LANG):
-        # Without this the lab's spend is billed to "exercises", because the
-        # context still holds whatever the previous call set. It is not a rounding
-        # error: on kcsa/1.1 the lab was the LARGEST completion of the three
-        # (42,558 tokens against 14,217), so the mislabel made a topic look like
-        # it cost two calls when it costs three.
-        _usage_context["kind"] = "lab"
-        break_fix = _reject_if_recap(
-            complete(
-                system,
-                f"{context}\n"
-                f"Escribí un script bash 'break & fix' para este tema: rompe algo de forma "
-                f"controlada y segura en una VM de laboratorio descartable y le explica al "
-                f"estudiante qué síntoma va a ver y qué debe lograr para arreglarlo. "
-                f"Incluí al final, comentada, la solución paso a paso. Respondé SOLO con "
-                f"el script bash, sin markdown.",
-            ),
-            "el script break&fix",
-        )
-        lab_dir.mkdir(parents=True, exist_ok=True)
-        (lab_dir / "break_fix.sh").write_text(break_fix, encoding="utf-8")
-        from . import labs
-        lab_spec = labs.default_spec(cert_id, topic_id, topic["title"])
-        (lab_dir / "lab.yaml").write_text(
-            yaml.safe_dump(lab_spec, sort_keys=False, allow_unicode=True)
-        )
+    # The lab is shared between languages: it is written once, or again with
+    # --force in the authoring language.
+    if not (directory / "lab" / "break_fix.sh").exists() or (force and lang == certs.DEFAULT_LANG):
+        _write_lab(complete, system, context, cert_id, topic_id, topic["title"], directory / "lab")
 
     if status == "stale":
         # Do not mark the topic current until NO language is left behind.

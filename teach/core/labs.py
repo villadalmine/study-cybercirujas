@@ -269,16 +269,64 @@ REQUIRED_KEYS = ("cert", "topic", "title", "provider", "resources", "setup")
 PROVIDERS = ("local", "terraform")
 
 
-def default_spec(cert_id: str, topic_id: str, title: str) -> dict:
+# A generated script states what it needs in one header line; lab.yaml is
+# written from it. The fixed 1 CPU / 1 GB of every generated lab.yaml was wrong
+# for nca-aiio/1.4, whose script needs two CPUs (#297).
+RESOURCES_LINE = re.compile(r"^#\s*lab-resources:(.*)$", re.M)
+RESOURCE_BOUNDS = {"cpus": (1, 8), "ram_mb": (256, 16384)}
+DEFAULT_VM = {"cpus": 1, "ram_mb": 1024}
+
+
+def script_resources(script: str | None) -> dict:
+    """`# lab-resources: cpus=2 ram_mb=2048` -> {"cpus": 2, "ram_mb": 2048}.
+
+    Missing, malformed or out-of-bounds values fall back to DEFAULT_VM one by one,
+    so a model's typo never produces a lab.yaml the runner refuses.
+    """
+    found = dict(DEFAULT_VM)
+    line = RESOURCES_LINE.search(script or "")
+    if line:
+        for key, value in re.findall(r"(\w+)\s*=\s*(\d+)", line.group(1)):
+            low, high = RESOURCE_BOUNDS.get(key, (None, None))
+            if low is not None and low <= int(value) <= high:
+                found[key] = int(value)
+    return found
+
+
+# `read -p ...` or `read ... </dev/tty` waits for a person. The runner has none
+# (teach/lab/runner.py feeds stdin from the lab spec), so such a prompt must be
+# skipped when the runner's variables say the machine is disposable.
+TERMINAL_READ = re.compile(r"^(?!\s*#).*\bread\b[^\n#]*(\s-[a-zA-Z]*p\b|</dev/tty)", re.M)
+
+
+def contract_problems(script: str) -> list[str]:
+    """Why a generated break_fix.sh cannot run under study-lab, [] when it can.
+
+    The same `infer_contract` the runner and `study-lab validate --strict` use,
+    so the generator rejects exactly what the runner would refuse (#297).
+    """
+    from teach.lab.spec import DEFAULT_ENV, VERBS, infer_contract
+
+    contract = infer_contract(script)
+    problems = [f"no {action} mode (a `case` arm such as {VERBS[action][0]})"
+                for action in ("verify", "cleanup") if contract[action] is None]
+    if TERMINAL_READ.search(script) and not any(name in script for name in DEFAULT_ENV):
+        problems.append("asks at the terminal and never checks " + "/".join(DEFAULT_ENV)
+                        + ", so it hangs under the runner")
+    return problems
+
+
+def default_spec(cert_id: str, topic_id: str, title: str, script: str | None = None) -> dict:
     """The lab.yaml every topic starts from — one definition, used by the AI
     generator and by `teach lab new`, so a lab written by hand and one written
-    by a model are held to the same contract."""
+    by a model are held to the same contract. The VM is sized from the script's
+    `# lab-resources:` line when it has one."""
     return {
         "cert": cert_id,
         "topic": topic_id,
         "title": title,
         "provider": "local",
-        "resources": {"vms": [{"name": "lab", "os": "debian-12", "cpus": 1, "ram_mb": 1024}]},
+        "resources": {"vms": [{"name": "lab", "os": "debian-12", **script_resources(script)}]},
         "setup": ["break_fix.sh"],
     }
 
