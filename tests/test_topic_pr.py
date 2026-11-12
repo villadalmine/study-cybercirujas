@@ -4,6 +4,7 @@ The plan (languages, authoring language first, models from meta.yaml) is tested 
 keep-spend helpers on strings. `build` drives git and the repo's own scripts, so it is exercised by
 running it, not here (its every step is a script that has its own tests).
 """
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -53,6 +54,23 @@ class Plan(unittest.TestCase):
                 topic_pr.plan("c", "1.1", Path(tmp), None)
             self.assertIn("no model", str(raised.exception))
 
+    def test_a_language_without_meta_is_refused_before_git(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = topic(Path(tmp), {"en": {"model": "m"}})
+            (d / "es").mkdir()
+            with self.assertRaises(SystemExit) as raised:
+                topic_pr.plan("c", "1.1", Path(tmp), None)
+            self.assertIn("es without meta.yaml", str(raised.exception))
+
+    def test_the_subject_says_translated_only_when_meta_does(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            topic(Path(tmp), {"en": {"model": "m-en"}, "es": {"model": "m-es"},
+                              "de": {"model": "m-de", "translated_from": "en"}})
+            p = topic_pr.plan("c", "1.1", Path(tmp), None)
+            self.assertEqual(p["translated_from"], {"de": "en", "en": None, "es": None})
+        self.assertEqual(topic_pr.subject("c", "1.1", "es", "m-es", None), "feat(c): 1.1 in es, m-es")
+        self.assertEqual(topic_pr.subject("c", "1.1", "de", "m", "en"), "feat(c): 1.1 in de, translated from en")
+
     def test_trailers(self):
         self.assertEqual(topic_pr.trailers("claude-code", "m", "284", ("Co-Authored-By: X <x@y>",)),
                          ["-m", "Part of #284", "-m", "Agent: claude-code\nModel: m\nCo-Authored-By: X <x@y>"])
@@ -68,13 +86,54 @@ class KeepSpend(unittest.TestCase):
         self.assertEqual(status_matrix.keep_spend(rendered, committed),
                          f"# Content Status\nnew ledger\n\n{committed}")
 
-    def test_nothing_to_keep_leaves_the_render(self):
-        rendered = f"ledger\n{self.M}\nlocal\n"
-        self.assertEqual(status_matrix.keep_spend(rendered, None), rendered)
+    def test_nothing_to_keep_drops_the_machine_footer(self):
+        rendered = f"ledger\n\n{self.M}\nlocal\n"
+        self.assertEqual(status_matrix.keep_spend(rendered, None), "ledger\n")
 
     def test_the_committed_footer_is_read_from_git(self):
         footer = status_matrix.committed_spend("HEAD")
-        self.assertTrue(footer is None or footer.startswith(self.M))
+        self.assertIsNotNone(footer, "docs/STATUS.md at HEAD has a spend footer")
+        self.assertTrue(footer.startswith(self.M))
+
+    def test_an_unknown_flag_fails_loudly(self):
+        done = subprocess.run([sys.executable, str(REPO / "scripts" / "status_matrix.py"), "--keep-spnd"],
+                              capture_output=True, text=True)
+        self.assertEqual(done.returncode, 2)
+
+
+class AgainstBase(unittest.TestCase):
+    """differs() and footer_kept() on a throwaway git repository."""
+
+    def repo(self, tmp: str) -> Path:
+        root = Path(tmp)
+        git = lambda *a: subprocess.run(["git", *a], cwd=root, check=True, capture_output=True)  # noqa: E731
+        git("init", "-q")
+        (root / "docs").mkdir()
+        (root / "docs" / "STATUS.md").write_text(f"ledger\n{KeepSpend.M}\ncommitted\n", encoding="utf-8")
+        (root / "certs" / "c" / "1.1" / "en").mkdir(parents=True)
+        (root / "certs" / "c" / "1.1" / "en" / "content.md").write_text("en\n", encoding="utf-8")
+        git("add", ".")
+        git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+        return root
+
+    def test_only_what_differs_from_the_base_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.repo(tmp)
+            self.assertFalse(topic_pr.differs(root, "HEAD", "certs/c/1.1/en"))
+            (root / "certs" / "c" / "1.1" / "es").mkdir()
+            (root / "certs" / "c" / "1.1" / "es" / "content.md").write_text("es\n", encoding="utf-8")
+            self.assertTrue(topic_pr.differs(root, "HEAD", "certs/c/1.1/es"))
+            (root / "certs" / "c" / "1.1" / "en" / "content.md").write_text("en, edited\n", encoding="utf-8")
+            self.assertTrue(topic_pr.differs(root, "HEAD", "certs/c/1.1/en"))
+
+    def test_a_changed_spend_footer_is_caught(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.repo(tmp)
+            status = root / "docs" / "STATUS.md"
+            status.write_text(f"new ledger\n{KeepSpend.M}\ncommitted\n", encoding="utf-8")
+            self.assertTrue(topic_pr.footer_kept(root, "HEAD"))
+            status.write_text(f"new ledger\n{KeepSpend.M}\nthis machine\n", encoding="utf-8")
+            self.assertFalse(topic_pr.footer_kept(root, "HEAD"))
 
 
 if __name__ == "__main__":
