@@ -63,8 +63,14 @@ sha256 `a755a568…` for both) and both trees hash `d1abe1fe…`.
 | cks | 26 | 0 | 0 | 0 | 0 | 208 | 98 | 108 / 92 / 706 |
 
 No objective moves and our frozen `certs/cks.md` has no drift from its own PDF: phase 2 is the version bump only.
-The one gap the run found was in the tool: the CKS file name has a space, and `extract` wrote it raw into the source
-URL, breaking the report's links. It is percent-encoded now (`tests/test_curriculum_diff.py`).
+
+Two gaps the run found, both closed in the tool:
+
+- The CKS file name has a space, and `extract` wrote it raw into the source URL, breaking the report's links and the
+  window check (the URL must equal the tracker's, which is encoded). It is percent-encoded now.
+- Nothing wrote `upstream.snapshot` and `upstream.milestone`, which the consistency gate (#220) requires; CKA & CKAD
+  were switched before the gate existed. `curriculum_diff.py window` writes them now (step 1 below). With the window
+  open the plan lists 128 files instead of 98: the 30 that cite the curriculum version join the version bump.
 
 ## Sources, pinned by commit
 
@@ -107,6 +113,10 @@ flowchart TD
    usage errors (exit 2), not a crash or an always-STALE answer. The model-based
    `teach cert snapshot` (used for vendors without a PDF layout) now records the sha256 of the vendor's bytes as
    `source_sha256` and refuses a document longer than its 20,000-character window instead of truncating it.
+   **Open the window** before planning: `scripts/curriculum_diff.py window docs/upgrades/<upgrade>.yaml` writes
+   `upstream.snapshot` and `upstream.milestone` into the `upstream:` block `teach tracker sync` wrote, and refuses when
+   the tracker's version or URL is not the frozen snapshot's. The plan reads that window (the citation lines it lists
+   target the upstream version only while it is valid), and `check_curriculum_consistency` fails without it.
 2. **Diff**: objectives match by normalized text first, then by difflib ratio (MATCH 0.60, REWORD 0.90). Three diffs per
    cert: *upstream* (old PDF to new PDF), *drift* (our frozen file to its own PDF), *impact* (our frozen file to the new
    PDF, which drives the classes). Per-objective weights in `certs/<cert>.md` are derived (the domain weight split

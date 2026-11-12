@@ -192,6 +192,8 @@ certs:
       sha256: a755a5680bec6978de4a3074d7f0c7fe978bd7a9ad5e4f1681597aedda6f6637
       published: '2026-11-03'
       detected: '2026-11-11'
+      snapshot: syllabi/cks/v1.37.yaml
+      milestone: CKS v1.37 upgrade
   kcna:
     name: Kubernetes and Cloud Native Associate (KCNA)
     exam: KCNA
@@ -636,8 +638,8 @@ certs:
     exam: CKNE
     category: cloud-native
     tracked_version: beta
-    upstream_status: outdated
-    last_checked: '2026-11-11'
+    upstream_status: current
+    last_checked: '2026-09-17'
     file: certs/ckne.md
     sources:
       objectives: https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
@@ -646,7 +648,6 @@ certs:
     validity: 2 years
     requires:
     - cka
-    curriculum_updated: '2026-10-01'
   terraform-associate:
     name: 'HashiCorp Certified: Terraform Associate (004)'
     exam: Terraform Associate 004

@@ -8,7 +8,7 @@ Milestone: *CKS v1.37 upgrade* · umbrella issue #287
 
 | Cert | keep | revalidate | regenerate | new | retire | topic files | planned | sections to edit | version lines (curriculum / label / technical) |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cks | 26 | 0 | 0 | 0 | 0 | 208 | 98 | 0 | 108 / 92 / 706 |
+| cks | 26 | 0 | 0 | 0 | 0 | 208 | 128 | 0 | 108 / 92 / 706 |
 
 ## Flow
 
