@@ -167,7 +167,7 @@ topics:
   - https://developer.nvidia.com/blog/tips-on-scaling-storage-for-ai-training-and-inferencing/
   - https://blogs.nvidia.com/blog/what-are-large-language-models-used-for/
   - https://developer.nvidia.com/blog/nvidia-gpu-operator-simplifying-gpu-management-in-kubernetes
-  status: pending
+  status: generated
   title: Describe the software components related to the life cycle of AI development
     and deployment
   topic: 1 - Essential AI Knowledge
