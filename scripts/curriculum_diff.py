@@ -686,8 +686,14 @@ def open_window(catalog: dict, spec: dict, root: Path = REPO) -> list[str]:
             why.append(f"{cert}: upstream {up.get('version')} at {up.get('objectives')} is not "
                        f"{s['target']} ({target.get('version')} at {url})")
         else:
-            up["snapshot"] = s["target"]
-            up["milestone"] = spec.get("milestone")
+            # Never write a window the gate would reject (no milestone, version not newer than tracked, ...).
+            opened = dict(up, snapshot=s["target"], milestone=spec.get("milestone"))
+            entry = dict(catalog["certs"][cert], upstream=opened)
+            _, rejected = cc.window(entry, root)
+            if rejected:
+                why += [f"{cert}: {r}" for r in rejected]
+            else:
+                up.update(snapshot=opened["snapshot"], milestone=opened["milestone"])
     return why
 
 
