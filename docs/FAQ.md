@@ -64,7 +64,8 @@ and the budget live in [`pipeline.yaml`](../pipeline.yaml); the commands are in
    `:707-738`). The result is frozen in `certs/<cert>.md` and is never changed
    by a sync ([OPERATING → Checking curriculum updates](OPERATING.md#checking-curriculum-updates)).
 2. **Author.** For each topic, three completions: content, exercises and the
-   lab script (`teach/core/generator.py:663-822`).
+   lab script, plus one retry of the lab when it misses the runner's contract
+   (`generate_topic`, `_write_lab` in `teach/core/generator.py`).
 3. **Translate.** From the English original, never re-authored
    (`teach/core/generator.py:943-1045`).
 4. **Check.** The free checks in `make verify-ci` and the PR checks in CI

@@ -166,7 +166,8 @@ when `lang` is the default).
 asks for `break`/`verify`/`cleanup` modes, no prompt that waits for a person
 (`STUDY_LAB=1` / `LAB_DISPOSABLE=yes` skip it) and a `# lab-resources: cpus=N
 ram_mb=M` header that sizes `lab.yaml`. `labs.contract_problems` checks the script
-with the same `infer_contract` as `study-lab validate --strict`; a failing script
+with the same `infer_contract` as `study-lab validate --strict` (plus a heuristic for
+terminal prompts; it reads the script alone, not lab.yaml); a failing script
 gets one retry with its problems, then is rejected "below the quality floor" and
 kept in `.rejected/`. The content stays written, so `run_batch.py` finds the topic
 pending only for its lab and runs `teach cert lab` instead of paying for the topic

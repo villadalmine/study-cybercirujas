@@ -296,14 +296,20 @@ def script_resources(script: str | None) -> dict:
 # `read -p ...` or `read ... </dev/tty` waits for a person. The runner has none
 # (teach/lab/runner.py feeds stdin from the lab spec), so such a prompt must be
 # skipped when the runner's variables say the machine is disposable.
-TERMINAL_READ = re.compile(r"^(?!\s*#).*\bread\b[^\n#]*(\s-[a-zA-Z]*p\b|</dev/tty)", re.M)
+# `-p` must be an option of `read` itself (before `;`, `|`, `&` or a comment),
+# so `while read -r d; do mkdir -p` is not a prompt; `< /dev/tty` with or without
+# a space is one, with or without -p. A heuristic for generated scripts, not a
+# parser (#299 review).
+TERMINAL_READ = re.compile(r"^(?!\s*#).*\bread\b[^\n#;|&]*(\s-[a-zA-Z]*p\b|<\s*/dev/tty)", re.M)
 
 
 def contract_problems(script: str) -> list[str]:
     """Why a generated break_fix.sh cannot run under study-lab, [] when it can.
 
-    The same `infer_contract` the runner and `study-lab validate --strict` use,
-    so the generator rejects exactly what the runner would refuse (#297).
+    The same `infer_contract` the runner and `study-lab validate --strict` use for
+    the modes, plus a terminal-prompt heuristic. It reads the script alone: a
+    hand-written lab can satisfy the runner through lab.yaml (`modes`, `env`,
+    `stdin`) and still fail here, so it gates generated labs only (#297).
     """
     from teach.lab.spec import DEFAULT_ENV, VERBS, infer_contract
 
