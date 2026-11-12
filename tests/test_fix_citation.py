@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
@@ -65,6 +66,58 @@ class Fix(unittest.TestCase):
             self.assertIn(OLD, (d / "en" / "content.md").read_text(encoding="utf-8"))
             self.assertEqual((d / "es" / "meta.yaml").read_text(encoding="utf-8"), before)
             self.assertEqual(len([line for line in report if line.startswith("replace")]), 2)
+
+    def test_a_longer_url_with_the_same_prefix_is_refused_and_nothing_is_written(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = topic(Path(tmp))
+            longer = OLD + "sub/page.html#frag"
+            (d / "en" / "exercises.md").write_text(f"# E\nSee {longer}\n", encoding="utf-8")
+            before = (d / "en" / "content.md").read_text(encoding="utf-8")
+            with self.assertRaises(SystemExit) as raised:
+                fix_citation.fix("c", "1.1", OLD, NEW, Path(tmp))
+            self.assertIn(longer, str(raised.exception))
+            self.assertEqual((d / "en" / "content.md").read_text(encoding="utf-8"), before)
+
+    def test_trailing_punctuation_is_not_part_of_the_url(self):
+        text, n, longer = fix_citation.replace_url(f"see {OLD}. And ({OLD}), or <{OLD}>", OLD, NEW)
+        self.assertEqual((n, longer), (3, []))
+        self.assertEqual(text, f"see {NEW}. And ({NEW}), or <{NEW}>")
+
+    def test_a_repeated_hash_aborts_before_any_file_is_written(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = topic(Path(tmp))
+            meta = d / "es" / "meta.yaml"
+            sha = translation_source_sha256(d, "en")
+            meta.write_text(meta.read_text(encoding="utf-8") + f"# was {sha}\n", encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                fix_citation.fix("c", "1.1", OLD, NEW, Path(tmp))
+            self.assertIn(OLD, (d / "en" / "content.md").read_text(encoding="utf-8"))
+
+    def test_crlf_is_kept(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = topic(Path(tmp))
+            (d / "en" / "content.md").write_bytes(f"# T\r\nSee {OLD}\r\n".encode())
+            fix_citation.fix("c", "1.1", OLD, NEW, Path(tmp))
+            self.assertEqual((d / "en" / "content.md").read_bytes(), f"# T\r\nSee {NEW}\r\n".encode())
+
+    def test_dry_run_reports_only_real_restamps_and_divergence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = topic(Path(tmp))
+            (d / "en" / "content.md").write_text("# T\nnothing cited\n", encoding="utf-8")
+            sha = translation_source_sha256(d, "en")
+            (d / "es" / "meta.yaml").write_text(f"translated_from: en\nsource_sha256: {sha}\n", encoding="utf-8")
+            report = fix_citation.fix("c", "1.1", OLD, NEW, Path(tmp), dry_run=True)
+            self.assertFalse(any(line.startswith("re-stamp") for line in report))  # the source did not change
+            self.assertTrue(any("has diverged" in line for line in report))
+
+    def test_a_redirect_is_not_a_200(self):
+        response = mock.MagicMock(status=200)
+        response.geturl.return_value = NEW + "index.html"
+        response.__enter__.return_value = response
+        with mock.patch("urllib.request.urlopen", return_value=response):
+            self.assertEqual(fix_citation.resolves(NEW), (False, NEW + "index.html"))
+            response.geturl.return_value = NEW
+            self.assertEqual(fix_citation.resolves(NEW), (True, NEW))
 
     def test_refusals(self):
         with tempfile.TemporaryDirectory() as tmp:
