@@ -601,8 +601,8 @@ nothing. `check_claims.py` catches this class; nothing free does.
      The matrix is derived from disk and counts only material that clears the
      quality floor, so a topic being generated genuinely is not finished yet. If
      two agents commit a regenerated `docs/STATUS.md` you may get a conflict — resolve
-     it by running `scripts/status_matrix.py` again rather than by merging, since
-     it is generated, never edited.
+     it by running `scripts/status_matrix.py --keep-spend` again rather than by
+     merging (it keeps the committed spend footer), since it is generated, never edited.
 
 ## Queue — Claude to Antigravity, 2026-08-06 (earlier)
 
