@@ -11,7 +11,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.plan.json](cka-ckad-1.37.plan.json) | three diffs per cert, one class per topic, the sections and lines in scope | `scripts/curriculum_diff.py plan` |
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
 | [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)) | a person / `plan` / `render` |
-| [ckne-ga.yaml](ckne-ga.yaml), [ckne-ga.plan.json](ckne-ga.plan.json), [ckne-ga.md](ckne-ga.md) | the same three for **CKNE GA** (beta → curriculum of 2026-10-01, milestone *v0.6.10*, [#285](https://github.com/villadalmine/study-cybercirujas/issues/285)) | a person / `plan` / `render` |
+| [ckne-ga.yaml](ckne-ga.yaml), [ckne-ga.plan.json](ckne-ga.plan.json), [ckne-ga.md](ckne-ga.md), [ckne-ga.pins.yaml](ckne-ga.pins.yaml) | the same three for **CKNE GA** (beta → curriculum of 2026-10-01, milestone *v0.6.10*, [#285](https://github.com/villadalmine/study-cybercirujas/issues/285)), and the pins the switch PR's citation fix stamps | a person / `plan` / `render` / a person |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
 The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the others), frozen from the official PDFs.
