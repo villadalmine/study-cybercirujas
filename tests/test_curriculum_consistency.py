@@ -122,6 +122,37 @@ class FixLine(unittest.TestCase):
                          "https://github.com/cncf/curriculum/blob/master/KCSA%20Curriculum.pdf")  # a blob page is not the raw PDF
 
 
+class Unpublished(unittest.TestCase):
+    """CKNE GA (#285): material written against a beta says the version was not published yet."""
+
+    LF = "https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/"
+    LINE = f"> **Exam context.** The CKNE curriculum (version not yet published, see <{LF}>) lists it."
+
+    def test_it_names_the_version_once_the_catalog_tracks_a_published_one(self):
+        for tracked in ("2026-10-01", "1.37"):
+            with self.subTest(tracked):
+                fixed = cc.fix_line(self.LINE, strict(entry(tracked=tracked, url=NEW), cert="ckne"))
+                self.assertEqual(fixed, self.LINE.replace("version not yet published", f"version {tracked}"))
+        want = strict(entry(tracked="2026-10-01", url=NEW), cert="ckne")
+        self.assertEqual(cc.fix_line("Version not yet published.", want), "Version 2026-10-01.")   # its own case
+
+    def test_it_is_true_while_the_cert_tracks_a_beta(self):
+        for tracked in ("beta", "unknown", ""):
+            with self.subTest(tracked):
+                self.assertEqual(cc.fix_line(self.LINE, strict(entry(tracked=tracked, url=self.LF), cert="ckne")), self.LINE)
+
+    def test_the_spanish_forms(self):
+        want = strict(entry(tracked="2026-10-01", url=NEW), cert="ckne")
+        for phrase in ("versión aún no publicada", "versión no publicada", "versión sin publicar"):
+            with self.subTest(phrase):
+                self.assertEqual(cc.fix_line(f"El temario ({phrase}).", want), "El temario (versión 2026-10-01).")
+
+    def test_with_an_open_window_it_names_the_target(self):
+        # one value per cert: the phrase gets what the other lines get, the window's target
+        e = entry(tracked="1.37", url=NEW, upstream={"version": "1.38", "objectives": NEW.replace("b3c8", "c4d9")})
+        self.assertEqual(cc.fix_line("(version not yet published)", cc.wanted(e, "ckne", strict=True)), "(version 1.38)")
+
+
 class Window(unittest.TestCase):
     """The upstream block is accepted only as a valid, bounded upgrade window."""
 
@@ -283,6 +314,33 @@ class Guard(unittest.TestCase):
         bad = cd.unlisted_edits(plan, [self.F], self.base, self.head("Curriculum v1.99"), self.ok)
         self.assertEqual(len(bad), 1)
         self.assertEqual(cd.unlisted_edits(plan, [self.F], self.base, self.head(LINE_NEW), self.ok), [])
+
+    def test_the_switch_pr_may_fix_by_the_head_catalog_of_the_cert_it_switches(self):
+        # a date-versioned upgrade has no window: the switch PR moves tracked_version and fixes the citations itself
+        lf = "https://training.linuxfoundation.org/ckne/"
+        line = f"The CKNE curriculum (version not yet published, see <{lf}>)."
+        fixed = line.replace("version not yet published", "version 2026-10-01")
+        base_cat = yaml.safe_dump({"certs": {"ckne": entry(tracked="beta", url=lf)}})
+        head_cat = yaml.safe_dump({"certs": {"ckne": entry(tracked="2026-10-01", url=NEW)}})
+        base = lambda f: base_cat if f == "catalog.yaml" else f"# t\n{line}\nend\n"  # noqa: E731
+        f = "certs/ckne/1.5/en/exercises.md"
+        plan = {"certs": {"ckne": {"new": [], "topics": [dict(self.TOPIC, topic="1.5")]}}}
+        switched = cd.cite_checker(base, lambda f: head_cat)
+        self.assertTrue(cd.citation_files_ok(plan, f, base, self.head(fixed), switched))
+        self.assertFalse(cd.citation_files_ok(plan, f, base, self.head(fixed), cd.cite_checker(base)))   # base only
+        same = cd.cite_checker(base, lambda f: base_cat)                                               # nothing switched
+        self.assertFalse(cd.citation_files_ok(plan, f, base, self.head(fixed), same))
+        self.assertFalse(cd.citation_files_ok(plan, f, base, self.head(fixed + " extra"), switched))
+
+    def test_a_window_on_the_head_does_not_become_the_target(self):
+        # review of #305: check_pr gates tracked_version and objectives, not an upstream block added on the head
+        base_cat = yaml.safe_dump({"certs": {"cka": entry(tracked="1.37", url=NEW)}})
+        head_cat = yaml.safe_dump({"certs": {"cka": entry(tracked="1.38", url=NEW, upstream={
+            "version": "1.39", "objectives": NEW.replace("b3c8", "c4d9")})}})
+        base = lambda f: base_cat if f == "catalog.yaml" else "# t\n- CNCF CKA Curriculum v1.37\nend\n"  # noqa: E731
+        ok = cd.cite_checker(base, lambda f: head_cat)
+        self.assertTrue(cd.citation_files_ok(self.PLAN, self.F, base, self.head("- CNCF CKA Curriculum v1.38"), ok))
+        self.assertFalse(cd.citation_files_ok(self.PLAN, self.F, base, self.head("- CNCF CKA Curriculum v1.39"), ok))
 
     def test_a_regenerated_topic_is_not_covered(self):
         plan = {"certs": {"cka": {"new": [], "topics": [dict(self.TOPIC, **{"class": "regenerate"})]}}}

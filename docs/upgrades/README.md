@@ -158,9 +158,19 @@ flowchart TD
    current`, the `upstream:` window removed; in `certs/<cert>.md`, `version`, `snapshot_date` (the target's `source.committed`: `check_versions` compares it with
    `curriculum_updated` when the version is a date), the PDF URL appended to `sources` (the
    page the material was written from stays cited) and each topic's title set to the objective text it maps to
-   (directory ids unchanged, see *Topic ids at the switch*). It refuses while any topic is `regenerate` or `retire` or a
-   new objective has no topic: content changes first. After it, `make quality CERT=<cert>` re-runs every check and
-   records it in each `meta.yaml` (that is the `revalidate` step), and `check_curriculum_consistency.py` must pass.
+   (directory ids unchanged, see *Topic ids at the switch*); the body of `certs/<cert>.md` keeps its dated notes and
+   gets one line saying the snapshot was superseded, by which document and upgrade. Each `revalidate` topic gets a
+   `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why, and `committed`:
+   the target curriculum's date, not the day of the check), before
+   `quality:`; `check_pr` treats it like `quality:`, a check record and not authorship. It refuses while any topic is
+   `regenerate` or `retire` or a new objective has no topic: content changes first. After it,
+   `make quality CERT=<cert>` re-runs every check (its result is the `quality:` block next to `revalidated:`), and
+   `check_curriculum_consistency.py` must pass.
+   **An upgrade with no window** (`window` needs dotted versions: a beta, or a PDF versioned by its date) moves its
+   citations in the switch PR itself, right after `switch`: `scripts/upgrade_versions.py <plan> <pins> --scope citations
+   --cert <cert>`, with a pins file that only pins the stamp date and the tool. A phrase saying the version was not
+   published yet (`unpublished` in `scripts/curriculum_patterns.yaml`) becomes the tracked version. `guard` accepts
+   those lines by the HEAD catalog only for a cert whose `tracked_version` that PR moves, a move `check_pr` gates.
    The PR's milestone is the release milestone `vX.Y.Z` that the upgrade spec names (`milestone:`), with `Scope:
    exam-version`; `check_pr` reads the spec **from the base**, so the spec PR merges before the switch PR (#291).
 
@@ -391,7 +401,7 @@ A consistency finding in a review blocks the merge and the release. It is never 
 ## Lessons
 
 - **A beta frozen from a web page has no version and summed weights (#285, CKNE GA, 2026-11-12).** The CKNE beta was
-  snapshotted from the Linux Foundation exam page, so `tracked_version` is `unknown` and each domain weight in
+  snapshotted from the Linux Foundation exam page, so `tracked_version` is `beta` (`version: unknown` in `certs/ckne.md`) and each domain weight in
   `certs/ckne.md` is the sum of evenly split objective weights (6 x 4.17 = 25.02). Two false positives followed, both
   closed in the tool: every domain looked reweighted (a derived weight now carries a 0.01-per-objective rounding slack;
   a published one is still compared exactly), and `scan` listed every line containing `unknown` as a version line (a

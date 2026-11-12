@@ -184,15 +184,16 @@ def base_texts(paths: list[str], base: str) -> dict[str, str | None]:
 
 
 # meta.yaml keys that record checks and reviews of the material, not its authorship.
-NOT_AUTHORSHIP_KEYS = ("quality", "reviews")
+NOT_AUTHORSHIP_KEYS = ("quality", "reviews", "revalidated")
 
 
 def quality_only(files: list[str], base_text, root: Path = REPO) -> set[str]:
     """meta.yaml files that are the only change in their topic/language and differ from
     the base only in NOT_AUTHORSHIP_KEYS: the `quality:` block scripts/quality_score.py
-    writes, and the `reviews:` a reviewer records (docs/REVIEWS.md).
+    writes, the `reviews:` a reviewer records (docs/REVIEWS.md), and the `revalidated:`
+    block `curriculum_diff.py switch` writes for a topic an upgrade re-checked.
 
-    Neither is authorship: a PR that rescored the corpus, or recorded a review,
+    None is authorship: a PR that rescored the corpus, recorded a review or a revalidation,
     would otherwise be read as editing the topic's material and asked for
     provenance matching its author. Any other change to the file still counts.
     """
