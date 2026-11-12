@@ -128,6 +128,14 @@ class Extraction(unittest.TestCase):
             cd.snapshot([{"id": "1", "name": "A", "weight": 50, "objectives": []}], cert="x", version="1",
                         repo="r", commit="c", path="p", committed="d", sha256="s")
 
+    def test_source_url_encodes_a_path_with_spaces(self):
+        # cncf/curriculum names the CKS PDF "CKS_Curriculum v1.37.pdf": a raw space breaks the markdown link
+        snap = cd.snapshot(BASE["domains"], cert="cks", version="1.37", repo="cncf/curriculum", commit="c",
+                           path="CKS_Curriculum v1.37.pdf", committed="d", sha256="s")
+        self.assertEqual(snap["source"]["url"],
+                         "https://github.com/cncf/curriculum/raw/c/CKS_Curriculum%20v1.37.pdf")
+        self.assertEqual(snap["source"]["path"], "CKS_Curriculum v1.37.pdf")
+
     def test_tree_hash_ignores_the_pdf_and_whitespace(self):
         a = BASE["domains"]
         b = copy.deepcopy(a)

@@ -20,6 +20,7 @@ import subprocess
 import sys
 import unicodedata
 from pathlib import Path
+from urllib.parse import quote
 
 import yaml
 
@@ -202,7 +203,7 @@ def snapshot(domains: list[dict], *, cert: str, version: str, repo: str, commit:
         "cert": cert,
         "version": str(version),
         "source": {"repo": repo, "commit": commit, "path": path,
-                   "url": f"https://github.com/{repo}/raw/{commit}/{path}",
+                   "url": f"https://github.com/{repo}/raw/{commit}/{quote(path)}",
                    "sha256": sha256, "committed": committed},
         "extraction": {"tool": "scripts/curriculum_diff.py extract",
                        "method": "pdftotext -layout; two columns split at the widest gap between marker starts"},
