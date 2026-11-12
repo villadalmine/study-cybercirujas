@@ -184,10 +184,13 @@ def committed_spend(ref: str = "HEAD") -> str | None:
 
 
 def keep_spend(rendered: str, footer: str | None) -> str:
-    """`rendered` with its spend footer replaced by `footer` (unchanged when there is none to keep)."""
-    if footer is None:
-        return rendered
-    return rendered.split(SPEND_MARKER)[0] + footer
+    """`rendered` with its spend footer replaced by `footer`.
+
+    With no committed footer to keep, the rendered one is dropped rather than kept: it reads this
+    machine's usage.jsonl, which is exactly what --keep-spend promises never to commit.
+    """
+    head = rendered.split(SPEND_MARKER)[0]
+    return head + footer if footer is not None else head.rstrip() + "\n"
 
 
 def _render() -> str:
@@ -392,7 +395,16 @@ def _spend_section() -> list[str]:
 
 
 if __name__ == "__main__":
-    if "--check" in sys.argv:
+    import argparse
+
+    # argparse, not `in sys.argv`: an unknown flag must fail loudly. An older copy of this script
+    # that silently ignored --keep-spend committed this machine's spend into topic PRs (#298).
+    _cli = argparse.ArgumentParser(description="Render docs/STATUS.md from the tree.")
+    _mode = _cli.add_mutually_exclusive_group()
+    _mode.add_argument("--check", action="store_true", help="fail when docs/STATUS.md does not match the tree")
+    _mode.add_argument("--keep-spend", action="store_true", help="keep the spend footer committed at HEAD")
+    _args = _cli.parse_args()
+    if _args.check:
         # Gate mode: prove the dashboard matches the tree instead of assuming it.
         drift = check()
         if drift:
@@ -402,7 +414,7 @@ if __name__ == "__main__":
             sys.exit(1)
         print("docs/STATUS.md matches the filesystem.")
         sys.exit(0)
-    if "--keep-spend" in sys.argv:
+    if _args.keep_spend:
         text = keep_spend(_render(), committed_spend())
         changed = not STATUS.exists() or STATUS.read_text(encoding="utf-8") != text
         STATUS.write_text(text)
