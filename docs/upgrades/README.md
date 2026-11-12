@@ -11,6 +11,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.plan.json](cka-ckad-1.37.plan.json) | three diffs per cert, one class per topic, the sections and lines in scope | `scripts/curriculum_diff.py plan` |
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
 | [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)) | a person / `plan` / `render` |
+| [ckne-ga.yaml](ckne-ga.yaml), [ckne-ga.plan.json](ckne-ga.plan.json), [ckne-ga.md](ckne-ga.md), [ckne-ga.pins.yaml](ckne-ga.pins.yaml) | the same three for **CKNE GA** (beta → curriculum of 2026-10-01, milestone *v0.6.10*, [#285](https://github.com/villadalmine/study-cybercirujas/issues/285)), and the pins the switch PR's citation fix stamps | a person / `plan` / `render` / a person |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
 The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the others), frozen from the official PDFs.
@@ -71,6 +72,28 @@ Two gaps the run found, both closed in the tool:
 - Nothing wrote `upstream.snapshot` and `upstream.milestone`, which the consistency gate (#220) requires; CKA & CKAD
   were switched before the gate existed. `curriculum_diff.py window` writes them now (step 1 below). With the window
   open the plan lists 128 files instead of 98: the 30 that cite the curriculum version join the version bump.
+
+## Result for CKNE GA (2026-11-12)
+
+The third run, and the first from a beta. `teach tracker sync --provider cncf` found `CKNE_Curriculum.pdf`
+(cncf/curriculum [`f423fa4`](https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKNE_Curriculum.pdf),
+2026-10-01, sha256 `eb069ba5…`) and would set `upstream_status: outdated`; that catalog change lands in the switch PR,
+together with the switch (committed alone it makes `check_versions` fail until the switch). Our material was written
+against the beta, which
+`certs/ckne.md` froze from the Linux Foundation exam page (`tracked_version: beta`). The PDF has no version number, so
+the version is its commit date, as for KCNA and KCSA; there is no `upstream:` window (that is for semver PDFs) and no
+`upstream_base` (no earlier PDF exists).
+
+| Cert | keep | revalidate | regenerate | new | retire | topic files | planned | sections | version lines (curriculum / label / technical) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ckne | 21 | 1 | 0 | 0 | 0 | 110 | 1 | 0 | 0 / 0 / 0 |
+
+The GA keeps the beta's 22 objectives, 5 domains and domain weights; the PDF has nothing below objective level. The
+one textual change is 5.2 "End to End" → "End-to-End" (`revalidate`, similarity 0.97): no section names it, so only
+its title moves and its checks re-run. The PDF puts *Observability* before *Network Security and Policy*: directory
+ids stay (see *Topic ids at the switch*), each topic's *Maps to* records the PDF position. No model is needed: the
+switch is `curriculum_diff.py switch docs/upgrades/ckne-ga.yaml`, then `make quality CERT=ckne`. Two false positives of
+this run were fixed in the tool first (see *Lessons*).
 
 ## Sources, pinned by commit
 
