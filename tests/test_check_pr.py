@@ -476,6 +476,14 @@ class QualityOnlyTests(unittest.TestCase):
             files, base = self.tree(tmp, self.META + review)
             self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), {"certs/cka/1.1/en/meta.yaml"})
 
+    def test_recording_a_revalidation_is_not_authorship(self):
+        # curriculum_diff.py switch: a revalidate topic records against which objective text it was re-checked (#285)
+        block = ("revalidated:\n  upgrade: docs/upgrades/ckne-ga.yaml\n  version: '2026-10-01'\n"
+                 "  reasons:\n  - objective reworded (similarity 0.9661)\nquality:\n  score: 80.6\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            files, base = self.tree(tmp, self.META + block)
+            self.assertEqual(check_pr.quality_only(files, base, root=Path(tmp)), {"certs/cka/1.1/en/meta.yaml"})
+
     def test_any_other_change_still_counts(self):
         with tempfile.TemporaryDirectory() as tmp:
             files, base = self.tree(tmp, self.META.replace("model: claude", "model: other") + "quality: {}\n")

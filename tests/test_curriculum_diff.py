@@ -552,6 +552,30 @@ class Switch(unittest.TestCase):
         self.assertEqual(yaml.safe_load((root / "catalog.yaml").read_text())["certs"]["c"]["tracked_version"],
                          "2026-10-01")
 
+    def test_a_revalidated_topic_records_it_and_the_frozen_file_says_it_was_superseded(self):
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        catalog, files, why = self.run_switch(domains)
+        root = Path(self._roots[-1])
+        self.assertEqual(why, [])
+        self.assertIn("**Superseded by the curriculum 2026-10-01**", files["certs/c.md"])
+        meta = "certs/c/2.3/en/meta.yaml"
+        self.assertNotIn(meta, files)              # no such topic directory in this fixture: nothing invented
+        (root / "certs/c/2.3/en").mkdir(parents=True)
+        (root / meta).write_text("lang: en\nquality:\n  score: 70\n", encoding="utf-8")
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md", "target": "syllabi/c/v2026-10-01.yaml"}}}
+        _, files, _ = cd.switch(root, spec, "docs/upgrades/u.yaml")
+        text = files[meta]
+        self.assertTrue(text.startswith("lang: en\nrevalidated:\n  upgrade: docs/upgrades/u.yaml\n"))
+        self.assertTrue(text.endswith("quality:\n  score: 70\n"))          # before quality, which stays last
+        self.assertIn("objective: Use the Gateway API to manage Ingress-traffic", text)
+        self.assertIn("reasons:\n  - objective reworded", text)
+        self.assertEqual(cd.with_revalidated(text, yaml.safe_load(text)["revalidated"]), text)    # idempotent
+        (root / "certs/c.md").write_text(files["certs/c.md"], encoding="utf-8")
+        _, again, _ = cd.switch(root, spec, "docs/upgrades/u.yaml")
+        self.assertEqual(again["certs/c.md"].count("Superseded by"), 1)         # the note is not repeated
+        self.assertEqual(cd.with_revalidated("lang: en\n", {"a": 1}), "lang: en\nrevalidated:\n  a: 1\n")
+
     def test_refused_while_content_must_change(self):
         domains = copy.deepcopy(BASE["domains"])
         domains[0]["objectives"].append({"id": "1.3", "text": "Configure volume snapshots and restore them"})
