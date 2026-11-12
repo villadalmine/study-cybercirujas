@@ -10,6 +10,7 @@
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 
 - **Labs that run:** a generated lab now has the `break`, `verify` and `cleanup` modes the lab runner needs and never waits at a prompt, or it is not written; `teach cert lab` rewrites only a topic's lab.
+- **Moved citations, fixed in one step:** `scripts/fix_citation.py` replaces a dead documentation URL in every language of a topic and keeps the translations' source chain current, without paying for a re-translation.
 
 ## Upgrade notes
 
