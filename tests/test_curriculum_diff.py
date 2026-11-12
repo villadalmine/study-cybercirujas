@@ -16,6 +16,9 @@ import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
@@ -128,6 +131,14 @@ class Extraction(unittest.TestCase):
             cd.snapshot([{"id": "1", "name": "A", "weight": 50, "objectives": []}], cert="x", version="1",
                         repo="r", commit="c", path="p", committed="d", sha256="s")
 
+    def test_source_url_encodes_a_path_with_spaces(self):
+        # cncf/curriculum names the CKS PDF "CKS_Curriculum v1.37.pdf": a raw space breaks the markdown link
+        snap = cd.snapshot(BASE["domains"], cert="cks", version="1.37", repo="cncf/curriculum", commit="c",
+                           path="CKS_Curriculum v1.37.pdf", committed="d", sha256="s")
+        self.assertEqual(snap["source"]["url"],
+                         "https://github.com/cncf/curriculum/raw/c/CKS_Curriculum%20v1.37.pdf")
+        self.assertEqual(snap["source"]["path"], "CKS_Curriculum v1.37.pdf")
+
     def test_tree_hash_ignores_the_pdf_and_whitespace(self):
         a = BASE["domains"]
         b = copy.deepcopy(a)
@@ -179,6 +190,76 @@ class Extraction(unittest.TestCase):
 
 
 # ==== diff ====
+
+class Window(unittest.TestCase):
+    """`window` writes upstream.snapshot and milestone only when the tracker and the frozen snapshot agree."""
+
+    URL = "https://github.com/cncf/curriculum/raw/c/CKS_Curriculum%20v1.37.pdf"
+    PINNED = "https://github.com/cncf/curriculum/raw/b/CKS_Curriculum%20v1.34.pdf"
+    SPEC = {"milestone": "v0.6.9", "certs": {"cks": {"target": "syllabi/cks/v1.37.yaml"}}}
+    GOOD = {"version": "1.37", "objectives": URL, "sha256": "s"}
+
+    def run_window(self, upstream, spec=None, tracked="1.34", snapshot=True):
+        spec = spec or self.SPEC
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "syllabi" / "cks").mkdir(parents=True)
+            (root / "docs" / "upgrades").mkdir(parents=True)
+            (root / "docs" / "upgrades" / "cks-1.37.yaml").write_text(cd.dump_yaml(spec), encoding="utf-8")
+            if snapshot:
+                snap = cd.snapshot(BASE["domains"], cert="cks", version="1.37", repo="cncf/curriculum", commit="c",
+                                   path="CKS_Curriculum v1.37.pdf", committed="d", sha256="s")
+                (root / "syllabi" / "cks" / "v1.37.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+            entry = {"tracked_version": tracked, "sources": {"objectives": self.PINNED}}
+            if upstream:
+                entry["upstream"] = copy.deepcopy(upstream)
+            catalog = {"certs": {"cks": entry}}
+            return cd.open_window(catalog, spec, root), catalog["certs"]["cks"].get("upstream")
+
+    def test_opens_when_the_tracker_and_the_snapshot_agree(self):
+        why, up = self.run_window(self.GOOD)
+        self.assertEqual(why, [])
+        self.assertEqual(up["snapshot"], "syllabi/cks/v1.37.yaml")
+        self.assertEqual(up["milestone"], "v0.6.9")
+        self.assertEqual(up["sha256"], "s")   # what the tracker wrote stays
+
+    def test_refused_without_an_upstream_block(self):
+        why, up = self.run_window(None)
+        self.assertIn("no upstream block", why[0])
+        self.assertIsNone(up)
+
+    def test_refused_without_the_frozen_snapshot(self):
+        why, up = self.run_window(self.GOOD, snapshot=False)
+        self.assertIn("does not exist", why[0])
+        self.assertNotIn("snapshot", up)
+
+    def test_refused_when_the_snapshot_is_another_document(self):
+        why, up = self.run_window(dict(self.GOOD, objectives=self.URL.replace("/c/", "/other/")))
+        self.assertIn("is not syllabi/cks/v1.37.yaml", why[0])
+        self.assertNotIn("snapshot", up)
+
+    def test_refused_when_the_snapshot_is_another_version(self):
+        why, up = self.run_window(dict(self.GOOD, version="1.38"))
+        self.assertIn("is not syllabi/cks/v1.37.yaml", why[0])
+        self.assertNotIn("snapshot", up)
+
+    def test_refused_when_the_gate_would_reject_it(self):
+        why, up = self.run_window(self.GOOD, spec={"certs": self.SPEC["certs"]})   # spec without milestone
+        self.assertTrue(any("upstream.milestone" in w for w in why))
+        self.assertNotIn("milestone", up)
+        why, up = self.run_window(self.GOOD, tracked="1.37")                       # already switched
+        self.assertTrue(any("not newer than tracked_version" in w for w in why))
+        self.assertNotIn("snapshot", up)
+
+    def test_the_committed_cks_window_is_current_and_written_like_catalog_save(self):
+        self.assertEqual(cd.main(["window", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
+        text = (REPO / "catalog.yaml").read_text(encoding="utf-8")
+        sys.path.insert(0, str(REPO))
+        from teach.core import catalog as tc
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"TEACH_ROOT": tmp}):
+            tc.save(yaml.safe_load(text))
+            self.assertEqual((Path(tmp) / "catalog.yaml").read_text(encoding="utf-8"), text)
+
 
 class Diff(unittest.TestCase):
     def test_identical(self):

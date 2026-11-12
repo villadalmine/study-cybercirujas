@@ -1,0 +1,2371 @@
+{
+  "certs": {
+    "cks": {
+      "cert": "cks",
+      "counts": {
+        "keep": 26,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 0
+      },
+      "drift": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.34"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Use Network security policies to restrict cluster level access"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Use CIS benchmark to review the security configuration of Kubernetes components (etcd, kubelet, kubedns, kubeapi)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Properly set up Ingress objects with TLS"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Protect node metadata and endpoints"
+            },
+            {
+              "new_id": "1.5",
+              "old_id": "1.5",
+              "similarity": 1.0,
+              "text": "Verify platform binaries before deploying"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Use appropriate pod security standards"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Manage kubernetes secrets"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Understand and implement isolation techniques (multi-tenancy, sandboxed containers, etc.)"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Implement Pod-to-Pod encryption (Cilium, Istio)"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Use Role Based Access Controls to minimize exposure"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Restrict access to Kubernetes API"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Upgrade Kubernetes to avoid vulnerabilities"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Minimize base image footprint"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Minimize host OS footprint (reduce attack surface)"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Using least-privilege identity and access management"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Minimize external access to the network"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Appropriately use kernel hardening tools such as AppArmor, seccomp"
+            },
+            {
+              "new_id": "6.1",
+              "old_id": "6.1",
+              "similarity": 1.0,
+              "text": "Perform behavioral analytics to detect malicious activities"
+            },
+            {
+              "new_id": "6.2",
+              "old_id": "6.2",
+              "similarity": 1.0,
+              "text": "Detect threats within physical infrastructure, apps, networks, data, users and workloads"
+            },
+            {
+              "new_id": "6.3",
+              "old_id": "6.3",
+              "similarity": 1.0,
+              "text": "Investigate and identify phases of attack and bad actors within the environment"
+            },
+            {
+              "new_id": "6.4",
+              "old_id": "6.4",
+              "similarity": 1.0,
+              "text": "Ensure immutability of containers at runtime"
+            },
+            {
+              "new_id": "6.5",
+              "old_id": "6.5",
+              "similarity": 1.0,
+              "text": "Use Kubernetes audit logs to monitor access"
+            }
+          ]
+        },
+        "old": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.34"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "efficiency": {
+        "planned_files": 128,
+        "sections_to_edit": 0,
+        "topic_files": 208,
+        "version_lines": {
+          "curriculum": 108,
+          "label": 92,
+          "technical": 706
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Use Network security policies to restrict cluster level access"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Use CIS benchmark to review the security configuration of Kubernetes components (etcd, kubelet, kubedns, kubeapi)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Properly set up Ingress objects with TLS"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Protect node metadata and endpoints"
+            },
+            {
+              "new_id": "1.5",
+              "old_id": "1.5",
+              "similarity": 1.0,
+              "text": "Verify platform binaries before deploying"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Use appropriate pod security standards"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Manage kubernetes secrets"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Understand and implement isolation techniques (multi-tenancy, sandboxed containers, etc.)"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Implement Pod-to-Pod encryption (Cilium, Istio)"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Use Role Based Access Controls to minimize exposure"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Restrict access to Kubernetes API"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Upgrade Kubernetes to avoid vulnerabilities"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Minimize base image footprint"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Minimize host OS footprint (reduce attack surface)"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Using least-privilege identity and access management"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Minimize external access to the network"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Appropriately use kernel hardening tools such as AppArmor, seccomp"
+            },
+            {
+              "new_id": "6.1",
+              "old_id": "6.1",
+              "similarity": 1.0,
+              "text": "Perform behavioral analytics to detect malicious activities"
+            },
+            {
+              "new_id": "6.2",
+              "old_id": "6.2",
+              "similarity": 1.0,
+              "text": "Detect threats within physical infrastructure, apps, networks, data, users and workloads"
+            },
+            {
+              "new_id": "6.3",
+              "old_id": "6.3",
+              "similarity": 1.0,
+              "text": "Investigate and identify phases of attack and bad actors within the environment"
+            },
+            {
+              "new_id": "6.4",
+              "old_id": "6.4",
+              "similarity": 1.0,
+              "text": "Ensure immutability of containers at runtime"
+            },
+            {
+              "new_id": "6.5",
+              "old_id": "6.5",
+              "similarity": 1.0,
+              "text": "Use Kubernetes audit logs to monitor access"
+            }
+          ]
+        },
+        "old": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.34"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/cks/v1.37.yaml",
+        "sha256": "3e27e5617212ae447dccc9488aa334c18fd415c5ff2efcc4dcb83cf450bd995a",
+        "source": {
+          "commit": "4de0c318883d34f6070e760bf55df1f8dd5846eb",
+          "committed": "2026-11-03",
+          "path": "CKS_Curriculum v1.37.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "a755a5680bec6978de4a3074d7f0c7fe978bd7a9ad5e4f1681597aedda6f6637",
+          "url": "https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf"
+        },
+        "tree_sha256": "d1abe1fec1cca25e5ac50752e15de854c85b4b192673165659b8f1dca3351d39",
+        "version": "1.37"
+      },
+      "topics": [
+        {
+          "class": "keep",
+          "domain": "Cluster Setup",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.1",
+          "planned_files": [
+            "certs/cks/1.1/en/content.md",
+            "certs/cks/1.1/en/exercises.md",
+            "certs/cks/1.1/es/content.md",
+            "certs/cks/1.1/es/exercises.md",
+            "certs/cks/1.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Network security policies to restrict cluster level access",
+          "topic": "1.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/1.1/en/content.md:341",
+              "certs/cks/1.1/en/exercises.md:1033",
+              "certs/cks/1.1/es/content.md:341",
+              "certs/cks/1.1/es/exercises.md:1033"
+            ],
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cks/1.1/en/exercises.md:15",
+              "certs/cks/1.1/es/exercises.md:15",
+              "certs/cks/1.1/lab/break_fix.sh:3",
+              "certs/cks/1.1/lab/break_fix.sh:6"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Setup",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.2",
+          "planned_files": [
+            "certs/cks/1.2/en/content.md",
+            "certs/cks/1.2/en/exercises.md",
+            "certs/cks/1.2/es/content.md",
+            "certs/cks/1.2/es/exercises.md",
+            "certs/cks/1.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use CIS benchmark to review the security configuration of Kubernetes components (etcd, kubelet, kubedns, kubeapi)",
+          "topic": "1.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/1.2/en/content.md:664",
+              "certs/cks/1.2/en/exercises.md:747",
+              "certs/cks/1.2/es/content.md:664",
+              "certs/cks/1.2/es/exercises.md:747"
+            ],
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cks/1.2/en/exercises.md:9",
+              "certs/cks/1.2/es/exercises.md:9",
+              "certs/cks/1.2/lab/break_fix.sh:3",
+              "certs/cks/1.2/lab/break_fix.sh:8"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Setup",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.3",
+          "planned_files": [
+            "certs/cks/1.3/en/content.md",
+            "certs/cks/1.3/en/exercises.md",
+            "certs/cks/1.3/es/content.md",
+            "certs/cks/1.3/es/exercises.md",
+            "certs/cks/1.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Properly set up Ingress objects with TLS",
+          "topic": "1.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/1.3/en/content.md:560",
+              "certs/cks/1.3/en/exercises.md:3",
+              "certs/cks/1.3/en/exercises.md:1037",
+              "certs/cks/1.3/es/content.md:560",
+              "certs/cks/1.3/es/exercises.md:3",
+              "certs/cks/1.3/es/exercises.md:1037"
+            ],
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cks/1.3/lab/break_fix.sh:3",
+              "certs/cks/1.3/lab/break_fix.sh:6"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Setup",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.4",
+          "planned_files": [
+            "certs/cks/1.4/en/content.md",
+            "certs/cks/1.4/en/exercises.md",
+            "certs/cks/1.4/es/content.md",
+            "certs/cks/1.4/es/exercises.md",
+            "certs/cks/1.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Protect node metadata and endpoints",
+          "topic": "1.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/1.4/en/content.md:308",
+              "certs/cks/1.4/en/exercises.md:1",
+              "certs/cks/1.4/en/exercises.md:8",
+              "certs/cks/1.4/es/content.md:308",
+              "certs/cks/1.4/es/exercises.md:1",
+              "certs/cks/1.4/es/exercises.md:8"
+            ],
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cks/1.4/lab/break_fix.sh:3",
+              "certs/cks/1.4/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Setup",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "1.5",
+          "planned_files": [
+            "certs/cks/1.5/en/content.md",
+            "certs/cks/1.5/en/exercises.md",
+            "certs/cks/1.5/es/content.md",
+            "certs/cks/1.5/es/exercises.md",
+            "certs/cks/1.5/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Verify platform binaries before deploying",
+          "topic": "1.5",
+          "version_lines": {
+            "citations": [
+              "certs/cks/1.5/en/content.md:325",
+              "certs/cks/1.5/en/exercises.md:682",
+              "certs/cks/1.5/es/content.md:325",
+              "certs/cks/1.5/es/exercises.md:682"
+            ],
+            "curriculum": 4,
+            "label": 0,
+            "technical": [
+              "certs/cks/1.5/en/content.md:35",
+              "certs/cks/1.5/en/content.md:38",
+              "certs/cks/1.5/en/content.md:49",
+              "certs/cks/1.5/en/content.md:89",
+              "certs/cks/1.5/en/content.md:98",
+              "certs/cks/1.5/en/content.md:116",
+              "certs/cks/1.5/en/content.md:137",
+              "certs/cks/1.5/en/content.md:143",
+              "certs/cks/1.5/en/content.md:171",
+              "certs/cks/1.5/en/content.md:178",
+              "certs/cks/1.5/en/content.md:179",
+              "certs/cks/1.5/en/content.md:197",
+              "certs/cks/1.5/en/content.md:198",
+              "certs/cks/1.5/en/content.md:204",
+              "certs/cks/1.5/en/content.md:214",
+              "certs/cks/1.5/en/content.md:215",
+              "certs/cks/1.5/en/content.md:233",
+              "certs/cks/1.5/en/content.md:294",
+              "certs/cks/1.5/en/exercises.md:26",
+              "certs/cks/1.5/en/exercises.md:30",
+              "certs/cks/1.5/en/exercises.md:36",
+              "certs/cks/1.5/en/exercises.md:55",
+              "certs/cks/1.5/en/exercises.md:97",
+              "certs/cks/1.5/en/exercises.md:311",
+              "certs/cks/1.5/en/exercises.md:312",
+              "certs/cks/1.5/en/exercises.md:319",
+              "certs/cks/1.5/en/exercises.md:326",
+              "certs/cks/1.5/en/exercises.md:612",
+              "certs/cks/1.5/es/content.md:35",
+              "certs/cks/1.5/es/content.md:38",
+              "certs/cks/1.5/es/content.md:49",
+              "certs/cks/1.5/es/content.md:89",
+              "certs/cks/1.5/es/content.md:98",
+              "certs/cks/1.5/es/content.md:116",
+              "certs/cks/1.5/es/content.md:137",
+              "certs/cks/1.5/es/content.md:143",
+              "certs/cks/1.5/es/content.md:171",
+              "certs/cks/1.5/es/content.md:178",
+              "certs/cks/1.5/es/content.md:179",
+              "certs/cks/1.5/es/content.md:197",
+              "certs/cks/1.5/es/content.md:198",
+              "certs/cks/1.5/es/content.md:204",
+              "certs/cks/1.5/es/content.md:214",
+              "certs/cks/1.5/es/content.md:215",
+              "certs/cks/1.5/es/content.md:233",
+              "certs/cks/1.5/es/content.md:294",
+              "certs/cks/1.5/es/exercises.md:26",
+              "certs/cks/1.5/es/exercises.md:30",
+              "certs/cks/1.5/es/exercises.md:36",
+              "certs/cks/1.5/es/exercises.md:55",
+              "certs/cks/1.5/es/exercises.md:97",
+              "certs/cks/1.5/es/exercises.md:311",
+              "certs/cks/1.5/es/exercises.md:312",
+              "certs/cks/1.5/es/exercises.md:319",
+              "certs/cks/1.5/es/exercises.md:326",
+              "certs/cks/1.5/es/exercises.md:612",
+              "certs/cks/1.5/lab/break_fix.sh:5",
+              "certs/cks/1.5/lab/break_fix.sh:10",
+              "certs/cks/1.5/lab/break_fix.sh:251"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Minimize Microservice Vulnerabilities",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.1",
+          "planned_files": [
+            "certs/cks/2.1/en/content.md",
+            "certs/cks/2.1/en/exercises.md",
+            "certs/cks/2.1/es/content.md",
+            "certs/cks/2.1/es/exercises.md",
+            "certs/cks/2.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use appropriate pod security standards",
+          "topic": "2.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/2.1/en/content.md:503",
+              "certs/cks/2.1/en/exercises.md:3",
+              "certs/cks/2.1/en/exercises.md:615",
+              "certs/cks/2.1/es/content.md:503",
+              "certs/cks/2.1/es/exercises.md:3",
+              "certs/cks/2.1/es/exercises.md:615"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/2.1/en/content.md:76",
+              "certs/cks/2.1/en/content.md:126",
+              "certs/cks/2.1/en/content.md:142",
+              "certs/cks/2.1/en/content.md:289",
+              "certs/cks/2.1/en/content.md:375",
+              "certs/cks/2.1/en/content.md:445",
+              "certs/cks/2.1/en/content.md:455",
+              "certs/cks/2.1/en/content.md:472",
+              "certs/cks/2.1/en/exercises.md:3",
+              "certs/cks/2.1/en/exercises.md:22",
+              "certs/cks/2.1/en/exercises.md:104",
+              "certs/cks/2.1/en/exercises.md:150",
+              "certs/cks/2.1/en/exercises.md:322",
+              "certs/cks/2.1/en/exercises.md:339",
+              "certs/cks/2.1/en/exercises.md:341",
+              "certs/cks/2.1/en/exercises.md:343",
+              "certs/cks/2.1/es/content.md:76",
+              "certs/cks/2.1/es/content.md:126",
+              "certs/cks/2.1/es/content.md:142",
+              "certs/cks/2.1/es/content.md:289",
+              "certs/cks/2.1/es/content.md:375",
+              "certs/cks/2.1/es/content.md:445",
+              "certs/cks/2.1/es/content.md:455",
+              "certs/cks/2.1/es/content.md:472",
+              "certs/cks/2.1/es/exercises.md:3",
+              "certs/cks/2.1/es/exercises.md:22",
+              "certs/cks/2.1/es/exercises.md:104",
+              "certs/cks/2.1/es/exercises.md:150",
+              "certs/cks/2.1/es/exercises.md:322",
+              "certs/cks/2.1/es/exercises.md:339",
+              "certs/cks/2.1/es/exercises.md:341",
+              "certs/cks/2.1/es/exercises.md:343",
+              "certs/cks/2.1/lab/break_fix.sh:3",
+              "certs/cks/2.1/lab/break_fix.sh:9"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Minimize Microservice Vulnerabilities",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.2",
+          "planned_files": [
+            "certs/cks/2.2/en/content.md",
+            "certs/cks/2.2/en/exercises.md",
+            "certs/cks/2.2/es/content.md",
+            "certs/cks/2.2/es/exercises.md",
+            "certs/cks/2.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Manage kubernetes secrets",
+          "topic": "2.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/2.2/en/content.md:657",
+              "certs/cks/2.2/en/exercises.md:3",
+              "certs/cks/2.2/en/exercises.md:794",
+              "certs/cks/2.2/es/content.md:657",
+              "certs/cks/2.2/es/exercises.md:794"
+            ],
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cks/2.2/lab/break_fix.sh:261",
+              "certs/cks/2.2/lab/break_fix.sh:262"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Minimize Microservice Vulnerabilities",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.3",
+          "planned_files": [
+            "certs/cks/2.3/en/content.md",
+            "certs/cks/2.3/en/exercises.md",
+            "certs/cks/2.3/es/content.md",
+            "certs/cks/2.3/es/exercises.md",
+            "certs/cks/2.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand and implement isolation techniques (multi-tenancy, sandboxed containers, etc.)",
+          "topic": "2.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/2.3/en/content.md:725",
+              "certs/cks/2.3/en/exercises.md:1",
+              "certs/cks/2.3/en/exercises.md:1129",
+              "certs/cks/2.3/es/content.md:725",
+              "certs/cks/2.3/es/exercises.md:1",
+              "certs/cks/2.3/es/exercises.md:1129"
+            ],
+            "curriculum": 4,
+            "label": 6,
+            "technical": [
+              "certs/cks/2.3/en/content.md:93",
+              "certs/cks/2.3/en/content.md:619",
+              "certs/cks/2.3/en/exercises.md:31",
+              "certs/cks/2.3/en/exercises.md:64",
+              "certs/cks/2.3/en/exercises.md:969",
+              "certs/cks/2.3/es/content.md:93",
+              "certs/cks/2.3/es/content.md:619",
+              "certs/cks/2.3/es/exercises.md:31",
+              "certs/cks/2.3/es/exercises.md:64",
+              "certs/cks/2.3/es/exercises.md:969",
+              "certs/cks/2.3/lab/break_fix.sh:3",
+              "certs/cks/2.3/lab/break_fix.sh:7"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Minimize Microservice Vulnerabilities",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "2.4",
+          "planned_files": [
+            "certs/cks/2.4/en/content.md",
+            "certs/cks/2.4/en/exercises.md",
+            "certs/cks/2.4/es/content.md",
+            "certs/cks/2.4/es/exercises.md",
+            "certs/cks/2.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implement Pod-to-Pod encryption (Cilium, Istio)",
+          "topic": "2.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/2.4/en/content.md:559",
+              "certs/cks/2.4/en/exercises.md:3",
+              "certs/cks/2.4/en/exercises.md:772",
+              "certs/cks/2.4/es/content.md:559",
+              "certs/cks/2.4/es/exercises.md:3",
+              "certs/cks/2.4/es/exercises.md:772"
+            ],
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cks/2.4/lab/break_fix.sh:3",
+              "certs/cks/2.4/lab/break_fix.sh:5",
+              "certs/cks/2.4/lab/break_fix.sh:255"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.1",
+          "planned_files": [
+            "certs/cks/3.1/en/content.md",
+            "certs/cks/3.1/en/exercises.md",
+            "certs/cks/3.1/es/content.md",
+            "certs/cks/3.1/es/exercises.md",
+            "certs/cks/3.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Role Based Access Controls to minimize exposure",
+          "topic": "3.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/3.1/en/content.md:3",
+              "certs/cks/3.1/en/content.md:1301",
+              "certs/cks/3.1/en/exercises.md:617",
+              "certs/cks/3.1/es/content.md:1301",
+              "certs/cks/3.1/es/exercises.md:617"
+            ],
+            "curriculum": 5,
+            "label": 3,
+            "technical": [
+              "certs/cks/3.1/en/content.md:120",
+              "certs/cks/3.1/en/content.md:350",
+              "certs/cks/3.1/en/exercises.md:11",
+              "certs/cks/3.1/es/content.md:120",
+              "certs/cks/3.1/es/content.md:350",
+              "certs/cks/3.1/es/exercises.md:11",
+              "certs/cks/3.1/lab/break_fix.sh:3",
+              "certs/cks/3.1/lab/break_fix.sh:7"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.2",
+          "planned_files": [
+            "certs/cks/3.2/en/content.md",
+            "certs/cks/3.2/en/exercises.md",
+            "certs/cks/3.2/es/content.md",
+            "certs/cks/3.2/es/exercises.md",
+            "certs/cks/3.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones",
+          "topic": "3.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/3.2/en/content.md:1303",
+              "certs/cks/3.2/en/exercises.md:1",
+              "certs/cks/3.2/en/exercises.md:6",
+              "certs/cks/3.2/es/content.md:1303",
+              "certs/cks/3.2/es/exercises.md:1",
+              "certs/cks/3.2/es/exercises.md:6"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/3.2/en/exercises.md:12",
+              "certs/cks/3.2/en/exercises.md:317",
+              "certs/cks/3.2/es/exercises.md:12",
+              "certs/cks/3.2/es/exercises.md:317",
+              "certs/cks/3.2/lab/break_fix.sh:3",
+              "certs/cks/3.2/lab/break_fix.sh:8"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.3",
+          "planned_files": [
+            "certs/cks/3.3/en/content.md",
+            "certs/cks/3.3/en/exercises.md",
+            "certs/cks/3.3/es/content.md",
+            "certs/cks/3.3/es/exercises.md",
+            "certs/cks/3.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Restrict access to Kubernetes API",
+          "topic": "3.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/3.3/en/content.md:3",
+              "certs/cks/3.3/en/content.md:1253",
+              "certs/cks/3.3/en/exercises.md:1",
+              "certs/cks/3.3/en/exercises.md:558",
+              "certs/cks/3.3/es/content.md:1253",
+              "certs/cks/3.3/es/exercises.md:1",
+              "certs/cks/3.3/es/exercises.md:558"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/3.3/en/content.md:116",
+              "certs/cks/3.3/en/content.md:445",
+              "certs/cks/3.3/en/exercises.md:82",
+              "certs/cks/3.3/en/exercises.md:135",
+              "certs/cks/3.3/en/exercises.md:159",
+              "certs/cks/3.3/en/exercises.md:583",
+              "certs/cks/3.3/es/content.md:116",
+              "certs/cks/3.3/es/content.md:445",
+              "certs/cks/3.3/es/exercises.md:82",
+              "certs/cks/3.3/es/exercises.md:135",
+              "certs/cks/3.3/es/exercises.md:159",
+              "certs/cks/3.3/es/exercises.md:583",
+              "certs/cks/3.3/lab/break_fix.sh:5",
+              "certs/cks/3.3/lab/break_fix.sh:10"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Cluster Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "3.4",
+          "planned_files": [
+            "certs/cks/3.4/en/content.md",
+            "certs/cks/3.4/en/exercises.md",
+            "certs/cks/3.4/es/content.md",
+            "certs/cks/3.4/es/exercises.md",
+            "certs/cks/3.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Upgrade Kubernetes to avoid vulnerabilities",
+          "topic": "3.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/3.4/en/content.md:3",
+              "certs/cks/3.4/en/content.md:1575",
+              "certs/cks/3.4/en/exercises.md:3",
+              "certs/cks/3.4/en/exercises.md:1111",
+              "certs/cks/3.4/es/content.md:3",
+              "certs/cks/3.4/es/content.md:1575",
+              "certs/cks/3.4/es/exercises.md:1111"
+            ],
+            "curriculum": 4,
+            "label": 26,
+            "technical": [
+              "certs/cks/3.4/en/content.md:3",
+              "certs/cks/3.4/en/content.md:31",
+              "certs/cks/3.4/en/content.md:54",
+              "certs/cks/3.4/en/content.md:91",
+              "certs/cks/3.4/en/content.md:218",
+              "certs/cks/3.4/en/content.md:404",
+              "certs/cks/3.4/en/content.md:408",
+              "certs/cks/3.4/en/content.md:452",
+              "certs/cks/3.4/en/content.md:485",
+              "certs/cks/3.4/en/content.md:509",
+              "certs/cks/3.4/en/content.md:522",
+              "certs/cks/3.4/en/content.md:531",
+              "certs/cks/3.4/en/content.md:532",
+              "certs/cks/3.4/en/content.md:533",
+              "certs/cks/3.4/en/content.md:534",
+              "certs/cks/3.4/en/content.md:535",
+              "certs/cks/3.4/en/content.md:538",
+              "certs/cks/3.4/en/content.md:540",
+              "certs/cks/3.4/en/content.md:580",
+              "certs/cks/3.4/en/content.md:581",
+              "certs/cks/3.4/en/content.md:584",
+              "certs/cks/3.4/en/content.md:586",
+              "certs/cks/3.4/en/content.md:597",
+              "certs/cks/3.4/en/content.md:600",
+              "certs/cks/3.4/en/content.md:601",
+              "certs/cks/3.4/en/content.md:643",
+              "certs/cks/3.4/en/content.md:645",
+              "certs/cks/3.4/en/content.md:649",
+              "certs/cks/3.4/en/content.md:650",
+              "certs/cks/3.4/en/content.md:655",
+              "certs/cks/3.4/en/content.md:656",
+              "certs/cks/3.4/en/content.md:664",
+              "certs/cks/3.4/en/content.md:669",
+              "certs/cks/3.4/en/content.md:674",
+              "certs/cks/3.4/en/content.md:686",
+              "certs/cks/3.4/en/content.md:687",
+              "certs/cks/3.4/en/content.md:688",
+              "certs/cks/3.4/en/content.md:689",
+              "certs/cks/3.4/en/content.md:693",
+              "certs/cks/3.4/en/content.md:694",
+              "certs/cks/3.4/en/content.md:695",
+              "certs/cks/3.4/en/content.md:696",
+              "certs/cks/3.4/en/content.md:697",
+              "certs/cks/3.4/en/content.md:702",
+              "certs/cks/3.4/en/content.md:703",
+              "certs/cks/3.4/en/content.md:704",
+              "certs/cks/3.4/en/content.md:705",
+              "certs/cks/3.4/en/content.md:706",
+              "certs/cks/3.4/en/content.md:707",
+              "certs/cks/3.4/en/content.md:708",
+              "certs/cks/3.4/en/content.md:709",
+              "certs/cks/3.4/en/content.md:710",
+              "certs/cks/3.4/en/content.md:717",
+              "certs/cks/3.4/en/content.md:735",
+              "certs/cks/3.4/en/content.md:743",
+              "certs/cks/3.4/en/content.md:744",
+              "certs/cks/3.4/en/content.md:753",
+              "certs/cks/3.4/en/content.md:754",
+              "certs/cks/3.4/en/content.md:755",
+              "certs/cks/3.4/en/content.md:756",
+              "certs/cks/3.4/en/content.md:757",
+              "certs/cks/3.4/en/content.md:762",
+              "certs/cks/3.4/en/content.md:763",
+              "certs/cks/3.4/en/content.md:764",
+              "certs/cks/3.4/en/content.md:765",
+              "certs/cks/3.4/en/content.md:766",
+              "certs/cks/3.4/en/content.md:775",
+              "certs/cks/3.4/en/content.md:779",
+              "certs/cks/3.4/en/content.md:780",
+              "certs/cks/3.4/en/content.md:781",
+              "certs/cks/3.4/en/content.md:785",
+              "certs/cks/3.4/en/content.md:822",
+              "certs/cks/3.4/en/content.md:842",
+              "certs/cks/3.4/en/content.md:869",
+              "certs/cks/3.4/en/content.md:984",
+              "certs/cks/3.4/en/content.md:1001",
+              "certs/cks/3.4/en/content.md:1009",
+              "certs/cks/3.4/en/content.md:1010",
+              "certs/cks/3.4/en/content.md:1017",
+              "certs/cks/3.4/en/content.md:1071",
+              "certs/cks/3.4/en/content.md:1073",
+              "certs/cks/3.4/en/content.md:1086",
+              "certs/cks/3.4/en/content.md:1152",
+              "certs/cks/3.4/en/content.md:1153",
+              "certs/cks/3.4/en/content.md:1154",
+              "certs/cks/3.4/en/content.md:1155",
+              "certs/cks/3.4/en/content.md:1156",
+              "certs/cks/3.4/en/content.md:1159",
+              "certs/cks/3.4/en/content.md:1161",
+              "certs/cks/3.4/en/content.md:1188",
+              "certs/cks/3.4/en/content.md:1339",
+              "certs/cks/3.4/en/content.md:1341",
+              "certs/cks/3.4/en/content.md:1348",
+              "certs/cks/3.4/en/content.md:1410",
+              "certs/cks/3.4/en/content.md:1416",
+              "certs/cks/3.4/en/content.md:1418",
+              "certs/cks/3.4/en/content.md:1489",
+              "certs/cks/3.4/en/content.md:1490",
+              "certs/cks/3.4/en/content.md:1492",
+              "certs/cks/3.4/en/content.md:1496",
+              "certs/cks/3.4/en/content.md:1505",
+              "certs/cks/3.4/en/content.md:1506",
+              "certs/cks/3.4/en/content.md:1508",
+              "certs/cks/3.4/en/exercises.md:18",
+              "certs/cks/3.4/en/exercises.md:19",
+              "certs/cks/3.4/en/exercises.md:20",
+              "certs/cks/3.4/en/exercises.md:25",
+              "certs/cks/3.4/en/exercises.md:27",
+              "certs/cks/3.4/en/exercises.md:47",
+              "certs/cks/3.4/en/exercises.md:48",
+              "certs/cks/3.4/en/exercises.md:49",
+              "certs/cks/3.4/en/exercises.md:59",
+              "certs/cks/3.4/en/exercises.md:61",
+              "certs/cks/3.4/en/exercises.md:71",
+              "certs/cks/3.4/en/exercises.md:85",
+              "certs/cks/3.4/en/exercises.md:86",
+              "certs/cks/3.4/en/exercises.md:87",
+              "certs/cks/3.4/en/exercises.md:98",
+              "certs/cks/3.4/en/exercises.md:135",
+              "certs/cks/3.4/en/exercises.md:136",
+              "certs/cks/3.4/en/exercises.md:137",
+              "certs/cks/3.4/en/exercises.md:138",
+              "certs/cks/3.4/en/exercises.md:140",
+              "certs/cks/3.4/en/exercises.md:219",
+              "certs/cks/3.4/en/exercises.md:256",
+              "certs/cks/3.4/en/exercises.md:263",
+              "certs/cks/3.4/en/exercises.md:269",
+              "certs/cks/3.4/en/exercises.md:293",
+              "certs/cks/3.4/en/exercises.md:319",
+              "certs/cks/3.4/en/exercises.md:391",
+              "certs/cks/3.4/en/exercises.md:395",
+              "certs/cks/3.4/en/exercises.md:408",
+              "certs/cks/3.4/en/exercises.md:418",
+              "certs/cks/3.4/en/exercises.md:423",
+              "certs/cks/3.4/en/exercises.md:425",
+              "certs/cks/3.4/en/exercises.md:436",
+              "certs/cks/3.4/en/exercises.md:439",
+              "certs/cks/3.4/en/exercises.md:452",
+              "certs/cks/3.4/en/exercises.md:453",
+              "certs/cks/3.4/en/exercises.md:460",
+              "certs/cks/3.4/en/exercises.md:467",
+              "certs/cks/3.4/en/exercises.md:472",
+              "certs/cks/3.4/en/exercises.md:486",
+              "certs/cks/3.4/en/exercises.md:487",
+              "certs/cks/3.4/en/exercises.md:488",
+              "certs/cks/3.4/en/exercises.md:489",
+              "certs/cks/3.4/en/exercises.md:494",
+              "certs/cks/3.4/en/exercises.md:495",
+              "certs/cks/3.4/en/exercises.md:496",
+              "certs/cks/3.4/en/exercises.md:501",
+              "certs/cks/3.4/en/exercises.md:502",
+              "certs/cks/3.4/en/exercises.md:503",
+              "certs/cks/3.4/en/exercises.md:504",
+              "certs/cks/3.4/en/exercises.md:510",
+              "certs/cks/3.4/en/exercises.md:520",
+              "certs/cks/3.4/en/exercises.md:523",
+              "certs/cks/3.4/en/exercises.md:530",
+              "certs/cks/3.4/en/exercises.md:544",
+              "certs/cks/3.4/en/exercises.md:551",
+              "certs/cks/3.4/en/exercises.md:552",
+              "certs/cks/3.4/en/exercises.md:553",
+              "certs/cks/3.4/en/exercises.md:556",
+              "certs/cks/3.4/en/exercises.md:569",
+              "certs/cks/3.4/en/exercises.md:574",
+              "certs/cks/3.4/en/exercises.md:585",
+              "certs/cks/3.4/en/exercises.md:588",
+              "certs/cks/3.4/en/exercises.md:589",
+              "certs/cks/3.4/en/exercises.md:590",
+              "certs/cks/3.4/en/exercises.md:593",
+              "certs/cks/3.4/en/exercises.md:615",
+              "certs/cks/3.4/en/exercises.md:621",
+              "certs/cks/3.4/en/exercises.md:642",
+              "certs/cks/3.4/en/exercises.md:643",
+              "certs/cks/3.4/en/exercises.md:644",
+              "certs/cks/3.4/en/exercises.md:662",
+              "certs/cks/3.4/en/exercises.md:684",
+              "certs/cks/3.4/en/exercises.md:728",
+              "certs/cks/3.4/en/exercises.md:738",
+              "certs/cks/3.4/en/exercises.md:752",
+              "certs/cks/3.4/en/exercises.md:772",
+              "certs/cks/3.4/en/exercises.md:812",
+              "certs/cks/3.4/en/exercises.md:813",
+              "certs/cks/3.4/en/exercises.md:824",
+              "certs/cks/3.4/en/exercises.md:849",
+              "certs/cks/3.4/en/exercises.md:863",
+              "certs/cks/3.4/en/exercises.md:891",
+              "certs/cks/3.4/en/exercises.md:898",
+              "certs/cks/3.4/en/exercises.md:935",
+              "certs/cks/3.4/en/exercises.md:937",
+              "certs/cks/3.4/en/exercises.md:942",
+              "certs/cks/3.4/en/exercises.md:946",
+              "certs/cks/3.4/en/exercises.md:951",
+              "certs/cks/3.4/en/exercises.md:961",
+              "certs/cks/3.4/en/exercises.md:967",
+              "certs/cks/3.4/en/exercises.md:984",
+              "certs/cks/3.4/en/exercises.md:997",
+              "certs/cks/3.4/en/exercises.md:1007",
+              "certs/cks/3.4/en/exercises.md:1055",
+              "certs/cks/3.4/es/content.md:3",
+              "certs/cks/3.4/es/content.md:31",
+              "certs/cks/3.4/es/content.md:54",
+              "certs/cks/3.4/es/content.md:91",
+              "certs/cks/3.4/es/content.md:218",
+              "certs/cks/3.4/es/content.md:404",
+              "certs/cks/3.4/es/content.md:408",
+              "certs/cks/3.4/es/content.md:452",
+              "certs/cks/3.4/es/content.md:485",
+              "certs/cks/3.4/es/content.md:509",
+              "certs/cks/3.4/es/content.md:522",
+              "certs/cks/3.4/es/content.md:531",
+              "certs/cks/3.4/es/content.md:532",
+              "certs/cks/3.4/es/content.md:533",
+              "certs/cks/3.4/es/content.md:534",
+              "certs/cks/3.4/es/content.md:535",
+              "certs/cks/3.4/es/content.md:538",
+              "certs/cks/3.4/es/content.md:540",
+              "certs/cks/3.4/es/content.md:580",
+              "certs/cks/3.4/es/content.md:581",
+              "certs/cks/3.4/es/content.md:584",
+              "certs/cks/3.4/es/content.md:586",
+              "certs/cks/3.4/es/content.md:597",
+              "certs/cks/3.4/es/content.md:600",
+              "certs/cks/3.4/es/content.md:601",
+              "certs/cks/3.4/es/content.md:643",
+              "certs/cks/3.4/es/content.md:645",
+              "certs/cks/3.4/es/content.md:649",
+              "certs/cks/3.4/es/content.md:650",
+              "certs/cks/3.4/es/content.md:655",
+              "certs/cks/3.4/es/content.md:656",
+              "certs/cks/3.4/es/content.md:664",
+              "certs/cks/3.4/es/content.md:669",
+              "certs/cks/3.4/es/content.md:674",
+              "certs/cks/3.4/es/content.md:686",
+              "certs/cks/3.4/es/content.md:687",
+              "certs/cks/3.4/es/content.md:688",
+              "certs/cks/3.4/es/content.md:689",
+              "certs/cks/3.4/es/content.md:693",
+              "certs/cks/3.4/es/content.md:694",
+              "certs/cks/3.4/es/content.md:695",
+              "certs/cks/3.4/es/content.md:696",
+              "certs/cks/3.4/es/content.md:697",
+              "certs/cks/3.4/es/content.md:702",
+              "certs/cks/3.4/es/content.md:703",
+              "certs/cks/3.4/es/content.md:704",
+              "certs/cks/3.4/es/content.md:705",
+              "certs/cks/3.4/es/content.md:706",
+              "certs/cks/3.4/es/content.md:707",
+              "certs/cks/3.4/es/content.md:708",
+              "certs/cks/3.4/es/content.md:709",
+              "certs/cks/3.4/es/content.md:710",
+              "certs/cks/3.4/es/content.md:717",
+              "certs/cks/3.4/es/content.md:735",
+              "certs/cks/3.4/es/content.md:743",
+              "certs/cks/3.4/es/content.md:744",
+              "certs/cks/3.4/es/content.md:753",
+              "certs/cks/3.4/es/content.md:754",
+              "certs/cks/3.4/es/content.md:755",
+              "certs/cks/3.4/es/content.md:756",
+              "certs/cks/3.4/es/content.md:757",
+              "certs/cks/3.4/es/content.md:762",
+              "certs/cks/3.4/es/content.md:763",
+              "certs/cks/3.4/es/content.md:764",
+              "certs/cks/3.4/es/content.md:765",
+              "certs/cks/3.4/es/content.md:766",
+              "certs/cks/3.4/es/content.md:775",
+              "certs/cks/3.4/es/content.md:779",
+              "certs/cks/3.4/es/content.md:780",
+              "certs/cks/3.4/es/content.md:781",
+              "certs/cks/3.4/es/content.md:785",
+              "certs/cks/3.4/es/content.md:822",
+              "certs/cks/3.4/es/content.md:842",
+              "certs/cks/3.4/es/content.md:869",
+              "certs/cks/3.4/es/content.md:984",
+              "certs/cks/3.4/es/content.md:1001",
+              "certs/cks/3.4/es/content.md:1009",
+              "certs/cks/3.4/es/content.md:1010",
+              "certs/cks/3.4/es/content.md:1017",
+              "certs/cks/3.4/es/content.md:1071",
+              "certs/cks/3.4/es/content.md:1073",
+              "certs/cks/3.4/es/content.md:1086",
+              "certs/cks/3.4/es/content.md:1152",
+              "certs/cks/3.4/es/content.md:1153",
+              "certs/cks/3.4/es/content.md:1154",
+              "certs/cks/3.4/es/content.md:1155",
+              "certs/cks/3.4/es/content.md:1156",
+              "certs/cks/3.4/es/content.md:1159",
+              "certs/cks/3.4/es/content.md:1161",
+              "certs/cks/3.4/es/content.md:1188",
+              "certs/cks/3.4/es/content.md:1339",
+              "certs/cks/3.4/es/content.md:1341",
+              "certs/cks/3.4/es/content.md:1348",
+              "certs/cks/3.4/es/content.md:1410",
+              "certs/cks/3.4/es/content.md:1416",
+              "certs/cks/3.4/es/content.md:1418",
+              "certs/cks/3.4/es/content.md:1489",
+              "certs/cks/3.4/es/content.md:1490",
+              "certs/cks/3.4/es/content.md:1492",
+              "certs/cks/3.4/es/content.md:1496",
+              "certs/cks/3.4/es/content.md:1505",
+              "certs/cks/3.4/es/content.md:1506",
+              "certs/cks/3.4/es/content.md:1508",
+              "certs/cks/3.4/es/exercises.md:18",
+              "certs/cks/3.4/es/exercises.md:19",
+              "certs/cks/3.4/es/exercises.md:20",
+              "certs/cks/3.4/es/exercises.md:25",
+              "certs/cks/3.4/es/exercises.md:27",
+              "certs/cks/3.4/es/exercises.md:47",
+              "certs/cks/3.4/es/exercises.md:48",
+              "certs/cks/3.4/es/exercises.md:49",
+              "certs/cks/3.4/es/exercises.md:59",
+              "certs/cks/3.4/es/exercises.md:61",
+              "certs/cks/3.4/es/exercises.md:71",
+              "certs/cks/3.4/es/exercises.md:85",
+              "certs/cks/3.4/es/exercises.md:86",
+              "certs/cks/3.4/es/exercises.md:87",
+              "certs/cks/3.4/es/exercises.md:98",
+              "certs/cks/3.4/es/exercises.md:135",
+              "certs/cks/3.4/es/exercises.md:136",
+              "certs/cks/3.4/es/exercises.md:137",
+              "certs/cks/3.4/es/exercises.md:138",
+              "certs/cks/3.4/es/exercises.md:140",
+              "certs/cks/3.4/es/exercises.md:219",
+              "certs/cks/3.4/es/exercises.md:256",
+              "certs/cks/3.4/es/exercises.md:263",
+              "certs/cks/3.4/es/exercises.md:269",
+              "certs/cks/3.4/es/exercises.md:293",
+              "certs/cks/3.4/es/exercises.md:319",
+              "certs/cks/3.4/es/exercises.md:391",
+              "certs/cks/3.4/es/exercises.md:395",
+              "certs/cks/3.4/es/exercises.md:408",
+              "certs/cks/3.4/es/exercises.md:418",
+              "certs/cks/3.4/es/exercises.md:423",
+              "certs/cks/3.4/es/exercises.md:425",
+              "certs/cks/3.4/es/exercises.md:436",
+              "certs/cks/3.4/es/exercises.md:439",
+              "certs/cks/3.4/es/exercises.md:452",
+              "certs/cks/3.4/es/exercises.md:453",
+              "certs/cks/3.4/es/exercises.md:460",
+              "certs/cks/3.4/es/exercises.md:467",
+              "certs/cks/3.4/es/exercises.md:472",
+              "certs/cks/3.4/es/exercises.md:486",
+              "certs/cks/3.4/es/exercises.md:487",
+              "certs/cks/3.4/es/exercises.md:488",
+              "certs/cks/3.4/es/exercises.md:489",
+              "certs/cks/3.4/es/exercises.md:494",
+              "certs/cks/3.4/es/exercises.md:495",
+              "certs/cks/3.4/es/exercises.md:496",
+              "certs/cks/3.4/es/exercises.md:501",
+              "certs/cks/3.4/es/exercises.md:502",
+              "certs/cks/3.4/es/exercises.md:503",
+              "certs/cks/3.4/es/exercises.md:504",
+              "certs/cks/3.4/es/exercises.md:510",
+              "certs/cks/3.4/es/exercises.md:520",
+              "certs/cks/3.4/es/exercises.md:523",
+              "certs/cks/3.4/es/exercises.md:530",
+              "certs/cks/3.4/es/exercises.md:544",
+              "certs/cks/3.4/es/exercises.md:551",
+              "certs/cks/3.4/es/exercises.md:552",
+              "certs/cks/3.4/es/exercises.md:553",
+              "certs/cks/3.4/es/exercises.md:556",
+              "certs/cks/3.4/es/exercises.md:569",
+              "certs/cks/3.4/es/exercises.md:574",
+              "certs/cks/3.4/es/exercises.md:585",
+              "certs/cks/3.4/es/exercises.md:588",
+              "certs/cks/3.4/es/exercises.md:589",
+              "certs/cks/3.4/es/exercises.md:590",
+              "certs/cks/3.4/es/exercises.md:593",
+              "certs/cks/3.4/es/exercises.md:615",
+              "certs/cks/3.4/es/exercises.md:621",
+              "certs/cks/3.4/es/exercises.md:642",
+              "certs/cks/3.4/es/exercises.md:643",
+              "certs/cks/3.4/es/exercises.md:644",
+              "certs/cks/3.4/es/exercises.md:662",
+              "certs/cks/3.4/es/exercises.md:684",
+              "certs/cks/3.4/es/exercises.md:728",
+              "certs/cks/3.4/es/exercises.md:738",
+              "certs/cks/3.4/es/exercises.md:752",
+              "certs/cks/3.4/es/exercises.md:772",
+              "certs/cks/3.4/es/exercises.md:812",
+              "certs/cks/3.4/es/exercises.md:813",
+              "certs/cks/3.4/es/exercises.md:824",
+              "certs/cks/3.4/es/exercises.md:849",
+              "certs/cks/3.4/es/exercises.md:863",
+              "certs/cks/3.4/es/exercises.md:891",
+              "certs/cks/3.4/es/exercises.md:898",
+              "certs/cks/3.4/es/exercises.md:935",
+              "certs/cks/3.4/es/exercises.md:937",
+              "certs/cks/3.4/es/exercises.md:942",
+              "certs/cks/3.4/es/exercises.md:946",
+              "certs/cks/3.4/es/exercises.md:951",
+              "certs/cks/3.4/es/exercises.md:961",
+              "certs/cks/3.4/es/exercises.md:967",
+              "certs/cks/3.4/es/exercises.md:984",
+              "certs/cks/3.4/es/exercises.md:997",
+              "certs/cks/3.4/es/exercises.md:1007",
+              "certs/cks/3.4/es/exercises.md:1055",
+              "certs/cks/3.4/lab/break_fix.sh:3",
+              "certs/cks/3.4/lab/break_fix.sh:4",
+              "certs/cks/3.4/lab/break_fix.sh:56"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Supply Chain Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.1",
+          "planned_files": [
+            "certs/cks/4.1/en/content.md",
+            "certs/cks/4.1/en/exercises.md",
+            "certs/cks/4.1/es/content.md",
+            "certs/cks/4.1/es/exercises.md",
+            "certs/cks/4.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Minimize base image footprint",
+          "topic": "4.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/4.1/en/content.md:3",
+              "certs/cks/4.1/en/content.md:1305",
+              "certs/cks/4.1/en/exercises.md:2",
+              "certs/cks/4.1/en/exercises.md:1170",
+              "certs/cks/4.1/es/content.md:3",
+              "certs/cks/4.1/es/content.md:1305",
+              "certs/cks/4.1/es/exercises.md:2",
+              "certs/cks/4.1/es/exercises.md:1170"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/4.1/en/content.md:761",
+              "certs/cks/4.1/en/content.md:763",
+              "certs/cks/4.1/en/content.md:765",
+              "certs/cks/4.1/en/content.md:770",
+              "certs/cks/4.1/en/exercises.md:11",
+              "certs/cks/4.1/en/exercises.md:455",
+              "certs/cks/4.1/es/content.md:761",
+              "certs/cks/4.1/es/content.md:763",
+              "certs/cks/4.1/es/content.md:765",
+              "certs/cks/4.1/es/content.md:770",
+              "certs/cks/4.1/es/exercises.md:11",
+              "certs/cks/4.1/es/exercises.md:455",
+              "certs/cks/4.1/lab/break_fix.sh:3",
+              "certs/cks/4.1/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Supply Chain Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.2",
+          "planned_files": [
+            "certs/cks/4.2/en/content.md",
+            "certs/cks/4.2/en/exercises.md",
+            "certs/cks/4.2/es/content.md",
+            "certs/cks/4.2/es/exercises.md",
+            "certs/cks/4.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)",
+          "topic": "4.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/4.2/en/content.md:3",
+              "certs/cks/4.2/en/content.md:1678",
+              "certs/cks/4.2/en/exercises.md:3",
+              "certs/cks/4.2/en/exercises.md:1701",
+              "certs/cks/4.2/es/content.md:3",
+              "certs/cks/4.2/es/content.md:1678",
+              "certs/cks/4.2/es/exercises.md:3",
+              "certs/cks/4.2/es/exercises.md:1701"
+            ],
+            "curriculum": 5,
+            "label": 2,
+            "technical": [
+              "certs/cks/4.2/en/content.md:1162",
+              "certs/cks/4.2/en/content.md:1219",
+              "certs/cks/4.2/es/content.md:3",
+              "certs/cks/4.2/es/content.md:1162",
+              "certs/cks/4.2/es/content.md:1219",
+              "certs/cks/4.2/lab/break_fix.sh:5",
+              "certs/cks/4.2/lab/break_fix.sh:15",
+              "certs/cks/4.2/lab/break_fix.sh:244"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Supply Chain Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.3",
+          "planned_files": [
+            "certs/cks/4.3/en/content.md",
+            "certs/cks/4.3/en/exercises.md",
+            "certs/cks/4.3/es/content.md",
+            "certs/cks/4.3/es/exercises.md",
+            "certs/cks/4.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Secure your supply chain (permitted registries, sign and validate artifacts, etc.)",
+          "topic": "4.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/4.3/en/content.md:3",
+              "certs/cks/4.3/en/content.md:1160",
+              "certs/cks/4.3/en/exercises.md:5",
+              "certs/cks/4.3/en/exercises.md:6",
+              "certs/cks/4.3/en/exercises.md:1668",
+              "certs/cks/4.3/es/content.md:1160",
+              "certs/cks/4.3/es/exercises.md:5",
+              "certs/cks/4.3/es/exercises.md:6",
+              "certs/cks/4.3/es/exercises.md:1668"
+            ],
+            "curriculum": 7,
+            "label": 1,
+            "technical": [
+              "certs/cks/4.3/en/content.md:1165",
+              "certs/cks/4.3/en/exercises.md:5",
+              "certs/cks/4.3/en/exercises.md:16",
+              "certs/cks/4.3/en/exercises.md:202",
+              "certs/cks/4.3/en/exercises.md:283",
+              "certs/cks/4.3/es/content.md:1165",
+              "certs/cks/4.3/es/exercises.md:5",
+              "certs/cks/4.3/es/exercises.md:16",
+              "certs/cks/4.3/es/exercises.md:202",
+              "certs/cks/4.3/es/exercises.md:283",
+              "certs/cks/4.3/lab/break_fix.sh:3",
+              "certs/cks/4.3/lab/break_fix.sh:19"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Supply Chain Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "4.4",
+          "planned_files": [
+            "certs/cks/4.4/en/content.md",
+            "certs/cks/4.4/en/exercises.md",
+            "certs/cks/4.4/es/content.md",
+            "certs/cks/4.4/es/exercises.md",
+            "certs/cks/4.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)",
+          "topic": "4.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/4.4/en/content.md:3",
+              "certs/cks/4.4/en/content.md:1888",
+              "certs/cks/4.4/en/exercises.md:4",
+              "certs/cks/4.4/en/exercises.md:1113",
+              "certs/cks/4.4/es/content.md:1888",
+              "certs/cks/4.4/es/exercises.md:4",
+              "certs/cks/4.4/es/exercises.md:1113"
+            ],
+            "curriculum": 4,
+            "label": 6,
+            "technical": [
+              "certs/cks/4.4/en/content.md:7",
+              "certs/cks/4.4/en/content.md:193",
+              "certs/cks/4.4/en/content.md:531",
+              "certs/cks/4.4/en/content.md:1385",
+              "certs/cks/4.4/en/exercises.md:4",
+              "certs/cks/4.4/en/exercises.md:394",
+              "certs/cks/4.4/es/content.md:7",
+              "certs/cks/4.4/es/content.md:193",
+              "certs/cks/4.4/es/content.md:531",
+              "certs/cks/4.4/es/content.md:1385",
+              "certs/cks/4.4/es/exercises.md:4",
+              "certs/cks/4.4/es/exercises.md:394",
+              "certs/cks/4.4/lab/break_fix.sh:3",
+              "certs/cks/4.4/lab/break_fix.sh:7"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.1",
+          "planned_files": [
+            "certs/cks/5.1/en/content.md",
+            "certs/cks/5.1/en/exercises.md",
+            "certs/cks/5.1/es/content.md",
+            "certs/cks/5.1/es/exercises.md",
+            "certs/cks/5.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Minimize host OS footprint (reduce attack surface)",
+          "topic": "5.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/5.1/en/content.md:3",
+              "certs/cks/5.1/en/content.md:2071",
+              "certs/cks/5.1/en/exercises.md:3",
+              "certs/cks/5.1/en/exercises.md:1055",
+              "certs/cks/5.1/es/content.md:3",
+              "certs/cks/5.1/es/content.md:2071",
+              "certs/cks/5.1/es/exercises.md:1055"
+            ],
+            "curriculum": 4,
+            "label": 2,
+            "technical": [
+              "certs/cks/5.1/en/content.md:3",
+              "certs/cks/5.1/en/content.md:189",
+              "certs/cks/5.1/en/content.md:1708",
+              "certs/cks/5.1/es/content.md:3",
+              "certs/cks/5.1/es/content.md:189",
+              "certs/cks/5.1/es/content.md:1708",
+              "certs/cks/5.1/lab/break_fix.sh:4",
+              "certs/cks/5.1/lab/break_fix.sh:48",
+              "certs/cks/5.1/lab/break_fix.sh:49"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.2",
+          "planned_files": [
+            "certs/cks/5.2/en/content.md",
+            "certs/cks/5.2/en/exercises.md",
+            "certs/cks/5.2/es/content.md",
+            "certs/cks/5.2/es/exercises.md",
+            "certs/cks/5.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Using least-privilege identity and access management",
+          "topic": "5.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/5.2/en/content.md:3",
+              "certs/cks/5.2/en/content.md:1543",
+              "certs/cks/5.2/en/exercises.md:3",
+              "certs/cks/5.2/es/content.md:3",
+              "certs/cks/5.2/es/content.md:1543",
+              "certs/cks/5.2/es/exercises.md:3"
+            ],
+            "curriculum": 2,
+            "label": 0,
+            "technical": [
+              "certs/cks/5.2/en/content.md:3",
+              "certs/cks/5.2/en/exercises.md:3",
+              "certs/cks/5.2/es/content.md:3",
+              "certs/cks/5.2/es/exercises.md:3",
+              "certs/cks/5.2/lab/break_fix.sh:3",
+              "certs/cks/5.2/lab/break_fix.sh:24",
+              "certs/cks/5.2/lab/break_fix.sh:25"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.3",
+          "planned_files": [
+            "certs/cks/5.3/en/content.md",
+            "certs/cks/5.3/en/exercises.md",
+            "certs/cks/5.3/es/content.md",
+            "certs/cks/5.3/es/exercises.md",
+            "certs/cks/5.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Minimize external access to the network",
+          "topic": "5.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/5.3/en/content.md:3",
+              "certs/cks/5.3/en/content.md:253",
+              "certs/cks/5.3/en/content.md:1459",
+              "certs/cks/5.3/en/exercises.md:1031",
+              "certs/cks/5.3/es/content.md:3",
+              "certs/cks/5.3/es/content.md:253",
+              "certs/cks/5.3/es/content.md:1459",
+              "certs/cks/5.3/es/exercises.md:1031"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/5.3/en/content.md:3",
+              "certs/cks/5.3/en/content.md:144",
+              "certs/cks/5.3/en/content.md:253",
+              "certs/cks/5.3/en/content.md:622",
+              "certs/cks/5.3/en/content.md:944",
+              "certs/cks/5.3/en/content.md:946",
+              "certs/cks/5.3/en/content.md:948",
+              "certs/cks/5.3/en/content.md:954",
+              "certs/cks/5.3/en/exercises.md:11",
+              "certs/cks/5.3/es/content.md:3",
+              "certs/cks/5.3/es/content.md:144",
+              "certs/cks/5.3/es/content.md:253",
+              "certs/cks/5.3/es/content.md:622",
+              "certs/cks/5.3/es/content.md:944",
+              "certs/cks/5.3/es/content.md:946",
+              "certs/cks/5.3/es/content.md:948",
+              "certs/cks/5.3/es/content.md:954",
+              "certs/cks/5.3/es/exercises.md:11",
+              "certs/cks/5.3/lab/break_fix.sh:3",
+              "certs/cks/5.3/lab/break_fix.sh:8"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Hardening",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "5.4",
+          "planned_files": [
+            "certs/cks/5.4/en/content.md",
+            "certs/cks/5.4/en/exercises.md",
+            "certs/cks/5.4/es/content.md",
+            "certs/cks/5.4/es/exercises.md",
+            "certs/cks/5.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Appropriately use kernel hardening tools such as AppArmor, seccomp",
+          "topic": "5.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/5.4/en/content.md:3",
+              "certs/cks/5.4/en/content.md:1196",
+              "certs/cks/5.4/en/exercises.md:3",
+              "certs/cks/5.4/en/exercises.md:1407",
+              "certs/cks/5.4/es/content.md:3",
+              "certs/cks/5.4/es/content.md:1196",
+              "certs/cks/5.4/es/exercises.md:1407"
+            ],
+            "curriculum": 5,
+            "label": 1,
+            "technical": [
+              "certs/cks/5.4/en/content.md:3",
+              "certs/cks/5.4/en/content.md:567",
+              "certs/cks/5.4/es/content.md:3",
+              "certs/cks/5.4/es/content.md:567",
+              "certs/cks/5.4/lab/break_fix.sh:3",
+              "certs/cks/5.4/lab/break_fix.sh:30",
+              "certs/cks/5.4/lab/break_fix.sh:39",
+              "certs/cks/5.4/lab/break_fix.sh:40",
+              "certs/cks/5.4/lab/break_fix.sh:297",
+              "certs/cks/5.4/lab/break_fix.sh:722",
+              "certs/cks/5.4/lab/break_fix.sh:1047"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Monitoring, Logging and Runtime Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "6.1",
+          "planned_files": [
+            "certs/cks/6.1/en/content.md",
+            "certs/cks/6.1/en/exercises.md",
+            "certs/cks/6.1/es/content.md",
+            "certs/cks/6.1/es/exercises.md",
+            "certs/cks/6.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Perform behavioral analytics to detect malicious activities",
+          "topic": "6.1",
+          "version_lines": {
+            "citations": [
+              "certs/cks/6.1/en/content.md:1899",
+              "certs/cks/6.1/en/exercises.md:925",
+              "certs/cks/6.1/es/content.md:1899",
+              "certs/cks/6.1/es/exercises.md:925"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/6.1/en/exercises.md:4",
+              "certs/cks/6.1/es/exercises.md:4",
+              "certs/cks/6.1/lab/break_fix.sh:4",
+              "certs/cks/6.1/lab/break_fix.sh:10",
+              "certs/cks/6.1/lab/break_fix.sh:385",
+              "certs/cks/6.1/lab/break_fix.sh:664"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Monitoring, Logging and Runtime Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "6.2",
+          "planned_files": [
+            "certs/cks/6.2/en/content.md",
+            "certs/cks/6.2/en/exercises.md",
+            "certs/cks/6.2/es/content.md",
+            "certs/cks/6.2/es/exercises.md",
+            "certs/cks/6.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Detect threats within physical infrastructure, apps, networks, data, users and workloads",
+          "topic": "6.2",
+          "version_lines": {
+            "citations": [
+              "certs/cks/6.2/en/content.md:4",
+              "certs/cks/6.2/en/content.md:2447",
+              "certs/cks/6.2/en/exercises.md:3",
+              "certs/cks/6.2/en/exercises.md:1430",
+              "certs/cks/6.2/es/content.md:4",
+              "certs/cks/6.2/es/content.md:2447",
+              "certs/cks/6.2/es/exercises.md:3",
+              "certs/cks/6.2/es/exercises.md:1430"
+            ],
+            "curriculum": 5,
+            "label": 2,
+            "technical": [
+              "certs/cks/6.2/en/content.md:575",
+              "certs/cks/6.2/en/exercises.md:3",
+              "certs/cks/6.2/en/exercises.md:28",
+              "certs/cks/6.2/es/content.md:4",
+              "certs/cks/6.2/es/content.md:575",
+              "certs/cks/6.2/es/exercises.md:3",
+              "certs/cks/6.2/es/exercises.md:28",
+              "certs/cks/6.2/lab/break_fix.sh:4",
+              "certs/cks/6.2/lab/break_fix.sh:11"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Monitoring, Logging and Runtime Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "6.3",
+          "planned_files": [
+            "certs/cks/6.3/en/content.md",
+            "certs/cks/6.3/es/content.md",
+            "certs/cks/6.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Investigate and identify phases of attack and bad actors within the environment",
+          "topic": "6.3",
+          "version_lines": {
+            "citations": [
+              "certs/cks/6.3/en/content.md:3",
+              "certs/cks/6.3/en/content.md:2004",
+              "certs/cks/6.3/es/content.md:3",
+              "certs/cks/6.3/es/content.md:2004"
+            ],
+            "curriculum": 2,
+            "label": 4,
+            "technical": [
+              "certs/cks/6.3/en/content.md:394",
+              "certs/cks/6.3/en/content.md:1481",
+              "certs/cks/6.3/en/content.md:1627",
+              "certs/cks/6.3/es/content.md:394",
+              "certs/cks/6.3/es/content.md:1481",
+              "certs/cks/6.3/es/content.md:1627",
+              "certs/cks/6.3/lab/break_fix.sh:4",
+              "certs/cks/6.3/lab/break_fix.sh:30",
+              "certs/cks/6.3/lab/break_fix.sh:31"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Monitoring, Logging and Runtime Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "6.4",
+          "planned_files": [
+            "certs/cks/6.4/en/content.md",
+            "certs/cks/6.4/en/exercises.md",
+            "certs/cks/6.4/es/content.md",
+            "certs/cks/6.4/es/exercises.md",
+            "certs/cks/6.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Ensure immutability of containers at runtime",
+          "topic": "6.4",
+          "version_lines": {
+            "citations": [
+              "certs/cks/6.4/en/content.md:3",
+              "certs/cks/6.4/en/content.md:1526",
+              "certs/cks/6.4/en/exercises.md:2",
+              "certs/cks/6.4/en/exercises.md:952",
+              "certs/cks/6.4/es/content.md:3",
+              "certs/cks/6.4/es/content.md:1526",
+              "certs/cks/6.4/es/exercises.md:952"
+            ],
+            "curriculum": 5,
+            "label": 3,
+            "technical": [
+              "certs/cks/6.4/en/content.md:225",
+              "certs/cks/6.4/en/content.md:227",
+              "certs/cks/6.4/en/content.md:229",
+              "certs/cks/6.4/en/exercises.md:12",
+              "certs/cks/6.4/en/exercises.md:18",
+              "certs/cks/6.4/en/exercises.md:19",
+              "certs/cks/6.4/en/exercises.md:525",
+              "certs/cks/6.4/en/exercises.md:534",
+              "certs/cks/6.4/es/content.md:225",
+              "certs/cks/6.4/es/content.md:227",
+              "certs/cks/6.4/es/content.md:229",
+              "certs/cks/6.4/es/exercises.md:12",
+              "certs/cks/6.4/es/exercises.md:18",
+              "certs/cks/6.4/es/exercises.md:19",
+              "certs/cks/6.4/es/exercises.md:525",
+              "certs/cks/6.4/es/exercises.md:534",
+              "certs/cks/6.4/lab/break_fix.sh:4",
+              "certs/cks/6.4/lab/break_fix.sh:9",
+              "certs/cks/6.4/lab/break_fix.sh:100",
+              "certs/cks/6.4/lab/break_fix.sh:858"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Monitoring, Logging and Runtime Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "6.5",
+          "planned_files": [
+            "certs/cks/6.5/en/content.md",
+            "certs/cks/6.5/en/exercises.md",
+            "certs/cks/6.5/es/content.md",
+            "certs/cks/6.5/es/exercises.md",
+            "certs/cks/6.5/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Use Kubernetes audit logs to monitor access",
+          "topic": "6.5",
+          "version_lines": {
+            "citations": [
+              "certs/cks/6.5/en/content.md:1542",
+              "certs/cks/6.5/en/exercises.md:5",
+              "certs/cks/6.5/en/exercises.md:1081",
+              "certs/cks/6.5/es/content.md:1542",
+              "certs/cks/6.5/es/exercises.md:5",
+              "certs/cks/6.5/es/exercises.md:1081"
+            ],
+            "curriculum": 4,
+            "label": 4,
+            "technical": [
+              "certs/cks/6.5/en/content.md:520",
+              "certs/cks/6.5/en/content.md:616",
+              "certs/cks/6.5/en/content.md:997",
+              "certs/cks/6.5/en/content.md:1027",
+              "certs/cks/6.5/en/content.md:1043",
+              "certs/cks/6.5/en/exercises.md:5",
+              "certs/cks/6.5/en/exercises.md:167",
+              "certs/cks/6.5/es/content.md:520",
+              "certs/cks/6.5/es/content.md:616",
+              "certs/cks/6.5/es/content.md:997",
+              "certs/cks/6.5/es/content.md:1027",
+              "certs/cks/6.5/es/content.md:1043",
+              "certs/cks/6.5/es/exercises.md:5",
+              "certs/cks/6.5/es/exercises.md:167",
+              "certs/cks/6.5/lab/break_fix.sh:4",
+              "certs/cks/6.5/lab/break_fix.sh:30",
+              "certs/cks/6.5/lab/break_fix.sh:31",
+              "certs/cks/6.5/lab/break_fix.sh:850"
+            ]
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/cks.md",
+        "sha256": "f9c9bbc6b547576cd08700d406fd0a1437aa4c02e6acfbb4e36ed51fc599276f",
+        "version": "1.34"
+      },
+      "upstream": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.37"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Use Network security policies to restrict cluster level access"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Use CIS benchmark to review the security configuration of Kubernetes components (etcd, kubelet, kubedns, kubeapi)"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Properly set up Ingress objects with TLS"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Protect node metadata and endpoints"
+            },
+            {
+              "new_id": "1.5",
+              "old_id": "1.5",
+              "similarity": 1.0,
+              "text": "Verify platform binaries before deploying"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Use appropriate pod security standards"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Manage kubernetes secrets"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Understand and implement isolation techniques (multi-tenancy, sandboxed containers, etc.)"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Implement Pod-to-Pod encryption (Cilium, Istio)"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Use Role Based Access Controls to minimize exposure"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Restrict access to Kubernetes API"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Upgrade Kubernetes to avoid vulnerabilities"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Minimize base image footprint"
+            },
+            {
+              "new_id": "4.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories)"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"
+            },
+            {
+              "new_id": "4.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Minimize host OS footprint (reduce attack surface)"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "5.2",
+              "similarity": 1.0,
+              "text": "Using least-privilege identity and access management"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Minimize external access to the network"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "5.4",
+              "similarity": 1.0,
+              "text": "Appropriately use kernel hardening tools such as AppArmor, seccomp"
+            },
+            {
+              "new_id": "6.1",
+              "old_id": "6.1",
+              "similarity": 1.0,
+              "text": "Perform behavioral analytics to detect malicious activities"
+            },
+            {
+              "new_id": "6.2",
+              "old_id": "6.2",
+              "similarity": 1.0,
+              "text": "Detect threats within physical infrastructure, apps, networks, data, users and workloads"
+            },
+            {
+              "new_id": "6.3",
+              "old_id": "6.3",
+              "similarity": 1.0,
+              "text": "Investigate and identify phases of attack and bad actors within the environment"
+            },
+            {
+              "new_id": "6.4",
+              "old_id": "6.4",
+              "similarity": 1.0,
+              "text": "Ensure immutability of containers at runtime"
+            },
+            {
+              "new_id": "6.5",
+              "old_id": "6.5",
+              "similarity": 1.0,
+              "text": "Use Kubernetes audit logs to monitor access"
+            }
+          ]
+        },
+        "old": {
+          "domains": 6,
+          "objectives": 26,
+          "version": "1.34"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "upstream_base": {
+        "file": "syllabi/cks/v1.34.yaml",
+        "sha256": "9b88f9a0b25cac014447ebfb3ca0e04edb975520f844a445c700458532e4a3d2",
+        "source": {
+          "commit": "94f35b01ae65763117de7fd5fcd5d57feacae68c",
+          "committed": "2025-10-30",
+          "path": "CKS_Curriculum v1.34.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "a755a5680bec6978de4a3074d7f0c7fe978bd7a9ad5e4f1681597aedda6f6637",
+          "url": "https://github.com/cncf/curriculum/raw/94f35b01ae65763117de7fd5fcd5d57feacae68c/CKS_Curriculum%20v1.34.pdf"
+        },
+        "tree_sha256": "d1abe1fec1cca25e5ac50752e15de854c85b4b192673165659b8f1dca3351d39",
+        "version": "1.34"
+      }
+    }
+  },
+  "issue": 287,
+  "milestone": "v0.6.9",
+  "planned_files": {
+    "keep": [],
+    "new": [
+      "{t}/**"
+    ],
+    "regenerate": [
+      "{t}/**"
+    ],
+    "retire": [
+      "{t}/**"
+    ],
+    "revalidate": [
+      "{t}/{lang}/meta.yaml"
+    ]
+  },
+  "rules": [
+    {
+      "action": "archive the topic directory; redirect its links",
+      "class": "retire",
+      "rule": "its objective is not in the new syllabus (removed, or below MATCH similarity to every new one)"
+    },
+    {
+      "action": "one PR through the whole content process (content, exercises, lab, translations)",
+      "class": "regenerate",
+      "rule": "its objective changed: best match has MATCH (0.6) <= similarity < REWORD (0.9)"
+    },
+    {
+      "action": "re-run every check against the new text; record the result in meta.yaml; a failed check makes it regenerate",
+      "class": "revalidate",
+      "rule": "its objective was reworded (REWORD <= similarity < 1), moved to another domain, or its domain's published weight changed"
+    },
+    {
+      "action": "no content change; only its listed technical version lines may be rewritten in place, by the version bump",
+      "class": "keep",
+      "rule": "its objective text, domain and domain weight are identical"
+    },
+    {
+      "action": "a new topic directory, through the whole content process",
+      "class": "new",
+      "rule": "an objective of the new syllabus that no topic covers"
+    }
+  ],
+  "spec": "docs/upgrades/cks-1.37.yaml",
+  "thresholds": {
+    "match": 0.6,
+    "reword": 0.9
+  },
+  "upgrade": "CKS v1.37"
+}

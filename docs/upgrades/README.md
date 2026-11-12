@@ -10,6 +10,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.yaml](cka-ckad-1.37.yaml) | the upgrade spec: tracked syllabus, target and upstream base per cert | a person |
 | [cka-ckad-1.37.plan.json](cka-ckad-1.37.plan.json) | three diffs per cert, one class per topic, the sections and lines in scope | `scripts/curriculum_diff.py plan` |
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
+| [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)) | a person / `plan` / `render` |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
 The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the others), frozen from the official PDFs.
@@ -47,6 +48,29 @@ title sections should stay as they are. No prose needs a model.
 
 Besides those, 195 lines cite "Curriculum v1.35" (mostly with a dead `raw/master` link) and 43 are headings or banners:
 mechanical, for the switch PR.
+
+## Result for CKS v1.37 (2026-11-12)
+
+The second run of the process, on a cert that did not shape it. `teach tracker sync --provider cncf` (last run on
+2026-09-03, which is why nothing flagged it before) found `CKS_Curriculum v1.37.pdf` (cncf/curriculum
+[`4de0c31`](https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf),
+2026-11-03) and wrote the `upstream:` block. Same pattern as CKA & CKAD: the v1.37 PDF is byte-identical to v1.34
+([`94f35b0`](https://github.com/cncf/curriculum/raw/94f35b01ae65763117de7fd5fcd5d57feacae68c/CKS_Curriculum%20v1.34.pdf),
+sha256 `a755a568…` for both) and both trees hash `d1abe1fe…`.
+
+| Cert | keep | revalidate | regenerate | new | retire | topic files | in scope | sections | version lines (curriculum / label / technical) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| cks | 26 | 0 | 0 | 0 | 0 | 208 | 128 | 0 | 108 / 92 / 706 |
+
+No objective moves and our frozen `certs/cks.md` has no drift from its own PDF: phase 2 is the version bump only.
+
+Two gaps the run found, both closed in the tool:
+
+- The CKS file name has a space, and `extract` wrote it raw into the source URL, breaking the report's links and the
+  window check (the URL must equal the tracker's, which is encoded). It is percent-encoded now.
+- Nothing wrote `upstream.snapshot` and `upstream.milestone`, which the consistency gate (#220) requires; CKA & CKAD
+  were switched before the gate existed. `curriculum_diff.py window` writes them now (step 1 below). With the window
+  open the plan lists 128 files instead of 98: the 30 that cite the curriculum version join the version bump.
 
 ## Sources, pinned by commit
 
@@ -89,6 +113,10 @@ flowchart TD
    usage errors (exit 2), not a crash or an always-STALE answer. The model-based
    `teach cert snapshot` (used for vendors without a PDF layout) now records the sha256 of the vendor's bytes as
    `source_sha256` and refuses a document longer than its 20,000-character window instead of truncating it.
+   **Open the window** before planning: `scripts/curriculum_diff.py window docs/upgrades/<upgrade>.yaml` writes
+   `upstream.snapshot` and `upstream.milestone` into the `upstream:` block `teach tracker sync` wrote, and refuses when
+   the tracker's version or URL is not the frozen snapshot's. The plan reads that window (the citation lines it lists
+   target the upstream version only while it is valid), and `check_curriculum_consistency` fails without it.
 2. **Diff**: objectives match by normalized text first, then by difflib ratio (MATCH 0.60, REWORD 0.90). Three diffs per
    cert: *upstream* (old PDF to new PDF), *drift* (our frozen file to its own PDF), *impact* (our frozen file to the new
    PDF, which drives the classes). Per-objective weights in `certs/<cert>.md` are derived (the domain weight split

@@ -1,0 +1,18 @@
+# Upgrade spec for scripts/curriculum_diff.py plan (#63). The plan and the report next to this file are
+# generated from it and from the files it names; nothing in them is written by hand.
+#
+#   scripts/curriculum_diff.py plan docs/upgrades/cks-1.37.yaml
+#   scripts/curriculum_diff.py render docs/upgrades/cks-1.37.plan.json -o docs/upgrades/cks-1.37.md
+#
+# tracked:       the frozen syllabus the material was built against (default certs/<cert>.md)
+# target:        the new curriculum, frozen from the official PDF pinned by commit
+# upstream_base: the old curriculum frozen from ITS official PDF, so the report can tell what the vendor
+#                changed apart from where our frozen file already differed from its own PDF
+upgrade: CKS v1.37
+milestone: v0.6.9
+issue: 287
+certs:
+  cks:
+    tracked: certs/cks.md
+    target: syllabi/cks/v1.37.yaml
+    upstream_base: syllabi/cks/v1.34.yaml
