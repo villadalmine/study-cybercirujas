@@ -133,6 +133,8 @@ class Unpublished(unittest.TestCase):
             with self.subTest(tracked):
                 fixed = cc.fix_line(self.LINE, strict(entry(tracked=tracked, url=NEW), cert="ckne"))
                 self.assertEqual(fixed, self.LINE.replace("version not yet published", f"version {tracked}"))
+        want = strict(entry(tracked="2026-10-01", url=NEW), cert="ckne")
+        self.assertEqual(cc.fix_line("Version not yet published.", want), "Version 2026-10-01.")   # its own case
 
     def test_it_is_true_while_the_cert_tracks_a_beta(self):
         for tracked in ("beta", "unknown", ""):
@@ -143,7 +145,12 @@ class Unpublished(unittest.TestCase):
         want = strict(entry(tracked="2026-10-01", url=NEW), cert="ckne")
         for phrase in ("versión aún no publicada", "versión no publicada", "versión sin publicar"):
             with self.subTest(phrase):
-                self.assertEqual(cc.fix_line(f"El temario ({phrase}).", want), "El temario (version 2026-10-01).")
+                self.assertEqual(cc.fix_line(f"El temario ({phrase}).", want), "El temario (versión 2026-10-01).")
+
+    def test_with_an_open_window_it_names_the_target(self):
+        # one value per cert: the phrase gets what the other lines get, the window's target
+        e = entry(tracked="1.37", url=NEW, upstream={"version": "1.38", "objectives": NEW.replace("b3c8", "c4d9")})
+        self.assertEqual(cc.fix_line("(version not yet published)", cc.wanted(e, "ckne", strict=True)), "(version 1.38)")
 
 
 class Window(unittest.TestCase):

@@ -30,7 +30,8 @@ numeric_tracked: '^\d+(?:\.\d+)+$'
 
 # A citation that says the curriculum had no published version yet. True while a cert tracks a beta frozen from a web page
 # (tracked_version `beta` or `unknown`); once tracked_version is a published version (`published_tracked`: a dotted number or
-# a date) the phrase disagrees with the catalog, and fix_line writes "version <tracked_version>" in its place (CKNE GA, #285).
+# a date) the phrase disagrees with the catalog, and fix_line writes "<its own word> <tracked_version>" in its place ("versión
+# aún no publicada" -> "versión 2026-10-01"; with an open window, the target version) (CKNE GA, #285).
 unpublished: '(?i)\bversion not yet published\b|\bversi[oó]n (?:a[uú]n )?(?:no|sin) publicar\b|\bversi[oó]n (?:a[uú]n )?no publicada\b'
 published_tracked: '^(?:\d+(?:\.\d+)+|\d{4}-\d{2}-\d{2})$'
 

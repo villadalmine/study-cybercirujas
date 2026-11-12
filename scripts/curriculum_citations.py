@@ -136,7 +136,7 @@ def wanted(entry: dict, cert: str = "", root: Path | None = None, strict: bool =
             "topic_ids": {p.name for p in (root / "certs" / cert).glob("*") if p.is_dir()} if root and cert else set(),
             "regexes": version_regexes(rule_for(entry, cert), tracked, cert) if numeric else [],
             # a published tracked_version: a line saying the version is not published yet disagrees with it
-            "published": tracked if PUBLISHED.match(tracked) else ""}
+            "published": next((v for v in ([target_v] if strict else [tracked]) if PUBLISHED.match(v)), "")}
 
 
 def _urls(line: str):
@@ -168,7 +168,8 @@ def fix_line(line: str, want: dict) -> str:
                 last = b
         line = "".join(out) + line[last:] if out else line
     if UNPUBLISHED is not None and want.get("published"):
-        line = UNPUBLISHED.sub(f"version {want['published']}", line)
+        # keep the phrase's own word ("version", "Version", "versión"): the material's language and case stay
+        line = UNPUBLISHED.sub(lambda m: f"{m.group(0).split()[0]} {want['published']}", line)
     return line
 
 
