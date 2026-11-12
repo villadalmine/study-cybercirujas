@@ -444,8 +444,8 @@ merged PRs, found by `scripts/release_notes.py` when the release is created; a s
 ([CONTRIBUTING → Releases](../CONTRIBUTING.md#releases)).
 
 **How does a curriculum upgrade work?**
-When a vendor publishes a new curriculum version, the cert gets an upgrade milestone
-(`<CERT> v<version> upgrade`) and the process of
+When a vendor publishes a new curriculum version, the upgrade gets a spec in `docs/upgrades/` that names its release
+milestone (`vX.Y.Z`; older upgrades used `<CERT> v<version> upgrade`, #291) and the process of
 [#63](https://github.com/villadalmine/study-cybercirujas/issues/63) runs, with no model until phase 2:
 `scripts/curriculum_diff.py extract` freezes the official PDF, pinned by commit and hashed, in `syllabi/`;
 `window` records that snapshot and the milestone in the catalog's `upstream:` block;
