@@ -7,6 +7,11 @@ content.md, exercises.md, and break_fix.sh are counted separately (see
 docs/HISTORY.md 2026-07-16/17). Run again after any generation to keep the state updated:
 
     .venv/bin/python3 scripts/status_matrix.py
+    .venv/bin/python3 scripts/status_matrix.py --keep-spend   # a PR that is not refreshing spend
+
+`--keep-spend` renders the ledger and keeps the spend footer as committed at HEAD (during a rebase,
+HEAD is the branch being rebased onto), so a content PR never carries a machine's usage log, and a
+rebase conflict in docs/STATUS.md is resolved by running it.
 """
 import sys
 from pathlib import Path
@@ -167,6 +172,22 @@ def check() -> list[str]:
 
 def _write() -> None:
     STATUS.write_text(_render())
+
+
+def committed_spend(ref: str = "HEAD") -> str | None:
+    """The spend footer of docs/STATUS.md at `ref` (from SPEND_MARKER on), or None if it has none."""
+    import subprocess
+    shown = subprocess.run(["git", "show", f"{ref}:docs/STATUS.md"], cwd=REPO, capture_output=True, text=True)
+    if shown.returncode != 0 or SPEND_MARKER not in shown.stdout:
+        return None
+    return SPEND_MARKER + shown.stdout.split(SPEND_MARKER, 1)[1]
+
+
+def keep_spend(rendered: str, footer: str | None) -> str:
+    """`rendered` with its spend footer replaced by `footer` (unchanged when there is none to keep)."""
+    if footer is None:
+        return rendered
+    return rendered.split(SPEND_MARKER)[0] + footer
 
 
 def _render() -> str:
@@ -380,5 +401,11 @@ if __name__ == "__main__":
             print("\n".join(drift[:40]))
             sys.exit(1)
         print("docs/STATUS.md matches the filesystem.")
+        sys.exit(0)
+    if "--keep-spend" in sys.argv:
+        text = keep_spend(_render(), committed_spend())
+        changed = not STATUS.exists() or STATUS.read_text(encoding="utf-8") != text
+        STATUS.write_text(text)
+        print("docs/STATUS.md updated (spend footer as committed)" if changed else "docs/STATUS.md already current")
         sys.exit(0)
     print("docs/STATUS.md updated" if refresh() else "docs/STATUS.md already current")
