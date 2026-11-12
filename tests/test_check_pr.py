@@ -923,9 +923,10 @@ class ExamVersionTests(unittest.TestCase):
         self.assertIn("its spec targets 'https://github.com/cncf/curriculum", problems[0])
 
     def test_a_spec_whose_target_is_missing_says_so(self):
-        specs = {"v0.6.10": {"ckne": {}}}
-        problems = check_pr.exam_version(["ckne"], "v0.6.10", "exam-version", {"ckne": "2026-10-01"}, specs)
-        self.assertIn("target snapshot is missing", problems[0])
+        for target in ({}, {"version": "2026-10-01", "url": ""}):
+            specs = {"v0.6.10": {"ckne": target}}
+            problems = check_pr.exam_version(["ckne"], "v0.6.10", "exam-version", {"ckne": "2026-10-01"}, specs)
+            self.assertIn("target snapshot is missing", problems[0])
 
     def test_a_versioned_milestone_without_its_spec_does_not_authorize(self):
         cases = (

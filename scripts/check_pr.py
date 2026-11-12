@@ -584,10 +584,10 @@ def spec_mismatch(changed: list[str], milestone: str, versions: dict[str, str],
     missing = [c for c in changed if c not in covered]
     if missing:
         return f"the upgrade spec of {milestone!r} does not cover {', '.join(missing)}"
-    broken = [c for c in changed if not covered[c].get("version")]
+    broken = [c for c in changed if not covered[c].get("version") or not covered[c].get("url")]
     if broken:
         return (f"the upgrade spec of {milestone!r} names {', '.join(broken)} but its target snapshot is missing "
-                "on the base or has no version")
+                "on the base or has no version or source.url")
     objectives = objectives or {}
     wrong = [f"{c} is at {versions[c]!r}, its spec targets {covered[c]['version']!r}" for c in changed
              if c in versions and versions[c] != covered[c]["version"]]
