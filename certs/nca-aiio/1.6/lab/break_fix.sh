@@ -18,12 +18,12 @@
 #   Your job: make `./this-script.sh check` report ALL GREEN.
 #
 # Usage:
-#   ./nca-aiio-1.6-break-fix.sh break    # create the broken lab
-#   ./nca-aiio-1.6-break-fix.sh check    # validate your fixes (run as often as you like)
-#   ./nca-aiio-1.6-break-fix.sh status   # show the scenario and what to achieve again
-#   ./nca-aiio-1.6-break-fix.sh reset    # delete the lab directory (only the lab)
+#   ./break_fix.sh break    # create the broken lab
+#   ./break_fix.sh check    # validate your fixes (run as often as you like)
+#   ./break_fix.sh status   # show the scenario and what to achieve again
+#   ./break_fix.sh reset    # delete the lab directory (only the lab)
 #
-# Override the location with: LAB_DIR=/tmp/mylab ./nca-aiio-1.6-break-fix.sh break
+# Override the location with: LAB_DIR=/tmp/mylab ./break_fix.sh break
 #
 # Official references:
 #   - NVIDIA NCA-AIIO exam guide:
@@ -513,6 +513,6 @@ esac
 #   NVIDIA AI Enterprise -> supported, licensed software suite bundling the above for production
 #
 # --- Verify ------------------------------------------------------------------
-#   ./nca-aiio-1.6-break-fix.sh check     # expect: ALL GREEN
-#   ./nca-aiio-1.6-break-fix.sh reset     # clean up the disposable lab
+#   ./break_fix.sh check     # expect: ALL GREEN
+#   ./break_fix.sh reset     # clean up the disposable lab
 # =============================================================================
