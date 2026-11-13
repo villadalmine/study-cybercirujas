@@ -1,36 +1,33 @@
 # Community 171
 
-> 15 nodes · cohesion 0.34
+> 7 nodes · cohesion 0.38
 
 ## Key Concepts
 
-- **Path** (15 connections)
-- **_base_slide()** (9 connections) — `teach/core/video.py`
-- **_font()** (8 connections) — `teach/core/video.py`
-- **_fonts_for()** (8 connections) — `teach/core/video.py`
-- **_render_slide()** (8 connections) — `teach/core/video.py`
-- **_slide_domains()** (8 connections) — `teach/core/video.py`
-- **_slide_bullets()** (7 connections) — `teach/core/video.py`
-- **_slide_path()** (7 connections) — `teach/core/video.py`
-- **_slide_title()** (7 connections) — `teach/core/video.py`
-- **_wrap()** (7 connections) — `teach/core/video.py`
-- **FreeTypeFont** (2 connections)
-- **ImageDraw** (2 connections)
-- **Image** (1 connections)
-- **(bold, regular) — Noto Sans CJK for zh/ja when installed, otherwise it falls…** (1 connections) — `teach/core/video.py`
-- **Barras horizontales con el peso de cada dominio del examen — dato real (sumado…** (1 connections) — `teach/core/video.py`
+- **default_spec()** (7 connections) — `teach/core/labs.py`
+- **script_resources()** (5 connections) — `teach/core/labs.py`
+- **Resources** (3 connections) — `tests/test_lab_contract_gen.py`
+- **.test_missing_or_out_of_bounds_falls_back_per_value()** (3 connections) — `tests/test_lab_contract_gen.py`
+- **.test_the_header_sizes_lab_yaml()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **`# lab-resources: cpus=2 ram_mb=2048` -> {"cpus": 2, "ram_mb": 2048}. Missing,…** (1 connections) — `teach/core/labs.py`
+- **The lab.yaml every topic starts from — one definition, used by the AI generator…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [video.py](video.py.md) (19 shared connections)
+- [Community 121](Community_121.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 8](Community_8.md) (1 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/video.py`
+- `teach/core/labs.py`
+- `tests/test_lab_contract_gen.py`
 
 ## Audit Trail
 
-- EXTRACTED: 55 (100%)
+- EXTRACTED: 14 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -23,7 +23,7 @@
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 126](Community_126.md) (1 shared connections)
 - [Community 141](Community_141.md) (1 shared connections)
-- [Community 232](Community_232.md) (1 shared connections)
+- [Community 55](Community_55.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)

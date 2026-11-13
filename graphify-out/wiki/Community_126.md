@@ -1,14 +1,13 @@
 # Community 126
 
-> 21 nodes · cohesion 0.17
+> 19 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **translate_topic()** (16 connections) — `teach/core/generator.py`
-- **content_dir()** (11 connections) — `teach/core/certs.py`
+- **get_topic()** (14 connections) — `teach/core/certs.py`
+- **content_dir()** (12 connections) — `teach/core/certs.py`
 - **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
-- **get_topic()** (10 connections) — `teach/core/certs.py`
-- **topic_outdated_langs()** (9 connections) — `teach/core/certs.py`
+- **topic_outdated_langs()** (10 connections) — `teach/core/certs.py`
 - **topic_langs()** (8 connections) — `teach/core/certs.py`
 - **._outdated()** (7 connections) — `tests/test_stale_cycle.py`
 - **._regenerate()** (5 connections) — `tests/test_stale_cycle.py`
@@ -21,36 +20,33 @@
 - **.tearDown()** (1 connections) — `tests/test_stale_cycle.py`
 - **Idiomas en los que existe contenido de un tema.** (1 connections) — `teach/core/certs.py`
 - **Languages whose content predates the last syllabus change. A topic goes 'stale'…** (1 connections) — `teach/core/certs.py`
-- **Translate an existing topic instead of re-authoring it. `generate_topic` never…** (1 connections) — `teach/core/generator.py`
 - **A topic that never changed reports no outdated languages, however old its…** (1 connections) — `tests/test_stale_cycle.py`
 - **When in doubt, regenerate: if freshness cannot be proven, it is not assumed.** (1 connections) — `tests/test_stale_cycle.py`
 - **The case that drove the design: rebuilding Spanish cannot mark the topic…** (1 connections) — `tests/test_stale_cycle.py`
 
 ## Relationships
 
+- [Community 7](Community_7.md) (10 shared connections)
 - [Community 10](Community_10.md) (8 shared connections)
-- [Community 273](Community_273.md) (5 shared connections)
 - [Community 173](Community_173.md) (3 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
+- [Community 134](Community_134.md) (3 shared connections)
 - [Community 8](Community_8.md) (2 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
 - [Community 207](Community_207.md) (1 shared connections)
 - [Community 55](Community_55.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)
-- [Community 0](Community_0.md) (1 shared connections)
 
 ## Source Files
 
 - `teach/core/certs.py`
-- `teach/core/generator.py`
 - `tests/test_stale_cycle.py`
 
 ## Audit Trail
 
-- EXTRACTED: 68 (97%)
-- INFERRED: 2 (3%)
+- EXTRACTED: 62 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

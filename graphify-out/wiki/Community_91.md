@@ -1,10 +1,10 @@
 # Community 91
 
-> 27 nodes · cohesion 0.10
+> 32 nodes · cohesion 0.08
 
 ## Key Concepts
 
-- **ExamVersionTests** (27 connections) — `tests/test_check_pr.py`
+- **ExamVersionTests** (32 connections) — `tests/test_check_pr.py`
 - **.changes()** (7 connections) — `tests/test_check_pr.py`
 - **.gh_base()** (5 connections) — `tests/test_check_pr.py`
 - **.test_objectives_file_name_change_is_detected()** (3 connections) — `tests/test_check_pr.py`
@@ -19,6 +19,9 @@
 - **.test_a_milestone_for_another_cert_does_not_authorize()** (1 connections) — `tests/test_check_pr.py`
 - **.test_a_percent_encoded_name_is_the_same_document()** (1 connections) — `tests/test_check_pr.py`
 - **.test_a_removed_cert_needs_only_to_be_named()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_spec_whose_target_is_missing_says_so()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_versioned_milestone_authorizes_through_its_upgrade_spec()** (1 connections) — `tests/test_check_pr.py`
+- **.test_a_versioned_milestone_without_its_spec_does_not_authorize()** (1 connections) — `tests/test_check_pr.py`
 - **.test_cert_separators_are_ampersand_comma_and_and()** (1 connections) — `tests/test_check_pr.py`
 - **.test_every_changed_cert_must_be_named()** (1 connections) — `tests/test_check_pr.py`
 - **.test_every_version_shape_of_the_real_catalog_can_be_authorized()** (1 connections) — `tests/test_check_pr.py`
@@ -26,14 +29,11 @@
 - **.test_only_an_upgrade_milestone_authorizes()** (1 connections) — `tests/test_check_pr.py`
 - **.test_the_declared_scope_alone_is_not_enough()** (1 connections) — `tests/test_check_pr.py`
 - **.test_the_label_and_the_description_text_authorize_nothing()** (1 connections) — `tests/test_check_pr.py`
-- **.test_the_milestone_alone_is_not_enough()** (1 connections) — `tests/test_check_pr.py`
-- **.test_the_version_must_equal_the_new_tracked_version()** (1 connections) — `tests/test_check_pr.py`
-- **.test_tracked_versions_reads_the_catalog()** (1 connections) — `tests/test_check_pr.py`
-- *... and 2 more nodes in this community*
+- *... and 7 more nodes in this community*
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
@@ -41,7 +41,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 37 (100%)
+- EXTRACTED: 42 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

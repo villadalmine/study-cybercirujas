@@ -1,34 +1,39 @@
 # Community 134
 
-> 8 nodes · cohesion 0.25
+> 11 nodes · cohesion 0.31
 
 ## Key Concepts
 
-- **The loop** (10 connections) — `docs/WORKFLOW.md`
-- **1. Snapshot the syllabus — once per certification** (2 connections) — `docs/WORKFLOW.md`
-- **2. Generate** (2 connections) — `docs/WORKFLOW.md`
-- **The syllabus-change trigger** (2 connections) — `docs/WORKFLOW.md`
-- **2b. The quality floor — the same standard for every backend** (1 connections) — `docs/WORKFLOW.md`
-- **2c. What "quality" can and cannot be proven mechanically** (1 connections) — `docs/WORKFLOW.md`
-- **4. Status** (1 connections) — `docs/WORKFLOW.md`
-- **5. Commit** (1 connections) — `docs/WORKFLOW.md`
+- **GenerateLab** (9 connections) — `tests/test_lab_contract_gen.py`
+- **.cert()** (7 connections) — `tests/test_lab_contract_gen.py`
+- **.run_lab()** (7 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_stale_topic_rebuilt_in_every_language_is_cleared()** (5 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_half_written_topic_stays_pending()** (4 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_pending_topic_is_finished_and_billed_to_itself()** (4 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_verified_lab_is_not_replaced()** (3 connections) — `tests/test_lab_contract_gen.py`
+- **complete()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **complete()** (1 connections) — `tests/test_lab_contract_gen.py`
+- **.setUp()** (1 connections) — `tests/test_lab_contract_gen.py`
+- **Status and accounting of a lab written on its own (#299 review).** (1 connections) — `tests/test_lab_contract_gen.py`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 273](Community_273.md) (1 shared connections)
-- [Community 257](Community_257.md) (1 shared connections)
-- [Community 221](Community_221.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
+- [Community 126](Community_126.md) (3 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 51](Community_51.md) (1 shared connections)
+- [Community 218](Community_218.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 244](Community_244.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/WORKFLOW.md`
+- `tests/test_lab_contract_gen.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (85%)
-- INFERRED: 2 (15%)
+- EXTRACTED: 22 (81%)
+- INFERRED: 5 (19%)
 - AMBIGUOUS: 0 (0%)
 
 ---

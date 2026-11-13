@@ -1,11 +1,11 @@
 # Community 1
 
-> 42 nodes · cohesion 0.09
+> 41 nodes · cohesion 0.10
 
 ## Key Concepts
 
 - **test_cli.py** (23 connections) — `tests/lab/test_cli.py`
-- **lab/__init__.py** (20 connections) — `teach/lab/__init__.py`
+- **lab/__init__.py** (21 connections) — `teach/lab/__init__.py`
 - **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
@@ -29,21 +29,21 @@
 - **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
 - **skipif** (3 connections)
-- *... and 17 more nodes in this community*
+- *... and 16 more nodes in this community*
 
 ## Relationships
 
-- [Community 26](Community_26.md) (8 shared connections)
-- [Community 61](Community_61.md) (7 shared connections)
-- [Community 29](Community_29.md) (6 shared connections)
+- [Community 29](Community_29.md) (13 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 61](Community_61.md) (5 shared connections)
 - [Community 18](Community_18.md) (5 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
 - [Community 56](Community_56.md) (3 shared connections)
 - [Community 70](Community_70.md) (3 shared connections)
-- [Community 69](Community_69.md) (3 shared connections)
+- [Community 111](Community_111.md) (3 shared connections)
 - [Community 34](Community_34.md) (2 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 236](Community_236.md) (1 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)
 
 ## Source Files
@@ -53,7 +53,6 @@
 - `tests/lab/conftest.py`
 - `tests/lab/test_cli.py`
 - `tests/lab/test_e2e.py`
-- `tests/lab/test_export_killercoda.py`
 
 ## Audit Trail
 

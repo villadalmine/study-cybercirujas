@@ -5,15 +5,16 @@
 ## Key Concepts
 
 - **From issue to release** (6 connections) — `docs/ISSUE-TO-RELEASE.md`
+- **The rules of the flow** (2 connections) — `docs/ISSUE-TO-RELEASE.md`
 - **Every label, who sets it** (1 connections) — `docs/ISSUE-TO-RELEASE.md`
 - **Milestones** (1 connections) — `docs/ISSUE-TO-RELEASE.md`
 - **Review and exceptions** (1 connections) — `docs/ISSUE-TO-RELEASE.md`
 - **Someone from outside the project** (1 connections) — `docs/ISSUE-TO-RELEASE.md`
-- **The rules of the flow** (1 connections) — `docs/ISSUE-TO-RELEASE.md`
 
 ## Relationships
 
 - [Community 23](Community_23.md) (1 shared connections)
+- [Community 44](Community_44.md) (1 shared connections)
 
 ## Source Files
 
@@ -21,8 +22,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 6 (86%)
+- INFERRED: 1 (14%)
 - AMBIGUOUS: 0 (0%)
 
 ---

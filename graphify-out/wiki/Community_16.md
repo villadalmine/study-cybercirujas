@@ -35,7 +35,7 @@
 
 - [Community 110](Community_110.md) (1 shared connections)
 - [Community 73](Community_73.md) (1 shared connections)
-- [Community 276](Community_276.md) (1 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 19](Community_19.md) (1 shared connections)

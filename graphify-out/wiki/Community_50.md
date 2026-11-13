@@ -1,27 +1,41 @@
 # Community 50
 
-> 3 nodes · cohesion 0.67
+> 17 nodes · cohesion 0.19
 
 ## Key Concepts
 
-- **pending()** (5 connections) — `scripts/run_batch.py`
-- **_sort_key()** (2 connections) — `scripts/run_batch.py`
-- **Topics still missing for this combination, in syllabus order.** (1 connections) — `scripts/run_batch.py`
+- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
+- **.run_check()** (8 connections) — `tests/test_source_chain.py`
+- **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.__init__()** (5 connections) — `tests/test_source_chain.py`
+- **.meta()** (4 connections) — `tests/test_source_chain.py`
+- **.test_a_translation_without_its_source_hash_fails_unless_in_the_baseline()** (3 connections) — `tests/test_source_chain.py`
+- **.test_the_baseline_cannot_grow()** (3 connections) — `tests/test_source_chain.py`
+- **.setUp()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_changed_source_marks_translation_lab_and_video_stale()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_fully_declared_chain_passes()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_lab_must_belong_to_a_syllabus_topic()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_stale_baseline_line_must_be_deleted()** (2 connections) — `tests/test_source_chain.py`
+- **.test_a_v2_lab_must_say_what_it_derives_from()** (2 connections) — `tests/test_source_chain.py`
+- **.test_the_real_baseline_is_within_its_ceiling()** (1 connections) — `tests/test_source_chain.py`
+- **.test_the_real_repository_passes()** (1 connections) — `tests/test_source_chain.py`
+- **Path** (1 connections)
+- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
-- [Community 249](Community_249.md) (2 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/run_batch.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (83%)
-- INFERRED: 1 (17%)
+- EXTRACTED: 28 (93%)
+- INFERRED: 2 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

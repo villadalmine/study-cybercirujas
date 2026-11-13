@@ -1,38 +1,42 @@
 # Community 75
 
-> 13 nodes · cohesion 0.27
+> 14 nodes · cohesion 0.23
 
 ## Key Concepts
 
-- **search_topics()** (19 connections) — `teach/core/corpus.py`
-- **SearchTests** (11 connections) — `tests/test_corpus.py`
-- **.test_a_query_of_nothing_but_filler_still_answers()** (2 connections) — `tests/test_corpus.py`
-- **.test_a_query_that_matches_nothing_returns_nothing()** (2 connections) — `tests/test_corpus.py`
-- **.test_a_title_hit_outranks_a_domain_hit()** (2 connections) — `tests/test_corpus.py`
-- **.test_accents_and_case_do_not_matter()** (2 connections) — `tests/test_corpus.py`
-- **.test_an_exact_topic_id_wins()** (2 connections) — `tests/test_corpus.py`
-- **.test_every_hit_explains_itself()** (2 connections) — `tests/test_corpus.py`
-- **.test_filler_words_are_dropped_by_measurement_not_by_a_list()** (2 connections) — `tests/test_corpus.py`
-- **.test_material_breaks_a_tie()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_cert_filter_is_honoured()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_limit_is_bounded_however_it_is_asked_for()** (2 connections) — `tests/test_corpus.py`
-- **Which topics mention this, ranked, with the reason for each hit. Scores a term…** (1 connections) — `teach/core/corpus.py`
+- **translation_source_sha256()** (16 connections) — `teach/core/certs.py`
+- **topic()** (12 connections) — `tests/test_fix_citation.py`
+- **Fix** (11 connections) — `tests/test_fix_citation.py`
+- **.test_a_repeated_hash_aborts_before_any_file_is_written()** (3 connections) — `tests/test_fix_citation.py`
+- **.test_dry_run_reports_only_real_restamps_and_divergence()** (3 connections) — `tests/test_fix_citation.py`
+- **.test_a_longer_url_with_the_same_prefix_is_refused_and_nothing_is_written()** (2 connections) — `tests/test_fix_citation.py`
+- **.test_a_stale_translation_stays_stale()** (2 connections) — `tests/test_fix_citation.py`
+- **.test_crlf_is_kept()** (2 connections) — `tests/test_fix_citation.py`
+- **.test_dry_run_writes_nothing()** (2 connections) — `tests/test_fix_citation.py`
+- **.test_refusals()** (2 connections) — `tests/test_fix_citation.py`
+- **.test_a_redirect_is_not_a_200()** (1 connections) — `tests/test_fix_citation.py`
+- **.test_trailing_punctuation_is_not_part_of_the_url()** (1 connections) — `tests/test_fix_citation.py`
+- **Path** (1 connections)
+- **What a translation of this topic is derived from: the source language's content…** (1 connections) — `teach/core/certs.py`
 
 ## Relationships
 
-- [Community 253](Community_253.md) (4 shared connections)
-- [Community 55](Community_55.md) (3 shared connections)
-- [Community 232](Community_232.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
+- [Community 54](Community_54.md) (6 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 44](Community_44.md) (3 shared connections)
+- [Community 22](Community_22.md) (2 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
-- `tests/test_corpus.py`
+- `teach/core/certs.py`
+- `tests/test_fix_citation.py`
 
 ## Audit Trail
 
-- EXTRACTED: 30 (100%)
+- EXTRACTED: 38 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

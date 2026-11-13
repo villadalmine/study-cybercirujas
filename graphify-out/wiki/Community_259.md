@@ -1,31 +1,26 @@
 # Community 259
 
-> 6 nodes · cohesion 0.47
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **_cli_env()** (7 connections) — `teach/core/generator.py`
-- **CliEnvTest** (4 connections) — `tests/test_split_answer.py`
-- **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
-- **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
-- **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
-- **Environment for the agent CLI: ours, plus the declared output ceiling. The…** (1 connections) — `teach/core/generator.py`
+- **test_ensure_image_builds_locally_and_never_pulls()** (4 connections) — `tests/lab/test_images.py`
+- **fake()** (1 connections) — `tests/lab/test_images.py`
+- **__init__()** (1 connections) — `tests/lab/test_images.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 267](Community_267.md) (1 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
+- [Community 112](Community_112.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/generator.py`
-- `tests/test_split_answer.py`
+- `tests/lab/test_images.py`
 
 ## Audit Trail
 
-- EXTRACTED: 11 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 3 (75%)
+- INFERRED: 1 (25%)
 - AMBIGUOUS: 0 (0%)
 
 ---
