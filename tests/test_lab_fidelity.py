@@ -66,8 +66,10 @@ ISSUES = [
     issue("HIGH", IAM, "iam|GetRole|2xx->2xx|$.Role"),
     issue("CRITICAL", "", "codebuild|StartBuild|Timeout", "iam|GetRole|2xx->4xx|status"),   # a chain: two services
     issue("HIGH", APPFLOW, "s3|GetObject|2xx->2xx|$.Body"),                                 # filed under appflow
-    issue("CRITICAL", S3, "s3|GetObject|NotImplemented", "s3.cond-get|run#9|AssertionError|assert code == 304"),
-    issue("HIGH", IAM, "iam|CreateServiceLinkedRole|NotImplemented"),
+    dict(issue("CRITICAL", S3, "s3|GetObject|NotImplemented", "s3.cond-get|run#9|AssertionError|assert code == 304"),
+         file="issues/things-that-do-not-work/s3-getobject-if-match.md"),
+    dict(issue("HIGH", IAM, "iam|CreateServiceLinkedRole|NotImplemented"),
+         file="issues/things-that-do-not-work/iam-slr-stub.md"),
     issue("HIGH", XRAY, "cloudwatch-logs|PutResourcePolicy|4xx->2xx|$"),
     issue("HIGH", XRAY, "logs|CreateLogGroup|2xx->2xx|$", "logs|PutResourcePolicy|2xx->4xx|status"),
 ]
@@ -258,8 +260,18 @@ class Check(unittest.TestCase):
         code, out = self.run_check()
         self.assertEqual(code, 0)
         self.assertIn("warn: critical-issue", out)
-        self.assertEqual(yaml.safe_load(self.lab.read_text())["fidelity"]["operations"]["s3:GetObject"]["verdict"],
-                         "warn: critical-issue")
+        op = yaml.safe_load(self.lab.read_text())["fidelity"]["operations"]["s3:GetObject"]
+        self.assertEqual(op["verdict"], "warn: critical-issue")
+        self.assertEqual(op["issues"], ["issues/things-that-do-not-work/s3-getobject-if-match.md"],
+                         "the block names the CRITICAL issue the warning comes from")
+        self.assertIn("issues/things-that-do-not-work/s3-getobject-if-match.md", out)
+
+    def test_a_stub_names_its_issue_and_ok_has_no_issue_list(self):
+        self.write(["s3:CreateBucket", "iam:CreateServiceLinkedRole"])
+        self.run_check("--write")
+        ops = yaml.safe_load(self.lab.read_text())["fidelity"]["operations"]
+        self.assertEqual(ops["iam:CreateServiceLinkedRole"]["issues"], ["issues/things-that-do-not-work/iam-slr-stub.md"])
+        self.assertNotIn("issues", ops["s3:CreateBucket"])
 
     def test_write_replaces_the_block_and_keeps_the_rest(self):
         self.write(["s3:CreateBucket"], extra="requires: linux\n")

@@ -219,6 +219,10 @@ fidelity:                     # written by `scripts/lab_fidelity.py check --writ
 | `warn: critical-issue` | it passes in some units, but a CRITICAL known issue about that service names it. The data is per operation, not per way of calling it (`s3|GetObject|NotImplemented` is only the If-Match path), so it is recorded, printed, and left to the runner's proof |
 | `ok` | otherwise; failing units and other known issues stay visible in the counts |
 
+For `warn: critical-issue` and `reject: not-implemented`, the operation also gets `issues:`, the emulator's
+known-issue files the verdict comes from (path in the pinned commit, so `git show <commit>:<path>` reads it),
+for example `s3:GetObject: {verdict: 'warn: critical-issue', ..., issues: [issues/things-that-do-not-work/<file>.md]}`.
+
 An operation belongs to the service whose emulator crate has a handler for it (`services/<crate>/src/ops/<op>.rs`,
 listed with `git ls-tree` at the pinned commit): a call inside a budgets scenario to `CreateRole` counts for
 `iam:CreateRole`, and an Issue-Key counts for the service it names, not the scenario's Shape-Id.

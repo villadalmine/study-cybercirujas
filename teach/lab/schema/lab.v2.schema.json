@@ -216,7 +216,8 @@
               "verdict": {"enum": ["ok", "warn: critical-issue", "reject: no-evidence", "reject: not-implemented"]},
               "passing_units": {"type": "integer", "minimum": 0},
               "failing_units": {"type": "integer", "minimum": 0},
-              "known_issues": {"type": "integer", "minimum": 0}
+              "known_issues": {"type": "integer", "minimum": 0},
+              "issues": {"type": "array", "items": {"type": "string", "pattern": "^issues/things-that-do-not-work/[^/]+\\.md$"}, "description": "For `warn: critical-issue` and `reject: not-implemented`: the emulator's known-issue files (path in the pinned commit) the verdict comes from."}
             }
           }
         }

@@ -251,17 +251,20 @@ def key_services(key: str, owners: dict[str, set[str]], ids: dict[str, str]) -> 
 
 
 def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -> dict:
-    """{(service, Operation): {passing_units, failing_units, known_issues, severities, causes}}
+    """{(service, Operation): {passing_units, failing_units, known_issues, severities, causes, critical, not_implemented}}
 
     A wire unit is filed under the scenario's service, but its steps may call other services (a budgets scenario
     calls iam:CreateRole). Each call is credited to the service that owns the operation: the unit's own service when
     it has a handler for it, else the only owner; an operation with several other owners is not credited (on
     v1.0.345 that drops 451 passing calls, e.g. CreateBucket from scenarios of other services: conservative). A known
     issue's severity counts only when all its keys are about one service, so a CRITICAL "the CodeBuild chain never
-    finishes" does not reject `iam:GetRole` because the chain calls it.
+    finishes" does not reject `iam:GetRole` because the chain calls it. `critical` and `not_implemented` keep the
+    issue files (path in the pinned commit) behind a `warn: critical-issue` or `reject: not-implemented` verdict, so
+    the lab's `fidelity:` block names the evidence instead of only the verdict.
     """
     idx: dict = defaultdict(lambda: {"passing_units": 0, "failing_units": 0, "known_issues": 0,
-                                     "severities": set(), "causes": set()})
+                                     "severities": set(), "causes": set(),
+                                     "critical": set(), "not_implemented": set()})
     for unit in scores["units"]:
         steps = (unit.get("detail") or {}).get("steps") or []
         services = {namespace(s) for s in unit.get("services", []) if s.startswith("com.amazonaws.")}
@@ -287,15 +290,19 @@ def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -
                     entry["known_issues"] += 1
                     if len(about) == 1:
                         entry["severities"].add(issue["severity"])
+                        if issue["severity"] == "CRITICAL" and issue.get("file"):
+                            entry["critical"].add(issue["file"])
                 if len(key.split("|")) > 2:
                     entry["causes"].add(key.split("|")[2])
+                    if key.split("|")[2] == "NotImplemented" and issue.get("file"):
+                        entry["not_implemented"].add(issue["file"])
     return idx
 
 
 def load_data(pin: dict) -> tuple[dict, list[dict], dict[str, set[str]]]:
     root = ensure_data(pin)
     scores = json.loads(gzip.decompress((root / "scores.json.gz").read_bytes()))
-    issues = [parse_issue(f.read_text(encoding="utf-8", errors="replace"))
+    issues = [{**parse_issue(f.read_text(encoding="utf-8", errors="replace")), "file": f"{ISSUES_DIR}/{f.name}"}
               for f in sorted((root / "repo" / ISSUES_DIR).glob("*.md"))]
     shapes = {s for u in scores["units"] for s in u.get("services", []) if s.startswith("com.amazonaws.")}
     shapes |= {i["shape"] for i in issues if i["shape"].startswith("com.amazonaws.")}
@@ -341,10 +348,14 @@ def fidelity_block(uses: list[str], pin: dict, index: dict, today: str) -> dict:
     for op in uses:
         svc, _, name = op.partition(":")
         e = index.get((svc, name))
-        ops[op] = {"verdict": verdict(e),
+        v = verdict(e)
+        ops[op] = {"verdict": v,
                    "passing_units": e["passing_units"] if e else 0,
                    "failing_units": e["failing_units"] if e else 0,
                    "known_issues": e["known_issues"] if e else 0}
+        why = {"warn: critical-issue": "critical", "reject: not-implemented": "not_implemented"}.get(v)
+        if why:
+            ops[op]["issues"] = sorted(e.get(why, ()))
     return {"emulator": EMULATOR, "release": pin["release"], "commit": pin["commit"],
             "scores_sha256": pin["scores_sha256"],
             "tool_sha256": sha256((REPO / TOOL).read_bytes()),
@@ -382,7 +393,7 @@ def cmd_check(args) -> int:
         rejected = {op: v["verdict"] for op, v in block["operations"].items() if v["verdict"].startswith("reject")}
         for op, v in block["operations"].items():
             print(f"     {rel}  {op:40} {v['verdict']:24} pass {v['passing_units']:4}  fail {v['failing_units']:4}  "
-                  f"known {v['known_issues']}")
+                  f"known {v['known_issues']}" + "".join(f"\n         {f}" for f in v.get("issues", [])))
         if args.write:
             path.write_text(with_fidelity(path.read_text(encoding="utf-8"), block), encoding="utf-8")
         else:
