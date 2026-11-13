@@ -83,7 +83,7 @@ cleanup() {
 }
 
 confirm() {
-  [[ "${AIIO_LAB_YES:-0}" == "1" ]] && return 0
+  [[ "${AIIO_LAB_YES:-0}" == "1" || "${STUDY_LAB:-}" == "1" || "${LAB_DISPOSABLE:-}" == "yes" ]] && return 0
   if [[ ! -t 0 ]]; then
     die "Non-interactive shell: re-run with AIIO_LAB_YES=1 once you are sure this is a disposable VM."
   fi
