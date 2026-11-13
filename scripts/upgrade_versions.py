@@ -12,6 +12,8 @@ only those lines and nothing else, from the one pins file:
   "the next one"), so "1.33 -> 1.34 -> 1.35" stays a forward chain; as an image or package tag (`busybox:1.35`) it stays;
 - a line with a calendar date ("Aug 2025": a release table row) is left as written, its dates belong to its versions;
 - `Minor:"34"` in version output moves with the line's other tokens;
+- a token after "were produced / generated / captured" (or "fueron producidas …") in the same sentence stays: a
+  record of how a transcript was made is not re-made by a bump;
 - an escaped dot (`v1\.33` in a sed or grep pattern) is a token too, and keeps its escape;
 - a token that dates a fact (at most two words after since, beta, GA, went, removed, gone, default, verified, … in the same clause,
   and the Spanish forms) is left as written: it is true of the release it names; the rest of its line moves;
@@ -62,6 +64,13 @@ HISTORY = re.compile(
 DATED = re.compile(r"(?i)\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|ene|abr|ago|dic)[a-z]*\.?\s+(?:19|20)\d{2}\b")
 # kubeadm/kubectl version output names the minor as a quoted number too: `Minor:"34"` moves with `GitVersion`.
 MINOR_FIELD = re.compile(r'(Minor:")(\d{2})(")')
+# A sentence that records how something was made ("They were produced with kubesec v2.14.x, … against Kubernetes
+# v1.34", "Fueron producidas con … contra Kubernetes v1.34") dates every version after the verb in it: the transcripts
+# were not re-made on the new release (#318 round 2). The whole sentence counts, not the clause: such a sentence
+# lists tools with commas.
+RECORD = re.compile(r"(?i)\b(?:were|was|been|fueron|fue|han sido|ha sido)\s+(?:produced|generated|captured|recorded|"
+                    r"producid[oa]s?|generad[oa]s?|capturad[oa]s?|grabad[oa]s?|registrad[oa]s?)\b")
+SENTENCE = re.compile(r"[.!?](?:\*\*)?\s")
 CLAUSE = re.compile(r"[.;:!?](?:\*\*)?\s|[,(\u2014|]")
 # The minor above the tracked one stays only as an image or package tag (`busybox:1.35`, `pkg@1.35`).
 TAG = re.compile(r"[:@]$")
@@ -112,7 +121,8 @@ def rewrite(line: str, pins: dict) -> str:
         ahead = above and minor == t_minor + 1 and not TAG.search(before)
         if not (t_minor - shift <= minor <= t_minor or ahead):
             return m.group(0)
-        if HISTORY.search(CLAUSE.split(before)[-1]) or m.string[m.end():m.end() + 1] == "+":
+        if (HISTORY.search(CLAUSE.split(before)[-1]) or RECORD.search(SENTENCE.split(before)[-1])
+                or m.string[m.end():m.end() + 1] == "+"):
             return m.group(0)                    # a dated fact ("GA in v1.33", "in v1.33+"): true of that release
         out = f"{v}1{dot}{minor + shift}"
         if patch is None:

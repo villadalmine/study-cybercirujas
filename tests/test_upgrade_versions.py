@@ -106,6 +106,14 @@ class ReviewOf318(unittest.TestCase):
         self.assertEqual(self.r(q), q)                                   # a scenario of its own: its answer names only 1.32
         self.assertEqual(self.r("repoint the apt repository URL back to `v1.33`"), "repoint the apt repository URL back to `v1.36`")
 
+    def test_a_record_of_how_transcripts_were_made_stays(self):
+        en = ("> **How to read.** They were produced with `kubesec v2.14.x`, `trivy v0.6x.x` and `conftest v0.5x.x` "
+              "against Kubernetes v1.34. The exam runs on v1.34.")
+        self.assertEqual(self.r(en), en[:-6] + "v1.37.")                 # the next sentence is not the record
+        es = "Fueron producidas con `kubesec v2.14.x`, `kube-linter v0.7.x` contra Kubernetes v1.34. Rinde en v1.34."
+        self.assertEqual(self.r(es), es[:-6] + "v1.37.")
+        self.assertEqual(self.r("Images produced by the build on v1.34"), "Images produced by the build on v1.37")
+
     def test_the_rest_of_a_line_with_a_dated_fact_moves(self):
         self.assertEqual(self.r("(since v1.28; it was two before that). So v1.34.1 apiserver with v1.33.4 kubelets"),
                          "(since v1.28; it was two before that). So v1.37.2 apiserver with v1.36.4 kubelets")
