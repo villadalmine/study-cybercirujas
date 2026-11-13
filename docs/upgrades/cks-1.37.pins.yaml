@@ -1,0 +1,18 @@
+# The one place the cks-1.37 upgrade pins its versions. scripts/upgrade_versions.py reads only this file
+# and the plan. Written by scripts/upgrade_pins.py from live sources on `date`; never edited by hand
+# (`scripts/upgrade_pins.py docs/upgrades/cks-1.37.yaml -o docs/upgrades/cks-1.37.pins.yaml --check` says whether upstream moved since).
+upgrade: cks-1.37
+date: '2026-11-13'
+tracked: '1.34'
+target: '1.37'
+shift: 3
+patch: 1.37.2
+kindest_node: v1.37.0
+tool: scripts/upgrade_versions.py
+tool_sha256: 244f584bca75c25b9e107b188d5e5cb94875edc8578874ff88c2bbbd0364c9b9
+curriculum_commit:
+  CKS: 4de0c318883d34f6070e760bf55df1f8dd5846eb
+live:
+  stable_txt: https://dl.k8s.io/release/stable-1.37.txt   # v1.37.2
+  apt_repo: https://pkgs.k8s.io/core:/stable:/v1.37/deb/Packages   # kubeadm, kubelet, kubectl: 1.37.0, 1.37.1, 1.37.2
+  kind_release: https://github.com/kubernetes-sigs/kind/releases/tag/v0.33.0   # node images 1.37.0, 1.36.4, 1.35.8, 1.34.11

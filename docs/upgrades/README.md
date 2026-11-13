@@ -10,7 +10,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.yaml](cka-ckad-1.37.yaml) | the upgrade spec: tracked syllabus, target and upstream base per cert | a person |
 | [cka-ckad-1.37.plan.json](cka-ckad-1.37.plan.json) | three diffs per cert, one class per topic, the sections and lines in scope | `scripts/curriculum_diff.py plan` |
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
-| [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)) | a person / `plan` / `render` |
+| [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md), [cks-1.37.pins.yaml](cks-1.37.pins.yaml) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)), and the pins its version bump reads | a person / `plan` / `render` / `scripts/upgrade_pins.py` |
 | [ckne-ga.yaml](ckne-ga.yaml), [ckne-ga.plan.json](ckne-ga.plan.json), [ckne-ga.md](ckne-ga.md), [ckne-ga.pins.yaml](ckne-ga.pins.yaml) | the same three for **CKNE GA** (beta → curriculum of 2026-10-01, milestone *v0.6.10*, [#285](https://github.com/villadalmine/study-cybercirujas/issues/285)), and the pins the switch PR's citation fix stamps | a person / `plan` / `render` / a person |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
@@ -334,7 +334,20 @@ PDF's domain 4); the plan's *Maps to* records it. Renumbering stays the maintain
 
 ## Phase 2: the edit script, `scripts/upgrade_versions.py`
 
-No model. `docs/upgrades/cka-ckad-1.37.pins.yaml` is the one place the versions are pinned (read live on 2026-10-21:
+No model. The pins file is the one place the versions are pinned. Since CKS v1.37 it is written by
+`scripts/upgrade_pins.py <spec> -o <pins>`, never by hand: `tracked` from the `version` of the spec's tracked syllabus (`certs/<cert>.md`), `target` from the target snapshot,
+`patch` from `dl.k8s.io/release/stable-<target>.txt` (kept only when kubeadm, kubelet and kubectl all have it in
+`pkgs.k8s.io/core:/stable:/v<target>/deb`, else the newest patch the three share), `kindest_node` from the newest
+`kindest/node:v<target>.*` the latest kind release lists, `tool_sha256` from the editor, `curriculum_commit` from the target
+snapshot, `date` = the lookup day, and `live:` = each URL with what it said. `--check` reads the sources again and exits 1 when
+a pin moved (upstream released a patch, kind a node image, or the editor changed): re-run it, then the edit.
+
+```bash
+scripts/upgrade_pins.py docs/upgrades/cks-1.37.yaml -o docs/upgrades/cks-1.37.pins.yaml          # 2026-11-13: 1.37.2, kindest/node v1.37.0, shift 3
+scripts/upgrade_pins.py docs/upgrades/cks-1.37.yaml -o docs/upgrades/cks-1.37.pins.yaml --check
+```
+
+`docs/upgrades/cka-ckad-1.37.pins.yaml` predates the script and was filled by a person (read live on 2026-10-21:
 `dl.k8s.io/release/stable-1.37.txt` = v1.37.1; `pkgs.k8s.io/core:/stable:/v1.37/deb` has kubeadm, kubelet and kubectl
 1.37.0-1.1 and 1.37.1-1.1; kind v0.33.0 ships `kindest/node:v1.37.0`). The script reads the plan and the pins and rewrites
 only the listed lines:

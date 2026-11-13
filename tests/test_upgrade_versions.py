@@ -35,6 +35,15 @@ class Rewrite(unittest.TestCase):
         self.assertEqual(out, "# https://github.com/cncf/curriculum/raw/f423fa49c0/CKAD_Curriculum_v1.37.pdf")
         self.assertEqual(uv.rewrite(out, PINS), out)
 
+    def test_a_curriculum_link_with_a_space_in_its_name_is_pinned_too(self):
+        pins = dict(PINS, tracked="1.34", shift=3, curriculum_commit={"CKS": "4de0c318"})
+        for sep in ("%20", " "):
+            line = f"- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum{sep}v1.34.pdf"
+            self.assertEqual(uv.rewrite(line, pins), "- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/"
+                             f"4de0c318/CKS_Curriculum{sep}v1.37.pdf")
+        other = "https://github.com/cncf/curriculum/raw/master/KCNA_Curriculum%20v1.34.pdf"   # an exam the pins do not list
+        self.assertIn("/raw/master/KCNA_Curriculum", uv.rewrite(other, pins))                # never given a commit
+
     def test_patch_rules(self):
         self.assertEqual(uv.rewrite("node  Ready  v1.35.0", PINS), "node  Ready  v1.37.0")
         self.assertEqual(uv.rewrite("apt install kubeadm=1.35.1-1.1 1.35.x-00", PINS),
