@@ -9,7 +9,7 @@ shift: 3
 patch: 1.37.2
 kindest_node: v1.37.0
 tool: scripts/upgrade_versions.py
-tool_sha256: 1762be2a474f354b013c4f37b55d43fd05220ad38a2c126661e350ff8f810a3f
+tool_sha256: bf454465606325b982ded09846842a3d7db69b9ee6a4d146152e914af5a8e2f5
 curriculum_commit:
   CKS: 4de0c318883d34f6070e760bf55df1f8dd5846eb
 live:

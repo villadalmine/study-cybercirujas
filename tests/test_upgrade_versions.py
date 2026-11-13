@@ -97,6 +97,9 @@ class ReviewOf318(unittest.TestCase):
     def test_round_2_of_319(self):
         es = "> **Nota v1.34**: pasó a beta en v1.31 y a GA en la línea v1.33, pero no es el predeterminado en v1.34."
         self.assertEqual(self.r(es), es.replace("Nota v1.34", "Nota v1.37"))   # same as the English twin
+        self.assertEqual(self.r("cuál es la versión estable de la línea menor 1.34"),
+                         "cuál es la versión estable de la línea menor 1.37")    # not a dated fact (#319 round 3)
+        self.assertEqual(self.r("ejemplo para la serie v1.34"), "ejemplo para la serie v1.37")
         self.assertEqual(self.r("In v1.33+ the token carries node claims on v1.34"),
                          "In v1.33+ the token carries node claims on v1.37")
         q = "`kubeadm upgrade apply v1.32.9` on a v1.33 cluster: what is your only real path back to v1.32?"

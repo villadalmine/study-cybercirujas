@@ -48,13 +48,15 @@ import curriculum_citations as cc  # noqa: E402
 TOKEN = re.compile(r"(?<![\d.\\])(v?)1(\\?\.)(\d{2})(?:(\\?\.)(\d+|x))?(?!\d)")
 # A token that dates a fact (when a feature arrived, graduated, became the default or went away; what a proof ran
 # on) is true of THAT release: "GA in the v1.33 line" is not "GA in v1.36". It stays when one of these words sits
-# right before it, at most two words back in the same clause ("went beta in v1.31", "not the default in v1.34",
+# right before it, at most two words back in the same clause (articles and prepositions do not count: "GA en la
+# línea v1.33") ("went beta in v1.31", "not the default in v1.34",
 # "Verified against 1.34"); the rest of the line moves, so a question and its answer still name the same release
 # (CKS v1.37 review, #318).
 HISTORY = re.compile(
     r"(?i)(?:\b(?:since|introduced|added|alpha|beta|graduated|promoted|went|removed|gone|deprecated|default|"
     r"verified|tested|desde|introducid[oa]s?|añadid[oa]s?|alfa|graduad[oa]s?|eliminad[oa]s?|obsolet[oa]s?|defecto|predeterminad[oa]s?|"
-    r"verificad[oa]s?|probad[oa]s?|line|l[ií]nea|series|serie)\b|\bGA\b)(?:\s+\S+){0,2}\s+$")
+    r"verificad[oa]s?|probad[oa]s?)\b|\bGA\b)"
+    r"(?:\s+(?:in|on|at|the|a|en|la|el|los|las|de|del|por))*(?:\s+\S+){0,2}\s+$")
 # A line that carries a calendar date ("| 1.34 | Aug 2025 | ~Oct 2026 |", a release table) dates every version on it:
 # moving the version would pair it with another release's dates. The line stays as written (#319 review).
 DATED = re.compile(r"(?i)\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|ene|abr|ago|dic)[a-z]*\.?\s+(?:19|20)\d{2}\b")
