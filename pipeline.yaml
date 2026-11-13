@@ -379,7 +379,7 @@ certs:
     owner: claude
     active: true
   nca-aiio:
-    languages: [en, es]
+    languages: [en]
     owner: claude
     active: true
 # Career path videos, rendered from catalog.yaml rather than from a syllabus.
