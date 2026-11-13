@@ -403,8 +403,7 @@ toolkit:
 devicePlugin:
   enabled: true
   config:
-    name: time-slicing-config
-    default: any
+    name: time-slicing-config   # no `default`: a node is time-sliced only when labelled (below)
 dcgmExporter:
   enabled: true
   serviceMonitor:
@@ -493,8 +492,6 @@ metadata:
 data:
   any: |-
     version: v1
-    flags:
-      migStrategy: none
     sharing:
       timeSlicing:
         renameByDefault: false
@@ -503,6 +500,15 @@ data:
           - name: nvidia.com/gpu
             replicas: 4
 ```
+
+The ConfigMap does nothing until a node opts in, so the H100 nodes that serve inference keep whole GPUs:
+
+```
+$ kubectl label node dev-gpu-01 nvidia.com/device-plugin.config=any
+node/dev-gpu-01 labeled
+```
+
+On that node the device plugin advertises physical GPUs × 4 as `nvidia.com/gpu`, and with `renameByDefault: false` GPU Feature Discovery suffixes the product label with `-SHARED` (for example `NVIDIA-A10-SHARED`). Selectors on `nvidia.com/gpu.product` therefore never land on a time-sliced node by accident. The MIG strategy is declared once, in the Helm values (`mig.strategy`); the operator passes it to the device plugin, so the ConfigMap does not repeat it.
 
 **Applying MIG** with the MIG Manager is declarative, through a node label:
 
