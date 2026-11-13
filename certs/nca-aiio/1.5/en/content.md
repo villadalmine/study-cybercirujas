@@ -168,7 +168,6 @@ devicePlugin:
   enabled: true
   config:
     name: time-slicing-config
-    default: any
 dcgmExporter:
   enabled: true
   serviceMonitor:
@@ -206,6 +205,14 @@ data:
           - name: nvidia.com/gpu
             replicas: 4
 ```
+
+The values set no `default` for that config, so no node is time-sliced until it opts in. Only the L4 pool does; the H100 node keeps whole GPUs for the dedicated LLM:
+
+```bash
+kubectl label node gpu-l4-1 gpu-l4-2 nvidia.com/device-plugin.config=any
+```
+
+On a time-sliced node, GPU Feature Discovery appends `-SHARED` to the product label (`nvidia.com/gpu.product=NVIDIA-L4-SHARED`). `renameByDefault: false` keeps the resource name `nvidia.com/gpu`, not the label, so a `nodeSelector` for those nodes uses the `-SHARED` value.
 
 GPU sharing choice per use case:
 
@@ -337,7 +344,7 @@ spec:
     spec:
       priorityClassName: online-inference
       nodeSelector:
-        nvidia.com/gpu.product: NVIDIA-L4
+        nvidia.com/gpu.product: NVIDIA-L4-SHARED
       tolerations:
         - key: nvidia.com/gpu
           operator: Exists
@@ -806,8 +813,8 @@ nvidia-operator-validator-tj8gh                               1/1     Running   
 $ kubectl get nodes -L nvidia.com/gpu.product,nvidia.com/gpu.count,nvidia.com/mig.strategy
 NAME        STATUS   ROLES    AGE   VERSION   GPU.PRODUCT              GPU.COUNT   MIG.STRATEGY
 gpu-h100-1  Ready    <none>   41d   v1.31.4   NVIDIA-H100-80GB-HBM3    8           mixed
-gpu-l4-1    Ready    <none>   41d   v1.31.4   NVIDIA-L4                4           mixed
-gpu-l4-2    Ready    <none>   41d   v1.31.4   NVIDIA-L4                4           mixed
+gpu-l4-1    Ready    <none>   41d   v1.31.4   NVIDIA-L4-SHARED         4           mixed
+gpu-l4-2    Ready    <none>   41d   v1.31.4   NVIDIA-L4-SHARED         4           mixed
 
 $ kubectl describe node gpu-l4-1 | grep -A6 "Allocatable:"
 Allocatable:
