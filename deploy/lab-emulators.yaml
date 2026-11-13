@@ -1,0 +1,10 @@
+# Written by scripts/lab_fidelity.py pin, never by hand (#303). The emulator release whose published
+# fidelity data decides which API operations a cloud lab may use. Move it with
+#   scripts/lab_fidelity.py pin --release <tag>   then   scripts/lab_fidelity.py check --write
+aws-emulator:
+  repo: aws/aws-emulator
+  release: v1.0.345
+  commit: 1874aeac0df92f7d39610275fcce9d7b94c79655
+  scores_url: https://github.com/aws/aws-emulator/releases/download/v1.0.345/scores.json.gz
+  scores_sha256: c5c7d9970a4e89e3b7ee3bbb24b0faeafe8f21ac04c65d95475067dacf3bd778
+  scored_at: '2026-11-13T16:40:50.681021+00:00'
