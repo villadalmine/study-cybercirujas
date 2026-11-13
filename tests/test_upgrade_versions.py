@@ -75,12 +75,22 @@ class ReviewOf318(unittest.TestCase):
         return uv.rewrite(line, self.P)
 
     def test_a_dated_fact_is_left_as_written(self):
-        for line in ("nftables went beta in v1.31 and GA in the v1.33 line, not the default in v1.34",
-                     "Since v1.32 the feature (enabled by default in v1.34) lets you keep anonymous access",
+        for line in ("Since v1.32 the feature (enabled by default in v1.34) lets you keep anonymous access",
                      "# GA field since v1.30; the beta annotations are gone in 1.34.",
                      "#   deprecated and are NOT used here). Verified against 1.34.",
+                     "It is GA and available in v1.34 as admission",
                      "Desde v1.32 la función (habilitada por defecto en v1.34)"):
             self.assertEqual(self.r(line), line)
+        self.assertEqual(self.r("> **v1.34 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34."),
+                         "> **v1.37 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34.")
+
+    def test_the_rest_of_a_line_with_a_dated_fact_moves(self):
+        self.assertEqual(self.r("(since v1.28; it was two before that). So v1.34.1 apiserver with v1.33.4 kubelets"),
+                         "(since v1.28; it was two before that). So v1.37.2 apiserver with v1.36.4 kubelets")
+        self.assertEqual(self.r("On v1.34 the flag is absent — the insecure port was removed in v1.20"),
+                         "On v1.37 the flag is absent — the insecure port was removed in v1.20")
+        self.assertEqual(self.r("Kubernetes 1.34 honours the field (GA since 1.30); container.apparmor.security.beta"),
+                         "Kubernetes 1.37 honours the field (GA since 1.30); container.apparmor.security.beta")
         self.assertEqual(self.r("apiVersion: flowcontrol/v1beta3 on v1.34"), "apiVersion: flowcontrol/v1beta3 on v1.37")
 
     def test_the_minor_above_moves_only_where_an_upgrade_goes(self):

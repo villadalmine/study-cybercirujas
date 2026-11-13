@@ -11,8 +11,8 @@ only those lines and nothing else, from the one pins file:
 - on a line that names the tracked minor, the minor above it moves too where an upgrade goes (after `->`, `→`, `to`,
   `_release="`), so "1.33 -> 1.34 -> 1.35" and removed_release="1.35" keep their meaning; elsewhere (an image tag) it stays;
 - an escaped dot (`v1\.33` in a sed or grep pattern) is a token too, and keeps its escape;
-- a line that dates a fact (since, introduced, alpha, beta, GA, graduated, went, removed in, gone in, verified against,
-  and the Spanish forms) is left as written: it is true of the release it names, and a bump would make it false;
+- a token that dates a fact (right after since, beta, GA, went, removed, gone, default, verified, … in the same clause,
+  and the Spanish forms) is left as written: it is true of the release it names; the rest of its line moves;
 - a target-minor patch of 1 or more becomes the pinned patch; .0 and .x stay (a sample keeps its shape);
 - "kindest/node v1.35.8" becomes the pinned kindest/node tag; nothing else in the output of a command is invented;
 - a line already naming the target minor is skipped, so a second run changes nothing; so is a companion line
@@ -44,14 +44,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import curriculum_citations as cc  # noqa: E402
 # A version token; the dot may be escaped (`v1\.33` in a sed or grep pattern), and the escape is kept.
 TOKEN = re.compile(r"(?<![\d.\\])(v?)1(\\?\.)(\d{2})(?:(\\?\.)(\d+|x))?(?!\d)")
-# A line that dates a fact (when a feature arrived, graduated or went away; what a proof ran on) says something
-# true about THAT release: moving its number would make it false ("GA in the v1.33 line" is not "GA in v1.36").
-# Such a line is left as written, whatever else it names (CKS v1.37 review, #318).
+# A token that dates a fact (when a feature arrived, graduated, became the default or went away; what a proof ran
+# on) is true of THAT release: "GA in the v1.33 line" is not "GA in v1.36". It stays when one of these words sits
+# right before it, at most three words back in the same clause ("went beta in v1.31", "not the default in v1.34",
+# "Verified against 1.34"); the rest of the line moves, so a question and its answer still name the same release
+# (CKS v1.37 review, #318).
 HISTORY = re.compile(
-    r"(?i)\b(?:since|introduced|added in|alpha|beta|graduated|promoted|went|removed in|gone in|deprecated in|"
-    r"verified (?:on|against|with)|tested (?:on|against|with)|desde|introducid[oa]s?|alfa|graduad[oa]s?|"
-    r"eliminad[oa]s? en|obsolet[oa]s? (?:en|desde)|verificad[oa]s? (?:en|contra|con)|probad[oa]s? (?:en|contra|con))\b"
-    r"|\bGA\b")
+    r"(?i)(?:\b(?:since|introduced|added|alpha|beta|graduated|promoted|went|removed|gone|deprecated|default|"
+    r"verified|tested|desde|introducid[oa]s?|añadid[oa]s?|alfa|graduad[oa]s?|eliminad[oa]s?|obsolet[oa]s?|defecto|"
+    r"verificad[oa]s?|probad[oa]s?)\b|\bGA\b)(?:\s+\S+){0,3}\s+$")
+CLAUSE = re.compile(r"[.;:!?](?:\*\*)?\s|[,(\u2014|]")
 UPWARD = re.compile(r"(?:→|->|\bto|_release=\"?)\s*$")
 KINDEST = re.compile(r"kindest/node v1\.\d+\.\d+")
 # A curriculum PDF link on master, any exam prefix, the name's separator as written (`_`, `%20` or a space).
@@ -69,8 +71,6 @@ def rewrite(line: str, pins: dict) -> str:
     minors = [int(m.group(3)) for m in TOKEN.finditer(line)]
     if re.search(rf"(?<![\d.])v?1\\?\.{target.split('.')[1]}(?!\d)", line):
         return line                              # already on the target
-    if HISTORY.search(line):
-        return line                              # a dated fact: true of the release it names
     # A line naming the tracked minor may name the one above it too, as where a sample upgrade goes ("-> 1.35",
     # "upgrade to v1.35.0") or the release that removes an API (removed_release="1.35"). That token moves with the
     # rest, so "1.33 -> 1.34 -> 1.35" stays a forward chain; one in any other place (an image tag) does not.
@@ -91,9 +91,12 @@ def rewrite(line: str, pins: dict) -> str:
 
     def move(m: re.Match) -> str:
         v, dot, minor, pdot, patch = m.group(1), m.group(2), int(m.group(3)), m.group(4), m.group(5)
-        ahead = above and minor == t_minor + 1 and UPWARD.search(m.string[:m.start()])
+        before = m.string[:m.start()]
+        ahead = above and minor == t_minor + 1 and UPWARD.search(before)
         if not (t_minor - shift <= minor <= t_minor or ahead):
             return m.group(0)
+        if HISTORY.search(CLAUSE.split(before)[-1]):
+            return m.group(0)                    # a dated fact: true of the release it names
         out = f"{v}1{dot}{minor + shift}"
         if patch is None:
             return out
