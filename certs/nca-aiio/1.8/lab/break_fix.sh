@@ -10,14 +10,14 @@
 #     /etc/lab-gpucpu/                         (benchmark config)
 #     /var/lib/lab-gpucpu/                     (results)
 #     /etc/systemd/system/lab-gpucpu-bench.service and its .service.d/ drop-ins
-#  "sudo ./lab-1.8-break-fix.sh reset" removes all of it.
+#  "sudo ./break_fix.sh reset" removes all of it.
 #
 #  Usage:
-#     sudo ./lab-1.8-break-fix.sh break    # build the lab and inject the faults
-#     sudo ./lab-1.8-break-fix.sh status   # show the last benchmark result
-#     sudo ./lab-1.8-break-fix.sh hint     # progressive hints
-#     sudo ./lab-1.8-break-fix.sh verify   # grade your fix
-#     sudo ./lab-1.8-break-fix.sh reset    # remove everything
+#     sudo ./break_fix.sh break    # build the lab and inject the faults
+#     sudo ./break_fix.sh status   # show the last benchmark result
+#     sudo ./break_fix.sh hint     # progressive hints
+#     sudo ./break_fix.sh verify   # grade your fix
+#     sudo ./break_fix.sh reset    # remove everything
 #
 # -----------------------------------------------------------------------------
 #  WHY THIS LAB EXISTS (theory you need for the exam)
@@ -90,6 +90,7 @@ STATE_DIR=/var/lib/${LAB}
 ENV_FILE=${ETC_DIR}/bench.env
 BENCH=${OPT_DIR}/bench.py
 BASELINE=${STATE_DIR}/baseline.json
+CEILING=${STATE_DIR}/ceiling.json
 RESULT=${STATE_DIR}/result.json
 
 c_red=$'\e[31m'; c_grn=$'\e[32m'; c_ylw=$'\e[33m'; c_cyn=$'\e[36m'; c_rst=$'\e[0m'
@@ -102,7 +103,15 @@ die()  { fail "$*"; exit 1; }
 preflight() {
   [[ $EUID -eq 0 ]] || die "Run as root (sudo $0 $*)."
   [[ -d /run/systemd/system ]] || die "systemd is not PID 1 on this machine; this lab needs systemd."
-  command -v python3 >/dev/null || die "python3 not found. Install it (dnf/apt install python3)."
+  if ! command -v python3 >/dev/null; then
+    info "Installing python3 from the distro repositories..."
+    if command -v dnf >/dev/null; then dnf -y -q install python3
+    elif command -v apt-get >/dev/null; then
+      apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3
+    elif command -v zypper >/dev/null; then zypper -n -q install python3
+    fi
+    command -v python3 >/dev/null || die "python3 not found. Install it (dnf/apt install python3)."
+  fi
   NPROC=$(nproc)
   (( NPROC >= 2 )) || die "This VM has ${NPROC} vCPU. Give it at least 2 (ideally 4+) and retry."
   PY3=$(command -v python3)
@@ -248,6 +257,16 @@ do_break() {
   BENCH_WORKERS=1 BENCH_TASKS="$tasks" BENCH_ITERS=1000000 BENCH_OUT="$BASELINE" \
     "$PY3" "$BENCH" >/dev/null
   chmod 0444 "$BASELINE"
+  # The ceiling: the same work on every CPU this machine really gives us. A VM
+  # with N vCPUs gets close to N; a container capped by a CPU quota it cannot
+  # see in nproc gets less. The target is set from what was measured here.
+  info "Measuring what all ${NPROC} vCPUs can do on this machine..."
+  BENCH_WORKERS=auto BENCH_TASKS="$tasks" BENCH_ITERS=1000000 BENCH_OUT="$CEILING" \
+    "$PY3" "$BENCH" >/dev/null
+  chmod 0444 "$CEILING"
+  local reach; reach=$(target_speedup)
+  "$PY3" -c "import sys; sys.exit(0 if float('${reach}') >= 1.2 else 1)" \
+    || warn "All vCPUs together are barely faster than one here (a CPU quota nproc does not show?). The speedup target is ${reach}x; the affinity, worker and quota checks still apply."
 
   systemctl daemon-reload
   info "Running the production service once..."
@@ -269,7 +288,7 @@ ${c_ylw}==================== INCIDENT TICKET ====================${c_rst}
 
  GOAL:
    * ${UNIT} uses all ${NPROC} vCPUs and reaches a speedup of at least
-     $( "$PY3" -c "print(round(max(1.3, 0.45*min(${NPROC},8)),2))" )x over the single-core baseline.
+     $(target_speedup)x over the single-core baseline.
    * Fix it through configuration only. Do NOT edit ${BENCH}, do NOT
      change BENCH_TASKS/BENCH_ITERS (the checksum must match the baseline),
      do NOT delete the unit file.
@@ -306,6 +325,23 @@ Hint 4: systemd does not see edited files until you run 'systemctl daemon-reload
 EOF
 }
 
+# The speedup verify asks for: 0.45 x min(N, 8) as on a real VM, but never
+# more than 75% of what all CPUs measured at break time (the ceiling).
+target_speedup() {
+  "$PY3" - "$BASELINE" "$CEILING" "$NPROC" <<'PY'
+import json, sys
+b = json.load(open(sys.argv[1]))
+n = int(sys.argv[3])
+t = max(1.3, 0.45 * min(n, 8))
+try:
+    c = json.load(open(sys.argv[2]))
+    t = min(t, 0.75 * b["elapsed_s"] / c["elapsed_s"])
+except (OSError, ValueError, KeyError, ZeroDivisionError):
+    pass
+print(f"{t:.2f}")
+PY
+}
+
 do_verify() {
   preflight
   [[ -f "$BASELINE" && -f "$UNIT_FILE" ]] || die "Lab not initialized (or the unit was deleted). Run: sudo $0 break"
@@ -327,7 +363,7 @@ do_verify() {
     die "The service failed. Read the journal above."
   fi
 
-  "$PY3" - "$BASELINE" "$RESULT" "$NPROC" "$start" <<'PY'
+  "$PY3" - "$BASELINE" "$RESULT" "$NPROC" "$start" "$(target_speedup)" <<'PY'
 import json, sys
 G, R, X = "\033[32m", "\033[31m", "\033[0m"
 b = json.load(open(sys.argv[1]))
@@ -361,7 +397,7 @@ check(quota_ok, f"cgroup cpu.max = '{cpu_max}' (no throttling).",
       f"cgroup cpu.max = '{cpu_max}': the service is throttled (cgroup layer: CPUQuota).")
 
 S = b["elapsed_s"] / r["elapsed_s"] if r["elapsed_s"] > 0 else 0
-target = max(1.3, 0.45 * min(n, 8))
+target = float(sys.argv[5])
 eff_n = min(n, r["workers"], len(r["allowed_cpus"]))
 p = (1 - 1 / S) / (1 - 1 / eff_n) if S > 1 and eff_n > 1 else 0.0
 print()
@@ -409,7 +445,7 @@ esac
 #    sudo systemctl start lab-gpucpu-bench.service &
 #    mpstat -P ALL 1 3        # (sysstat) or: top, then press 1
 #  Expected: one CPU at ~100% %usr, all others ~0%. Wall time in
-#  'sudo ./lab-1.8-break-fix.sh status' is about the same as the baseline.
+#  'sudo ./break_fix.sh status' is about the same as the baseline.
 #
 #  STEP 2. See ALL the configuration, not only the unit file.
 #    systemctl cat lab-gpucpu-bench.service
@@ -445,7 +481,7 @@ esac
 #  STEP 6. Reload and re-test. It is better but still far from Nx.
 #    sudo systemctl daemon-reload
 #    sudo systemctl start lab-gpucpu-bench.service
-#    sudo ./lab-1.8-break-fix.sh status
+#    sudo ./break_fix.sh status
 #  mpstat now shows ALL CPUs busy, but each at about 100/N %: the cgroup
 #  is throttling. Confirm while it runs:
 #    cat /sys/fs/cgroup/system.slice/lab-gpucpu-bench.service/cpu.max   -> 100000 100000
@@ -458,7 +494,7 @@ esac
 #    sudo systemctl daemon-reload
 #
 #  STEP 8. Verify.
-#    sudo ./lab-1.8-break-fix.sh verify
+#    sudo ./break_fix.sh verify
 #  Expected: all checks OK, cpu.max = 'max 100000', speedup close to N
 #  (for example 3.6x on 4 vCPUs), Amdahl p around 0.95+. It is not exactly
 #  Nx because of pool startup, process creation and result collection,

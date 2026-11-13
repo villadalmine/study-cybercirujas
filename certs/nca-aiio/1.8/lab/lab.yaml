@@ -6,7 +6,7 @@ resources:
   vms:
   - name: lab
     os: debian-12
-    cpus: 1
+    cpus: 2
     ram_mb: 1024
 setup:
 - break_fix.sh
