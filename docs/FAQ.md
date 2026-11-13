@@ -289,6 +289,10 @@ Most labs do not yet have a full `break | verify | cleanup` contract
 ([LABS-RUNNER → State of the curated labs](LABS-RUNNER.md#state-of-the-548-curated-labs-validate-2026-10-15),
 [#46](https://github.com/villadalmine/study-cybercirujas/issues/46)); known
 broken ones are listed in `tests/fixtures/labs_known_broken.txt`.
+A cloud lab that runs on a local emulator also declares the API operations it
+calls (`uses:`); `scripts/lab_fidelity.py check` fails the build when the pinned
+AWS Emulator release has no passing evidence for one of them
+([LABS-RUNNER](LABS-RUNNER.md), [#325](https://github.com/villadalmine/study-cybercirujas/issues/325)).
 
 **Can I write a lab without AI?**
 Yes: `teach lab new <cert> <topic>` scaffolds it and `teach lab validate`
