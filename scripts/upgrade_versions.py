@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply a Kubernetes version bump to exactly the lines an upgrade plan lists (#51, #63). No model, no network.
+r"""Apply a Kubernetes version bump to exactly the lines an upgrade plan lists (#51, #63). No model, no network.
 
     scripts/upgrade_versions.py PLAN PINS --scope material|labs [--cert cka] [--check]
 
@@ -8,6 +8,13 @@ only those lines and nothing else, from the one pins file:
 
 - a version token 1.N, v1.N, 1.N.P, 1.N.x with N in {tracked-shift .. tracked} moves up by shift minors, so a
   sample upgrade "1.34 -> 1.35" becomes "1.36 -> 1.37" and still skips nothing;
+- on a line that names the tracked minor, the minor above it moves too (where an upgrade goes, removed_release="1.35",
+  "the next one"), so "1.33 -> 1.34 -> 1.35" stays a forward chain; as an image or package tag (`busybox:1.35`) it stays;
+- a line with a calendar date ("Aug 2025": a release table row) is left as written, its dates belong to its versions;
+- `Minor:"34"` in version output moves with the line's other tokens;
+- an escaped dot (`v1\.33` in a sed or grep pattern) is a token too, and keeps its escape;
+- a token that dates a fact (at most two words after since, beta, GA, went, removed, gone, default, verified, … in the same clause,
+  and the Spanish forms) is left as written: it is true of the release it names; the rest of its line moves;
 - a target-minor patch of 1 or more becomes the pinned patch; .0 and .x stay (a sample keeps its shape);
 - "kindest/node v1.35.8" becomes the pinned kindest/node tag; nothing else in the output of a command is invented;
 - a line already naming the target minor is skipped, so a second run changes nothing; so is a companion line
@@ -37,7 +44,27 @@ import yaml
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import curriculum_citations as cc  # noqa: E402
-TOKEN = re.compile(r"(?<![\d.])(v?)1\.(\d{2})(?:\.(\d+|x))?(?!\d)")
+# A version token; the dot may be escaped (`v1\.33` in a sed or grep pattern), and the escape is kept.
+TOKEN = re.compile(r"(?<![\d.\\])(v?)1(\\?\.)(\d{2})(?:(\\?\.)(\d+|x))?(?!\d)")
+# A token that dates a fact (when a feature arrived, graduated, became the default or went away; what a proof ran
+# on) is true of THAT release: "GA in the v1.33 line" is not "GA in v1.36". It stays when one of these words sits
+# right before it, at most two words back in the same clause (articles and prepositions do not count: "GA en la
+# línea v1.33") ("went beta in v1.31", "not the default in v1.34",
+# "Verified against 1.34"); the rest of the line moves, so a question and its answer still name the same release
+# (CKS v1.37 review, #318).
+HISTORY = re.compile(
+    r"(?i)(?:\b(?:since|introduced|added|alpha|beta|graduated|promoted|went|removed|gone|deprecated|default|"
+    r"verified|tested|desde|introducid[oa]s?|añadid[oa]s?|alfa|graduad[oa]s?|eliminad[oa]s?|obsolet[oa]s?|defecto|predeterminad[oa]s?|"
+    r"verificad[oa]s?|probad[oa]s?)\b|\bGA\b)"
+    r"(?:\s+(?:in|on|at|the|a|en|la|el|los|las|de|del|por))*(?:\s+\S+){0,2}\s+$")
+# A line that carries a calendar date ("| 1.34 | Aug 2025 | ~Oct 2026 |", a release table) dates every version on it:
+# moving the version would pair it with another release's dates. The line stays as written (#319 review).
+DATED = re.compile(r"(?i)\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|ene|abr|ago|dic)[a-z]*\.?\s+(?:19|20)\d{2}\b")
+# kubeadm/kubectl version output names the minor as a quoted number too: `Minor:"34"` moves with `GitVersion`.
+MINOR_FIELD = re.compile(r'(Minor:")(\d{2})(")')
+CLAUSE = re.compile(r"[.;:!?](?:\*\*)?\s|[,(\u2014|]")
+# The minor above the tracked one stays only as an image or package tag (`busybox:1.35`, `pkg@1.35`).
+TAG = re.compile(r"[:@]$")
 KINDEST = re.compile(r"kindest/node v1\.\d+\.\d+")
 # A curriculum PDF link on master, any exam prefix, the name's separator as written (`_`, `%20` or a space).
 CURRICULUM = re.compile(r"(https://github\.com/cncf/curriculum)/raw/master/([A-Z]+)_Curriculum(_|%20| )v1\.(\d+)\.pdf")
@@ -51,10 +78,21 @@ def rewrite(line: str, pins: dict) -> str:
     """The line with its version tokens moved, or unchanged when it already names the target."""
     tracked, target, shift = pins["tracked"], pins["target"], int(pins["shift"])
     t_minor = int(tracked.split(".")[1])
-    minors = [int(m.group(2)) for m in TOKEN.finditer(line)]
-    if re.search(rf"(?<![\d.])v?{re.escape(target)}(?!\d)", line):
+    minors = [int(m.group(3)) for m in TOKEN.finditer(line)]
+    if re.search(rf"(?<![\d.])v?1\\?\.{target.split('.')[1]}(?!\d)", line):
         return line                              # already on the target
-    if t_minor not in minors and (not t_minor - 1 in minors or any(m > t_minor for m in minors)):
+    if DATED.search(line):
+        return line                              # a release table row: its dates belong to the versions it names
+    # A line naming the tracked minor may name the one above it too: where a sample upgrade goes ("-> 1.35", "de v1.34
+    # a v1.35"), the release that removes an API (removed_release="1.35"), "the next one" (#319 review: a list of
+    # upward words missed Spanish). That token moves with the rest, so "1.33 -> 1.34 -> 1.35" stays a forward chain;
+    # as an image or package tag (`busybox:1.35`) it is not a Kubernetes version and stays.
+    above = t_minor in minors
+    if t_minor not in minors and (not t_minor - 1 in minors or any(m > t_minor for m in minors)
+                                  or any(t_minor - shift <= m < t_minor - 1 for m in minors)):
+        # A companion moves only when every version it names is the minor below: a line that also names an older
+        # one ("v1.32.9 on a v1.33 cluster ... back to v1.32") is a scenario of its own, and its answer, which
+        # names only the older one, would not move with it (#319 review).
         # A companion line ("Cluster version: v1.34.1", the version a sample upgrade starts from) moves only
         # while it still shows the minor below the tracked one; once moved it shows a minor above it.
         return line
@@ -69,19 +107,27 @@ def rewrite(line: str, pins: dict) -> str:
     line = CURRICULUM.sub(pin_pdf, line)
 
     def move(m: re.Match) -> str:
-        v, minor, patch = m.group(1), int(m.group(2)), m.group(3)
-        if not t_minor - shift <= minor <= t_minor:
+        v, dot, minor, pdot, patch = m.group(1), m.group(2), int(m.group(3)), m.group(4), m.group(5)
+        before = m.string[:m.start()]
+        ahead = above and minor == t_minor + 1 and not TAG.search(before)
+        if not (t_minor - shift <= minor <= t_minor or ahead):
             return m.group(0)
-        out = f"{v}1.{minor + shift}"
+        if HISTORY.search(CLAUSE.split(before)[-1]) or m.string[m.end():m.end() + 1] == "+":
+            return m.group(0)                    # a dated fact ("GA in v1.33", "in v1.33+"): true of that release
+        out = f"{v}1{dot}{minor + shift}"
         if patch is None:
             return out
         if minor == t_minor and patch not in ("0", "x"):
             if patch != "1":
                 raise SystemExit(f"unexpected patch .{patch} on the tracked minor: {line.strip()!r}")
             patch = pins["patch"].rsplit(".", 1)[1]
-        return f"{out}.{patch}"
+        return f"{out}{pdot}{patch}"
 
-    return TOKEN.sub(move, line)
+    out = TOKEN.sub(move, line)
+    if out != line:
+        out = MINOR_FIELD.sub(lambda m: m.group(0) if not t_minor - shift <= int(m.group(2)) <= t_minor
+                              else f"{m.group(1)}{int(m.group(2)) + shift}{m.group(3)}", out)
+    return out
 
 
 def in_scope(rel: str, scope: str, cert: str | None) -> bool:

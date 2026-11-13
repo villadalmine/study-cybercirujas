@@ -65,6 +65,74 @@ class Rewrite(unittest.TestCase):
             uv.rewrite("v1.35.7", PINS)
 
 
+
+class ReviewOf318(unittest.TestCase):
+    """CKS v1.37 (shift 3) review of #318: what a mechanical bump must not do."""
+    P = {"tracked": "1.34", "target": "1.37", "shift": 3, "patch": "1.37.2", "kindest_node": "v1.37.0",
+         "curriculum_commit": {"CKS": "abc"}}
+
+    def r(self, line):
+        return uv.rewrite(line, self.P)
+
+    def test_a_dated_fact_is_left_as_written(self):
+        for line in ("Since v1.32 the feature (enabled by default in v1.34) lets you keep anonymous access",
+                     "# GA field since v1.30; the beta annotations are gone in 1.34.",
+                     "#   deprecated and are NOT used here). Verified against 1.34.",
+                     "Desde v1.32 la función (habilitada por defecto en v1.34)"):
+            self.assertEqual(self.r(line), line)
+        self.assertEqual(self.r("> **v1.34 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34."),
+                         "> **v1.37 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34.")
+
+    def test_a_dated_table_row_stays_and_two_words_is_the_reach(self):
+        row = "| **1.34** (exam target) | Aug 2025 | ~Aug 2026 | ~Oct 2026 |"
+        self.assertEqual(self.r(row), row)
+        self.assertEqual(self.r("| 1.33 | abr 2025 | ~abr 2026 |"), "| 1.33 | abr 2025 | ~abr 2026 |")
+        self.assertEqual(self.r("It is GA and available in v1.34 as admission"), "It is GA and available in v1.37 as admission")
+        self.assertEqual(self.r("Es GA y está disponible en v1.34"), "Es GA y está disponible en v1.37")
+
+    def test_version_output_moves_its_minor_field(self):
+        self.assertEqual(self.r('Major:"1", Minor:"34", GitVersion:"v1.34.1", BuildDate:"2026-02-18T10:22:41Z"'),
+                         'Major:"1", Minor:"37", GitVersion:"v1.37.2", BuildDate:"2026-02-18T10:22:41Z"')
+
+    def test_round_2_of_319(self):
+        es = "> **Nota v1.34**: pasó a beta en v1.31 y a GA en la línea v1.33, pero no es el predeterminado en v1.34."
+        self.assertEqual(self.r(es), es.replace("Nota v1.34", "Nota v1.37"))   # same as the English twin
+        self.assertEqual(self.r("cuál es la versión estable de la línea menor 1.34"),
+                         "cuál es la versión estable de la línea menor 1.37")    # not a dated fact (#319 round 3)
+        self.assertEqual(self.r("ejemplo para la serie v1.34"), "ejemplo para la serie v1.37")
+        self.assertEqual(self.r("In v1.33+ the token carries node claims on v1.34"),
+                         "In v1.33+ the token carries node claims on v1.37")
+        q = "`kubeadm upgrade apply v1.32.9` on a v1.33 cluster: what is your only real path back to v1.32?"
+        self.assertEqual(self.r(q), q)                                   # a scenario of its own: its answer names only 1.32
+        self.assertEqual(self.r("repoint the apt repository URL back to `v1.33`"), "repoint the apt repository URL back to `v1.36`")
+
+    def test_the_rest_of_a_line_with_a_dated_fact_moves(self):
+        self.assertEqual(self.r("(since v1.28; it was two before that). So v1.34.1 apiserver with v1.33.4 kubelets"),
+                         "(since v1.28; it was two before that). So v1.37.2 apiserver with v1.36.4 kubelets")
+        self.assertEqual(self.r("On v1.34 the flag is absent — the insecure port was removed in v1.20"),
+                         "On v1.37 the flag is absent — the insecure port was removed in v1.20")
+        self.assertEqual(self.r("Kubernetes 1.34 honours the field (GA since 1.30); container.apparmor.security.beta"),
+                         "Kubernetes 1.37 honours the field (GA since 1.30); container.apparmor.security.beta")
+        self.assertEqual(self.r("apiVersion: flowcontrol/v1beta3 on v1.34"), "apiVersion: flowcontrol/v1beta3 on v1.37")
+
+    def test_the_minor_above_moves_except_as_a_tag(self):
+        self.assertEqual(self.r("upgrade to v1.35.0 is too far: 1.33 → 1.34 → 1.35"),
+                         "upgrade to v1.38.0 is too far: 1.36 → 1.37 → 1.38")
+        self.assertEqual(self.r('removed_release="1.35" while you upgrade to v1.34'),
+                         'removed_release="1.38" while you upgrade to v1.37')
+        self.assertEqual(self.r("--image=busybox:1.35 # 1.34"), "--image=busybox:1.35 # 1.37")
+        self.assertEqual(self.r("actualizar el clúster de v1.34 a v1.35 no pueda"), "actualizar el clúster de v1.37 a v1.38 no pueda")
+        self.assertEqual(self.r("works in v1.34; before you plan v1.35, a v1.35-day surprise"),
+                         "works in v1.37; before you plan v1.38, a v1.38-day surprise")
+        self.assertEqual(self.r("1.35 alone"), "1.35 alone")
+
+    def test_an_escaped_dot_moves_and_keeps_its_escape(self):
+        self.assertEqual(self.r("sed 's|/stable:/v1\\.33/|/stable:/v1.34/|'"), "sed 's|/stable:/v1\\.36/|/stable:/v1.37/|'")
+
+    def test_a_wildcard_patch_companion_moves(self):
+        self.assertEqual(self.r("shows only 1.33.x after apt-get update"), "shows only 1.36.x after apt-get update")
+
+
 class Run(unittest.TestCase):
     def tree(self, root: Path):
         topic = root / "certs/cka/4.3"

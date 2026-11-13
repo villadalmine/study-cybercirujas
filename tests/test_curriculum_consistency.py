@@ -68,6 +68,19 @@ class FixLine(unittest.TestCase):
     def test_a_marker_after_its_introducing_word(self):
         self.assertEqual(cc.fix_line("Version 1.35 objectives:", strict()), "Version 1.37 objectives:")
         self.assertEqual(cc.fix_line("Versión 1.35 del curriculum", strict()), "Versión 1.37 del curriculum")
+
+    def test_the_forms_the_cks_review_found(self):
+        """#318: `currículum`, bold between marker and number, and the exam-version phrase."""
+        for old, new in (("**Certificación:** Certified Kubernetes Security Specialist (CKA) — currículum v1.35",
+                          "**Certificación:** Certified Kubernetes Security Specialist (CKA) — currículum v1.37"),
+                         ("(CKA), currículum **v1.35**", "(CKA), currículum **v1.37**"),
+                         ("## Ejercicios Guiados (versión de examen 1.35 · peso del dominio 4%)",
+                          "## Ejercicios Guiados (versión de examen 1.37 · peso del dominio 4%)"),
+                         ("— Versión del examen **1.35**", "— Versión del examen **1.37**"),
+                         ("— Exam version **1.35**", "— Exam version **1.37**")):
+            with self.subTest(old=old):
+                self.assertEqual(cc.fix_line(old, strict()), new)
+        self.assertEqual(cc.fix_line("versión de examen 3.3 del temario", strict()), "versión de examen 3.3 del temario")
         self.assertEqual(cc.fix_line("v1.35 pods in the exam", strict()), "v1.35 pods in the exam")   # a bare v is not enough here
 
     def test_another_certs_id_or_a_number_that_is_not_a_version_is_not_a_citation(self):
