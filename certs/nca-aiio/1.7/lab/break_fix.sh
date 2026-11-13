@@ -41,10 +41,10 @@
 # modeled on Triton's, not copied byte-for-byte.
 #
 # USAGE
-#   ./lab-1.7.sh            # build the lab and break it (same as: break)
-#   ./lab-1.7.sh check      # validate the model repository (your success test)
-#   ./lab-1.7.sh reset      # wipe and re-break from scratch
-#   ./lab-1.7.sh cleanup    # remove everything this lab created
+#   ./break_fix.sh            # build the lab and break it (same as: break)
+#   ./break_fix.sh check      # validate the model repository (your success test)
+#   ./break_fix.sh reset      # wipe and re-break from scratch
+#   ./break_fix.sh cleanup    # remove everything this lab created
 #
 # SOURCES
 #   NCA-AIIO exam guide:
@@ -191,7 +191,7 @@ check_model() {
     fi
   fi
 
-  while read -r io_tag io_name io_type; do
+  while read -r io_tag io_name io_type _dims; do
     [[ "$io_tag" == "#io" ]] || continue
     cfg_type="$(cfg_io_type "$io_name" "$cfg")"
     if [[ -z "$cfg_type" ]]; then
@@ -483,7 +483,7 @@ exit 0
 # a different model that happens to share a use case.
 #
 # --- Step 1: model name must match the directory ------------------------------
-# ./lab-1.7.sh check
+# ./break_fix.sh check
 #   | fraud-detector | -  | UNAVAILABLE: Invalid argument: unexpected name 'fraud_detector' ...
 # sed -i 's/^name: "fraud_detector"/name: "fraud-detector"/' model_repository/fraud-detector/config.pbtxt
 # (Triton identifies a model by its directory name; 'name' in config.pbtxt is
@@ -515,7 +515,7 @@ exit 0
 # reduced precision. The new ONNX export is FP32 until someone optimizes it.
 #
 # --- Step 5: verify -----------------------------------------------------------
-# ./lab-1.7.sh check
+# ./break_fix.sh check
 #   | fraud-detector       | 1       | READY
 #   | fraud-detector-trt   | 1       | READY
 #   PASS: all models READY.
@@ -597,5 +597,5 @@ exit 0
 # nvidia.com/gpu. Same contract, same failure modes.
 #
 # Cleanup when done:
-#   ./lab-1.7.sh cleanup
+#   ./break_fix.sh cleanup
 # =============================================================================
