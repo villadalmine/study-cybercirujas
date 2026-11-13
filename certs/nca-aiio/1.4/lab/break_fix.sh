@@ -31,9 +31,10 @@
 #    - Undo everything with:   sudo ./this-script.sh cleanup
 #
 #  Usage:
-#    sudo ./aiio-1.4-break-fix.sh            # set up and break
-#    sudo AIIO_LAB_YES=1 ./aiio-1.4-break-fix.sh   # without the prompt
-#    sudo ./aiio-1.4-break-fix.sh cleanup    # remove the lab
+#    sudo ./break_fix.sh            # set up and break
+#    sudo AIIO_LAB_YES=1 ./break_fix.sh   # without the prompt
+#    sudo ./break_fix.sh verify     # run the check (same as aiio-lab-check)
+#    sudo ./break_fix.sh cleanup    # remove the lab
 #
 #  References:
 #    https://academy.nvidia.com/en/course/ai-infrastructure-operations-fundamentals/?cm=64727
@@ -440,7 +441,7 @@ briefing() {
  RULES
    - Do not edit ${LAB_DIR}/*.py or ${STATE_DIR}/baseline (honor system).
    - You MAY change ${CONF_DIR}/infer.conf and the systemd config of the unit.
-   - Validate with:   sudo aiio-lab-check
+   - Validate with:   sudo aiio-lab-check   (or: sudo $0 verify)
      (PASS needs the SLO met AND zero root causes left.)
 
  USEFUL STARTING POINTS
@@ -458,7 +459,12 @@ main() {
     cleanup
     exit 0
   fi
-  [[ -z "${1:-}" ]] || die "Unknown argument '${1}'. Use no argument (setup) or 'cleanup'."
+  if [[ "${1:-}" == "verify" ]]; then
+    require_root
+    [[ -x "${CHECK_BIN}" ]] || die "Lab not set up: run 'sudo $0' first."
+    exec "${CHECK_BIN}"
+  fi
+  [[ -z "${1:-}" ]] || die "Unknown argument '${1}'. Use no argument (setup), 'verify' or 'cleanup'."
 
   require_root
   require_systemd
@@ -584,5 +590,5 @@ main "$@"
 #   accelerators sit idle exactly like the half-core service above.
 #
 # --- Cleanup ------------------------------------------------------------------
-#   sudo ./aiio-1.4-break-fix.sh cleanup
+#   sudo ./break_fix.sh cleanup
 # =============================================================================
