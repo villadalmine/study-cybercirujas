@@ -77,7 +77,8 @@ require_tools() {
   for t in ip ping awk grep; do
     command -v "$t" >/dev/null 2>&1 || die "Missing required tool: $t (install iproute2 / iputils)."
   done
-  ping -h 2>&1 | grep -q -- '-M' || die "Your ping does not support '-M do' (need iputils ping)."
+  # iputils `ping -h` exits 2: keep that status away from pipefail.
+  { ping -h 2>&1 || true; } | grep -q -- '-M' || die "Your ping does not support '-M do' (need iputils ping)."
 }
 
 lab_exists() { ip netns list 2>/dev/null | grep -q '^aiio-node0'; }
