@@ -1,16 +1,17 @@
 # Community 216
 
-> 22 nodes · cohesion 0.16
+> 24 nodes · cohesion 0.14
 
 ## Key Concepts
 
+- **Switch** (12 connections) — `tests/test_curriculum_diff.py`
 - **Guard** (11 connections) — `tests/test_curriculum_diff.py`
-- **Switch** (11 connections) — `tests/test_curriculum_diff.py`
-- **.run_switch()** (8 connections) — `tests/test_curriculum_diff.py`
+- **.run_switch()** (9 connections) — `tests/test_curriculum_diff.py`
 - **.plan()** (7 connections) — `tests/test_curriculum_diff.py`
 - **.check()** (5 connections) — `tests/test_curriculum_diff.py`
 - **.test_regenerate_and_retire_own_their_directory()** (3 connections) — `tests/test_curriculum_diff.py`
 - **.test_the_command_writes_once_and_check_agrees()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_the_old_version_of_the_same_document_is_replaced_by_the_pin()** (3 connections) — `tests/test_curriculum_diff.py`
 - **.test_a_scoped_topic_may_record_provenance_in_its_meta()** (2 connections) — `tests/test_curriculum_diff.py`
 - **.test_an_unlisted_line_may_not()** (2 connections) — `tests/test_curriculum_diff.py`
 - **.test_listed_section_and_version_line_may_change()** (2 connections) — `tests/test_curriculum_diff.py`
@@ -26,10 +27,11 @@
 - **.test_the_lab_title_follows_the_objective_and_the_guard_accepts_only_that()** (2 connections) — `tests/test_curriculum_diff.py`
 - **.test_a_folded_or_block_lab_title_is_replaced_whole()** (1 connections) — `tests/test_curriculum_diff.py`
 - **`switch` closes an upgrade whose material stays: catalog and frozen syllabus…** (1 connections) — `tests/test_curriculum_diff.py`
+- **#322: CKS cited raw/master/CKS_Curriculum v1.34.pdf (a 404) next to the pinned…** (1 connections) — `tests/test_curriculum_diff.py`
 
 ## Relationships
 
-- [Community 245](Community_245.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
 
 ## Source Files
 
@@ -37,8 +39,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 41 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

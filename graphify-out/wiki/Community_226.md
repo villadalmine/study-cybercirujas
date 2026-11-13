@@ -1,11 +1,12 @@
 # Community 226
 
-> 8 nodes · cohesion 0.25
+> 9 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **Rewrite** (8 connections) — `tests/test_upgrade_versions.py`
+- **Rewrite** (9 connections) — `tests/test_upgrade_versions.py`
 - **.test_a_companion_line_moves_once()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_a_curriculum_link_with_a_space_in_its_name_is_pinned_too()** (1 connections) — `tests/test_upgrade_versions.py`
 - **.test_a_sample_upgrade_keeps_its_distance()** (1 connections) — `tests/test_upgrade_versions.py`
 - **.test_already_on_target_is_skipped_and_odd_patch_stops()** (1 connections) — `tests/test_upgrade_versions.py`
 - **.test_patch_rules()** (1 connections) — `tests/test_upgrade_versions.py`
@@ -23,7 +24,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 8 (100%)
+- EXTRACTED: 9 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

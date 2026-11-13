@@ -1,29 +1,39 @@
 # Community 244
 
-> 5 nodes · cohesion 0.60
+> 10 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **WriteLab** (5 connections) — `tests/test_lab_contract_gen.py`
-- **.run_with()** (5 connections) — `tests/test_lab_contract_gen.py`
-- **.test_a_rejected_script_is_retried_with_its_problems()** (2 connections) — `tests/test_lab_contract_gen.py`
-- **.test_after_the_last_attempt_nothing_is_written_and_the_batch_may_retry()** (2 connections) — `tests/test_lab_contract_gen.py`
-- **.test_the_prompt_states_the_contract()** (1 connections) — `tests/test_lab_contract_gen.py`
+- **_agent_completer()** (18 connections) — `teach/core/generator.py`
+- **AgentCompleterProvenanceTest** (9 connections) — `tests/test_agent_completer.py`
+- **.test_claude_keeps_the_declared_model_and_effort_flags()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_codex_and_custom_never_inherit_the_claude_model()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_custom_records_explicit_model_flag_when_present()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_env_override_beats_default_and_rejects_split_turns()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_error_envelope_raises_generator_config_error()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_oversized_prompt_raises_generator_config_error()** (2 connections) — `tests/test_agent_completer.py`
+- **.test_gemini_pins_model_before_print_flag_and_parses_agy_json_envelope()** (2 connections) — `tests/test_agent_completer.py`
+- **.setUp()** (1 connections) — `tests/test_agent_completer.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 134](Community_134.md) (1 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 259](Community_259.md) (2 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 18](Community_18.md) (1 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 142](Community_142.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_lab_contract_gen.py`
+- `teach/core/generator.py`
+- `tests/test_agent_completer.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (89%)
-- INFERRED: 1 (11%)
+- EXTRACTED: 26 (96%)
+- INFERRED: 1 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

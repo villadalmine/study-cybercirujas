@@ -1,6 +1,6 @@
 # Community 23
 
-> 20 nodes · cohesion 0.25
+> 18 nodes · cohesion 0.29
 
 ## Key Concepts
 
@@ -15,12 +15,10 @@
 - **REVIEWS.md** (7 connections) — `docs/REVIEWS.md`
 - **GOVERNANCE.md** (6 connections) — `docs/GOVERNANCE.md`
 - **RUN-A-LAB-ANYWHERE.md** (6 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **upgrades/README.md** (6 connections) — `docs/upgrades/README.md`
 - **audit/README.md** (5 connections) — `docs/audit/README.md`
 - **CODE_OF_CONDUCT.md** (4 connections) — `CODE_OF_CONDUCT.md`
 - **LABS-RUNNER.md** (3 connections) — `docs/LABS-RUNNER.md`
 - **The charter** (2 connections) — `docs/CHARTER.md`
-- **cka-ckad-1.37.md** (2 connections) — `docs/upgrades/cka-ckad-1.37.md`
 - **CLAUDE.md** (1 connections) — `CLAUDE.md`
 - **Code of Conduct** (1 connections) — `CODE_OF_CONDUCT.md`
 - **How to use it** (1 connections) — `docs/CHARTER.md`
@@ -28,8 +26,8 @@
 ## Relationships
 
 - [Community 110](Community_110.md) (35 shared connections)
+- [Community 132](Community_132.md) (2 shared connections)
 - [Community 145](Community_145.md) (2 shared connections)
-- [Community 218](Community_218.md) (2 shared connections)
 - [Community 254](Community_254.md) (1 shared connections)
 - [Community 228](Community_228.md) (1 shared connections)
 - [Community 239](Community_239.md) (1 shared connections)
@@ -37,8 +35,8 @@
 - [Community 48](Community_48.md) (1 shared connections)
 - [Community 242](Community_242.md) (1 shared connections)
 - [Community 238](Community_238.md) (1 shared connections)
+- [Community 156](Community_156.md) (1 shared connections)
 - [Community 230](Community_230.md) (1 shared connections)
-- [Community 188](Community_188.md) (1 shared connections)
 
 ## Source Files
 
@@ -57,12 +55,10 @@
 - `docs/REVIEWS.md`
 - `docs/RUN-A-LAB-ANYWHERE.md`
 - `docs/audit/README.md`
-- `docs/upgrades/README.md`
-- `docs/upgrades/cka-ckad-1.37.md`
 
 ## Audit Trail
 
-- EXTRACTED: 102 (100%)
+- EXTRACTED: 97 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

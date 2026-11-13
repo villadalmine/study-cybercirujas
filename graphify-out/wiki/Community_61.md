@@ -1,65 +1,61 @@
 # Community 61
 
-> 42 nodes · cohesion 0.08
+> 34 nodes · cohesion 0.09
 
 ## Key Concepts
 
-- **subprocess** (116 connections)
 - **fix_corrupted_content.py** (29 connections) — `scripts/fix_corrupted_content.py`
-- **run_batch.py** (20 connections) — `scripts/run_batch.py`
-- **claims.py** (20 connections) — `teach/core/claims.py`
-- **check_graph.py** (16 connections) — `scripts/check_graph.py`
-- **next_work.py** (13 connections) — `scripts/next_work.py`
-- **regenerate()** (12 connections) — `scripts/check_graph.py`
-- **run_until_complete.py** (11 connections) — `scripts/run_until_complete.py`
-- **generate_with_retries()** (8 connections) — `scripts/run_batch.py`
-- **rebuild_in_copy()** (7 connections) — `scripts/check_graph.py`
+- **quality.py** (19 connections) — `teach/core/quality.py`
+- **main()** (17 connections) — `scripts/fix_corrupted_content.py`
+- **check_file()** (15 connections) — `teach/core/quality.py`
+- **find_bad_combos()** (9 connections) — `scripts/fix_corrupted_content.py`
 - **render_ready_videos()** (7 connections) — `scripts/fix_corrupted_content.py`
-- **unstage_inflight.py** (7 connections) — `scripts/unstage_inflight.py`
 - **_finish()** (6 connections) — `scripts/fix_corrupted_content.py`
-- **main()** (6 connections) — `scripts/run_until_complete.py`
-- **main()** (5 connections) — `scripts/check_graph.py`
+- **authored()** (6 connections) — `teach/core/quality.py`
 - **_cert_topic_ids()** (5 connections) — `scripts/fix_corrupted_content.py`
-- **main()** (5 connections) — `scripts/next_work.py`
+- **lab_only()** (5 connections) — `scripts/run_batch.py`
+- **pending()** (5 connections) — `scripts/run_batch.py`
+- **find_missing_videos()** (4 connections) — `scripts/fix_corrupted_content.py`
+- **_record_quota_block()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_refresh_status()** (4 connections) — `scripts/fix_corrupted_content.py`
-- **generate()** (4 connections) — `scripts/run_batch.py`
-- **graphify_bin()** (3 connections) — `scripts/check_graph.py`
-- **touches_graph_sources()** (3 connections) — `scripts/check_graph.py`
+- **_usable_translate_backend()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_publish_if_complete()** (3 connections) — `scripts/fix_corrupted_content.py`
-- **pending()** (3 connections) — `scripts/run_until_complete.py`
-- **main()** (3 connections) — `scripts/unstage_inflight.py`
-- **normalized()** (2 connections) — `scripts/check_graph.py`
-- *... and 17 more nodes in this community*
+- **strip_fences_in_place()** (3 connections) — `scripts/fix_corrupted_content.py`
+- **_sort_key()** (2 connections) — `scripts/run_batch.py`
+- **Path** (1 connections)
+- **A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **Detect and regenerate corrupt or missing content.md/exercises.md. Originally…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **Produce videos for certifications whose content is finished. The unattended…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **Ids de todos los topics del temario (frontmatter del .md), para poder detectar…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **Write a generation-time limit into the quota history. Only `quota.py` wrote…** (1 connections) — `scripts/fix_corrupted_content.py`
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (49 shared connections)
-- [Community 89](Community_89.md) (11 shared connections)
-- [Community 45](Community_45.md) (11 shared connections)
-- [Community 103](Community_103.md) (9 shared connections)
-- [Community 49](Community_49.md) (9 shared connections)
-- [Community 6](Community_6.md) (9 shared connections)
-- [Community 32](Community_32.md) (8 shared connections)
-- [Community 1](Community_1.md) (5 shared connections)
-- [Community 37](Community_37.md) (4 shared connections)
-- [Community 19](Community_19.md) (4 shared connections)
-- [Community 31](Community_31.md) (4 shared connections)
-- [Community 34](Community_34.md) (4 shared connections)
+- [Community 43](Community_43.md) (13 shared connections)
+- [Community 19](Community_19.md) (10 shared connections)
+- [Community 63](Community_63.md) (5 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
+- [Community 88](Community_88.md) (3 shared connections)
+- [Community 144](Community_144.md) (3 shared connections)
+- [Community 103](Community_103.md) (3 shared connections)
+- [Community 13](Community_13.md) (3 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 112](Community_112.md) (2 shared connections)
 
 ## Source Files
 
-- `scripts/check_graph.py`
 - `scripts/fix_corrupted_content.py`
-- `scripts/next_work.py`
 - `scripts/run_batch.py`
-- `scripts/run_until_complete.py`
-- `scripts/unstage_inflight.py`
-- `teach/core/claims.py`
+- `teach/core/quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 265 (98%)
-- INFERRED: 5 (2%)
+- EXTRACTED: 111 (97%)
+- INFERRED: 4 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

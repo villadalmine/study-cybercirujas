@@ -27,11 +27,13 @@
 - [Community 121](Community_121.md) (6 shared connections)
 - [Community 209](Community_209.md) (5 shared connections)
 - [Community 0](Community_0.md) (3 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
 - [Community 163](Community_163.md) (2 shared connections)
-- [Community 126](Community_126.md) (2 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 126](Community_126.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
 - [Community 171](Community_171.md) (1 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
 
 ## Source Files
 

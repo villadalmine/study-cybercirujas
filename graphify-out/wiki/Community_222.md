@@ -1,33 +1,43 @@
 # Community 222
 
-> 6 nodes · cohesion 0.47
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **run_cert.py** (12 connections) — `scripts/run_cert.py`
-- **main()** (6 connections) — `scripts/run_cert.py`
-- **run()** (3 connections) — `scripts/run_cert.py`
-- **pending_topics()** (2 connections) — `scripts/run_cert.py`
-- **# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and** (1 connections) — `scripts/run_cert.py`
-- **The ONE way to take a certification from nothing to finished. Every agent and…** (1 connections) — `scripts/run_cert.py`
+- **7. The source chain** (8 connections) — `docs/PRINCIPLES.md`
+- **Principles** (8 connections) — `docs/PRINCIPLES.md`
+- **fail()** (4 connections) — `tests/test_check_pr.py`
+- **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
+- **Quality score** (2 connections) — `docs/FAQ.md`
+- **1. Information sovereignty** (1 connections) — `docs/PRINCIPLES.md`
+- **2. Curriculum-as-Code** (1 connections) — `docs/PRINCIPLES.md`
+- **3. Determinism** (1 connections) — `docs/PRINCIPLES.md`
+- **4. With AI or without AI: the same pipeline and the same validator** (1 connections) — `docs/PRINCIPLES.md`
+- **5. Honest about limits** (1 connections) — `docs/PRINCIPLES.md`
+- **6. Open by default** (1 connections) — `docs/PRINCIPLES.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 88](Community_88.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 156](Community_156.md) (2 shared connections)
+- [Community 260](Community_260.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 28](Community_28.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/run_cert.py`
+- `docs/FAQ.md`
+- `docs/PRINCIPLES.md`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 18 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 10 (50%)
+- INFERRED: 10 (50%)
 - AMBIGUOUS: 0 (0%)
 
 ---

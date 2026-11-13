@@ -15,14 +15,13 @@
 
 ## Relationships
 
-- [clean_registry.py](clean_registry.py.md) (2 shared connections)
+- [Community 207](Community_207.md) (3 shared connections)
 - [Community 209](Community_209.md) (2 shared connections)
 - [Community 74](Community_74.md) (2 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 - [Community 231](Community_231.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
-- [Community 280](Community_280.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 - [Community 121](Community_121.md) (1 shared connections)
 - [Community 126](Community_126.md) (1 shared connections)
 - [Community 44](Community_44.md) (1 shared connections)

@@ -1,25 +1,30 @@
 # Community 260
 
-> 4 nodes · cohesion 0.50
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **verify_runs()** (4 connections) — `scripts/check_pr.py`
-- **judge_run()** (3 connections) — `scripts/check_pr.py`
-- **Why a cited run does not prove this head, or None if it does. Jobs named…** (1 connections) — `scripts/check_pr.py`
-- **True if at least one cited run proves this head; prints why each one does or…** (1 connections) — `scripts/check_pr.py`
+- **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
+- **.fetch()** (4 connections) — `tests/test_check_pr.py`
+- **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
+- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
+- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
+- **.test_a_dispatched_run_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **.test_another_head_or_a_red_job_does_not()** (1 connections) — `tests/test_check_pr.py`
+- **The run under 'Where it ran' must be verify.yml's, on this head (review of #3).** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (3 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
+- [Community 222](Community_222.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 6 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

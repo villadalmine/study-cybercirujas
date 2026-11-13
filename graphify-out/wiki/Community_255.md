@@ -1,26 +1,33 @@
 # Community 255
 
-> 3 nodes · cohesion 0.67
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **lab_only()** (5 connections) — `scripts/run_batch.py`
-- **Path** (1 connections)
-- **True when the topic is pending ONLY because its lab is missing. A lab the…** (1 connections) — `scripts/run_batch.py`
+- **accepted()** (9 connections) — `teach/core/bot_stats.py`
+- **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
+- **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_one_bad_field_refuses_the_whole_event()** (2 connections) — `tests/test_bot_stats.py`
+- **.test_the_languages_are_the_ones_the_site_serves()** (2 connections) — `tests/test_bot_stats.py`
+- **The event as it will be counted, or None if any field is not ours. Whole-event…** (1 connections) — `teach/core/bot_stats.py`
+- **Every field is a closed set. An unknown value is refused, not cleaned.** (1 connections) — `tests/test_bot_stats.py`
 
 ## Relationships
 
-- [Community 0](Community_0.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 215](Community_215.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/run_batch.py`
+- `teach/core/bot_stats.py`
+- `tests/test_bot_stats.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
+- EXTRACTED: 16 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

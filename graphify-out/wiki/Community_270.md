@@ -1,24 +1,27 @@
 # Community 270
 
-> 3 nodes · cohesion 0.67
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WhereItRanTests** (3 connections) — `tests/test_check_pr.py`
-- **.test_evidence_without_a_run_fails()** (1 connections) — `tests/test_check_pr.py`
-- **.test_runs_are_read_from_the_subsection()** (1 connections) — `tests/test_check_pr.py`
+- **OffSwitchTests** (5 connections) — `tests/test_model_probe.py`
+- **.test_accepted_and_ignored()** (2 connections) — `tests/test_model_probe.py`
+- **.test_the_switch_that_works()** (2 connections) — `tests/test_model_probe.py`
+- **.test_a_rate_limit_is_not_a_refusal()** (1 connections) — `tests/test_model_probe.py`
+- **.test_refused_outright()** (1 connections) — `tests/test_model_probe.py`
 
 ## Relationships
 
+- [Community 206](Community_206.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `tests/test_model_probe.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

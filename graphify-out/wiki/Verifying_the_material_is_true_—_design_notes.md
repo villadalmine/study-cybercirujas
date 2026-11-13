@@ -6,10 +6,10 @@
 
 - **Verifying the material is true — design notes** (6 connections) — `docs/AUDITOR_DESIGN.md`
 - **A funnel, cheapest layer first** (5 connections) — `docs/AUDITOR_DESIGN.md`
+- **Layer 2 — retrieval over a bounded corpus (cheap, one-off indexing)** (2 connections) — `docs/AUDITOR_DESIGN.md`
 - **Honest limits** (1 connections) — `docs/AUDITOR_DESIGN.md`
 - **Layer 0 — what exists (free, deterministic)** (1 connections) — `docs/AUDITOR_DESIGN.md`
 - **Layer 1 — a structured fact base, no RAG at all (free, deterministic)** (1 connections) — `docs/AUDITOR_DESIGN.md`
-- **Layer 2 — retrieval over a bounded corpus (cheap, one-off indexing)** (1 connections) — `docs/AUDITOR_DESIGN.md`
 - **Layer 3 — adversarial judging (costs quota, sample only)** (1 connections) — `docs/AUDITOR_DESIGN.md`
 - **The design mistake to avoid** (1 connections) — `docs/AUDITOR_DESIGN.md`
 - **The gap, precisely** (1 connections) — `docs/AUDITOR_DESIGN.md`
@@ -17,6 +17,7 @@
 
 ## Relationships
 
+- [Community 28](Community_28.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
@@ -25,8 +26,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 10 (91%)
+- INFERRED: 1 (9%)
 - AMBIGUOUS: 0 (0%)
 
 ---

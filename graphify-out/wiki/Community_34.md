@@ -1,10 +1,12 @@
 # Community 34
 
-> 50 nodes · cohesion 0.07
+> 62 nodes · cohesion 0.05
 
 ## Key Concepts
 
 - **check_groundedness.py** (37 connections) — `scripts/check_groundedness.py`
+- **ReviewOf318** (12 connections) — `tests/test_upgrade_versions.py`
+- **.r()** (12 connections) — `tests/test_upgrade_versions.py`
 - **check_topic()** (11 connections) — `scripts/check_groundedness.py`
 - **test_killercoda_publish.py** (11 connections) — `tests/lab/test_killercoda_publish.py`
 - **fixture()** (8 connections) — `scripts/check_groundedness.py`
@@ -26,25 +28,23 @@
 - **best_windows()** (3 connections) — `scripts/check_groundedness.py`
 - **changed()** (3 connections) — `scripts/check_groundedness.py`
 - **download()** (3 connections) — `scripts/check_groundedness.py`
-- **sha()** (3 connections) — `scripts/check_groundedness.py`
-- **scenario()** (3 connections) — `tests/lab/test_killercoda_publish.py`
-- **test_an_export_without_scenarios_does_not_touch_the_mirror()** (3 connections) — `tests/lab/test_killercoda_publish.py`
-- *... and 25 more nodes in this community*
+- **guardian()** (3 connections) — `scripts/check_groundedness.py`
+- *... and 37 more nodes in this community*
 
 ## Relationships
 
 - [Community 43](Community_43.md) (6 shared connections)
-- [Community 61](Community_61.md) (4 shared connections)
+- [Community 144](Community_144.md) (5 shared connections)
+- [Community 249](Community_249.md) (3 shared connections)
 - [Community 10](Community_10.md) (3 shared connections)
-- [Community 127](Community_127.md) (2 shared connections)
 - [Community 1](Community_1.md) (2 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
-- [Community 256](Community_256.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
+- [Community 74](Community_74.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 249](Community_249.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 
 ## Source Files
 
@@ -52,11 +52,12 @@
 - `tests/lab/test_kc_meta.py`
 - `tests/lab/test_killercoda_publish.py`
 - `tests/lab/test_runner_guard.py`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 110 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 131 (98%)
+- INFERRED: 2 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

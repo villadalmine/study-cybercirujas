@@ -11,7 +11,7 @@
 - **me()** (3 connections) — `teach/api.py`
 - **Platform (Long-Term Roadmap, see docs/ORIGINAL_DESIGN.md)** (3 connections) — `docs/BACKLOG.md`
 - **3. Web: Public Landing + Paid Study Zone** (3 connections) — `docs/ORIGINAL_DESIGN.md`
-- **1. Catalog Tracker (Scraper — nothing is static)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
+- **1. Catalog Tracker (Scraper — nothing is static)** (2 connections) — `docs/ORIGINAL_DESIGN.md`
 - **2. Generator (AI, on-demand)** (1 connections) — `docs/ORIGINAL_DESIGN.md`
 - **Authentication — a minimal interface so real users/OIDC can be plugged in later…** (1 connections) — `teach/core/auth.py`
 - **Always denies. Real auth pending (OIDC/social login).** (1 connections) — `teach/core/auth.py`
@@ -23,6 +23,7 @@
 - [Community 125](Community_125.md) (1 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)
+- [Community 28](Community_28.md) (1 shared connections)
 - [Community 157](Community_157.md) (1 shared connections)
 
 ## Source Files
@@ -34,8 +35,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 17 (81%)
-- INFERRED: 4 (19%)
+- EXTRACTED: 17 (77%)
+- INFERRED: 5 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

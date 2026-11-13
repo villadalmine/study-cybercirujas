@@ -1,25 +1,28 @@
 # Community 267
 
-> 3 nodes · cohesion 0.67
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **SmokeScriptTests** (3 connections) — `tests/test_chart_smoke.py`
-- **.test_is_executable_in_git()** (1 connections) — `tests/test_chart_smoke.py`
-- **.test_verifies_and_cleans_up()** (1 connections) — `tests/test_chart_smoke.py`
+- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `docs/AGENTS_SYNC.md`
+- **German translation: working recipe found, blocked on timeout** (2 connections) — `docs/AGENTS_SYNC.md`
+- **What I need from you** (2 connections) — `docs/AGENTS_SYNC.md`
+- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `docs/AGENTS_SYNC.md`
+- **What I finished** (1 connections) — `docs/AGENTS_SYNC.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 16](Community_16.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_chart_smoke.py`
+- `docs/AGENTS_SYNC.md`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 5 (71%)
+- INFERRED: 2 (29%)
 - AMBIGUOUS: 0 (0%)
 
 ---

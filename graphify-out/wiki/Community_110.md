@@ -30,14 +30,14 @@
 
 - [Community 23](Community_23.md) (35 shared connections)
 - [Community 145](Community_145.md) (3 shared connections)
+- [Community 21](Community_21.md) (2 shared connections)
 - [Community 212](Community_212.md) (1 shared connections)
-- [Community 221](Community_221.md) (1 shared connections)
 - [Community 16](Community_16.md) (1 shared connections)
 - [Community 59](Community_59.md) (1 shared connections)
 - [Verifying the material is true — design notes](Verifying_the_material_is_true_—_design_notes.md) (1 shared connections)
 - [Which backend authors better material?](Which_backend_authors_better_material_.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)
-- [Community 6](Community_6.md) (1 shared connections)
+- [Community 45](Community_45.md) (1 shared connections)
 - [Community 84](Community_84.md) (1 shared connections)
 - [Community 47](Community_47.md) (1 shared connections)
 

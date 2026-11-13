@@ -1,26 +1,23 @@
 # Community 277
 
-> 4 nodes · cohesion 0.50
+> 2 nodes · cohesion 1.00
 
 ## Key Concepts
 
-- **renamed_from()** (5 connections) — `scripts/check_pr.py`
-- **old_names()** (3 connections) — `scripts/check_pr.py`
-- **The old paths of the files this PR renames: `git diff --name-only` lists only…** (1 connections) — `scripts/check_pr.py`
-- **`R100<TAB>old<TAB>new` lines of `git diff --name-status -M` -> the old paths.** (1 connections) — `scripts/check_pr.py`
+- **row()** (2 connections) — `tests/test_curriculum_diff.py`
+- **One `pdftotext -layout` line: a left-column part, padded, then a right-column…** (1 connections) — `tests/test_curriculum_diff.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (3 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `tests/test_curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (100%)
+- EXTRACTED: 2 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

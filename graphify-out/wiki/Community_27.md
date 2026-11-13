@@ -1,12 +1,12 @@
 # Community 27
 
-> 48 nodes · cohesion 0.07
+> 50 nodes · cohesion 0.07
 
 ## Key Concepts
 
 - **entry()** (16 connections) — `tests/test_curriculum_consistency.py`
-- **strict()** (15 connections) — `tests/test_curriculum_consistency.py`
-- **FixLine** (12 connections) — `tests/test_curriculum_consistency.py`
+- **strict()** (16 connections) — `tests/test_curriculum_consistency.py`
+- **FixLine** (13 connections) — `tests/test_curriculum_consistency.py`
 - **Guard** (11 connections) — `tests/test_curriculum_consistency.py`
 - **Gate** (8 connections) — `tests/test_curriculum_consistency.py`
 - **Window** (7 connections) — `tests/test_curriculum_consistency.py`
@@ -16,6 +16,7 @@
 - **.tree()** (6 connections) — `tests/test_curriculum_consistency.py`
 - **.test_a_cert_without_a_numeric_version_is_checked_on_its_link_only()** (3 connections) — `tests/test_curriculum_consistency.py`
 - **.test_any_vendor_is_checked_from_its_catalog_entry()** (3 connections) — `tests/test_curriculum_consistency.py`
+- **.test_the_forms_the_cks_review_found()** (3 connections) — `tests/test_curriculum_consistency.py`
 - **.test_a_window_on_the_head_does_not_become_the_target()** (3 connections) — `tests/test_curriculum_consistency.py`
 - **.test_the_switch_pr_may_fix_by_the_head_catalog_of_the_cert_it_switches()** (3 connections) — `tests/test_curriculum_consistency.py`
 - **.test_it_is_true_while_the_cert_tracks_a_beta()** (3 connections) — `tests/test_curriculum_consistency.py`
@@ -28,8 +29,7 @@
 - **.test_a_marker_after_its_introducing_word()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_another_certs_id_or_a_number_that_is_not_a_version_is_not_a_citation()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_every_form_the_repo_uses()** (2 connections) — `tests/test_curriculum_consistency.py`
-- **.test_lpic1s_dead_exam_102_page_is_not_a_reviewed_spelling()** (2 connections) — `tests/test_curriculum_consistency.py`
-- *... and 23 more nodes in this community*
+- *... and 25 more nodes in this community*
 
 ## Relationships
 
@@ -42,7 +42,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 91 (100%)
+- EXTRACTED: 94 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
