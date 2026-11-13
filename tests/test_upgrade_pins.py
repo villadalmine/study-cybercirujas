@@ -53,13 +53,14 @@ class Repo:
         r = self.root = Path(self.tmp.name)
         (r / "scripts").mkdir()
         (r / "scripts" / "upgrade_versions.py").write_text("# editor\n")
-        (r / "catalog.yaml").write_text(yaml.safe_dump({"certs": {"cks": {"tracked_version": tracked}}}))
+        (r / "certs").mkdir()
+        (r / "certs" / "cks.md").write_text(f"---\ncert: cks\nversion: '{tracked}'\n---\n# CKS\n")
         (r / "syllabi" / "cks").mkdir(parents=True)
         (r / "syllabi" / "cks" / "v1.37.yaml").write_text(yaml.safe_dump(
             {"version": "1.37", "source": {"path": "CKS_Curriculum v1.37.pdf", "commit": "4de0c31" + "0" * 33}}))
         (r / "docs" / "upgrades").mkdir(parents=True)
         self.spec = r / "docs" / "upgrades" / "cks-1.37.yaml"
-        self.spec.write_text(yaml.safe_dump({"certs": {"cks": {"target": "syllabi/cks/v1.37.yaml"}}}))
+        self.spec.write_text(yaml.safe_dump({"certs": {"cks": {"tracked": "certs/cks.md", "target": "syllabi/cks/v1.37.yaml"}}}))
 
 
 class Build(unittest.TestCase):
@@ -117,10 +118,40 @@ class Check(unittest.TestCase):
         self.assertNotEqual(up.comparable(yaml.safe_load(out.read_text())), up.comparable(moved))
 
 
+class Main(unittest.TestCase):
+    def test_write_then_check(self):
+        r = Repo()
+        out = r.root / "docs" / "upgrades" / "cks-1.37.pins.yaml"
+        argv = [str(r.spec), "-o", str(out), "--date", "2026-11-13"]
+        old = up.REPO
+        up.REPO = r.root                                                 # the editor and the paths of the fixture repo
+        try:
+            self.assertEqual(up.main(argv, get=sources()), 0)
+            self.assertIn("docs/upgrades/cks-1.37.yaml -o docs/upgrades/cks-1.37.pins.yaml --check", out.read_text())
+            self.assertEqual(up.main(argv + ["--check"], get=sources()), 0)
+            self.assertEqual(up.main(argv + ["--check"], get=sources(stable="v1.37.4\n",
+                                                                     apt=APT.replace("1.37.2", "1.37.4"))), 1)
+        finally:
+            up.REPO = old
+
+    def test_check_without_the_file_fails_before_reading_any_source(self):
+        r = Repo()
+        def no_network(url):
+            raise AssertionError("fetched " + url)
+        self.assertEqual(up.main([str(r.spec), "-o", str(r.root / "missing.yaml"), "--check"], get=no_network), 1)
+
+
 class RepoPins(unittest.TestCase):
-    def test_the_cks_pins_file_was_written_by_this_script(self):
+    def test_the_cks_pins_file_says_what_the_repo_says(self):
+        """Offline: the keys that come from the repo, not from a source, match the committed file."""
         f = REPO / "docs" / "upgrades" / "cks-1.37.pins.yaml"
+        pins = yaml.safe_load(f.read_text())
         self.assertTrue(f.read_text().startswith("# The one place the cks-1.37 upgrade pins its versions."))
+        snap = yaml.safe_load((REPO / "syllabi" / "cks" / "v1.37.yaml").read_text())
+        self.assertEqual(pins["target"], snap["version"])
+        self.assertEqual(pins["curriculum_commit"], {"CKS": snap["source"]["commit"]})
+        self.assertEqual(pins["tool_sha256"], hashlib.sha256((REPO / up.TOOL).read_bytes()).hexdigest())
+        self.assertEqual(int(pins["target"].split(".")[1]) - int(pins["tracked"].split(".")[1]), pins["shift"])
 
 
 if __name__ == "__main__":

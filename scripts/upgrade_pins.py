@@ -7,8 +7,8 @@
 `scripts/upgrade_versions.py` rewrites the version lines a plan lists from ONE pins file. This script is the only
 writer of that file. Every value comes from the spec, the repo, or a source read when it runs:
 
-- `tracked`: the catalog's `tracked_version` of the spec's certs (they must agree), `target`: the target snapshot's
-  `version`, `shift`: the minors between them;
+- `tracked`: the `version` of each cert's tracked syllabus the spec names (what the plan diffs; they must agree),
+  `target`: the target snapshot's `version`, `shift`: the minors between them;
 - `patch`: `https://dl.k8s.io/release/stable-<target>.txt`, kept only when kubeadm, kubelet and kubectl all exist at
   that version in `https://pkgs.k8s.io/core:/stable:/v<target>/deb/Packages`; otherwise the newest patch all three
   have there;
@@ -18,8 +18,9 @@ writer of that file. Every value comes from the spec, the repo, or a source read
 - `date`: the day of the lookup (UTC; `--date` to reproduce one), which is what a tool edit stamps in meta.yaml;
 - `live`: the URLs read, each with what it said.
 
---check reads the sources again and exits 1 when any value other than `date` differs from the file (upstream moved,
-or the editor changed): the file is then re-written by running this without --check, never by hand.
+--check reads the sources again and exits 1 when a pin differs from the file (`date` and the `live:` notes are not
+compared): upstream moved, or the editor changed. The file is then re-written by running this without --check, never
+by hand. A GitHub token in GITHUB_TOKEN, when set, is used for the kind release (the API allows 60 anonymous calls an hour).
 """
 from __future__ import annotations
 
@@ -27,6 +28,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -43,9 +45,14 @@ PACKAGES = ("kubeadm", "kubelet", "kubectl")
 
 
 def fetch(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "study-cybercirujas upgrade_pins"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode("utf-8")
+    headers = {"User-Agent": "study-cybercirujas upgrade_pins"}
+    if url.startswith("https://api.github.com/") and os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=60) as r:
+            return r.read().decode("utf-8")
+    except OSError as e:                         # HTTPError, URLError, timeouts: one line, not a traceback
+        raise SystemExit(f"cannot read {url}: {e}")
 
 
 def _key(v: str) -> tuple[int, ...]:
@@ -93,10 +100,10 @@ def pick_kind(release_json: str, target: str) -> tuple[str, str, str]:
 
 def build(spec_file: Path, date: str, get=fetch, root: Path = REPO) -> dict:
     spec = yaml.safe_load(spec_file.read_text(encoding="utf-8"))
-    catalog = yaml.safe_load((root / "catalog.yaml").read_text(encoding="utf-8"))["certs"]
     tracked, targets, commits = set(), set(), {}
     for cert, c in spec["certs"].items():
-        tracked.add(str(catalog[cert]["tracked_version"]))
+        syllabus = (root / c.get("tracked", f"certs/{cert}.md")).read_text(encoding="utf-8")
+        tracked.add(str(yaml.safe_load(syllabus.split("---")[1])["version"]))
         snap = yaml.safe_load((root / c["target"]).read_text(encoding="utf-8"))
         targets.add(str(snap["version"]))
         commits[snap["source"]["path"].split("_Curriculum")[0]] = snap["source"]["commit"]
@@ -150,7 +157,15 @@ def comparable(pins: dict) -> dict:
     return {k: v for k, v in pins.items() if k not in ("date", "live")}
 
 
-def main(argv: list[str] | None = None) -> int:
+def rel(p: Path) -> str:
+    """The path as the repo names it, so the header does not depend on how the command was typed."""
+    try:
+        return str(p.resolve().relative_to(REPO))
+    except ValueError:
+        return str(p)
+
+
+def main(argv: list[str] | None = None, get=fetch) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("spec", type=Path)
     ap.add_argument("-o", "--out", type=Path, required=True)
@@ -158,11 +173,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--check", action="store_true", help="exit 1 if the sources now give other pins than the file")
     a = ap.parse_args(argv)
     date = a.date or dt.datetime.now(dt.timezone.utc).date().isoformat()
-    pins = build(a.spec, date)
+    if a.check and not a.out.is_file():
+        print(f"{a.out}: missing")
+        return 1
+    pins = build(a.spec, date, get=get)
     if a.check:
-        if not a.out.is_file():
-            print(f"{a.out}: missing")
-            return 1
         have = comparable(yaml.safe_load(a.out.read_text(encoding="utf-8")))
         want = comparable(pins)
         drift = {k: (have.get(k), want[k]) for k in want if have.get(k) != want[k]}
@@ -170,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{a.out}: {k}: {old!r} -> {new!r}")
         print("pins: STALE" if drift else f"pins: current ({a.out})")
         return 1 if drift else 0
-    a.out.write_text(render(pins, str(a.spec), str(a.out)), encoding="utf-8")
+    a.out.write_text(render(pins, rel(a.spec), rel(a.out)), encoding="utf-8")
     print(f"wrote {a.out}: patch {pins['patch']}, kindest/node {pins['kindest_node']}, shift {pins['shift']}")
     return 0
 
