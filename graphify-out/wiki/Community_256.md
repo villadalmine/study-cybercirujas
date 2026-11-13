@@ -1,37 +1,35 @@
 # Community 256
 
-> 10 nodes · cohesion 0.38
+> 9 nodes · cohesion 0.39
 
 ## Key Concepts
 
-- **test_runner_guard.py** (12 connections) — `tests/lab/test_runner_guard.py`
-- **FakeLab** (6 connections) — `tests/lab/test_runner_guard.py`
-- **test_check_shell_exec_refuse_a_foreign_container()** (5 connections) — `tests/lab/test_runner_guard.py`
-- **test_down_refuses_a_foreign_container()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_node_image_for_supported_minors()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **test_run_refuses_a_kubernetes_minor_without_a_node_image()** (4 connections) — `tests/lab/test_runner_guard.py`
-- **parametrize** (4 connections)
-- **test_run_refuses_a_foreign_container()** (3 connections) — `tests/lab/test_runner_guard.py`
-- **test_ours_passes_study_lab_containers()** (2 connections) — `tests/lab/test_runner_guard.py`
-- **study-lab never adopts or deletes a container it did not create. run()…** (1 connections) — `tests/lab/test_runner_guard.py`
+- **Client** (15 connections) — `tests/test_mcp_server.py`
+- **._request()** (5 connections) — `tests/test_mcp_server.py`
+- **.__init__()** (3 connections) — `tests/test_mcp_server.py`
+- **._notify()** (3 connections) — `tests/test_mcp_server.py`
+- **._send()** (3 connections) — `tests/test_mcp_server.py`
+- **.tools()** (3 connections) — `tests/test_mcp_server.py`
+- **.call()** (2 connections) — `tests/test_mcp_server.py`
+- **.close()** (1 connections) — `tests/test_mcp_server.py`
+- **A minimal MCP client: enough to initialise, list and call.** (1 connections) — `tests/test_mcp_server.py`
 
 ## Relationships
 
-- [Community 12](Community_12.md) (6 shared connections)
-- [Community 280](Community_280.md) (1 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
-- [Community 111](Community_111.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 34](Community_34.md) (1 shared connections)
+- [Community 170](Community_170.md) (4 shared connections)
+- [Community 221](Community_221.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 232](Community_232.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/lab/test_runner_guard.py`
+- `tests/test_mcp_server.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 21 (95%)
+- INFERRED: 1 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

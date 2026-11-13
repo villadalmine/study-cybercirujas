@@ -1,28 +1,34 @@
 # Community 232
 
-> 5 nodes · cohesion 0.40
+> 10 nodes · cohesion 0.20
 
 ## Key Concepts
 
-- **authorship()** (5 connections) — `scripts/check_pr.py`
-- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
-- **_cells()** (2 connections) — `scripts/check_pr.py`
-- **The data rows of '### Findings ledger' (None if the subsection is missing).** (1 connections) — `scripts/check_pr.py`
-- **Who is declared as author agrees with Provenance; the findings ledger is well…** (1 connections) — `scripts/check_pr.py`
+- **Study bot — design** (8 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Operating it** (4 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Tools / function calling — evaluated 2026-09-09** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Alternatives considered** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Effort** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **How a student uses it** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **How it is maintained** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Is it all API?** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **The insight: explicit selection replaces retrieval** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **Two harnesses, not one (the distinction that sets the phases)** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (4 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
+- [Community 68](Community_68.md) (1 shared connections)
+- [Community 256](Community_256.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `docs/STUDY_BOT_DESIGN.md`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

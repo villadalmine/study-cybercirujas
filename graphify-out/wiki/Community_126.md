@@ -1,10 +1,9 @@
 # Community 126
 
-> 19 nodes · cohesion 0.18
+> 18 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **get_topic()** (14 connections) — `teach/core/certs.py`
 - **content_dir()** (12 connections) — `teach/core/certs.py`
 - **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
 - **topic_outdated_langs()** (10 connections) — `teach/core/certs.py`
@@ -26,16 +25,16 @@
 
 ## Relationships
 
-- [Community 7](Community_7.md) (10 shared connections)
-- [Community 10](Community_10.md) (8 shared connections)
-- [Community 173](Community_173.md) (3 shared connections)
+- [Community 7](Community_7.md) (7 shared connections)
+- [Community 10](Community_10.md) (6 shared connections)
 - [Community 134](Community_134.md) (3 shared connections)
-- [Community 8](Community_8.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
 - [Community 207](Community_207.md) (1 shared connections)
+- [Community 8](Community_8.md) (1 shared connections)
+- [Community 173](Community_173.md) (1 shared connections)
 - [Community 55](Community_55.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 - [Community 227](Community_227.md) (1 shared connections)
 
 ## Source Files
@@ -45,7 +44,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 62 (98%)
+- EXTRACTED: 51 (98%)
 - INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 

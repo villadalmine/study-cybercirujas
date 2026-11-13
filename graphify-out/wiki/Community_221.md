@@ -1,33 +1,35 @@
 # Community 221
 
-> 7 nodes · cohesion 0.29
+> 12 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **Agent guide: commands, content workflow and verification** (7 connections) — `docs/AGENT-GUIDE.md`
-- **Rules** (3 connections) — `docs/AGENT-GUIDE.md`
-- **Pull requests from agents** (2 connections) — `docs/AGENT-GUIDE.md`
-- **Verification: what is proven, and what is only assumed** (2 connections) — `docs/AGENT-GUIDE.md`
-- **Agent Idea Synchronization (docs/AGENTS_SYNC.md)** (1 connections) — `docs/AGENT-GUIDE.md`
-- **Commands** (1 connections) — `docs/AGENT-GUIDE.md`
-- **Content Workflow** (1 connections) — `docs/AGENT-GUIDE.md`
+- **ProtocolTests** (12 connections) — `tests/test_mcp_server.py`
+- **.setUpClass()** (2 connections) — `tests/test_mcp_server.py`
+- **.tearDownClass()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_a_bad_topic_does_not_take_the_server_down()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_a_topic_arrives_with_its_sources()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_an_unknown_certification_says_what_to_do_instead()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_every_tool_is_described()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_it_offers_the_contract_and_nothing_else()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_listing_certifications_says_which_are_empty()** (1 connections) — `tests/test_mcp_server.py`
+- **.test_search_carries_its_reasoning()** (1 connections) — `tests/test_mcp_server.py`
+- **skipUnless** (1 connections)
+- **Started as a subprocess and driven over stdio, like a real client.** (1 connections) — `tests/test_mcp_server.py`
 
 ## Relationships
 
-- [Community 110](Community_110.md) (1 shared connections)
-- [Community 44](Community_44.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [Community 215](Community_215.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 256](Community_256.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/AGENT-GUIDE.md`
+- `tests/test_mcp_server.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (64%)
-- INFERRED: 4 (36%)
+- EXTRACTED: 13 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

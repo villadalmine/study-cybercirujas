@@ -9,9 +9,9 @@
 - **fix_line()** (11 connections) — `scripts/curriculum_citations.py`
 - **window()** (10 connections) — `scripts/curriculum_citations.py`
 - **offenders()** (8 connections) — `scripts/curriculum_citations.py`
+- **family()** (7 connections) — `scripts/curriculum_citations.py`
 - **cited()** (6 connections) — `scripts/curriculum_citations.py`
 - **problems()** (6 connections) — `scripts/curriculum_citations.py`
-- **family()** (5 connections) — `scripts/curriculum_citations.py`
 - **meta_ok()** (5 connections) — `scripts/curriculum_citations.py`
 - **spans()** (5 connections) — `scripts/curriculum_citations.py`
 - **version_regexes()** (5 connections) — `scripts/curriculum_citations.py`
@@ -26,22 +26,24 @@
 - **The line with its curriculum links pinned to the catalog's and its cited…** (1 connections) — `scripts/curriculum_citations.py`
 - **The line with the spans that only look like a cited version blanked out (same…** (1 connections) — `scripts/curriculum_citations.py`
 - **(versions, document URLs) this line cites, for the one-value-per-cert rule.** (1 connections) — `scripts/curriculum_citations.py`
-- **Things that make the control itself unable to speak for a cert: an invalid…** (1 connections) — `scripts/curriculum_citations.py`
 - **What the material and the metadata say about each cert's curriculum, against…** (1 connections) — `scripts/curriculum_citations.py`
+- **Things that make the control itself unable to speak for a cert: an invalid…** (1 connections) — `scripts/curriculum_citations.py`
 - **Every line of every cert that disagrees with its catalog entry, with what…** (1 connections) — `scripts/curriculum_citations.py`
 - *... and 5 more nodes in this community*
 
 ## Relationships
 
-- [Community 141](Community_141.md) (8 shared connections)
 - [Community 219](Community_219.md) (5 shared connections)
-- [Community 146](Community_146.md) (4 shared connections)
+- [Community 141](Community_141.md) (5 shared connections)
+- [Community 135](Community_135.md) (4 shared connections)
 - [Community 214](Community_214.md) (3 shared connections)
+- [Community 146](Community_146.md) (3 shared connections)
+- [Community 111](Community_111.md) (3 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
+- [Community 158](Community_158.md) (1 shared connections)
 - [Community 27](Community_27.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
+- [Community 12](Community_12.md) (1 shared connections)
 - [Community 57](Community_57.md) (1 shared connections)
 
 ## Source Files
@@ -50,7 +52,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 78 (96%)
+- EXTRACTED: 80 (96%)
 - INFERRED: 3 (4%)
 - AMBIGUOUS: 0 (0%)
 

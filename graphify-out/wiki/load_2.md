@@ -2,7 +2,7 @@
 
 > God node · 24 connections · `teach/core/catalog.py`
 
-**Community:** [Community 59](Community_59.md)
+**Community:** [Community 74](Community_74.md)
 
 ## Connections by Relation
 

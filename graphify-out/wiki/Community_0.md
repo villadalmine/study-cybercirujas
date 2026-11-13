@@ -1,6 +1,6 @@
 # Community 0
 
-> 46 nodes · cohesion 0.08
+> 48 nodes · cohesion 0.08
 
 ## Key Concepts
 
@@ -9,6 +9,7 @@
 - **typer** (23 connections)
 - **tracker_sync()** (8 connections) — `teach/cli.py`
 - **lab_validate()** (7 connections) — `teach/cli.py`
+- **cert_add()** (6 connections) — `teach/cli.py`
 - **cert_generate()** (6 connections) — `teach/cli.py`
 - **cert_readings()** (6 connections) — `teach/cli.py`
 - **cert_show()** (6 connections) — `teach/cli.py`
@@ -28,23 +29,22 @@
 - **status()** (5 connections) — `teach/cli.py`
 - **_echo_readings()** (4 connections) — `teach/cli.py`
 - **serve()** (3 connections) — `teach/cli.py`
-- **main()** (1 connections) — `teach/cli.py`
-- *... and 21 more nodes in this community*
+- *... and 23 more nodes in this community*
 
 ## Relationships
 
-- [Community 59](Community_59.md) (7 shared connections)
+- [Community 74](Community_74.md) (9 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
 - [video.py](video.py.md) (6 shared connections)
-- [Community 43](Community_43.md) (5 shared connections)
+- [Community 7](Community_7.md) (5 shared connections)
 - [Community 10](Community_10.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
 - [Community 163](Community_163.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
 - [Community 121](Community_121.md) (3 shared connections)
 - [Community 8](Community_8.md) (3 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
 - [Community 125](Community_125.md) (2 shared connections)
-- [Community 255](Community_255.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
+- [Community 142](Community_142.md) (1 shared connections)
 
 ## Source Files
 
@@ -53,7 +53,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 132 (99%)
+- EXTRACTED: 135 (99%)
 - INFERRED: 2 (1%)
 - AMBIGUOUS: 0 (0%)
 

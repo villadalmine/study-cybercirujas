@@ -4,22 +4,23 @@
 
 ## Key Concepts
 
-- **QuotaProbeCommandTest** (4 connections) — `tests/test_agent_completer.py`
-- **.test_probe_claude_pins_haiku_before_terminator()** (1 connections) — `tests/test_agent_completer.py`
-- **.test_probe_gemini_error_envelope_maps_to_exhausted()** (1 connections) — `tests/test_agent_completer.py`
-- **.test_probe_gemini_pins_cheap_flash_model_before_print_flag()** (1 connections) — `tests/test_agent_completer.py`
+- **graded()** (4 connections) — `scripts/probe_models.py`
+- **detect_language()** (3 connections) — `scripts/probe_models.py`
+- **Best-effort language of a reply: one of MARKERS, 'zh', 'ja', or 'unclear'. Kana…** (1 connections) — `scripts/probe_models.py`
+- **(did it find the answer in the material, which language it replied in). Both…** (1 connections) — `scripts/probe_models.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 170](Community_170.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_agent_completer.py`
+- `scripts/probe_models.py`
 
 ## Audit Trail
 
-- EXTRACTED: 4 (100%)
+- EXTRACTED: 6 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

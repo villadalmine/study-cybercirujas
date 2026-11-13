@@ -1,10 +1,10 @@
 # Community 46
 
-> 18 nodes · cohesion 0.18
+> 19 nodes · cohesion 0.17
 
 ## Key Concepts
 
-- **re** (119 connections)
+- **re** (123 connections)
 - **test_lockfile.py** (9 connections) — `tests/test_lockfile.py`
 - **test_actions_pinned.py** (7 connections) — `tests/test_actions_pinned.py`
 - **unpinned()** (5 connections) — `tests/test_actions_pinned.py`
@@ -14,6 +14,7 @@
 - **norm()** (4 connections) — `tests/test_lockfile.py`
 - **ActionsPinnedTests** (3 connections) — `tests/test_actions_pinned.py`
 - **.test_every_direct_dependency_is_pinned()** (3 connections) — `tests/test_lockfile.py`
+- **test_killercoda_jobs_never_fail_a_pr_and_name_no_lab()** (2 connections) — `tests/lab/test_kc_gate.py`
 - **.test_a_tag_or_a_missing_comment_is_reported()** (2 connections) — `tests/test_actions_pinned.py`
 - **.test_every_action_is_pinned_by_sha_with_version_comment()** (2 connections) — `tests/test_actions_pinned.py`
 - **tomllib** (2 connections)
@@ -25,27 +26,28 @@
 
 ## Relationships
 
-- [Community 43](Community_43.md) (12 shared connections)
-- [Community 74](Community_74.md) (7 shared connections)
+- [Community 43](Community_43.md) (9 shared connections)
+- [Community 74](Community_74.md) (8 shared connections)
 - [Community 31](Community_31.md) (6 shared connections)
-- [Community 32](Community_32.md) (6 shared connections)
 - [Community 124](Community_124.md) (6 shared connections)
 - [Community 14](Community_14.md) (6 shared connections)
-- [Community 89](Community_89.md) (4 shared connections)
-- [Community 104](Community_104.md) (4 shared connections)
-- [Community 18](Community_18.md) (4 shared connections)
-- [Community 249](Community_249.md) (3 shared connections)
-- [Community 61](Community_61.md) (3 shared connections)
-- [Community 164](Community_164.md) (3 shared connections)
+- [Community 32](Community_32.md) (5 shared connections)
+- [Community 111](Community_111.md) (4 shared connections)
+- [Community 249](Community_249.md) (4 shared connections)
+- [Community 144](Community_144.md) (4 shared connections)
+- [Community 164](Community_164.md) (4 shared connections)
+- [Community 54](Community_54.md) (4 shared connections)
+- [Community 89](Community_89.md) (3 shared connections)
 
 ## Source Files
 
+- `tests/lab/test_kc_gate.py`
 - `tests/test_actions_pinned.py`
 - `tests/test_lockfile.py`
 
 ## Audit Trail
 
-- EXTRACTED: 146 (100%)
+- EXTRACTED: 151 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

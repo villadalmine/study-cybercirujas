@@ -1,49 +1,40 @@
 # Community 45
 
-> 17 nodes · cohesion 0.16
+> 17 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **main()** (17 connections) — `scripts/fix_corrupted_content.py`
-- **main()** (11 connections) — `scripts/run_batch.py`
-- **budget()** (8 connections) — `teach/core/pipeline.py`
-- **is_fatal()** (6 connections) — `teach/core/pipeline.py`
-- **me()** (6 connections) — `teach/core/pipeline.py`
-- **topics_per_run()** (6 connections) — `teach/core/pipeline.py`
-- **mine()** (5 connections) — `teach/core/pipeline.py`
-- **owner()** (5 connections) — `teach/core/pipeline.py`
-- **_usable_translate_backend()** (4 connections) — `scripts/fix_corrupted_content.py`
-- **strip_fences_in_place()** (3 connections) — `scripts/fix_corrupted_content.py`
-- **is_retryable()** (3 connections) — `teach/core/pipeline.py`
-- **A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…** (1 connections) — `scripts/fix_corrupted_content.py`
-- **TRANSLATE_BACKEND if it can actually answer, else claude. A misconfigured…** (1 connections) — `scripts/fix_corrupted_content.py`
-- **Which agent takes this certification by default; 'any' if unassigned. NOT a…** (1 connections) — `teach/core/pipeline.py`
-- **This agent's name, from TEACH_AGENT. Unset means 'claude' — the historical…** (1 connections) — `teach/core/pipeline.py`
-- **Maximum topics one invocation may generate. 0 means unbounded, which is…** (1 connections) — `teach/core/pipeline.py`
-- **True for errors where retrying cannot help (quota exhausted), as opposed to…** (1 connections) — `teach/core/pipeline.py`
+- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
+- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
+- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
+- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
+- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
+- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
+- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
+- **Check first** (1 connections) — `docs/CLEANUP.md`
+- **Delete** (1 connections) — `docs/CLEANUP.md`
+- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
+- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
+- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
+- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
+- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
+- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
+- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
 
 ## Relationships
 
-- [Community 19](Community_19.md) (12 shared connections)
-- [Community 61](Community_61.md) (11 shared connections)
-- [Community 49](Community_49.md) (3 shared connections)
-- [Community 103](Community_103.md) (3 shared connections)
-- [Community 6](Community_6.md) (2 shared connections)
-- [Community 7](Community_7.md) (2 shared connections)
-- [Community 88](Community_88.md) (1 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 62](Community_62.md) (1 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
+- [Community 110](Community_110.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/fix_corrupted_content.py`
-- `scripts/run_batch.py`
-- `teach/core/pipeline.py`
+- `docs/CLEANUP.md`
 
 ## Audit Trail
 
-- EXTRACTED: 58 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 17 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---

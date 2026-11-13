@@ -1,52 +1,35 @@
 # Community 224
 
-> 17 nodes · cohesion 0.12
+> 11 nodes · cohesion 0.22
 
 ## Key Concepts
 
-- **test_kc_gate.py** (21 connections) — `tests/lab/test_kc_gate.py`
-- **provable_labs()** (9 connections) — `teach/lab/cli.py`
-- **test_the_mirror_gate_needs_a_recorded_proof_for_the_current_lab_hash()** (8 connections) — `tests/lab/test_kc_gate.py`
-- **has_fix_verb()** (5 connections) — `teach/lab/kc_scope.py`
-- **natural()** (4 connections) — `teach/lab/export_killercoda.py`
-- **test_every_tested_lab_has_a_way_to_be_proven()** (4 connections) — `tests/lab/test_kc_gate.py`
-- **test_human_tested_entries_match_the_evidence_file()** (4 connections) — `tests/lab/test_kc_gate.py`
-- **test_labs_with_a_fix_verb_or_a_fix_file_are_provable()** (3 connections) — `tests/lab/test_kc_gate.py`
-- **test_the_plan_lists_the_provable_labs()** (3 connections) — `tests/lab/test_kc_gate.py`
-- **test_killercoda_jobs_never_fail_a_pr_and_name_no_lab()** (2 connections) — `tests/lab/test_kc_gate.py`
-- **test_fix_verb_detection()** (2 connections) — `tests/lab/test_kc_scope.py`
-- **(cert, topic) of every lab that has a reference fix: a file in fixes/, or a…** (1 connections) — `teach/lab/cli.py`
-- **The lab script itself carries a reference fix (a `fix)` case), so it can be…** (1 connections) — `teach/lab/kc_scope.py`
-- **Killercoda is an optional channel: a lab is `tested` or `loaded-untested`, a…** (1 connections) — `tests/lab/test_kc_gate.py`
-- **A lab with Killercoda evidence and no reference fix could never be re-proven:…** (1 connections) — `tests/lab/test_kc_gate.py`
-- **human_tested.yaml drives the scenario banner; lab-evidence.yaml is the…** (1 connections) — `tests/lab/test_kc_gate.py`
-- **A passing tested.json alone is not enough: ckad/4.4 is under `failed:` and has…** (1 connections) — `tests/lab/test_kc_gate.py`
+- **_domain_markers()** (8 connections) — `teach/core/tracker.py`
+- **_domain_of()** (6 connections) — `teach/core/tracker.py`
+- **_name_pattern()** (5 connections) — `teach/core/tracker.py`
+- **_heading_like()** (3 connections) — `teach/core/tracker.py`
+- **.test_a_bare_domain_number_is_not_a_marker()** (3 connections) — `tests/test_tracker.py`
+- **.test_a_possessive_domain_name_still_matches_itself()** (3 connections) — `tests/test_tracker.py`
+- **Pattern** (2 connections)
+- **A domain name, tolerant of the plural a vendor drops or adds between documents.…** (1 connections) — `teach/core/tracker.py`
+- **(name pattern, objective-id pattern, domain) per syllabus topic. The domain is…** (1 connections) — `teach/core/tracker.py`
+- **Short and not a sentence: how a heading, a tab or a domain title is laid out.** (1 connections) — `teach/core/tracker.py`
+- **The domain a line announces, if it is laid out to announce one. A domain's name…** (1 connections) — `teach/core/tracker.py`
 
 ## Relationships
 
-- [Community 111](Community_111.md) (9 shared connections)
-- [Community 18](Community_18.md) (6 shared connections)
-- [Community 70](Community_70.md) (5 shared connections)
-- [Community 29](Community_29.md) (5 shared connections)
-- [Community 46](Community_46.md) (3 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
-- [Community 56](Community_56.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 104](Community_104.md) (4 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/lab/cli.py`
-- `teach/lab/export_killercoda.py`
-- `teach/lab/kc_scope.py`
-- `tests/lab/test_kc_gate.py`
-- `tests/lab/test_kc_scope.py`
+- `teach/core/tracker.py`
+- `tests/test_tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 54 (100%)
+- EXTRACTED: 22 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

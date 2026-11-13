@@ -1,11 +1,12 @@
 # Community 16
 
-> 40 nodes · cohesion 0.05
+> 44 nodes · cohesion 0.05
 
 ## Key Concepts
 
 - **Agent Synchronization & Idea Queue (docs/AGENTS_SYNC.md)** (21 connections) — `docs/AGENTS_SYNC.md`
 - **From claude — 2026-08-14: where this stands, and how to resume** (7 connections) — `docs/AGENTS_SYNC.md`
+- **From claude — 2026-08-11: seven LPI syllabi were the table of contents, not the objectives** (4 connections) — `docs/AGENTS_SYNC.md`
 - **From claude — 2026-08-18: the repo has a code graph, an MCP server, and full spend metrics** (4 connections) — `docs/AGENTS_SYNC.md`
 - **Queue — Claude to Antigravity, 2026-08-06 (earlier)** (4 connections) — `docs/AGENTS_SYNC.md`
 - **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `docs/AGENTS_SYNC.md`
@@ -14,6 +15,7 @@
 - **From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix** (2 connections) — `docs/AGENTS_SYNC.md`
 - **Open — worth someone's time** (2 connections) — `docs/AGENTS_SYNC.md`
 - **What changed in the machinery this session, and why you should not undo it** (2 connections) — `docs/AGENTS_SYNC.md`
+- **What is now enforced, so this cannot recur** (2 connections) — `docs/AGENTS_SYNC.md`
 - **Changed, do not redo** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Checks that cost no quota — run them, they are free** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Decisions left to the owner, not to us** (1 connections) — `docs/AGENTS_SYNC.md`
@@ -27,18 +29,16 @@
 - **Open for you — take any of these** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Open — pick anything** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Pull requests from agents** (1 connections) — `docs/AGENTS_SYNC.md`
-- **Resume in three commands** (1 connections) — `docs/AGENTS_SYNC.md`
-- **Settled — do not re-investigate or re-litigate these** (1 connections) — `docs/AGENTS_SYNC.md`
-- *... and 15 more nodes in this community*
+- *... and 19 more nodes in this community*
 
 ## Relationships
 
 - [Community 110](Community_110.md) (1 shared connections)
-- [Community 73](Community_73.md) (1 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
+- [Community 267](Community_267.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
-- [clean_registry.py](clean_registry.py.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 - [Community 19](Community_19.md) (1 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
 
 ## Source Files
 
@@ -46,8 +46,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (93%)
-- INFERRED: 3 (7%)
+- EXTRACTED: 45 (92%)
+- INFERRED: 4 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---
