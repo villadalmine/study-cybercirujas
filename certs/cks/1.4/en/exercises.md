@@ -1,11 +1,11 @@
-# Guided Exercises — Protect Node Metadata and Endpoints (CKS 1.34, Topic 1.4)
+# Guided Exercises — Protect Node Metadata and Endpoints (CKS 1.37, Topic 1.4)
 
 These hands-on exercises walk you through discovering, testing, and hardening the network endpoints exposed by Kubernetes nodes, and through blocking Pod access to the cloud provider metadata service. Run each block in order, then answer the verification questions before moving on. Consolidated answers are in the collapsible section at the end.
 
 > **Lab environment.** You need a cluster where you have `sudo` on the nodes (kubeadm, `kind`, or a cloud cluster with SSH access). Commands assume a control-plane node plus at least one worker. Where a step touches the kubelet config, take a backup first — a malformed config will stop the kubelet. Nothing here needs to run against production.
 
 **Reference sources**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Ports and Protocols — https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubelet authentication/authorization — https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/
 - Kubelet config (v1beta1) — https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/

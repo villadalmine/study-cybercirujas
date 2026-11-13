@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Dominio 2.4: Implement Pod-to-Pod encryption (Cilium, Istio)
+# CKS v1.37 - Dominio 2.4: Implement Pod-to-Pod encryption (Cilium, Istio)
 # Peso en el examen: 5
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Este script de "break & fix" apunta a la implementación vía Cilium
 # (WireGuard transparent encryption), una de las dos rutas que cubre
@@ -252,5 +252,5 @@ main "$@"
 # modo STRICT + DestinationRule con ISTIO_MUTUAL). Para el dominio
 # 2.4 del CKS hay que saber diagnosticar y remediar cualquiera de
 # las dos rutas.
-# Fuente: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# Fuente: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 # ============================================================

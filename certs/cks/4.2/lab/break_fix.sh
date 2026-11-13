@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==============================================================================
-# CKS v1.34 - Dominio 4.2: Understand your supply chain (SBOM, CI/CD,
+# CKS v1.37 - Dominio 4.2: Understand your supply chain (SBOM, CI/CD,
 # artifact repositories) - peso en el examen: 5%
 #
 # Ejercicio: "whitelist de registries confiables" con OPA Gatekeeper como
@@ -12,7 +12,7 @@ set -euo pipefail
 # artifact repository interno confiable).
 #
 # Fuentes:
-#   - CKS Curriculum v1.34: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   - CKS Curriculum v1.37: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #   - OPA Gatekeeper (admission controller usado en este lab): https://open-policy-agent.github.io/gatekeeper/website/docs/
 #
 # USAR SOLO EN UNA VM/CLUSTER DE LABORATORIO DESCARTABLE. Este script instala
@@ -241,7 +241,7 @@ main() {
     setup)
       cat <<EOF
 ================================================================================
- CKS v1.34 - Dominio 4.2: Understand your supply chain (peso: 5%)
+ CKS v1.37 - Dominio 4.2: Understand your supply chain (peso: 5%)
  Este script instala OPA Gatekeeper y aplica/rompe un Constraint.
  Usalo SOLO en una VM/cluster de laboratorio descartable.
 ================================================================================

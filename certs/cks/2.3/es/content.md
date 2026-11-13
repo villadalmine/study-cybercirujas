@@ -90,7 +90,7 @@ Aplicá Pod Security Admission a nivel de namespace para que el tenant no pueda 
 ```bash
 kubectl label namespace tenant-a \
   pod-security.kubernetes.io/enforce=restricted \
-  pod-security.kubernetes.io/enforce-version=v1.34 \
+  pod-security.kubernetes.io/enforce-version=v1.37 \
   pod-security.kubernetes.io/warn=restricted
 ```
 
@@ -616,7 +616,7 @@ metadata:
   labels:
     tenant: x
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
   annotations:
     scheduler.alpha.kubernetes.io/node-selector: "tenant=x"
 ---
@@ -722,7 +722,7 @@ kubectl get pods -A -o json | jq -r '.items[]
 
 ## Referencias
 
-- CKS Curriculum v1.34 (CNCF): https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes — Multi-tenancy: https://kubernetes.io/docs/concepts/security/multi-tenancy/
 - Kubernetes — Namespaces: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
 - Kubernetes — Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/

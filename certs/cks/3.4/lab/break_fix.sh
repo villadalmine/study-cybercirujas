@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# break-fix: CKS 1.34 - Dominio 3.4 "Upgrade Kubernetes to avoid vulnerabilities" (peso: 3.75%)
-# Fuente: CKS Curriculum v1.34 - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# break-fix: CKS 1.37 - Dominio 3.4 "Upgrade Kubernetes to avoid vulnerabilities" (peso: 3.75%)
+# Fuente: CKS Curriculum v1.37 - https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 # Referencias: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 #              https://kubernetes.io/docs/setup/release/version-skew-policy/
 #
@@ -53,7 +53,7 @@ available_versions() {
 }
 
 semver_of() {
-  # extrae "X.Y.Z" de un string tipo "1.34.1-1.1" (version de paquete apt)
+  # extrae "X.Y.Z" de un string tipo "1.37.2-1.1" (version de paquete apt)
   printf '%s\n' "$1" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1
 }
 

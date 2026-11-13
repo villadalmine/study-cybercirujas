@@ -1,6 +1,6 @@
 # Topic 2.2 — Manage Kubernetes Secrets: Guided Exercises
 
-**Certification:** CKS (exam version 1.34) · **Exam weight:** 5
+**Certification:** CKS (exam version 1.37) · **Exam weight:** 5
 
 ## Lab prerequisites
 
@@ -791,7 +791,7 @@ until kubectl get --raw='/readyz' 2>/dev/null; do sleep 3; done; echo
 
 ## References
 
-- CNCF CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes — Secrets — https://kubernetes.io/docs/concepts/configuration/secret/
 - Kubernetes — Encrypting Confidential Data at Rest — https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
 - Kubernetes — Using a KMS provider for data encryption — https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/

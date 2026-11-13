@@ -23,17 +23,17 @@ La verificación no tiene sentido si antes no decidís *exactamente* qué artefa
    mkdir -p ~/verify-lab && cd ~/verify-lab
    ```
 
-2. Preguntale al canal de releases cuál es la versión estable actual, y cuál es la versión estable de la línea menor 1.34:
+2. Preguntale al canal de releases cuál es la versión estable actual, y cuál es la versión estable de la línea menor 1.37:
 
    ```bash
    curl -sL https://dl.k8s.io/release/stable.txt
-   curl -sL https://dl.k8s.io/release/stable-1.34.txt
+   curl -sL https://dl.k8s.io/release/stable-1.37.txt
    ```
 
 3. Fijá la versión explícitamente en tu shell — cada paso posterior la reutiliza:
 
    ```bash
-   export K8S_VERSION=v1.34.0
+   export K8S_VERSION=v1.37.0
    export ARCH=amd64
    echo "${K8S_VERSION}/${ARCH}"
    ```
@@ -52,7 +52,7 @@ La verificación no tiene sentido si antes no decidís *exactamente* qué artefa
 
 1. ¿Por qué `curl -sL https://dl.k8s.io/release/stable.txt` es una *comodidad* y no un control de seguridad?
 2. `dl.k8s.io` se sirve sobre HTTPS. ¿Por qué TLS por sí solo es insuficiente para confiar en el `kubectl` que acabás de localizar?
-3. ¿Cuál es la diferencia práctica, para un auditor, entre "instalamos Kubernetes 1.34" e "instalamos `v1.34.0` con digest `sha256:…`"?
+3. ¿Cuál es la diferencia práctica, para un auditor, entre "instalamos Kubernetes 1.37" e "instalamos `v1.37.0` con digest `sha256:…`"?
 
 ---
 
@@ -94,7 +94,7 @@ La verificación no tiene sentido si antes no decidís *exactamente* qué artefa
    echo "$(cat server.sha512)  kubernetes-server-linux-${ARCH}.tar.gz" | sha512sum --check
    ```
 
-   > Si el archivo `.sha512` no está publicado para tu release, los mismos digests están listados en el changelog de la release: `https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.34.md`.
+   > Si el archivo `.sha512` no está publicado para tu release, los mismos digests están listados en el changelog de la release: `https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.37.md`.
 
 5. Recién ahora instalá el binario:
 
@@ -308,22 +308,22 @@ La mayoría de los clústeres instalan `kubelet`/`kubeadm`/`kubectl` desde `pkgs
 
    ```bash
    cd ~/verify-lab
-   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key -o k8s-1.34-release.key
-   gpg --show-keys --with-fingerprint --with-colons k8s-1.34-release.key | grep -E '^(pub|fpr|uid)'
+   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key -o k8s-1.37-release.key
+   gpg --show-keys --with-fingerprint --with-colons k8s-1.37-release.key | grep -E '^(pub|fpr|uid)'
    ```
 
 2. Instalala en un keyring dedicado (nunca en el conjunto global de confianza):
 
    ```bash
    sudo mkdir -p /etc/apt/keyrings
-   sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg < k8s-1.34-release.key
+   sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg < k8s-1.37-release.key
    sudo chmod 0644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
    ```
 
 3. Acotá esa clave a exactamente un repositorio con `signed-by=`:
 
    ```bash
-   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /' \
+   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' \
      | sudo tee /etc/apt/sources.list.d/kubernetes.list
    sudo apt-get update
    ```
@@ -609,7 +609,7 @@ Dos reglas que vale la pena memorizar: **verificá antes de instalar, nunca desp
 
 1. `stable.txt` te dice qué considera estable upstream en este momento; se obtiene en tiempo de ejecución y puede cambiar entre tu corrida de prueba y tu corrida de producción. Es un insumo para una decisión, no un paso de verificación. La seguridad requiere una versión que fijaste deliberadamente y que podés reproducir.
 2. TLS protege el *canal*: prueba que estás hablando con `dl.k8s.io` y que nadie modificó los bytes en tránsito. No dice nada sobre si el objeto almacenado en ese servidor es el objeto que produjo el equipo de release de Kubernetes — un bucket comprometido, un mirror envenenado o un edge de CDN malicioso servirían todos su contenido sobre TLS perfectamente válido. La integridad y la provenance necesitan checksums y firmas.
-3. "Kubernetes 1.34" es un rango de decenas de binarios distintos con distintos fixes y distintos hashes; no es verificable. `v1.34.0` más un digest es un objeto único, inmutable y reproducible — un auditor puede volver a descargarlo, volver a hashearlo y obtener la misma respuesta el año que viene.
+3. "Kubernetes 1.37" es un rango de decenas de binarios distintos con distintos fixes y distintos hashes; no es verificable. `v1.37.0` más un digest es un objeto único, inmutable y reproducible — un auditor puede volver a descargarlo, volver a hashearlo y obtener la misma respuesta el año que viene.
 
 ### Ejercicio 2
 
@@ -679,7 +679,7 @@ Dos reglas que vale la pena memorizar: **verificá antes de instalar, nunca desp
 
 ## Fuentes
 
-- CNCF, *CKS Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *CKS Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Documentación de Kubernetes, *Verify Signed Kubernetes Artifacts* — https://kubernetes.io/docs/tasks/administer-cluster/verify-signed-artifacts/
 - Documentación de Kubernetes, *Install and Set Up kubectl on Linux* — https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 - Kubernetes, *Download Kubernetes / release artifacts* — https://kubernetes.io/releases/download/

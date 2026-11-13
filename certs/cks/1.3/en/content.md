@@ -557,4 +557,4 @@ Successful `curl` handshake:
 - ingress-nginx — Client certificate authentication: https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/
 - Kubernetes blog — "Ingress-nginx CVE-2025-1974: What You Need to Know": https://kubernetes.io/blog/2025/03/24/ingress-nginx-cve-2025-1974/
 - cert-manager — Securing Ingress resources: https://cert-manager.io/docs/usage/ingress/
-- CNCF — CKS Curriculum v1.34: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — CKS Curriculum v1.37: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf

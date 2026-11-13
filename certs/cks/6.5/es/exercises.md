@@ -2,7 +2,7 @@
 
 ## Ejercicios Guiados
 
-> **Peso en el examen:** 4 · **Versión del cluster:** v1.34 · **Tiempo estimado:** 120–150 min
+> **Peso en el examen:** 4 · **Versión del cluster:** v1.37 · **Tiempo estimado:** 120–150 min
 >
 > El audit logging es el único mecanismo en Kubernetes que responde *"¿quién hizo qué, sobre qué objeto, desde dónde, y fue permitido?"* después del hecho. RBAC te dice qué está *permitido*; el audit log te dice qué se *intentó*. En el examen CKS este tema casi siempre aparece como una edición de static pod bajo presión de tiempo, así que cada ejercicio de abajo termina con la misma disciplina: **cambiar → reiniciar → probar que funciona → probar que no rompiste el API server.**
 
@@ -164,7 +164,7 @@ Forma esperada (los valores van a diferir):
     "groups": ["kubeadm:cluster-admins", "system:authenticated"]
   },
   "sourceIPs": ["192.168.178.20"],
-  "userAgent": "kubectl/v1.34.0 (linux/amd64) kubernetes/f9a2c1e",
+  "userAgent": "kubectl/v1.37.0 (linux/amd64) kubernetes/f9a2c1e",
   "objectRef": {
     "resource": "secrets",
     "namespace": "audit-demo",
@@ -944,7 +944,7 @@ Correlacioná sobre el evento **original**: encontrá el `delete` sobre el recur
 
 Los tres son campos del esquema estándar de kubeconfig, que es precisamente por qué la configuración del webhook usa ese formato. Notá también que el archivo debe estar montado dentro del contenedor del API server y su clave privada protegida en `0600` y propiedad de root.
 
-**A22.** La API `AuditSink` (`auditregistration.k8s.io/v1alpha1`, "configuración dinámica de auditoría") fue deprecada y **eliminada en Kubernetes 1.19**. No existe en v1.34 y no va a volver. La política de auditoría es configuración del control plane, no datos del cluster, y se configura únicamente mediante flags y archivos del API server — lo cual es una propiedad de seguridad, no un descuido: si la política de auditoría fuera un objeto de API con alcance de cluster, cualquiera con el RBAC para editarla podría deshabilitar su propio logging antes de actuar. Gestionar el manifiesto del static Pod y el archivo de política con gestión de configuración (o con las opciones de logging del control plane de un proveedor gestionado) es el camino soportado.
+**A22.** La API `AuditSink` (`auditregistration.k8s.io/v1alpha1`, "configuración dinámica de auditoría") fue deprecada y **eliminada en Kubernetes 1.19**. No existe en v1.37 y no va a volver. La política de auditoría es configuración del control plane, no datos del cluster, y se configura únicamente mediante flags y archivos del API server — lo cual es una propiedad de seguridad, no un descuido: si la política de auditoría fuera un objeto de API con alcance de cluster, cualquiera con el RBAC para editarla podría deshabilitar su propio logging antes de actuar. Gestionar el manifiesto del static Pod y el archivo de política con gestión de configuración (o con las opciones de logging del control plane de un proveedor gestionado) es el camino soportado.
 
 ### Ejercicio 6
 
@@ -1078,7 +1078,7 @@ La prueba de que el descarte está vivo (el tercer comando de arriba): generá e
 
 ## Referencias
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes Documentation, *Auditing* — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 - Kubernetes API Reference, *Audit Configuration (`audit.k8s.io/v1`)* — https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 - Kubernetes Documentation, *kube-apiserver command-line reference* — https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/

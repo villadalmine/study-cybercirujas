@@ -32,10 +32,10 @@ A checksum published on the *same* server as the artifact proves almost nothing 
 | Binaries (`kubectl`, `kubelet`, `kubeadm`, `kube-apiserver`, …) | `https://dl.k8s.io/release/<version>/bin/<os>/<arch>/<binary>` |
 | Per-binary checksum | same URL + `.sha256` |
 | Per-binary signature / certificate | same URL + `.sig` and `.cert` |
-| Tarballs + sha512 list | `CHANGELOG/CHANGELOG-1.34.md` in `kubernetes/kubernetes` |
+| Tarballs + sha512 list | `CHANGELOG/CHANGELOG-1.37.md` in `kubernetes/kubernetes` |
 | Container images | `registry.k8s.io/<component>:<version>` (signed with cosign) |
 | SBOM | `https://sbom.k8s.io/<version>/release` |
-| Distro packages | `https://pkgs.k8s.io/core:/stable:/v1.34/{deb,rpm}/` |
+| Distro packages | `https://pkgs.k8s.io/core:/stable:/v1.37/{deb,rpm}/` |
 
 Note the `registry.k8s.io` / `dl.k8s.io` hostnames: the old `k8s.gcr.io` registry is frozen. Anything still pulling from it is a finding in itself.
 
@@ -46,7 +46,7 @@ Note the `registry.k8s.io` / `dl.k8s.io` hostnames: the old `k8s.gcr.io` registr
 The everyday workflow, and the one most likely to appear as an exam task:
 
 ```bash
-KUBE_VERSION=v1.34.0
+KUBE_VERSION=v1.37.0
 ARCH=linux/amd64
 
 curl -LO "https://dl.k8s.io/release/${KUBE_VERSION}/bin/${ARCH}/kubectl"
@@ -86,7 +86,7 @@ Same idea for the release tarballs, which use SHA-512:
 ```bash
 curl -LO "https://dl.k8s.io/${KUBE_VERSION}/kubernetes-server-linux-amd64.tar.gz"
 sha512sum kubernetes-server-linux-amd64.tar.gz
-# compare against the value listed in CHANGELOG-1.34.md
+# compare against the value listed in CHANGELOG-1.37.md
 ```
 
 ### Verifying a binary that is already installed
@@ -95,7 +95,7 @@ This is the "an intruder may have swapped a binary on this node" scenario. Hash 
 
 ```bash
 sha256sum /usr/local/bin/kubelet
-curl -sL "https://dl.k8s.io/release/v1.34.0/bin/linux/amd64/kubelet.sha256"
+curl -sL "https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubelet.sha256"
 ```
 
 Two frequent gotchas:
@@ -113,7 +113,7 @@ Since v1.26 **all** Kubernetes release artifacts — binaries, tarballs and imag
 
 ```bash
 BINARY=kubectl
-VERSION=v1.34.0
+VERSION=v1.37.0
 URL="https://dl.k8s.io/release/${VERSION}/bin/linux/amd64"
 
 curl -sSLO "${URL}/${BINARY}"
@@ -134,13 +134,13 @@ Verified OK
 ### A release image
 
 ```bash
-cosign verify registry.k8s.io/kube-apiserver:v1.34.0 \
+cosign verify registry.k8s.io/kube-apiserver:v1.37.0 \
   --certificate-identity krel-trust@k8s-releng-prod.iam.gserviceaccount.com \
   --certificate-oidc-issuer https://accounts.google.com
 ```
 
 ```
-Verification for registry.k8s.io/kube-apiserver:v1.34.0 --
+Verification for registry.k8s.io/kube-apiserver:v1.37.0 --
 The following checks were performed on each of these signatures:
   - The cosign claims were validated
   - Existence of the claims in the transparency log was verified offline
@@ -168,15 +168,15 @@ cosign verify --key cosign.pub myregistry.io/app@sha256:<digest>
 The community repos are GPG-signed; `apt`/`dnf` verify the repository metadata automatically, provided you installed the keyring:
 
 ```bash
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key \
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key \
   | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 ```
 
 Verify an individual RPM before installing, and verify installed files afterwards:
 
 ```bash
-rpm --checksig kubeadm-1.34.0-150500.1.1.x86_64.rpm
-# kubeadm-1.34.0-...x86_64.rpm: digests signatures OK
+rpm --checksig kubeadm-1.37.0-150500.1.1.x86_64.rpm
+# kubeadm-1.37.0-...x86_64.rpm: digests signatures OK
 
 rpm --verify kubelet        # empty output = no file has been modified
 ```
@@ -194,14 +194,14 @@ debsums -c kubelet          # lists only files whose checksum changed
 Every release ships an SPDX SBOM, so you can answer "does this component embed the vulnerable library?" without unpacking anything:
 
 ```bash
-curl -sL https://sbom.k8s.io/v1.34.0/release -o k8s-v1.34.0.spdx
-grep -i 'name: golang.org/x/net' k8s-v1.34.0.spdx
+curl -sL https://sbom.k8s.io/v1.37.0/release -o k8s-v1.37.0.spdx
+grep -i 'name: golang.org/x/net' k8s-v1.37.0.spdx
 ```
 
 Or pull the SBOM attached to an image:
 
 ```bash
-cosign download sbom registry.k8s.io/kube-apiserver:v1.34.0
+cosign download sbom registry.k8s.io/kube-apiserver:v1.37.0
 ```
 
 ---
@@ -211,8 +211,8 @@ cosign download sbom registry.k8s.io/kube-apiserver:v1.34.0
 A checksum you verified at install time is worthless if the workload later pulls a mutable tag. Tags are pointers; **digests are content-addressed and immutable**.
 
 ```yaml
-# Bad: :latest, and even :v1.34.0 can be re-pushed
-image: registry.k8s.io/kube-apiserver:v1.34.0
+# Bad: :latest, and even :v1.37.0 can be re-pushed
+image: registry.k8s.io/kube-apiserver:v1.37.0
 
 # Good
 image: registry.k8s.io/kube-apiserver@sha256:0f6a3b0e3d7c9b1a5e2d4c8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b
@@ -230,7 +230,7 @@ registry.k8s.io/kube-apiserver@sha256:0f6a3b0e3d7c9b1a5e2d4c8f7a6b5c4d3e2f1a0b9c
 
 ```bash
 crictl images --digests
-crictl inspecti registry.k8s.io/kube-apiserver:v1.34.0
+crictl inspecti registry.k8s.io/kube-apiserver:v1.37.0
 ```
 
 If the running `imageID` digest does not match the digest you signed and approved, something changed the image behind the tag.
@@ -291,7 +291,7 @@ The same discipline applies to `kubectl` plugins from Krew, CNI plugin tarballs,
 
 - **Trusting a checksum served from the same compromised host as the artifact.** Use signatures for anything that matters.
 - **`cosign verify` without identity flags** (or with a wildcard regexp) — accepts any valid Sigstore signature from anyone.
-- **Verifying the download but installing from cache**, or verifying `v1.34.0` while the node runs `v1.33.4`.
+- **Verifying the download but installing from cache**, or verifying `v1.37.0` while the node runs `v1.36.4`.
 - **Pinning a tag and calling it immutable.** Only digests are immutable.
 - **Ignoring the exit code** in automation — always `set -euo pipefail` and let `sha256sum --check` fail the build.
 - **Verifying at install time only.** Re-check with `rpm --verify` / `debsums` and compare running `imageID` digests as part of routine node auditing.
@@ -322,7 +322,7 @@ rpm -Va | grep -E 'kube|etcd'      # or: debsums -c
 
 ## Referencias
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Verify Signed Kubernetes Artifacts — https://kubernetes.io/docs/tasks/administer-cluster/verify-signed-artifacts/
 - Install and Set Up kubectl on Linux (checksum validation) — https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 - Installing kubeadm (community package repositories) — https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/

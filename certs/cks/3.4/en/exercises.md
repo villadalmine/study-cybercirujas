@@ -1,6 +1,6 @@
 # Topic 3.4 — Upgrade Kubernetes to Avoid Vulnerabilities
 
-**Certification:** CKS (Certified Kubernetes Security Specialist) — Exam version 1.34
+**Certification:** CKS (Certified Kubernetes Security Specialist) — Exam version 1.37
 **Domain:** Cluster Hardening — *Upgrade Kubernetes to avoid vulnerabilities*
 **Exam weight:** 3.75 %
 **Format:** guided exercises. Execute every numbered step; answer the checkpoint questions before moving on. All answers are collapsed at the end of the document.
@@ -15,16 +15,16 @@ These exercises mutate a control plane. **Do not run them against anything you c
 
 | Host   | Role                    | Starting version |
 |--------|-------------------------|------------------|
-| `cp01` | control-plane (kubeadm) | v1.33.4          |
-| `w01`  | worker                  | v1.33.4          |
-| `w02`  | worker                  | v1.33.4          |
+| `cp01` | control-plane (kubeadm) | v1.36.4          |
+| `w01`  | worker                  | v1.36.4          |
+| `w02`  | worker                  | v1.36.4          |
 
 * Cluster bootstrapped with `kubeadm`, control plane running as **static Pods**, stacked `etcd`.
 * Container runtime: `containerd`.
 * Root/`sudo` on every node, and `kubectl` configured against `cp01`.
-* Target version in the examples: **v1.34.1**. Substitute the latest v1.34 patch available in your package repository — the *mechanics* are what you are learning, not the digits.
+* Target version in the examples: **v1.37.2**. Substitute the latest v1.37 patch available in your package repository — the *mechanics* are what you are learning, not the digits.
 
-> **Quick build option (Debian/Ubuntu):** `kubeadm init --kubernetes-version v1.33.4 --pod-network-cidr 10.244.0.0/16` on `cp01`, then join `w01`/`w02`, then install a CNI. If you only have one machine, `kind create cluster --image kindest/node:v1.33.4` works for Exercises 1, 2, 4, 8 and 9, but **not** for 5–7 (kind nodes are not package-managed the way kubeadm nodes are).
+> **Quick build option (Debian/Ubuntu):** `kubeadm init --kubernetes-version v1.36.4 --pod-network-cidr 10.244.0.0/16` on `cp01`, then join `w01`/`w02`, then install a CNI. If you only have one machine, `kind create cluster --image kindest/node:v1.36.4` works for Exercises 1, 2, 4, 8 and 9, but **not** for 5–7 (kind nodes are not package-managed the way kubeadm nodes are).
 
 **Exam framing.** In the CKS exam this objective almost always appears as: *"Upgrade this cluster from v1.X to v1.Y. Upgrade **only** the control-plane node (or: upgrade `cp` first, then `node01`). Do not upgrade the worker nodes."* The whole task is worth a few points and should take under 8 minutes once you have the sequence memorised. Speed matters more than elegance here — Exercise 10 is the speed-run.
 
@@ -32,7 +32,7 @@ These exercises mutate a control plane. **Do not run them against anything you c
 
 ## Exercise 1 — Establish the baseline and internalise the version skew policy
 
-You cannot decide *whether* you are exposed, or *how far* you may jump, without an exact inventory. "The cluster is on 1.33" is not an inventory: `kube-apiserver`, `kubelet`, `kube-proxy`, `etcd`, `CoreDNS` and the container runtime all version independently, and each has its own CVE stream.
+You cannot decide *whether* you are exposed, or *how far* you may jump, without an exact inventory. "The cluster is on 1.36" is not an inventory: `kube-apiserver`, `kubelet`, `kube-proxy`, `etcd`, `CoreDNS` and the container runtime all version independently, and each has its own CVE stream.
 
 ### Steps
 
@@ -44,9 +44,9 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
 
    ```
    NAME   STATUS   ROLES           AGE   VERSION   INTERNAL-IP    OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-   cp01   Ready    control-plane   31d   v1.33.4   10.10.0.11     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
-   w01    Ready    <none>          31d   v1.33.4   10.10.0.21     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
-   w02    Ready    <none>          31d   v1.33.4   10.10.0.22     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
+   cp01   Ready    control-plane   31d   v1.36.4   10.10.0.11     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
+   w01    Ready    <none>          31d   v1.36.4   10.10.0.21     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
+   w02    Ready    <none>          31d   v1.36.4   10.10.0.22     Ubuntu 24.04.2 LTS   6.8.0-51-generic    containerd://2.0.5
    ```
 
 2. Get the client (`kubectl`) and server (`kube-apiserver`) versions separately:
@@ -56,9 +56,9 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
    ```
 
    ```
-   Client Version: v1.33.4
+   Client Version: v1.36.4
    Kustomize Version: v5.6.0
-   Server Version: v1.33.4
+   Server Version: v1.36.4
    ```
 
 3. Get the version of the `kubeadm` binary on `cp01`. **This is the version that governs what you are allowed to upgrade to** — `kubeadm upgrade apply vX.Y.Z` refuses to install a version that does not match the running `kubeadm` binary.
@@ -68,7 +68,7 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
    ```
 
    ```
-   v1.33.4
+   v1.36.4
    ```
 
 4. Read the *actual image tags* of the control-plane static Pods. This is ground truth; the `kubeadm-config` ConfigMap can drift from reality after a partial or failed upgrade.
@@ -82,9 +82,9 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
    ```
    POD                    IMAGE
    etcd-cp01              registry.k8s.io/etcd:3.6.4-0
-   kube-apiserver-cp01    registry.k8s.io/kube-apiserver:v1.33.4
-   kube-controller-manager-cp01  registry.k8s.io/kube-controller-manager:v1.33.4
-   kube-scheduler-cp01    registry.k8s.io/kube-scheduler:v1.33.4
+   kube-apiserver-cp01    registry.k8s.io/kube-apiserver:v1.36.4
+   kube-controller-manager-cp01  registry.k8s.io/kube-controller-manager:v1.36.4
+   kube-scheduler-cp01    registry.k8s.io/kube-scheduler:v1.36.4
    ```
 
 5. Add the components kubeadm treats as *addons* (they are upgraded by `kubeadm upgrade apply`, but they are not part of the control-plane skew rules):
@@ -95,7 +95,7 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
    ```
 
    ```
-   registry.k8s.io/kube-proxy:v1.33.4
+   registry.k8s.io/kube-proxy:v1.36.4
    registry.k8s.io/coredns/coredns:v1.12.0
    ```
 
@@ -132,12 +132,12 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
 
 ### ✅ Checkpoint 1
 
-- **Q1.1** — The `VERSION` column of `kubectl get nodes` shows `v1.33.4` for `cp01`. Which binary's version is that, and which component's version is it *not*?
-- **Q1.2** — A colleague proposes going from v1.31 straight to v1.34 with `kubeadm upgrade apply v1.34.1` to close a CVE quickly. Why will this fail, and what is the correct path?
-- **Q1.3** — After you upgrade `kube-apiserver` to v1.34.1 but leave every `kubelet` on v1.33.4, is the cluster in a supported state? For how many minor versions can that situation persist?
-- **Q1.4** — Your workstation has `kubectl` v1.31.0 and the cluster is being upgraded to v1.34.1. Is that combination supported? What symptom would you expect first?
+- **Q1.1** — The `VERSION` column of `kubectl get nodes` shows `v1.36.4` for `cp01`. Which binary's version is that, and which component's version is it *not*?
+- **Q1.2** — A colleague proposes going from v1.34 straight to v1.37 with `kubeadm upgrade apply v1.37.2` to close a CVE quickly. Why will this fail, and what is the correct path?
+- **Q1.3** — After you upgrade `kube-apiserver` to v1.37.2 but leave every `kubelet` on v1.36.4, is the cluster in a supported state? For how many minor versions can that situation persist?
+- **Q1.4** — Your workstation has `kubectl` v1.34.0 and the cluster is being upgraded to v1.37.2. Is that combination supported? What symptom would you expect first?
 - **Q1.5** — Why must you upgrade `kube-apiserver` *before* the kubelets, and never the reverse?
-- **Q1.6** — `containerd` 2.0.5 and `runc` 1.2.6 appear in your inventory. Does `kubeadm upgrade apply v1.34.1` patch them? What is the security implication?
+- **Q1.6** — `containerd` 2.0.5 and `runc` 1.2.6 appear in your inventory. Does `kubeadm upgrade apply v1.37.2` patch them? What is the security implication?
 
 ---
 
@@ -216,7 +216,7 @@ You cannot decide *whether* you are exposed, or *how far* you may jump, without 
 
 ### ✅ Checkpoint 2
 
-- **Q2.1** — An advisory states: *"Affected: kubelet v1.32.0 – v1.32.6, v1.33.0 – v1.33.5. Fixed in: v1.32.7, v1.33.6, v1.34.0."* Your cluster runs kubelet v1.33.4. What is the **minimum-risk** remediation, and why is it not "upgrade to v1.34.1"?
+- **Q2.1** — An advisory states: *"Affected: kubelet v1.35.0 – v1.35.6, v1.36.0 – v1.36.5. Fixed in: v1.35.7, v1.36.6, v1.37.0."* Your cluster runs kubelet v1.36.4. What is the **minimum-risk** remediation, and why is it not "upgrade to v1.37.2"?
 - **Q2.2** — Your cluster runs v1.29. Nothing is broken and the workloads are happy. Give the security argument, in one sentence, for why v1.29 is nonetheless unacceptable.
 - **Q2.3** — The CVE feed shows nothing new this month, yet a container-escape exploit is circulating publicly. Which two inventory lines from Exercise 1 would you check first, and why does the Kubernetes feed miss them?
 - **Q2.4** — Why does the official CVE feed live behind `official-cve-feed`-labelled GitHub issues instead of a hand-curated page? What does that imply about latency and completeness?
@@ -253,20 +253,20 @@ There is **no supported downgrade path** in Kubernetes. `kubeadm upgrade` moves 
      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
      --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
      --key=/etc/kubernetes/pki/etcd/healthcheck-client.key \
-     snapshot save /var/backups/etcd-pre-1.34-$(date +%F).db
+     snapshot save /var/backups/etcd-pre-1.37-$(date +%F).db
    ```
 
    ```
    {"level":"info","msg":"created temporary db file",...}
    {"level":"info","msg":"fetching snapshot","endpoint":"https://127.0.0.1:2379"}
    {"level":"info","msg":"fetched snapshot","size":"42 MB"}
-   Snapshot saved at /var/backups/etcd-pre-1.34-2026-07-31.db
+   Snapshot saved at /var/backups/etcd-pre-1.37-2026-07-31.db
    ```
 
 3. Verify the snapshot is readable and non-empty. `etcdctl snapshot status` is deprecated; the modern tool is `etcdutl`:
 
    ```bash
-   sudo etcdutl snapshot status /var/backups/etcd-pre-1.34-$(date +%F).db --write-out=table
+   sudo etcdutl snapshot status /var/backups/etcd-pre-1.37-$(date +%F).db --write-out=table
    ```
 
    ```
@@ -290,7 +290,7 @@ There is **no supported downgrade path** in Kubernetes. `kubeadm upgrade` moves 
 5. Copy both artefacts **off the node**. A backup that lives only on the machine you are about to break is not a backup.
 
    ```bash
-   scp /var/backups/etcd-pre-1.34-*.db /var/backups/k8s-etc-*.tgz backup-host:/srv/k8s-backups/
+   scp /var/backups/etcd-pre-1.37-*.db /var/backups/k8s-etc-*.tgz backup-host:/srv/k8s-backups/
    ```
 
 6. Check certificate expiry while you are here — `kubeadm upgrade apply` renews control-plane certificates automatically, which is a useful side effect worth recording *before*:
@@ -316,7 +316,7 @@ There is **no supported downgrade path** in Kubernetes. `kubeadm upgrade` moves 
 ### ✅ Checkpoint 3
 
 - **Q3.1** — `kubeadm upgrade apply v1.32.9` on a v1.33 cluster: what does kubeadm do, and what is your only real path back to v1.32?
-- **Q3.2** — You restore the etcd snapshot from step 2 but keep the already-upgraded v1.34.1 static Pod manifests. What class of failure should you expect?
+- **Q3.2** — You restore the etcd snapshot from step 2 but keep the already-upgraded v1.37.2 static Pod manifests. What class of failure should you expect?
 - **Q3.3** — Which certificates does `kubeadm upgrade apply` renew by default, and which flag disables that? Name one situation where you would want to disable it.
 - **Q3.4** — Why is `healthcheck-client.crt` the right certificate for `etcdctl snapshot save`, rather than `server.crt`?
 - **Q3.5** — On a cluster with **external** etcd, what changes about this exercise?
@@ -388,11 +388,11 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
    kubectl -n kube-system get ds -o custom-columns='NAME:.metadata.name,IMAGE:.spec.template.spec.containers[*].image'
    ```
 
-7. Check each third-party component's own compatibility matrix for v1.34 (Calico/Cilium, the CSI drivers, ingress controller, cert-manager, Prometheus operator…). Record any that must be upgraded **first**.
+7. Check each third-party component's own compatibility matrix for v1.37 (Calico/Cilium, the CSI drivers, ingress controller, cert-manager, Prometheus operator…). Record any that must be upgraded **first**.
 
 ### ✅ Checkpoint 4
 
-- **Q4.1** — `apiserver_requested_deprecated_apis` shows `removed_release="1.35"` for a group you use. You are upgrading to v1.34. Is this urgent? What do you do with the finding?
+- **Q4.1** — `apiserver_requested_deprecated_apis` shows `removed_release="1.38"` for a group you use. You are upgrading to v1.37. Is this urgent? What do you do with the finding?
 - **Q4.2** — A `Deployment` was created years ago via `apps/v1beta2`. Today `kubectl get deploy -o yaml` returns `apps/v1`. Explain the storage-vs-serving mechanism that makes this true, and why the object survives the removal of `apps/v1beta2` while a Git manifest does not.
 - **Q4.3** — Why is a `ValidatingWebhookConfiguration` a potential *cluster-wide outage* during an upgrade, and what field controls the blast radius?
 - **Q4.4** — Name the security-relevant reason this "check removed APIs" exercise belongs in a **security** objective at all, rather than only in a reliability runbook.
@@ -405,24 +405,24 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
 
 ### Steps
 
-1. Inspect the current repository definition. On the community `pkgs.k8s.io` repos, **the minor version is baked into the URL** — this is the number-one reason `apt-cache madison kubeadm` shows no v1.34 candidate:
+1. Inspect the current repository definition. On the community `pkgs.k8s.io` repos, **the minor version is baked into the URL** — this is the number-one reason `apt-cache madison kubeadm` shows no v1.37 candidate:
 
    ```bash
    cat /etc/apt/sources.list.d/kubernetes.list
    ```
 
    ```
-   deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /
+   deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /
    ```
 
-2. Repoint the repository to v1.34 **and re-import the signing key** (each minor-version repo is signed separately):
+2. Repoint the repository to v1.37 **and re-import the signing key** (each minor-version repo is signed separately):
 
    **Debian / Ubuntu**
 
    ```bash
-   sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key \
+   sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key \
      | sudo gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /' \
+   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' \
      | sudo tee /etc/apt/sources.list.d/kubernetes.list
    sudo apt-get update
    ```
@@ -433,10 +433,10 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
    cat <<'EOF' | sudo tee /etc/yum.repos.d/kubernetes.repo
    [kubernetes]
    name=Kubernetes
-   baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/
+   baseurl=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/
    enabled=1
    gpgcheck=1
-   gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+   gpgkey=https://pkgs.k8s.io/core:/stable:/v1.37/rpm/repodata/repomd.xml.key
    exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
    EOF
    ```
@@ -449,27 +449,27 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
    ```
 
    ```
-      kubeadm | 1.34.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.34/deb/  Packages
-      kubeadm | 1.34.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.34/deb/  Packages
+      kubeadm | 1.37.2-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb/  Packages
+      kubeadm | 1.37.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb/  Packages
    ```
 
 4. Install **only** `kubeadm` for now, releasing and reapplying the version hold:
 
    ```bash
    sudo apt-mark unhold kubeadm
-   sudo apt-get install -y kubeadm=1.34.1-1.1
+   sudo apt-get install -y kubeadm=1.37.2-1.1
    sudo apt-mark hold kubeadm
    sudo kubeadm version -o short
    ```
 
    ```
    kubeadm set on hold.
-   v1.34.1
+   v1.37.2
    ```
 
    **RPM equivalent:**
    ```bash
-   sudo dnf install -y kubeadm-1.34.1-150500.1.1 --disableexcludes=kubernetes
+   sudo dnf install -y kubeadm-1.37.2-150500.1.1 --disableexcludes=kubernetes
    ```
 
 5. Run the plan. Read every line — this output *is* the change plan, and it tells you explicitly which components kubeadm will **not** handle:
@@ -483,31 +483,31 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
    [upgrade/config] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
    [upgrade] Running cluster health checks
    [upgrade] Fetching available versions to upgrade to
-   [upgrade/versions] Cluster version: v1.33.4
-   [upgrade/versions] kubeadm version: v1.34.1
-   [upgrade/versions] Target version: v1.34.1
-   [upgrade/versions] Latest version in the v1.33 series: v1.33.6
+   [upgrade/versions] Cluster version: v1.36.4
+   [upgrade/versions] kubeadm version: v1.37.2
+   [upgrade/versions] Target version: v1.37.2
+   [upgrade/versions] Latest version in the v1.36 series: v1.36.6
 
    Components that must be upgraded manually after you have upgraded the control plane
    with 'kubeadm upgrade apply':
    COMPONENT   NODE   CURRENT   TARGET
-   kubelet     cp01   v1.33.4   v1.34.1
-   kubelet     w01    v1.33.4   v1.34.1
-   kubelet     w02    v1.33.4   v1.34.1
+   kubelet     cp01   v1.36.4   v1.37.2
+   kubelet     w01    v1.36.4   v1.37.2
+   kubelet     w02    v1.36.4   v1.37.2
 
    Upgrade to the latest stable version:
 
    COMPONENT                 NODE   CURRENT   TARGET
-   kube-apiserver            cp01   v1.33.4   v1.34.1
-   kube-controller-manager   cp01   v1.33.4   v1.34.1
-   kube-scheduler            cp01   v1.33.4   v1.34.1
-   kube-proxy                       1.33.4    v1.34.1
+   kube-apiserver            cp01   v1.36.4   v1.37.2
+   kube-controller-manager   cp01   v1.36.4   v1.37.2
+   kube-scheduler            cp01   v1.36.4   v1.37.2
+   kube-proxy                       1.36.4    v1.37.2
    CoreDNS                          v1.12.0   v1.12.1
    etcd                      cp01   3.6.4-0   3.6.4-0
 
    You can now apply the upgrade by executing the following command:
 
-           kubeadm upgrade apply v1.34.1
+           kubeadm upgrade apply v1.37.2
 
    _____________________________________________________________________
    ```
@@ -517,17 +517,17 @@ Minor upgrades remove APIs that were deprecated one or more releases earlier. If
 6. Rehearse without mutating anything. `--dry-run` renders the new manifests into a temporary directory and runs the same preflight logic:
 
    ```bash
-   sudo kubeadm upgrade apply v1.34.1 --dry-run
+   sudo kubeadm upgrade apply v1.37.2 --dry-run
    ```
 
-7. Note that the plan reported `v1.33.6` as "latest in the v1.33 series". If your only goal is closing a CVE fixed in v1.33.6, **that is the upgrade you should be doing** (see Q2.1).
+7. Note that the plan reported `v1.36.6` as "latest in the v1.36 series". If your only goal is closing a CVE fixed in v1.36.6, **that is the upgrade you should be doing** (see Q2.1).
 
 ### ✅ Checkpoint 5
 
-- **Q5.1** — `apt-cache madison kubeadm` shows only 1.33.x even after `apt-get update`. What is the cause, and what is the fix?
+- **Q5.1** — `apt-cache madison kubeadm` shows only 1.36.x even after `apt-get update`. What is the cause, and what is the fix?
 - **Q5.2** — Why does `kubeadm upgrade plan` list the kubelets under *"must be upgraded manually"*? What is the design reason kubeadm refuses to do it?
 - **Q5.3** — What does `apt-mark hold kubeadm` protect you from, and why is it a *security* control and not just an operational nicety?
-- **Q5.4** — You install `kubeadm=1.34.1-1.1` but run `kubeadm upgrade apply v1.34.0`. What happens?
+- **Q5.4** — You install `kubeadm=1.37.2-1.1` but run `kubeadm upgrade apply v1.37.0`. What happens?
 - **Q5.5** — In the plan output, `etcd` shows `3.6.4-0 → 3.6.4-0`. Does kubeadm restart the etcd static Pod anyway? Which flag would you use to keep etcd untouched, and when is that justified?
 
 ---
@@ -541,19 +541,19 @@ Order matters and is non-negotiable: **control-plane components first, then drai
 1. Apply the control-plane upgrade. This is the only node where you run `apply`:
 
    ```bash
-   sudo kubeadm upgrade apply v1.34.1
+   sudo kubeadm upgrade apply v1.37.2
    ```
 
    ```
    [upgrade/config] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
    [preflight] Running pre-flight checks.
    [upgrade] Running cluster health checks
-   [upgrade/version] You have chosen to change the cluster version to "v1.34.1"
-   [upgrade/versions] Cluster version: v1.33.4
-   [upgrade/versions] kubeadm version: v1.34.1
+   [upgrade/version] You have chosen to change the cluster version to "v1.37.2"
+   [upgrade/versions] Cluster version: v1.36.4
+   [upgrade/versions] kubeadm version: v1.37.2
    [upgrade] Are you sure you want to proceed? [y/N]: y
    [upgrade/prepull] Pulling images required for setting up a Kubernetes cluster
-   [upgrade/apply] Upgrading your Static Pod-hosted control plane instance to version "v1.34.1" (timeout: 5m0s)...
+   [upgrade/apply] Upgrading your Static Pod-hosted control plane instance to version "v1.37.2" (timeout: 5m0s)...
    [upgrade/etcd] Upgrading etcd
    [upgrade/staticpods] Preparing for "etcd" upgrade
    [upgrade/staticpods] Writing new Static Pod manifests to "/etc/kubernetes/tmp/kubeadm-upgraded-manifests..."
@@ -566,12 +566,12 @@ Order matters and is non-negotiable: **control-plane components first, then drai
    [addons] Applied essential addon: CoreDNS
    [addons] Applied essential addon: kube-proxy
 
-   [upgrade] SUCCESS! A control plane instance for this node was upgraded to "v1.34.1".
+   [upgrade] SUCCESS! A control plane instance for this node was upgraded to "v1.37.2".
 
    [upgrade] Now please proceed with upgrading the kubelet on this node if you haven't already done so.
    ```
 
-   For unattended runs add `-y`. To skip the interactive confirmation *and* the etcd upgrade: `sudo kubeadm upgrade apply v1.34.1 -y --etcd-upgrade=false`.
+   For unattended runs add `-y`. To skip the interactive confirmation *and* the etcd upgrade: `sudo kubeadm upgrade apply v1.37.2 -y --etcd-upgrade=false`.
 
 2. Confirm the control plane really moved, before touching the kubelet:
 
@@ -582,15 +582,15 @@ Order matters and is non-negotiable: **control-plane components first, then drai
    ```
 
    ```
-   Server Version: v1.34.1
+   Server Version: v1.37.2
    POD                            IMAGE
    etcd-cp01                      registry.k8s.io/etcd:3.6.4-0
-   kube-apiserver-cp01            registry.k8s.io/kube-apiserver:v1.34.1
-   kube-controller-manager-cp01   registry.k8s.io/kube-controller-manager:v1.34.1
-   kube-scheduler-cp01            registry.k8s.io/kube-scheduler:v1.34.1
+   kube-apiserver-cp01            registry.k8s.io/kube-apiserver:v1.37.2
+   kube-controller-manager-cp01   registry.k8s.io/kube-controller-manager:v1.37.2
+   kube-scheduler-cp01            registry.k8s.io/kube-scheduler:v1.37.2
    ```
 
-   Note that `kubectl get nodes` **still** shows `v1.33.4` for `cp01` — the kubelet has not been touched yet.
+   Note that `kubectl get nodes` **still** shows `v1.36.4` for `cp01` — the kubelet has not been touched yet.
 
 3. Drain the node. `--ignore-daemonsets` is mandatory on any real cluster (CNI and `kube-proxy` are DaemonSets and cannot be evicted):
 
@@ -612,13 +612,13 @@ Order matters and is non-negotiable: **control-plane components first, then drai
 
    ```bash
    sudo apt-mark unhold kubelet kubectl
-   sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+   sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
    sudo apt-mark hold kubelet kubectl
    ```
 
    **RPM:**
    ```bash
-   sudo dnf install -y kubelet-1.34.1-150500.1.1 kubectl-1.34.1-150500.1.1 --disableexcludes=kubernetes
+   sudo dnf install -y kubelet-1.37.2-150500.1.1 kubectl-1.37.2-150500.1.1 --disableexcludes=kubernetes
    ```
 
 5. Reload systemd and restart the kubelet. **`daemon-reload` is required** — the package may have changed the unit or its drop-ins:
@@ -639,9 +639,9 @@ Order matters and is non-negotiable: **control-plane components first, then drai
    ```
    node/cp01 uncordoned
    NAME   STATUS   ROLES           AGE   VERSION
-   cp01   Ready    control-plane   31d   v1.34.1
-   w01    Ready    <none>          31d   v1.33.4
-   w02    Ready    <none>          31d   v1.33.4
+   cp01   Ready    control-plane   31d   v1.37.2
+   w01    Ready    <none>          31d   v1.36.4
+   w02    Ready    <none>          31d   v1.36.4
    ```
 
 7. Confirm the certificate renewal side effect from Exercise 3:
@@ -659,7 +659,7 @@ Order matters and is non-negotiable: **control-plane components first, then drai
 ### ✅ Checkpoint 6
 
 - **Q6.1** — Why must the node be drained *before* `apt-get install kubelet`, and not after?
-- **Q6.2** — After step 1 succeeded, `kubectl get nodes` still reports `v1.33.4` for `cp01`. Is this a bug? Explain precisely what `kubeadm upgrade apply` did and did not change.
+- **Q6.2** — After step 1 succeeded, `kubectl get nodes` still reports `v1.36.4` for `cp01`. Is this a bug? Explain precisely what `kubeadm upgrade apply` did and did not change.
 - **Q6.3** — Explain the mechanism by which writing a new file into `/etc/kubernetes/manifests/` upgrades `kube-apiserver`. Which component performs the restart?
 - **Q6.4** — During step 1 the API server is briefly unavailable. Do running application Pods on `w01` stop serving traffic? Justify.
 - **Q6.5** — You forget `systemctl daemon-reload` and only run `systemctl restart kubelet`. What class of bug does this invite?
@@ -681,7 +681,7 @@ The second control-plane node and every worker use `kubeadm upgrade node`, **nev
 
    ```
    [upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
-   [upgrade] Upgrading your Static Pod-hosted control plane instance to version "v1.34.1"...
+   [upgrade] Upgrading your Static Pod-hosted control plane instance to version "v1.37.2"...
    [upgrade/staticpods] Component "kube-apiserver" upgraded successfully!
    [upgrade] The control plane instance for this node was successfully upgraded!
    ```
@@ -725,7 +725,7 @@ The second control-plane node and every worker use `kubeadm upgrade node`, **nev
 
    ```bash
    sudo apt-mark unhold kubelet kubectl
-   sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+   sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
    sudo apt-mark hold kubelet kubectl
    sudo systemctl daemon-reload
    sudo systemctl restart kubelet
@@ -735,7 +735,7 @@ The second control-plane node and every worker use `kubeadm upgrade node`, **nev
 
    ```bash
    kubectl uncordon w01
-   kubectl get nodes -w    # Ctrl-C when w01 is Ready at v1.34.1
+   kubectl get nodes -w    # Ctrl-C when w01 is Ready at v1.37.2
    ```
 
 7. Repeat steps 3–6 for `w02`. **One node at a time.** Verify the `kube-proxy` DaemonSet rolled onto each upgraded node:
@@ -749,7 +749,7 @@ The second control-plane node and every worker use `kubeadm upgrade node`, **nev
 - **Q7.1** — What exactly does `kubeadm upgrade node` do on a worker, given that it explicitly does *not* install the kubelet binary? Why is the step not skippable?
 - **Q7.2** — A drain has been stuck for 10 minutes on `payments/api-*`. `kubectl get pdb -A` shows `ALLOWED DISRUPTIONS: 0`. Give two correct remediations and one that a reviewer should reject.
 - **Q7.3** — Why does `kubectl drain` never evict DaemonSet Pods, and why does that make `--ignore-daemonsets` effectively mandatory rather than optional?
-- **Q7.4** — You upgrade `kubelet` on `w01` to v1.34.1 but the `kube-proxy` DaemonSet still runs the v1.33.4 image because you skipped the control plane. Is that a supported skew? What is the ordering rule you broke?
+- **Q7.4** — You upgrade `kubelet` on `w01` to v1.37.2 but the `kube-proxy` DaemonSet still runs the v1.36.4 image because you skipped the control plane. Is that a supported skew? What is the ordering rule you broke?
 - **Q7.5** — Explain the practical, security-relevant reason for doing workers strictly one at a time rather than draining all of them in parallel.
 
 ---
@@ -769,7 +769,7 @@ An upgrade is not finished when `kubectl get nodes` looks nice. Two things remai
      -o custom-columns='POD:.metadata.name,IMAGE:.spec.containers[*].image'
    ```
 
-   Every `VERSION` should read `v1.34.1`; every control-plane image tag should read `v1.34.1`.
+   Every `VERSION` should read `v1.37.2`; every control-plane image tag should read `v1.37.2`.
 
 2. Check API-server health endpoints individually — `readyz?verbose` names the failing check instead of just returning non-200:
 
@@ -809,8 +809,8 @@ An upgrade is not finished when `kubectl get nodes` looks nice. Two things remai
 6. **Verify artefact integrity.** If you download binaries directly rather than via packages, always check the published SHA-256:
 
    ```bash
-   curl -LO "https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl"
-   curl -LO "https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl.sha256"
+   curl -LO "https://dl.k8s.io/release/v1.37.2/bin/linux/amd64/kubectl"
+   curl -LO "https://dl.k8s.io/release/v1.37.2/bin/linux/amd64/kubectl.sha256"
    echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
    ```
 
@@ -821,7 +821,7 @@ An upgrade is not finished when `kubectl get nodes` looks nice. Two things remai
 7. **Verify signatures.** Kubernetes signs release images and binaries with Sigstore/cosign (keyless, recorded in Rekor):
 
    ```bash
-   cosign verify registry.k8s.io/kube-apiserver:v1.34.1 \
+   cosign verify registry.k8s.io/kube-apiserver:v1.37.2 \
      --certificate-identity krel-trust@k8s-releng-prod.iam.gserviceaccount.com \
      --certificate-oidc-issuer https://accounts.google.com \
      | jq '.[0].optional.Subject'
@@ -846,7 +846,7 @@ An upgrade is not finished when `kubectl get nodes` looks nice. Two things remai
 - **Q8.2** — You had manually added `--audit-log-path` to `/etc/kubernetes/manifests/kube-apiserver.yaml`. Does `kubeadm upgrade apply` preserve it? What is the durable way to make such a flag survive every future upgrade?
 - **Q8.3** — `sha256sum --check` passes on a downloaded `kubectl`. What attack does that defeat, and what attack does it **not** defeat? Which step in this exercise covers the gap?
 - **Q8.4** — Why does the `apiserver_requested_deprecated_apis` metric read `0` (or vanish) immediately after the upgrade even in a cluster full of legacy clients?
-- **Q8.5** — You upgraded Kubernetes to v1.34.1 to close a container-escape CVE, but the advisory's affected component was `runc`. Did the Kubernetes upgrade remediate it? What is the correct action, and what does it require of the node?
+- **Q8.5** — You upgraded Kubernetes to v1.37.2 to close a container-escape CVE, but the advisory's affected component was `runc`. Did the Kubernetes upgrade remediate it? What is the correct action, and what does it require of the node?
 
 ---
 
@@ -860,7 +860,7 @@ There is no `kubeadm downgrade`. Rehearse the real recovery path once, in the la
 
    ```bash
    sudo systemctl stop kubelet
-   sudo kubeadm upgrade apply v1.34.1 -y   # will time out waiting for static Pods
+   sudo kubeadm upgrade apply v1.37.2 -y   # will time out waiting for static Pods
    ```
 
    ```
@@ -888,14 +888,14 @@ There is no `kubeadm downgrade`. Rehearse the real recovery path once, in the la
 4. Retry with `--force` only if kubeadm refuses because of a version mismatch it recorded mid-failure:
 
    ```bash
-   sudo kubeadm upgrade apply v1.34.1 --force -y
+   sudo kubeadm upgrade apply v1.37.2 --force -y
    ```
 
 5. Rehearse the full rollback (destructive — lab only). Stop the control plane, restore the snapshot into a **new** data directory, and repoint etcd:
 
    ```bash
    sudo mv /etc/kubernetes/manifests /etc/kubernetes/manifests.off   # stop static Pods
-   sudo etcdutl snapshot restore /var/backups/etcd-pre-1.34-2026-07-31.db \
+   sudo etcdutl snapshot restore /var/backups/etcd-pre-1.37-2026-07-31.db \
      --data-dir /var/lib/etcd-restored
    sudo sed -i 's#path: /var/lib/etcd#path: /var/lib/etcd-restored#' \
      /etc/kubernetes/manifests.off/etcd.yaml
@@ -905,13 +905,13 @@ There is no `kubeadm downgrade`. Rehearse the real recovery path once, in the la
 
    ```bash
    sudo apt-mark unhold kubeadm kubelet kubectl
-   sudo apt-get install -y --allow-downgrades kubeadm=1.33.4-1.1 kubelet=1.33.4-1.1 kubectl=1.33.4-1.1
+   sudo apt-get install -y --allow-downgrades kubeadm=1.36.4-1.1 kubelet=1.36.4-1.1 kubectl=1.36.4-1.1
    sudo apt-mark hold kubeadm kubelet kubectl
    sudo mv /etc/kubernetes/manifests.off /etc/kubernetes/manifests
    sudo systemctl daemon-reload && sudo systemctl restart kubelet
    ```
 
-   (You will also need to repoint the apt repository URL back to `v1.33`.)
+   (You will also need to repoint the apt repository URL back to `v1.36`.)
 
 7. Verify, and note in your runbook exactly how long this took.
 
@@ -932,23 +932,23 @@ Memorise this. On the exam you will be given a target version and told which nod
 
 ```bash
 # 1. repoint repo to the target minor version + re-import key
-sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key \
+sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key \
   | sudo gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /' \
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' \
   | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
 
 # 2. kubeadm only
-sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.34.1-1.1 && sudo apt-mark hold kubeadm
+sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.37.2-1.1 && sudo apt-mark hold kubeadm
 
 # 3. plan + apply
 sudo kubeadm upgrade plan
-sudo kubeadm upgrade apply v1.34.1 -y
+sudo kubeadm upgrade apply v1.37.2 -y
 
 # 4. drain, upgrade kubelet+kubectl, restart, uncordon
 kubectl drain cp01 --ignore-daemonsets
 sudo apt-mark unhold kubelet kubectl
-sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload && sudo systemctl restart kubelet
 kubectl uncordon cp01
@@ -958,13 +958,13 @@ kubectl uncordon cp01
 
 ```bash
 # repo repoint (same as above), then:
-sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.34.1-1.1 && sudo apt-mark hold kubeadm
+sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.37.2-1.1 && sudo apt-mark hold kubeadm
 sudo kubeadm upgrade node
 # from the control plane / wherever kubectl works:
 kubectl drain node01 --ignore-daemonsets --delete-emptydir-data
 # back on node01:
 sudo apt-mark unhold kubelet kubectl
-sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload && sudo systemctl restart kubelet
 kubectl uncordon node01
@@ -981,7 +981,7 @@ kubectl uncordon node01
 ### ✅ Checkpoint 10
 
 - **Q10.1** — The exam task says *"upgrade the control plane node only; do not upgrade the worker nodes."* Which of the commands above do you run, and which do you deliberately skip?
-- **Q10.2** — After finishing, `kubectl get nodes` shows `cp01 Ready,SchedulingDisabled v1.34.1`. Have you completed the task? What is the one remaining command?
+- **Q10.2** — After finishing, `kubectl get nodes` shows `cp01 Ready,SchedulingDisabled v1.37.2`. Have you completed the task? What is the one remaining command?
 
 ---
 
@@ -992,11 +992,11 @@ kubectl uncordon node01
 
 **Q1.1** — It is the **kubelet** version, as self-reported by the node in `.status.nodeInfo.kubeletVersion`. It is emphatically **not** the `kube-apiserver` version. Immediately after `kubeadm upgrade apply` the API server is on the new version while the `VERSION` column still shows the old one — the two are decoupled by design. Get the API server's version from `kubectl version` (`Server Version:`) or from the static Pod image tag.
 
-**Q1.2** — `kubeadm` supports upgrading **exactly one minor version at a time**. `kubeadm upgrade plan` / `apply` will refuse a v1.31 → v1.34 jump at preflight. The correct path is sequential: v1.31 → v1.32 → v1.33 → v1.34, each hop with its own `kubeadm` binary, its own repository URL, and its own kubelet rollout. The constraint exists because storage-version migrations, API removals and feature-gate transitions are only validated between adjacent minors. Additionally, `kubeadm upgrade plan` on a v1.31 cluster will only ever offer you v1.32.
+**Q1.2** — `kubeadm` supports upgrading **exactly one minor version at a time**. `kubeadm upgrade plan` / `apply` will refuse a v1.34 → v1.37 jump at preflight. The correct path is sequential: v1.34 → v1.35 → v1.36 → v1.37, each hop with its own `kubeadm` binary, its own repository URL, and its own kubelet rollout. The constraint exists because storage-version migrations, API removals and feature-gate transitions are only validated between adjacent minors. Additionally, `kubeadm upgrade plan` on a v1.34 cluster will only ever offer you v1.35.
 
-**Q1.3** — Yes, this is supported. `kubelet` may be up to **three minor versions older** than `kube-apiserver` (since v1.28; it was two before that). It must **never** be newer. So v1.34.1 apiserver with v1.33.4 kubelets is fine, and could in principle persist for three minors — but "supported" is not "secure": those kubelets are still carrying whatever CVE you upgraded to fix. Treat the skew allowance as a rollout window measured in hours or days, not as a resting state.
+**Q1.3** — Yes, this is supported. `kubelet` may be up to **three minor versions older** than `kube-apiserver` (since v1.28; it was two before that). It must **never** be newer. So v1.37.2 apiserver with v1.36.4 kubelets is fine, and could in principle persist for three minors — but "supported" is not "secure": those kubelets are still carrying whatever CVE you upgraded to fix. Treat the skew allowance as a rollout window measured in hours or days, not as a resting state.
 
-**Q1.4** — Not supported. `kubectl` is supported within **one minor version** of `kube-apiserver` (older or newer), so v1.31 against a v1.34 server is three minors out. Expected symptoms: missing or unrecognised fields being silently dropped on `apply`, subcommands failing against APIs the old client doesn't know, and `kubectl` warning `client version is older than server version`. This is worse than an outage because it fails *quietly* — a stripped `securityContext` on apply is a real security regression.
+**Q1.4** — Not supported. `kubectl` is supported within **one minor version** of `kube-apiserver` (older or newer), so v1.34 against a v1.37 server is three minors out. Expected symptoms: missing or unrecognised fields being silently dropped on `apply`, subcommands failing against APIs the old client doesn't know, and `kubectl` warning `client version is older than server version`. This is worse than an outage because it fails *quietly* — a stripped `securityContext` on apply is a real security regression.
 
 **Q1.5** — The skew policy is asymmetric on purpose: components may be *older* than the API server, never *newer*. A newer kubelet will attempt to use API groups, fields and subresources that the older API server does not serve, producing registration failures, dropped fields and a node that may never become `Ready`. The API server is the schema authority; everything else must trail it. This is exactly why `kubeadm upgrade apply` (control plane) precedes the `kubelet` package install on every node.
 
@@ -1004,7 +1004,7 @@ kubectl uncordon node01
 
 ### Checkpoint 2
 
-**Q2.1** — Upgrade to **v1.33.6**, the patch release in your current minor series. It closes the CVE while changing nothing about API surfaces, feature gates, addon versions, or third-party compatibility — the blast radius is a binary swap. Jumping to v1.34.1 also closes the CVE but simultaneously ships a minor's worth of API removals, defaulting changes and behavioural drift, so you would be coupling an urgent security fix to a change that requires the whole Exercise-4 compatibility review. Security response and platform modernisation are separate changes and should be separate maintenance windows.
+**Q2.1** — Upgrade to **v1.36.6**, the patch release in your current minor series. It closes the CVE while changing nothing about API surfaces, feature gates, addon versions, or third-party compatibility — the blast radius is a binary swap. Jumping to v1.37.2 also closes the CVE but simultaneously ships a minor's worth of API removals, defaulting changes and behavioural drift, so you would be coupling an urgent security fix to a change that requires the whole Exercise-4 compatibility review. Security response and platform modernisation are separate changes and should be separate maintenance windows.
 
 **Q2.2** — v1.29 is outside the three-most-recent-minors support window, so it receives **no security patches at all**: every CVE disclosed against it from now on is permanently unfixed in that branch, and disclosure makes the exploit public. Running an EOL Kubernetes is accepting an unbounded and monotonically growing set of known-exploitable vulnerabilities.
 
@@ -1018,7 +1018,7 @@ kubectl uncordon node01
 
 **Q3.1** — kubeadm rejects it. Downgrades are not supported: `kubeadm upgrade apply` validates that the requested version is not older than the current cluster version and fails preflight. Your only real path back to v1.32 is a **restore**: stop the control plane, restore the pre-upgrade etcd snapshot into a fresh data directory, downgrade the `kubeadm`/`kubelet`/`kubectl` packages (with the repository repointed to the old minor), restore the old static Pod manifests and PKI from your `/etc/kubernetes` tarball, and restart the kubelet. This is precisely why Exercise 3 is not optional.
 
-**Q3.2** — A version mismatch between the data in etcd (written by v1.33 with v1.33 storage versions) and a v1.34 control plane, *and* the reverse hazard: a v1.34 API server may have already migrated objects to storage versions the restored data does not contain, or the restored data may contain objects in serving versions v1.34 no longer serves. Expect API server crash-loops, objects that fail to decode, and controllers that cannot reconcile. **Restore the manifests and the packages together with the data** — the snapshot and the binaries are one atomic unit of state.
+**Q3.2** — A version mismatch between the data in etcd (written by v1.36 with v1.36 storage versions) and a v1.37 control plane, *and* the reverse hazard: a v1.37 API server may have already migrated objects to storage versions the restored data does not contain, or the restored data may contain objects in serving versions v1.37 no longer serves. Expect API server crash-loops, objects that fail to decode, and controllers that cannot reconcile. **Restore the manifests and the packages together with the data** — the snapshot and the binaries are one atomic unit of state.
 
 **Q3.3** — `kubeadm upgrade apply` (and `kubeadm upgrade node`) renews **all kubeadm-managed control-plane certificates** — `apiserver`, `apiserver-kubelet-client`, `apiserver-etcd-client`, `front-proxy-client`, `etcd-server`, `etcd-peer`, `etcd-healthcheck-client` — and the client certificates embedded in `admin.conf`, `controller-manager.conf` and `scheduler.conf`, each for another year. Disable with `--certificate-renewal=false`. You would disable it when certificates are **externally managed** (issued by your corporate PKI, cert-manager, or Vault), where kubeadm's self-signed renewal would replace a properly issued cert with one your trust chain does not accept.
 
@@ -1028,7 +1028,7 @@ kubectl uncordon node01
 
 ### Checkpoint 4
 
-**Q4.1** — Not urgent for *this* upgrade — `removed_release="1.35"` means the API still works in v1.34, so the v1.34 upgrade will not break it. But it is a hard blocker for the *next* one, and you have exactly one release cycle to fix it. Correct handling: file it now with an owner, identify the calling client from `apiserver_request_total` (`userAgent` label) and audit logs, migrate the manifests to the replacement version with `kubectl convert` or by hand, and re-check the metric before you plan v1.35. Do not let it become a v1.35-day surprise.
+**Q4.1** — Not urgent for *this* upgrade — `removed_release="1.38"` means the API still works in v1.37, so the v1.37 upgrade will not break it. But it is a hard blocker for the *next* one, and you have exactly one release cycle to fix it. Correct handling: file it now with an owner, identify the calling client from `apiserver_request_total` (`userAgent` label) and audit logs, migrate the manifests to the replacement version with `kubectl convert` or by hand, and re-check the metric before you plan v1.38. Do not let it become a v1.38-day surprise.
 
 **Q4.2** — Kubernetes distinguishes the **storage version** (the single version an object is persisted as in etcd) from the **served versions** (all versions the API server will convert to and from on request). The object was stored once under whatever the storage version was, and every read is converted on the fly to the version you request; `kubectl get -o yaml` shows `apps/v1` because that is the preferred served version today. So the live object survives the removal of `apps/v1beta2` — only *requests* naming the removed version fail. A YAML file in Git is a request waiting to happen: `kubectl apply -f` of an `apps/v1beta2` manifest fails hard after removal. That asymmetry is why scanning the live cluster is not sufficient and you must scan your manifest sources too.
 
@@ -1038,13 +1038,13 @@ kubectl uncordon node01
 
 ### Checkpoint 5
 
-**Q5.1** — The `pkgs.k8s.io` community repositories are **per-minor-version**: the URL `.../core:/stable:/v1.33/deb/` contains only v1.33 packages and will never serve v1.34, no matter how often you `apt-get update`. Fix: rewrite `/etc/apt/sources.list.d/kubernetes.list` to `.../core:/stable:/v1.34/deb/`, re-import that repo's `Release.key` into `/etc/apt/keyrings/kubernetes-apt-keyring.gpg` (each repo is signed independently), then `apt-get update`. See https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/. This is the single most common stumble on this exam task.
+**Q5.1** — The `pkgs.k8s.io` community repositories are **per-minor-version**: the URL `.../core:/stable:/v1.36/deb/` contains only v1.36 packages and will never serve v1.37, no matter how often you `apt-get update`. Fix: rewrite `/etc/apt/sources.list.d/kubernetes.list` to `.../core:/stable:/v1.37/deb/`, re-import that repo's `Release.key` into `/etc/apt/keyrings/kubernetes-apt-keyring.gpg` (each repo is signed independently), then `apt-get update`. See https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/. This is the single most common stumble on this exam task.
 
 **Q5.2** — Because the `kubelet` is an **operating-system-level package and systemd unit on every node**, not a container the control plane can reschedule. kubeadm has no remote execution channel into your nodes — it is a local bootstrapping tool, deliberately not a configuration-management system. It does what it can reach: it updates the node's kubelet *configuration* (via `kubeadm upgrade node`) and tells you to install the binary yourself. That separation is why kubelet rollout is your job (or Ansible's / your image pipeline's), node by node.
 
 **Q5.3** — It pins the installed version so that an unrelated `apt-get upgrade` or an automated `unattended-upgrades` run cannot move `kubelet`/`kubeadm`/`kubectl` underneath you. Security relevance: an out-of-band bump can silently push a `kubelet` **newer than the API server**, violating the skew policy and breaking the node; conversely, an unpinned mass upgrade across the fleet can restart every kubelet simultaneously. Version control over the components that enforce your authentication, authorisation and admission path is itself a security control — you want upgrades to happen on your schedule, in your order, with your verification.
 
-**Q5.4** — It fails at preflight. `kubeadm` refuses to apply a version that does not match its own binary version, with an error along the lines of *"the --version argument is invalid due to these errors: … kubeadm version v1.34.1 is not the same as the requested version v1.34.0"*. The rule is: install the exact `kubeadm` patch you intend to run, then pass that same version to `apply`. (`--force` can override some preflight failures but is not a way around this — install the right `kubeadm`.)
+**Q5.4** — It fails at preflight. `kubeadm` refuses to apply a version that does not match its own binary version, with an error along the lines of *"the --version argument is invalid due to these errors: … kubeadm version v1.37.2 is not the same as the requested version v1.37.0"*. The rule is: install the exact `kubeadm` patch you intend to run, then pass that same version to `apply`. (`--force` can override some preflight failures but is not a way around this — install the right `kubeadm`.)
 
 **Q5.5** — Yes. `kubeadm upgrade apply` rewrites `/etc/kubernetes/manifests/etcd.yaml` as part of the upgrade even when the image tag is unchanged, and any write to that file makes the kubelet restart the static Pod. On a single-node stacked-etcd control plane that is a brief full-cluster write outage. Use `--etcd-upgrade=false` to leave etcd alone; justified when etcd is externally managed, when you have a separate etcd maintenance window, or when you are deliberately minimising the change set of an urgent patch-level security upgrade. Always take the snapshot first regardless.
 
@@ -1052,7 +1052,7 @@ kubectl uncordon node01
 
 **Q6.1** — Because `apt-get install kubelet` triggers a kubelet restart, and on a busy node that briefly interrupts the process supervising every container. Draining first moves workloads off and cordons the node so the scheduler does not place new ones there, so the restart happens on an idle node. Reversing the order means a live restart under load: eviction of Pods that were mid-request, possible container restarts, and — if the new kubelet fails to start due to a config incompatibility — an outage of everything that was still running there. On the control-plane node the same argument applies to `CoreDNS` and any other non-DaemonSet workload scheduled there.
 
-**Q6.2** — Not a bug; it is the expected intermediate state. `kubeadm upgrade apply` rewrote the **static Pod manifests** for `kube-apiserver`, `kube-controller-manager`, `kube-scheduler` and `etcd`, upgraded the `kube-proxy` and `CoreDNS` addons, renewed the certificates, and updated the `kubeadm-config` / `kubelet-config` ConfigMaps. It did **not** install a new `kubelet` binary on any node, including this one. `kubectl get nodes` reports `.status.nodeInfo.kubeletVersion`, so it keeps showing `v1.33.4` until you install the package and restart the service in steps 4–5.
+**Q6.2** — Not a bug; it is the expected intermediate state. `kubeadm upgrade apply` rewrote the **static Pod manifests** for `kube-apiserver`, `kube-controller-manager`, `kube-scheduler` and `etcd`, upgraded the `kube-proxy` and `CoreDNS` addons, renewed the certificates, and updated the `kubeadm-config` / `kubelet-config` ConfigMaps. It did **not** install a new `kubelet` binary on any node, including this one. `kubectl get nodes` reports `.status.nodeInfo.kubeletVersion`, so it keeps showing `v1.36.4` until you install the package and restart the service in steps 4–5.
 
 **Q6.3** — The **kubelet** performs it. The kubelet watches its `staticPodPath` (`/etc/kubernetes/manifests`, set in `/var/lib/kubelet/config.yaml`) and treats every manifest there as a Pod it owns directly, with no API server involvement. When kubeadm writes a new `kube-apiserver.yaml` with an updated image tag, the kubelet notices the file change, kills the old container and starts one from the new image. This is why the control plane can be upgraded even while the API server is down, and why a kubelet that is stopped (Exercise 9) causes `kubeadm upgrade apply` to hang and time out.
 
@@ -1064,7 +1064,7 @@ kubectl uncordon node01
 
 ### Checkpoint 7
 
-**Q7.1** — On a worker, `kubeadm upgrade node` downloads the new cluster-wide kubelet configuration from the `kubelet-config` ConfigMap in `kube-system` and writes it to `/var/lib/kubelet/config.yaml`, and refreshes the node's kubeadm-managed client certificate/`kubelet.conf` as needed. It does not install any binary. It is not skippable because the new kubelet binary expects the new configuration schema: skipping it can leave the node running v1.34 kubelet against a v1.33 config file, which at best ignores new defaults and at worst fails to start. On additional control-plane nodes it does more — it also upgrades that node's static Pod manifests.
+**Q7.1** — On a worker, `kubeadm upgrade node` downloads the new cluster-wide kubelet configuration from the `kubelet-config` ConfigMap in `kube-system` and writes it to `/var/lib/kubelet/config.yaml`, and refreshes the node's kubeadm-managed client certificate/`kubelet.conf` as needed. It does not install any binary. It is not skippable because the new kubelet binary expects the new configuration schema: skipping it can leave the node running v1.37 kubelet against a v1.36 config file, which at best ignores new defaults and at worst fails to start. On additional control-plane nodes it does more — it also upgrades that node's static Pod manifests.
 
 **Q7.2** — Correct: (1) scale the Deployment up so `ALLOWED DISRUPTIONS` becomes ≥1 and the eviction can proceed while the PDB's availability guarantee still holds; (2) fix an over-strict or wrong PDB — e.g. `minAvailable: 2` on a 2-replica Deployment mathematically forbids all voluntary disruption, so correct it to `maxUnavailable: 1` or raise the replica count. Reject: `kubectl drain --disable-eviction`, which bypasses the eviction API and **deletes the Pods outright**, silently defeating the exact availability guarantee the application owner encoded in the PDB. (`--force` is likewise not the answer here — the Pods are controller-owned; the blocker is the budget, not ownership.)
 
@@ -1098,7 +1098,7 @@ kubectl uncordon node01
 
 ### Checkpoint 10
 
-**Q10.1** — Run the entire control-plane block: repoint the repository, `apt-mark unhold kubeadm` → install the pinned `kubeadm` → `apt-mark hold kubeadm`, `kubeadm upgrade plan`, `kubeadm upgrade apply v1.34.1 -y`, then `kubectl drain cp01 --ignore-daemonsets`, install the pinned `kubelet`/`kubectl`, `systemctl daemon-reload && systemctl restart kubelet`, `kubectl uncordon cp01`. **Skip the entire worker block** — do not `ssh` to the workers, do not run `kubeadm upgrade node`, do not drain or upgrade them. Leaving the kubelets one minor behind is within the supported skew, which is exactly why the task can ask for it.
+**Q10.1** — Run the entire control-plane block: repoint the repository, `apt-mark unhold kubeadm` → install the pinned `kubeadm` → `apt-mark hold kubeadm`, `kubeadm upgrade plan`, `kubeadm upgrade apply v1.37.2 -y`, then `kubectl drain cp01 --ignore-daemonsets`, install the pinned `kubelet`/`kubectl`, `systemctl daemon-reload && systemctl restart kubelet`, `kubectl uncordon cp01`. **Skip the entire worker block** — do not `ssh` to the workers, do not run `kubeadm upgrade node`, do not drain or upgrade them. Leaving the kubelets one minor behind is within the supported skew, which is exactly why the task can ask for it.
 
 **Q10.2** — No. `SchedulingDisabled` means the node still carries the `node.kubernetes.io/unschedulable` taint and the `spec.unschedulable: true` field left by `drain`; the cluster will not place any new Pods there, so the task is incomplete and will be graded as such. Run `kubectl uncordon cp01` and confirm the status reads plain `Ready`.
 
@@ -1108,7 +1108,7 @@ kubectl uncordon node01
 
 ## Reference sources
 
-- CNCF CKS Curriculum v1.34 — https://github.com/cncf/curriculum
+- CNCF CKS Curriculum v1.37 — https://github.com/cncf/curriculum
 - Upgrading kubeadm clusters — https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 - Upgrading Linux nodes — https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/upgrading-linux-nodes/
 - Changing the Kubernetes package repository — https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/

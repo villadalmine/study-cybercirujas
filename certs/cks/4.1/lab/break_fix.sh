@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Supply Chain Security
+# CKS v1.37 - Supply Chain Security
 # Tema 4.1: Minimize base image footprint (peso en el examen: 5)
-# Fuente: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# Fuente: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Script "break & fix" para una VM de laboratorio DESCARTABLE.
 # Instala Docker si falta, construye una imagen deliberadamente "bloated"

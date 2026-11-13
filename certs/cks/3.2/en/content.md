@@ -1,6 +1,6 @@
 # CKS 3.2 — Exercise Caution in Using Service Accounts
 
-**Domain:** Cluster Hardening (15%) · **Topic weight:** 3.75 · **Kubernetes:** v1.34
+**Domain:** Cluster Hardening (15%) · **Topic weight:** 3.75 · **Kubernetes:** v1.37
 
 ---
 
@@ -1300,5 +1300,5 @@ For every new workload, all seven must be true:
 - KEP-1205 — *Bound Service Account Tokens*: https://github.com/kubernetes/enhancements/issues/1205
 - KEP-2799 — *Reduction of Secret-Based Service Account Tokens*: https://github.com/kubernetes/enhancements/issues/2799
 - KEP-4193 — *Bound Service Account Token Improvements* (JTI, node/pod claims, node binding): https://github.com/kubernetes/enhancements/issues/4193
-- CNCF — *CKS Curriculum v1.34*: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — *CKS Curriculum v1.37*: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository: https://github.com/cncf/curriculum

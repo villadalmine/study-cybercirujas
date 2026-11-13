@@ -1,6 +1,6 @@
 # Exercises — Topic 5.2: Using Least-Privilege Identity and Access Management
 
-> **Domain context (CKS v1.34, exam weight 2.5).** These guided labs build the practical muscle memory the exam expects around identity and authorization: enumerating who can do what, constructing minimal `Role`/`ClusterRole` grants, hardening `ServiceAccount` token exposure, and spotting the RBAC constructs that quietly hand out cluster-admin. Every step is runnable; expected output is shown so you can confirm you are on track before answering the checkpoint questions.
+> **Domain context (CKS v1.37, exam weight 2.5).** These guided labs build the practical muscle memory the exam expects around identity and authorization: enumerating who can do what, constructing minimal `Role`/`ClusterRole` grants, hardening `ServiceAccount` token exposure, and spotting the RBAC constructs that quietly hand out cluster-admin. Every step is runnable; expected output is shown so you can confirm you are on track before answering the checkpoint questions.
 >
 > **Prerequisites**
 > - A cluster where you are `cluster-admin` (a throwaway `kind`, `minikube`, or a real cluster's admin kubeconfig). Kubernetes **v1.30+** so that `kubectl create token`, projected bound tokens, and `auth can-i --list` behave as documented.

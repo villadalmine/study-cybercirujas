@@ -1,6 +1,6 @@
 # CKS 4.2 — Entendé tu cadena de suministro (SBOM, CI/CD, repositorios de artefactos)
 
-**Examen:** CKS v1.34 · **Dominio:** Supply Chain Security (20%) · **Peso del tema:** 5
+**Examen:** CKS v1.37 · **Dominio:** Supply Chain Security (20%) · **Peso del tema:** 5
 
 ---
 
@@ -1698,7 +1698,7 @@ El orden importa operativamente: la regla de registry/digest de la VAP es la lí
 
 ## Referencias
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Using Admission Controllers* (`ImagePolicyWebhook`, `AlwaysPullImages`, `NodeRestriction`) — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 - Kubernetes, *Validating Admission Policy* — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - Kubernetes, *Common Expression Language in Kubernetes* — https://kubernetes.io/docs/reference/using-api/cel/

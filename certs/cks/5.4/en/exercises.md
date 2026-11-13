@@ -1,6 +1,6 @@
 # CKS 5.4 — Appropriately use kernel hardening tools such as AppArmor and seccomp
 
-**Certification:** Certified Kubernetes Security Specialist (CKS), curriculum **v1.34**
+**Certification:** Certified Kubernetes Security Specialist (CKS), curriculum **v1.37**
 **Domain:** 5. Microservice Vulnerability Minimization — **exam weight of this topic: 2.5 %**
 **Format:** guided exercises. Execute every numbered step, then answer the questions in the block before moving on. All answers are collapsed at the end.
 
@@ -1404,7 +1404,7 @@ kind delete cluster --name cks54
 
 ## Sources
 
-- CNCF, *CKS Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *CKS Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Restrict a Container's Syscalls with seccomp* — https://kubernetes.io/docs/tutorials/security/seccomp/
 - Kubernetes, *Restrict a Container's Access to Resources with AppArmor* — https://kubernetes.io/docs/tutorials/security/apparmor/
 - Kubernetes, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/

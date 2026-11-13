@@ -1,6 +1,6 @@
 # CKS 4.2 — Entendé tu cadena de suministro (SBOM, CI/CD, repositorios de artefactos)
 
-> **Dominio:** Supply Chain Security · **Peso de este objetivo en el examen:** 5 · **Temario:** CKS v1.34
+> **Dominio:** Supply Chain Security · **Peso de este objetivo en el examen:** 5 · **Temario:** CKS v1.37
 
 ---
 
@@ -1159,7 +1159,7 @@ Fijate en la última salida: el manifiesto declaraba `:1.8.3`, y `mutateDigest: 
 
 ### 5.4 ImagePolicyWebhook — la configuración clásica del examen
 
-Todavía se distribuye en v1.34 como `imagepolicy.k8s.io/v1alpha1`. Arquitectónicamente superado, pero aparece en el examen y es el único mecanismo de admisión cuya *configuración entera* vive en el sistema de archivos del plano de control — vale la pena entenderlo aunque sea solo por eso.
+Todavía se distribuye en v1.37 como `imagepolicy.k8s.io/v1alpha1`. Arquitectónicamente superado, pero aparece en el examen y es el único mecanismo de admisión cuya *configuración entera* vive en el sistema de archivos del plano de control — vale la pena entenderlo aunque sea solo por eso.
 
 **Paso 1 — el archivo de configuración de admisión:**
 
@@ -1216,7 +1216,7 @@ metadata:
 spec:
   containers:
     - name: kube-apiserver
-      image: registry.k8s.io/kube-apiserver:v1.34.0
+      image: registry.k8s.io/kube-apiserver:v1.37.0
       command:
         - kube-apiserver
         - --advertise-address=10.0.1.10
@@ -1675,7 +1675,7 @@ Los ítems 5–7 son trabajo puro de `kubectl`/plano de control y son la superfi
 ## Referencias
 
 **Temario y examen**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 - Linux Foundation CKS program page — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

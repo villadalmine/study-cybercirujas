@@ -1,7 +1,7 @@
 # CKS 6.2 — Detectar amenazas dentro de la infraestructura física, aplicaciones, redes, datos, usuarios y cargas de trabajo
 
 > **Dominio:** Monitoring, Logging and Runtime Security
-> **Currículo:** CKS v1.34 · **Peso relativo:** 4
+> **Currículo:** CKS v1.37 · **Peso relativo:** 4
 > **Prerrequisitos:** 6.1 (análisis de comportamiento / visibilidad de syscalls), 2.x (RBAC, auditoría), 4.x (seccomp/AppArmor)
 
 ---
@@ -572,7 +572,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
     - name: kube-apiserver
-      image: registry.k8s.io/kube-apiserver:v1.34.0
+      image: registry.k8s.io/kube-apiserver:v1.37.0
       command:
         - kube-apiserver
         - --advertise-address=10.0.1.10
@@ -2444,7 +2444,7 @@ La detección es un sistema, no una herramienta. Instrumentá cada plano, probá
 ## 13. Referencias
 
 **Currículo y examen**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Repositorio de currículos de la CNCF — https://github.com/cncf/curriculum
 
 **Kubernetes upstream**

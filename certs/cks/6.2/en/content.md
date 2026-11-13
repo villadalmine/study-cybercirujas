@@ -1,7 +1,7 @@
 # CKS 6.2 — Detect Threats Within Physical Infrastructure, Apps, Networks, Data, Users and Workloads
 
 > **Domain:** Monitoring, Logging and Runtime Security
-> **Curriculum:** CKS v1.34 · **Relative weight:** 4
+> **Curriculum:** CKS v1.37 · **Relative weight:** 4
 > **Prerequisites:** 6.1 (behavioural analytics / syscall visibility), 2.x (RBAC, audit), 4.x (seccomp/AppArmor)
 
 ---
@@ -572,7 +572,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
     - name: kube-apiserver
-      image: registry.k8s.io/kube-apiserver:v1.34.0
+      image: registry.k8s.io/kube-apiserver:v1.37.0
       command:
         - kube-apiserver
         - --advertise-address=10.0.1.10
@@ -2444,7 +2444,7 @@ Detection is a system, not a tool. Instrument every plane, prove each one fires 
 ## 13. References
 
 **Curriculum and exam**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 
 **Kubernetes upstream**

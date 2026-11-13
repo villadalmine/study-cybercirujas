@@ -1,6 +1,6 @@
 # 3.3 — Restrict access to the Kubernetes API
 
-**Certification:** CKS (Certified Kubernetes Security Specialist), exam version 1.34
+**Certification:** CKS (Certified Kubernetes Security Specialist), exam version 1.37
 **Domain:** 3 — Cluster Hardening · **Topic weight:** 3.75 %
 
 ---
@@ -113,7 +113,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
   - name: kube-apiserver
-    image: registry.k8s.io/kube-apiserver:v1.34.0
+    image: registry.k8s.io/kube-apiserver:v1.37.0
     command:
     - kube-apiserver
     # ---- Gate 1: reachability ---------------------------------------------
@@ -442,7 +442,7 @@ apiserver_authentication_config_controller_automatic_reload_last_timestamp_secon
 > $ kube-apiserver --help | grep -E 'authentication-config|anonymous-auth'
 > $ kubectl get --raw /metrics | grep 'kubernetes_feature_enabled.*Anonymous'
 > ```
-> `apiserver.config.k8s.io/v1beta1` is served in 1.34; newer releases may also serve `v1`. Read the version your cluster reports rather than assuming.
+> `apiserver.config.k8s.io/v1beta1` is served in 1.37; newer releases may also serve `v1`. Read the version your cluster reports rather than assuming.
 
 ### 4.4 Client certificates: the unrevokable identity
 
@@ -1250,6 +1250,6 @@ sudo crictl logs <container-id> 2>&1 | tail -20
 - PKI certificates and requirements — https://kubernetes.io/docs/setup/best-practices/certificates/
 - Securing a Cluster — https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/
 - Ports and Protocols — https://kubernetes.io/docs/reference/networking/ports-and-protocols/
-- CKS Curriculum v1.34 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CIS Kubernetes Benchmark — https://www.cisecurity.org/benchmark/kubernetes
 - kube-bench — https://github.com/aquasecurity/kube-bench

@@ -1,15 +1,15 @@
-# Exercise Caution in Using Service Accounts (CKS 1.34 — Topic 3.2)
+# Exercise Caution in Using Service Accounts (CKS 1.37 — Topic 3.2)
 
 Every Pod in Kubernetes authenticates to the API server as a **ServiceAccount** (SA). If you do nothing, that identity is the namespace's `default` SA, and — historically — its token was mounted into every container at `/var/run/secrets/kubernetes.io/serviceaccount/`. An attacker who achieves code execution in a Pod immediately inherits that identity and every RBAC permission bound to it. This module walks through hardening the ServiceAccount attack surface: disabling automatic token mounts, understanding bound (projected) tokens versus legacy Secret tokens, and building least-privilege SAs.
 
 > **Reference sources**
-> - CKS Curriculum v1.34 — <https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf>
+> - CKS Curriculum v1.37 — <https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf>
 > - Configure Service Accounts for Pods — <https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/>
 > - Managing Service Accounts — <https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/>
 > - Bound Service Account Tokens / TokenRequest — <https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#bound-service-account-token-volume>
 > - Using RBAC Authorization — <https://kubernetes.io/docs/reference/access-authn-authz/rbac/>
 
-Assume a cluster running Kubernetes **1.34** and a shell with cluster-admin. All commands are copy-paste runnable.
+Assume a cluster running Kubernetes **1.37** and a shell with cluster-admin. All commands are copy-paste runnable.
 
 ---
 
@@ -314,7 +314,7 @@ Assume a cluster running Kubernetes **1.34** and a shell with cluster-admin. All
      automountServiceAccountToken: true
      containers:
        - name: kubectl
-         image: bitnami/kubectl:1.34
+         image: bitnami/kubectl:1.37
          command: ["sleep", "3600"]
    ```
 

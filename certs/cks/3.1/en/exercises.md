@@ -8,7 +8,7 @@
 > $ kubectl auth can-i '*' '*'
 > yes
 > $ kubectl version -o json | grep -m1 gitVersion
->   "gitVersion": "v1.34.0",
+>   "gitVersion": "v1.37.0",
 > ```
 >
 > RBAC is enabled when the API server runs with `--authorization-mode=...,RBAC`. Confirm on a kubeadm node:
@@ -614,4 +614,4 @@ A pod that mounts a ServiceAccount token gives any code (or attacker) in that co
 - Kubernetes — *Authorization Overview* (verbs, resource vs non-resource requests): https://kubernetes.io/docs/reference/access-authn-authz/authorization/
 - Kubernetes — *Checking API Access* (`kubectl auth can-i`, SelfSubjectAccessReview): https://kubernetes.io/docs/reference/access-authn-authz/authorization/#checking-api-access
 - Kubernetes — *User Impersonation*: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation
-- CNCF — *CKS Curriculum v1.34*: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — *CKS Curriculum v1.37*: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf

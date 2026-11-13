@@ -2,12 +2,12 @@
 set -euo pipefail
 
 # ============================================================
-# CKS 1.34 - Dominio: Cluster Setup
+# CKS 1.37 - Dominio: Cluster Setup
 # Tema 1.5: Verify platform binaries before deploying (peso examen: 3)
 # Lab tipo "break & fix"
 #
 # Fuente de referencia (curricula oficial CKS):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Que practica este lab:
 #   Antes de instalar/actualizar binarios de la plataforma (kubeadm,
@@ -248,4 +248,4 @@ esac
 # repo kubernetes/kubernetes) y, desde Kubernetes 1.24+, los artefactos
 # de release tambien tienen firmas cosign/sigstore ademas de los
 # checksums SHA-256/512.
-# Fuente: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# Fuente: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf

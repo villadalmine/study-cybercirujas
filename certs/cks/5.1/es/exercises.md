@@ -1,6 +1,6 @@
 # CKS 5.1 — Minimizar la superficie del sistema operativo del host (reducir la superficie de ataque)
 
-**Certificación:** Certified Kubernetes Security Specialist (CKS), versión de examen 1.34
+**Certificación:** Certified Kubernetes Security Specialist (CKS), versión de examen 1.37
 **Dominio:** System Hardening — **Peso de este tema en el examen: 2.5%**
 
 ---
@@ -1052,7 +1052,7 @@ Contrastá con el punto de diseño de Talos Linux, Bottlerocket, Flatcar y Fedor
 
 ## Fuentes
 
-- CNCF, *CKS Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *CKS Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Ports and Protocols* — https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubernetes, *Kubelet authentication/authorization* — https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/
 - Kubernetes, *Set Kubelet Parameters Via A Configuration File* — https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/

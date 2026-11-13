@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Dominio 3: Minimize Microservice Vulnerabilities
+# CKS v1.37 - Dominio 3: Minimize Microservice Vulnerabilities
 # Tema 3.1: Use Role Based Access Controls to minimize exposure (peso: 3.75)
 #
 # Fuente de referencia (curriculum, no copiar literal):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Lab "break & fix": crea un workload cuyo ServiceAccount quedo atado a un
 # ClusterRole/ClusterRoleBinding sobre-permisivo (mucho mas acceso del que

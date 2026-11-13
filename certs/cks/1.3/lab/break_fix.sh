@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # ============================================================================
-# CKS (v1.34) - Dominio 1.3: Properly set up Ingress objects with TLS
+# CKS (v1.37) - Dominio 1.3: Properly set up Ingress objects with TLS
 # Peso en el examen: 3
 # Fuente de referencia (curriculum oficial): 
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 # Documentacion tecnica de referencia (para profundizar, no copiada aqui):
 #   https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
 #   https://kubernetes.github.io/ingress-nginx/user-guide/tls/

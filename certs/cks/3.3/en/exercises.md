@@ -1,4 +1,4 @@
-# Topic 3.3 — Restrict access to the Kubernetes API (CKS v1.34)
+# Topic 3.3 — Restrict access to the Kubernetes API (CKS v1.37)
 
 > **Lab environment assumption:** a `kubeadm`-provisioned cluster. The control-plane components run as **static pods**, so the `kube-apiserver` manifest lives at `/etc/kubernetes/manifests/kube-apiserver.yaml`. Editing that file makes the kubelet restart the API server automatically (watch for the container to be recreated). Run every step as `root` on the control-plane node unless noted.
 >
@@ -132,7 +132,7 @@ Since v1.32 the `AnonymousAuthConfigurableEndpoints` feature (enabled by default
 
 ## Exercise 2 — Verify there is no insecure serving port
 
-Historically the API server exposed an unauthenticated `--insecure-port` (default 8080). This flag was **removed entirely in v1.20**; on v1.34 there is nothing to disable, but you must be able to *prove* the API server serves only over TLS on 6443.
+Historically the API server exposed an unauthenticated `--insecure-port` (default 8080). This flag was **removed entirely in v1.20**; on v1.37 there is nothing to disable, but you must be able to *prove* the API server serves only over TLS on 6443.
 
 ### Steps
 
@@ -156,7 +156,7 @@ Historically the API server exposed an unauthenticated `--insecure-port` (defaul
    ```
 
 > ❓ **Check your understanding**
-> 1. On a v1.34 cluster, if `ps` shows no `--insecure-port`, is the insecure port disabled or absent — and does the distinction matter for the exam answer?
+> 1. On a v1.37 cluster, if `ps` shows no `--insecure-port`, is the insecure port disabled or absent — and does the distinction matter for the exam answer?
 > 2. Before v1.20, why was `--insecure-port=8080` considered a critical bypass even with RBAC enabled? (Hint: which pipeline stages did the insecure port skip?)
 
 ---
@@ -555,7 +555,7 @@ cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml
 
 ## Sources
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Authenticating (anonymous requests, X.509, `AuthenticationConfiguration`) — https://kubernetes.io/docs/reference/access-authn-authz/authentication/
 - RBAC authorization — https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 - Node authorization — https://kubernetes.io/docs/reference/access-authn-authz/node/
@@ -580,7 +580,7 @@ cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml
 2. Static pods only see files that are explicitly mounted from the host. A command-line *flag* is baked into the pod spec and needs no filesystem access, but a *config file* referenced by `--authentication-config` must be made visible inside the container via a `hostPath` volume + `volumeMount`, or the API server reports "no such file."
 
 ### Exercise 2
-1. On v1.34 the flag is **absent** — the insecure port was removed in v1.20, so there is no port to "disable." For the exam, the correct action is to *verify* TLS-only serving on 6443 (no plaintext listener, 401 without creds), not to add `--insecure-port=0` (which is now an unknown flag and would fail to start on some versions). Know that "removed" ≠ "set to 0."
+1. On v1.37 the flag is **absent** — the insecure port was removed in v1.20, so there is no port to "disable." For the exam, the correct action is to *verify* TLS-only serving on 6443 (no plaintext listener, 401 without creds), not to add `--insecure-port=0` (which is now an unknown flag and would fail to start on some versions). Know that "removed" ≠ "set to 0."
 2. The insecure port bypassed **both authentication and authorization** — requests to `localhost:8080` were treated as fully privileged with no credentials and no RBAC evaluation. Anyone with local (or misconfigured network) access to that port had de-facto `cluster-admin`, regardless of how tight RBAC was.
 
 ### Exercise 3

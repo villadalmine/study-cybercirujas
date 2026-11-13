@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Dominio 2: Cluster Hardening
+# CKS v1.37 - Dominio 2: Cluster Hardening
 # Tema 2.1: Use appropriate Pod Security Standards
 # Peso en el examen: 5
 #
 # Fuente de referencia (curriculum oficial, solo como guía de scope, no se
 # copia texto literal de ahi):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Este script es tipo "break & fix": deja un Deployment roto por una
 # violacion de Pod Security Admission (PSA) en un namespace con el nivel

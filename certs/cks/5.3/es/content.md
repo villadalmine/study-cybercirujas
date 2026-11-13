@@ -1,6 +1,6 @@
 # 5.3 Minimizar el acceso externo a la red
 
-> **Dominio**: System Hardening — **Peso en el examen**: 2,5 % — **Versión del examen**: CKS v1.34
+> **Dominio**: System Hardening — **Peso en el examen**: 2,5 % — **Versión del examen**: CKS v1.37
 > **Alcance**: reducir la superficie de ataque de red *de los nodos mismos* (alcanzabilidad del host, sockets en escucha, firewall del host, primitivas de exposición) — la capa que está **por debajo** del plano de autorización de Kubernetes.
 
 ---
@@ -84,7 +84,7 @@ CKS 5.3 es esencialmente los anillos 1–4. El anillo 0 lo heredás de la plataf
 
 ## 2. Comparaciones técnicas y compromisos
 
-### 2.1 La superficie de escucha por defecto (kubeadm, v1.34)
+### 2.1 La superficie de escucha por defecto (kubeadm, v1.37)
 
 Los valores de abajo son los de `kubeadm` por defecto; verificalos en tu propio clúster con `ss -tulpn`.
 
@@ -141,7 +141,7 @@ Dos hechos que hacen de `nft` nativo la respuesta correcta:
 1. **Múltiples cadenas base pueden engancharse al mismo hook de netfilter.** Tu `table inet k8s_node` y la `table ip kube-proxy` de kube-proxy son objetos independientes recorridos en orden de prioridad. Ninguna vacía a la otra. `iptables -F` / `firewalld --reload` no ofrecen esa garantía.
 2. **Podés engancharte a una prioridad *anterior* al NAT**, que es la única forma de filtrar correctamente el tráfico NodePort (§2.5).
 
-> **Nota v1.34**: el backend `nftables` de kube-proxy (KEP-3866) pasó a beta en v1.31 y a GA en la línea v1.33, pero todavía **no** es el default en v1.34. Confirmalo en tu clúster:
+> **Nota v1.37**: el backend `nftables` de kube-proxy (KEP-3866) pasó a beta en v1.31 y a GA en la línea v1.33, pero todavía **no** es el default en v1.34. Confirmalo en tu clúster:
 > `kubectl -n kube-system get cm kube-proxy -o jsonpath='{.data.config\.conf}' | grep -E '^mode'`
 
 ### 2.4 Comparación de primitivas de exposición externa
@@ -250,7 +250,7 @@ Created symlink /etc/systemd/system/rpcbind.socket → /dev/null.
 ```nft
 #!/usr/sbin/nft -f
 #
-# /etc/nftables.conf — Kubernetes worker node baseline (CKS v1.34 reference)
+# /etc/nftables.conf — Kubernetes worker node baseline (CKS v1.37 reference)
 # Enforcement model:
 #   prerouting_guard  : filters NodePort/hostPort BEFORE kube-proxy DNAT (priority -150)
 #   input             : default-deny for traffic terminating on the host
@@ -619,7 +619,7 @@ staticPodPath: /etc/kubernetes/manifests
 ```bash
 $ sudo systemctl restart kubelet
 $ sudo journalctl -u kubelet -n 5 --no-pager
-Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.113 4188 server.go:466] "Kubelet version" kubeletVersion="v1.34.1"
+Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.113 4188 server.go:466] "Kubelet version" kubeletVersion="v1.37.2"
 Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.311 4188 server.go:1245] "Started kubelet"
 Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.315 4188 server.go:236] "Starting to listen" address="0.0.0.0" port=10250
 ```
@@ -941,17 +941,17 @@ metadata:
   name: team-a
   labels:
     pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/audit-version: v1.34
+    pod-security.kubernetes.io/audit-version: v1.37
     pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/warn-version: v1.34
+    pod-security.kubernetes.io/warn-version: v1.37
 ```
 
 ```bash
 $ kubectl -n team-a run hn --image=nginx:1.27 --overrides='{"spec":{"hostNetwork":true}}'
 Error from server (Forbidden): pods "hn" is forbidden: violates PodSecurity
-"baseline:v1.34": host namespaces (hostNetwork=true)
+"baseline:v1.37": host namespaces (hostNetwork=true)
 ```
 
 ### 3.10 Egreso de pods: bloquear el servicio de metadata en la capa de la API
@@ -1456,7 +1456,7 @@ exit=1
 ## Referencias
 
 **Currículum**
-- CKS Curriculum v1.34 (CNCF): https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Repositorio de currículums de CNCF: https://github.com/cncf/curriculum
 
 **Kubernetes — superficie de red y componentes**

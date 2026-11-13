@@ -1,6 +1,6 @@
 # CKS 5.1 — Minimize Host OS Footprint (Reduce Attack Surface)
 
-**Certification:** Certified Kubernetes Security Specialist (CKS), exam version 1.34
+**Certification:** Certified Kubernetes Security Specialist (CKS), exam version 1.37
 **Domain:** System Hardening — **Exam weight of this topic: 2.5%**
 
 ---
@@ -1052,7 +1052,7 @@ Contrast with the design point of Talos Linux, Bottlerocket, Flatcar, and Fedora
 
 ## Sources
 
-- CNCF, *CKS Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *CKS Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Ports and Protocols* — https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubernetes, *Kubelet authentication/authorization* — https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/
 - Kubernetes, *Set Kubelet Parameters Via A Configuration File* — https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/

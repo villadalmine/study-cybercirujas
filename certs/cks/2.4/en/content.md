@@ -556,7 +556,7 @@ Always finish with a **negative test** (a plaintext client that must fail, or a 
 
 ## Referencias
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Cilium — Transparent Encryption: https://docs.cilium.io/en/stable/security/network/encryption/
 - Cilium — WireGuard Transparent Encryption: https://docs.cilium.io/en/stable/security/network/encryption-wireguard/
 - Cilium — IPsec Transparent Encryption and key rotation: https://docs.cilium.io/en/stable/security/network/encryption-ipsec/

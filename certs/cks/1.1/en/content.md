@@ -338,7 +338,7 @@ kubectl run probe -n staging --rm -it --restart=Never \
 
 ## References
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes — Network Policies — https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes API Reference — NetworkPolicy v1 — https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
 - Kubernetes — Cluster Networking — https://kubernetes.io/docs/concepts/cluster-administration/networking/

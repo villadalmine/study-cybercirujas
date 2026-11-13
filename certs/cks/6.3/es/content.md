@@ -1,6 +1,6 @@
 # 6.3 Investigar e identificar fases de ataque y actores maliciosos dentro del entorno
 
-**CKS v1.34 — Dominio 6: Monitoring, Logging and Runtime Security · Peso del subtema: 4**
+**CKS v1.37 — Dominio 6: Monitoring, Logging and Runtime Security · Peso del subtema: 4**
 
 ---
 
@@ -391,7 +391,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
     - name: kube-apiserver
-      image: registry.k8s.io/kube-apiserver:v1.34.0
+      image: registry.k8s.io/kube-apiserver:v1.37.0
       command:
         - kube-apiserver
         - --advertise-address=10.0.0.10
@@ -1478,7 +1478,7 @@ node/node-worker-03 tainted
 
 $ kubectl get node node-worker-03 -o wide
 NAME             STATUS                     ROLES    AGE    VERSION   INTERNAL-IP
-node-worker-03   Ready,SchedulingDisabled   <none>   276d   v1.34.0   10.0.1.23
+node-worker-03   Ready,SchedulingDisabled   <none>   276d   v1.37.0   10.0.1.23
 ```
 
 > **El orden importa.** `NoExecute` desaloja todo pod que no tolere el taint — incluido el pod de evidencia en cuarentena, a menos que le agregues la toleración antes, e incluido el Job de recolección forense a menos que también la tolere (por eso el manifiesto del Job en §3.6 lleva `tolerations: [{operator: Exists}]`). Si solo necesitás detener nueva planificación, `cordon` solo es más seguro.
@@ -1624,7 +1624,7 @@ $ sudo jq -c 'select(.annotations["authentication.kubernetes.io/pod-name"] != nu
                  src: .sourceIPs[0], ua: .userAgent, uri: .requestURI}' \
     /var/log/kubernetes/audit/audit.log | grep 'payment-api' | tail -n 3
 {"user":"system:serviceaccount:prod:payment-api","bound_pod":"payment-api-7d9c4f8b6-2xk9v","bound_uid":"5c1e9d34-7a2b-4f18-9e6c-3a0b12d4e5f7","node":"node-worker-03","src":"10.244.3.17","ua":"curl/8.5.0","uri":"/api/v1/namespaces/prod/secrets"}
-{"user":"system:serviceaccount:prod:payment-api","bound_pod":"payment-api-7d9c4f8b6-2xk9v","bound_uid":"5c1e9d34-7a2b-4f18-9e6c-3a0b12d4e5f7","node":"node-worker-03","src":"203.0.113.44","ua":"kubectl/v1.34.0 (linux/amd64)","uri":"/api/v1/namespaces/prod/secrets"}
+{"user":"system:serviceaccount:prod:payment-api","bound_pod":"payment-api-7d9c4f8b6-2xk9v","bound_uid":"5c1e9d34-7a2b-4f18-9e6c-3a0b12d4e5f7","node":"node-worker-03","src":"203.0.113.44","ua":"kubectl/v1.37.0 (linux/amd64)","uri":"/api/v1/namespaces/prod/secrets"}
 ```
 
 La segunda línea: el *mismo* token ligado, presentado desde **203.0.113.44** — una dirección fuera del CIDR del clúster — con un user agent de `kubectl`. El token fue exfiltrado y se está usando desde la máquina del propio atacante.
@@ -2001,5 +2001,5 @@ Que cualquiera de estos devuelva un valor inesperado es un punto de partida de i
 
 **Certificación**
 
-- CNCF CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Página del examen CKS (Linux Foundation) — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/

@@ -12,7 +12,7 @@
 ### Qué necesitás
 
 - Un clúster de Kubernetes **cuyo plugin CNI aplique `NetworkPolicy`**. Esta es la razón más común por la que un laboratorio "no funciona": el API server acepta sin problemas un objeto `NetworkPolicy` incluso cuando nada en el clúster lo hace cumplir.
-- `kubectl` v1.34 coincidiendo con la versión del clúster.
+- `kubectl` v1.37 coincidiendo con la versión del clúster.
 - Opcionalmente `jq` para el ejercicio de auditoría.
 
 ### El modelo mental que estás construyendo
@@ -1030,7 +1030,7 @@ La trampa es que `namespaceSelector: {}` significa "cada namespace", no "ningún
 
 ## Referencias
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Documentación de Kubernetes, *Network Policies* — https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Referencia de la API de Kubernetes, *NetworkPolicy v1* — https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
 - Documentación de Kubernetes, *Declare Network Policy* — https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/

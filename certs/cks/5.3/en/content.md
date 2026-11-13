@@ -1,6 +1,6 @@
 # 5.3 Minimize external access to the network
 
-> **Domain**: System Hardening — **Exam weight**: 2.5 % — **Exam version**: CKS v1.34
+> **Domain**: System Hardening — **Exam weight**: 2.5 % — **Exam version**: CKS v1.37
 > **Scope**: reducing the network attack surface *of the nodes themselves* (host reachability, listening sockets, host firewalling, exposure primitives) — the layer **underneath** the Kubernetes authorization plane.
 
 ---
@@ -84,7 +84,7 @@ CKS 5.3 is essentially Rings 1–4. Ring 0 you inherit from the platform; do not
 
 ## 2. Technical comparisons and trade-offs
 
-### 2.1 The default listening surface (kubeadm, v1.34)
+### 2.1 The default listening surface (kubeadm, v1.37)
 
 Values below are `kubeadm` defaults; verify on your own cluster with `ss -tulpn`.
 
@@ -141,7 +141,7 @@ Two facts that make native `nft` the right answer:
 1. **Multiple base chains can hook the same netfilter hook.** Your `table inet k8s_node` and kube-proxy's `table ip kube-proxy` are independent objects traversed in priority order. Neither flushes the other. `iptables -F` / `firewalld --reload` have no such guarantee.
 2. **You can hook at a priority *before* NAT**, which is the only way to filter NodePort traffic correctly (§2.5).
 
-> **v1.34 note**: the kube-proxy `nftables` backend (KEP-3866) went beta in v1.31 and GA in the v1.33 line, but it is still **not** the default in v1.34. Confirm on your cluster:
+> **v1.37 note**: the kube-proxy `nftables` backend (KEP-3866) went beta in v1.31 and GA in the v1.33 line, but it is still **not** the default in v1.34. Confirm on your cluster:
 > `kubectl -n kube-system get cm kube-proxy -o jsonpath='{.data.config\.conf}' | grep -E '^mode'`
 
 ### 2.4 External exposure primitives compared
@@ -250,7 +250,7 @@ Created symlink /etc/systemd/system/rpcbind.socket → /dev/null.
 ```nft
 #!/usr/sbin/nft -f
 #
-# /etc/nftables.conf — Kubernetes worker node baseline (CKS v1.34 reference)
+# /etc/nftables.conf — Kubernetes worker node baseline (CKS v1.37 reference)
 # Enforcement model:
 #   prerouting_guard  : filters NodePort/hostPort BEFORE kube-proxy DNAT (priority -150)
 #   input             : default-deny for traffic terminating on the host
@@ -619,7 +619,7 @@ staticPodPath: /etc/kubernetes/manifests
 ```bash
 $ sudo systemctl restart kubelet
 $ sudo journalctl -u kubelet -n 5 --no-pager
-Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.113 4188 server.go:466] "Kubelet version" kubeletVersion="v1.34.1"
+Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.113 4188 server.go:466] "Kubelet version" kubeletVersion="v1.37.2"
 Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.311 4188 server.go:1245] "Started kubelet"
 Aug 04 09:41:02 node-1 kubelet[4188]: I0804 09:41:02.315 4188 server.go:236] "Starting to listen" address="0.0.0.0" port=10250
 ```
@@ -941,17 +941,17 @@ metadata:
   name: team-a
   labels:
     pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/audit-version: v1.34
+    pod-security.kubernetes.io/audit-version: v1.37
     pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/warn-version: v1.34
+    pod-security.kubernetes.io/warn-version: v1.37
 ```
 
 ```bash
 $ kubectl -n team-a run hn --image=nginx:1.27 --overrides='{"spec":{"hostNetwork":true}}'
 Error from server (Forbidden): pods "hn" is forbidden: violates PodSecurity
-"baseline:v1.34": host namespaces (hostNetwork=true)
+"baseline:v1.37": host namespaces (hostNetwork=true)
 ```
 
 ### 3.10 Pod egress: blocking the metadata service in the API layer
@@ -1456,7 +1456,7 @@ exit=1
 ## Referencias
 
 **Curriculum**
-- CKS Curriculum v1.34 (CNCF): https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF curriculum repository: https://github.com/cncf/curriculum
 
 **Kubernetes — network surface and components**

@@ -73,7 +73,7 @@ pod-security.kubernetes.io/<MODE>-version: <POLICY_VERSION>   # optional
 | `audit` | Violation is recorded as an annotation in the API server audit log. Object is admitted. | Pods **and** workload controllers (Deployment, Job, CronJob, …). |
 | `warn` | Violation is returned to the client as a `Warning:` header. Object is admitted. | Pods **and** workload controllers. |
 
-`<LEVEL>` is `privileged`, `baseline`, or `restricted`. `<POLICY_VERSION>` is a minor version like `v1.34`, or `latest` (the default).
+`<LEVEL>` is `privileged`, `baseline`, or `restricted`. `<POLICY_VERSION>` is a minor version like `v1.37`, or `latest` (the default).
 
 ### The `enforce`-only-applies-to-Pods trap
 
@@ -123,7 +123,7 @@ metadata:
   labels:
     # Hard requirement
     pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     # Tell me now, at apply time, if I'm not ready for restricted
     pod-security.kubernetes.io/warn: restricted
     pod-security.kubernetes.io/warn-version: latest
@@ -139,7 +139,7 @@ This "enforce baseline / warn+audit restricted" combination is the canonical mig
 ```console
 $ kubectl label namespace prod \
     pod-security.kubernetes.io/enforce=restricted \
-    pod-security.kubernetes.io/enforce-version=v1.34 --overwrite
+    pod-security.kubernetes.io/enforce-version=v1.37 --overwrite
 namespace/prod labeled
 ```
 
@@ -286,7 +286,7 @@ spec:
 
 ```console
 $ kubectl -n prod apply -f web.yaml
-Error from server (Forbidden): error when creating "web.yaml": pods "web" is forbidden: violates PodSecurity "restricted:v1.34": allowPrivilegeEscalation != false (container "web" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "web" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "web" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "web" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Error from server (Forbidden): error when creating "web.yaml": pods "web" is forbidden: violates PodSecurity "restricted:v1.37": allowPrivilegeEscalation != false (container "web" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "web" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "web" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "web" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
 ```
 
 The compliant version — this is the shape worth being able to type from memory:
@@ -372,7 +372,7 @@ This requires the API server audit log to be configured (`--audit-policy-file`, 
 
 ## Policy versioning
 
-Pinning `*-version` to a concrete minor version (`v1.34`) freezes the policy definition. If a later Kubernetes release adds a new check to `restricted`, a pinned namespace keeps evaluating the older ruleset and your running workloads are not suddenly rejected on cluster upgrade.
+Pinning `*-version` to a concrete minor version (`v1.37`) freezes the policy definition. If a later Kubernetes release adds a new check to `restricted`, a pinned namespace keeps evaluating the older ruleset and your running workloads are not suddenly rejected on cluster upgrade.
 
 - Use a **pinned version for `enforce`** in production, so an upgrade cannot break admission for existing workloads.
 - Use **`latest` for `warn` and `audit`**, so you learn about new checks before they bite.
@@ -442,7 +442,7 @@ spec:
 kubectl create ns lab
 kubectl label ns lab \
   pod-security.kubernetes.io/enforce=baseline \
-  pod-security.kubernetes.io/enforce-version=v1.34 \
+  pod-security.kubernetes.io/enforce-version=v1.37 \
   pod-security.kubernetes.io/warn=restricted \
   pod-security.kubernetes.io/audit=restricted
 
@@ -452,7 +452,7 @@ kubectl -n lab run web --image=nginx
 # 3. A privileged pod is rejected
 kubectl -n lab run bad --image=nginx --privileged
 # Error from server (Forbidden): pods "bad" is forbidden: violates PodSecurity
-# "baseline:v1.34": privileged (container "bad" must not set securityContext.privileged=true)
+# "baseline:v1.37": privileged (container "bad" must not set securityContext.privileged=true)
 
 # 4. A hostPath pod is rejected
 kubectl -n lab apply -f - <<'EOF'
@@ -469,7 +469,7 @@ spec:
     - name: host
       hostPath: { path: / }
 EOF
-# Error from server (Forbidden): ... violates PodSecurity "baseline:v1.34":
+# Error from server (Forbidden): ... violates PodSecurity "baseline:v1.37":
 # hostPath volumes (volume "host")
 
 # 5. Dry-run the upgrade to restricted and read what would break
@@ -500,4 +500,4 @@ kubectl delete ns lab
 - Admission Controllers Reference — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 - Validating Admission Policy — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - Auditing — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
-- CKS Curriculum v1.34 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf

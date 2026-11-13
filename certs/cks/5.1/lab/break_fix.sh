@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # ==============================================================================
-#  CKS (exam version 1.34) — Domain 5: Microservice Vulnerability Minimization
+#  CKS (exam version 1.37) — Domain 5: Microservice Vulnerability Minimization
 #  Topic 5.1 — Minimize host OS footprint (reduce attack surface)
 #  Exam weight: 2.5
 # ==============================================================================
@@ -45,8 +45,8 @@
 #    sudo ./cks-5.1-break-fix.sh cleanup --give-up
 #
 #  REFERENCES (official)
-#    * CKS curriculum v1.34
-#      https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#    * CKS curriculum v1.37
+#      https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #    * Container runtimes / required kernel modules and sysctls
 #      https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 #    * Network plugin requirements (bridge-nf-call-iptables)

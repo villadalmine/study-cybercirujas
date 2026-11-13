@@ -2,8 +2,8 @@
 
 ## Ejercicios Guiados: Registries Permitidos, Firma y Validación de Artefactos
 
-> **Dominio del examen:** Supply Chain Security (20% de CKS v1.34) — competencia *"Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"*
-> **Referencia:** [CKS Curriculum v1.34](https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf)
+> **Dominio del examen:** Supply Chain Security (20% de CKS v1.37) — competencia *"Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"*
+> **Referencia:** [CKS Curriculum v1.37](https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf)
 
 ---
 
@@ -13,7 +13,7 @@ Cada ejercicio de abajo asume este entorno. Fijá estas versiones — la sintaxi
 
 | Componente | Versión | Notas |
 |---|---|---|
-| Kubernetes | v1.34.x, `kubeadm` | 1 control-plane (`cp01`, `10.0.1.10`), 2 workers (`w01`, `w02`) |
+| Kubernetes | v1.37.x, `kubeadm` | 1 control-plane (`cp01`, `10.0.1.10`), 2 workers (`w01`, `w02`) |
 | Container runtime | containerd 2.0+ | La ruta del plugin CRI difiere de 1.7 — ver Ejercicio 7 |
 | cosign | v2.4.x | La sintaxis de v1 (`COSIGN_EXPERIMENTAL=1`) ya no existe |
 | Kyverno | v1.14.x | Helm chart `kyverno/kyverno` |
@@ -199,7 +199,7 @@ Esperado (abreviado):
 ```console
 registry.k8s.io/coredns/coredns:v1.12.1
 registry.k8s.io/etcd:3.6.4-0
-registry.k8s.io/kube-apiserver:v1.34.1
+registry.k8s.io/kube-apiserver:v1.37.2
 docker.io/library/registry:2.8.3
 docker.io/calico/node:v3.29.1
 ```
@@ -280,7 +280,7 @@ Esperado:
 
 ## Ejercicio 2 — Allowlist de registries con ValidatingAdmissionPolicy (CEL, in-tree)
 
-Esta es la forma moderna y sin dependencias de restringir registries: sin webhook externo, sin Pod extra, sin riesgo de disponibilidad por un controller de terceros. Es GA y está disponible en v1.34 como `admissionregistration.k8s.io/v1`.
+Esta es la forma moderna y sin dependencias de restringir registries: sin webhook externo, sin Pod extra, sin riesgo de disponibilidad por un controller de terceros. Es GA y está disponible en v1.37 como `admissionregistration.k8s.io/v1`.
 
 **Pasos**
 
@@ -1665,7 +1665,7 @@ El orden es toda la respuesta: **confiá en la clave nueva en todas partes antes
 
 ## Fuentes oficiales
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Admission Controllers Reference — ImagePolicyWebhook* — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#imagepolicywebhook
 - Kubernetes, *Validating Admission Policy* — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - Kubernetes, *Common Expression Language in Kubernetes* — https://kubernetes.io/docs/reference/using-api/cel/

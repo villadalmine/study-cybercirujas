@@ -1,4 +1,4 @@
-# Tema 3.3 — Restringir el acceso a la API de Kubernetes (CKS v1.34)
+# Tema 3.3 — Restringir el acceso a la API de Kubernetes (CKS v1.37)
 
 > **Supuesto del entorno de laboratorio:** un clúster aprovisionado con `kubeadm`. Los componentes del plano de control corren como **static pods**, así que el manifiesto del `kube-apiserver` vive en `/etc/kubernetes/manifests/kube-apiserver.yaml`. Editar ese archivo hace que el kubelet reinicie el API server automáticamente (fijate en que el contenedor se recree). Ejecutá cada paso como `root` en el nodo del plano de control salvo que se indique lo contrario.
 >
@@ -132,7 +132,7 @@ Desde la v1.32 la funcionalidad `AnonymousAuthConfigurableEndpoints` (habilitada
 
 ## Ejercicio 2 — Verificar que no haya un puerto de servicio inseguro
 
-Históricamente el API server exponía un `--insecure-port` no autenticado (por defecto 8080). Este flag fue **eliminado por completo en v1.20**; en v1.34 no hay nada que deshabilitar, pero tenés que ser capaz de *demostrar* que el API server sirve únicamente sobre TLS en el 6443.
+Históricamente el API server exponía un `--insecure-port` no autenticado (por defecto 8080). Este flag fue **eliminado por completo en v1.20**; en v1.37 no hay nada que deshabilitar, pero tenés que ser capaz de *demostrar* que el API server sirve únicamente sobre TLS en el 6443.
 
 ### Pasos
 
@@ -156,7 +156,7 @@ Históricamente el API server exponía un `--insecure-port` no autenticado (por 
    ```
 
 > ❓ **Comprobá tu comprensión**
-> 1. En un clúster v1.34, si `ps` no muestra ningún `--insecure-port`, ¿el puerto inseguro está deshabilitado o ausente — y esa distinción importa para la respuesta del examen?
+> 1. En un clúster v1.37, si `ps` no muestra ningún `--insecure-port`, ¿el puerto inseguro está deshabilitado o ausente — y esa distinción importa para la respuesta del examen?
 > 2. Antes de la v1.20, ¿por qué `--insecure-port=8080` se consideraba un bypass crítico incluso con RBAC habilitado? (Pista: ¿qué etapas del pipeline salteaba el puerto inseguro?)
 
 ---
@@ -555,7 +555,7 @@ cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml
 
 ## Fuentes
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Authenticating (peticiones anónimas, X.509, `AuthenticationConfiguration`) — https://kubernetes.io/docs/reference/access-authn-authz/authentication/
 - Autorización RBAC — https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 - Node authorization — https://kubernetes.io/docs/reference/access-authn-authz/node/
@@ -580,7 +580,7 @@ cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml
 2. Los static pods solo ven archivos que se montan explícitamente desde el host. Un *flag* de línea de comandos está incorporado en la spec del pod y no necesita acceso al sistema de archivos, pero un *archivo de configuración* referenciado por `--authentication-config` debe hacerse visible dentro del contenedor mediante un volumen `hostPath` + `volumeMount`, o el API server reporta "no such file".
 
 ### Ejercicio 2
-1. En v1.34 el flag está **ausente** — el puerto inseguro fue eliminado en v1.20, así que no hay ningún puerto que "deshabilitar". Para el examen, la acción correcta es *verificar* que se sirve solo por TLS en el 6443 (sin listener en texto plano, 401 sin credenciales), no agregar `--insecure-port=0` (que ahora es un flag desconocido y haría fallar el arranque en algunas versiones). Sabé que "eliminado" ≠ "puesto en 0".
+1. En v1.37 el flag está **ausente** — el puerto inseguro fue eliminado en v1.20, así que no hay ningún puerto que "deshabilitar". Para el examen, la acción correcta es *verificar* que se sirve solo por TLS en el 6443 (sin listener en texto plano, 401 sin credenciales), no agregar `--insecure-port=0` (que ahora es un flag desconocido y haría fallar el arranque en algunas versiones). Sabé que "eliminado" ≠ "puesto en 0".
 2. El puerto inseguro se salteaba **tanto la autenticación como la autorización** — las peticiones a `localhost:8080` se trataban como totalmente privilegiadas, sin credenciales y sin evaluación de RBAC. Cualquiera con acceso local (o de red mal configurada) a ese puerto tenía `cluster-admin` de facto, sin importar cuán ajustado estuviera RBAC.
 
 ### Ejercicio 3

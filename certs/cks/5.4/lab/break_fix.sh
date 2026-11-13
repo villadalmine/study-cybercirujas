@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  CKS 1.34 — Domain 5: Microservice Vulnerabilities (weight of this topic: 2.5%)
+#  CKS 1.37 — Domain 5: Microservice Vulnerabilities (weight of this topic: 2.5%)
 #  Topic 5.4 — Appropriately use kernel hardening tools such as AppArmor, seccomp
 #
 #  BREAK & FIX LAB — "The node came back from the golden image"
@@ -36,8 +36,8 @@
 #      pullable (override with LAB_IMAGE=... for an air-gapped registry).
 #
 #  SOURCES (all statements below are traceable to these)
-#    - CKS curriculum v1.34
-#      https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#    - CKS curriculum v1.37
+#      https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #    - Restrict a Container's Access to Resources with AppArmor
 #      https://kubernetes.io/docs/tutorials/security/apparmor/
 #    - Restrict a Container's Syscalls with seccomp
@@ -719,7 +719,7 @@ cmd_cleanup() {
 # --------------------------------------------------------------------------- #
 usage() {
   cat <<USAGE
-${LAB_ID} — CKS 1.34 topic 5.4 break & fix
+${LAB_ID} — CKS 1.37 topic 5.4 break & fix
 
   sudo $0 start            preflight + stage + break + brief   (start here)
   sudo $0 stage            build the healthy baseline only
@@ -1044,7 +1044,7 @@ main "$@"
 #        SIGSYS and no message -> the profile WAS applied and is working as
 #        written. The profile is wrong, not missing.
 #
-# 4. Field syntax for CKS 1.34 (annotations are gone; do not write them):
+# 4. Field syntax for CKS 1.37 (annotations are gone; do not write them):
 #      spec.securityContext.appArmorProfile.{type,localhostProfile}       (Pod)
 #      spec.containers[].securityContext.appArmorProfile.{...}      (container)
 #        type: RuntimeDefault | Localhost | Unconfined

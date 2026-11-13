@@ -1,6 +1,6 @@
 # Ejercicios Guiados — CKS 6.2: Detectar Amenazas en Infraestructura Física, Apps, Redes, Datos, Usuarios y Cargas de Trabajo
 
-> **Dominio:** Monitoreo, Logging y Seguridad en Runtime · **Peso de esta tarea en el examen:** 4 % (total del dominio 20 %) · **Versión del examen:** CKS v1.34
+> **Dominio:** Monitoreo, Logging y Seguridad en Runtime · **Peso de esta tarea en el examen:** 4 % (total del dominio 20 %) · **Versión del examen:** CKS v1.37
 >
 > Los dominios 1–5 tratan de *frenar* cosas. Esta tarea trata de *verlas*. Un clúster con control de admisión perfecto y cero instrumentación de detección es un clúster donde un ataque exitoso no deja ninguna evidencia. Tu trabajo en estos ejercicios es instrumentar cada capa nombrada en el temario, disparar deliberadamente cada detector, y después leer la evidencia cruda que realmente recibiría quien responde al incidente.
 
@@ -25,7 +25,7 @@ Al terminar estos ejercicios vas a poder:
 
 | Nodo | Rol | Especificación |
 |---|---|---|
-| `cks-cp` | control plane (kubeadm) | Ubuntu 24.04, 2 vCPU / 4 GiB, Kubernetes v1.34, containerd 2.x |
+| `cks-cp` | control plane (kubeadm) | Ubuntu 24.04, 2 vCPU / 4 GiB, Kubernetes v1.37, containerd 2.x |
 | `cks-w1` | worker | Ubuntu 24.04, 2 vCPU / 4 GiB, kernel ≥ 5.8 (requerido para el `modern_ebpf` de Falco) |
 
 Necesitás `root` (o `sudo` sin contraseña) **en ambos nodos vía SSH**, más un `kubectl` funcionando con `cluster-admin`. Se asume un CNI que soporte NetworkPolicy; el Ejercicio 6 da un camino con Cilium y una alternativa agnóstica al CNI.
@@ -1353,7 +1353,7 @@ Ahora tenés cinco sensores independientes. Este ejercicio ejecuta una intrusió
 
 **R4.4 —** Un **401** significa que la autenticación misma falló: no se presentó una credencial válida, así que el API server nunca resolvió una identidad y RBAC nunca fue consultado. Un **403** significa que la autenticación *tuvo éxito* y la autorización después denegó la petición — el servidor sabía quién era el llamador y dijo que no. Ver `system:anonymous` con un `403` prueba por lo tanto que **la autenticación anónima está habilitada** (`--anonymous-auth=true`): las peticiones no autenticadas están siendo vinculadas exitosamente a la identidad incorporada `system:anonymous` y evaluadas por RBAC. Con `--anonymous-auth=false` la misma sonda devuelve 401 sin usuario resuelto. Operativamente: una ráfaga de 403 desde una identidad es reconocimiento hecho por una credencial *válida* — alguien mapeando sus permisos; una ráfaga de 401 es adivinación de credenciales o un token expirado/rotado.
 
-**R4.5 —** Un 403 solo muestra un intento que falló, y los controladores legítimos generan 403 constantemente por sondeos normales y patrones de acceso optimista — baja señal, alto volumen. El User-Agent caracteriza el **herramental**, y el herramental de una carga de trabajo es determinista: una aplicación Go usando `client-go` envía algo como `payments/v2.1 (linux/amd64) kubernetes/$Format` o el default de client-go `kubernetes/v1.34.0 (linux/amd64) kubernetes/ab12cd3`. `python-requests/2.32.3` o `curl/8.5.0` desde una ServiceAccount que solo habló client-go es *herramental manejado a mano usando credenciales robadas*, y es una señal sobre peticiones **exitosas**, no solo sobre las fallidas. Construí una línea base de User-Agent por ServiceAccount; la alerta ante la primera desviación es una de las detecciones de mayor precisión disponibles en el log de auditoría. (Es trivialmente falsificable, así que tratala como de alta precisión, no de alta cobertura.)
+**R4.5 —** Un 403 solo muestra un intento que falló, y los controladores legítimos generan 403 constantemente por sondeos normales y patrones de acceso optimista — baja señal, alto volumen. El User-Agent caracteriza el **herramental**, y el herramental de una carga de trabajo es determinista: una aplicación Go usando `client-go` envía algo como `payments/v2.1 (linux/amd64) kubernetes/$Format` o el default de client-go `kubernetes/v1.37.0 (linux/amd64) kubernetes/ab12cd3`. `python-requests/2.32.3` o `curl/8.5.0` desde una ServiceAccount que solo habló client-go es *herramental manejado a mano usando credenciales robadas*, y es una señal sobre peticiones **exitosas**, no solo sobre las fallidas. Construí una línea base de User-Agent por ServiceAccount; la alerta ante la primera desviación es una de las detecciones de mayor precisión disponibles en el log de auditoría. (Es trivialmente falsificable, así que tratala como de alta precisión, no de alta cobertura.)
 
 **R4.6 —** **Inundación de la rotación de logs.** El atacante nunca toca el archivo de log; simplemente genera suficiente tráfico de API autorizado — un bucle apretado de `list pods`, una tormenta de watches — para escribir más de 100 MiB × 10 = ~1 GiB de registros de auditoría, lo que hace rodar su actividad anterior fuera de los backups retenidos y fuera del disco por completo. Los límites de retención que configuraste por seguridad de disco se vuelven una primitiva de destrucción de evidencia. La solución es arquitectónica, no un cambio de ajuste: **enviar los eventos de auditoría fuera del nodo en tiempo real** vía `--audit-webhook-config-file` (o un sidecar/agente que siga el archivo) hacia almacenamiento de solo-anexado, escritura-única, que las credenciales del nodo no puedan borrar. Y además alertá sobre la inundación misma — un pico repentino en la tasa de eventos de auditoría desde una identidad es una detección, no solo una anomalía operativa.
 
@@ -1427,7 +1427,7 @@ Para revertir el API server, restaurá `/root/kube-apiserver.yaml.bak` **hacia**
 
 ## Fuentes
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Auditing* — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 - Kubernetes, *Audit Configuration API (audit.k8s.io/v1)* — https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 - Kubernetes, *kube-apiserver command-line reference* — https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/

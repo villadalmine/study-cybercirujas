@@ -1,5 +1,5 @@
 # CKS 6.4 — Garantizar la Inmutabilidad de los Contenedores en Tiempo de Ejecución
-## Ejercicios Guiados (versión de examen 1.34 · peso del dominio 4%)
+## Ejercicios Guiados (versión de examen 1.37 · peso del dominio 4%)
 
 > **Qué significa "inmutabilidad" en el contexto de CKS.** Un contenedor es inmutable cuando su sistema de archivos no puede modificarse después de arrancar, cuando no puede agregársele nada que no estuviera en la imagen, y cuando la imagen misma no puede cambiar bajo una referencia estable. En la práctica esto son cuatro controles independientes, y el examen evalúa los cuatro:
 > 1. `securityContext.readOnlyRootFilesystem: true` — la capa del contenedor se monta `ro`.
@@ -9,14 +9,14 @@
 
 ### Prerrequisitos
 
-- Un clúster en **v1.34** (`kubeadm` o `kind`), `kubectl` como `cluster-admin`.
+- Un clúster en **v1.37** (`kubeadm` o `kind`), `kubectl` como `cluster-admin`.
 - SSH root en al menos un nodo worker, con `crictl` y `jq` disponibles (necesarios en los Ejercicios 4 y 8).
 - Acceso saliente a `docker.io` y `registry.k8s.io`.
 
 ```bash
 kubectl version --short
-# Client Version: v1.34.0
-# Server Version: v1.34.0
+# Client Version: v1.37.0
+# Server Version: v1.37.0
 
 kubectl create namespace immutability-lab
 kubectl config set-context --current --namespace=immutability-lab
@@ -522,7 +522,7 @@ kubectl describe pod bad-digest | grep -E 'Failed|Error' | head -2
 kubectl create namespace psa-restricted
 kubectl label namespace psa-restricted \
   pod-security.kubernetes.io/enforce=restricted \
-  pod-security.kubernetes.io/enforce-version=v1.34
+  pod-security.kubernetes.io/enforce-version=v1.37
 ```
 
 2. Verificá que `restricted` rechaza un Pod sin endurecer:
@@ -531,7 +531,7 @@ kubectl label namespace psa-restricted \
 kubectl -n psa-restricted run rejected --image=nginx:1.27
 ```
 ```
-Error from server (Forbidden): pods "rejected" is forbidden: violates PodSecurity "restricted:v1.34":
+Error from server (Forbidden): pods "rejected" is forbidden: violates PodSecurity "restricted:v1.37":
 allowPrivilegeEscalation != false (container "rejected" must set securityContext.allowPrivilegeEscalation=false),
 unrestricted capabilities (container "rejected" must set securityContext.capabilities.drop=["ALL"]),
 runAsNonRoot != true (pod or container "rejected" must set securityContext.runAsNonRoot=true),
@@ -949,7 +949,7 @@ sudo apparmor_parser -R /etc/apparmor.d/k8s-immutable && sudo rm /etc/apparmor.d
 
 ## Fuentes de referencia
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Configure a Security Context for a Pod or Container* — https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 - Kubernetes, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - Kubernetes, *Pod Security Admission* — https://kubernetes.io/docs/concepts/security/pod-security-admission/
