@@ -28,8 +28,9 @@
 #
 # Usage
 # -----
-#   ./break-fix-1.5.sh           # build the lab and break it
-#   ./break-fix-1.5.sh --reset   # remove the lab directory
+#   ./break_fix.sh            # build the lab and break it
+#   ./break_fix.sh --verify   # run the placement gate (exit 0 = fixed)
+#   ./break_fix.sh --reset    # remove the lab directory (also: --cleanup)
 #
 # Then:
 #   ~/aiio-lab-1.5/bin/placement-gate            # see the symptom
@@ -80,7 +81,12 @@ done
 # ----------------------------------------------------------------------------
 # --reset
 # ----------------------------------------------------------------------------
-if [[ "${1:-}" == "--reset" ]]; then
+if [[ "${1:-}" == "--verify" ]]; then
+  [[ -x "$LAB_DIR/bin/placement-gate" ]] || die "Lab not set up: run $0 first."
+  exec "$LAB_DIR/bin/placement-gate"
+fi
+
+if [[ "${1:-}" == "--reset" || "${1:-}" == "--cleanup" ]]; then
   if [[ -d "$LAB_DIR" && -f "$MARKER" ]]; then
     rm -rf -- "$LAB_DIR"
     say "Lab directory $LAB_DIR removed."
