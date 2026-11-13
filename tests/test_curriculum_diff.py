@@ -254,8 +254,14 @@ class Window(unittest.TestCase):
         self.assertNotIn("snapshot", up)
 
     def test_the_committed_cks_window_is_current_and_written_like_catalog_save(self):
-        self.assertEqual(cd.main(["window", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
+        """While the CKS v1.37 upgrade is open the window is current; once switched, `switch` closed it (#287)."""
         text = (REPO / "catalog.yaml").read_text(encoding="utf-8")
+        cks = yaml.safe_load(text)["certs"]["cks"]
+        if str(cks["tracked_version"]) == "1.37":
+            self.assertNotIn("upstream", cks)
+            self.assertEqual(cd.main(["switch", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
+        else:
+            self.assertEqual(cd.main(["window", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
         sys.path.insert(0, str(REPO))
         from teach.core import catalog as tc
         with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"TEACH_ROOT": tmp}):
@@ -492,7 +498,7 @@ class Switch(unittest.TestCase):
 
     URL = "https://github.com/cncf/curriculum/raw/c/C_Curriculum.pdf"
 
-    def run_switch(self, target_domains):
+    def run_switch(self, target_domains, frozen_md=None):
         import frontmatter
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
@@ -501,7 +507,7 @@ class Switch(unittest.TestCase):
         (root / "certs").mkdir()
         (root / "syllabi" / "c").mkdir(parents=True)
         md = root / "certs" / "c.md"
-        md.write_text(frontmatter.dumps(frontmatter.loads(FROZEN_MD)) + "\n", encoding="utf-8")
+        md.write_text(frontmatter.dumps(frontmatter.loads(frozen_md or FROZEN_MD)) + "\n", encoding="utf-8")
         snap = cd.snapshot(target_domains, cert="c", version="2026-10-01", repo="cncf/curriculum", commit="c",
                            path="C_Curriculum.pdf", committed="2026-10-01", sha256="s")
         (root / "syllabi" / "c" / "v2026-10-01.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
@@ -528,6 +534,20 @@ class Switch(unittest.TestCase):
         self.assertIn("snapshot_date: '2026-10-01'", text)   # check_versions reads it when the version is a date
         self.assertIn(f"- {self.URL}", text)
         self.assertIn("- https://vendor.example/page/", text)   # the material was written from it: kept
+
+    def test_the_old_version_of_the_same_document_is_replaced_by_the_pin(self):
+        """#322: CKS cited raw/master/CKS_Curriculum v1.34.pdf (a 404) next to the pinned v1.37, top level and per topic."""
+        import frontmatter
+        old = "https://github.com/cncf/curriculum/raw/master/C_Curriculum.pdf"   # the same document, not pinned
+        post = frontmatter.loads(FROZEN_MD)
+        post.metadata["sources"] = [old, "https://vendor.example/page/"]
+        for t in post.metadata["topics"]:
+            t["sources"] = [old]
+        _, files, why = self.run_switch(copy.deepcopy(BASE["domains"]), frontmatter.dumps(post))
+        self.assertEqual(why, [])
+        meta = frontmatter.loads(files["certs/c.md"]).metadata
+        self.assertEqual(meta["sources"], [self.URL, "https://vendor.example/page/"])
+        self.assertTrue(all(t["sources"] == [self.URL] for t in meta["topics"]))
 
     def test_reordered_domains_land_each_title_on_its_own_objective(self):
         # CKNE: the PDF lists Observability before Security, so our 4.x map to 5.x and back

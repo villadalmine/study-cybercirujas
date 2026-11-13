@@ -160,7 +160,8 @@ flowchart TD
    cert, `tracked_version` = the target snapshot's version, `sources.objectives` = its PDF URL, `upstream_status:
    current`, the `upstream:` window removed; in `certs/<cert>.md`, `version`, `snapshot_date` (the target's `source.committed`: `check_versions` compares it with
    `curriculum_updated` when the version is a date), the PDF URL appended to `sources` (the
-   page the material was written from stays cited) and each topic's title set to the objective text it maps to
+   page the material was written from stays cited; a link to the same document, another version or the ref before the
+   pin, is replaced by the pinned PDF, at the top level and in each topic's `sources`, #322) and each topic's title set to the objective text it maps to
    (directory ids and the `topic:` domain labels unchanged, see *Topic ids at the switch*), in `certs/<cert>.md` and in
    the topic's `lab/lab.yaml` `title:` line, which Killercoda's rule R5 compares with the syllabus; `guard` accepts
    that one line in a kept or revalidated topic's `lab.yaml` and nothing else in it. The body of `certs/<cert>.md` keeps its dated notes and
