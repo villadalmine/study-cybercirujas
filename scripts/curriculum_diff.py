@@ -781,6 +781,17 @@ def superseded_mark(version: str) -> str:
     return f"**Superseded by the curriculum {version}**"
 
 
+# the top-level `title:` scalar with its continuation lines: PyYAML folds a long title onto an indented second line
+# (21 labs in the tree), and `>-`/`|` block scalars are indented too (review of #307)
+LAB_TITLE = re.compile(r"^title:[^\n]*(?:\n[ \t]+\S[^\n]*)*", re.M)
+
+
+def lab_with_title(text: str, title: str) -> str:
+    """The lab.yaml text with its top-level `title:` line set to `title`, everything else byte for byte (#306)."""
+    line = yaml.safe_dump({"title": title}, allow_unicode=True, width=10**6, default_flow_style=False).strip()
+    return LAB_TITLE.sub(lambda _: line, text, count=1) if LAB_TITLE.search(text) else text
+
+
 def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str, str], list[str]]:
     """(new catalog, {path: new text} for the frozen syllabi, the reasons it cannot) without writing."""
     import frontmatter
@@ -813,6 +824,11 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
             new = texts.get(row["maps_to"]) if row else None
             if new and tidy(str(topic.get("title") or "")) != new:
                 topic["title"] = new
+            lab = root / "certs" / cert / str(topic.get("id")) / "lab" / "lab.yaml"
+            if new and lab.is_file():      # the lab states the objective title too (Killercoda R5 compares them)
+                text = lab.read_text(encoding="utf-8")
+                if (yaml.safe_load(text) or {}).get("title") != new and lab_with_title(text, new) != text:
+                    files[str(lab.relative_to(root))] = lab_with_title(text, new)
         post.metadata["version"] = version
         post.metadata["snapshot_date"] = str(committed)
         sources = list(post.metadata.get("sources") or [])
@@ -964,6 +980,33 @@ def citation_files_ok(plan_data: dict, f: str, base_text, head_text, cite_ok) ->
     if (parts[-1] not in DOC_FILES and not is_lab_script) or len(old.splitlines()) != len(new.splitlines()):
         return False
     return all(cite_ok(f, x, y) for x, y in zip(old.splitlines(), new.splitlines()) if x != y)
+
+
+def lab_title_ok(plan_data: dict, f: str, base_text, head_text) -> bool:
+    """A kept or revalidated topic's lab.yaml may change only as `switch` changes it: its `title:` line set to the
+    target objective the plan maps the topic to, read from the target syllabus on the base."""
+    parts = f.split("/")
+    if len(parts) != 5 or parts[0] != "certs" or parts[3:] != ["lab", "lab.yaml"] or parts[1] not in plan_data["certs"]:
+        return False
+    c = plan_data["certs"][parts[1]]
+    row = next((t for t in c["topics"] if t["topic"] == parts[2]), None)
+    target = c.get("target") or {}
+    old, new, target = base_text(f), head_text(f), base_text(target.get("file") or "") if isinstance(target, dict) else None
+    if not row or row["class"] not in ("keep", "revalidate") or old is None or new is None or not target:
+        return False
+    texts = {o["id"]: o["text"] for d in (yaml.safe_load(target) or {}).get("domains") or [] for o in d["objectives"]}
+    want = texts.get(row.get("maps_to"))
+    if not want or new != lab_with_title(old, want):
+        return False
+    # only together with the switch: the head's frozen syllabus already gives the topic that title, so the lab and the
+    # syllabus cannot be split by a lab-only edit (review of #307)
+    tracked = c.get("tracked") or {}
+    md = head_text(tracked.get("file") or f"certs/{parts[1]}.md") if isinstance(tracked, dict) else None
+    try:
+        topics = (yaml.safe_load(md.split("---", 2)[1]) or {}).get("topics") or [] if md and md.startswith("---") else []
+    except yaml.YAMLError:
+        return False
+    return any(str(t.get("id")) == parts[2] and tidy(str(t.get("title") or "")) == want for t in topics)
 
 
 TOOLS = {"scripts/upgrade_versions.py"}      # the only scripted editor a meta.yaml may name in `tool_edit`
@@ -1179,7 +1222,8 @@ def _guard_run(args) -> int:
     plan_data = json.loads(committed)
     base_t, head_t = (lambda f: _git_text(base, f)), (lambda f: _git_text(None, f))
     cite_ok = cite_checker(base_t, head_t)
-    bad = [f for f in guard(plan_data, files) if not citation_files_ok(plan_data, f, base_t, head_t, cite_ok)]
+    bad = [f for f in guard(plan_data, files) if not citation_files_ok(plan_data, f, base_t, head_t, cite_ok)
+           and not lab_title_ok(plan_data, f, base_t, head_t)]
     for f in bad:
         print(f"NOT PLANNED: {f}")
     scoped = unlisted_edits(plan_data, files, base_t, head_t, cite_ok)
