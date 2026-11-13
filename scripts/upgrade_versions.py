@@ -13,7 +13,8 @@ only those lines and nothing else, from the one pins file:
 - a line already naming the target minor is skipped, so a second run changes nothing; so is a companion line
   ("Cluster version: v1.34.1", where a sample upgrade starts from) once it shows a minor above the tracked one;
 - an unexpected shape (a target-minor patch other than 0, 1 or x) stops the run: nothing is guessed;
-- a `cncf/curriculum/raw/master/..._v1.35.pdf` link becomes the v1.37 PDF pinned by commit (pins `curriculum_commit`);
+- a `cncf/curriculum/raw/master/<EXAM>_Curriculum v1.N.pdf` link (`_`, `%20` or a space before the version) of an exam the
+  pins list, on a minor this upgrade moves, becomes the target PDF pinned by commit (pins `curriculum_commit`);
 - lab.yaml's `verified:` block is never rewritten: it records a proof on its date, and the 1.37 proofs are new evidence.
 
 A material file whose lines moved gets a tool_edit block in the meta.yaml next to it (tool, script sha256, plan
@@ -38,7 +39,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import curriculum_citations as cc  # noqa: E402
 TOKEN = re.compile(r"(?<![\d.])(v?)1\.(\d{2})(?:\.(\d+|x))?(?!\d)")
 KINDEST = re.compile(r"kindest/node v1\.\d+\.\d+")
-CURRICULUM = re.compile(r"(https://github\.com/cncf/curriculum)/raw/master/(CKAD?)_Curriculum_v1\.35\.pdf")
+# A curriculum PDF link on master, any exam prefix, the name's separator as written (`_`, `%20` or a space).
+CURRICULUM = re.compile(r"(https://github\.com/cncf/curriculum)/raw/master/([A-Z]+)_Curriculum(_|%20| )v1\.(\d+)\.pdf")
 
 
 def sha256(path: Path) -> str:
@@ -57,8 +59,14 @@ def rewrite(line: str, pins: dict) -> str:
         # while it still shows the minor below the tracked one; once moved it shows a minor above it.
         return line
     line = KINDEST.sub(f"kindest/node {pins['kindest_node']}", line)
-    line = CURRICULUM.sub(lambda m: f"{m.group(1)}/raw/{pins['curriculum_commit'][m.group(2)]}/{m.group(2)}_Curriculum_v{target}.pdf",
-                          line)
+    def pin_pdf(m: re.Match) -> str:
+        exam, sep, minor = m.group(2), m.group(3), int(m.group(4))
+        commit = pins["curriculum_commit"].get(exam)
+        if commit is None or not t_minor - shift <= minor <= t_minor:
+            return m.group(0)                    # another exam's PDF, or a version this upgrade does not move
+        return f"{m.group(1)}/raw/{commit}/{exam}_Curriculum{sep}v{target}.pdf"
+
+    line = CURRICULUM.sub(pin_pdf, line)
 
     def move(m: re.Match) -> str:
         v, minor, patch = m.group(1), int(m.group(2)), m.group(3)
