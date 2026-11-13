@@ -415,6 +415,23 @@ class BelowTopicLevel(unittest.TestCase):
                           "certs/cka/4.2/lab/lab.yaml:1", "certs/cka/4.2/lab/lab.yaml:2"])
 
 
+    def test_headings_banners_answers_and_bare_companions_are_technical(self):
+        """#318/#319 review: label lines were moved by no scope; a bare minor below is where a sample starts."""
+        doc = ("# T\n\n## Guided Exercises (Kubernetes v1.34)\n\n**Kubernetes:** v1.34\n\n"
+               "**Q1.1** — still works in v1.34\n\nshows only 1.33.x\n\n"
+               "deb https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /\n\nOn v1.33 the flag\n\n"
+               "Curriculum v1.34\n\nGo 1.330 is not a minor\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs/cks/3.4/en").mkdir(parents=True)
+            (root / "certs/cks/3.4/en/content.md").write_text(doc, encoding="utf-8")
+            found = cd.scan(root, "cks", "3.4", ["en"], "1.34", [])
+        self.assertEqual(found["version_lines"]["label"], 0)
+        self.assertEqual(found["version_lines"]["curriculum"], 1)
+        self.assertEqual(found["version_lines"]["technical"],
+                         [f"certs/cks/3.4/en/content.md:{n}" for n in (3, 5, 7, 9, 11, 13)])
+
+
 class FrozenFromABeta(unittest.TestCase):
     """CKNE GA (#285): a beta frozen from a web page, with summed weights and no version number."""
 

@@ -541,7 +541,9 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
     # version any line can name; matching the word would list every "<unknown>" in a kubectl output (ckne GA).
     ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)") if re.search(r"\d", version) else None
     major, _, minor = version.partition(".")
-    companion = (re.compile(rf"(^|[^0-9.])v?{major}\.({minor_below(minor)})\.(?:\d+|x)(?!\d)")
+    # The minor below in the same file, bare or with a patch ("stable:/v1.33/deb/", "offer 1.33 patches",
+    # "1.33.x", "v1.33.4"): where a sample upgrade starts from (#319 review). The editor leaves a dated one alone.
+    companion = (re.compile(rf"(^|[^0-9.\\])v?{major}\\?\.({minor_below(minor)})(?:\.(?:\d+|x))?(?![\d])")
                  if minor.isdigit() and int(minor) > 2 else None)
     sections, lines = [], {"curriculum": 0, "label": 0, "technical": [], "citations": []}
     topic_dir = root / "certs" / cert / topic

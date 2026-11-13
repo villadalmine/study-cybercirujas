@@ -8,7 +8,7 @@ Milestone: *v0.6.9* · umbrella issue #287
 
 | Cert | keep | revalidate | regenerate | new | retire | topic files | planned | sections to edit | version lines (curriculum / label / technical) |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| cks | 26 | 0 | 0 | 0 | 0 | 208 | 130 | 0 | 108 / 0 / 798 |
+| cks | 26 | 0 | 0 | 0 | 0 | 208 | 130 | 0 | 108 / 0 / 816 |
 
 ## Flow
 
@@ -76,13 +76,13 @@ Thresholds: MATCH = 0.6, REWORD = 0.9 (difflib ratio on normalized text). The fi
 | 3.1 | Use Role Based Access Controls to minimize exposure | `keep` | unchanged | 3.1 | 0 | 5/0/11 | en,es | yes |
 | 3.2 | Exercise caution in using service accounts e.g. disable defaults, minimize permissions on newly created ones | `keep` | unchanged | 3.2 | 0 | 4/0/10 | en,es | yes |
 | 3.3 | Restrict access to Kubernetes API | `keep` | unchanged | 3.3 | 0 | 4/0/18 | en,es | yes |
-| 3.4 | Upgrade Kubernetes to avoid vulnerabilities | `keep` | unchanged | 3.4 | 0 | 4/0/425 | en,es | yes |
+| 3.4 | Upgrade Kubernetes to avoid vulnerabilities | `keep` | unchanged | 3.4 | 0 | 4/0/441 | en,es | yes |
 | 4.1 | Minimize base image footprint | `keep` | unchanged | 4.1 | 0 | 4/0/18 | en,es | yes |
 | 4.2 | Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories) | `keep` | unchanged | 4.2 | 0 | 5/0/10 | en,es | yes |
 | 4.3 | Secure your supply chain (permitted registries, sign and validate artifacts, etc.) | `keep` | unchanged | 4.3 | 0 | 7/0/13 | en,es | yes |
 | 4.4 | Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter) | `keep` | unchanged | 4.4 | 0 | 4/0/20 | en,es | yes |
 | 5.1 | Minimize host OS footprint (reduce attack surface) | `keep` | unchanged | 5.1 | 0 | 4/0/11 | en,es | yes |
-| 5.2 | Using least-privilege identity and access management | `keep` | unchanged | 5.2 | 0 | 2/0/7 | en,es | yes |
+| 5.2 | Using least-privilege identity and access management | `keep` | unchanged | 5.2 | 0 | 2/0/9 | en,es | yes |
 | 5.3 | Minimize external access to the network | `keep` | unchanged | 5.3 | 0 | 4/0/24 | en,es | yes |
 | 5.4 | Appropriately use kernel hardening tools such as AppArmor, seccomp | `keep` | unchanged | 5.4 | 0 | 5/0/12 | en,es | yes |
 | 6.1 | Perform behavioral analytics to detect malicious activities | `keep` | unchanged | 6.1 | 0 | 4/0/10 | en,es | yes |
@@ -276,6 +276,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.3/lab/break_fix.sh:10`
 - `certs/cks/3.4/en/content.md:3`
 - `certs/cks/3.4/en/content.md:31`
+- `certs/cks/3.4/en/content.md:53`
 - `certs/cks/3.4/en/content.md:54`
 - `certs/cks/3.4/en/content.md:91`
 - `certs/cks/3.4/en/content.md:218`
@@ -283,6 +284,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/content.md:404`
 - `certs/cks/3.4/en/content.md:408`
 - `certs/cks/3.4/en/content.md:452`
+- `certs/cks/3.4/en/content.md:454`
 - `certs/cks/3.4/en/content.md:485`
 - `certs/cks/3.4/en/content.md:509`
 - `certs/cks/3.4/en/content.md:522`
@@ -300,6 +302,8 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/content.md:597`
 - `certs/cks/3.4/en/content.md:600`
 - `certs/cks/3.4/en/content.md:601`
+- `certs/cks/3.4/en/content.md:637`
+- `certs/cks/3.4/en/content.md:641`
 - `certs/cks/3.4/en/content.md:643`
 - `certs/cks/3.4/en/content.md:645`
 - `certs/cks/3.4/en/content.md:649`
@@ -385,6 +389,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/exercises.md:20`
 - `certs/cks/3.4/en/exercises.md:25`
 - `certs/cks/3.4/en/exercises.md:27`
+- `certs/cks/3.4/en/exercises.md:35`
 - `certs/cks/3.4/en/exercises.md:47`
 - `certs/cks/3.4/en/exercises.md:48`
 - `certs/cks/3.4/en/exercises.md:49`
@@ -405,10 +410,12 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/exercises.md:263`
 - `certs/cks/3.4/en/exercises.md:269`
 - `certs/cks/3.4/en/exercises.md:293`
+- `certs/cks/3.4/en/exercises.md:318`
 - `certs/cks/3.4/en/exercises.md:319`
 - `certs/cks/3.4/en/exercises.md:391`
 - `certs/cks/3.4/en/exercises.md:395`
 - `certs/cks/3.4/en/exercises.md:408`
+- `certs/cks/3.4/en/exercises.md:415`
 - `certs/cks/3.4/en/exercises.md:418`
 - `certs/cks/3.4/en/exercises.md:423`
 - `certs/cks/3.4/en/exercises.md:425`
@@ -466,6 +473,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/exercises.md:891`
 - `certs/cks/3.4/en/exercises.md:898`
 - `certs/cks/3.4/en/exercises.md:908`
+- `certs/cks/3.4/en/exercises.md:914`
 - `certs/cks/3.4/en/exercises.md:935`
 - `certs/cks/3.4/en/exercises.md:937`
 - `certs/cks/3.4/en/exercises.md:942`
@@ -487,6 +495,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/en/exercises.md:1101`
 - `certs/cks/3.4/es/content.md:3`
 - `certs/cks/3.4/es/content.md:31`
+- `certs/cks/3.4/es/content.md:53`
 - `certs/cks/3.4/es/content.md:54`
 - `certs/cks/3.4/es/content.md:91`
 - `certs/cks/3.4/es/content.md:218`
@@ -494,6 +503,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/es/content.md:404`
 - `certs/cks/3.4/es/content.md:408`
 - `certs/cks/3.4/es/content.md:452`
+- `certs/cks/3.4/es/content.md:454`
 - `certs/cks/3.4/es/content.md:485`
 - `certs/cks/3.4/es/content.md:509`
 - `certs/cks/3.4/es/content.md:522`
@@ -511,6 +521,8 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/es/content.md:597`
 - `certs/cks/3.4/es/content.md:600`
 - `certs/cks/3.4/es/content.md:601`
+- `certs/cks/3.4/es/content.md:637`
+- `certs/cks/3.4/es/content.md:641`
 - `certs/cks/3.4/es/content.md:643`
 - `certs/cks/3.4/es/content.md:645`
 - `certs/cks/3.4/es/content.md:649`
@@ -596,6 +608,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/es/exercises.md:20`
 - `certs/cks/3.4/es/exercises.md:25`
 - `certs/cks/3.4/es/exercises.md:27`
+- `certs/cks/3.4/es/exercises.md:35`
 - `certs/cks/3.4/es/exercises.md:47`
 - `certs/cks/3.4/es/exercises.md:48`
 - `certs/cks/3.4/es/exercises.md:49`
@@ -616,10 +629,12 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/es/exercises.md:263`
 - `certs/cks/3.4/es/exercises.md:269`
 - `certs/cks/3.4/es/exercises.md:293`
+- `certs/cks/3.4/es/exercises.md:318`
 - `certs/cks/3.4/es/exercises.md:319`
 - `certs/cks/3.4/es/exercises.md:391`
 - `certs/cks/3.4/es/exercises.md:395`
 - `certs/cks/3.4/es/exercises.md:408`
+- `certs/cks/3.4/es/exercises.md:415`
 - `certs/cks/3.4/es/exercises.md:418`
 - `certs/cks/3.4/es/exercises.md:423`
 - `certs/cks/3.4/es/exercises.md:425`
@@ -677,6 +692,7 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/3.4/es/exercises.md:891`
 - `certs/cks/3.4/es/exercises.md:898`
 - `certs/cks/3.4/es/exercises.md:908`
+- `certs/cks/3.4/es/exercises.md:914`
 - `certs/cks/3.4/es/exercises.md:935`
 - `certs/cks/3.4/es/exercises.md:937`
 - `certs/cks/3.4/es/exercises.md:942`
@@ -772,8 +788,10 @@ Commands, outputs or prose about that Kubernetes version: the only version lines
 - `certs/cks/5.1/lab/break_fix.sh:48`
 - `certs/cks/5.1/lab/break_fix.sh:49`
 - `certs/cks/5.2/en/content.md:3`
+- `certs/cks/5.2/en/content.md:379`
 - `certs/cks/5.2/en/exercises.md:3`
 - `certs/cks/5.2/es/content.md:3`
+- `certs/cks/5.2/es/content.md:379`
 - `certs/cks/5.2/es/exercises.md:3`
 - `certs/cks/5.2/lab/break_fix.sh:3`
 - `certs/cks/5.2/lab/break_fix.sh:24`

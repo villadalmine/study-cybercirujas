@@ -78,11 +78,21 @@ class ReviewOf318(unittest.TestCase):
         for line in ("Since v1.32 the feature (enabled by default in v1.34) lets you keep anonymous access",
                      "# GA field since v1.30; the beta annotations are gone in 1.34.",
                      "#   deprecated and are NOT used here). Verified against 1.34.",
-                     "It is GA and available in v1.34 as admission",
                      "Desde v1.32 la función (habilitada por defecto en v1.34)"):
             self.assertEqual(self.r(line), line)
         self.assertEqual(self.r("> **v1.34 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34."),
                          "> **v1.37 note**: went beta in v1.31 and GA in the v1.33 line, not the default in v1.34.")
+
+    def test_a_dated_table_row_stays_and_two_words_is_the_reach(self):
+        row = "| **1.34** (exam target) | Aug 2025 | ~Aug 2026 | ~Oct 2026 |"
+        self.assertEqual(self.r(row), row)
+        self.assertEqual(self.r("| 1.33 | abr 2025 | ~abr 2026 |"), "| 1.33 | abr 2025 | ~abr 2026 |")
+        self.assertEqual(self.r("It is GA and available in v1.34 as admission"), "It is GA and available in v1.37 as admission")
+        self.assertEqual(self.r("Es GA y está disponible en v1.34"), "Es GA y está disponible en v1.37")
+
+    def test_version_output_moves_its_minor_field(self):
+        self.assertEqual(self.r('Major:"1", Minor:"34", GitVersion:"v1.34.1", BuildDate:"2026-02-18T10:22:41Z"'),
+                         'Major:"1", Minor:"37", GitVersion:"v1.37.2", BuildDate:"2026-02-18T10:22:41Z"')
 
     def test_the_rest_of_a_line_with_a_dated_fact_moves(self):
         self.assertEqual(self.r("(since v1.28; it was two before that). So v1.34.1 apiserver with v1.33.4 kubelets"),
@@ -93,12 +103,15 @@ class ReviewOf318(unittest.TestCase):
                          "Kubernetes 1.37 honours the field (GA since 1.30); container.apparmor.security.beta")
         self.assertEqual(self.r("apiVersion: flowcontrol/v1beta3 on v1.34"), "apiVersion: flowcontrol/v1beta3 on v1.37")
 
-    def test_the_minor_above_moves_only_where_an_upgrade_goes(self):
+    def test_the_minor_above_moves_except_as_a_tag(self):
         self.assertEqual(self.r("upgrade to v1.35.0 is too far: 1.33 → 1.34 → 1.35"),
                          "upgrade to v1.38.0 is too far: 1.36 → 1.37 → 1.38")
         self.assertEqual(self.r('removed_release="1.35" while you upgrade to v1.34'),
                          'removed_release="1.38" while you upgrade to v1.37')
         self.assertEqual(self.r("--image=busybox:1.35 # 1.34"), "--image=busybox:1.35 # 1.37")
+        self.assertEqual(self.r("actualizar el clúster de v1.34 a v1.35 no pueda"), "actualizar el clúster de v1.37 a v1.38 no pueda")
+        self.assertEqual(self.r("works in v1.34; before you plan v1.35, a v1.35-day surprise"),
+                         "works in v1.37; before you plan v1.38, a v1.38-day surprise")
         self.assertEqual(self.r("1.35 alone"), "1.35 alone")
 
     def test_an_escaped_dot_moves_and_keeps_its_escape(self):
