@@ -2,6 +2,7 @@ cert: nca-aiio
 topic: '1.6'
 title: Explain the purpose and use case of various NVIDIA solutions
 provider: local
+requires: linux
 resources:
   vms:
   - name: lab
