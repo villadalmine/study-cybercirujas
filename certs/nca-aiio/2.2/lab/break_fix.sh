@@ -25,10 +25,10 @@
 #   - Use "cleanup" to remove everything.
 #
 # USAGE
-#   sudo ./aiio-2.2-breakfix.sh break     # build healthy fabric, verify, then inject faults
-#   sudo ./aiio-2.2-breakfix.sh check     # grade your fix
-#   sudo ./aiio-2.2-breakfix.sh hint [1-3]
-#   sudo ./aiio-2.2-breakfix.sh cleanup
+#   sudo ./break_fix.sh break     # build healthy fabric, verify, then inject faults
+#   sudo ./break_fix.sh check     # grade your fix
+#   sudo ./break_fix.sh hint [1-3]
+#   sudo ./break_fix.sh cleanup
 #
 # OFFICIAL REFERENCES
 #   NCA-AIIO exam guide:
@@ -379,7 +379,7 @@ exit 0
 #   (8972 = 9000 - 20 bytes IPv4 header - 8 bytes ICMP header.)
 #
 # STEP 5 - Grade
-#   sudo ./aiio-2.2-breakfix.sh check     # every line PASS
+#   sudo ./break_fix.sh check     # every line PASS
 #
 # STEP 6 - Lessons for scaling GPU infrastructure
 #   - Scale-up (NVLink/NVSwitch inside a node) hides network problems.
@@ -404,5 +404,5 @@ exit 0
 #     as the cluster grows.
 #
 # STEP 7 - Clean up
-#   sudo ./aiio-2.2-breakfix.sh cleanup
+#   sudo ./break_fix.sh cleanup
 # =============================================================================
