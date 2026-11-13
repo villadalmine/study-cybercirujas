@@ -117,9 +117,12 @@ def cmd_pin(args) -> int:
 
 # ---------------------------------------------------------------- data
 
-def git(repo: Path, *args: str) -> str:
-    out = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True)
-    if out.returncode:
+def git(repo: Path, *args: str, check: bool = True) -> str:
+    try:
+        out = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True)
+    except FileNotFoundError:
+        raise SystemExit("git is not installed: lab_fidelity.py needs it to read the emulator's issues and tree")
+    if out.returncode and check:
         raise SystemExit(f"git {' '.join(args)} in {repo}: {out.stderr.strip()}")
     return out.stdout
 
@@ -139,8 +142,7 @@ def ensure_data(pin: dict) -> Path:
         (root / "scores.json.gz.part").write_bytes(blob)
         (root / "scores.json.gz.part").replace(scores)
     repo = root / "repo"
-    if repo.exists() and subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True,
-                                        text=True).stdout.strip() != pin["commit"]:
+    if repo.exists() and git(repo, "rev-parse", "HEAD", check=False).strip() != pin["commit"]:
         shutil.rmtree(repo)
     if not repo.exists():
         tmp = root / "repo.part"
@@ -181,7 +183,7 @@ def ownership(handler_paths: list[str], shapes: set[str]) -> dict[str, set[str]]
     owners: dict[str, set[str]] = defaultdict(set)
     for path in handler_paths:
         parts = path.split("/")
-        if len(parts) >= 5 and parts[0] == "services" and parts[2:4] == ["src", "ops"] and path.endswith(".rs"):
+        if len(parts) == 5 and parts[0] == "services" and parts[2:4] == ["src", "ops"] and path.endswith(".rs"):
             stem = parts[-1][:-3]
             if stem != "mod" and parts[1] in crate_ns:
                 owners[norm(stem)].add(crate_ns[parts[1]])
@@ -204,18 +206,36 @@ def parse_issue(text: str) -> dict:
     return {"severity": head.get("Issue-Severity", ""), "shape": head.get("Issue-Shape-Id", ""), "keys": keys}
 
 
-def key_services(key: str, owners: dict[str, set[str]]) -> tuple[str, set[str]]:
-    """An Issue-Key `<service id>|<Operation>|<cause>...` -> (Operation, its namespaces). The first segment is the
-    called service (an SDK id such as `s3` or `cloudwatch-logs`), not the issue's Shape-Id, which is the scenario's.
-    An operation one service owns goes to it; one several own goes to the owner whose name is that id, or to all
-    of them (a known issue then counts for each: it can only make a verdict stricter). A key whose operation has no
-    handler anywhere (`<check-id>|run#N|...`) names no operation and is skipped."""
+def sdk_ids(issues: list[dict], owners: dict[str, set[str]]) -> dict[str, str]:
+    """Issue-Key service id (`logs`, `elbv2`, `monitoring`...) -> namespace, learned from the data, not typed by hand.
+
+    A key whose operation exactly one service owns tells which namespace its first segment means. Every such key
+    votes; the namespace with most votes wins, ties broken by name, so the table is the same on every run."""
+    votes: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for issue in issues:
+        for key in issue["keys"]:
+            parts = key.split("|")
+            cands = owners.get(norm(parts[1]), set()) if len(parts) >= 2 else set()
+            if len(cands) == 1:
+                votes[parts[0]][next(iter(cands))] += 1
+    return {sid: min(v, key=lambda ns: (-v[ns], ns)) for sid, v in votes.items()}
+
+
+def key_services(key: str, owners: dict[str, set[str]], ids: dict[str, str]) -> tuple[str, set[str]]:
+    """An Issue-Key `<service id>|<Operation>|<cause>...` -> (Operation, its namespace or nothing). The first segment
+    is the called service (an SDK id such as `s3` or `logs`), not the issue's Shape-Id, which is the scenario's.
+    An operation one service owns goes to it. One several own goes to the owner the id names, directly
+    (`cloudwatch-logs` -> cloudwatchlogs) or through `sdk_ids`; when neither names an owner the key is skipped,
+    never spread over every service that has an operation of that name. A key whose operation has no handler
+    anywhere (`<check-id>|run#N|...`) names no operation and is skipped too."""
     parts = key.split("|")
     if len(parts) < 2:
         return "", set()
     cands = owners.get(norm(parts[1]), set())
-    named = {ns for ns in cands if norm(ns) == norm(parts[0])}
-    return parts[1], (cands if len(cands) <= 1 else named or cands)
+    if len(cands) <= 1:
+        return parts[1], cands
+    named = {ns for ns in cands if norm(ns) == norm(parts[0]) or ids.get(parts[0]) == ns}
+    return parts[1], named if len(named) == 1 else set()
 
 
 def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -> dict:
@@ -223,7 +243,8 @@ def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -
 
     A wire unit is filed under the scenario's service, but its steps may call other services (a budgets scenario
     calls iam:CreateRole). Each call is credited to the service that owns the operation: the unit's own service when
-    it has a handler for it, else the only owner; an operation with several other owners is not credited. A known
+    it has a handler for it, else the only owner; an operation with several other owners is not credited (on
+    v1.0.345 that drops 451 passing calls, e.g. CreateBucket from scenarios of other services: conservative). A known
     issue's severity counts only when all its keys are about one service, so a CRITICAL "the CodeBuild chain never
     finishes" does not reject `iam:GetRole` because the chain calls it.
     """
@@ -241,8 +262,9 @@ def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -
                     idx[(svc, op)]["passing_units"] += 1
                 elif op in bad:
                     idx[(svc, op)]["failing_units"] += 1
+    ids = sdk_ids(issues, owners)
     for issue in issues:
-        resolved = [(key, *key_services(key, owners)) for key in issue["keys"]]
+        resolved = [(key, *key_services(key, owners, ids)) for key in issue["keys"]]
         about = set().union(*(svcs for _, _, svcs in resolved)) if resolved else set()
         named = set()
         for key, op, svcs in resolved:

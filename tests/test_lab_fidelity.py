@@ -33,8 +33,9 @@ HANDLERS = [f"services/{lf.service_dir(shape)}/src/ops/{op}.rs" for shape, op in
     (S3, "create_bucket"), (S3, "put_bucket_versioning"), (S3, "get_object"), (S3, "mod"),
     (IAM, "create_role"), (IAM, "get_role"), (IAM, "create_service_linked_role"),
     (BUDGETS, "create_budget"), (CODEBUILD, "start_build"),
-    (LOGS, "put_resource_policy"), (XRAY, "put_resource_policy"),
-]] + ["services/vendor-crate/src/ops/create_role.rs", "issues/things-that-do-not-work/x.md"]
+    (LOGS, "put_resource_policy"), (XRAY, "put_resource_policy"), (LOGS, "create_log_group"),
+]] + ["services/vendor-crate/src/ops/create_role.rs", "issues/things-that-do-not-work/x.md",
+      f"services/{lf.service_dir(S3)}/src/ops/types/shared_types.rs"]
 OWNERS = lf.ownership(HANDLERS, {S3, IAM, BUDGETS, APPFLOW, LOGS, XRAY, CODEBUILD})
 
 
@@ -65,6 +66,7 @@ ISSUES = [
     issue("CRITICAL", S3, "s3|GetObject|NotImplemented", "s3.cond-get|run#9|AssertionError|assert code == 304"),
     issue("HIGH", IAM, "iam|CreateServiceLinkedRole|NotImplemented"),
     issue("HIGH", XRAY, "cloudwatch-logs|PutResourcePolicy|4xx->2xx|$"),
+    issue("HIGH", XRAY, "logs|CreateLogGroup|2xx->2xx|$", "logs|PutResourcePolicy|2xx->4xx|status"),
 ]
 
 
@@ -73,6 +75,7 @@ class Ownership(unittest.TestCase):
         self.assertEqual(OWNERS["createrole"], {"iam"}, "a crate no shape names is left out")
         self.assertEqual(OWNERS["putresourcepolicy"], {"cloudwatchlogs", "xray"})
         self.assertNotIn("mod", OWNERS)
+        self.assertNotIn("sharedtypes", OWNERS, "src/ops/types/*.rs are not operations")
 
     def test_service_dir_matches_the_emulator_layout(self):
         self.assertEqual(lf.service_dir(S3), "service-com-amazonaws-s3-amazons3")
@@ -80,12 +83,20 @@ class Ownership(unittest.TestCase):
                          "service-com-amazonaws-applicationdiscoveryservice-awsposeidonservice-v2015-11-01")
 
     def test_issue_keys_go_to_the_called_service(self):
-        self.assertEqual(lf.key_services("s3|GetObject|2xx->2xx|$.Body", OWNERS), ("GetObject", {"s3"}))
-        self.assertEqual(lf.key_services("cloudwatch-logs|PutResourcePolicy|x", OWNERS),
-                         ("PutResourcePolicy", {"cloudwatchlogs"}), "two owners: the one named by the key")
-        self.assertEqual(lf.key_services("logs|PutResourcePolicy|x", OWNERS)[1], {"cloudwatchlogs", "xray"},
-                         "two owners, none named: both (it can only make a verdict stricter)")
-        self.assertEqual(lf.key_services("s3.cond-get|run#9|AssertionError|assert", OWNERS), ("run#9", set()))
+        ids = {"logs": "cloudwatchlogs"}
+        self.assertEqual(lf.key_services("s3|GetObject|2xx->2xx|$.Body", OWNERS, ids), ("GetObject", {"s3"}))
+        self.assertEqual(lf.key_services("cloudwatch-logs|PutResourcePolicy|x", OWNERS, {}),
+                         ("PutResourcePolicy", {"cloudwatchlogs"}), "two owners: the one the id names")
+        self.assertEqual(lf.key_services("logs|PutResourcePolicy|x", OWNERS, ids)[1], {"cloudwatchlogs"},
+                         "two owners: the one the learned SDK id names")
+        self.assertEqual(lf.key_services("logs|PutResourcePolicy|x", OWNERS, {})[1], set(),
+                         "two owners, none named: skipped, never spread over both")
+        self.assertEqual(lf.key_services("s3.cond-get|run#9|AssertionError|assert", OWNERS, ids), ("run#9", set()))
+
+    def test_sdk_ids_are_learned_from_keys_with_one_owner(self):
+        ids = lf.sdk_ids([issue("HIGH", XRAY, "logs|CreateLogGroup|x", "logs|PutResourcePolicy|y"),
+                          issue("HIGH", S3, "s3|GetObject|z")], OWNERS)
+        self.assertEqual(ids, {"logs": "cloudwatchlogs", "s3": "s3"})
 
 
 class Index(unittest.TestCase):
@@ -107,6 +118,10 @@ class Index(unittest.TestCase):
         self.assertEqual(self.idx[("s3", "GetObject")]["known_issues"], 2)
         self.assertNotIn(("appflow", "GetObject"), self.idx)
         self.assertNotIn(("xray", "PutResourcePolicy"), {k for k, v in self.idx.items() if v["known_issues"]})
+        self.assertEqual(self.idx[("cloudwatchlogs", "PutResourcePolicy")]["known_issues"], 2,
+                         "`cloudwatch-logs` by name, `logs` through the learned SDK id")
+        self.assertEqual(self.idx[("cloudwatchlogs", "PutResourcePolicy")]["severities"], {"HIGH"},
+                         "an issue whose keys all resolve to one service keeps its severity")
 
     def test_check_id_keys_name_no_operation(self):
         self.assertFalse([k for k in self.idx if k[1].startswith("run#") or "." in k[0]])
@@ -154,7 +169,7 @@ class Data(unittest.TestCase):
         subprocess.run(["git", "init", "-q", str(self.root / "repo")], check=True)        # wedged: no HEAD
         calls = []
 
-        def fake_git(repo, *args):
+        def fake_git(repo, *args, check=True):
             calls.append(args[0])
             if args[0] == "fetch":
                 raise SystemExit("offline")
