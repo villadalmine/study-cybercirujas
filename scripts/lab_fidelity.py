@@ -4,6 +4,7 @@
     scripts/lab_fidelity.py pin [--release v1.0.345] [--check]   # write/compare deploy/lab-emulators.yaml
     scripts/lab_fidelity.py fetch                                 # download the pinned data into .cache/lab-fidelity/
     scripts/lab_fidelity.py ops s3 [--grep Bucket]                # which operations of a service have evidence
+    scripts/lab_fidelity.py check [lab.yaml ...] [--write]        # the gate; --write records the `fidelity:` block
 
 A cloud lab runs against AWS Emulator (https://github.com/aws/aws-emulator), not AWS. The emulator only teaches
 the truth where it behaves like AWS, so a lab declares the API operations it calls in `uses:` (`s3:CreateBucket`,
@@ -25,11 +26,19 @@ Verdict per operation (the only rule; change it here, with its test):
   this does not reject: it is recorded, and the runner's break/fix proof decides;
 - `ok` otherwise. Failing units and known issues are counted, never hidden: `ops` prints them.
 
-`check` (the gate over each lab, and the `fidelity:` block it records there) is the next PR of #325.
+`check --write` records, in each lab.yaml that declares `uses:`, a `fidelity:` block saying where the verdict comes
+from (emulator, release, commit, sha256 of the scores, sha256 of this script, date) and the counts per operation.
+`check` without --write re-derives that block and exits 1 when a lab has a rejected operation (a `warn:` is printed, not failed), when the block is missing, or when
+it differs from the recorded one (other than `date`): the pin moved or someone edited it by hand. Labs without
+`uses:` are not cloud labs and are skipped, so on a tree with none this needs no network.
+
+`uses:` itself is declared by the lab's author (person or generator): `uses_from: declared` says so in the block.
+Comparing it with the emulator's request log when the runner plays the lab is #303 step 3.
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import gzip
 import hashlib
 import json
@@ -51,11 +60,14 @@ EMULATOR = "aws-emulator"
 GH_REPO = "aws/aws-emulator"
 API = f"https://api.github.com/repos/{GH_REPO}"
 ISSUES_DIR = "issues/things-that-do-not-work"
+TOOL = "scripts/lab_fidelity.py"
 PINS_HEADER = (
     "# Written by scripts/lab_fidelity.py pin, never by hand (#303). The emulator release whose published\n"
     "# fidelity data decides which API operations a cloud lab may use. Move it with\n"
     "#   scripts/lab_fidelity.py pin --release <tag>   then   scripts/lab_fidelity.py check --write\n"
 )
+OPERATION = re.compile(r"^[a-z0-9][a-z0-9.-]*:[A-Z][A-Za-z0-9]*$")
+FIDELITY_KEY = re.compile(r"^fidelity:.*?(?=^\S|\Z)", re.M | re.S)
 
 
 def sha256(data: bytes) -> str:
@@ -280,7 +292,7 @@ def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -
     return idx
 
 
-def load_index(pin: dict) -> dict:
+def load_data(pin: dict) -> tuple[dict, list[dict], dict[str, set[str]]]:
     root = ensure_data(pin)
     scores = json.loads(gzip.decompress((root / "scores.json.gz").read_bytes()))
     issues = [parse_issue(f.read_text(encoding="utf-8", errors="replace"))
@@ -288,7 +300,24 @@ def load_index(pin: dict) -> dict:
     shapes = {s for u in scores["units"] for s in u.get("services", []) if s.startswith("com.amazonaws.")}
     shapes |= {i["shape"] for i in issues if i["shape"].startswith("com.amazonaws.")}
     handlers = git(root / "repo", "ls-tree", "-r", "--name-only", "HEAD", "--", "services").splitlines()
-    return build_index(scores, issues, ownership(handlers, shapes))
+    return scores, issues, ownership(handlers, shapes)
+
+
+def load_index(pin: dict) -> dict:
+    return build_index(*load_data(pin))
+
+
+def unattributed(issues: list[dict], owners: dict[str, set[str]]) -> dict[str, int]:
+    """Issue keys about a real operation that no single service could be given (several owners, and neither the
+    key's id nor `sdk_ids` names one), counted per id. They are skipped by `build_index`; this says how many."""
+    ids = sdk_ids(issues, owners)
+    out: dict[str, int] = defaultdict(int)
+    for issue in issues:
+        for key in issue["keys"]:
+            op, svcs = key_services(key, owners, ids)
+            if not svcs and op and owners.get(norm(op)):
+                out[key.split("|")[0]] += 1
+    return dict(sorted(out.items(), key=lambda kv: (-kv[1], kv[0])))
 
 
 def verdict(entry: dict | None) -> str:
@@ -297,6 +326,80 @@ def verdict(entry: dict | None) -> str:
     if "CRITICAL" in entry["severities"]:
         return "warn: critical-issue"
     return "ok"
+
+
+# ---------------------------------------------------------------- labs
+
+def lab_files(paths: list[str]) -> list[Path]:
+    if paths:
+        return [Path(p) / "lab.yaml" if Path(p).is_dir() else Path(p) for p in paths]
+    return sorted(REPO.glob("certs/*/*/lab/lab.yaml"))
+
+
+def fidelity_block(uses: list[str], pin: dict, index: dict, today: str) -> dict:
+    ops = {}
+    for op in uses:
+        svc, _, name = op.partition(":")
+        e = index.get((svc, name))
+        ops[op] = {"verdict": verdict(e),
+                   "passing_units": e["passing_units"] if e else 0,
+                   "failing_units": e["failing_units"] if e else 0,
+                   "known_issues": e["known_issues"] if e else 0}
+    return {"emulator": EMULATOR, "release": pin["release"], "commit": pin["commit"],
+            "scores_sha256": pin["scores_sha256"],
+            "tool_sha256": sha256((REPO / TOOL).read_bytes()),
+            "uses_from": "declared", "date": today, "operations": ops}
+
+
+def with_fidelity(text: str, block: dict) -> str:
+    dumped = yaml.safe_dump({"fidelity": block}, sort_keys=False, width=200)
+    if FIDELITY_KEY.search(text):
+        return FIDELITY_KEY.sub(lambda _: dumped, text, count=1)
+    return text.rstrip("\n") + "\n" + dumped
+
+
+def cmd_check(args) -> int:
+    labs = []
+    for path in lab_files(args.paths):
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("uses"):
+            labs.append((path, data))
+    if not labs:
+        print("OK: no lab declares `uses:` (no cloud-emulator lab to check)")
+        return 0
+    pin = load_pins()
+    index = load_index(pin)
+    today = args.date or dt.datetime.now(dt.timezone.utc).date().isoformat()
+    bad = 0
+    for path, data in labs:
+        rel = path.relative_to(REPO) if path.is_absolute() and REPO in path.parents else path
+        wrong = [u for u in data["uses"] if not isinstance(u, str) or not OPERATION.match(u)]
+        if wrong:
+            print(f"FAIL {rel}: `uses:` entries must be <service>:<Operation> ({', '.join(map(str, wrong))})")
+            bad += 1
+            continue
+        block = fidelity_block(data["uses"], pin, index, today)
+        rejected = {op: v["verdict"] for op, v in block["operations"].items() if v["verdict"].startswith("reject")}
+        for op, v in block["operations"].items():
+            print(f"     {rel}  {op:40} {v['verdict']:24} pass {v['passing_units']:4}  fail {v['failing_units']:4}  "
+                  f"known {v['known_issues']}")
+        if args.write:
+            path.write_text(with_fidelity(path.read_text(encoding="utf-8"), block), encoding="utf-8")
+        else:
+            have = dict(data.get("fidelity") or {})
+            want = dict(block)
+            have.pop("date", None)
+            want.pop("date", None)
+            if have != want:
+                print(f"FAIL {rel}: `fidelity:` is {'missing' if not have else 'stale'}; "
+                      f"run scripts/lab_fidelity.py check --write {rel}")
+                bad += 1
+        if rejected:
+            print(f"FAIL {rel}: {len(rejected)} operation(s) without fidelity evidence: "
+                  + ", ".join(f"{op} ({v})" for op, v in rejected.items()))
+            bad += 1
+    print(f"{len(labs)} cloud lab(s), {bad} failing")
+    return 1 if bad else 0
 
 
 def cmd_ops(args) -> int:
@@ -316,8 +419,11 @@ def cmd_ops(args) -> int:
 
 def cmd_fetch(_args) -> int:
     pin = load_pins()
-    root = ensure_data(pin)
-    print(f"OK: {pin['release']} data in {root}")
+    _, issues, owners = load_data(pin)
+    skipped = unattributed(issues, owners)
+    top = ", ".join(f"{sid} {n}" for sid, n in list(skipped.items())[:8])
+    print(f"OK: {pin['release']} data in {CACHE / EMULATOR / pin['release']}")
+    print(f"unattributed issue keys: {sum(skipped.values())} ({top}): skipped, see build_index")
     return 0
 
 
@@ -334,6 +440,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("service")
     p.add_argument("--grep")
     p.set_defaults(func=cmd_ops)
+    p = sub.add_parser("check", help="the gate over every lab that declares uses:")
+    p.add_argument("paths", nargs="*")
+    p.add_argument("--write", action="store_true", help="record the fidelity: block")
+    p.add_argument("--date", help="YYYY-MM-DD to stamp (default: today, UTC)")
+    p.set_defaults(func=cmd_check)
     args = ap.parse_args(argv)
     return args.func(args)
 
