@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.8](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.7...v0.6.8) (2026-11-13)
+
+
+### Features
+
+* **certs:** CKNE follows the GA curriculum (2026-10-01) ([#306](https://github.com/villadalmine/study-cybercirujas/issues/306)) ([7f6aa3f](https://github.com/villadalmine/study-cybercirujas/commit/7f6aa3ffd93ff72c563f05b129d04dfdfc488d2d))
+* **nca-aiio:** 1.3 AI, machine learning and deep learning, English and Spanish ([#292](https://github.com/villadalmine/study-cybercirujas/issues/292)) ([8a8bee9](https://github.com/villadalmine/study-cybercirujas/commit/8a8bee9e85e3b823cc370d834e771527262af4d8))
+* **scripts:** curriculum upgrade switch + versioned milestones for exam-version ([#291](https://github.com/villadalmine/study-cybercirujas/issues/291)) ([#301](https://github.com/villadalmine/study-cybercirujas/issues/301)) ([3eda0dd](https://github.com/villadalmine/study-cybercirujas/commit/3eda0dde8b2dd1e7c8ea138e9213c868a91e5658))
+* **scripts:** fix_citation.py replaces a moved URL in every language without re-translating ([#300](https://github.com/villadalmine/study-cybercirujas/issues/300)) ([6c506fa](https://github.com/villadalmine/study-cybercirujas/commit/6c506fa2163b5daa35fdaadd523d9a7b828d50cb))
+* **scripts:** topic_pr.py puts one generated topic on its own PR branch ([#298](https://github.com/villadalmine/study-cybercirujas/issues/298)) ([905c0d9](https://github.com/villadalmine/study-cybercirujas/commit/905c0d9943da38472a2a5b66cbdd0e0916081a33))
+* **upgrades:** freeze CKS v1.37 and open its upgrade window, with curriculum_diff window ([#290](https://github.com/villadalmine/study-cybercirujas/issues/290)) ([176bafd](https://github.com/villadalmine/study-cybercirujas/commit/176bafdbb27d0986075049d96db338ce8c158a5c))
+* **upgrades:** freeze the CKNE GA curriculum and plan its upgrade from the beta ([#304](https://github.com/villadalmine/study-cybercirujas/issues/304)) ([e2d6c93](https://github.com/villadalmine/study-cybercirujas/commit/e2d6c93d6b1a3c257d073c6f88776911652d03ea))
+
+
+### Bug Fixes
+
+* **generator:** a generated lab honours the study-lab runner's contract ([#299](https://github.com/villadalmine/study-cybercirujas/issues/299)) ([2882d34](https://github.com/villadalmine/study-cybercirujas/commit/2882d34b98b9deb2eaafccc4dc712962d81920ba))
+* **scripts:** close the CKNE switch's hand steps: unpublished citations, revalidation record, superseded notes ([#305](https://github.com/villadalmine/study-cybercirujas/issues/305)) ([4a983f8](https://github.com/villadalmine/study-cybercirujas/commit/4a983f834c9fceef3a0b5812ea85bfd9ae4218ef))
+* **scripts:** switch moves the lab's title with the objective and guard accepts only that line ([#307](https://github.com/villadalmine/study-cybercirujas/issues/307)) ([e89948c](https://github.com/villadalmine/study-cybercirujas/commit/e89948c89657bf581a24bd704a7b324b249ee87e))
+
 ## [0.6.7](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.6...v0.6.7) (2026-11-11)
 
 
