@@ -822,7 +822,22 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
         rows = {t["topic"]: t for t in c["topics"]}
         md = root / (s.get("tracked") or f"certs/{cert}.md")
         post = frontmatter.load(md)
+        same_document = cc.family(url)
+
+        def repin(found: list) -> list:
+            # A link to the same document as the target (another version, or the ref before the pin: `raw/master/
+            # CKS_Curriculum v1.34.pdf`, a 404 once cncf/curriculum renamed it) becomes the pinned target; any other
+            # source (the beta page CKNE was written from) stays cited (#322 review).
+            out = []
+            for u in found:
+                u = url if isinstance(u, str) and cc.family(u) == same_document else u
+                if u not in out:
+                    out.append(u)
+            return out
+
         for topic in post.metadata.get("topics") or []:
+            if topic.get("sources"):
+                topic["sources"] = repin(list(topic["sources"]))
             row = rows.get(str(topic.get("id")))
             new = texts.get(row["maps_to"]) if row else None
             if new and tidy(str(topic.get("title") or "")) != new:
@@ -834,7 +849,7 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
                     files[str(lab.relative_to(root))] = lab_with_title(text, new)
         post.metadata["version"] = version
         post.metadata["snapshot_date"] = str(committed)
-        sources = list(post.metadata.get("sources") or [])
+        sources = repin(list(post.metadata.get("sources") or []))
         post.metadata["sources"] = sources if url in sources else [*sources, url]
         note = superseded_note(version, url, spec_path or "the upgrade spec")
         body = post.content.rstrip("\n")
