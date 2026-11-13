@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# Certificación: CKS (Certified Kubernetes Security Specialist) - examen v1.34
+# Certificación: CKS (Certified Kubernetes Security Specialist) - examen v1.37
 # Tema 2.3: Understand and implement isolation techniques
 #           (multi-tenancy, sandboxed containers, etc.) - peso en el examen: 5%
 # Fuente de referencia:
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Escenario: un tenant (namespace) ejecuta cargas no confiables que deben
 # correr sobre un runtime "sandboxed" (gVisor) en lugar del runtime por

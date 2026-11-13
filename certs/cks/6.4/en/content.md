@@ -1,6 +1,6 @@
 # 6.4 — Ensure immutability of containers at runtime
 
-**Certification:** CKS (Certified Kubernetes Security Specialist), curriculum v1.34
+**Certification:** CKS (Certified Kubernetes Security Specialist), curriculum v1.37
 **Domain:** Monitoring, Logging and Runtime Security · **Weight:** 4
 
 ---
@@ -222,11 +222,11 @@ metadata:
     # Baseline platform posture. Note: `restricted` does NOT imply
     # readOnlyRootFilesystem — that is added by the VAP in section 5.
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/audit-version: v1.34
+    pod-security.kubernetes.io/audit-version: v1.37
     pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/warn-version: v1.34
+    pod-security.kubernetes.io/warn-version: v1.37
     security.example.com/immutability: enforce
 ---
 apiVersion: v1
@@ -1523,7 +1523,7 @@ Six facts that decide the question:
 
 **CNCF / certification**
 
-- CKS Curriculum v1.34 (PDF) — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (PDF) — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF curriculum repository — https://github.com/cncf/curriculum
 - CKS Exam Program — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

@@ -2,8 +2,8 @@
 
 ## Guided Exercises: Permitted Registries, Artifact Signing and Validation
 
-> **Exam domain:** Supply Chain Security (20% of CKS v1.34) — competency *"Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"*
-> **Reference:** [CKS Curriculum v1.34](https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf)
+> **Exam domain:** Supply Chain Security (20% of CKS v1.37) — competency *"Secure your supply chain (permitted registries, sign and validate artifacts, etc.)"*
+> **Reference:** [CKS Curriculum v1.37](https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf)
 
 ---
 
@@ -13,7 +13,7 @@ Every exercise below assumes this environment. Pin these versions — CEL policy
 
 | Component | Version | Notes |
 |---|---|---|
-| Kubernetes | v1.34.x, `kubeadm` | 1 control-plane (`cp01`, `10.0.1.10`), 2 workers (`w01`, `w02`) |
+| Kubernetes | v1.37.x, `kubeadm` | 1 control-plane (`cp01`, `10.0.1.10`), 2 workers (`w01`, `w02`) |
 | Container runtime | containerd 2.0+ | CRI plugin path differs from 1.7 — see Exercise 7 |
 | cosign | v2.4.x | v1 syntax (`COSIGN_EXPERIMENTAL=1`) is gone |
 | Kyverno | v1.14.x | Helm chart `kyverno/kyverno` |
@@ -199,7 +199,7 @@ Expected (abridged):
 ```console
 registry.k8s.io/coredns/coredns:v1.12.1
 registry.k8s.io/etcd:3.6.4-0
-registry.k8s.io/kube-apiserver:v1.34.1
+registry.k8s.io/kube-apiserver:v1.37.2
 docker.io/library/registry:2.8.3
 docker.io/calico/node:v3.29.1
 ```
@@ -280,7 +280,7 @@ Expected:
 
 ## Exercise 2 — Allowlist registries with ValidatingAdmissionPolicy (CEL, in-tree)
 
-This is the modern, dependency-free way to restrict registries: no external webhook, no extra Pod, no availability risk from a third-party controller. It is GA and available in v1.34 as `admissionregistration.k8s.io/v1`.
+This is the modern, dependency-free way to restrict registries: no external webhook, no extra Pod, no availability risk from a third-party controller. It is GA and available in v1.37 as `admissionregistration.k8s.io/v1`.
 
 **Steps**
 
@@ -1665,7 +1665,7 @@ The ordering is the whole answer: **trust the new key everywhere before you sign
 
 ## Official sources
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Admission Controllers Reference — ImagePolicyWebhook* — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#imagepolicywebhook
 - Kubernetes, *Validating Admission Policy* — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - Kubernetes, *Common Expression Language in Kubernetes* — https://kubernetes.io/docs/reference/using-api/cel/

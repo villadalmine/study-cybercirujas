@@ -1,6 +1,6 @@
 # CKS 4.3 — Asegurá tu cadena de suministro
 
-**Certificación:** Certified Kubernetes Security Specialist (CKS), currículum v1.34
+**Certificación:** Certified Kubernetes Security Specialist (CKS), currículum v1.37
 **Dominio:** Supply Chain Security (20 %) · **Peso del sub-tema:** 5
 **Alcance:** registries permitidos, procedencia de imágenes, firma y validación de artefactos (firmas, attestations, SBOMs), enforcement en admission, enforcement a nivel de nodo (containerd).
 
@@ -1157,12 +1157,12 @@ Este es el argumento práctico más fuerte para poner la allowlist de registries
 
 ## 8. Referencias
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Validating Admission Policy — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - CEL en Kubernetes — https://kubernetes.io/docs/reference/using-api/cel/
 - Referencia de Admission Controllers (`ImagePolicyWebhook`, `AlwaysPullImages`) — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 - API `AdmissionConfiguration` (`apiserver.config.k8s.io/v1`) — https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/
-- API `ImageReview` (`imagepolicy.k8s.io/v1alpha1`) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#imagereview-v1alpha1-imagepolicy-k8s-io
+- API `ImageReview` (`imagepolicy.k8s.io/v1alpha1`) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#imagereview-v1alpha1-imagepolicy-k8s-io
 - Imágenes y política de pull de imágenes — https://kubernetes.io/docs/concepts/containers/images/
 - Hacer pull de una imagen desde un registry privado — https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 - Configuración de hosts de registry en containerd (`hosts.toml`) — https://github.com/containerd/containerd/blob/main/docs/hosts.md

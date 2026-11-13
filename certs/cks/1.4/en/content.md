@@ -305,7 +305,7 @@ kubectl -n kube-system get pod kube-apiserver-controlplane -o yaml \
 
 ## References
 
-- CKS Curriculum v1.34 — <https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf>
+- CKS Curriculum v1.37 — <https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf>
 - Network Policies — <https://kubernetes.io/docs/concepts/services-networking/network-policies/>
 - Kubelet authentication and authorization — <https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/>
 - Kubelet configuration (v1beta1) reference — <https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/>

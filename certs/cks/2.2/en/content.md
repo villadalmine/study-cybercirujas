@@ -654,7 +654,7 @@ Also check for secrets leaking through the wrong channels: `command`/`args` in P
 
 ## Referencias
 
-- CKS Curriculum v1.34 (CNCF): https://github.com/cncf/curriculum
+- CKS Curriculum v1.37 (CNCF): https://github.com/cncf/curriculum
 - Secrets (concepts): https://kubernetes.io/docs/concepts/configuration/secret/
 - Good practices for Kubernetes Secrets: https://kubernetes.io/docs/concepts/security/secrets-good-practices/
 - Managing Secrets using kubectl: https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/

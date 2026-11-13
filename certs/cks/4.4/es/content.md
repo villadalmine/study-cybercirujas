@@ -1,6 +1,6 @@
 # CKS 4.4 — Realizar análisis estático de cargas de trabajo de usuario e imágenes de contenedor
 
-**Certificación:** Certified Kubernetes Security Specialist (CKS) — versión de examen 1.34
+**Certificación:** Certified Kubernetes Security Specialist (CKS) — versión de examen 1.37
 **Dominio:** Supply Chain Security (20%) · **Peso del tema:** 5
 **Perfil:** Principal Platform Architect / Senior SRE
 
@@ -190,7 +190,7 @@ Las reglas de seccomp y AppArmor de kubesec coinciden con **anotaciones**:
 - `seccomp.security.alpha.kubernetes.io/pod` — la anotación *alpha*, eliminada de Kubernetes en v1.25.
 - `container.apparmor.security.beta.kubernetes.io/<name>` — la anotación *beta*, obsoleta desde v1.30, cuando `securityContext.appArmorProfile` pasó a beta (GA en v1.31).
 
-Un manifiesto escrito correctamente para Kubernetes 1.34 —
+Un manifiesto escrito correctamente para Kubernetes 1.37 —
 
 ```yaml
 securityContext:
@@ -528,7 +528,7 @@ metadata:
   name: payments
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
     security.cks.local/enforce: "true"
@@ -1382,7 +1382,7 @@ metadata:
   name: platform-security
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1885,7 +1885,7 @@ Cosas que le cuestan tiempo a los candidatos y vale la pena ensayar:
 ## 10. Referencias
 
 **Temario y certificación**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Repositorio de temarios de CNCF — https://github.com/cncf/curriculum
 - Página del examen CKS (Linux Foundation) — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

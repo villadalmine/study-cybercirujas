@@ -9,7 +9,7 @@
 > - Kubernetes Auditing — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 > - Kubernetes Audit Policy reference — https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 
-**Supuestos del laboratorio.** Un clúster kubeadm (v1.34) donde tenés `root` en el nodo del control-plane y en al menos un worker. Falco ≥ 0.38 está instalado en los workers con su ruleset por defecto (`journalctl -u falco -f` muestra eventos). Donde un paso deba correr en un nodo, está marcado `# on node`. Tratá el workload `victim` de abajo como una aplicación en la que un atacante ya obtuvo un punto de apoyo — vos sos quien responde al incidente.
+**Supuestos del laboratorio.** Un clúster kubeadm (v1.37) donde tenés `root` en el nodo del control-plane y en al menos un worker. Falco ≥ 0.38 está instalado en los workers con su ruleset por defecto (`journalctl -u falco -f` muestra eventos). Donde un paso deba correr en un nodo, está marcado `# on node`. Tratá el workload `victim` de abajo como una aplicación en la que un atacante ya obtuvo un punto de apoyo — vos sos quien responde al incidente.
 
 ---
 

@@ -1,6 +1,6 @@
 # CKS 1.3 — Configurar Correctamente Objetos Ingress con TLS
 
-**Dominio:** Cluster Setup · **Peso del examen de esta tarea:** 3 · **Versión del examen:** CKS v1.34
+**Dominio:** Cluster Setup · **Peso del examen de esta tarea:** 3 · **Versión del examen:** CKS v1.37
 
 Estos son ejercicios prácticos guiados. Ejecutá cada paso en un cluster de pruebas (kind, minikube, kubeadm) donde tengas libertad para romper cosas. Cada bloque termina con preguntas de comprensión; todas las respuestas están colapsadas al final.
 
@@ -1034,7 +1034,7 @@ kubectl get secrets -A --field-selector type=kubernetes.io/tls \
 
 ## Fuentes de referencia
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Documentación de Kubernetes, *Ingress* — https://kubernetes.io/docs/concepts/services-networking/ingress/
 - Documentación de Kubernetes, *Ingress Controllers* — https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 - Documentación de Kubernetes, *Secrets — TLS Secrets* — https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets

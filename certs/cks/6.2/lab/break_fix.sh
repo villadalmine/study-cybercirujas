@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
 # ==============================================================================
-#  CKS 1.34 — Domain 6: Monitoring, Logging and Runtime Security
+#  CKS 1.37 — Domain 6: Monitoring, Logging and Runtime Security
 #  Topic 6.2 — Detect threats within physical infrastructure, apps, networks,
 #              data, users and workloads          (exam weight: 4 %)
 #
 #  BREAK & FIX LAB
 #
 #  Reference syllabus:
-#    https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#    https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #  Reference documentation used to build this lab:
 #    https://falco.org/docs/reference/rules/
 #    https://falco.org/docs/reference/daemon/config-options/

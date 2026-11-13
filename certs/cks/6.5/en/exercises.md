@@ -2,7 +2,7 @@
 
 ## Guided Exercises
 
-> **Exam weight:** 4 · **Cluster version:** v1.34 · **Estimated time:** 120–150 min
+> **Exam weight:** 4 · **Cluster version:** v1.37 · **Estimated time:** 120–150 min
 >
 > Audit logging is the only mechanism in Kubernetes that answers *"who did what, to which object, from where, and was it allowed?"* after the fact. RBAC tells you what is *permitted*; the audit log tells you what was *attempted*. In the CKS exam this topic almost always appears as a static-pod edit under time pressure, so every exercise below ends with the same discipline: **change → restart → prove it works → prove you did not break the API server.**
 
@@ -164,7 +164,7 @@ Expected shape (values will differ):
     "groups": ["kubeadm:cluster-admins", "system:authenticated"]
   },
   "sourceIPs": ["192.168.178.20"],
-  "userAgent": "kubectl/v1.34.0 (linux/amd64) kubernetes/f9a2c1e",
+  "userAgent": "kubectl/v1.37.0 (linux/amd64) kubernetes/f9a2c1e",
   "objectRef": {
     "resource": "secrets",
     "namespace": "audit-demo",
@@ -944,7 +944,7 @@ Correlate on the **original** event: find the `delete` on the owner resource whe
 
 All three are fields of the standard kubeconfig schema, which is precisely why the webhook config uses that format. Also note the file must be mounted into the API server container and its private key protected at `0600` root-owned.
 
-**A22.** The `AuditSink` API (`auditregistration.k8s.io/v1alpha1`, "dynamic audit configuration") was deprecated and **removed in Kubernetes 1.19**. It does not exist in v1.34 and is not coming back. Audit policy is control-plane configuration, not cluster data, and it is configured through API server flags and files only — which is a security property, not an oversight: if audit policy were a cluster-scoped API object, anyone with the RBAC to edit it could disable their own logging before acting. Managing the static Pod manifest and policy file with configuration management (or a managed provider's control-plane logging settings) is the supported path.
+**A22.** The `AuditSink` API (`auditregistration.k8s.io/v1alpha1`, "dynamic audit configuration") was deprecated and **removed in Kubernetes 1.19**. It does not exist in v1.37 and is not coming back. Audit policy is control-plane configuration, not cluster data, and it is configured through API server flags and files only — which is a security property, not an oversight: if audit policy were a cluster-scoped API object, anyone with the RBAC to edit it could disable their own logging before acting. Managing the static Pod manifest and policy file with configuration management (or a managed provider's control-plane logging settings) is the supported path.
 
 ### Exercise 6
 
@@ -1078,7 +1078,7 @@ Proof that the drop is live (the third command above): generate the traffic, the
 
 ## References
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes Documentation, *Auditing* — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 - Kubernetes API Reference, *Audit Configuration (`audit.k8s.io/v1`)* — https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 - Kubernetes Documentation, *kube-apiserver command-line reference* — https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/

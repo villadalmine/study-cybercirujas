@@ -1,5 +1,5 @@
 # CKS 4.1 — Minimize Base Image Footprint
-## Guided Exercises (exam v1.34 · Supply Chain Security · weight 5)
+## Guided Exercises (exam v1.37 · Supply Chain Security · weight 5)
 
 > **What you are practising.** Every byte in a container image is either code you run or attack surface you inherit. This lab walks the full reduction path — *fat builder image → slim distro → distroless → scratch* — and forces you to **measure** the result at each step (size, package count, CVE count, presence of a shell), instead of trusting the marketing on a base image's README. You will also break things on purpose: minimal images fail in very specific, very recognisable ways (missing CA bundle, missing `/etc/passwd`, missing `/tmp`, `kubectl exec` returning `exec: "sh": executable file not found`), and recognising those failures instantly is what separates a hardened build from a rolled-back deployment.
 
@@ -8,7 +8,7 @@
 | Tool | Minimum | Check |
 |---|---|---|
 | Docker Engine (BuildKit on by default) | 24.x | `docker version --format '{{.Server.Version}}'` |
-| kubectl | 1.34 | `kubectl version --client` |
+| kubectl | 1.37 | `kubectl version --client` |
 | A cluster (kind / minikube / k3s) | 1.32+ | `kubectl get nodes` |
 | Trivy | 0.58+ | `trivy --version` |
 | Syft | 1.18+ | `syft version` |
@@ -452,7 +452,7 @@ docker run --rm -it gcr.io/distroless/static-debian12:debug-nonroot sh -c 'busyb
 - **Q4.2** Removing `/bin/sh` blocks a specific, very common exploitation step. Name it, and name a class of RCE that removing the shell does **not** block.
 - **Q4.3** `gcr.io/distroless/static-debian12` still carries `/etc/ssl/certs/ca-certificates.crt` and `/etc/passwd`. Why are those two files deliberately kept, when the whole point is minimalism?
 - **Q4.4** What is the operational difference between the `:nonroot` tag and the plain tag, and what happens if you use the plain tag together with a Pod that sets `runAsNonRoot: true` but no `runAsUser`?
-- **Q4.5** `debug-nonroot` ships a BusyBox shell. Explain why shipping that tag to production defeats the exercise, and what the supported alternative is in Kubernetes 1.34.
+- **Q4.5** `debug-nonroot` ships a BusyBox shell. Explain why shipping that tag to production defeats the exercise, and what the supported alternative is in Kubernetes 1.37.
 
 ---
 
@@ -1167,7 +1167,7 @@ or equivalently `docker inspect --format '{{json .Config.Env}}' <image>` after a
 
 ## Sources
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Configure a Security Context for a Pod or Container* — https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 - Kubernetes, *Debug Running Pods (Ephemeral Containers)* — https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/
 - Kubernetes, *Images — image pull policy and digests* — https://kubernetes.io/docs/concepts/containers/images/

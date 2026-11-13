@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  CKS 1.34 — Domain 6: Supply Chain Security
+#  CKS 1.37 — Domain 6: Supply Chain Security
 #  Topic 6.4 — Ensure immutability of containers at runtime   (topic weight: 4)
 #
 #  BREAK & FIX LAB
 #
-#  Reference: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#  Reference: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #             https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 #             https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 #             https://kubernetes.io/docs/concepts/security/pod-security-standards/
@@ -97,7 +97,7 @@ EOF
     exit 1
   fi
 
-  # ValidatingAdmissionPolicy is GA since v1.30 and is what the CKS 1.34 exam
+  # ValidatingAdmissionPolicy is GA since v1.30 and is what the CKS 1.37 exam
   # ships with. Degrade gracefully on older clusters instead of half-breaking.
   if kubectl api-resources --api-group=admissionregistration.k8s.io -o name 2>/dev/null \
        | grep -q '^validatingadmissionpolicies'; then
@@ -855,7 +855,7 @@ main "$@"
 # -----------------------------------------------------------------------------
 # SOURCES
 # -----------------------------------------------------------------------------
-#   CKS Curriculum v1.34 — https://github.com/cncf/curriculum
+#   CKS Curriculum v1.37 — https://github.com/cncf/curriculum
 #   Security context      — https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 #   SecurityContext API   — https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1
 #   Validating admission policy — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/

@@ -1,7 +1,7 @@
 # CKS 4.4 — Guided Exercises: Static Analysis of User Workloads and Container Images
 
 > **Domain:** Supply Chain Security (weight 5) — *Perform static analysis of user workloads and container images (e.g. Kubesec, KubeLinter)*
-> **Exam version:** CKS 1.34
+> **Exam version:** CKS 1.37
 > **Format:** numbered steps you execute, followed by verification questions. All answers are in the collapsible section at the end.
 
 ---
@@ -391,7 +391,7 @@ done
 - **Q2.1** — In step 5c you changed `runAsUser` from `20001` to `999`. The pod still does not run as root. Why did the score drop anyway, and what real-world attack does the `RunAsUser10000` rule (`runAsUser > 10000`) actually mitigate?
 - **Q2.2** — `CapDropAll` and `CapDropAny` are separate rules worth +1 each, yet `drop: ["ALL"]` satisfies both. Construct a `capabilities` block that satisfies `CapDropAny` but **not** `CapDropAll`, and explain when that weaker form is legitimate in production.
 - **Q2.3** — The manifest sets `readOnlyRootFilesystem: true` and then mounts two `emptyDir` volumes. Why is that pairing almost always necessary, and what specific runtime failure do you see if you set the flag without adding the writable mounts?
-- **Q2.4** — The manifest carries **both** `container.apparmor.security.beta.kubernetes.io/api` (annotation) and `securityContext.appArmorProfile` (field). Which one does Kubernetes 1.34 honour, which one does Kubesec's `ApparmorAny` rule look for, and what is the correct engineering response when a scanner rewards a deprecated field?
+- **Q2.4** — The manifest carries **both** `container.apparmor.security.beta.kubernetes.io/api` (annotation) and `securityContext.appArmorProfile` (field). Which one does Kubernetes 1.37 honour, which one does Kubesec's `ApparmorAny` rule look for, and what is the correct engineering response when a scanner rewards a deprecated field?
 - **Q2.5** — The hardened pod scores 18. A second manifest in the same repo scores 22 because it adds an AppArmor annotation and a PVC with `ReadWriteOnce`. Is the 22-point workload more secure? Justify your answer in terms of what the score is and is not.
 - **Q2.6** — `automountServiceAccountToken: false` is arguably the highest-value line in this manifest, yet it earns **zero** Kubesec points. Explain the risk it removes, and state the general principle this illustrates about score-driven security programmes.
 - **Q2.7** — The image reference is pinned by digest (`@sha256:...`) rather than by tag. Kubesec has no rule for this. Which supply-chain attack does the digest pin defeat, and which of the two tools in this exercise *does* flag `:latest`?
@@ -1110,7 +1110,7 @@ Commit this list to memory — it is the difference between a report and an asse
 
 ## Sources
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubesec — https://kubesec.io/ and https://github.com/controlplaneio/kubesec
 - KubeLinter documentation — https://docs.kubelinter.io/
 - KubeLinter checks reference — https://docs.kubelinter.io/#/generated/checks
@@ -1166,9 +1166,9 @@ Commit this list to memory — it is the difference between a report and an asse
 
 **A2.3** — `readOnlyRootFilesystem: true` remounts `/` read-only inside the container. Almost every real process writes *somewhere*: `/tmp`, a cache directory, a PID file, a log spool, a language runtime's scratch space. Without writable `emptyDir` mounts at exactly those paths, the process fails at startup or first write with `EROFS` — typically `open /tmp/xxx: read-only file system`, visible as a `CrashLoopBackOff` with the error in `kubectl logs`. The control is only adoptable if you pair it with an explicit, enumerated set of writable mounts — which is itself valuable, because it forces you to know what your workload writes.
 
-**A2.4** — Kubernetes 1.34 honours **`securityContext.appArmorProfile`** (the field, GA since 1.30); the annotation `container.apparmor.security.beta.kubernetes.io/<c>` is deprecated and slated for removal. Kubesec's `ApparmorAny` rule keys on the **annotation**. The correct response is *not* to add a deprecated annotation to farm points: fix the manifest to the supported field, and fix the *scanner* — upgrade it, open an issue, or add a custom rule/waiver. Writing deprecated API surface into manifests to satisfy a linter is how you accumulate a migration debt that breaks on the next cluster upgrade. This is the canonical example of **scanner lag**, and it is why you never treat a scanner's ruleset as the policy — the policy is the standard; the scanner is one imperfect implementation of it.
+**A2.4** — Kubernetes 1.37 honours **`securityContext.appArmorProfile`** (the field, GA since 1.30); the annotation `container.apparmor.security.beta.kubernetes.io/<c>` is deprecated and slated for removal. Kubesec's `ApparmorAny` rule keys on the **annotation**. The correct response is *not* to add a deprecated annotation to farm points: fix the manifest to the supported field, and fix the *scanner* — upgrade it, open an issue, or add a custom rule/waiver. Writing deprecated API surface into manifests to satisfy a linter is how you accumulate a migration debt that breaks on the next cluster upgrade. This is the canonical example of **scanner lag**, and it is why you never treat a scanner's ruleset as the policy — the policy is the standard; the scanner is one imperfect implementation of it.
 
-**A2.5** — No, not necessarily. The 22-point workload earned +3 for a deprecated AppArmor annotation (which may not even be enforced on a 1.34 cluster) and +2 for PVC properties that are storage-availability concerns, not security controls. Meanwhile it might be missing `automountServiceAccountToken: false` or be pinned to `:latest`. The score is **a sum of matched rules, not a risk measurement**: it has no denominator, no weighting by exploitability, and no awareness of the controls it has no rule for. Comparisons across different workloads are meaningless; only the delta on the *same* workload over time carries signal.
+**A2.5** — No, not necessarily. The 22-point workload earned +3 for a deprecated AppArmor annotation (which may not even be enforced on a 1.37 cluster) and +2 for PVC properties that are storage-availability concerns, not security controls. Meanwhile it might be missing `automountServiceAccountToken: false` or be pinned to `:latest`. The score is **a sum of matched rules, not a risk measurement**: it has no denominator, no weighting by exploitability, and no awareness of the controls it has no rule for. Comparisons across different workloads are meaningless; only the delta on the *same* workload over time carries signal.
 
 **A2.6** — It removes the automatic projection of a ServiceAccount token into `/var/run/secrets/kubernetes.io/serviceaccount/token`. That token is the single most valuable thing an attacker finds after compromising a container: it is a valid credential to the API server, and combined with over-broad RBAC it converts one compromised pod into cluster-wide access. Kubesec awards zero points because it has no rule for it. The principle: **the scanner's ruleset is not the policy**. A programme that only fixes what the scanner flags will systematically miss every control the tool has no rule for, and the ruleset is chosen by tool maintainers, not by your threat model.
 

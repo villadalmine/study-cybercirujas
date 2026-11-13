@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Dominio 4.3: Secure your supply chain
+# CKS v1.37 - Dominio 4.3: Secure your supply chain
 #             (permitted registries, sign and validate artifacts)
 # Peso en el examen: 5
 #
@@ -16,7 +16,7 @@
 #   ./break-fix-4.3-supply-chain.sh clean   # borra todo lo creado por el lab
 #
 # Fuente de referencia (curriculum oficial, usado solo como guia de temario):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 
 set -euo pipefail
 

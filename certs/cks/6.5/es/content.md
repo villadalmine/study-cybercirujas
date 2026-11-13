@@ -1,6 +1,6 @@
 # 6.5 — Usar los Kubernetes Audit Logs para monitorear el acceso
 
-**Certificación:** CKS (Certified Kubernetes Security Specialist) — Versión del examen **1.34**
+**Certificación:** CKS (Certified Kubernetes Security Specialist) — Versión del examen **1.37**
 **Dominio:** Monitoring, Logging and Runtime Security — **peso 4**
 
 ---
@@ -517,7 +517,7 @@ spec:
     - --audit-log-truncate-max-event-size=204800                 # AUDIT: 200 KiB
     - --audit-log-truncate-max-batch-size=10485760               # AUDIT: 10 MiB
     # ─────────────────────────────────────────────────────────────
-    image: registry.k8s.io/kube-apiserver:v1.34.0
+    image: registry.k8s.io/kube-apiserver:v1.37.0
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8
@@ -613,7 +613,7 @@ Editar el static Pod a mano es lo que pide el examen, pero `kubeadm upgrade appl
 ```yaml
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
-kubernetesVersion: v1.34.0
+kubernetesVersion: v1.37.0
 apiServer:
   extraArgs:
     - name: audit-policy-file
@@ -994,7 +994,7 @@ $ sudo grep -F '"subresource":"exec"' /var/log/kubernetes/audit/audit.log | tail
     "10.0.3.44",
     "192.0.2.17"
   ],
-  "userAgent": "kubectl/v1.34.0 (linux/amd64) kubernetes/f3a4c19",
+  "userAgent": "kubectl/v1.37.0 (linux/amd64) kubernetes/f3a4c19",
   "objectRef": {
     "resource": "pods",
     "namespace": "prod",
@@ -1024,7 +1024,7 @@ $ sudo grep -F '"subresource":"exec"' /var/log/kubernetes/audit/audit.log | tail
 | `stage` | `ResponseComplete` acá — la sesión terminó. Si solo ves `ResponseStarted` para un exec, la sesión sigue abierta o el apiserver murió a mitad del stream. |
 | `verb: create` sobre `pods/exec` | `exec` se modela como un **create** sobre un subrecurso, no como un `get`. Las reglas RBAC para exec deben por lo tanto otorgar `create` sobre `pods/exec`. |
 | `sourceIPs` | Un **array**: el último elemento es el peer directo, los anteriores vienen de `X-Forwarded-For`. Dos entradas acá significan que la petición atravesó un proxy/LB — `192.0.2.17` es el cliente real. |
-| `userAgent` | Huella de las herramientas del atacante. `kubectl/v1.20` en un cluster 1.34, o un `Go-http-client/2.0` pelado, merece una alerta. |
+| `userAgent` | Huella de las herramientas del atacante. `kubectl/v1.20` en un cluster 1.37, o un `Go-http-client/2.0` pelado, merece una alerta. |
 | `responseStatus.code: 101` | HTTP 101 Switching Protocols — upgrade SPDY/WebSocket. Normal para exec/attach/portforward. |
 | `annotations["authorization.k8s.io/reason"]` | **El binding exacto que otorgó el acceso.** Esta es la forma más rápida de responder "¿por qué pudieron hacer eso?" sin reproducir RBAC a mano. |
 | `stageTimestamp − requestReceivedTimestamp` | Duración de la sesión: 2,78 s. |
@@ -1040,7 +1040,7 @@ I0806 09:21:07.884261   24118 round_trippers.go:560]     Audit-Id: 4c1e77b2-9a03
 ```bash
 $ sudo jq -c 'select(.auditID=="4c1e77b2-9a03-41d5-bc8e-0f3ab5d21e77")' \
     /var/log/kubernetes/audit/audit.log
-{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"4c1e77b2-9a03-41d5-bc8e-0f3ab5d21e77","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/prod/secrets?limit=500","verb":"list","user":{"username":"alice@example.com","groups":["oidc:sre","system:authenticated"]},"sourceIPs":["10.0.3.44"],"userAgent":"kubectl/v1.34.0 (linux/amd64) kubernetes/f3a4c19","objectRef":{"resource":"secrets","namespace":"prod","apiVersion":"v1"},"responseStatus":{"metadata":{},"code":200},"requestReceivedTimestamp":"2026-08-06T09:21:07.871402Z","stageTimestamp":"2026-08-06T09:21:07.883901Z","annotations":{"authorization.k8s.io/decision":"allow","authorization.k8s.io/reason":"RBAC: allowed by ClusterRoleBinding \"sre-readers\" of ClusterRole \"secret-reader\" to Group \"oidc:sre\""}}
+{"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"4c1e77b2-9a03-41d5-bc8e-0f3ab5d21e77","stage":"ResponseComplete","requestURI":"/api/v1/namespaces/prod/secrets?limit=500","verb":"list","user":{"username":"alice@example.com","groups":["oidc:sre","system:authenticated"]},"sourceIPs":["10.0.3.44"],"userAgent":"kubectl/v1.37.0 (linux/amd64) kubernetes/f3a4c19","objectRef":{"resource":"secrets","namespace":"prod","apiVersion":"v1"},"responseStatus":{"metadata":{},"code":200},"requestReceivedTimestamp":"2026-08-06T09:21:07.871402Z","stageTimestamp":"2026-08-06T09:21:07.883901Z","annotations":{"authorization.k8s.io/decision":"allow","authorization.k8s.io/reason":"RBAC: allowed by ClusterRoleBinding \"sre-readers\" of ClusterRole \"secret-reader\" to Group \"oidc:sre\""}}
 ```
 
 Notá el `level: Metadata` — la regla de Tier 1 impidió que los payloads del Secret se escribieran. Eso es la policy haciendo su trabajo.
@@ -1539,7 +1539,7 @@ $ sudo ls -l /var/log/kubernetes/audit/audit.log
 - Documentación de Kubernetes — *Using RBAC Authorization* (`authorization.k8s.io/decision` y `reason`): https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 - Documentación de Kubernetes — *System Logs and Metrics*: https://kubernetes.io/docs/concepts/cluster-administration/system-metrics/
 - Código fuente de Kubernetes — verificador de audit policy y backends: https://github.com/kubernetes/apiserver/tree/master/pkg/audit
-- CNCF — CKS Curriculum v1.34: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — CKS Curriculum v1.37: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CIS Kubernetes Benchmark: https://www.cisecurity.org/benchmark/kubernetes
 - `kube-bench` (evaluación CIS automatizada): https://github.com/aquasecurity/kube-bench
 - Falco — plugin `k8saudit`: https://github.com/falcosecurity/plugins/tree/master/plugins/k8saudit

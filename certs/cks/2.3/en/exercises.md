@@ -1,4 +1,4 @@
-# CKS v1.34 — Topic 2.3: Understand and Implement Isolation Techniques
+# CKS v1.37 — Topic 2.3: Understand and Implement Isolation Techniques
 
 ## Guided Exercises
 
@@ -28,7 +28,7 @@ By the end of these exercises you will be able to:
 
 | Requirement | Detail |
 |---|---|
-| Cluster | 2 nodes minimum (`controlplane` + `node01`), Kubernetes v1.33/v1.34 |
+| Cluster | 2 nodes minimum (`controlplane` + `node01`), Kubernetes v1.36/v1.37 |
 | CNI | A policy-enforcing CNI (Cilium, Calico, Antrea). `kubectl get pods -n kube-system` should show one of them |
 | Runtime | containerd (v1.7 or v2.x), with root/sudo on `node01` |
 | Tools | `kubectl`, `jq`, `openssl`, `wget`/`curl` on the node |
@@ -61,7 +61,7 @@ A Namespace by itself is a naming boundary, **not** a security boundary. In this
    for ns in tenant-blue tenant-green; do
      kubectl label namespace $ns \
        pod-security.kubernetes.io/enforce=restricted \
-       pod-security.kubernetes.io/enforce-version=v1.34 \
+       pod-security.kubernetes.io/enforce-version=v1.37 \
        pod-security.kubernetes.io/audit=restricted \
        pod-security.kubernetes.io/warn=restricted \
        tenant=$ns --overwrite
@@ -172,7 +172,7 @@ A Namespace by itself is a naming boundary, **not** a security boundary. In this
 
 **Q2.** In step 1 you set `enforce`, `audit` and `warn`. What is the practical difference between `enforce=restricted` and `audit=restricted` when a violating Pod is submitted?
 
-**Q3.** Why does `pod-security.kubernetes.io/enforce-version=v1.34` matter? What breaks if you omit it and later upgrade the cluster?
+**Q3.** Why does `pod-security.kubernetes.io/enforce-version=v1.37` matter? What breaks if you omit it and later upgrade the cluster?
 
 **Q4.** Pod Security Admission ignored the Deployment in a hypothetical `restricted` Namespace but blocked its Pods, leaving `ReplicaSet` events full of failures. Why does PSA behave that way, and where do you look for the error?
 
@@ -966,7 +966,7 @@ This is the core hands-on skill of the topic: swapping the shared host kernel fo
    kubectl delete clusterrolebinding legacy-admin
    kubectl label ns legacy \
      pod-security.kubernetes.io/enforce=baseline \
-     pod-security.kubernetes.io/enforce-version=v1.34 \
+     pod-security.kubernetes.io/enforce-version=v1.37 \
      pod-security.kubernetes.io/warn=restricted --overwrite
    kubectl apply -f - <<'EOF'
    apiVersion: networking.k8s.io/v1
@@ -1020,7 +1020,7 @@ kubectl label node node01 node-restriction.kubernetes.io/tenant- sandbox.example
 
 **Q2.** `enforce` rejects the Pod at admission time; the API request fails and no Pod object is created. `audit` lets the Pod through but records an annotation in the audit log entry. `warn` returns a warning to the client (visible in `kubectl` output) but still admits. Setting all three is standard: enforce the level you can commit to today, and audit/warn at the stricter level you are migrating toward.
 
-**Q3.** The PSA profiles evolve between Kubernetes releases — a new field or a new restriction can be added to `restricted`. Pinning `enforce-version` freezes the semantics to the definition shipped in v1.34, so a cluster upgrade cannot silently start rejecting previously-valid Pods. Omitting it means the label defaults to `latest`, which tracks whatever the running control plane implements and can break workloads on upgrade.
+**Q3.** The PSA profiles evolve between Kubernetes releases — a new field or a new restriction can be added to `restricted`. Pinning `enforce-version` freezes the semantics to the definition shipped in v1.37, so a cluster upgrade cannot silently start rejecting previously-valid Pods. Omitting it means the label defaults to `latest`, which tracks whatever the running control plane implements and can break workloads on upgrade.
 
 **Q4.** PSA is a Pod-level admission controller: it validates Pod objects, not the workload controllers that create them. A Deployment is admitted, its ReplicaSet is admitted, and the failure surfaces only when the ReplicaSet controller tries to create Pods. Look at `kubectl -n <ns> describe replicaset <name>` and `kubectl -n <ns> get events` — the Deployment itself just reports zero available replicas. (PSA does emit a *warning* on the Deployment create, which is why `warn` is worth enabling.)
 
@@ -1126,7 +1126,7 @@ kubectl label node node01 node-restriction.kubernetes.io/tenant- sandbox.example
 
 ## References
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes documentation, *Multi-tenancy* — https://kubernetes.io/docs/concepts/security/multi-tenancy/
 - Kubernetes documentation, *Pod Security Admission* — https://kubernetes.io/docs/concepts/security/pod-security-admission/
 - Kubernetes documentation, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/

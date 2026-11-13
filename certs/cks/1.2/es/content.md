@@ -661,7 +661,7 @@ Usá `etcdctl get /registry/secrets/<ns>/<name> | hexdump -C` y observá el valo
 
 ## Referencias
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CIS Kubernetes Benchmark (descarga gratuita) — https://www.cisecurity.org/benchmark/kubernetes
 - Panorama de los CIS Benchmarks — https://www.cisecurity.org/cis-benchmarks
 - Repositorio de kube-bench — https://github.com/aquasecurity/kube-bench

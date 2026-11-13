@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# CKS 1.34 - Dominio 5 (System Hardening) - Tema 5.3
+# CKS 1.37 - Dominio 5 (System Hardening) - Tema 5.3
 # "Minimize external access to the network"
 # Peso en el examen: 2.5
 #
 # Fuente de referencia (curriculum oficial, no se copia texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Este script es un laboratorio "break & fix". Ejecutalo SOLO en una VM
 # descartable con un cluster de un solo nodo (kind/minikube/k3d) donde

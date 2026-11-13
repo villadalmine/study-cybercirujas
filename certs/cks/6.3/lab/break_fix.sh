@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # ==============================================================================
-#  CKS 1.34 — Domain 6: Monitoring, Logging and Runtime Security
+#  CKS 1.37 — Domain 6: Monitoring, Logging and Runtime Security
 #  Topic 6.3 — Investigate and identify phases of attack and bad actors
 #              within the environment
 # ==============================================================================
@@ -27,8 +27,8 @@
 #  Skip the interactive guard in automation with:  CONFIRM=yes ./break_fix.sh break
 #
 #  References (original summaries only; consult the sources directly):
-#   - CKS Curriculum v1.34
-#       https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   - CKS Curriculum v1.37
+#       https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #   - Kubernetes — Auditing
 #       https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 #   - Kubernetes — Static Pods

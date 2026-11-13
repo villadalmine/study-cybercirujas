@@ -1,6 +1,6 @@
 # CKS 4.3 — Secure your supply chain
 
-**Certification:** Certified Kubernetes Security Specialist (CKS), curriculum v1.34
+**Certification:** Certified Kubernetes Security Specialist (CKS), curriculum v1.37
 **Domain:** Supply Chain Security (20 %) · **Sub-topic weight:** 5
 **Scope:** permitted registries, image provenance, signing and validating artifacts (signatures, attestations, SBOMs), admission-time enforcement, node-level (containerd) enforcement.
 
@@ -1157,12 +1157,12 @@ This is the strongest practical argument for putting the registry allowlist in a
 
 ## 8. References
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Validating Admission Policy — https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 - CEL in Kubernetes — https://kubernetes.io/docs/reference/using-api/cel/
 - Admission Controllers Reference (`ImagePolicyWebhook`, `AlwaysPullImages`) — https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
 - `AdmissionConfiguration` API (`apiserver.config.k8s.io/v1`) — https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/
-- `ImageReview` API (`imagepolicy.k8s.io/v1alpha1`) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#imagereview-v1alpha1-imagepolicy-k8s-io
+- `ImageReview` API (`imagepolicy.k8s.io/v1alpha1`) — https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#imagereview-v1alpha1-imagepolicy-k8s-io
 - Images and image pull policy — https://kubernetes.io/docs/concepts/containers/images/
 - Pull an Image from a Private Registry — https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 - containerd registry host configuration (`hosts.toml`) — https://github.com/containerd/containerd/blob/main/docs/hosts.md

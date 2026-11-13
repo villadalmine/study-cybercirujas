@@ -1,5 +1,5 @@
 # CKS 4.1 — Minimizar la Superficie de la Imagen Base
-## Ejercicios Guiados (examen v1.34 · Supply Chain Security · peso 5)
+## Ejercicios Guiados (examen v1.37 · Supply Chain Security · peso 5)
 
 > **Qué estás practicando.** Cada byte de una imagen de contenedor es o bien código que ejecutás o bien superficie de ataque que heredás. Este laboratorio recorre el camino completo de reducción — *imagen builder gorda → distro slim → distroless → scratch* — y te obliga a **medir** el resultado en cada paso (tamaño, cantidad de paquetes, cantidad de CVEs, presencia de una shell), en lugar de confiar en el marketing del README de una imagen base. También vas a romper cosas a propósito: las imágenes mínimas fallan de maneras muy específicas y muy reconocibles (falta el bundle de CAs, falta `/etc/passwd`, falta `/tmp`, `kubectl exec` devolviendo `exec: "sh": executable file not found`), y reconocer esas fallas al instante es lo que separa un build endurecido de un deployment revertido.
 
@@ -8,7 +8,7 @@
 | Herramienta | Mínimo | Verificación |
 |---|---|---|
 | Docker Engine (BuildKit activado por defecto) | 24.x | `docker version --format '{{.Server.Version}}'` |
-| kubectl | 1.34 | `kubectl version --client` |
+| kubectl | 1.37 | `kubectl version --client` |
 | Un clúster (kind / minikube / k3s) | 1.32+ | `kubectl get nodes` |
 | Trivy | 0.58+ | `trivy --version` |
 | Syft | 1.18+ | `syft version` |
@@ -452,7 +452,7 @@ docker run --rm -it gcr.io/distroless/static-debian12:debug-nonroot sh -c 'busyb
 - **Q4.2** Quitar `/bin/sh` bloquea un paso de explotación específico y muy común. Nombralo, y nombrá una clase de RCE que quitar la shell **no** bloquea.
 - **Q4.3** `gcr.io/distroless/static-debian12` sigue llevando `/etc/ssl/certs/ca-certificates.crt` y `/etc/passwd`. ¿Por qué se mantienen deliberadamente esos dos archivos, si todo el punto es el minimalismo?
 - **Q4.4** ¿Cuál es la diferencia operativa entre el tag `:nonroot` y el tag simple, y qué pasa si usás el tag simple junto con un Pod que fija `runAsNonRoot: true` pero no `runAsUser`?
-- **Q4.5** `debug-nonroot` incluye una shell BusyBox. Explicá por qué enviar ese tag a producción anula el ejercicio, y cuál es la alternativa soportada en Kubernetes 1.34.
+- **Q4.5** `debug-nonroot` incluye una shell BusyBox. Explicá por qué enviar ese tag a producción anula el ejercicio, y cuál es la alternativa soportada en Kubernetes 1.37.
 
 ---
 
@@ -1167,7 +1167,7 @@ o equivalentemente `docker inspect --format '{{json .Config.Env}}' <image>` desp
 
 ## Fuentes
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Configure a Security Context for a Pod or Container* — https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 - Kubernetes, *Debug Running Pods (Ephemeral Containers)* — https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/
 - Kubernetes, *Images — image pull policy and digests* — https://kubernetes.io/docs/concepts/containers/images/

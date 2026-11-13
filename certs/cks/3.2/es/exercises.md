@@ -1,15 +1,15 @@
-# Ejercer precaución en el uso de Service Accounts (CKS 1.34 — Tema 3.2)
+# Ejercer precaución en el uso de Service Accounts (CKS 1.37 — Tema 3.2)
 
 Todo Pod en Kubernetes se autentica contra el API server como una **ServiceAccount** (SA). Si no se hace nada, esa identidad es la SA `default` del namespace y —históricamente— su token se montaba en cada contenedor en `/var/run/secrets/kubernetes.io/serviceaccount/`. Un atacante que logre ejecución de código dentro de un Pod hereda de inmediato esa identidad y todos los permisos RBAC asociados a ella. Este módulo recorre el endurecimiento de la superficie de ataque de las ServiceAccounts: deshabilitar el montaje automático de tokens, entender los tokens acotados (proyectados) frente a los tokens legacy basados en Secret, y construir SAs de mínimo privilegio.
 
 > **Fuentes de referencia**
-> - CKS Curriculum v1.34 — <https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf>
+> - CKS Curriculum v1.37 — <https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf>
 > - Configure Service Accounts for Pods — <https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/>
 > - Managing Service Accounts — <https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/>
 > - Bound Service Account Tokens / TokenRequest — <https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#bound-service-account-token-volume>
 > - Using RBAC Authorization — <https://kubernetes.io/docs/reference/access-authn-authz/rbac/>
 
-Se asume un clúster con Kubernetes **1.34** y una shell con cluster-admin. Todos los comandos son ejecutables por copiar y pegar.
+Se asume un clúster con Kubernetes **1.37** y una shell con cluster-admin. Todos los comandos son ejecutables por copiar y pegar.
 
 ---
 
@@ -314,7 +314,7 @@ Se asume un clúster con Kubernetes **1.34** y una shell con cluster-admin. Todo
      automountServiceAccountToken: true
      containers:
        - name: kubectl
-         image: bitnami/kubectl:1.34
+         image: bitnami/kubectl:1.37
          command: ["sleep", "3600"]
    ```
 

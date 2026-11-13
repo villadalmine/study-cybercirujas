@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# CKS 1.34 - Dominio 4.4: Perform static analysis of user workloads and container images
+# CKS 1.37 - Dominio 4.4: Perform static analysis of user workloads and container images
 #            (e.g. Kubesec, KubeLinter) - peso en el examen: 5
 #
 # Fuentes de referencia:
-#   - CNCF CKS Curriculum v1.34: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   - CNCF CKS Curriculum v1.37: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #   - KubeLinter docs:            https://docs.kubelinter.io/
 #   - KubeLinter repo (releases): https://github.com/stackrox/kube-linter
 #   - Kubesec:                    https://kubesec.io/

@@ -1,6 +1,6 @@
 # 5.4 — Appropriately use kernel hardening tools such as AppArmor, seccomp
 
-> **CKS v1.34 · Domain 5: Microservice Vulnerability Minimization · Weight 2.5**
+> **CKS v1.37 · Domain 5: Microservice Vulnerability Minimization · Weight 2.5**
 
 ---
 
@@ -564,7 +564,7 @@ metadata:
   name: prod
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
 ```
@@ -1193,7 +1193,7 @@ Rule of thumb: never regenerate a profile from a trace shorter than the workload
 
 ## 8. References
 
-* CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+* CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 * Kubernetes — Restrict a Container's Syscalls with seccomp — https://kubernetes.io/docs/tutorials/security/seccomp/
 * Kubernetes — Restrict a Container's Access to Resources with AppArmor — https://kubernetes.io/docs/tutorials/security/apparmor/
 * Kubernetes — Security Context / `SecurityContext` API reference — https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context

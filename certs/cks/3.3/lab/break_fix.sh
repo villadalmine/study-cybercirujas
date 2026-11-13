@@ -2,12 +2,12 @@
 set -euo pipefail
 
 # ==========================================================================
-# CKS v1.34 - Cluster Setup & Hardening
+# CKS v1.37 - Cluster Setup & Hardening
 # Tema 3.3: Restrict access to Kubernetes API (peso examen: 3.75%)
 #
 # Fuentes de referencia (consultar para profundizar, no se copia texto
 # literal de ninguna de ellas):
-#   - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   - https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #   - https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 #   - https://kubernetes.io/docs/reference/access-authn-authz/authentication/#anonymous-requests
 #

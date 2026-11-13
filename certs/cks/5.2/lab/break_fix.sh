@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  CKS 1.34 — Domain 5: Microservice Vulnerabilities
+#  CKS 1.37 — Domain 5: Microservice Vulnerabilities
 #  Topic 5.2 — Using least-privilege identity and access management
 #  Exam weight: 2.5
 #
@@ -21,8 +21,8 @@
 #      minimum, plus the anonymous-access blind spot.
 #
 #  Authoritative references:
-#    - CKS curriculum v1.34
-#      https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#    - CKS curriculum v1.37
+#      https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #    - RBAC authorization
 #      https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 #    - RBAC good practices

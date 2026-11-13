@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# CKS 1.34 - Tema 1.2: Use CIS benchmark to review the security configuration
+# CKS 1.37 - Tema 1.2: Use CIS benchmark to review the security configuration
 # of Kubernetes components (etcd, kubelet, kube-dns/coredns, kube-apiserver)
 # Peso en el examen: 3
 #
 # Fuentes:
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #   https://www.cisecurity.org/benchmark/kubernetes
 #
 # Qué hace este script:

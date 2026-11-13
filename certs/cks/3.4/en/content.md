@@ -1,6 +1,6 @@
 # 3.4 — Upgrade Kubernetes to Avoid Vulnerabilities
 
-> **CKS v1.34 · Domain 3: Cluster Hardening · Weight 3.75%**
+> **CKS v1.37 · Domain 3: Cluster Hardening · Weight 3.75%**
 > Audience: Platform Architects and SREs operating self-managed Kubernetes at production scale.
 
 ---
@@ -28,7 +28,7 @@ The single most common misconception at CKS level is that "patch the cluster" is
 | **Design-level weakness with no code fix** | CVE-2020-8554 — any user who can create a Service may claim an arbitrary `externalIPs` / LoadBalancer status IP and MITM cluster egress to that IP | ❌ **No** | Admission control (ValidatingAdmissionPolicy / Kyverno / OPA) restricting `spec.externalIPs`; RBAC on Service creation |
 | **Ecosystem component outside the k8s repo** | CVE-2025-1974 ("IngressNightmare") — unauthenticated RCE in the `ingress-nginx` admission controller, CVSS 9.8; runc CVE-2024-21626 ("Leaky Vessels") file-descriptor leak → container escape; CVE-2019-5736 runc host `/proc/self/exe` overwrite | ❌ **No** — a `kubeadm upgrade` does not touch them | Separate patch pipelines for CNI, ingress, CSI, runtime, kernel |
 
-Design the upgrade program around this table. A "we are on the latest patch of 1.34" dashboard that is green while `ingress-nginx`, `containerd`, `runc`, and the host kernel are unmanaged is *security theatre*.
+Design the upgrade program around this table. A "we are on the latest patch of 1.37" dashboard that is green while `ingress-nginx`, `containerd`, `runc`, and the host kernel are unmanaged is *security theatre*.
 
 ### 1.3 The real production constraint: MTTR of a CVE
 
@@ -88,7 +88,7 @@ metadata:
   name: platform-security
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
 ---
@@ -215,7 +215,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: watch
-              image: alpine/k8s:1.34.1
+              image: alpine/k8s:1.37.2
               command: ["/bin/sh", "/scripts/cve-watch.sh"]
               env:
                 - name: CLUSTER_NAME
@@ -276,7 +276,7 @@ Encode this as policy, not sentiment. The number that matters on the platform sc
 
 Kubernetes is upgraded *in place, component by component*, which means a cluster is intentionally heterogeneous mid-upgrade. The **version skew policy** defines exactly how heterogeneous it is allowed to be. Violating it produces undefined behaviour, not a clean error — this is a high-yield exam and production topic.
 
-### 3.1 The skew matrix (Kubernetes 1.34)
+### 3.1 The skew matrix (Kubernetes 1.37)
 
 | Component | May be **newer** than `kube-apiserver`? | Maximum lag behind `kube-apiserver` | Extra constraints |
 |---|---|---|---|
@@ -401,11 +401,11 @@ This finds *runtime* callers — including controllers and CI jobs — that a st
 Complement it with static scanning of your Git manifests and installed Helm releases:
 
 ```
-$ kubent --cluster --helm3 --target-version 1.34.0
+$ kubent --cluster --helm3 --target-version 1.37.0
 6:12PM INF >>> Kube No Trouble `kubent` <<<
 6:12PM INF version 0.7.3 (git sha b2b2b2b)
 6:12PM INF Initializing collectors and retrieving data
-6:12PM INF Target K8s version is 1.34.0
+6:12PM INF Target K8s version is 1.37.0
 6:12PM INF Retrieved 412 resources from collector name=Cluster
 6:12PM INF Retrieved 37 resources from collector name=Helm v3
 __________________________________________________________________________________________
@@ -449,9 +449,9 @@ $ kube-apiserver --help | grep -A2 'feature-gates'
 Kubernetes has been adding **compatibility (emulated) versions** (KEP-4330) precisely to decouple "run the new binary" from "adopt the new behaviour". With `--emulated-version`, a newly-installed `kube-apiserver` binary can present the API surface and defaults of the *previous* minor, so you can install a security-patched binary immediately and enable the new behaviour later as a separate, independently revertible change:
 
 ```
-# Install the 1.34 binary but keep 1.33 API behaviour, then flip the emulation
+# Install the 1.37 binary but keep 1.36 API behaviour, then flip the emulation
 # forward once workloads are validated.
---emulated-version=1.33
+--emulated-version=1.36
 ```
 
 This is a materially better security posture: **binary patching stops being coupled to behavioural risk.** Feature-gate maturity for this capability varies by release — confirm availability and syntax for your exact version against the KEP and component reference (<https://github.com/kubernetes/enhancements/issues/4330>) before relying on it in production.
@@ -482,7 +482,7 @@ An upgrade is the moment you deliberately execute new privileged binaries on eve
 Kubernetes publishes SHA-256 digests for every release binary and signs release artifacts with **Sigstore/cosign** using keyless (Fulcio/Rekor) signing.
 
 ```
-$ VERSION=v1.34.1
+$ VERSION=v1.37.2
 $ ARCH=linux/amd64
 $ curl -fsSLO "https://dl.k8s.io/release/${VERSION}/bin/${ARCH}/kubectl"
 $ curl -fsSLO "https://dl.k8s.io/release/${VERSION}/bin/${ARCH}/kubectl.sha256"
@@ -506,7 +506,7 @@ Verified OK
 Container images are signed the same way:
 
 ```
-$ cosign verify registry.k8s.io/kube-apiserver:v1.34.1 \
+$ cosign verify registry.k8s.io/kube-apiserver:v1.37.2 \
     --certificate-identity krel-trust@k8s-releng-prod.iam.gserviceaccount.com \
     --certificate-oidc-issuer https://accounts.google.com \
   | jq '.[0].optional.Bundle.Payload.body' -r | head -c 80
@@ -519,7 +519,7 @@ For package-based installs, the community repositories at `pkgs.k8s.io` are GPG-
 
 ---
 
-## 7. The Full `kubeadm` Upgrade Runbook (v1.33.4 → v1.34.1)
+## 7. The Full `kubeadm` Upgrade Runbook (v1.36.4 → v1.37.2)
 
 Reference topology: three control-plane nodes (`cp-1`, `cp-2`, `cp-3`) with stacked etcd, and worker nodes (`w-1` … `w-n`). Debian/Ubuntu with the community `pkgs.k8s.io` repository.
 
@@ -528,16 +528,16 @@ Reference topology: three control-plane nodes (`cp-1`, `cp-2`, `cp-3`) with stac
 ```
 $ kubectl get nodes -o wide
 NAME   STATUS   ROLES           AGE    VERSION   INTERNAL-IP     OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-cp-1   Ready    control-plane   214d   v1.33.4   10.20.0.11      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
-cp-2   Ready    control-plane   214d   v1.33.4   10.20.0.12      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
-cp-3   Ready    control-plane   214d   v1.33.4   10.20.0.13      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
-w-1    Ready    <none>          214d   v1.33.4   10.20.0.21      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
-w-2    Ready    <none>          214d   v1.33.4   10.20.0.22      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
+cp-1   Ready    control-plane   214d   v1.36.4   10.20.0.11      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
+cp-2   Ready    control-plane   214d   v1.36.4   10.20.0.12      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
+cp-3   Ready    control-plane   214d   v1.36.4   10.20.0.13      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
+w-1    Ready    <none>          214d   v1.36.4   10.20.0.21      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
+w-2    Ready    <none>          214d   v1.36.4   10.20.0.22      Ubuntu 24.04.2 LTS   6.8.0-52-generic    containerd://2.0.4
 
 $ kubectl version
-Client Version: v1.33.4
+Client Version: v1.36.4
 Kustomize Version: v5.6.0
-Server Version: v1.34.0
+Server Version: v1.37.0
 ```
 
 Confirm control-plane health *before* touching anything:
@@ -577,13 +577,13 @@ $ sudo ETCDCTL_API=3 etcdctl \
     --cacert=/etc/kubernetes/pki/etcd/ca.crt \
     --cert=/etc/kubernetes/pki/etcd/server.crt \
     --key=/etc/kubernetes/pki/etcd/server.key \
-    snapshot save /var/backups/etcd-pre-1.34.1.db
-{"level":"info","ts":"2026-03-11T09:04:12.118Z","caller":"snapshot/v3_snapshot.go:65","msg":"created temporary db file","path":"/var/backups/etcd-pre-1.34.1.db.part"}
+    snapshot save /var/backups/etcd-pre-1.37.2.db
+{"level":"info","ts":"2026-03-11T09:04:12.118Z","caller":"snapshot/v3_snapshot.go:65","msg":"created temporary db file","path":"/var/backups/etcd-pre-1.37.2.db.part"}
 {"level":"info","ts":"2026-03-11T09:04:12.140Z","caller":"snapshot/v3_snapshot.go:73","msg":"fetching snapshot","endpoint":"https://127.0.0.1:2379"}
 {"level":"info","ts":"2026-03-11T09:04:13.902Z","caller":"snapshot/v3_snapshot.go:88","msg":"fetched snapshot","endpoint":"https://127.0.0.1:2379","size":"148 MB","took":"1.783 seconds"}
-Snapshot saved at /var/backups/etcd-pre-1.34.1.db
+Snapshot saved at /var/backups/etcd-pre-1.37.2.db
 
-$ sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status /var/backups/etcd-pre-1.34.1.db
+$ sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status /var/backups/etcd-pre-1.37.2.db
 +----------+----------+------------+------------+
 |   HASH   | REVISION | TOTAL KEYS | TOTAL SIZE |
 +----------+----------+------------+------------+
@@ -594,11 +594,11 @@ $ sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status /var/backups/etcd
 Also back up the control-plane configuration and PKI on every CP node:
 
 ```
-$ sudo tar czf /var/backups/k8s-etc-pre-1.34.1-$(hostname).tgz \
+$ sudo tar czf /var/backups/k8s-etc-pre-1.37.2-$(hostname).tgz \
     /etc/kubernetes /var/lib/kubelet/config.yaml
 $ sudo ls -lh /var/backups/
--rw-r--r-- 1 root root 148M Mar 11 09:04 etcd-pre-1.34.1.db
--rw-r--r-- 1 root root  84K Mar 11 09:05 k8s-etc-pre-1.34.1-cp-1.tgz
+-rw-r--r-- 1 root root 148M Mar 11 09:04 etcd-pre-1.37.2.db
+-rw-r--r-- 1 root root  84K Mar 11 09:05 k8s-etc-pre-1.37.2-cp-1.tgz
 ```
 
 Copy both off-node. A backup that lives only on the machine you are about to break is not a backup.
@@ -634,26 +634,26 @@ front-proxy-ca          Feb 20, 2035 08:14 UTC   8y              no
 
 ### 7.3 Upgrade `kubeadm` on the first control-plane node
 
-Point the package repository at the new minor. This is the step most often forgotten — the repo is versioned per minor, so without editing it `apt` will only ever offer 1.33 patches.
+Point the package repository at the new minor. This is the step most often forgotten — the repo is versioned per minor, so without editing it `apt` will only ever offer 1.36 patches.
 
 ```
 $ cat /etc/apt/sources.list.d/kubernetes.list
-deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /
 
-$ sudo sed -i 's|/core:/stable:/v1\.33/|/core:/stable:/v1.34/|' /etc/apt/sources.list.d/kubernetes.list
+$ sudo sed -i 's|/core:/stable:/v1\.36/|/core:/stable:/v1.37/|' /etc/apt/sources.list.d/kubernetes.list
 
-$ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key \
+$ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key \
     | sudo gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 $ sudo apt-get update
-Get:1 https://pkgs.k8s.io/core:/stable:/v1.34/deb  InRelease [1186 B]
-Get:2 https://pkgs.k8s.io/core:/stable:/v1.34/deb  Packages [6082 B]
+Get:1 https://pkgs.k8s.io/core:/stable:/v1.37/deb  InRelease [1186 B]
+Get:2 https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages [6082 B]
 Fetched 7268 B in 1s (7104 B/s)
 Reading package lists... Done
 
 $ apt-cache madison kubeadm | head -5
-   kubeadm | 1.34.1-1.1 | https://pkgs.k8s.io/core:/stable:/v1.34/deb  Packages
-   kubeadm | 1.34.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.34/deb  Packages
+   kubeadm | 1.37.2-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
+   kubeadm | 1.37.0-1.1 | https://pkgs.k8s.io/core:/stable:/v1.37/deb  Packages
 ```
 
 Install exactly the target version and re-apply the hold (the hold prevents an unrelated `apt upgrade` from silently violating skew):
@@ -661,17 +661,17 @@ Install exactly the target version and re-apply the hold (the hold prevents an u
 ```
 $ sudo apt-mark unhold kubeadm
 Canceled hold on kubeadm.
-$ sudo apt-get install -y kubeadm=1.34.1-1.1
+$ sudo apt-get install -y kubeadm=1.37.2-1.1
 Reading package lists... Done
 The following packages will be upgraded:
   kubeadm
 1 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Setting up kubeadm (1.34.1-1.1) ...
+Setting up kubeadm (1.37.2-1.1) ...
 $ sudo apt-mark hold kubeadm
 kubeadm set on hold.
 
 $ kubeadm version
-kubeadm version: &version.Info{Major:"1", Minor:"34", GitVersion:"v1.34.1", GitCommit:"3c4e4c9c1b3d5f4b2a1e0d9c8b7a6f5e4d3c2b1a", GitTreeState:"clean", BuildDate:"2026-02-18T10:22:41Z", GoVersion:"go1.24.6", Compiler:"gc", Platform:"linux/amd64"}
+kubeadm version: &version.Info{Major:"1", Minor:"37", GitVersion:"v1.37.2", GitCommit:"3c4e4c9c1b3d5f4b2a1e0d9c8b7a6f5e4d3c2b1a", GitTreeState:"clean", BuildDate:"2026-02-18T10:22:41Z", GoVersion:"go1.24.6", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
 ### 7.4 Plan the upgrade
@@ -682,39 +682,39 @@ $ sudo kubeadm upgrade plan
 [upgrade/config] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
 [upgrade] Running cluster health checks
 [upgrade] Fetching available versions to upgrade to
-[upgrade/versions] Cluster version: 1.33.4
-[upgrade/versions] kubeadm version: v1.34.1
-I0311 09:11:44.882014   18422 version.go:261] remote version is much newer: v1.34.1; falling back to: stable-1.34
-[upgrade/versions] Target version: v1.34.1
-[upgrade/versions] Latest version in the v1.33 series: v1.33.6
+[upgrade/versions] Cluster version: 1.36.4
+[upgrade/versions] kubeadm version: v1.37.2
+I0311 09:11:44.882014   18422 version.go:261] remote version is much newer: v1.37.2; falling back to: stable-1.37
+[upgrade/versions] Target version: v1.37.2
+[upgrade/versions] Latest version in the v1.36 series: v1.36.6
 
 Components that must be upgraded manually after you have upgraded the control plane with 'kubeadm upgrade apply':
 COMPONENT   NODE   CURRENT   TARGET
-kubelet     cp-1   v1.33.4   v1.34.1
-kubelet     cp-2   v1.33.4   v1.34.1
-kubelet     cp-3   v1.33.4   v1.34.1
-kubelet     w-1    v1.33.4   v1.34.1
-kubelet     w-2    v1.33.4   v1.34.1
+kubelet     cp-1   v1.36.4   v1.37.2
+kubelet     cp-2   v1.36.4   v1.37.2
+kubelet     cp-3   v1.36.4   v1.37.2
+kubelet     w-1    v1.36.4   v1.37.2
+kubelet     w-2    v1.36.4   v1.37.2
 
 Upgrade to the latest stable version:
 
 COMPONENT                 NODE   CURRENT    TARGET
-kube-apiserver            cp-1   v1.33.4    v1.34.1
-kube-apiserver            cp-2   v1.33.4    v1.34.1
-kube-apiserver            cp-3   v1.33.4    v1.34.1
-kube-controller-manager   cp-1   v1.33.4    v1.34.1
-kube-controller-manager   cp-2   v1.33.4    v1.34.1
-kube-controller-manager   cp-3   v1.33.4    v1.34.1
-kube-scheduler            cp-1   v1.33.4    v1.34.1
-kube-scheduler            cp-2   v1.33.4    v1.34.1
-kube-scheduler            cp-3   v1.33.4    v1.34.1
+kube-apiserver            cp-1   v1.36.4    v1.37.2
+kube-apiserver            cp-2   v1.36.4    v1.37.2
+kube-apiserver            cp-3   v1.36.4    v1.37.2
+kube-controller-manager   cp-1   v1.36.4    v1.37.2
+kube-controller-manager   cp-2   v1.36.4    v1.37.2
+kube-controller-manager   cp-3   v1.36.4    v1.37.2
+kube-scheduler            cp-1   v1.36.4    v1.37.2
+kube-scheduler            cp-2   v1.36.4    v1.37.2
+kube-scheduler            cp-3   v1.36.4    v1.37.2
 etcd                      cp-1   3.5.21-0   3.6.4-0
 etcd                      cp-2   3.5.21-0   3.6.4-0
 etcd                      cp-3   3.5.21-0   3.6.4-0
 
 You can now apply the upgrade by executing the following command:
 
-	kubeadm upgrade apply v1.34.1
+	kubeadm upgrade apply v1.37.2
 
 _____________________________________________________________________
 
@@ -732,7 +732,7 @@ _____________________________________________________________________
 Preview the exact changes to the static pod manifests before committing — this is the single most underused safety check in the whole runbook:
 
 ```
-$ sudo kubeadm upgrade diff v1.34.1 --context-lines 3
+$ sudo kubeadm upgrade diff v1.37.2 --context-lines 3
 [upgrade/diff] Reading configuration from the cluster...
 --- /etc/kubernetes/manifests/kube-apiserver.yaml
 +++ new manifest
@@ -740,8 +740,8 @@ $ sudo kubeadm upgrade diff v1.34.1 --context-lines 3
      - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key
      - --service-cluster-ip-range=10.96.0.0/12
      - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
--    image: registry.k8s.io/kube-apiserver:v1.33.4
-+    image: registry.k8s.io/kube-apiserver:v1.34.1
+-    image: registry.k8s.io/kube-apiserver:v1.36.4
++    image: registry.k8s.io/kube-apiserver:v1.37.2
      imagePullPolicy: IfNotPresent
      livenessProbe:
        failureThreshold: 8
@@ -750,20 +750,20 @@ $ sudo kubeadm upgrade diff v1.34.1 --context-lines 3
 Pre-pull images so the control plane is not offline waiting on a registry (mandatory in air-gapped environments):
 
 ```
-$ sudo kubeadm config images list --kubernetes-version v1.34.1
-registry.k8s.io/kube-apiserver:v1.34.1
-registry.k8s.io/kube-controller-manager:v1.34.1
-registry.k8s.io/kube-scheduler:v1.34.1
-registry.k8s.io/kube-proxy:v1.34.1
+$ sudo kubeadm config images list --kubernetes-version v1.37.2
+registry.k8s.io/kube-apiserver:v1.37.2
+registry.k8s.io/kube-controller-manager:v1.37.2
+registry.k8s.io/kube-scheduler:v1.37.2
+registry.k8s.io/kube-proxy:v1.37.2
 registry.k8s.io/coredns/coredns:v1.12.1
 registry.k8s.io/pause:3.10
 registry.k8s.io/etcd:3.6.4-0
 
-$ sudo kubeadm config images pull --kubernetes-version v1.34.1
-[config/images] Pulled registry.k8s.io/kube-apiserver:v1.34.1
-[config/images] Pulled registry.k8s.io/kube-controller-manager:v1.34.1
-[config/images] Pulled registry.k8s.io/kube-scheduler:v1.34.1
-[config/images] Pulled registry.k8s.io/kube-proxy:v1.34.1
+$ sudo kubeadm config images pull --kubernetes-version v1.37.2
+[config/images] Pulled registry.k8s.io/kube-apiserver:v1.37.2
+[config/images] Pulled registry.k8s.io/kube-controller-manager:v1.37.2
+[config/images] Pulled registry.k8s.io/kube-scheduler:v1.37.2
+[config/images] Pulled registry.k8s.io/kube-proxy:v1.37.2
 [config/images] Pulled registry.k8s.io/coredns/coredns:v1.12.1
 [config/images] Pulled registry.k8s.io/pause:3.10
 [config/images] Pulled registry.k8s.io/etcd:3.6.4-0
@@ -772,17 +772,17 @@ $ sudo kubeadm config images pull --kubernetes-version v1.34.1
 ### 7.5 Apply on the first control-plane node
 
 ```
-$ sudo kubeadm upgrade apply v1.34.1
+$ sudo kubeadm upgrade apply v1.37.2
 [upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
 [preflight] Running preflight checks.
 [upgrade] Running cluster health checks
-[upgrade/version] You have chosen to change the cluster version to "v1.34.1"
-[upgrade/versions] Cluster version: v1.33.4
-[upgrade/versions] kubeadm version: v1.34.1
+[upgrade/version] You have chosen to change the cluster version to "v1.37.2"
+[upgrade/versions] Cluster version: v1.36.4
+[upgrade/versions] kubeadm version: v1.37.2
 [upgrade] Are you sure you want to proceed? [y/N]: y
 [upgrade/prepull] Pulling images required for setting up a Kubernetes cluster
 [upgrade/prepull] This might take a minute or two, depending on the speed of your internet connection
-[upgrade/apply] Upgrading your Static Pod-hosted control plane instance to version "v1.34.1"
+[upgrade/apply] Upgrading your Static Pod-hosted control plane instance to version "v1.37.2"
 [upgrade/etcd] Upgrading to TLS for etcd
 [upgrade/staticpods] Preparing for "etcd" upgrade
 [upgrade/staticpods] Renewing etcd-server certificate
@@ -819,7 +819,7 @@ $ sudo kubeadm upgrade apply v1.34.1
 [addons] Applied essential addon: CoreDNS
 [addons] Applied essential addon: kube-proxy
 
-[upgrade] SUCCESS! Your cluster was upgraded to "v1.34.1". Enjoy!
+[upgrade] SUCCESS! Your cluster was upgraded to "v1.37.2". Enjoy!
 
 [upgrade] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven't already done so.
 ```
@@ -839,7 +839,7 @@ apiVersion: kubeadm.k8s.io/v1beta4
 kind: UpgradeConfiguration
 apply:
   # Target version. Must be exactly one minor above the current cluster version.
-  kubernetesVersion: v1.34.1
+  kubernetesVersion: v1.37.2
   # Renew all control-plane certificates as part of the upgrade.
   certificateRenewal: true
   # Upgrade the stacked etcd static pod alongside the control plane.
@@ -866,7 +866,7 @@ plan: {}
 ---
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
-kubernetesVersion: v1.34.1
+kubernetesVersion: v1.37.2
 clusterName: prod-eu-west-1
 controlPlaneEndpoint: "k8s-api.internal.example.com:6443"
 certificatesDir: /etc/kubernetes/pki
@@ -981,7 +981,7 @@ pod/coredns-668d6bf9bc-4h2xq evicted
 node/cp-1 drained
 
 $ sudo apt-mark unhold kubelet kubectl
-$ sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+$ sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 $ sudo apt-mark hold kubelet kubectl
 
 $ sudo systemctl daemon-reload
@@ -998,7 +998,7 @@ Verify before moving on:
 
 ```
 $ kubectl get node cp-1 -o jsonpath='{.status.nodeInfo.kubeletVersion}{"\n"}'
-v1.34.1
+v1.37.2
 ```
 
 ### 7.8 Remaining control-plane nodes
@@ -1006,15 +1006,15 @@ v1.34.1
 On `cp-2` and `cp-3`, the command is `kubeadm upgrade node` — **not** `apply`. `apply` is a one-time, cluster-wide operation performed on the first control-plane node only.
 
 ```
-$ sudo sed -i 's|/core:/stable:/v1\.33/|/core:/stable:/v1.34/|' /etc/apt/sources.list.d/kubernetes.list
-$ sudo apt-get update && sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.34.1-1.1 && sudo apt-mark hold kubeadm
+$ sudo sed -i 's|/core:/stable:/v1\.36/|/core:/stable:/v1.37/|' /etc/apt/sources.list.d/kubernetes.list
+$ sudo apt-get update && sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.37.2-1.1 && sudo apt-mark hold kubeadm
 
 $ sudo kubeadm upgrade node
 [upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
 [preflight] Running pre-flight checks
 [preflight] Skipping prepull. Not a control plane node.
 [upgrade] Skipping prepull. Not a control plane node.
-[upgrade] Upgrading your Static Pod-hosted control plane instance to version "v1.34.1"
+[upgrade] Upgrading your Static Pod-hosted control plane instance to version "v1.37.2"
 [upgrade/staticpods] Preparing for "etcd" upgrade
 [upgrade/staticpods] Renewing etcd-server certificate
 [upgrade/staticpods] Moved new manifest to "/etc/kubernetes/manifests/etcd.yaml" and backed up old manifest to "/etc/kubernetes/tmp/kubeadm-backup-manifests-2026-03-11-09-31-40/etcd.yaml"
@@ -1068,9 +1068,9 @@ pod/ledger-6b7c8d9e01-p9m3s evicted
 node/w-1 drained
 
 # On the node
-$ sudo sed -i 's|/core:/stable:/v1\.33/|/core:/stable:/v1.34/|' /etc/apt/sources.list.d/kubernetes.list
+$ sudo sed -i 's|/core:/stable:/v1\.36/|/core:/stable:/v1.37/|' /etc/apt/sources.list.d/kubernetes.list
 $ sudo apt-get update
-$ sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.34.1-1.1 && sudo apt-mark hold kubeadm
+$ sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=1.37.2-1.1 && sudo apt-mark hold kubeadm
 
 $ sudo kubeadm upgrade node
 [upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
@@ -1083,7 +1083,7 @@ $ sudo kubeadm upgrade node
 [upgrade] Now you should go ahead and upgrade the kubelet package using your package manager.
 
 $ sudo apt-mark unhold kubelet kubectl
-$ sudo apt-get install -y kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+$ sudo apt-get install -y kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 $ sudo apt-mark hold kubelet kubectl
 $ sudo systemctl daemon-reload && sudo systemctl restart kubelet
 
@@ -1149,16 +1149,16 @@ Any row with `ALLOWED: 0` is a landmine. Fix it (scale up, or relax the budget) 
 $ kubectl get nodes -o custom-columns=\
 NAME:.metadata.name,STATUS:.status.conditions[-1].type,KUBELET:.status.nodeInfo.kubeletVersion,PROXY:.status.nodeInfo.kubeProxyVersion,RUNTIME:.status.nodeInfo.containerRuntimeVersion,KERNEL:.status.nodeInfo.kernelVersion
 NAME   STATUS   KUBELET   PROXY     RUNTIME               KERNEL
-cp-1   Ready    v1.34.1   v1.34.1   containerd://2.0.4    6.8.0-52-generic
-cp-2   Ready    v1.34.1   v1.34.1   containerd://2.0.4    6.8.0-52-generic
-cp-3   Ready    v1.34.1   v1.34.1   containerd://2.0.4    6.8.0-52-generic
-w-1    Ready    v1.34.1   v1.34.1   containerd://2.0.4    6.8.0-52-generic
-w-2    Ready    v1.34.1   v1.34.1   containerd://2.0.4    6.8.0-52-generic
+cp-1   Ready    v1.37.2   v1.37.2   containerd://2.0.4    6.8.0-52-generic
+cp-2   Ready    v1.37.2   v1.37.2   containerd://2.0.4    6.8.0-52-generic
+cp-3   Ready    v1.37.2   v1.37.2   containerd://2.0.4    6.8.0-52-generic
+w-1    Ready    v1.37.2   v1.37.2   containerd://2.0.4    6.8.0-52-generic
+w-2    Ready    v1.37.2   v1.37.2   containerd://2.0.4    6.8.0-52-generic
 
 $ kubectl version
-Client Version: v1.34.1
+Client Version: v1.37.2
 Kustomize Version: v5.7.1
-Server Version: v1.34.1
+Server Version: v1.37.2
 
 $ kubectl get --raw='/livez?verbose' | tail -3
 [+]poststarthook/apiservice-openapiv3-controller ok
@@ -1185,7 +1185,7 @@ cp-2	registry.k8s.io/kube-apiserver@sha256:9b1c...e4f7
 cp-3	registry.k8s.io/kube-apiserver@sha256:9b1c...e4f7
 
 $ kubectl -n kube-system get cm kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion
-kubernetesVersion: v1.34.1
+kubernetesVersion: v1.37.2
 ```
 
 Confirm the certificates were genuinely renewed:
@@ -1336,16 +1336,16 @@ spec:
 
 | # | Symptom | Root cause | Diagnosis | Remediation |
 |---|---|---|---|---|
-| 1 | `kubeadm upgrade plan` → `could not fetch a Kubernetes version from the internet` | Air-gapped / egress blocked to `dl.k8s.io` | `curl -v https://dl.k8s.io/release/stable.txt` | Pass the version explicitly: `kubeadm upgrade apply v1.34.1`; pre-pull images |
+| 1 | `kubeadm upgrade plan` → `could not fetch a Kubernetes version from the internet` | Air-gapped / egress blocked to `dl.k8s.io` | `curl -v https://dl.k8s.io/release/stable.txt` | Pass the version explicitly: `kubeadm upgrade apply v1.37.2`; pre-pull images |
 | 2 | `[preflight] Some fatal errors occurred: ... etcd cluster is not healthy` | etcd quorum lost or a member is down | `etcdctl endpoint health --cluster` | Restore quorum *before* upgrading. Never use `--force` here |
-| 3 | `error execution phase preflight: [preflight] ... Specified version to upgrade to v1.35.0 is at least one minor version higher` | Attempted a multi-minor jump | `kubectl version`, `kubeadm version` | Upgrade one minor at a time: 1.33 → 1.34 → 1.35 |
+| 3 | `error execution phase preflight: [preflight] ... Specified version to upgrade to v1.38.0 is at least one minor version higher` | Attempted a multi-minor jump | `kubectl version`, `kubeadm version` | Upgrade one minor at a time: 1.36 → 1.37 → 1.38 |
 | 4 | `Unable to connect to the server: x509: certificate has expired or is not yet valid` | Control-plane certs expired (cluster idle >12 months) | `sudo kubeadm certs check-expiration` | `sudo kubeadm certs renew all`, restart static pods, then refresh `admin.conf` |
 | 5 | Node `NotReady` after kubelet upgrade; `journalctl` shows `failed to run Kubelet: misconfiguration: kubelet cgroup driver: "cgroupfs" is different from docker cgroup driver: "systemd"` | cgroup driver mismatch between kubelet and runtime | `journalctl -u kubelet -n 100 --no-pager` | Set `cgroupDriver: systemd` in `/var/lib/kubelet/config.yaml` **and** `SystemdCgroup = true` in `/etc/containerd/config.toml`; restart both |
 | 6 | `kube-apiserver` never comes back; no pod visible | Static pod manifest invalid, or image not present | `sudo crictl ps -a \| head`, `sudo crictl logs <id>`, `journalctl -u kubelet -f` | Restore from `/etc/kubernetes/tmp/kubeadm-backup-manifests-*/` |
 | 7 | `kubectl drain` hangs forever, repeating `Cannot evict pod as it would violate the pod's disruption budget` | A PDB with `disruptionsAllowed: 0` | `kubectl get pdb -A` | Scale the workload up or relax the PDB. `--disable-eviction` is a last resort that ignores PDBs |
 | 8 | Workloads fail post-upgrade with `no matches for kind "X" in version "Y"` | A removed API | `kubectl api-resources`, `kubent` | `kubectl convert`; roll forward the manifests. Rolling the cluster back is far more expensive |
 | 9 | Node upgraded but `kubectl get nodes` still shows the old version | `kubeadm upgrade node` ran but the kubelet **package** was not installed, or the kubelet was not restarted | `kubelet --version` on the node vs. Node object | `apt-get install kubelet=<ver>` then `systemctl daemon-reload && systemctl restart kubelet` |
-| 10 | `apt-get install kubeadm=1.34.1-1.1` → `Version '1.34.1-1.1' for 'kubeadm' was not found` | The `pkgs.k8s.io` repository is still pinned to the old minor | `cat /etc/apt/sources.list.d/kubernetes.list` | Update the repo URL to `v1.34`, re-import the signing key, `apt-get update` |
+| 10 | `apt-get install kubeadm=1.37.2-1.1` → `Version '1.37.2-1.1' for 'kubeadm' was not found` | The `pkgs.k8s.io` repository is still pinned to the old minor | `cat /etc/apt/sources.list.d/kubernetes.list` | Update the repo URL to `v1.37`, re-import the signing key, `apt-get update` |
 | 11 | `kubelet` logs `Unable to register node ... Unauthorized` after a long outage | Rotated kubelet client cert expired while the node was down | `openssl x509 -in /var/lib/kubelet/pki/kubelet-client-current.pem -noout -enddate` | Regenerate the bootstrap kubeconfig: `kubeadm token create --print-join-command`, or re-issue `/etc/kubernetes/kubelet.conf` and restart |
 | 12 | CoreDNS `CrashLoopBackOff` after upgrade | Addon version incompatibility or a stale `Corefile` plugin directive | `kubectl -n kube-system logs -l k8s-app=kube-dns --previous` | Reconcile the CoreDNS ConfigMap; `kubeadm` prints migration warnings during `apply` |
 | 13 | Pods stuck `ContainerCreating` after upgrade, CNI errors in events | The CNI plugin does not support the new minor | `kubectl -n kube-system logs ds/<cni>`; check `/etc/cni/net.d` | Upgrade the CNI **before** the Kubernetes minor; consult its compatibility matrix |
@@ -1407,15 +1407,15 @@ $ sudo mv /etc/kubernetes/manifests/*.yaml /etc/kubernetes/manifests.disabled/
 $ sudo crictl ps            # confirm the control plane is fully stopped
 
 $ sudo mv /var/lib/etcd /var/lib/etcd.broken
-$ sudo ETCDCTL_API=3 etcdctl snapshot restore /var/backups/etcd-pre-1.34.1.db \
+$ sudo ETCDCTL_API=3 etcdctl snapshot restore /var/backups/etcd-pre-1.37.2.db \
     --name cp-1 \
     --initial-cluster cp-1=https://10.20.0.11:2380,cp-2=https://10.20.0.12:2380,cp-3=https://10.20.0.13:2380 \
     --initial-cluster-token etcd-cluster-prod \
     --initial-advertise-peer-urls https://10.20.0.11:2380 \
     --data-dir /var/lib/etcd
-2026-03-11T10:02:19Z	info	snapshot/v3_snapshot.go:260	restoring snapshot	{"path": "/var/backups/etcd-pre-1.34.1.db", "wal-dir": "/var/lib/etcd/member/wal", "data-dir": "/var/lib/etcd", "snap-dir": "/var/lib/etcd/member/snap"}
+2026-03-11T10:02:19Z	info	snapshot/v3_snapshot.go:260	restoring snapshot	{"path": "/var/backups/etcd-pre-1.37.2.db", "wal-dir": "/var/lib/etcd/member/wal", "data-dir": "/var/lib/etcd", "snap-dir": "/var/lib/etcd/member/snap"}
 2026-03-11T10:02:21Z	info	membership/cluster.go:421	added member	{"cluster-id": "7f4e2a1b", "local-member-id": "0", "added-peer-id": "3d1a9f0e2b7c4d51"}
-2026-03-11T10:02:21Z	info	snapshot/v3_snapshot.go:287	restored snapshot	{"path": "/var/backups/etcd-pre-1.34.1.db", "data-dir": "/var/lib/etcd"}
+2026-03-11T10:02:21Z	info	snapshot/v3_snapshot.go:287	restored snapshot	{"path": "/var/backups/etcd-pre-1.37.2.db", "data-dir": "/var/lib/etcd"}
 
 # Repeat the restore on cp-2 and cp-3 with their own --name and peer URL,
 # from the SAME snapshot file and the SAME --initial-cluster-token.
@@ -1486,14 +1486,14 @@ Minimal command sequence to have in muscle memory:
 ```
 # control plane
 sudo -i
-sed -i 's|v1.33|v1.34|' /etc/apt/sources.list.d/kubernetes.list
-apt-get update && apt-get install -y --allow-change-held-packages kubeadm=1.34.1-1.1
+sed -i 's|v1.36|v1.37|' /etc/apt/sources.list.d/kubernetes.list
+apt-get update && apt-get install -y --allow-change-held-packages kubeadm=1.37.2-1.1
 kubeadm upgrade plan
-kubeadm upgrade apply v1.34.1 -y
+kubeadm upgrade apply v1.37.2 -y
 exit
 kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
 sudo -i
-apt-get install -y --allow-change-held-packages kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+apt-get install -y --allow-change-held-packages kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 systemctl daemon-reload && systemctl restart kubelet
 exit
 kubectl uncordon <node>
@@ -1502,10 +1502,10 @@ kubectl uncordon <node>
 kubectl drain <node> --ignore-daemonsets --delete-emptydir-data
 ssh <node>
 sudo -i
-sed -i 's|v1.33|v1.34|' /etc/apt/sources.list.d/kubernetes.list
-apt-get update && apt-get install -y --allow-change-held-packages kubeadm=1.34.1-1.1
+sed -i 's|v1.36|v1.37|' /etc/apt/sources.list.d/kubernetes.list
+apt-get update && apt-get install -y --allow-change-held-packages kubeadm=1.37.2-1.1
 kubeadm upgrade node
-apt-get install -y --allow-change-held-packages kubelet=1.34.1-1.1 kubectl=1.34.1-1.1
+apt-get install -y --allow-change-held-packages kubelet=1.37.2-1.1 kubectl=1.37.2-1.1
 systemctl daemon-reload && systemctl restart kubelet
 exit; exit
 kubectl uncordon <node>
@@ -1572,5 +1572,5 @@ kubectl uncordon <node>
 - Sigstore cosign — <https://docs.sigstore.dev/cosign/signing/overview/>
 
 **Certification**
-- CKS Curriculum v1.34 — <https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf>
+- CKS Curriculum v1.37 — <https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf>
 - CNCF curriculum repository — <https://github.com/cncf/curriculum>

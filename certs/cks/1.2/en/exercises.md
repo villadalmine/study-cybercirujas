@@ -6,7 +6,7 @@
 
 ## Lab prerequisites
 
-- A `kubeadm`-provisioned cluster, Kubernetes **v1.34**, with at least one control plane node (`cp1`) and one worker (`w1`).
+- A `kubeadm`-provisioned cluster, Kubernetes **v1.37**, with at least one control plane node (`cp1`) and one worker (`w1`).
 - `root` (or `sudo`) shell access on both nodes.
 - `kube-bench` available. If it is not installed, any of these work:
   - binary/package on the node,
@@ -744,7 +744,7 @@ In real clusters — and in nodes you cannot SSH into — the benchmark runs as 
 
 ## References
 
-- CKS Curriculum v1.34, CNCF — <https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf>
+- CKS Curriculum v1.37, CNCF — <https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf>
 - CIS Kubernetes Benchmark (registration required) — <https://www.cisecurity.org/benchmark/kubernetes>
 - `kube-bench`, Aqua Security — <https://github.com/aquasecurity/kube-bench>
 - Kubernetes documentation, kubelet configuration file — <https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/>

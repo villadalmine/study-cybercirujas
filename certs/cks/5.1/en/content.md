@@ -1,6 +1,6 @@
 # 5.1 Minimize host OS footprint (reduce attack surface)
 
-> **CKS v1.34 — Domain: System Hardening — Weight 2.5**
+> **CKS v1.37 — Domain: System Hardening — Weight 2.5**
 > Prerequisite reading: node components (kubelet, container runtime, kube-proxy), Linux namespaces/cgroups, systemd unit model.
 > Adjacent topics: 5.2 (minimize IAM roles), 5.3 (minimize external network access), 5.4 (AppArmor/seccomp), 6.x (runtime detection).
 
@@ -186,7 +186,7 @@ Read this correctly: `kubelet` and `containerd` score 9.6 **and that is unavoida
 
 ### 2.1 Reference footprint comparison
 
-Numbers below are one reference build each (node images built 2026-07, x86-64, kubelet 1.34, containerd 2.x), measured with the commands above. Treat them as orders of magnitude, not constants.
+Numbers below are one reference build each (node images built 2026-07, x86-64, kubelet 1.37, containerd 2.x), measured with the commands above. Treat them as orders of magnitude, not constants.
 
 | Node image | Packages / installed units | Running services | Listening `0.0.0.0` ports | SUID/SGID files | Root FS writable | Package manager on box |
 |---|---|---|---|---|---|---|
@@ -1705,7 +1705,7 @@ machine:
   certSANs: []
 
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:v1.34.0
+    image: ghcr.io/siderolabs/kubelet:v1.37.0
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true          # no static pods on workers
     extraConfig:
@@ -2068,7 +2068,7 @@ Under time pressure, the highest-yield actions on a node task are, in order:
 
 ## References
 
-- CNCF — *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34*: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37*: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes — *Ports and Protocols*: https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubernetes — *Kubelet Configuration (v1beta1) reference*: https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
 - Kubernetes — *Set Kubelet Parameters Via A Configuration File*: https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/

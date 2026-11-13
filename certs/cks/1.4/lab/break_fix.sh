@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# CKS v1.34 - Dominio: Cluster Hardening
+# CKS v1.37 - Dominio: Cluster Hardening
 # Tema 1.4: Protect node metadata and endpoints (peso examen: 3)
-# Fuente de referencia: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+# Fuente de referencia: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # BREAK & FIX
 # -----------

@@ -1,6 +1,6 @@
 # 5.1 Minimizar la superficie del SO anfitrión (reducir la superficie de ataque)
 
-> **CKS v1.34 — Dominio: System Hardening — Peso 2.5**
+> **CKS v1.37 — Dominio: System Hardening — Peso 2.5**
 > Lectura previa: componentes del nodo (kubelet, container runtime, kube-proxy), namespaces/cgroups de Linux, modelo de unidades de systemd.
 > Temas adyacentes: 5.2 (minimizar roles IAM), 5.3 (minimizar el acceso externo a la red), 5.4 (AppArmor/seccomp), 6.x (detección en runtime).
 
@@ -186,7 +186,7 @@ Leé esto correctamente: `kubelet` y `containerd` puntúan 9.6 **y eso es inevit
 
 ### 2.1 Comparación de huella de referencia
 
-Los números de abajo corresponden a una build de referencia de cada caso (imágenes de nodo construidas en 2026-07, x86-64, kubelet 1.34, containerd 2.x), medidos con los comandos anteriores. Tomalos como órdenes de magnitud, no como constantes.
+Los números de abajo corresponden a una build de referencia de cada caso (imágenes de nodo construidas en 2026-07, x86-64, kubelet 1.37, containerd 2.x), medidos con los comandos anteriores. Tomalos como órdenes de magnitud, no como constantes.
 
 | Imagen de nodo | Paquetes / unidades instaladas | Servicios en ejecución | Puertos en escucha `0.0.0.0` | Archivos SUID/SGID | Root FS escribible | Gestor de paquetes en la máquina |
 |---|---|---|---|---|---|---|
@@ -1705,7 +1705,7 @@ machine:
   certSANs: []
 
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:v1.34.0
+    image: ghcr.io/siderolabs/kubelet:v1.37.0
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true          # no static pods on workers
     extraConfig:
@@ -2068,7 +2068,7 @@ Bajo presión de tiempo, las acciones de mayor rédito en una tarea de nodo son,
 
 ## Referencias
 
-- CNCF — *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34*: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37*: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes — *Ports and Protocols*: https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubernetes — *Kubelet Configuration (v1beta1) reference*: https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
 - Kubernetes — *Set Kubelet Parameters Via A Configuration File*: https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/

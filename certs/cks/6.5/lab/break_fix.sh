@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  CKS 1.34 — Domain 6: Monitoring, Logging and Runtime Security (weight 20%)
+#  CKS 1.37 — Domain 6: Monitoring, Logging and Runtime Security (weight 20%)
 #  Topic 6.5 — Use Kubernetes audit logs to monitor access (topic weight: 4)
 #
 #  BREAK & FIX laboratory script.
@@ -27,8 +27,8 @@
 #
 #  Flags: --yes (skip confirmation), --force (skip the multi-node guard)
 #
-#  Reference: CKS Curriculum v1.34
-#    https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#  Reference: CKS Curriculum v1.37
+#    https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #  Upstream docs:
 #    https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 #    https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
@@ -847,5 +847,5 @@ main "$@"
 #     https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 #     https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 #     https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
-#     https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#     https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 # =============================================================================

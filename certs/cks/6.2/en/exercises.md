@@ -1,6 +1,6 @@
 # Guided Exercises — CKS 6.2: Detect Threats Within Physical Infrastructure, Apps, Networks, Data, Users and Workloads
 
-> **Domain:** Monitoring, Logging and Runtime Security · **Exam weight of this task:** 4 % (domain total 20 %) · **Exam version:** CKS v1.34
+> **Domain:** Monitoring, Logging and Runtime Security · **Exam weight of this task:** 4 % (domain total 20 %) · **Exam version:** CKS v1.37
 >
 > Domains 1–5 are about *stopping* things. This task is about *seeing* them. A cluster with perfect admission control and zero detection instrumentation is a cluster where a successful attack leaves no evidence at all. Your job in these exercises is to instrument every layer named in the curriculum, deliberately trip each detector, and then read the raw evidence a responder would actually get.
 
@@ -25,7 +25,7 @@ After completing these exercises you will be able to:
 
 | Node | Role | Spec |
 |---|---|---|
-| `cks-cp` | control plane (kubeadm) | Ubuntu 24.04, 2 vCPU / 4 GiB, Kubernetes v1.34, containerd 2.x |
+| `cks-cp` | control plane (kubeadm) | Ubuntu 24.04, 2 vCPU / 4 GiB, Kubernetes v1.37, containerd 2.x |
 | `cks-w1` | worker | Ubuntu 24.04, 2 vCPU / 4 GiB, kernel ≥ 5.8 (required for Falco `modern_ebpf`) |
 
 You need `root` (or passwordless `sudo`) **on both nodes over SSH**, plus a working `kubectl` with `cluster-admin`. A CNI that supports NetworkPolicy is assumed; Exercise 6 gives a Cilium path and a CNI-agnostic fallback.
@@ -1353,7 +1353,7 @@ You now have five independent sensors. This exercise runs one coherent intrusion
 
 **A4.4 —** A **401** means authentication itself failed: no valid credential was presented, so the API server never resolved an identity and RBAC was never consulted. A **403** means authentication *succeeded* and authorization then denied the request — the server knew who the caller was and said no. Seeing `system:anonymous` with a `403` therefore proves **anonymous authentication is enabled** (`--anonymous-auth=true`): unauthenticated requests are being successfully bound to the built-in `system:anonymous` identity and evaluated by RBAC. With `--anonymous-auth=false` the same probe returns 401 with no resolved user. Operationally: a burst of 403s from one identity is reconnaissance by a *valid* credential — someone mapping their permissions; a burst of 401s is credential guessing or an expired/rotated token.
 
-**A4.5 —** A 403 only shows an attempt that failed, and legitimate controllers generate 403s constantly through normal probing and optimistic access patterns — low signal, high volume. The User-Agent characterises the **tooling**, and a workload's tooling is deterministic: a Go application using `client-go` sends something like `payments/v2.1 (linux/amd64) kubernetes/$Format` or the client-go default `kubernetes/v1.34.0 (linux/amd64) kubernetes/ab12cd3`. `python-requests/2.32.3` or `curl/8.5.0` from a ServiceAccount that has only ever spoken client-go is *hand-driven tooling using stolen credentials*, and it is a signal on **successful** requests, not just failed ones. Build a per-ServiceAccount User-Agent baseline; the alert on first deviation is one of the highest-precision detections available in the audit log. (It is trivially spoofable, so treat it as high-precision, not high-recall.)
+**A4.5 —** A 403 only shows an attempt that failed, and legitimate controllers generate 403s constantly through normal probing and optimistic access patterns — low signal, high volume. The User-Agent characterises the **tooling**, and a workload's tooling is deterministic: a Go application using `client-go` sends something like `payments/v2.1 (linux/amd64) kubernetes/$Format` or the client-go default `kubernetes/v1.37.0 (linux/amd64) kubernetes/ab12cd3`. `python-requests/2.32.3` or `curl/8.5.0` from a ServiceAccount that has only ever spoken client-go is *hand-driven tooling using stolen credentials*, and it is a signal on **successful** requests, not just failed ones. Build a per-ServiceAccount User-Agent baseline; the alert on first deviation is one of the highest-precision detections available in the audit log. (It is trivially spoofable, so treat it as high-precision, not high-recall.)
 
 **A4.6 —** **Log rotation flooding.** The attacker never touches the log file; they simply generate enough authorized API traffic — a tight `list pods` loop, a watch storm — to write more than 100 MiB × 10 = ~1 GiB of audit records, which rolls their earlier activity out of the retained backups and off the disk entirely. Retention limits you configured for disk safety become an evidence-destruction primitive. The defeat is architectural, not a tuning change: **ship audit events off-node in real time** via `--audit-webhook-config-file` (or a sidecar/agent tailing the file) to append-only, write-once storage the node's credentials cannot delete. Then also alert on the flood itself — a sudden spike in audit event rate from one identity is a detection, not just an operational anomaly.
 
@@ -1427,7 +1427,7 @@ To revert the API server, restore `/root/kube-apiserver.yaml.bak` **into** `/etc
 
 ## Sources
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Auditing* — https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 - Kubernetes, *Audit Configuration API (audit.k8s.io/v1)* — https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
 - Kubernetes, *kube-apiserver command-line reference* — https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/

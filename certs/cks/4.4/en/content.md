@@ -1,6 +1,6 @@
 # CKS 4.4 — Perform Static Analysis of User Workloads and Container Images
 
-**Certification:** Certified Kubernetes Security Specialist (CKS) — exam version 1.34
+**Certification:** Certified Kubernetes Security Specialist (CKS) — exam version 1.37
 **Domain:** Supply Chain Security (20%) · **Topic weight:** 5
 **Profile:** Principal Platform Architect / Senior SRE
 
@@ -190,7 +190,7 @@ kubesec's seccomp and AppArmor rules match **annotations**:
 - `seccomp.security.alpha.kubernetes.io/pod` — the *alpha* annotation, removed from Kubernetes in v1.25.
 - `container.apparmor.security.beta.kubernetes.io/<name>` — the *beta* annotation, deprecated since v1.30 when `securityContext.appArmorProfile` went beta (GA in v1.31).
 
-A manifest written correctly for Kubernetes 1.34 —
+A manifest written correctly for Kubernetes 1.37 —
 
 ```yaml
 securityContext:
@@ -528,7 +528,7 @@ metadata:
   name: payments
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
     security.cks.local/enforce: "true"
@@ -1382,7 +1382,7 @@ metadata:
   name: platform-security
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1885,7 +1885,7 @@ Things that cost candidates time and are worth rehearsing:
 ## 10. Referencias
 
 **Curriculum and certification**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 - CKS exam page (Linux Foundation) — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

@@ -1,6 +1,6 @@
 # Ejercicios Guiados — CKS 2.1: Usar los pod security standards apropiados
 
-> **Peso en el examen:** 5 · **Versión de Kubernetes:** v1.34
+> **Peso en el examen:** 5 · **Versión de Kubernetes:** v1.37
 > Todos los pasos son ejecutables. Ejecutá el bloque, observá la salida y respondé las preguntas antes de seguir. Las respuestas están plegadas al final.
 
 ---
@@ -19,7 +19,7 @@
 | `pod-security.kubernetes.io/audit` | Lo permite, escribe una anotación en el audit log. |
 | `pod-security.kubernetes.io/warn` | Lo permite, devuelve una advertencia al cliente. |
 
-Cada modo tiene su etiqueta `-version` correspondiente (`latest` o `v1.34`).
+Cada modo tiene su etiqueta `-version` correspondiente (`latest` o `v1.37`).
 
 ---
 
@@ -101,7 +101,7 @@ pod/sloppy created
 # 2.1 Add enforcement at baseline, pinned to the cluster version
 kubectl label namespace psa-lab --overwrite \
   pod-security.kubernetes.io/enforce=baseline \
-  pod-security.kubernetes.io/enforce-version=v1.34
+  pod-security.kubernetes.io/enforce-version=v1.37
 
 # 2.2 A Pod that baseline must reject
 cat > privileged-pod.yaml <<'EOF'
@@ -147,7 +147,7 @@ kubectl -n psa-lab get pods
 # 3.1 Raise enforcement to restricted
 kubectl label namespace psa-lab --overwrite \
   pod-security.kubernetes.io/enforce=restricted \
-  pod-security.kubernetes.io/enforce-version=v1.34
+  pod-security.kubernetes.io/enforce-version=v1.37
 
 # 3.2 Delete the legacy Pod so the namespace is consistent
 kubectl -n psa-lab delete pod sloppy
@@ -319,7 +319,7 @@ Anotá el resultado exacto de cada uno de los dos comandos `apply`.
 **Verificá tu comprensión**
 
 19. **Q19.** Los dos namespaces dicen `restricted`, y sin embargo el resultado de admisión difiere. ¿Qué control explica la diferencia, y en qué versión de Kubernetes se agregó?
-20. **Q20.** ¿Cuál es el argumento operativo **a favor** de fijar `enforce-version` en `v1.34`, y cuál es el argumento **en contra**?
+20. **Q20.** ¿Cuál es el argumento operativo **a favor** de fijar `enforce-version` en `v1.37`, y cuál es el argumento **en contra**?
 21. **Q21.** ¿Qué pasa si establecés `enforce-version` en una versión más nueva que el API server, por ejemplo `v1.99`?
 
 ---
@@ -336,11 +336,11 @@ apiVersion: pod-security.admission.config.k8s.io/v1
 kind: PodSecurityConfiguration
 defaults:
   enforce: "baseline"
-  enforce-version: "v1.34"
+  enforce-version: "v1.37"
   audit: "restricted"
-  audit-version: "v1.34"
+  audit-version: "v1.37"
   warn: "restricted"
-  warn-version: "v1.34"
+  warn-version: "v1.37"
 exemptions:
   usernames: []
   runtimeClasses: []
@@ -566,9 +566,9 @@ Sin `jq`, el equivalente legible es `kubectl get ns -L pod-security.kubernetes.i
 
 ### Ejercicio 6
 
-**A19.** El control de **Volume Types**. `restricted` obtuvo su lista blanca explícita de volúmenes en **v1.25**. Fijado a `restricted:v1.24`, el volumen `nfs` se evalúa solo contra las reglas de `baseline` (que prohíben `hostPath` pero permiten `nfs`), así que el Pod es admitido. En `restricted:latest` (= v1.34) `nfs` no está en la lista blanca y el Pod es rechazado. Todo lo demás en el manifiesto ya satisface ambas revisiones.
+**A19.** El control de **Volume Types**. `restricted` obtuvo su lista blanca explícita de volúmenes en **v1.25**. Fijado a `restricted:v1.24`, el volumen `nfs` se evalúa solo contra las reglas de `baseline` (que prohíben `hostPath` pero permiten `nfs`), así que el Pod es admitido. En `restricted:latest` (= v1.37) `nfs` no está en la lista blanca y el Pod es rechazado. Todo lo demás en el manifiesto ya satisface ambas revisiones.
 
-**A20.** **A favor de fijar:** las definiciones de política evolucionan entre releases menores. Fijar garantiza que actualizar el clúster de v1.34 a v1.35 no pueda de golpe rechazar cargas de trabajo que ayer cumplían — vos decidís cuándo adoptar las nuevas reglas subiendo la etiqueta. También mantiene el comportamiento idéntico en todo el plano de control durante una actualización. **En contra de fijar:** te perdés silenciosamente protecciones nuevas, y las versiones fijadas se pudren; `latest` significa que siempre obtenés el endurecimiento actual. El compromiso habitual es fijar `enforce-version` y dejar `warn`/`audit` en `latest`, de modo que las reglas nuevas aparezcan como advertencias antes de que puedan llegar a bloquear.
+**A20.** **A favor de fijar:** las definiciones de política evolucionan entre releases menores. Fijar garantiza que actualizar el clúster de v1.37 a v1.38 no pueda de golpe rechazar cargas de trabajo que ayer cumplían — vos decidís cuándo adoptar las nuevas reglas subiendo la etiqueta. También mantiene el comportamiento idéntico en todo el plano de control durante una actualización. **En contra de fijar:** te perdés silenciosamente protecciones nuevas, y las versiones fijadas se pudren; `latest` significa que siempre obtenés el endurecimiento actual. El compromiso habitual es fijar `enforce-version` y dejar `warn`/`audit` en `latest`, de modo que las reglas nuevas aparezcan como advertencias antes de que puedan llegar a bloquear.
 
 **A21.** La etiqueta se acepta (las etiquetas de namespace no se rechazan por esto), pero el API server emite una advertencia de que la versión es desconocida y **cae de vuelta a `latest`** para la evaluación. Falla cerrado, no abierto — obtenés la interpretación actual y más estricta en lugar de ninguna política. Verificá con `kubectl describe ns <name>` y observando la advertencia en la llamada a `kubectl label`.
 
@@ -612,7 +612,7 @@ sudo cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.y
 
 ## Fuentes
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Documentación de Kubernetes, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - Documentación de Kubernetes, *Pod Security Admission* — https://kubernetes.io/docs/concepts/security/pod-security-admission/
 - Documentación de Kubernetes, *Enforce Pod Security Standards with Namespace Labels* — https://kubernetes.io/docs/tasks/configure-pod-container/enforce-standards-namespace-labels/

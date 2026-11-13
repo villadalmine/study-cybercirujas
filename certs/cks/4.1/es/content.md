@@ -1,6 +1,6 @@
 # CKS 4.1 — Minimizar la huella de la imagen base
 
-**Dominio:** Supply Chain Security · **Peso en el examen:** 5% · **Versión del examen:** CKS 1.34 (Kubernetes v1.34)
+**Dominio:** Supply Chain Security · **Peso en el examen:** 5% · **Versión del examen:** CKS 1.37 (Kubernetes v1.37)
 
 ---
 
@@ -758,16 +758,16 @@ metadata:
   name: prod
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/audit-version: v1.34
+    pod-security.kubernetes.io/audit-version: v1.37
     pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/warn-version: v1.34
+    pod-security.kubernetes.io/warn-version: v1.37
 ```
 
 ### 4.1 Forzar la procedencia de imágenes con ValidatingAdmissionPolicy (sin controlador externo)
 
-`ValidatingAdmissionPolicy` alcanzó GA en v1.30 y es la forma in-tree, basada en CEL, de imponer reglas sobre imágenes en un clúster 1.34. Esto es relevante para el examen porque no necesita ni un chart de Helm ni TLS de webhook.
+`ValidatingAdmissionPolicy` alcanzó GA en v1.30 y es la forma in-tree, basada en CEL, de imponer reglas sobre imágenes en un clúster 1.37. Esto es relevante para el examen porque no necesita ni un chart de Helm ni TLS de webhook.
 
 ```yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1302,7 +1302,7 @@ $ trivy image --severity HIGH,CRITICAL --quiet IMG
 ## Referencias
 
 **Examen y currícula**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Repositorio de currícula de la CNCF — https://github.com/cncf/curriculum
 - Linux Foundation, Certified Kubernetes Security Specialist — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist-cks/
 

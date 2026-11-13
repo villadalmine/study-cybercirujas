@@ -1,6 +1,6 @@
 # Guided Exercises — CKS 2.1: Use appropriate pod security standards
 
-> **Exam weight:** 5 · **Kubernetes version:** v1.34
+> **Exam weight:** 5 · **Kubernetes version:** v1.37
 > Every step is executable. Run the block, observe the output, then answer the questions before moving on. Answers are collapsed at the end.
 
 ---
@@ -19,7 +19,7 @@
 | `pod-security.kubernetes.io/audit` | Allows it, writes an annotation to the audit log. |
 | `pod-security.kubernetes.io/warn` | Allows it, returns a warning to the client. |
 
-Each mode has a matching `-version` label (`latest` or `v1.34`).
+Each mode has a matching `-version` label (`latest` or `v1.37`).
 
 ---
 
@@ -101,7 +101,7 @@ pod/sloppy created
 # 2.1 Add enforcement at baseline, pinned to the cluster version
 kubectl label namespace psa-lab --overwrite \
   pod-security.kubernetes.io/enforce=baseline \
-  pod-security.kubernetes.io/enforce-version=v1.34
+  pod-security.kubernetes.io/enforce-version=v1.37
 
 # 2.2 A Pod that baseline must reject
 cat > privileged-pod.yaml <<'EOF'
@@ -147,7 +147,7 @@ kubectl -n psa-lab get pods
 # 3.1 Raise enforcement to restricted
 kubectl label namespace psa-lab --overwrite \
   pod-security.kubernetes.io/enforce=restricted \
-  pod-security.kubernetes.io/enforce-version=v1.34
+  pod-security.kubernetes.io/enforce-version=v1.37
 
 # 3.2 Delete the legacy Pod so the namespace is consistent
 kubectl -n psa-lab delete pod sloppy
@@ -319,7 +319,7 @@ Record the exact result of each of the two `apply` commands.
 **Check your understanding**
 
 19. **Q19.** The two namespaces both say `restricted`, yet the admission outcome differs. Which control accounts for the difference, and in which Kubernetes version was it added?
-20. **Q20.** What is the operational argument **for** pinning `enforce-version` to `v1.34`, and what is the argument **against**?
+20. **Q20.** What is the operational argument **for** pinning `enforce-version` to `v1.37`, and what is the argument **against**?
 21. **Q21.** What happens if you set `enforce-version` to a version newer than the API server, e.g. `v1.99`?
 
 ---
@@ -336,11 +336,11 @@ apiVersion: pod-security.admission.config.k8s.io/v1
 kind: PodSecurityConfiguration
 defaults:
   enforce: "baseline"
-  enforce-version: "v1.34"
+  enforce-version: "v1.37"
   audit: "restricted"
-  audit-version: "v1.34"
+  audit-version: "v1.37"
   warn: "restricted"
-  warn-version: "v1.34"
+  warn-version: "v1.37"
 exemptions:
   usernames: []
   runtimeClasses: []
@@ -566,9 +566,9 @@ Without `jq`, the readable equivalent is `kubectl get ns -L pod-security.kuberne
 
 ### Exercise 6
 
-**A19.** The **Volume Types** control. `restricted` gained its explicit volume allow-list in **v1.25**. Pinned to `restricted:v1.24` the `nfs` volume is evaluated only against `baseline`'s rules (which forbid `hostPath` but permit `nfs`), so the Pod is admitted. At `restricted:latest` (= v1.34) `nfs` is not on the allow-list and the Pod is rejected. Everything else in the manifest already satisfies both revisions.
+**A19.** The **Volume Types** control. `restricted` gained its explicit volume allow-list in **v1.25**. Pinned to `restricted:v1.24` the `nfs` volume is evaluated only against `baseline`'s rules (which forbid `hostPath` but permit `nfs`), so the Pod is admitted. At `restricted:latest` (= v1.37) `nfs` is not on the allow-list and the Pod is rejected. Everything else in the manifest already satisfies both revisions.
 
-**A20.** **For pinning:** the policy definitions themselves evolve between minor releases. Pinning guarantees that upgrading the cluster from v1.34 to v1.35 cannot suddenly reject workloads that were compliant yesterday — you decide when to adopt the new rules by bumping the label. It also keeps behaviour identical across a control plane mid-upgrade. **Against pinning:** you silently miss new protections, and pinned versions rot; `latest` means you always get the current hardening. The usual compromise is to pin `enforce-version` and leave `warn`/`audit` at `latest`, so new rules show up as warnings before they can ever block.
+**A20.** **For pinning:** the policy definitions themselves evolve between minor releases. Pinning guarantees that upgrading the cluster from v1.37 to v1.38 cannot suddenly reject workloads that were compliant yesterday — you decide when to adopt the new rules by bumping the label. It also keeps behaviour identical across a control plane mid-upgrade. **Against pinning:** you silently miss new protections, and pinned versions rot; `latest` means you always get the current hardening. The usual compromise is to pin `enforce-version` and leave `warn`/`audit` at `latest`, so new rules show up as warnings before they can ever block.
 
 **A21.** The label is accepted (namespace labels are not rejected for this), but the API server emits a warning that the version is unknown and **falls back to `latest`** for evaluation. It fails closed, not open — you get the current, strictest interpretation rather than no policy. Check with `kubectl describe ns <name>` and by watching for the warning on the `kubectl label` call.
 
@@ -612,7 +612,7 @@ sudo cp /root/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.y
 
 ## Sources
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes documentation, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - Kubernetes documentation, *Pod Security Admission* — https://kubernetes.io/docs/concepts/security/pod-security-admission/
 - Kubernetes documentation, *Enforce Pod Security Standards with Namespace Labels* — https://kubernetes.io/docs/tasks/configure-pod-container/enforce-standards-namespace-labels/

@@ -1,5 +1,5 @@
 # CKS 5.3 — Minimizar el Acceso Externo a la Red
-## Ejercicios Guiados (Kubernetes v1.34)
+## Ejercicios Guiados (Kubernetes v1.37)
 
 > **Dominio:** System Hardening · **Peso en el examen:** 2.5 %
 > **Objetivo:** reducir la superficie alcanzable de un nodo Kubernetes y de las cargas de trabajo que corren en él — a nivel del host (filtro de paquetes del kernel, servicios systemd, sshd), a nivel de los componentes del control plane (direcciones de bind, puertos), y a nivel de la API de Kubernetes (tipos de Service, alcance del bind de `kube-proxy`, NetworkPolicy, admission control).
@@ -8,7 +8,7 @@
 
 | Ítem | Valor |
 |---|---|
-| Cluster | `kubeadm`, Kubernetes **v1.34** |
+| Cluster | `kubeadm`, Kubernetes **v1.37** |
 | Control plane | `cp01` — `192.168.56.10` |
 | Worker | `w01` — `192.168.56.11` |
 | SO del nodo | Ubuntu 24.04 LTS, backend `nftables` |
@@ -1028,7 +1028,7 @@ Minimizar el acceso externo es bidireccional. Un pod que puede alcanzar el servi
 
 ## Fuentes
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Ports and Protocols* — https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 - Kubernetes, *Kubelet authentication/authorization* — https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/
 - Kubernetes, *kubelet configuration (v1beta1) reference* — https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/

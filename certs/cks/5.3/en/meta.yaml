@@ -2,6 +2,13 @@ generated_at: '2026-08-01T00:00:00'
 lang: en
 backend: unknown
 model: unknown
+tool_edit:
+  tool: scripts/upgrade_versions.py
+  script_sha256: 70f348f481dd43d832ec5343b728c7351e6f029409f502ee5b126baf1b087ebe
+  plan: docs/upgrades/cks-1.37.plan.json
+  plan_sha256: 39ff235a9a200415b2c0f93196cfc12a991239aa70420b23265c8e8b8883c421
+  pins_sha256: efb15ddf131ed8e49dbb1e3321f5ce5625308cc91b65fd60d61183f3c6fe4671
+  date: '2026-11-13'
 quality:
   weights_version: 1
   score: 69.4

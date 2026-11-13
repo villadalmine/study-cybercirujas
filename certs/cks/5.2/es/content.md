@@ -1,6 +1,6 @@
 # 5.2 Uso de gestión de identidad y acceso con privilegio mínimo
 
-> **Dominio**: System Hardening · **Peso en el examen**: 2.5 · **Kubernetes**: v1.34
+> **Dominio**: System Hardening · **Peso en el examen**: 2.5 · **Kubernetes**: v1.37
 > **Alcance**: identidad de *humanos*, *máquinas*, *workloads* y *nodos* — en el sistema operativo del host, dentro del cluster, y a través de la frontera de confianza con la nube.
 
 ---
@@ -1540,7 +1540,7 @@ kubectl run imds --rm -it --restart=Never --image=curlimages/curl:8.9.1 -- \
 - Controlling Access to the Kubernetes API — https://kubernetes.io/docs/concepts/security/controlling-access/
 
 **Examen y currículum**
-- CKS Curriculum v1.34 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 - CKS certification page — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

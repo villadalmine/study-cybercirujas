@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# break-fix: CKS v1.34 - Dominio "Cluster Setup"
+# break-fix: CKS v1.37 - Dominio "Cluster Setup"
 # Tema 1.1 - Use Network security policies to restrict cluster level access (peso: 3)
 # Fuente de referencia (curriculum oficial, NO copiar texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Este script está pensado para correr en una VM de laboratorio DESCARTABLE
 # con un cluster de Kubernetes ya funcionando y un CNI que soporte NetworkPolicy

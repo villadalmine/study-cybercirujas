@@ -1,13 +1,13 @@
 #!/bin/bash
 #
 # ==============================================================================
-#  CKS 1.34 -- Domain 6: Monitoring, Logging and Runtime Security
+#  CKS 1.37 -- Domain 6: Monitoring, Logging and Runtime Security
 #  Topic 6.1  -- Perform behavioral analytics to detect malicious activities
 #  Exam weight: 4%
 #
 #  BREAK & FIX lab -- Falco runtime behavioral detection
 #
-#  Reference: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#  Reference: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #             https://falco.org/docs/reference/rules/
 #             https://falco.org/docs/reference/daemon/config-options/
 #
@@ -382,7 +382,7 @@ print_briefing() {
     cat <<EOF
 
 ${C_BLD}================================================================================
- CKS 1.34 -- 6.1 Perform behavioral analytics to detect malicious activities
+ CKS 1.37 -- 6.1 Perform behavioral analytics to detect malicious activities
  BREAK & FIX -- "the SOC went blind"
 ================================================================================${C_OFF}
 
@@ -661,7 +661,7 @@ main "$@"
 #                      whether falcosidekick/the SIEM forwarder is alive.
 #
 #  Sources:
-#    - CKS v1.34 curriculum: https://github.com/cncf/curriculum
+#    - CKS v1.37 curriculum: https://github.com/cncf/curriculum
 #    - Falco rules reference: https://falco.org/docs/reference/rules/
 #    - Falco config reference: https://falco.org/docs/reference/daemon/config-options/
 #    - Supported fields: https://falco.org/docs/reference/rules/supported-fields/

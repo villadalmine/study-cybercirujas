@@ -12,7 +12,7 @@
 ### What you need
 
 - A Kubernetes cluster **whose CNI plugin enforces `NetworkPolicy`**. This is the single most common reason a lab "doesn't work": the API server happily accepts a `NetworkPolicy` object even when nothing in the cluster enforces it.
-- `kubectl` v1.34 matching the cluster version.
+- `kubectl` v1.37 matching the cluster version.
 - Optionally `jq` for the audit exercise.
 
 ### Mental model you are building
@@ -1030,7 +1030,7 @@ The trap is that `namespaceSelector: {}` means "every namespace", not "no namesp
 
 ## References
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes documentation, *Network Policies* — https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Kubernetes API reference, *NetworkPolicy v1* — https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/network-policy-v1/
 - Kubernetes documentation, *Declare Network Policy* — https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/

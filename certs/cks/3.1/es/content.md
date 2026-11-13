@@ -1,6 +1,6 @@
 # Usar controles de acceso basados en roles para minimizar la exposición
 
-**Certificación:** Certified Kubernetes Security Specialist (CKS) — currículum v1.34
+**Certificación:** Certified Kubernetes Security Specialist (CKS) — currículum v1.37
 **Dominio:** Cluster Setup and Hardening
 **Peso:** 3.75%
 **Perfil:** Principal Platform Architect / Senior SRE
@@ -63,7 +63,7 @@ Semántica crítica de la etapa 2:
 - **RBAC nunca devuelve `deny`.** Devuelve `allow` o `no-opinion`. Si RBAC es el último autorizador, un `no-opinion` se convierte en un `403 Forbidden` implícito. Esto significa que *no podés escribir una regla RBAC de "deny"* — un error conceptual común y caro. La restricción se logra únicamente *no otorgando*.
 - Como la cadena es "gana el primer allow", colocar un autorizador permisivo (`AlwaysAllow`, o un webhook laxo) antes de RBAC neutraliza RBAC en silencio.
 
-### 2.1 Declarar la cadena: `--authorization-config` (v1.34)
+### 2.1 Declarar la cadena: `--authorization-config` (v1.37)
 
 Los clústeres modernos configuran la cadena mediante un archivo estructurado en lugar del flag heredado `--authorization-mode`. Ambos son mutuamente excluyentes.
 
@@ -117,7 +117,7 @@ spec:
   priorityClassName: system-node-critical
   containers:
     - name: kube-apiserver
-      image: registry.k8s.io/kube-apiserver:v1.34.0
+      image: registry.k8s.io/kube-apiserver:v1.37.0
       command:
         - kube-apiserver
         - --advertise-address=10.0.0.11
@@ -347,7 +347,7 @@ metadata:
   name: payments
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: v1.34
+    pod-security.kubernetes.io/enforce-version: v1.37
 ---
 # Dedicated identity. Never reuse the namespace "default" ServiceAccount:
 # it is shared by every workload that forgets to set serviceAccountName.
@@ -1298,7 +1298,7 @@ $ kubectl create rolebinding reporter -n payments \
 - Kubernetes — *Kubernetes API Access Control (RBAC good practices)*: https://kubernetes.io/docs/concepts/security/rbac-good-practices/
 - Kubernetes — *kubeadm: super-admin.conf and admin.conf*: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/
 - Kubernetes — *Feature Gates*: https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
-- CNCF — *CKS Curriculum v1.34*: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF — *CKS Curriculum v1.37*: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF — *Curriculum repository*: https://github.com/cncf/curriculum
 - CIS — *Kubernetes Benchmark* (secciones 1.2 API server, 5.1 RBAC and Service Accounts): https://www.cisecurity.org/benchmark/kubernetes
 - NSA/CISA — *Kubernetes Hardening Guide*: https://media.defense.gov/2022/Aug/29/2003066362/-1/-1/0/CTR_KUBERNETES_HARDENING_GUIDANCE_1.2_20220829.PDF

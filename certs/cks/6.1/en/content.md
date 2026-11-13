@@ -2,7 +2,7 @@
 
 **Domain:** Monitoring, Logging and Runtime Security (20%)
 **Item weight:** ~4% of the exam
-**Target Kubernetes version:** v1.34
+**Target Kubernetes version:** v1.37
 
 ---
 
@@ -1896,7 +1896,7 @@ The task pattern for this item is stable. Optimize for it:
 ## 8. References
 
 **CNCF / CKS**
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 - Certified Kubernetes Security Specialist (CKS) — https://www.cncf.io/training/certification/cks/
 

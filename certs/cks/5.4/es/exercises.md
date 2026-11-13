@@ -1,6 +1,6 @@
 # CKS 5.4 — Uso apropiado de herramientas de endurecimiento del kernel como AppArmor y seccomp
 
-**Certificación:** Certified Kubernetes Security Specialist (CKS), currículum **v1.34**
+**Certificación:** Certified Kubernetes Security Specialist (CKS), currículum **v1.37**
 **Dominio:** 5. Minimización de vulnerabilidades en microservicios — **peso de este tema en el examen: 2.5 %**
 **Formato:** ejercicios guiados. Ejecuta cada paso numerado y luego responde las preguntas del bloque antes de continuar. Todas las respuestas están plegadas al final.
 
@@ -1404,7 +1404,7 @@ kind delete cluster --name cks54
 
 ## Fuentes
 
-- CNCF, *CKS Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *CKS Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Kubernetes, *Restrict a Container's Syscalls with seccomp* — https://kubernetes.io/docs/tutorials/security/seccomp/
 - Kubernetes, *Restrict a Container's Access to Resources with AppArmor* — https://kubernetes.io/docs/tutorials/security/apparmor/
 - Kubernetes, *Pod Security Standards* — https://kubernetes.io/docs/concepts/security/pod-security-standards/

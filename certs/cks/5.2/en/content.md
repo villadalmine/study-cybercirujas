@@ -1,6 +1,6 @@
 # 5.2 Using least-privilege identity and access management
 
-> **Domain**: System Hardening · **Exam weight**: 2.5 · **Kubernetes**: v1.34
+> **Domain**: System Hardening · **Exam weight**: 2.5 · **Kubernetes**: v1.37
 > **Scope**: identity of *humans*, *machines*, *workloads* and *nodes* — on the host OS, inside the cluster, and across the cloud trust boundary.
 
 ---
@@ -1540,7 +1540,7 @@ kubectl run imds --rm -it --restart=Never --image=curlimages/curl:8.9.1 -- \
 - Controlling Access to the Kubernetes API — https://kubernetes.io/docs/concepts/security/controlling-access/
 
 **Exam and curriculum**
-- CKS Curriculum v1.34 (CNCF) — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 (CNCF) — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CNCF Curriculum repository — https://github.com/cncf/curriculum
 - CKS certification page — https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
 

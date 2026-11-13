@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# CKS 1.34 - Dominio 3.2: Exercise caution in using service accounts
+# CKS 1.37 - Dominio 3.2: Exercise caution in using service accounts
 #            (disable defaults, minimize permissions on newly created ones)
 # Peso en el examen: 3.75
 #
 # Fuente de referencia (curriculum oficial, no se copia texto literal):
-#   https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+#   https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 #
 # Script tipo "break & fix". Pensado para correr en una VM de laboratorio
 # DESCARTABLE con un cluster de Kubernetes ya funcionando (kubeadm, kind, minikube, etc.)

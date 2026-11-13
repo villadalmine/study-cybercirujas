@@ -1,7 +1,7 @@
 # Guided Exercises — 6.1 Perform behavioral analytics to detect malicious activities
 
 > **Domain:** Monitoring, Logging and Runtime Security · **Exam weight of this task:** 4
-> **Target environment:** a `kubeadm` cluster (v1.34) with at least one worker (`node01`) where you have `root` on the host. Kernel ≥ 5.8 is assumed so the *modern eBPF* driver is available.
+> **Target environment:** a `kubeadm` cluster (v1.37) with at least one worker (`node01`) where you have `root` on the host. Kernel ≥ 5.8 is assumed so the *modern eBPF* driver is available.
 > **What "behavioral analytics" means here:** you are not scanning artefacts at rest (that is Supply Chain Security). You are watching what a process *does* at runtime — the syscalls it issues, the files it opens, the sockets it connects, the binaries it spawns — and deciding whether that behavior deviates from the workload's expected profile.
 
 ---
@@ -910,7 +910,7 @@ sudo systemctl restart falco-modern-bpf.service
 
 **Q32.** The last cheap opportunity was (c), `ls /host/etc/kubernetes/pki` — a process inside a container reading a path that is only reachable because the host root was mounted in. At that moment the attacker had visibility of the cluster CA and control-plane certs but had not yet executed on the node; killing the Pod there contains the incident. Admission-time, a Pod Security Admission `baseline`/`restricted` label on the namespace (or an equivalent Kyverno/Gatekeeper policy) rejects the Pod outright: `restricted` forbids `privileged: true`, and both forbid `hostPath` volumes. The manifest in step 1 would never have been admitted.
 
-**Q33.** The **audit log** catches it. An external attacker replaying the stolen token authenticates as `system:serviceaccount:shop:builder` — the `user.username` field — and, in Kubernetes 1.34 with bound ServiceAccount tokens, the audit entry also carries the token's binding in `user.extra` (`authentication.kubernetes.io/pod-name` and `.../pod-uid`, plus the credential ID). The detection is the mismatch between that recorded Pod binding and the request's `sourceIPs`: a token bound to a Pod on `node01` arriving from an off-cluster address is unambiguous credential theft. Runtime detection sees nothing, because nothing happens on the node.
+**Q33.** The **audit log** catches it. An external attacker replaying the stolen token authenticates as `system:serviceaccount:shop:builder` — the `user.username` field — and, in Kubernetes 1.37 with bound ServiceAccount tokens, the audit entry also carries the token's binding in `user.extra` (`authentication.kubernetes.io/pod-name` and `.../pod-uid`, plus the credential ID). The detection is the mismatch between that recorded Pod binding and the request's `sourceIPs`: a token bound to a Pod on `node01` arriving from an off-cluster address is unambiguous credential theft. Runtime detection sees nothing, because nothing happens on the node.
 
 **Q34.** Low confidence, and specifically **asymmetric** confidence: the alerts you received are still true positives (Falco does not fabricate events), but the *absence* of an alert proves nothing, so you cannot bound the scope of the intrusion from the alert set alone. Remediation is twofold: treat the incident as scope-unknown and fall back on evidence that does not depend on the dropped stream — audit logs, `/proc` state on the node, image and filesystem forensics — and fix the drop condition (larger ring buffers, more buffers per CPU, reduced syscall ingestion) before the next incident. Persistent drops on a node mean that node has no reliable runtime detection.
 
@@ -922,7 +922,7 @@ sudo systemctl restart falco-modern-bpf.service
 
 ## Sources
 
-- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.34* — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF, *Certified Kubernetes Security Specialist (CKS) Curriculum v1.37* — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - The Falco Project, *Rules* and *Rules Fields* — https://falco.org/docs/concepts/rules/ · https://falco.org/docs/reference/rules/supported-fields/
 - The Falco Project, *Falco Configuration* — https://falco.org/docs/reference/daemon/config-options/
 - The Falco Project, *Event Sources: Kubernetes Audit Events* — https://falco.org/docs/event-sources/kubernetes-audit/

@@ -1,6 +1,6 @@
 # Ejercicios — 2.4 Implementar Cifrado Pod-a-Pod (Cilium, Istio)
 
-**Certificación:** CKS 1.34 · **Peso del dominio:** 5%
+**Certificación:** CKS 1.37 · **Peso del dominio:** 5%
 
 Estos son ejercicios guiados prácticos. Cada bloque termina con preguntas de verificación; las respuestas están colapsadas al final. No leas las respuestas hasta haber ejecutado el bloque.
 
@@ -769,7 +769,7 @@ La configuración dice qué se pretendía; la captura dice qué es cierto. Hacé
 
 ## Referencias
 
-- CNCF CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CNCF CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - Cilium — Transparent Encryption (WireGuard & IPsec) — https://docs.cilium.io/en/stable/security/network/encryption/
 - Cilium — WireGuard Transparent Encryption — https://docs.cilium.io/en/stable/security/network/encryption-wireguard/
 - Cilium — IPsec Transparent Encryption and key rotation — https://docs.cilium.io/en/stable/security/network/encryption-ipsec/

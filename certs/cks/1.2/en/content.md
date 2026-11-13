@@ -661,7 +661,7 @@ Use `etcdctl get /registry/secrets/<ns>/<name> | hexdump -C` and observe the rea
 
 ## References
 
-- CKS Curriculum v1.34 — https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- CKS Curriculum v1.37 — https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 - CIS Kubernetes Benchmark (free download) — https://www.cisecurity.org/benchmark/kubernetes
 - CIS Benchmarks overview — https://www.cisecurity.org/cis-benchmarks
 - kube-bench repository — https://github.com/aquasecurity/kube-bench

@@ -1,6 +1,6 @@
 # Ejercicios — Tema 5.2: Uso de Gestión de Identidad y Acceso con Mínimo Privilegio
 
-> **Contexto del dominio (CKS v1.34, peso de examen 2.5).** Estos labs guiados construyen la memoria muscular práctica que el examen espera en torno a identidad y autorización: enumerar quién puede hacer qué, construir permisos mínimos con `Role`/`ClusterRole`, endurecer la exposición de tokens de `ServiceAccount`, y detectar las construcciones RBAC que entregan cluster-admin de forma silenciosa. Cada paso es ejecutable; se muestra la salida esperada para que puedas confirmar que vas bien encaminado antes de responder las preguntas de control.
+> **Contexto del dominio (CKS v1.37, peso de examen 2.5).** Estos labs guiados construyen la memoria muscular práctica que el examen espera en torno a identidad y autorización: enumerar quién puede hacer qué, construir permisos mínimos con `Role`/`ClusterRole`, endurecer la exposición de tokens de `ServiceAccount`, y detectar las construcciones RBAC que entregan cluster-admin de forma silenciosa. Cada paso es ejecutable; se muestra la salida esperada para que puedas confirmar que vas bien encaminado antes de responder las preguntas de control.
 >
 > **Prerrequisitos**
 > - Un clúster donde seas `cluster-admin` (un `kind` descartable, `minikube`, o el kubeconfig de admin de un clúster real). Kubernetes **v1.30+** para que `kubectl create token`, los tokens proyectados acotados (bound) y `auth can-i --list` se comporten como está documentado.
