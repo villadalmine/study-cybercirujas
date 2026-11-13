@@ -4,6 +4,14 @@ backend: claude
 model: claude-opus-5-5
 sources:
 - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
+revalidated:
+  upgrade: docs/upgrades/ckne-ga.yaml
+  against: syllabi/ckne/v2026-10-01.yaml
+  version: '2026-10-01'
+  objective: Troubleshooting End-to-End Network Performance with Tracing
+  reasons:
+  - objective reworded (similarity 0.9661)
+  committed: '2026-10-01'
 quality:
   weights_version: 1
   score: 80.6

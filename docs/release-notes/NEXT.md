@@ -11,6 +11,7 @@
 
 - **Labs that run:** a generated lab now has the `break`, `verify` and `cleanup` modes the lab runner needs and never waits at a prompt, or it is not written; `teach cert lab` rewrites only a topic's lab.
 - **Moved citations, fixed in one step:** `scripts/fix_citation.py` replaces a dead documentation URL in every language of a topic and keeps the translations' source chain current, without paying for a re-translation.
+- **CKNE follows the GA curriculum:** the Certified Kubernetes Network Engineer material now tracks the official CNCF curriculum (2026-10-01) instead of the beta page; the GA kept the same 22 objectives, so every topic stays as it was, with one title reworded.
 
 ## Upgrade notes
 
