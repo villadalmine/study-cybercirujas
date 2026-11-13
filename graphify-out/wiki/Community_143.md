@@ -1,35 +1,33 @@
 # Community 143
 
-> 7 nodes · cohesion 0.29
+> 10 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **probe_languages()** (10 connections) — `scripts/probe_models.py`
-- **graded()** (4 connections) — `scripts/probe_models.py`
-- **detect_language()** (3 connections) — `scripts/probe_models.py`
-- **Re-probing, and two things the second run taught (2026-09-14)** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Best-effort language of a reply: one of MARKERS, 'zh', 'ja', or 'unclear'. Kana…** (1 connections) — `scripts/probe_models.py`
-- **(did it find the answer in the material, which language it replied in). Both…** (1 connections) — `scripts/probe_models.py`
-- **Ask the model, in each language, a question answered by real material. Returns…** (1 connections) — `scripts/probe_models.py`
+- **Window** (10 connections) — `tests/test_curriculum_diff.py`
+- **.run_window()** (7 connections) — `tests/test_curriculum_diff.py`
+- **.test_opens_when_the_tracker_and_the_snapshot_agree()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_refused_when_the_gate_would_reject_it()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_refused_when_the_snapshot_is_another_document()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_refused_when_the_snapshot_is_another_version()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_refused_without_an_upstream_block()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_refused_without_the_frozen_snapshot()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_the_committed_cks_window_is_current_and_written_like_catalog_save()** (2 connections) — `tests/test_curriculum_diff.py`
+- **`window` writes upstream.snapshot and milestone only when the tracker and the…** (1 connections) — `tests/test_curriculum_diff.py`
 
 ## Relationships
 
-- [Community 37](Community_37.md) (4 shared connections)
-- [Community 93](Community_93.md) (2 shared connections)
-- [Community 278](Community_278.md) (1 shared connections)
-- [Community 45](Community_45.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [The phases](The_phases.md) (1 shared connections)
+- [Community 245](Community_245.md) (1 shared connections)
+- [Community 59](Community_59.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/STUDY_BOT_DESIGN.md`
-- `scripts/probe_models.py`
+- `tests/test_curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (88%)
-- INFERRED: 2 (12%)
+- EXTRACTED: 17 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

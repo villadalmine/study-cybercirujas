@@ -1,36 +1,34 @@
 # Community 144
 
-> 10 nodes · cohesion 0.27
+> 9 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **.run_sync()** (8 connections) — `tests/test_tracker.py`
-- **SyncCncfTests** (6 connections) — `tests/test_tracker.py`
-- **2026-09-11** (3 connections) — `docs/HISTORY.md`
-- **json()** (2 connections) — `tests/test_tracker.py`
-- **.test_a_new_upstream_version_goes_to_upstream_not_tracked_version()** (2 connections) — `tests/test_tracker.py`
-- **.test_after_the_switch_the_status_is_current()** (2 connections) — `tests/test_tracker.py`
-- **.test_sync_is_idempotent_once_the_tracked_version_is_the_published_one()** (2 connections) — `tests/test_tracker.py`
-- **fake_get()** (1 connections) — `tests/test_tracker.py`
-- **__init__()** (1 connections) — `tests/test_tracker.py`
-- **`teach tracker sync` fills `upstream:` and never moves `tracked_version` (#63).** (1 connections) — `tests/test_tracker.py`
+- **ocr_pdf.py** (12 connections) — `scripts/ocr_pdf.py`
+- **ocr()** (7 connections) — `scripts/ocr_pdf.py`
+- **main()** (6 connections) — `scripts/ocr_pdf.py`
+- **embedded_text()** (4 connections) — `scripts/ocr_pdf.py`
+- **fetch()** (4 connections) — `scripts/ocr_pdf.py`
+- **Path** (3 connections)
+- **Read a PDF whose text cannot be extracted, by rendering it and running OCR.…** (1 connections) — `scripts/ocr_pdf.py`
+- **What the PDF's own text layer yields. Empty-ish means OCR is needed.** (1 connections) — `scripts/ocr_pdf.py`
+- **(text, engine). Renders each page, then reads the pixels.** (1 connections) — `scripts/ocr_pdf.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 59](Community_59.md) (1 shared connections)
-- [Community 15](Community_15.md) (1 shared connections)
-- [Community 65](Community_65.md) (1 shared connections)
+- [Community 43](Community_43.md) (7 shared connections)
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
 
 ## Source Files
 
-- `docs/HISTORY.md`
-- `tests/test_tracker.py`
+- `scripts/ocr_pdf.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (81%)
-- INFERRED: 3 (19%)
+- EXTRACTED: 26 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

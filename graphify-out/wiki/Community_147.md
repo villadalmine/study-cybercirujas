@@ -1,40 +1,35 @@
 # Community 147
 
-> 10 nodes · cohesion 0.31
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **Scope** (13 connections) — `teach/lab/kc_scope.py`
-- **.tested()** (7 connections) — `teach/lab/kc_scope.py`
-- **reason()** (5 connections) — `teach/lab/kc_scope.py`
-- **test_status_is_tested_only_with_killercoda_evidence()** (5 connections) — `tests/lab/test_kc_scope.py`
-- **.proven_for()** (4 connections) — `teach/lab/kc_scope.py`
-- **status()** (4 connections) — `teach/lab/kc_scope.py`
-- **Which labs are on Killercoda: `tested` and `loaded-untested`** (4 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Why a lab is not `tested` (empty for a tested one).** (1 connections) — `teach/lab/kc_scope.py`
-- **The publish gate: an entry on a target that allows the mirror, for THIS lab…** (1 connections) — `teach/lab/kc_scope.py`
-- **Evidence on a Killercoda target (any hash: a changed lab is re-proven by the…** (1 connections) — `teach/lab/kc_scope.py`
+- **contract_problems()** (9 connections) — `teach/core/labs.py`
+- **Contract** (7 connections) — `tests/test_lab_contract_gen.py`
+- **.test_the_gate_agrees_with_the_runner()** (3 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_full_contract_passes()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_missing_mode_is_named()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_terminal_prompt_needs_the_runner_variables()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_reading_a_file_or_a_comment_is_not_a_prompt()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_prompt_heuristic_edges()** (1 connections) — `tests/test_lab_contract_gen.py`
+- **Why a generated break_fix.sh cannot run under study-lab, [] when it can. The…** (1 connections) — `teach/core/labs.py`
 
 ## Relationships
 
-- [Community 44](Community_44.md) (6 shared connections)
-- [Community 111](Community_111.md) (5 shared connections)
-- [Community 213](Community_213.md) (2 shared connections)
-- [Community 18](Community_18.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 217](Community_217.md) (1 shared connections)
-- [Community 170](Community_170.md) (1 shared connections)
+- [Community 29](Community_29.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 121](Community_121.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/RUN-A-LAB-ANYWHERE.md`
-- `teach/lab/kc_scope.py`
-- `tests/lab/test_kc_scope.py`
+- `teach/core/labs.py`
+- `tests/test_lab_contract_gen.py`
 
 ## Audit Trail
 
-- EXTRACTED: 23 (74%)
-- INFERRED: 8 (26%)
+- EXTRACTED: 17 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

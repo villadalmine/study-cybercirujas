@@ -1,13 +1,20 @@
 # Community 257
 
-> 8 nodes · cohesion 0.25
+> 15 nodes · cohesion 0.13
 
 ## Key Concepts
 
+- **The loop** (10 connections) — `docs/WORKFLOW.md`
 - **Content Workflow** (9 connections) — `docs/WORKFLOW.md`
+- **1. Snapshot the syllabus — once per certification** (2 connections) — `docs/WORKFLOW.md`
 - **Backends** (2 connections) — `docs/WORKFLOW.md`
 - **Switching to Gemini (or any CLI agent)** (2 connections) — `docs/WORKFLOW.md`
+- **The syllabus-change trigger** (2 connections) — `docs/WORKFLOW.md`
 - **Translating instead of re-authoring** (2 connections) — `docs/WORKFLOW.md`
+- **2b. The quality floor — the same standard for every backend** (1 connections) — `docs/WORKFLOW.md`
+- **2c. What "quality" can and cannot be proven mechanically** (1 connections) — `docs/WORKFLOW.md`
+- **4. Status** (1 connections) — `docs/WORKFLOW.md`
+- **5. Commit** (1 connections) — `docs/WORKFLOW.md`
 - **Everything the pipeline produces is declared in `pipeline.yaml`** (1 connections) — `docs/WORKFLOW.md`
 - **Failure modes worth knowing** (1 connections) — `docs/WORKFLOW.md`
 - **Language flow: author once in English, translate outwards** (1 connections) — `docs/WORKFLOW.md`
@@ -15,10 +22,12 @@
 
 ## Relationships
 
+- [Community 74](Community_74.md) (2 shared connections)
+- [Community 15](Community_15.md) (2 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
-- [Community 273](Community_273.md) (1 shared connections)
-- [Community 134](Community_134.md) (1 shared connections)
-- [Community 221](Community_221.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
@@ -27,8 +36,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 10 (83%)
-- INFERRED: 2 (17%)
+- EXTRACTED: 20 (87%)
+- INFERRED: 3 (13%)
 - AMBIGUOUS: 0 (0%)
 
 ---

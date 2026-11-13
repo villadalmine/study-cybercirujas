@@ -15,6 +15,7 @@ import argparse
 import difflib
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -288,8 +289,18 @@ def load_syllabus(path: Path) -> dict:
         d = domains.setdefault(did, {"id": did, "name": name, "weight": 0.0, "objectives": []})
         d["weight"] += float(t.get("weight") or 0)
         d["objectives"].append({"id": str(t["id"]), "text": tidy(str(t.get("title") or ""))})
+    # A frozen file stores per-objective weights, the domain's split evenly and rounded to two decimals, so the
+    # sum carries up to 0.01 per objective of rounding (ckne: 25 -> 25.02). `derived` lets the diff tell that
+    # from a published change; a snapshot's weight is the document's own number and is compared exactly.
     return {"cert": front.get("cert"), "version": str(front.get("version")), "file_sha256": sha256_text(text),
-            "domains": [dict(d, weight=number(d["weight"])) for d in domains.values()]}
+            "domains": [dict(d, weight=number(d["weight"]), derived=True) for d in domains.values()]}
+
+
+def same_weight(old: dict, new: dict) -> bool:
+    """Equal domain weights, allowing a derived (summed) weight its rounding: 0.01 per objective."""
+    a, b = float(old["weight"]), float(new["weight"])
+    slack = 0.01 * max(len(d.get("objectives") or []) for d in (old, new)) if (old.get("derived") or new.get("derived")) else 0
+    return abs(a - b) <= slack + 1e-9
 
 
 def _match_domains(old: list[dict], new: list[dict]) -> dict[str, str]:
@@ -361,7 +372,7 @@ def diff(old: dict, new: dict) -> dict:
         if normalize(odom[oid]["name"]) != normalize(ndom[nid]["name"]):
             domains["renamed"].append({"old_id": oid, "new_id": nid, "old": odom[oid]["name"],
                                        "new": ndom[nid]["name"]})
-        if number(odom[oid]["weight"]) != number(ndom[nid]["weight"]):
+        if not same_weight(odom[oid], ndom[nid]):
             domains["weight_changed"].append({"old_id": oid, "new_id": nid, "domain": ndom[nid]["name"],
                                               "old": number(odom[oid]["weight"]),
                                               "new": number(ndom[nid]["weight"])})
@@ -526,7 +537,9 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
 
     Lab files (`lab/lab.yaml`: `kubernetes:`, `runner_image`; `lab/*.sh`) are scanned too: every version
     line there is `technical`, since the runner and the Killercoda export read them."""
-    ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)")
+    # A tracked "version" with no digit ("beta", "unknown": a curriculum frozen before it had a number) is not a
+    # version any line can name; matching the word would list every "<unknown>" in a kubectl output (ckne GA).
+    ver = re.compile(rf"(^|[^0-9.]){re.escape(version)}([^0-9]|$)") if re.search(r"\d", version) else None
     major, _, minor = version.partition(".")
     companion = (re.compile(rf"(^|[^0-9.])v{major}\.({minor_below(minor)})\.\d+(?!\d)")
                  if minor.isdigit() and int(minor) > 2 else None)
@@ -549,7 +562,7 @@ def scan(root: Path, cert: str, topic: str, langs: list[str], version: str, need
         heads = _headings(text) if is_doc else [False] * len(text.splitlines())
         found = []
         for n, (line, heading) in enumerate(zip(text.splitlines(), heads), 1):
-            if not ver.search(line):
+            if ver is None or not ver.search(line):
                 continue
             if is_doc and "curriculum" in line.casefold():
                 lines["curriculum"] += 1
@@ -718,6 +731,149 @@ COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone 
                       _window_args, _window_run)
 
 
+# ==== switch ====
+#
+#   scripts/curriculum_diff.py switch docs/upgrades/<upgrade>.yaml [--check]
+#
+# The last step of an upgrade: what the catalog and the frozen syllabus say moves from the tracked curriculum
+# to the target. Until this command it was a hand edit of catalog.yaml (CKA & CKAD v1.37). From the live plan:
+#
+# - refused while any topic is `regenerate` or `retire`, or any objective is `new`: their content PRs come
+#   first, and this command only closes upgrades whose material stays (keep and revalidate);
+# - catalog.yaml: `tracked_version` -> the target's version, `sources.objectives` -> the target's pinned PDF,
+#   `upstream_status: current`, and the `upstream:` window removed;
+# - certs/<cert>.md: `version` -> the target's, the PDF added to `sources`, and each topic's title -> the
+#   target objective it maps to when the wording changed, and `snapshot_date` -> the target's `source.committed`
+#   (the date of the curriculum it now follows: check_versions compares it with `curriculum_updated` when the
+#   version is a date, and a fixed input keeps `--check` stable across days). Directory names stay (README ->
+#   Topic ids at the switch): the snapshot's positional ids are not the frozen file's.
+#
+# - every `revalidate` topic: a `revalidated:` block in each <lang>/meta.yaml (the plan's planned file) records against
+#   which objective text, from which upgrade and why it was re-checked; `make quality` then re-runs the checks and their
+#   result is the `quality:` block next to it. The block goes before `quality:`, which quality_score.py keeps last;
+# - the body of certs/<cert>.md keeps its dated notes (they were true when written) and gets one line saying the snapshot
+#   was superseded, by which document and upgrade, so no note there reads as the current state.
+#
+# The same serializers teach.core uses (yaml.safe_dump for the catalog, frontmatter.dumps for the syllabus).
+# A domain renamed or reweighted is not rewritten into each topic's `topic:`/`weight:` (#124).
+
+
+REVALIDATED_KEY = re.compile(r"^revalidated:.*?(?=^\S|\Z)", re.M | re.S)
+
+
+def with_revalidated(meta_text: str, block: dict) -> str:
+    """meta.yaml with its `revalidated:` block replaced in place, or inserted before `quality:` (or appended)."""
+    text = yaml.safe_dump({"revalidated": block}, sort_keys=False, allow_unicode=True, width=1000)
+    if REVALIDATED_KEY.search(meta_text):
+        return REVALIDATED_KEY.sub(lambda _: text, meta_text, count=1)
+    at = re.search(r"^quality:", meta_text, re.M)
+    if at:
+        return meta_text[:at.start()] + text + meta_text[at.start():]
+    return meta_text + ("" if not meta_text or meta_text.endswith("\n") else "\n") + text
+
+
+def superseded_note(version: str, url: str, upgrade: str) -> str:
+    return (f"{superseded_mark(version)} ({url}), switched by `{upgrade}`. The notes above are dated and "
+            "describe the snapshot they were written for.")
+
+
+def superseded_mark(version: str) -> str:
+    return f"**Superseded by the curriculum {version}**"
+
+
+# the top-level `title:` scalar with its continuation lines: PyYAML folds a long title onto an indented second line
+# (21 labs in the tree), and `>-`/`|` block scalars are indented too (review of #307)
+LAB_TITLE = re.compile(r"^title:[^\n]*(?:\n[ \t]+\S[^\n]*)*", re.M)
+
+
+def lab_with_title(text: str, title: str) -> str:
+    """The lab.yaml text with its top-level `title:` line set to `title`, everything else byte for byte (#306)."""
+    line = yaml.safe_dump({"title": title}, allow_unicode=True, width=10**6, default_flow_style=False).strip()
+    return LAB_TITLE.sub(lambda _: line, text, count=1) if LAB_TITLE.search(text) else text
+
+
+def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str, str], list[str]]:
+    """(new catalog, {path: new text} for the frozen syllabi, the reasons it cannot) without writing."""
+    import frontmatter
+
+    catalog = yaml.safe_load((root / "catalog.yaml").read_text(encoding="utf-8"))
+    files, why = {}, []
+    for cert, s in sorted(spec["certs"].items()):
+        entry = (catalog.get("certs") or {}).get(cert)
+        if entry is None:
+            why.append(f"{cert}: not in catalog.yaml")
+            continue
+        c = plan_cert(root, cert, s)
+        pending = [f"{t['topic']} ({t['class']})" for t in c["topics"] if t["class"] in ("regenerate", "retire")]
+        pending += [f"{n['objective']} (new)" for n in c.get("new") or []]
+        if pending:
+            why.append(f"{cert}: content changes first: {', '.join(pending)}")
+            continue
+        target = load_syllabus(root / s["target"])
+        source = target.get("source") or {}
+        url, version, committed = source.get("url"), str(target["version"]), source.get("committed")
+        if not url or not committed:
+            why.append(f"{cert}: {s['target']} has no source.url or source.committed")
+            continue
+        texts = {o["id"]: o["text"] for d in target["domains"] for o in d["objectives"]}
+        rows = {t["topic"]: t for t in c["topics"]}
+        md = root / (s.get("tracked") or f"certs/{cert}.md")
+        post = frontmatter.load(md)
+        for topic in post.metadata.get("topics") or []:
+            row = rows.get(str(topic.get("id")))
+            new = texts.get(row["maps_to"]) if row else None
+            if new and tidy(str(topic.get("title") or "")) != new:
+                topic["title"] = new
+            lab = root / "certs" / cert / str(topic.get("id")) / "lab" / "lab.yaml"
+            if new and lab.is_file():      # the lab states the objective title too (Killercoda R5 compares them)
+                text = lab.read_text(encoding="utf-8")
+                if (yaml.safe_load(text) or {}).get("title") != new and lab_with_title(text, new) != text:
+                    files[str(lab.relative_to(root))] = lab_with_title(text, new)
+        post.metadata["version"] = version
+        post.metadata["snapshot_date"] = str(committed)
+        sources = list(post.metadata.get("sources") or [])
+        post.metadata["sources"] = sources if url in sources else [*sources, url]
+        note = superseded_note(version, url, spec_path or "the upgrade spec")
+        body = post.content.rstrip("\n")
+        if superseded_mark(version) not in body:
+            post.content = f"{body}\n\n{note}" if body else note
+        files[str(md.relative_to(root))] = frontmatter.dumps(post) + "\n"
+        for row in c["topics"]:
+            if row["class"] != "revalidate":
+                continue
+            block = {"upgrade": spec_path or None, "against": s["target"], "version": version,
+                     "objective": texts.get(row["maps_to"]), "reasons": list(row["reasons"]),
+                     "committed": str(committed)}   # the target curriculum's date, not the day it was re-checked
+            for meta in sorted((root / "certs" / cert / row["topic"]).glob("*/meta.yaml")):
+                files[str(meta.relative_to(root))] = with_revalidated(meta.read_text(encoding="utf-8"), block)
+        entry["tracked_version"] = version
+        entry.setdefault("sources", {})["objectives"] = url
+        entry["upstream_status"] = "current"
+        entry.pop("upstream", None)
+    return catalog, files, why
+
+
+def _switch_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("spec", help="the upgrade spec, relative to the repository root")
+    p.add_argument("--check", action="store_true", help="fail if the files do not already say this")
+
+
+def _switch_run(args) -> int:
+    spec = yaml.safe_load((REPO / args.spec).read_text(encoding="utf-8"))
+    catalog, files, why = switch(REPO, spec, Path(os.path.normpath(args.spec)).as_posix())
+    if why:
+        print("\n".join(why), file=sys.stderr)
+        return 1
+    status = write(yaml.safe_dump(catalog, sort_keys=False, allow_unicode=True), str(REPO / "catalog.yaml"), args.check)
+    for rel, text in files.items():
+        status |= write(text, str(REPO / rel), args.check)
+    return status
+
+
+COMMANDS["switch"] = ("close an upgrade: tracked_version, objectives and the frozen syllabus move to the target",
+                      _switch_args, _switch_run)
+
+
 # ==== guard ====
 #
 #   scripts/curriculum_diff.py guard docs/upgrades/<upgrade>.plan.json [--base origin/main | --files ...]
@@ -763,26 +919,46 @@ def guard(plan_data: dict, changed: list[str]) -> list[str]:
 ALIASES = {"", "claude", "agy", "cheap", "codex", "gemini", "opus", "sonnet", "haiku", "unknown", "none"}
 
 
-def cite_checker(base_text):
+def _catalog_certs(text: str | None) -> dict:
+    try:
+        data = yaml.safe_load(text or "")
+    except yaml.YAMLError:
+        data = None
+    return data.get("certs", {}) if isinstance(data, dict) else {}
+
+
+def cite_checker(base_text, head_text=None):
     """(file, old line, new line) -> True when the new line is what the citation fix writes from the catalog on the BASE.
 
     Plan-free on purpose: the catalog says what each cert's citations must read, so any line `fix_line` would change may
-    be rewritten to exactly that, in a topic the plan keeps or revalidates, with no widening of the plan."""
-    try:
-        data = yaml.safe_load(base_text("catalog.yaml") or "")
-    except yaml.YAMLError:
-        data = None
-    certs = data.get("certs", {}) if isinstance(data, dict) else {}
+    be rewritten to exactly that, in a topic the plan keeps or revalidates, with no widening of the plan.
+
+    The switch PR of an upgrade with no window (a beta or a date-versioned PDF: `window` needs dotted versions) moves
+    tracked_version and must make the citations agree in the same PR, or the consistency gate fails it. For a cert whose
+    tracked_version differs between the base and the HEAD catalog, the fix the HEAD catalog writes is accepted too; that
+    catalog change is itself gated by check_pr (an upgrade spec on the base, its milestone, `Scope: exam-version`)."""
+    base = _catalog_certs(base_text("catalog.yaml"))
+    head = _catalog_certs(head_text("catalog.yaml")) if head_text else {}
+    switched = {c: e for c, e in head.items()
+                if c in base and isinstance(e, dict) and e.get("tracked_version") != base[c].get("tracked_version")}
+
+    def wants(cert: str) -> list[dict]:
+        # the head entry without its `upstream:` window: check_pr gates only tracked_version and sources.objectives, so
+        # an ungated window on the head must not become the target (the switch removes the window anyway)
+        out = [cc.wanted(base[cert], cert, strict=True)] if cert in base else []
+        if cert in switched:
+            out.append(cc.wanted({**switched[cert], "upstream": None}, cert, strict=True))
+        return out
 
     def ok(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
-        return (len(parts) > 2 and parts[0] == "certs" and parts[1] in certs
-                and cc.fix_line(old, cc.wanted(certs[parts[1]], parts[1], strict=True)) == new)
+        return (len(parts) > 2 and parts[0] == "certs"
+                and any(cc.fix_line(old, w) == new for w in wants(parts[1])))
 
     def meta(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
-        return (len(parts) > 2 and parts[0] == "certs" and parts[1] in certs
-                and cc.meta_ok(old, new, cc.wanted(certs[parts[1]], parts[1], strict=True), parts[3] if len(parts) > 4 else None))
+        return (len(parts) > 2 and parts[0] == "certs"
+                and any(cc.meta_ok(old, new, w, parts[3] if len(parts) > 4 else None) for w in wants(parts[1])))
     ok.meta = meta
     return ok
 
@@ -804,6 +980,33 @@ def citation_files_ok(plan_data: dict, f: str, base_text, head_text, cite_ok) ->
     if (parts[-1] not in DOC_FILES and not is_lab_script) or len(old.splitlines()) != len(new.splitlines()):
         return False
     return all(cite_ok(f, x, y) for x, y in zip(old.splitlines(), new.splitlines()) if x != y)
+
+
+def lab_title_ok(plan_data: dict, f: str, base_text, head_text) -> bool:
+    """A kept or revalidated topic's lab.yaml may change only as `switch` changes it: its `title:` line set to the
+    target objective the plan maps the topic to, read from the target syllabus on the base."""
+    parts = f.split("/")
+    if len(parts) != 5 or parts[0] != "certs" or parts[3:] != ["lab", "lab.yaml"] or parts[1] not in plan_data["certs"]:
+        return False
+    c = plan_data["certs"][parts[1]]
+    row = next((t for t in c["topics"] if t["topic"] == parts[2]), None)
+    target = c.get("target") or {}
+    old, new, target = base_text(f), head_text(f), base_text(target.get("file") or "") if isinstance(target, dict) else None
+    if not row or row["class"] not in ("keep", "revalidate") or old is None or new is None or not target:
+        return False
+    texts = {o["id"]: o["text"] for d in (yaml.safe_load(target) or {}).get("domains") or [] for o in d["objectives"]}
+    want = texts.get(row.get("maps_to"))
+    if not want or new != lab_with_title(old, want):
+        return False
+    # only together with the switch: the head's frozen syllabus already gives the topic that title, so the lab and the
+    # syllabus cannot be split by a lab-only edit (review of #307)
+    tracked = c.get("tracked") or {}
+    md = head_text(tracked.get("file") or f"certs/{parts[1]}.md") if isinstance(tracked, dict) else None
+    try:
+        topics = (yaml.safe_load(md.split("---", 2)[1]) or {}).get("topics") or [] if md and md.startswith("---") else []
+    except yaml.YAMLError:
+        return False
+    return any(str(t.get("id")) == parts[2] and tidy(str(t.get("title") or "")) == want for t in topics)
 
 
 TOOLS = {"scripts/upgrade_versions.py"}      # the only scripted editor a meta.yaml may name in `tool_edit`
@@ -836,7 +1039,7 @@ def tool_edit_ok(root: Path, plan_data: dict, directory: str, meta: dict, change
     - every changed doc file of the directory keeps its line count, and each line that differs is a technical
       version line the plan lists AND is exactly what the script's own function writes for the line it replaced
       (`echo pwned` on a listed line is refused)."""
-    cite_ok = cite_checker(base_text)
+    cite_ok = cite_checker(base_text, head_text)
     edit = meta.get("tool_edit")
     pins = load_pins(plan_data, base_text)
     if not isinstance(edit, dict) or edit.get("tool") not in TOOLS or not pins or pins.get("tool") != edit["tool"]:
@@ -875,7 +1078,7 @@ def wrong_rewrites(plan_data: dict, changed: list[str], base_text, head_text) ->
     pins = load_pins(plan_data, base_text)
     if not pins:
         return []
-    cite_ok = cite_checker(base_text)
+    cite_ok = cite_checker(base_text, head_text)
     listed: dict[str, set] = {}
     for c in plan_data["certs"].values():
         for t in c["topics"]:
@@ -1018,8 +1221,9 @@ def _guard_run(args) -> int:
         print(f"plan: {rel} as committed on {base[:12]} (the base), not the head's copy")
     plan_data = json.loads(committed)
     base_t, head_t = (lambda f: _git_text(base, f)), (lambda f: _git_text(None, f))
-    cite_ok = cite_checker(base_t)
-    bad = [f for f in guard(plan_data, files) if not citation_files_ok(plan_data, f, base_t, head_t, cite_ok)]
+    cite_ok = cite_checker(base_t, head_t)
+    bad = [f for f in guard(plan_data, files) if not citation_files_ok(plan_data, f, base_t, head_t, cite_ok)
+           and not lab_title_ok(plan_data, f, base_t, head_t)]
     for f in bad:
         print(f"NOT PLANNED: {f}")
     scoped = unlisted_edits(plan_data, files, base_t, head_t, cite_ok)

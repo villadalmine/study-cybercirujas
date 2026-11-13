@@ -5,14 +5,15 @@
 ## Key Concepts
 
 - **AGENTS.md** (5 connections) — `AGENTS.md`
+- **Work flow** (2 connections) — `AGENTS.md`
 - **Hard rules for agents** (1 connections) — `AGENTS.md`
 - **Read in this order** (1 connections) — `AGENTS.md`
 - **Where things live** (1 connections) — `AGENTS.md`
-- **Work flow** (1 connections) — `AGENTS.md`
 
 ## Relationships
 
 - [Community 23](Community_23.md) (1 shared connections)
+- [Community 44](Community_44.md) (1 shared connections)
 
 ## Source Files
 
@@ -20,8 +21,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 5 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 5 (83%)
+- INFERRED: 1 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

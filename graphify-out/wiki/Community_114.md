@@ -1,6 +1,6 @@
 # Community 114
 
-> 19 nodes · cohesion 0.15
+> 18 nodes · cohesion 0.16
 
 ## Key Concepts
 
@@ -8,7 +8,6 @@
 - **test_stream.py** (14 connections) — `tests/lab/test_stream.py`
 - **_why()** (5 connections) — `teach/lab/runner.py`
 - **Lab** (4 connections) — `tests/lab/test_stream.py`
-- **threading** (4 connections)
 - **test_a_child_that_exits_124_is_not_reported_as_a_timeout()** (3 connections) — `tests/lab/test_stream.py`
 - **test_scripts_run_under_timeout_inside_the_container()** (3 connections) — `tests/lab/test_stream.py`
 - **test_the_backstop_docker_exec_is_bounded()** (3 connections) — `tests/lab/test_stream.py`
@@ -26,15 +25,13 @@
 
 ## Relationships
 
-- [Community 12](Community_12.md) (7 shared connections)
-- [Community 236](Community_236.md) (2 shared connections)
+- [Community 12](Community_12.md) (5 shared connections)
+- [Community 280](Community_280.md) (4 shared connections)
 - [Community 61](Community_61.md) (1 shared connections)
-- [Community 280](Community_280.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 249](Community_249.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
 - [Community 215](Community_215.md) (1 shared connections)
-- [Community 160](Community_160.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 37](Community_37.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
 
 ## Source Files
 
@@ -43,7 +40,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 39 (95%)
+- EXTRACTED: 36 (95%)
 - INFERRED: 2 (5%)
 - AMBIGUOUS: 0 (0%)
 

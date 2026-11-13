@@ -1,29 +1,29 @@
 # Community 132
 
-> 10 nodes · cohesion 0.20
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
-- **Study bot — design** (8 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Operating it** (4 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Tools / function calling — evaluated 2026-09-09** (2 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Alternatives considered** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Effort** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **How a student uses it** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **How it is maintained** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Is it all API?** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **The insight: explicit selection replaces retrieval** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
-- **Two harnesses, not one (the distinction that sets the phases)** (1 connections) — `docs/STUDY_BOT_DESIGN.md`
+- **cks** (6 connections) — `docs/upgrades/cks-1.37.md`
+- **Upgrade plan: CKS v1.37** (5 connections) — `docs/upgrades/cks-1.37.md`
+- **cks-1.37.md** (2 connections) — `docs/upgrades/cks-1.37.md`
+- **Rules (from the code, not judgment)** (2 connections) — `docs/upgrades/cks-1.37.md`
+- **Counts** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **Drift: frozen `certs/cks.md` vs its own v1.34 PDF** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **Flow** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **Impact: frozen `certs/cks.md` -> v1.37 (drives the classes)** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **Per-topic plan** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **Technical lines that name v1.34** (1 connections) — `docs/upgrades/cks-1.37.md`
+- **What upstream changed (v1.34 PDF -> v1.37 PDF)** (1 connections) — `docs/upgrades/cks-1.37.md`
 
 ## Relationships
 
-- [Community 110](Community_110.md) (1 shared connections)
-- [The phases](The_phases.md) (1 shared connections)
-- [Community 93](Community_93.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/STUDY_BOT_DESIGN.md`
+- `docs/upgrades/cks-1.37.md`
 
 ## Audit Trail
 

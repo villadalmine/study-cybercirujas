@@ -135,9 +135,13 @@ class ToolEditProvenance(unittest.TestCase):
 
     def test_the_committed_pins_name_this_script(self):
         import yaml
-        pins = yaml.safe_load((REPO / "docs/upgrades/cka-ckad-1.37.pins.yaml").read_text(encoding="utf-8"))
-        self.assertEqual((pins["tool"], pins["tool_sha256"]), ("scripts/upgrade_versions.py", self.sha),
-                         "the script changed: update tool_sha256 in the pins file (and re-run the edits to restamp)")
+        files = sorted((REPO / "docs/upgrades").glob("*.pins.yaml"))
+        self.assertTrue(files)
+        for path in files:
+            with self.subTest(path.name):
+                pins = yaml.safe_load(path.read_text(encoding="utf-8"))
+                self.assertEqual((pins["tool"], pins["tool_sha256"]), ("scripts/upgrade_versions.py", self.sha),
+                                 "the script changed: update tool_sha256 in the pins file (and re-run the edits to restamp)")
 
     def test_accepted_for_the_line_the_script_writes(self):
         self.assertTrue(self.ok(self.GOOD))

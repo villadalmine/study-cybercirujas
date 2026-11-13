@@ -305,6 +305,29 @@ def cert_translate(
         raise typer.Exit(1)
 
 
+@cert_app.command("lab")
+def cert_lab(
+    cert_id: str,
+    topic: str = typer.Option(..., "--topic", help="The topic whose lab to write (e.g. 1.4)"),
+    backend: str = typer.Option(None, "--backend"),
+    force: bool = typer.Option(False, "--force", help="Replace an existing lab"),
+) -> None:
+    """Write only a topic's lab (break_fix.sh + lab.yaml), leaving its content alone.
+
+    For a lab that is missing or that `study-lab validate --strict` refuses: the
+    script is checked against the runner's contract before anything is written.
+    """
+    try:
+        result = generator.generate_lab(cert_id, topic, backend=backend, force=force)
+    except generator.GeneratorConfigError as error:
+        typer.echo(f"  {topic}: {error}", err=True)
+        raise typer.Exit(1)
+    if "skipped" in result:
+        typer.echo(f"  {topic}: skipped — {result['skipped']}")
+    else:
+        typer.echo(f"  {topic}: lab written into {result['written']}")
+
+
 @cert_app.command("video-script")
 def cert_video_script(
     cert_id: str,
