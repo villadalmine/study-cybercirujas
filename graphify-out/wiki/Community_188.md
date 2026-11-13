@@ -1,6 +1,6 @@
 # Community 188
 
-> 12 nodes · cohesion 0.17
+> 11 nodes · cohesion 0.18
 
 ## Key Concepts
 
@@ -8,7 +8,6 @@
 - **The template: `lab.yaml` v2 + `break | verify | cleanup`** (3 connections) — `docs/LABS-RUNNER.md`
 - **clean()** (2 connections) — `teach/core/tracker.py`
 - **How it works** (2 connections) — `docs/LABS-RUNNER.md`
-- **Quick start** (2 connections) — `docs/LABS-RUNNER.md`
 - **Run a lab from another repository** (2 connections) — `docs/LABS-RUNNER.md`
 - **State of the 548 curated labs (validate, 2026-10-15)** (2 connections) — `docs/LABS-RUNNER.md`
 - **Create a lab that follows the template** (1 connections) — `docs/LABS-RUNNER.md`
@@ -20,9 +19,9 @@
 ## Relationships
 
 - [Community 104](Community_104.md) (1 shared connections)
-- [Community 236](Community_236.md) (1 shared connections)
 - [clean_registry.py](clean_registry.py.md) (1 shared connections)
 - [Community 23](Community_23.md) (1 shared connections)
+- [Community 26](Community_26.md) (1 shared connections)
 - [Community 1](Community_1.md) (1 shared connections)
 - [Community 138](Community_138.md) (1 shared connections)
 
@@ -33,8 +32,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 14 (82%)
-- INFERRED: 3 (18%)
+- EXTRACTED: 14 (88%)
+- INFERRED: 2 (12%)
 - AMBIGUOUS: 0 (0%)
 
 ---

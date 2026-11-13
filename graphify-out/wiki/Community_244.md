@@ -1,36 +1,29 @@
 # Community 244
 
-> 11 nodes · cohesion 0.22
+> 5 nodes · cohesion 0.60
 
 ## Key Concepts
 
-- **_domain_markers()** (8 connections) — `teach/core/tracker.py`
-- **_domain_of()** (6 connections) — `teach/core/tracker.py`
-- **_name_pattern()** (5 connections) — `teach/core/tracker.py`
-- **_heading_like()** (3 connections) — `teach/core/tracker.py`
-- **.test_a_bare_domain_number_is_not_a_marker()** (3 connections) — `tests/test_tracker.py`
-- **.test_a_possessive_domain_name_still_matches_itself()** (3 connections) — `tests/test_tracker.py`
-- **Pattern** (2 connections)
-- **A domain name, tolerant of the plural a vendor drops or adds between documents.…** (1 connections) — `teach/core/tracker.py`
-- **(name pattern, objective-id pattern, domain) per syllabus topic. The domain is…** (1 connections) — `teach/core/tracker.py`
-- **Short and not a sentence: how a heading, a tab or a domain title is laid out.** (1 connections) — `teach/core/tracker.py`
-- **The domain a line announces, if it is laid out to announce one. A domain's name…** (1 connections) — `teach/core/tracker.py`
+- **WriteLab** (5 connections) — `tests/test_lab_contract_gen.py`
+- **.run_with()** (5 connections) — `tests/test_lab_contract_gen.py`
+- **.test_a_rejected_script_is_retried_with_its_problems()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_after_the_last_attempt_nothing_is_written_and_the_batch_may_retry()** (2 connections) — `tests/test_lab_contract_gen.py`
+- **.test_the_prompt_states_the_contract()** (1 connections) — `tests/test_lab_contract_gen.py`
 
 ## Relationships
 
-- [Community 104](Community_104.md) (4 shared connections)
-- [Community 74](Community_74.md) (4 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/core/tracker.py`
-- `tests/test_tracker.py`
+- `tests/test_lab_contract_gen.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 8 (89%)
+- INFERRED: 1 (11%)
 - AMBIGUOUS: 0 (0%)
 
 ---

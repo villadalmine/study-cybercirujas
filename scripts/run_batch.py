@@ -48,12 +48,30 @@ def pending(cert: str, lang: str) -> list[str]:
     )
 
 
+def lab_only(cert: str, topic: str, lang: str, repo: Path = REPO) -> bool:
+    """True when the topic is pending ONLY because its lab is missing.
+
+    A lab the runner's contract rejects is not written (generator._write_lab,
+    #297) while the content and exercises already are. Regenerating with
+    --force would pay for both again; `teach cert lab` writes just the lab.
+    """
+    from teach.core import certs, quality
+
+    if lang != certs.DEFAULT_LANG:
+        return False
+    topic_dir = repo / "certs" / cert / topic
+    return not (topic_dir / "lab" / "break_fix.sh").exists() and quality.authored(topic_dir / lang)
+
+
+def command(cert: str, topic: str, lang: str, backend: str) -> list[str]:
+    if lab_only(cert, topic, lang):
+        return [str(TEACH), "cert", "lab", cert, "--topic", topic, "--backend", backend]
+    return [str(TEACH), "cert", "generate", cert, "--topic", topic,
+            "--lang", lang, "--backend", backend, "--force"]
+
+
 def generate(cert: str, topic: str, lang: str, backend: str) -> tuple[bool, str]:
-    result = subprocess.run(
-        [str(TEACH), "cert", "generate", cert, "--topic", topic,
-         "--lang", lang, "--backend", backend, "--force"],
-        cwd=REPO, capture_output=True, text=True,
-    )
+    result = subprocess.run(command(cert, topic, lang, backend), cwd=REPO, capture_output=True, text=True)
     return result.returncode == 0, (result.stdout + result.stderr).strip()
 
 

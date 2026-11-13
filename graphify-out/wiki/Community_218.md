@@ -1,60 +1,63 @@
 # Community 218
 
-> 48 nodes · cohesion 0.05
+> 53 nodes · cohesion 0.06
 
 ## Key Concepts
 
-- **ToolEditProvenance** (12 connections) — `tests/test_upgrade_versions.py`
+- **topic_pr.py** (20 connections) — `scripts/topic_pr.py`
+- **FAQ — how the ecosystem works, honestly** (17 connections) — `docs/FAQ.md`
+- **build()** (10 connections) — `scripts/topic_pr.py`
 - **CitedRunTests** (9 connections) — `tests/test_check_pr.py`
-- **1. The code graph (Graphify)** (8 connections) — `docs/DEVTOOLS.md`
+- **translated_from()** (8 connections) — `scripts/topic_pr.py`
+- **Path** (8 connections)
 - **Principles** (8 connections) — `docs/PRINCIPLES.md`
-- **.ok()** (7 connections) — `tests/test_upgrade_versions.py`
-- **7. The source chain** (6 connections) — `docs/PRINCIPLES.md`
+- **plan()** (7 connections) — `scripts/topic_pr.py`
+- **7. The source chain** (7 connections) — `docs/PRINCIPLES.md`
+- **differs()** (6 connections) — `scripts/topic_pr.py`
+- **run()** (6 connections) — `scripts/topic_pr.py`
+- **footer_kept()** (5 connections) — `scripts/topic_pr.py`
+- **main()** (5 connections) — `scripts/topic_pr.py`
+- **topic_langs()** (5 connections) — `scripts/topic_pr.py`
+- **_tracked_media()** (4 connections) — `scripts/status_matrix.py`
+- **model_of()** (4 connections) — `scripts/topic_pr.py`
 - **.fetch()** (4 connections) — `tests/test_check_pr.py`
 - **fail()** (4 connections) — `tests/test_check_pr.py`
-- **2. The wiki (OpenWiki)** (4 connections) — `docs/DEVTOOLS.md`
-- **3. Real metrics, end to end** (4 connections) — `docs/DEVTOOLS.md`
-- **Developer tools: code graph, wiki, and real metrics** (4 connections) — `docs/DEVTOOLS.md`
-- **.base()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.meta()** (3 connections) — `tests/test_upgrade_versions.py`
-- **topic()** (3 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_another_tool_or_a_sha_the_pins_do_not_name()** (3 connections) — `tests/test_upgrade_versions.py`
+- **subject()** (3 connections) — `scripts/topic_pr.py`
+- **Determinism and provenance** (3 connections) — `docs/FAQ.md`
+- **Known gaps** (3 connections) — `docs/FAQ.md`
+- **Translations** (3 connections) — `docs/FAQ.md`
+- **trailers()** (2 connections) — `scripts/topic_pr.py`
 - **.test_a_green_verify_run_on_the_head_proves_it()** (2 connections) — `tests/test_check_pr.py`
 - **.test_an_api_error_is_reported_not_swallowed()** (2 connections) — `tests/test_check_pr.py`
-- **.test_jobs_named_verify_and_e2e_in_another_workflow_do_not()** (2 connections) — `tests/test_check_pr.py`
-- **.test_the_repository_name_is_compared_without_case()** (2 connections) — `tests/test_check_pr.py`
-- **.setUp()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_accepted_for_the_line_the_script_writes()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_guard_flags_a_wrong_rewrite_of_any_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_an_edit_outside_the_plan()** (2 connections) — `tests/test_upgrade_versions.py`
-- **.test_refused_for_other_content_on_a_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
-- **Quality score** (2 connections) — `docs/FAQ.md`
-- *... and 23 more nodes in this community*
+- *... and 28 more nodes in this community*
 
 ## Relationships
 
-- [Community 150](Community_150.md) (1 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 141](Community_141.md) (5 shared connections)
+- [Community 54](Community_54.md) (3 shared connections)
+- [Community 63](Community_63.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 23](Community_23.md) (2 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 21](Community_21.md) (2 shared connections)
 - [Community 138](Community_138.md) (1 shared connections)
-- [Community 145](Community_145.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 21](Community_21.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
+- [Community 32](Community_32.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/DEVTOOLS.md`
 - `docs/FAQ.md`
 - `docs/PRINCIPLES.md`
+- `scripts/status_matrix.py`
+- `scripts/topic_pr.py`
 - `tests/test_check_pr.py`
-- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 58 (87%)
-- INFERRED: 9 (13%)
+- EXTRACTED: 94 (85%)
+- INFERRED: 16 (15%)
 - AMBIGUOUS: 0 (0%)
 
 ---

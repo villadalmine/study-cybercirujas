@@ -1,6 +1,6 @@
 cert: ckne
 topic: '5.2'
-title: Troubleshooting End to End Network Performance with Tracing
+title: Troubleshooting End-to-End Network Performance with Tracing
 provider: local
 resources:
   vms:

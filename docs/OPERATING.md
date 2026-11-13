@@ -199,6 +199,7 @@ falls back along `en → es`.
 ```bash
 teach cert generate  <cert> --lang en --backend claude    # author (from the syllabus)
 teach cert translate <cert> --to es --backend litellm     # translate (from English)
+teach cert lab       <cert> --topic <id> --backend claude  # only the lab, checked against study-lab's contract
 ```
 
 The distinction matters and is easy to get wrong: `generate --lang <x>` does
@@ -232,6 +233,7 @@ make quality                      # floor report, then rescore and write each me
 make audit                        # pending/corrupt combos, and unrendered videos
 make test                         # floor and stale-invalidation tests
 scripts/check_citations.py        # do the cited sources exist?
+scripts/fix_citation.py <cert> <topic> OLD NEW   # a moved URL, fixed in every language; current translations re-stamped, no model
 scripts/check_manifests.py        # do the embedded manifests parse?
 scripts/check_k8s_apis.py         # are any removed Kubernetes APIs still taught?
 scripts/check_api_facts.py        # do manifests use APIs the tracked release serves?

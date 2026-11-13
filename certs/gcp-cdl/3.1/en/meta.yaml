@@ -26,7 +26,7 @@ quality:
     result: pass
     weight: 10
     ran_at: null
-    evidence: 47 citation(s), 85% from catalogued projects
+    evidence: 47 citation(s), 87% from catalogued projects
   - name: citations_resolve
     version: '1'
     result: not_run

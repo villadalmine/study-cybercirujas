@@ -1,12 +1,16 @@
 # Community 112
 
-> 24 nodes · cohesion 0.13
+> 36 nodes · cohesion 0.08
 
 ## Key Concepts
 
 - **model_comparison.py** (23 connections) — `scripts/model_comparison.py`
+- **quality.py** (19 connections) — `teach/core/quality.py`
+- **collections** (13 connections)
 - **window_budget.py** (12 connections) — `scripts/window_budget.py`
+- **test_images.py** (12 connections) — `tests/lab/test_images.py`
 - **observations()** (8 connections) — `scripts/model_comparison.py`
+- **quality_report.py** (8 connections) — `scripts/quality_report.py`
 - **render_markdown()** (7 connections) — `scripts/model_comparison.py`
 - **main()** (6 connections) — `scripts/model_comparison.py`
 - **main()** (6 connections) — `scripts/window_budget.py`
@@ -17,39 +21,42 @@
 - **_load()** (4 connections) — `scripts/window_budget.py`
 - **_md_table()** (3 connections) — `scripts/model_comparison.py`
 - **_kind()** (3 connections) — `scripts/window_budget.py`
+- **_cmd()** (3 connections) — `tests/lab/test_images.py`
 - **_week()** (2 connections) — `scripts/window_budget.py`
+- **test_k8s_inner_dockerd_listens_on_the_unix_socket_only()** (2 connections) — `tests/lab/test_images.py`
+- **test_job_ids_are_unique_across_workflows()** (1 connections) — `tests/lab/test_images.py`
+- **test_runner_base_images_are_pinned_by_digest()** (1 connections) — `tests/lab/test_images.py`
 - **Path** (1 connections)
 - **Path** (1 connections)
-- **The same numbers main() prints, as a dict — shared by the docs/MODELS.md…** (1 connections) — `scripts/model_comparison.py`
-- **docs/MODELS.md: the model-comparison dashboard, derived and deterministic. Same…** (1 connections) — `scripts/model_comparison.py`
-- **Is one model better than another, and what does it cost to find out? Comparing…** (1 connections) — `scripts/model_comparison.py`
-- **Write docs/MODELS.md; True if it changed. Importable, like…** (1 connections) — `scripts/model_comparison.py`
-- **(cert, topic, lang) -> tokens and minutes, from the recorded completions.** (1 connections) — `scripts/model_comparison.py`
-- **One row per generated topic/language, attributed to the model in meta.yaml.…** (1 connections) — `scripts/model_comparison.py`
-- **How much quota is left this week, in the unit that actually runs out. The…** (1 connections) — `scripts/window_budget.py`
-- **What the API actually said the limit was: spend | weekly | "". Read from the…** (1 connections) — `scripts/window_budget.py`
+- **Path** (1 connections)
+- *... and 11 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (8 shared connections)
+- [Community 43](Community_43.md) (14 shared connections)
+- [Community 103](Community_103.md) (7 shared connections)
+- [Community 102](Community_102.md) (6 shared connections)
 - [Community 89](Community_89.md) (4 shared connections)
-- [Community 102](Community_102.md) (4 shared connections)
-- [Community 103](Community_103.md) (4 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
-- [Community 6](Community_6.md) (2 shared connections)
-- [Community 160](Community_160.md) (2 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
+- [Community 141](Community_141.md) (3 shared connections)
+- [Community 46](Community_46.md) (3 shared connections)
+- [Community 61](Community_61.md) (3 shared connections)
+- [Community 19](Community_19.md) (3 shared connections)
+- [Community 124](Community_124.md) (3 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 13](Community_13.md) (2 shared connections)
+- [Community 6](Community_6.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/model_comparison.py`
+- `scripts/quality_report.py`
 - `scripts/window_budget.py`
+- `teach/core/quality.py`
+- `tests/lab/test_images.py`
 
 ## Audit Trail
 
-- EXTRACTED: 66 (100%)
+- EXTRACTED: 114 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

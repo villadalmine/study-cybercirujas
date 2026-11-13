@@ -184,15 +184,16 @@ def base_texts(paths: list[str], base: str) -> dict[str, str | None]:
 
 
 # meta.yaml keys that record checks and reviews of the material, not its authorship.
-NOT_AUTHORSHIP_KEYS = ("quality", "reviews")
+NOT_AUTHORSHIP_KEYS = ("quality", "reviews", "revalidated")
 
 
 def quality_only(files: list[str], base_text, root: Path = REPO) -> set[str]:
     """meta.yaml files that are the only change in their topic/language and differ from
     the base only in NOT_AUTHORSHIP_KEYS: the `quality:` block scripts/quality_score.py
-    writes, and the `reviews:` a reviewer records (docs/REVIEWS.md).
+    writes, the `reviews:` a reviewer records (docs/REVIEWS.md), and the `revalidated:`
+    block `curriculum_diff.py switch` writes for a topic an upgrade re-checked.
 
-    Neither is authorship: a PR that rescored the corpus, or recorded a review,
+    None is authorship: a PR that rescored the corpus, recorded a review or a revalidation,
     would otherwise be read as editing the topic's material and asked for
     provenance matching its author. Any other change to the file still counts.
     """
@@ -534,15 +535,84 @@ def version_matches(token: str, tracked: str) -> bool:
     return token in wanted or (token[:1] in ("v", "V") and token[1:] in wanted)
 
 
-def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict[str, str]) -> str | None:
+VERSIONED_MILESTONE = re.compile(r"^v\d+\.\d+\.\d+$")
+UPGRADES = "docs/upgrades"
+
+
+def upgrade_specs(base: str) -> dict[str, dict[str, dict[str, str]]]:
+    """{milestone: {cert: {"version", "url"}}} of every docs/upgrades/*.yaml spec ON THE BASE (#291).
+
+    Read from the base, never from the head: a PR cannot write the spec that authorizes itself.
+    `version` and `url` are the target snapshot's `version` and `source.url`, also read from the base:
+    the only tracked_version and objectives document the milestone may move the cert to."""
+    res = subprocess.run(["git", "ls-tree", "--name-only", f"{base}:{UPGRADES}"], cwd=REPO,
+                         capture_output=True, text=True)
+    names = [f"{UPGRADES}/{n}" for n in res.stdout.split() if n.endswith(".yaml")] if res.returncode == 0 else []
+    out: dict[str, dict[str, str]] = {}
+    for text in base_texts(names, base).values():
+        spec = yaml.safe_load(text or "") or {}
+        if not isinstance(spec, dict) or not isinstance(spec.get("certs"), dict) or not spec.get("milestone"):
+            continue
+        targets = {c: (v or {}).get("target") for c, v in spec["certs"].items() if isinstance(v, dict)}
+        snaps = base_texts([t for t in targets.values() if t], base)
+        found: dict[str, dict[str, str]] = {}
+        for cert, target in targets.items():
+            snap = yaml.safe_load(snaps.get(target) or "") if target else None
+            if isinstance(snap, dict) and snap.get("version") is not None:
+                found[cert] = {"version": str(snap["version"]),
+                               "url": str((snap.get("source") or {}).get("url") or "")}
+            else:
+                found[cert] = {}   # named, but its target is missing or has no version
+        out.setdefault(str(spec["milestone"]).strip(), {}).update(found)
+    return out
+
+
+def objectives_urls(text: str | None) -> dict[str, str]:
+    """cert key -> sources.objectives of a catalog.yaml text (the head's, for the milestone check)."""
+    certs = (yaml.safe_load(text) or {}).get("certs") or {} if text else {}
+    return {key: str((c.get("sources") or {}).get("objectives") or "") for key, c in certs.items()
+            if isinstance(c, dict)}
+
+
+def spec_mismatch(changed: list[str], milestone: str, versions: dict[str, str],
+                  specs: dict[str, dict[str, dict[str, str]]], objectives: dict[str, str] | None = None) -> str | None:
+    """A versioned milestone authorizes only through an upgrade spec on the base that names it, and only the
+    move to that spec's target: its version AND its document (`sources.objectives` = the target's PDF URL)."""
+    covered = specs.get(milestone)
+    if not covered:
+        return (f"the milestone {milestone!r} is named by no upgrade spec on the base "
+                f"({UPGRADES}/*.yaml with 'milestone: {milestone}'): merge the spec before the switch")
+    missing = [c for c in changed if c not in covered]
+    if missing:
+        return f"the upgrade spec of {milestone!r} does not cover {', '.join(missing)}"
+    broken = [c for c in changed if not covered[c].get("version") or not covered[c].get("url")]
+    if broken:
+        return (f"the upgrade spec of {milestone!r} names {', '.join(broken)} but its target snapshot is missing "
+                "on the base or has no version or source.url")
+    objectives = objectives or {}
+    wrong = [f"{c} is at {versions[c]!r}, its spec targets {covered[c]['version']!r}" for c in changed
+             if c in versions and versions[c] != covered[c]["version"]]
+    wrong += [f"{c} cites {objectives[c]!r} as its objectives, its spec targets {covered[c]['url']!r}"
+              for c in changed if c in objectives and objectives[c] != covered[c].get("url")]
+    if wrong:
+        return f"the milestone {milestone!r}: {'; '.join(wrong)}"
+    return None
+
+
+def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict[str, str],
+                       specs: dict[str, dict[str, dict[str, str]]] | None = None,
+                       objectives: dict[str, str] | None = None) -> str | None:
     """Why the milestone does not authorize this change, or None if it does.
 
-    It must be '<CERT>[ & <CERT>...] v<version> upgrade', name EVERY cert that changed, and its
-    version must equal the new tracked_version of each of them (a cert the PR removed has none)."""
+    Either a release milestone 'vX.Y.Z' that an upgrade spec on the base names (#291: every milestone is
+    versioned), or the older '<CERT>[ & <CERT>...] v<version> upgrade', which must name EVERY cert that changed,
+    with its version equal to the new tracked_version of each (a cert the PR removed has none)."""
+    if VERSIONED_MILESTONE.match((milestone or "").strip()):
+        return spec_mismatch(changed, milestone.strip(), versions, specs or {}, objectives)
     match = UPGRADE_MILESTONE.match((milestone or "").strip())
     if not match:
-        return (f"the PR's milestone is {milestone!r}, not an upgrade milestone "
-                "('<CERT> v<version> upgrade')")
+        return (f"the PR's milestone is {milestone!r}, neither a release milestone named by an upgrade spec "
+                "('vX.Y.Z') nor an upgrade milestone ('<CERT> v<version> upgrade')")
     named = {c.strip().lower() for c in CERT_SEPARATORS.split(match.group("certs")) if c.strip()}
     missing = [c for c in changed if c.lower() not in named]
     if missing:
@@ -555,7 +625,9 @@ def milestone_mismatch(changed: list[str], milestone: str | None, versions: dict
 
 
 def exam_version(changed: list[str], milestone: str | None, declared: str | None,
-                 versions: dict[str, str] | None = None) -> list[str]:
+                 versions: dict[str, str] | None = None,
+                 specs: dict[str, dict[str, dict[str, str]]] | None = None,
+                 objectives: dict[str, str] | None = None) -> list[str]:
     """Problems if the exam version moved outside its own milestone's PR.
 
     `milestone` is the title of the PR's real milestone; `declared` is the scope its description declares;
@@ -565,7 +637,7 @@ def exam_version(changed: list[str], milestone: str | None, declared: str | None
     problems = []
     names = ", ".join(changed[:4]) + ("…" if len(changed) > 4 else "")
     head = f"exam version: {CATALOG} changes tracked_version or objectives of {names}, but "
-    why = milestone_mismatch(changed, milestone, versions or {})
+    why = milestone_mismatch(changed, milestone, versions or {}, specs, objectives)
     if why:
         problems.append(head + why + ". Only the final PR of that cert's upgrade milestone may move the "
                         "version; a links fix must not (CONTRIBUTING -> How big is my change?)")
@@ -929,7 +1001,8 @@ def main() -> int:
     if args.base and CATALOG in files and not is_bot_pr(head_ref, files, author, same_repo):
         problems += exam_version(exam_version_changes(base_texts([CATALOG], args.base)[CATALOG], head_catalog()),
                                  milestone, declared_scope(sections(body).get("Scope", ""))[0],
-                                 tracked_versions(head_catalog()))
+                                 tracked_versions(head_catalog()), upgrade_specs(args.base),
+                                 objectives_urls(head_catalog()))
     # The graph bot's and the Release PR cite no run, and an empty runs file would still make
     # the workflow's "cited run" step run and fail: write nothing for it.
     if args.runs_file and not is_bot_pr(head_ref, files, author, same_repo):

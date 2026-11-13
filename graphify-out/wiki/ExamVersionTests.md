@@ -1,6 +1,6 @@
 # ExamVersionTests
 
-> God node · 27 connections · `tests/test_check_pr.py`
+> God node · 32 connections · `tests/test_check_pr.py`
 
 **Community:** [Community 91](Community_91.md)
 
@@ -20,17 +20,17 @@
 - .test_pinning_the_same_file_to_a_commit_is_link_maintenance() `EXTRACTED`
 - .test_pinning_does_not_hide_a_tracked_version_change() `EXTRACTED`
 - .test_a_new_or_removed_cert_is_a_change() `EXTRACTED`
+- .test_a_removed_cert_needs_only_to_be_named() `EXTRACTED`
+- .test_every_version_shape_of_the_real_catalog_can_be_authorized() `EXTRACTED`
+- .test_non_numeric_versions_are_compared_as_strings() `EXTRACTED`
+- .test_tracked_versions_reads_the_catalog() `EXTRACTED`
+- .test_the_label_and_the_description_text_authorize_nothing() `EXTRACTED`
 - .test_a_percent_encoded_name_is_the_same_document() `EXTRACTED`
 - .test_without_a_change_nothing_is_required() `EXTRACTED`
 - .test_a_change_with_nothing_fails_twice() `EXTRACTED`
 - .test_the_declared_scope_alone_is_not_enough() `EXTRACTED`
 - .test_the_milestone_alone_is_not_enough() `EXTRACTED`
-- .test_only_an_upgrade_milestone_authorizes() `EXTRACTED`
-- .test_a_milestone_for_another_cert_does_not_authorize() `EXTRACTED`
-- .test_every_changed_cert_must_be_named() `EXTRACTED`
-- .test_cert_separators_are_ampersand_comma_and_and() `EXTRACTED`
-- .test_the_version_must_equal_the_new_tracked_version() `EXTRACTED`
-- *…and 5 more `method` connection(s) not listed (lowest-degree first to go)*
+- *…and 10 more `method` connection(s) not listed (lowest-degree first to go)*
 
 ### rationale_for
 - catalog.yaml: tracked_version or objectives only move in the milestone's final… `EXTRACTED`

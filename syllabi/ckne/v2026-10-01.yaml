@@ -1,0 +1,78 @@
+cert: ckne
+version: '2026-10-01'
+source:
+  repo: cncf/curriculum
+  commit: f423fa49c0cab0820533babd95b37ebe8fd89e67
+  path: CKNE_Curriculum.pdf
+  url: https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKNE_Curriculum.pdf
+  sha256: eb069ba5e425043bb3d396303c8df0c58812803677d393be66cebbd67ca733d3
+  committed: '2026-10-01'
+extraction:
+  tool: scripts/curriculum_diff.py extract
+  method: pdftotext -layout; two columns split at the widest gap between marker starts
+tree_sha256: 9acc0ad7322fb6a2c4ecccf9063cd917400bc60116673402af1252f856b82f2e
+domains:
+- id: '1'
+  name: Core Infrastructure and CNI
+  weight: 15
+  objectives:
+  - id: '1.1'
+    text: Installing and Configuring CNI Plugins
+  - id: '1.2'
+    text: Managing IPAM and Pod CIDR Allocation
+  - id: '1.3'
+    text: Using Linux Tools (iptables, ip, tcpdump) for Packet-level Issues
+  - id: '1.4'
+    text: Troubleshooting Pod Connectivity (DNS, pod-to-pod)
+  - id: '1.5'
+    text: Configuring Multi-interface Pods
+- id: '2'
+  name: Service Networking and DNS
+  weight: 25
+  objectives:
+  - id: '2.1'
+    text: Configuring L4 Services
+  - id: '2.2'
+    text: Understanding kube-proxy and CNI Alternatives
+  - id: '2.3'
+    text: Customizing coreDNS for Services
+  - id: '2.4'
+    text: Troubleshooting Service Network Traffic
+  - id: '2.5'
+    text: Configuring Pod Endpoint Availability
+  - id: '2.6'
+    text: Managing Traffic with the Gateway API (Gateway, HTTPRoutes)
+- id: '3'
+  name: Advanced Traffic Management
+  weight: 20
+  objectives:
+  - id: '3.1'
+    text: Optimizing LLM Traffic
+  - id: '3.2'
+    text: Implementing Routing to Expose Networks
+  - id: '3.3'
+    text: Configuring Egress Gateways for Cluster Exit Traffic
+  - id: '3.4'
+    text: Implementing Cross Cluster Service Discovery and Load Balancing
+- id: '4'
+  name: Observability
+  weight: 15
+  objectives:
+  - id: '4.1'
+    text: Analyzing Network Health Using Metrics
+  - id: '4.2'
+    text: Troubleshooting End-to-End Network Performance with Tracing
+  - id: '4.3'
+    text: Auditing Traffic with Logs
+- id: '5'
+  name: Network Security and Policy
+  weight: 25
+  objectives:
+  - id: '5.1'
+    text: Securing Traffic with Network Policies
+  - id: '5.2'
+    text: Implementing Node and Pod Level Encryption
+  - id: '5.3'
+    text: Managing TLS Certificates for Gateway API
+  - id: '5.4'
+    text: Implementing Pod-level Authentication and Authorization

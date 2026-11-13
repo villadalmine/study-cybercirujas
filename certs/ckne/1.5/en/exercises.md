@@ -1,6 +1,6 @@
 # CKNE 1.5 — Configuring Multi-interface Pods: Guided Exercises
 
-> **Exam context.** The CKNE curriculum (version not yet published, see <https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/>) lists "Configuring Multi-interface Pods" at a weight of 3.0. Kubernetes does not support multiple interfaces natively. A pod gets exactly one network, the one set up by the cluster's primary CNI plugin. In practice, extra interfaces come from a *meta-plugin*, and the reference implementation is **Multus CNI**. Multus implements the Network Plumbing Working Group (NPWG) *Kubernetes Network Custom Resource Definition De-facto Standard*. These exercises build that setup step by step, from an empty cluster through to diagnosing a broken pod.
+> **Exam context.** The CKNE curriculum (version 2026-10-01, see <https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/>) lists "Configuring Multi-interface Pods" at a weight of 3.0. Kubernetes does not support multiple interfaces natively. A pod gets exactly one network, the one set up by the cluster's primary CNI plugin. In practice, extra interfaces come from a *meta-plugin*, and the reference implementation is **Multus CNI**. Multus implements the Network Plumbing Working Group (NPWG) *Kubernetes Network Custom Resource Definition De-facto Standard*. These exercises build that setup step by step, from an empty cluster through to diagnosing a broken pod.
 
 **Primary sources used throughout:**
 

@@ -1,9 +1,10 @@
 ---
 cert: ckne
 exam: CKNE
-snapshot_date: '2026-09-17'
+snapshot_date: '2026-10-01'
 sources:
 - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
+- https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKNE_Curriculum.pdf
 topics:
 - id: '1.1'
   sources:
@@ -149,7 +150,7 @@ topics:
   sources:
   - https://training.linuxfoundation.org/certification/certified-kubernetes-network-engineer-ckne/
   status: generated
-  title: Troubleshooting End to End Network Performance with Tracing
+  title: Troubleshooting End-to-End Network Performance with Tracing
   topic: 5 - Observability
   weight: 5.0
 - id: '5.3'
@@ -159,7 +160,7 @@ topics:
   title: Auditing Traffic with Logs
   topic: 5 - Observability
   weight: 5.0
-version: unknown
+version: '2026-10-01'
 weights_published: 6
 ---
 
@@ -168,3 +169,5 @@ weights_published: 6
 Domains and weights as published by Linux Foundation Education for the Certified Kubernetes Network Engineer. Performance-based, two hours, intermediate, CKA-level skills assumed.
 
 **Beta closed, awaiting general availability (checked 2026-09-17).** The objectives can still move before GA, so nothing is generated against this snapshot yet — generating now would mean writing material for a syllabus that has not settled, which is the failure that cost this project seven LPI re-snapshots. Re-check before spending anything on it.
+
+**Superseded by the curriculum 2026-10-01** (https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKNE_Curriculum.pdf), switched by `docs/upgrades/ckne-ga.yaml`. The notes above are dated and describe the snapshot they were written for.

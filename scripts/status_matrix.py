@@ -7,6 +7,11 @@ content.md, exercises.md, and break_fix.sh are counted separately (see
 docs/HISTORY.md 2026-07-16/17). Run again after any generation to keep the state updated:
 
     .venv/bin/python3 scripts/status_matrix.py
+    .venv/bin/python3 scripts/status_matrix.py --keep-spend   # a PR that is not refreshing spend
+
+`--keep-spend` renders the ledger and keeps the spend footer as committed at HEAD (during a rebase,
+HEAD is the branch being rebased onto), so a content PR never carries a machine's usage log, and a
+rebase conflict in docs/STATUS.md is resolved by running it.
 """
 import sys
 from pathlib import Path
@@ -167,6 +172,25 @@ def check() -> list[str]:
 
 def _write() -> None:
     STATUS.write_text(_render())
+
+
+def committed_spend(ref: str = "HEAD") -> str | None:
+    """The spend footer of docs/STATUS.md at `ref` (from SPEND_MARKER on), or None if it has none."""
+    import subprocess
+    shown = subprocess.run(["git", "show", f"{ref}:docs/STATUS.md"], cwd=REPO, capture_output=True, text=True)
+    if shown.returncode != 0 or SPEND_MARKER not in shown.stdout:
+        return None
+    return SPEND_MARKER + shown.stdout.split(SPEND_MARKER, 1)[1]
+
+
+def keep_spend(rendered: str, footer: str | None) -> str:
+    """`rendered` with its spend footer replaced by `footer`.
+
+    With no committed footer to keep, the rendered one is dropped rather than kept: it reads this
+    machine's usage.jsonl, which is exactly what --keep-spend promises never to commit.
+    """
+    head = rendered.split(SPEND_MARKER)[0]
+    return head + footer if footer is not None else head.rstrip() + "\n"
 
 
 def _render() -> str:
@@ -371,7 +395,16 @@ def _spend_section() -> list[str]:
 
 
 if __name__ == "__main__":
-    if "--check" in sys.argv:
+    import argparse
+
+    # argparse, not `in sys.argv`: an unknown flag must fail loudly. An older copy of this script
+    # that silently ignored --keep-spend committed this machine's spend into topic PRs (#298).
+    _cli = argparse.ArgumentParser(description="Render docs/STATUS.md from the tree.")
+    _mode = _cli.add_mutually_exclusive_group()
+    _mode.add_argument("--check", action="store_true", help="fail when docs/STATUS.md does not match the tree")
+    _mode.add_argument("--keep-spend", action="store_true", help="keep the spend footer committed at HEAD")
+    _args = _cli.parse_args()
+    if _args.check:
         # Gate mode: prove the dashboard matches the tree instead of assuming it.
         drift = check()
         if drift:
@@ -380,5 +413,11 @@ if __name__ == "__main__":
             print("\n".join(drift[:40]))
             sys.exit(1)
         print("docs/STATUS.md matches the filesystem.")
+        sys.exit(0)
+    if _args.keep_spend:
+        text = keep_spend(_render(), committed_spend())
+        changed = not STATUS.exists() or STATUS.read_text(encoding="utf-8") != text
+        STATUS.write_text(text)
+        print("docs/STATUS.md updated (spend footer as committed)" if changed else "docs/STATUS.md already current")
         sys.exit(0)
     print("docs/STATUS.md updated" if refresh() else "docs/STATUS.md already current")

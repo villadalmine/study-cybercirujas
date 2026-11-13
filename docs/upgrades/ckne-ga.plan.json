@@ -1,0 +1,770 @@
+{
+  "certs": {
+    "ckne": {
+      "cert": "ckne",
+      "counts": {
+        "keep": 21,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 1
+      },
+      "efficiency": {
+        "planned_files": 1,
+        "sections_to_edit": 0,
+        "topic_files": 110,
+        "version_lines": {
+          "curriculum": 0,
+          "label": 0,
+          "technical": 0
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": false,
+        "new": {
+          "domains": 5,
+          "objectives": 22,
+          "version": "2026-10-01"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [
+            {
+              "new": "Troubleshooting End-to-End Network Performance with Tracing",
+              "new_id": "4.2",
+              "old": "Troubleshooting End to End Network Performance with Tracing",
+              "old_id": "5.2",
+              "similarity": 0.9661
+            }
+          ],
+          "unchanged": [
+            {
+              "new_id": "1.1",
+              "old_id": "1.1",
+              "similarity": 1.0,
+              "text": "Installing and Configuring CNI Plugins"
+            },
+            {
+              "new_id": "1.2",
+              "old_id": "1.2",
+              "similarity": 1.0,
+              "text": "Managing IPAM and Pod CIDR Allocation"
+            },
+            {
+              "new_id": "1.3",
+              "old_id": "1.3",
+              "similarity": 1.0,
+              "text": "Using Linux Tools (iptables, ip, tcpdump) for Packet-level Issues"
+            },
+            {
+              "new_id": "1.4",
+              "old_id": "1.4",
+              "similarity": 1.0,
+              "text": "Troubleshooting Pod Connectivity (DNS, pod-to-pod)"
+            },
+            {
+              "new_id": "1.5",
+              "old_id": "1.5",
+              "similarity": 1.0,
+              "text": "Configuring Multi-interface Pods"
+            },
+            {
+              "new_id": "2.1",
+              "old_id": "2.1",
+              "similarity": 1.0,
+              "text": "Configuring L4 Services"
+            },
+            {
+              "new_id": "2.2",
+              "old_id": "2.2",
+              "similarity": 1.0,
+              "text": "Understanding kube-proxy and CNI Alternatives"
+            },
+            {
+              "new_id": "2.3",
+              "old_id": "2.3",
+              "similarity": 1.0,
+              "text": "Customizing coreDNS for Services"
+            },
+            {
+              "new_id": "2.4",
+              "old_id": "2.4",
+              "similarity": 1.0,
+              "text": "Troubleshooting Service Network Traffic"
+            },
+            {
+              "new_id": "2.5",
+              "old_id": "2.5",
+              "similarity": 1.0,
+              "text": "Configuring Pod Endpoint Availability"
+            },
+            {
+              "new_id": "2.6",
+              "old_id": "2.6",
+              "similarity": 1.0,
+              "text": "Managing Traffic with the Gateway API (Gateway, HTTPRoutes)"
+            },
+            {
+              "new_id": "3.1",
+              "old_id": "3.1",
+              "similarity": 1.0,
+              "text": "Optimizing LLM Traffic"
+            },
+            {
+              "new_id": "3.2",
+              "old_id": "3.2",
+              "similarity": 1.0,
+              "text": "Implementing Routing to Expose Networks"
+            },
+            {
+              "new_id": "3.3",
+              "old_id": "3.3",
+              "similarity": 1.0,
+              "text": "Configuring Egress Gateways for Cluster Exit Traffic"
+            },
+            {
+              "new_id": "3.4",
+              "old_id": "3.4",
+              "similarity": 1.0,
+              "text": "Implementing Cross Cluster Service Discovery and Load Balancing"
+            },
+            {
+              "new_id": "5.1",
+              "old_id": "4.1",
+              "similarity": 1.0,
+              "text": "Securing Traffic with Network Policies"
+            },
+            {
+              "new_id": "5.2",
+              "old_id": "4.2",
+              "similarity": 1.0,
+              "text": "Implementing Node and Pod Level Encryption"
+            },
+            {
+              "new_id": "5.3",
+              "old_id": "4.3",
+              "similarity": 1.0,
+              "text": "Managing TLS Certificates for Gateway API"
+            },
+            {
+              "new_id": "5.4",
+              "old_id": "4.4",
+              "similarity": 1.0,
+              "text": "Implementing Pod-level Authentication and Authorization"
+            },
+            {
+              "new_id": "4.1",
+              "old_id": "5.1",
+              "similarity": 1.0,
+              "text": "Analyzing Network Health Using Metrics"
+            },
+            {
+              "new_id": "4.3",
+              "old_id": "5.3",
+              "similarity": 1.0,
+              "text": "Auditing Traffic with Logs"
+            }
+          ]
+        },
+        "old": {
+          "domains": 5,
+          "objectives": 22,
+          "version": "unknown"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/ckne/v2026-10-01.yaml",
+        "sha256": "8e2bf1cbc2c618639bafbdd564ae9abfd0753716191ca58f5598c0022605c4dc",
+        "source": {
+          "commit": "f423fa49c0cab0820533babd95b37ebe8fd89e67",
+          "committed": "2026-10-01",
+          "path": "CKNE_Curriculum.pdf",
+          "repo": "cncf/curriculum",
+          "sha256": "eb069ba5e425043bb3d396303c8df0c58812803677d393be66cebbd67ca733d3",
+          "url": "https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKNE_Curriculum.pdf"
+        },
+        "tree_sha256": "9acc0ad7322fb6a2c4ecccf9063cd917400bc60116673402af1252f856b82f2e",
+        "version": "2026-10-01"
+      },
+      "topics": [
+        {
+          "class": "keep",
+          "domain": "Core Infrastructure and CNI",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "1.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Installing and Configuring CNI Plugins",
+          "topic": "1.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Core Infrastructure and CNI",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "1.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing IPAM and Pod CIDR Allocation",
+          "topic": "1.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Core Infrastructure and CNI",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "1.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Using Linux Tools (iptables, ip, tcpdump) for Packet-level Issues",
+          "topic": "1.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Core Infrastructure and CNI",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "1.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshooting Pod Connectivity (DNS, pod-to-pod)",
+          "topic": "1.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Core Infrastructure and CNI",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "1.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring Multi-interface Pods",
+          "topic": "1.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring L4 Services",
+          "topic": "2.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Understanding kube-proxy and CNI Alternatives",
+          "topic": "2.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Customizing coreDNS for Services",
+          "topic": "2.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshooting Service Network Traffic",
+          "topic": "2.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring Pod Endpoint Availability",
+          "topic": "2.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Service Networking and DNS",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "2.6",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing Traffic with the Gateway API (Gateway, HTTPRoutes)",
+          "topic": "2.6",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Traffic Management",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "3.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Optimizing LLM Traffic",
+          "topic": "3.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Traffic Management",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "3.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Routing to Expose Networks",
+          "topic": "3.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Traffic Management",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "3.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring Egress Gateways for Cluster Exit Traffic",
+          "topic": "3.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Traffic Management",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "3.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Cross Cluster Service Discovery and Load Balancing",
+          "topic": "3.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Security and Policy",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "5.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Securing Traffic with Network Policies",
+          "topic": "4.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Security and Policy",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "5.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Node and Pod Level Encryption",
+          "topic": "4.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Security and Policy",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "5.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing TLS Certificates for Gateway API",
+          "topic": "4.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Security and Policy",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "5.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Pod-level Authentication and Authorization",
+          "topic": "4.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Observability",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "4.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Analyzing Network Health Using Metrics",
+          "topic": "5.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Observability",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "4.2",
+          "planned_files": [
+            "certs/ckne/5.2/en/meta.yaml"
+          ],
+          "reasons": [
+            "objective reworded (similarity 0.9661)"
+          ],
+          "sections": [],
+          "similarity": 0.9661,
+          "title": "Troubleshooting End to End Network Performance with Tracing",
+          "topic": "5.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Observability",
+          "lab": true,
+          "languages": [
+            "en"
+          ],
+          "maps_to": "4.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Auditing Traffic with Logs",
+          "topic": "5.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/ckne.md",
+        "sha256": "4b49c4e17c20104272ede1a564d4ca7dc65b70f74dfc7cdf161934bbb2c63398",
+        "version": "unknown"
+      }
+    }
+  },
+  "issue": 285,
+  "milestone": "v0.6.10",
+  "planned_files": {
+    "keep": [],
+    "new": [
+      "{t}/**"
+    ],
+    "regenerate": [
+      "{t}/**"
+    ],
+    "retire": [
+      "{t}/**"
+    ],
+    "revalidate": [
+      "{t}/{lang}/meta.yaml"
+    ]
+  },
+  "rules": [
+    {
+      "action": "archive the topic directory; redirect its links",
+      "class": "retire",
+      "rule": "its objective is not in the new syllabus (removed, or below MATCH similarity to every new one)"
+    },
+    {
+      "action": "one PR through the whole content process (content, exercises, lab, translations)",
+      "class": "regenerate",
+      "rule": "its objective changed: best match has MATCH (0.6) <= similarity < REWORD (0.9)"
+    },
+    {
+      "action": "re-run every check against the new text; record the result in meta.yaml; a failed check makes it regenerate",
+      "class": "revalidate",
+      "rule": "its objective was reworded (REWORD <= similarity < 1), moved to another domain, or its domain's published weight changed"
+    },
+    {
+      "action": "no content change; only its listed technical version lines may be rewritten in place, by the version bump",
+      "class": "keep",
+      "rule": "its objective text, domain and domain weight are identical"
+    },
+    {
+      "action": "a new topic directory, through the whole content process",
+      "class": "new",
+      "rule": "an objective of the new syllabus that no topic covers"
+    }
+  ],
+  "spec": "docs/upgrades/ckne-ga.yaml",
+  "thresholds": {
+    "match": 0.6,
+    "reword": 0.9
+  },
+  "upgrade": "CKNE GA"
+}

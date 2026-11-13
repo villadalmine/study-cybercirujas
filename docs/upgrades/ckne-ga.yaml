@@ -1,0 +1,18 @@
+# Upgrade spec for scripts/curriculum_diff.py plan (#63). The plan and the report next to this file are
+# generated from it and from the files it names; nothing in them is written by hand.
+#
+#   scripts/curriculum_diff.py plan docs/upgrades/ckne-ga.yaml
+#   scripts/curriculum_diff.py render docs/upgrades/ckne-ga.plan.json -o docs/upgrades/ckne-ga.md
+#
+# tracked:  the frozen syllabus the material was built against: the beta, frozen on 2026-09-17 from the Linux
+#           Foundation exam page (there was no PDF during the beta)
+# target:   the GA curriculum, frozen from cncf/curriculum CKNE_Curriculum.pdf pinned by commit. The PDF name
+#           carries no version, so the version is its commit date, the convention of kcna and kcsa
+# No upstream_base: the beta had no official PDF to diff against.
+upgrade: CKNE GA
+milestone: v0.6.10
+issue: 285
+certs:
+  ckne:
+    tracked: certs/ckne.md
+    target: syllabi/ckne/v2026-10-01.yaml

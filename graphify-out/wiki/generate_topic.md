@@ -1,30 +1,31 @@
 # generate_topic()
 
-> God node · 24 connections · `teach/core/generator.py`
+> God node · 26 connections · `teach/core/generator.py`
 
-**Community:** [Community 273](Community_273.md)
+**Community:** [Community 7](Community_7.md)
 
 ## Connections by Relation
 
 ### calls
-- yaml `EXTRACTED`
-- make_completer() `EXTRACTED`
+- generate_lab() `EXTRACTED`
 - GeneratorConfigError `EXTRACTED`
-- [load()](load.md) `EXTRACTED`
-- content_dir() `EXTRACTED`
+- make_completer() `EXTRACTED`
 - get_topic() `EXTRACTED`
+- [load()](load.md) `EXTRACTED`
+- _write_lab() `EXTRACTED`
+- content_dir() `EXTRACTED`
 - _reject_if_recap() `EXTRACTED`
 - topic_outdated_langs() `EXTRACTED`
 - topic_langs() `EXTRACTED`
 - complete() `EXTRACTED`
 - clear_topic_stale() `EXTRACTED`
 - cert_generate() `EXTRACTED`
+- authored() `EXTRACTED`
 - _reject_if_substandard() `EXTRACTED`
-- _write_meta() `EXTRACTED`
-- generate_cert() `EXTRACTED`
 - _topic_context() `EXTRACTED`
-- default_spec() `EXTRACTED`
+- _write_meta() `EXTRACTED`
 - set_topic_status() `EXTRACTED`
+- generate_cert() `EXTRACTED`
 - _system() `EXTRACTED`
 
 ### contains
@@ -35,8 +36,9 @@
 - Generate one topic's content in one language. The lab is shared. `EXTRACTED`
 
 ### references
-- First, the thing that surprises everyone `INFERRED`
+- Content generation `INFERRED`
 - 2. Generate `INFERRED`
+- First, the thing that surprises everyone `INFERRED`
 
 ---
 

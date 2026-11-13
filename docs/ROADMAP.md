@@ -15,7 +15,7 @@ Last reviewed: **2026-09-30** (counts below re-checked against docs/STATUS.md on
 
 | Family | Published | Outstanding |
 |---|---|---|
-| ☸️ CNCF / Kubernetes | 15 / 16 | `cba` — unreadable PDF, needs the OCR route and a human to check the result. `ckne` published in English (beta syllabus) |
+| ☸️ CNCF / Kubernetes | 15 / 16 | `cba` — unreadable PDF, needs the OCR route and a human to check the result. `ckne` published in English (GA curriculum of 2026-10-01, #285) |
 | 🐧 Linux / LPI | 9 / 14 | `lpic-2` (41), `lpic-3-300` (20), `lpi-020-100` (17), `lfcs` (5), `lfca` (6) |
 | ☁️ Cloud providers | 3 / 5 | AWS, Azure and Google careers exist end to end. `terraform-associate` (37) and `terraform-advanced` (27) — syllabus only, `active: false` |
 | 🤖 AI | 1 / 7 | `mcpa` published in English, needs Spanish (17). Syllabi frozen, coming-soon: `aws-aif` (14), `gcp-gail` (15), `ai-901` (7), `nca-aiio` (22), `nca-genl` (31), `ncp-aii` (39) |
