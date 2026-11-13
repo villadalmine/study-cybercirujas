@@ -254,8 +254,14 @@ class Window(unittest.TestCase):
         self.assertNotIn("snapshot", up)
 
     def test_the_committed_cks_window_is_current_and_written_like_catalog_save(self):
-        self.assertEqual(cd.main(["window", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
+        """While the CKS v1.37 upgrade is open the window is current; once switched, `switch` closed it (#287)."""
         text = (REPO / "catalog.yaml").read_text(encoding="utf-8")
+        cks = yaml.safe_load(text)["certs"]["cks"]
+        if str(cks["tracked_version"]) == "1.37":
+            self.assertNotIn("upstream", cks)
+            self.assertEqual(cd.main(["switch", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
+        else:
+            self.assertEqual(cd.main(["window", "docs/upgrades/cks-1.37.yaml", "--check"]), 0)
         sys.path.insert(0, str(REPO))
         from teach.core import catalog as tc
         with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"TEACH_ROOT": tmp}):
