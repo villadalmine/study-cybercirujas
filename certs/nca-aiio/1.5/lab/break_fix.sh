@@ -431,7 +431,7 @@ EOF
 #     [FAIL] drug-discovery           dataset > node-local NVMe -> parallel-fs
 #     [PASS] predictive-maintenance   deployed at the edge (factory)
 #     [PASS] predictive-maintenance   latency budget <= 100 ms
-#     Result: 13 passed, 10 failed
+#     Result: 10 passed, 9 failed
 #     GATE: BLOCKED - platform rollout halted ...
 #     exit=1
 #
@@ -480,7 +480,7 @@ EOF
 # Step 7 - Verify
 #   ~/aiio-lab-1.5/bin/placement-gate ; echo "exit=$?"
 #   Expected:
-#     Result: 23 passed, 0 failed
+#     Result: 19 passed, 0 failed
 #     GATE: OPEN - all use cases are placed correctly. Rollout approved.
 #     exit=0
 #
