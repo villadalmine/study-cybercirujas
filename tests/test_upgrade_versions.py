@@ -65,6 +65,39 @@ class Rewrite(unittest.TestCase):
             uv.rewrite("v1.35.7", PINS)
 
 
+
+class ReviewOf318(unittest.TestCase):
+    """CKS v1.37 (shift 3) review of #318: what a mechanical bump must not do."""
+    P = {"tracked": "1.34", "target": "1.37", "shift": 3, "patch": "1.37.2", "kindest_node": "v1.37.0",
+         "curriculum_commit": {"CKS": "abc"}}
+
+    def r(self, line):
+        return uv.rewrite(line, self.P)
+
+    def test_a_dated_fact_is_left_as_written(self):
+        for line in ("nftables went beta in v1.31 and GA in the v1.33 line, not the default in v1.34",
+                     "Since v1.32 the feature (enabled by default in v1.34) lets you keep anonymous access",
+                     "# GA field since v1.30; the beta annotations are gone in 1.34.",
+                     "#   deprecated and are NOT used here). Verified against 1.34.",
+                     "Desde v1.32 la función (habilitada por defecto en v1.34)"):
+            self.assertEqual(self.r(line), line)
+        self.assertEqual(self.r("apiVersion: flowcontrol/v1beta3 on v1.34"), "apiVersion: flowcontrol/v1beta3 on v1.37")
+
+    def test_the_minor_above_moves_only_where_an_upgrade_goes(self):
+        self.assertEqual(self.r("upgrade to v1.35.0 is too far: 1.33 → 1.34 → 1.35"),
+                         "upgrade to v1.38.0 is too far: 1.36 → 1.37 → 1.38")
+        self.assertEqual(self.r('removed_release="1.35" while you upgrade to v1.34'),
+                         'removed_release="1.38" while you upgrade to v1.37')
+        self.assertEqual(self.r("--image=busybox:1.35 # 1.34"), "--image=busybox:1.35 # 1.37")
+        self.assertEqual(self.r("1.35 alone"), "1.35 alone")
+
+    def test_an_escaped_dot_moves_and_keeps_its_escape(self):
+        self.assertEqual(self.r("sed 's|/stable:/v1\\.33/|/stable:/v1.34/|'"), "sed 's|/stable:/v1\\.36/|/stable:/v1.37/|'")
+
+    def test_a_wildcard_patch_companion_moves(self):
+        self.assertEqual(self.r("shows only 1.33.x after apt-get update"), "shows only 1.36.x after apt-get update")
+
+
 class Run(unittest.TestCase):
     def tree(self, root: Path):
         topic = root / "certs/cka/4.3"

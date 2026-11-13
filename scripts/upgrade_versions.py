@@ -8,6 +8,11 @@ only those lines and nothing else, from the one pins file:
 
 - a version token 1.N, v1.N, 1.N.P, 1.N.x with N in {tracked-shift .. tracked} moves up by shift minors, so a
   sample upgrade "1.34 -> 1.35" becomes "1.36 -> 1.37" and still skips nothing;
+- on a line that names the tracked minor, the minor above it moves too where an upgrade goes (after `->`, `→`, `to`,
+  `_release="`), so "1.33 -> 1.34 -> 1.35" and removed_release="1.35" keep their meaning; elsewhere (an image tag) it stays;
+- an escaped dot (`v1\.33` in a sed or grep pattern) is a token too, and keeps its escape;
+- a line that dates a fact (since, introduced, alpha, beta, GA, graduated, went, removed in, gone in, verified against,
+  and the Spanish forms) is left as written: it is true of the release it names, and a bump would make it false;
 - a target-minor patch of 1 or more becomes the pinned patch; .0 and .x stay (a sample keeps its shape);
 - "kindest/node v1.35.8" becomes the pinned kindest/node tag; nothing else in the output of a command is invented;
 - a line already naming the target minor is skipped, so a second run changes nothing; so is a companion line
@@ -37,7 +42,17 @@ import yaml
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import curriculum_citations as cc  # noqa: E402
-TOKEN = re.compile(r"(?<![\d.])(v?)1\.(\d{2})(?:\.(\d+|x))?(?!\d)")
+# A version token; the dot may be escaped (`v1\.33` in a sed or grep pattern), and the escape is kept.
+TOKEN = re.compile(r"(?<![\d.\\])(v?)1(\\?\.)(\d{2})(?:(\\?\.)(\d+|x))?(?!\d)")
+# A line that dates a fact (when a feature arrived, graduated or went away; what a proof ran on) says something
+# true about THAT release: moving its number would make it false ("GA in the v1.33 line" is not "GA in v1.36").
+# Such a line is left as written, whatever else it names (CKS v1.37 review, #318).
+HISTORY = re.compile(
+    r"(?i)\b(?:since|introduced|added in|alpha|beta|graduated|promoted|went|removed in|gone in|deprecated in|"
+    r"verified (?:on|against|with)|tested (?:on|against|with)|desde|introducid[oa]s?|alfa|graduad[oa]s?|"
+    r"eliminad[oa]s? en|obsolet[oa]s? (?:en|desde)|verificad[oa]s? (?:en|contra|con)|probad[oa]s? (?:en|contra|con))\b"
+    r"|\bGA\b")
+UPWARD = re.compile(r"(?:→|->|\bto|_release=\"?)\s*$")
 KINDEST = re.compile(r"kindest/node v1\.\d+\.\d+")
 # A curriculum PDF link on master, any exam prefix, the name's separator as written (`_`, `%20` or a space).
 CURRICULUM = re.compile(r"(https://github\.com/cncf/curriculum)/raw/master/([A-Z]+)_Curriculum(_|%20| )v1\.(\d+)\.pdf")
@@ -51,9 +66,15 @@ def rewrite(line: str, pins: dict) -> str:
     """The line with its version tokens moved, or unchanged when it already names the target."""
     tracked, target, shift = pins["tracked"], pins["target"], int(pins["shift"])
     t_minor = int(tracked.split(".")[1])
-    minors = [int(m.group(2)) for m in TOKEN.finditer(line)]
-    if re.search(rf"(?<![\d.])v?{re.escape(target)}(?!\d)", line):
+    minors = [int(m.group(3)) for m in TOKEN.finditer(line)]
+    if re.search(rf"(?<![\d.])v?1\\?\.{target.split('.')[1]}(?!\d)", line):
         return line                              # already on the target
+    if HISTORY.search(line):
+        return line                              # a dated fact: true of the release it names
+    # A line naming the tracked minor may name the one above it too, as where a sample upgrade goes ("-> 1.35",
+    # "upgrade to v1.35.0") or the release that removes an API (removed_release="1.35"). That token moves with the
+    # rest, so "1.33 -> 1.34 -> 1.35" stays a forward chain; one in any other place (an image tag) does not.
+    above = t_minor in minors
     if t_minor not in minors and (not t_minor - 1 in minors or any(m > t_minor for m in minors)):
         # A companion line ("Cluster version: v1.34.1", the version a sample upgrade starts from) moves only
         # while it still shows the minor below the tracked one; once moved it shows a minor above it.
@@ -69,17 +90,18 @@ def rewrite(line: str, pins: dict) -> str:
     line = CURRICULUM.sub(pin_pdf, line)
 
     def move(m: re.Match) -> str:
-        v, minor, patch = m.group(1), int(m.group(2)), m.group(3)
-        if not t_minor - shift <= minor <= t_minor:
+        v, dot, minor, pdot, patch = m.group(1), m.group(2), int(m.group(3)), m.group(4), m.group(5)
+        ahead = above and minor == t_minor + 1 and UPWARD.search(m.string[:m.start()])
+        if not (t_minor - shift <= minor <= t_minor or ahead):
             return m.group(0)
-        out = f"{v}1.{minor + shift}"
+        out = f"{v}1{dot}{minor + shift}"
         if patch is None:
             return out
         if minor == t_minor and patch not in ("0", "x"):
             if patch != "1":
                 raise SystemExit(f"unexpected patch .{patch} on the tracked minor: {line.strip()!r}")
             patch = pins["patch"].rsplit(".", 1)[1]
-        return f"{out}.{patch}"
+        return f"{out}{pdot}{patch}"
 
     return TOKEN.sub(move, line)
 

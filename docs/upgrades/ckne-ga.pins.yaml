@@ -5,4 +5,4 @@
 upgrade: ckne-ga
 date: '2026-11-12'          # the day the switch was prepared; what a tool edit stamps in meta.yaml (never the clock)
 tool: scripts/upgrade_versions.py   # the one scripted editor the guard accepts for this upgrade
-tool_sha256: 244f584bca75c25b9e107b188d5e5cb94875edc8578874ff88c2bbbd0364c9b9   # its sha256: change the script and this line moves with it (a test checks)
+tool_sha256: acacee6a797f0fd5154934c4a78331be0698275c0a19d422a0366724495fbe39   # its sha256: change the script and this line moves with it (a test checks)

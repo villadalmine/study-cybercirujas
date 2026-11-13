@@ -149,8 +149,11 @@ flowchart TD
    regenerates a topic.
 4. **Scope below topic level.** For each `revalidate`/`regenerate` topic the plan lists the sections (markdown headings)
    that name what changed: the old domain name, the old objective title, a weight line. For every topic it lists the
-   lines that name the tracked version, split into `curriculum`, `label` and `technical`; `# ...` lines inside code
-   fences are not headings, and every version line of `lab/lab.yaml` and `lab/*.sh` is `technical`.
+   lines that name the tracked version, split into `curriculum` and `technical`; `# ...` lines inside code
+   fences are not headings, and every version line of `lab/lab.yaml` and `lab/*.sh` is `technical`. Until the CKS
+   v1.37 review (#318) headings and lines starting with `**` were counted as `label` and moved by no scope, so a
+   banner kept the old version and an answer ("**Q4.1** — …") stayed while its question moved; they are `technical`
+   now and `label` stays in the plan at 0 (the CKA & CKAD and CKNE plans are records and keep their counts).
 5. **Issues**: one per `regenerate` or `new` topic, as a sub-issue of the umbrella issue. For v1.37 there are none.
 6. **Phase 2** (below), then the **switch**: the final PR moves `tracked_version` and `sources.objectives`.
    `scripts/curriculum_diff.py switch docs/upgrades/<upgrade>.yaml` writes it (`--check` reports without writing): per

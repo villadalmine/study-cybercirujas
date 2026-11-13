@@ -12,12 +12,15 @@
 # component), so a topic id such as "CKA 3.3" or "CKA 1.1" is not a version, and another cert's id ("CKAD 1.35" in a CKA page) is not
 # this cert's citation.
 version:
-  words: 'curriculum|curr[ií]culo|certification|certificaci[oó]n?|examen|exam|exame|syllabus|objectives|objetivos|temario'
+  words: 'curr[ií]culum|curr[ií]culo|certification|certificaci[oó]n?|examen|exam|exame|syllabus|objectives|objetivos|temario'
   marker: '(?:v|version\s+|versi[oó]n\s+|vers[aã]o\s+)'
   gap: 40
   # The version marker that may FOLLOW a number's introducing word ("Version 4.0 objectives:"): the long forms only, a bare `v`
   # next to the word "exam" is too common in prose to trust.
   long_marker: '(?:version\s+|versi[oó]n\s+|vers[aã]o\s+)'
+  # A phrase that names the exam version by itself, the number right after it (bold allowed): "versión de examen 1.34",
+  # "Exam version **1.34**" (CKS v1.37 review, #318). The number still needs the shape of tracked_version.
+  phrase: 'versi[oó]n\s+del?\s+examen|exam\s+version'
 # Spans that look like a cited version and are not one (a version of something else that merely sits near the word "objectives").
 ignore:
   - 'CVSS\s+v?\d+(?:\.\d+)*'
@@ -71,6 +74,8 @@ files:
 #  - certs/<cert>/<topic>/lab/lab.yaml `verified:` blocks record the proof of the v1.35 run on its date with its node image
 #    (kindest/node v1.35.8): historical evidence, and lab.yaml is not scanned. The v1.37 proofs are new records
 #    (docs/upgrades/evidence/).
+# A bold marker or number ("currículum **v1.34**", "Exam version **1.34**") is read through: up to two `*` may sit between the
+# marker and the number.
 #  - the upgrade examples in cka 4.2 and 4.3 ("1.35 -> 1.36 -> 1.37", "upgrading directly from 1.35 to 1.37 is prohibited") teach
 #    the one-minor-at-a-time rule; 1.35 is the example's starting point, not the exam version. They have no introducing word
 #    and no cert id before the number, which is why no pattern above matches them.

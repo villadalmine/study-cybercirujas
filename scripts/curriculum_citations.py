@@ -59,17 +59,22 @@ def version_regexes(rule: dict, tracked: str, cert: str) -> list[re.Pattern]:
 
     A: an introducing word, then the marker and the number ("Curriculum v1.35", "Curriculum_v1.35.pdf").
     B: the cert's own id, then the number ("# CKA 1.35 - Topic 1.1", "(CKA v1.35)"), the number in the shape of tracked_version.
-    C: a long marker and the number, then an introducing word ("Version 4.0 objectives:")."""
+    C: a long marker and the number, then an introducing word ("Version 4.0 objectives:").
+    D: a phrase that names the exam version by itself, then the number ("versión de examen 1.34", "Exam version **1.34**").
+    Up to two `*` may sit between a marker and the number (bold)."""
     number = r"\d+" + r"(?:\.\d+)" * tracked.count(".")
     shaped = r"\.".join(r"\d{%d}" % len(c) for c in tracked.split("."))
     words = rule["words"]
     gap = int(rule["gap"])
     cert_re = re.escape(cert).replace(r"\-", "[ -]")
-    return [
-        re.compile(rf"(?i:(?<![A-Za-z])(?:{words})(?![A-Za-z])[^\n]{{0,{gap}}}?(?<![A-Za-z]){rule['marker']})({number})(?!\.?\d)"),
+    out = [
+        re.compile(rf"(?i:(?<![A-Za-z])(?:{words})(?![A-Za-z])[^\n]{{0,{gap}}}?(?<![A-Za-z]){rule['marker']}\*{{0,2}})({number})(?!\.?\d)"),
         re.compile(rf"(?i:(?<![A-Za-z0-9])(?:{cert_re})(?![A-Za-z0-9])[ \t:]*\(?\s*(?:{rule['marker']})?)(?<!\d)({shaped})(?!\.?\d)(?!\s*%)"),
         re.compile(rf"(?i:(?<![A-Za-z]){rule['long_marker']})({number})(?!\.?\d)(?=[^\n]{{0,{gap}}}?(?<![A-Za-z])(?:{words})(?![A-Za-z]))"),
     ]
+    if rule.get("phrase"):
+        out.append(re.compile(rf"(?i:(?<![A-Za-z])(?:{rule['phrase']})\s*\*{{0,2}})(?<!\d)({shaped})(?!\.?\d)"))
+    return out
 
 
 def spans(line: str, want: dict) -> list[tuple[int, int, str]]:
