@@ -209,6 +209,4 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 
 From `usage.jsonl` and `quota-history.jsonl` at the last refresh. Outside `--check` on purpose: spend moves without content moving. Detail: `make metrics`.
 
-- 2,782 completions · 68,966,114 output tokens · $2,199.16 API-equivalent
-- 75 session windows observed · median 761,850 output tokens per window
-- per stage: author 1589 · translate 897 · probe 205 · video-script 22 · untagged 21 · catalog-sync 21 · snapshot 19 · judge 8
+Nothing recorded yet.
