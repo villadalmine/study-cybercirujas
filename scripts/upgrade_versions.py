@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply a Kubernetes version bump to exactly the lines an upgrade plan lists (#51, #63). No model, no network.
+r"""Apply a Kubernetes version bump to exactly the lines an upgrade plan lists (#51, #63). No model, no network.
 
     scripts/upgrade_versions.py PLAN PINS --scope material|labs [--cert cka] [--check]
 
@@ -53,8 +53,8 @@ TOKEN = re.compile(r"(?<![\d.\\])(v?)1(\\?\.)(\d{2})(?:(\\?\.)(\d+|x))?(?!\d)")
 # (CKS v1.37 review, #318).
 HISTORY = re.compile(
     r"(?i)(?:\b(?:since|introduced|added|alpha|beta|graduated|promoted|went|removed|gone|deprecated|default|"
-    r"verified|tested|desde|introducid[oa]s?|añadid[oa]s?|alfa|graduad[oa]s?|eliminad[oa]s?|obsolet[oa]s?|defecto|"
-    r"verificad[oa]s?|probad[oa]s?)\b|\bGA\b)(?:\s+\S+){0,2}\s+$")
+    r"verified|tested|desde|introducid[oa]s?|añadid[oa]s?|alfa|graduad[oa]s?|eliminad[oa]s?|obsolet[oa]s?|defecto|predeterminad[oa]s?|"
+    r"verificad[oa]s?|probad[oa]s?|line|l[ií]nea|series|serie)\b|\bGA\b)(?:\s+\S+){0,2}\s+$")
 # A line that carries a calendar date ("| 1.34 | Aug 2025 | ~Oct 2026 |", a release table) dates every version on it:
 # moving the version would pair it with another release's dates. The line stays as written (#319 review).
 DATED = re.compile(r"(?i)\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|ene|abr|ago|dic)[a-z]*\.?\s+(?:19|20)\d{2}\b")
@@ -86,7 +86,11 @@ def rewrite(line: str, pins: dict) -> str:
     # upward words missed Spanish). That token moves with the rest, so "1.33 -> 1.34 -> 1.35" stays a forward chain;
     # as an image or package tag (`busybox:1.35`) it is not a Kubernetes version and stays.
     above = t_minor in minors
-    if t_minor not in minors and (not t_minor - 1 in minors or any(m > t_minor for m in minors)):
+    if t_minor not in minors and (not t_minor - 1 in minors or any(m > t_minor for m in minors)
+                                  or any(t_minor - shift <= m < t_minor - 1 for m in minors)):
+        # A companion moves only when every version it names is the minor below: a line that also names an older
+        # one ("v1.32.9 on a v1.33 cluster ... back to v1.32") is a scenario of its own, and its answer, which
+        # names only the older one, would not move with it (#319 review).
         # A companion line ("Cluster version: v1.34.1", the version a sample upgrade starts from) moves only
         # while it still shows the minor below the tracked one; once moved it shows a minor above it.
         return line
@@ -106,8 +110,8 @@ def rewrite(line: str, pins: dict) -> str:
         ahead = above and minor == t_minor + 1 and not TAG.search(before)
         if not (t_minor - shift <= minor <= t_minor or ahead):
             return m.group(0)
-        if HISTORY.search(CLAUSE.split(before)[-1]):
-            return m.group(0)                    # a dated fact: true of the release it names
+        if HISTORY.search(CLAUSE.split(before)[-1]) or m.string[m.end():m.end() + 1] == "+":
+            return m.group(0)                    # a dated fact ("GA in v1.33", "in v1.33+"): true of that release
         out = f"{v}1{dot}{minor + shift}"
         if patch is None:
             return out

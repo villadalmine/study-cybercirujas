@@ -376,8 +376,10 @@ scripts/upgrade_versions.py docs/upgrades/cka-ckad-1.37.plan.json docs/upgrades/
   (`WRONG REWRITE`). The original generation's provenance stays untouched, and any other edit needs the model fields like before.
 
 A scan correction came with it: a sample that shows an upgrade also names the version it starts from (`Cluster version:
-v1.34.1` beside a table `v1.34.1 to v1.35.1`). `scan` now lists the `v1.N.P` lines of the minor below, in a file that
-already has a tracked line (3 lines in CKA 4.3), so the bump cannot leave a sample contradicting itself.
+v1.34.1` beside a table `v1.34.1 to v1.35.1`). `scan` now lists the lines of the minor below, in a file that already has
+a tracked line (3 lines in CKA 4.3), so the bump cannot leave a sample contradicting itself. Since the CKS v1.37 review
+(#319) that is any mention of the minor below, bare or not (`stable:/v1.33/deb/`, `1.33.x`, `v1\.33`); the editor moves
+such a line only when every version on it is that minor, and never a dated one (`GA in the v1.33 line`, `v1.33+`).
 
 ## The repo says one thing: the consistency gate (#220)
 

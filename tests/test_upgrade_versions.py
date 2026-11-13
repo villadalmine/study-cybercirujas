@@ -94,6 +94,15 @@ class ReviewOf318(unittest.TestCase):
         self.assertEqual(self.r('Major:"1", Minor:"34", GitVersion:"v1.34.1", BuildDate:"2026-02-18T10:22:41Z"'),
                          'Major:"1", Minor:"37", GitVersion:"v1.37.2", BuildDate:"2026-02-18T10:22:41Z"')
 
+    def test_round_2_of_319(self):
+        es = "> **Nota v1.34**: pasó a beta en v1.31 y a GA en la línea v1.33, pero no es el predeterminado en v1.34."
+        self.assertEqual(self.r(es), es.replace("Nota v1.34", "Nota v1.37"))   # same as the English twin
+        self.assertEqual(self.r("In v1.33+ the token carries node claims on v1.34"),
+                         "In v1.33+ the token carries node claims on v1.37")
+        q = "`kubeadm upgrade apply v1.32.9` on a v1.33 cluster: what is your only real path back to v1.32?"
+        self.assertEqual(self.r(q), q)                                   # a scenario of its own: its answer names only 1.32
+        self.assertEqual(self.r("repoint the apt repository URL back to `v1.33`"), "repoint the apt repository URL back to `v1.36`")
+
     def test_the_rest_of_a_line_with_a_dated_fact_moves(self):
         self.assertEqual(self.r("(since v1.28; it was two before that). So v1.34.1 apiserver with v1.33.4 kubelets"),
                          "(since v1.28; it was two before that). So v1.37.2 apiserver with v1.36.4 kubelets")

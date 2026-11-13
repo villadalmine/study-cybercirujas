@@ -8,7 +8,7 @@ shift: 2                    # minors between them: 1.33 -> 1.35, 1.34 -> 1.36, 1
 patch: '1.37.1'             # kubeadm, kubelet and kubectl; where a sample shows a target patch (.1) it becomes this
 kindest_node: 'v1.37.0'     # newest kindest/node tag that exists; teach/lab/runner.py pins its digest
 tool: scripts/upgrade_versions.py   # the one scripted editor the guard accepts for this upgrade
-tool_sha256: e03f1d890144d0484b7f1e98da7d869ddd051dffd5eaa7035c554bebb548cb6f   # its sha256: change the script and this line moves with it (a test checks), or the guard refuses the tool edits
+tool_sha256: 1762be2a474f354b013c4f37b55d43fd05220ad38a2c126661e350ff8f810a3f   # its sha256: change the script and this line moves with it (a test checks), or the guard refuses the tool edits
 curriculum_commit:          # the v1.37 PDFs, pinned by commit (the v1.35 links on master are 404)
   CKA: b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec
   CKAD: f423fa49c0cab0820533babd95b37ebe8fd89e67
