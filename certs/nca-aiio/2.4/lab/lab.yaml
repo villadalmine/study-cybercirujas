@@ -1,0 +1,13 @@
+cert: nca-aiio
+topic: '2.4'
+title: Articulate the key advantages, challenges, and considerations related to on-prem
+  vs cloud infrastructures
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
