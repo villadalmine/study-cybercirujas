@@ -1,16 +1,12 @@
 # Community 22
 
-> 49 nodes · cohesion 0.08
+> 17 nodes · cohesion 0.31
 
 ## Key Concepts
 
 - **check_source_chain.py** (19 connections) — `scripts/check_source_chain.py`
-- **chain_sha256()** (14 connections) — `teach/core/certs.py`
-- **SourceChainTests** (12 connections) — `tests/test_source_chain.py`
 - **Chain** (11 connections) — `scripts/check_source_chain.py`
 - **.labs()** (8 connections) — `scripts/check_source_chain.py`
-- **translation_source_sha256()** (8 connections) — `teach/core/certs.py`
-- **.run_check()** (8 connections) — `tests/test_source_chain.py`
 - **.content_and_translations()** (7 connections) — `scripts/check_source_chain.py`
 - **.videos()** (7 connections) — `scripts/check_source_chain.py`
 - **rel()** (7 connections) — `scripts/check_source_chain.py`
@@ -18,46 +14,37 @@
 - **.lack()** (6 connections) — `scripts/check_source_chain.py`
 - **.syllabi()** (6 connections) — `scripts/check_source_chain.py`
 - **load_yaml()** (6 connections) — `scripts/check_source_chain.py`
-- **Tree** (5 connections) — `tests/test_source_chain.py`
 - **.run()** (5 connections) — `scripts/check_source_chain.py`
 - **main()** (5 connections) — `scripts/check_source_chain.py`
-- **state()** (5 connections) — `scripts/check_versions.py`
-- **.__init__()** (5 connections) — `tests/test_source_chain.py`
-- **ChainHashTests** (4 connections) — `tests/test_source_chain.py`
 - **frontmatter()** (4 connections) — `scripts/check_source_chain.py`
-- **_same_version()** (4 connections) — `scripts/check_versions.py`
-- **.test_line_endings_are_not_part_of_the_hash()** (4 connections) — `tests/test_source_chain.py`
-- **.meta()** (4 connections) — `tests/test_source_chain.py`
-- **.setUp()** (3 connections) — `tests/test_labs_host_guard.py`
-- *... and 24 more nodes in this community*
+- **Path** (3 connections)
+- **baseline()** (2 connections) — `scripts/check_source_chain.py`
+- **.__init__()** (2 connections) — `scripts/check_source_chain.py`
+- **Does every link of the source chain say where it comes from? docs/PRINCIPLES.md…** (1 connections) — `scripts/check_source_chain.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (6 shared connections)
 - [Community 141](Community_141.md) (3 shared connections)
-- [Community 10](Community_10.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 - [Community 124](Community_124.md) (2 shared connections)
+- [Community 75](Community_75.md) (2 shared connections)
 - [Community 70](Community_70.md) (2 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 29](Community_29.md) (2 shared connections)
-- [Community 63](Community_63.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
+- [Community 213](Community_213.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 112](Community_112.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 127](Community_127.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/check_source_chain.py`
-- `scripts/check_versions.py`
-- `teach/core/certs.py`
-- `tests/test_labs_host_guard.py`
-- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 115 (93%)
-- INFERRED: 9 (7%)
+- EXTRACTED: 60 (95%)
+- INFERRED: 3 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

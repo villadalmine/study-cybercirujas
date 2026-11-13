@@ -1,6 +1,6 @@
 # Community 13
 
-> 21 nodes · cohesion 0.13
+> 22 nodes · cohesion 0.13
 
 ## Key Concepts
 
@@ -12,6 +12,7 @@
 - **.test_content_without_references_is_rejected()** (3 connections) — `tests/test_quality.py`
 - **.test_exercises_without_details_are_rejected()** (3 connections) — `tests/test_quality.py`
 - **.test_references_heading_in_other_languages()** (3 connections) — `tests/test_quality.py`
+- **_reusable()** (2 connections) — `teach/core/generator.py`
 - **.test_complete_material_passes()** (2 connections) — `tests/test_quality.py`
 - **.test_missing_leading_heading()** (2 connections) — `tests/test_quality.py`
 - **.test_short_material_is_rejected()** (2 connections) — `tests/test_quality.py`
@@ -28,8 +29,9 @@
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 273](Community_273.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 7](Community_7.md) (2 shared connections)
+- [Community 112](Community_112.md) (2 shared connections)
 - [Community 19](Community_19.md) (2 shared connections)
 - [Community 249](Community_249.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
@@ -37,12 +39,13 @@
 
 ## Source Files
 
+- `teach/core/generator.py`
 - `teach/core/quality.py`
 - `tests/test_quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 39 (100%)
+- EXTRACTED: 40 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

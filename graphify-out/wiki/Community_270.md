@@ -1,11 +1,12 @@
 # Community 270
 
-> 2 nodes · cohesion 1.00
+> 3 nodes · cohesion 0.67
 
 ## Key Concepts
 
-- **row()** (2 connections) — `tests/test_curriculum_diff.py`
-- **One `pdftotext -layout` line: a left-column part, padded, then a right-column…** (1 connections) — `tests/test_curriculum_diff.py`
+- **WhereItRanTests** (3 connections) — `tests/test_check_pr.py`
+- **.test_evidence_without_a_run_fails()** (1 connections) — `tests/test_check_pr.py`
+- **.test_runs_are_read_from_the_subsection()** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
@@ -13,11 +14,11 @@
 
 ## Source Files
 
-- `tests/test_curriculum_diff.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 2 (100%)
+- EXTRACTED: 3 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

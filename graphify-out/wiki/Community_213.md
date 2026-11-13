@@ -1,39 +1,32 @@
 # Community 213
 
-> 8 nodes · cohesion 0.25
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **main()** (6 connections) — `teach/lab/kc_scope.py`
-- **current()** (5 connections) — `teach/lab/kc_scope.py`
-- **stale_entries()** (5 connections) — `teach/lab/kc_scope.py`
-- **Glossary** (3 connections) — `docs/HOW-IT-WORKS.md`
-- **test_the_stale_report_runs_on_the_real_repo_and_never_fails()** (2 connections) — `tests/lab/test_kc_scope.py`
-- **Sources and licensing** (2 connections) — `docs/FAQ.md`
-- **(lab, target, recorded hash, current hash) for every evidence entry recorded…** (1 connections) — `teach/lab/kc_scope.py`
-- **`python -m teach.lab.kc_scope`: one ::warning:: per stale evidence entry. Never…** (1 connections) — `teach/lab/kc_scope.py`
+- **state()** (5 connections) — `scripts/check_versions.py`
+- **_same_version()** (4 connections) — `scripts/check_versions.py`
+- **.setUp()** (3 connections) — `tests/test_labs_host_guard.py`
+- **parts()** (1 connections) — `scripts/check_versions.py`
+- **True/False if both versions are known and comparable, else None. "3.0" and…** (1 connections) — `scripts/check_versions.py`
+- **current | outdated | unknown. `unknown` is a real answer and is reported as…** (1 connections) — `scripts/check_versions.py`
 
 ## Relationships
 
-- [Community 111](Community_111.md) (3 shared connections)
-- [Community 44](Community_44.md) (2 shared connections)
-- [Community 147](Community_147.md) (2 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 239](Community_239.md) (1 shared connections)
+- [Community 245](Community_245.md) (2 shared connections)
+- [Community 63](Community_63.md) (1 shared connections)
+- [Community 209](Community_209.md) (1 shared connections)
+- [Community 22](Community_22.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/FAQ.md`
-- `docs/HOW-IT-WORKS.md`
-- `teach/lab/kc_scope.py`
-- `tests/lab/test_kc_scope.py`
+- `scripts/check_versions.py`
+- `tests/test_labs_host_guard.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (78%)
-- INFERRED: 4 (22%)
+- EXTRACTED: 8 (80%)
+- INFERRED: 2 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

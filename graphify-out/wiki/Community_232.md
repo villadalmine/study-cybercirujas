@@ -1,39 +1,27 @@
 # Community 232
 
-> 12 nodes · cohesion 0.18
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **test_corpus.py** (9 connections) — `tests/test_corpus.py`
-- **get_topic()** (6 connections) — `teach/core/corpus.py`
-- **ContractTests** (3 connections) — `tests/test_corpus.py`
-- **TopicTests** (3 connections) — `tests/test_corpus.py`
-- **get_topic()** (2 connections) — `teach/mcp_server.py`
-- **.test_a_missing_language_says_so_rather_than_pretending()** (2 connections) — `tests/test_corpus.py`
-- **.test_the_material_travels_with_its_sources()** (2 connections) — `tests/test_corpus.py`
-- **.test_it_is_the_four_functions_the_design_names()** (1 connections) — `tests/test_corpus.py`
-- **.test_nothing_in_the_contract_can_write()** (1 connections) — `tests/test_corpus.py`
-- **The material for one topic: theory, exercises, and where it came from.…** (1 connections) — `teach/core/corpus.py`
-- **The four functions a study agent gets — and the boundary around them. Phase 2…** (1 connections) — `tests/test_corpus.py`
-- **inspect** (1 connections)
+- **authorship()** (5 connections) — `scripts/check_pr.py`
+- **ledger_rows()** (5 connections) — `scripts/check_pr.py`
+- **_cells()** (2 connections) — `scripts/check_pr.py`
+- **The data rows of '### Findings ledger' (None if the subsection is missing).** (1 connections) — `scripts/check_pr.py`
+- **Who is declared as author agrees with Provenance; the findings ledger is well…** (1 connections) — `scripts/check_pr.py`
 
 ## Relationships
 
-- [Community 253](Community_253.md) (2 shared connections)
-- [Community 55](Community_55.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 32](Community_32.md) (4 shared connections)
+- [Community 46](Community_46.md) (2 shared connections)
 
 ## Source Files
 
-- `teach/core/corpus.py`
-- `teach/mcp_server.py`
-- `tests/test_corpus.py`
+- `scripts/check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

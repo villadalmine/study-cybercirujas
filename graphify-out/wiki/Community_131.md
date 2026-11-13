@@ -1,40 +1,35 @@
 # Community 131
 
-> 17 nodes · cohesion 0.12
+> 13 nodes · cohesion 0.26
 
 ## Key Concepts
 
-- **The routine, start to finish** (8 connections) — `docs/CLEANUP.md`
-- **Cleanup — what fills up, and how to reclaim it** (7 connections) — `docs/CLEANUP.md`
-- **1. The container registry (the one that actually fills)** (4 connections) — `docs/CLEANUP.md`
-- **4. Local state (`~/.local/state/teach-plat/`)** (2 connections) — `docs/CLEANUP.md`
-- **2. Rejected generation output (`.rejected/`)** (1 connections) — `docs/CLEANUP.md`
-- **3. Orphaned topic directories** (1 connections) — `docs/CLEANUP.md`
-- **5. Scratch files in the repository root** (1 connections) — `docs/CLEANUP.md`
-- **Check first** (1 connections) — `docs/CLEANUP.md`
-- **Delete** (1 connections) — `docs/CLEANUP.md`
-- **Step 0 — measure before touching anything** (1 connections) — `docs/CLEANUP.md`
-- **Step 1 — orphaned registry uploads · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
-- **Step 2 — old image tags · *automatable with a rule, not blindly*** (1 connections) — `docs/CLEANUP.md`
-- **Step 3 — garbage collection · *safe to automate, but slow*** (1 connections) — `docs/CLEANUP.md`
-- **Step 4 — logs and diagnosed rejections · *safe to automate*** (1 connections) — `docs/CLEANUP.md`
-- **Step 5 — orphaned topics and scratch files · *keep manual*** (1 connections) — `docs/CLEANUP.md`
-- **Steps 1–3, automated · `make clean-registry`** (1 connections) — `docs/CLEANUP.md`
-- **Worth doing once** (1 connections) — `docs/CLEANUP.md`
+- **ToolEditProvenance** (12 connections) — `tests/test_upgrade_versions.py`
+- **.ok()** (7 connections) — `tests/test_upgrade_versions.py`
+- **.base()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.meta()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_another_tool_or_a_sha_the_pins_do_not_name()** (3 connections) — `tests/test_upgrade_versions.py`
+- **.setUp()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_accepted_for_the_line_the_script_writes()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_guard_flags_a_wrong_rewrite_of_any_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_an_edit_outside_the_plan()** (2 connections) — `tests/test_upgrade_versions.py`
+- **.test_refused_for_other_content_on_a_listed_line()** (2 connections) — `tests/test_upgrade_versions.py`
+- **topic()** (1 connections) — `tests/test_upgrade_versions.py`
+- **.test_the_committed_pins_name_this_script()** (1 connections) — `tests/test_upgrade_versions.py`
+- **curriculum_diff.tool_edit_ok / wrong_rewrites: a scripted edit counts only for…** (1 connections) — `tests/test_upgrade_versions.py`
 
 ## Relationships
 
-- [Community 6](Community_6.md) (1 shared connections)
-- [Community 110](Community_110.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/CLEANUP.md`
+- `tests/test_upgrade_versions.py`
 
 ## Audit Trail
 
-- EXTRACTED: 17 (94%)
-- INFERRED: 1 (6%)
+- EXTRACTED: 21 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

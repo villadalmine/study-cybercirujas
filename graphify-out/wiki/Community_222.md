@@ -1,40 +1,33 @@
 # Community 222
 
-> 12 nodes · cohesion 0.18
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **scan()** (10 connections) — `scripts/curriculum_diff.py`
-- **_sections()** (5 connections) — `scripts/curriculum_diff.py`
-- **_headings()** (4 connections) — `scripts/curriculum_diff.py`
-- **unlisted_edits()** (4 connections) — `scripts/curriculum_diff.py`
-- **Efficiency: how this update came out** (3 connections) — `docs/upgrades/README.md`
-- **minor_below()** (2 connections) — `scripts/curriculum_diff.py`
-- **Phase 2, measured (2026-10-21)** (2 connections) — `docs/upgrades/README.md`
-- **Cost: scoped edits versus full regeneration** (1 connections) — `docs/upgrades/README.md`
-- **Per line: is it a markdown heading? A `# ...` line inside a code fence is a…** (1 connections) — `scripts/curriculum_diff.py`
-- **(first line number, heading, body) per markdown section; text before the first…** (1 connections) — `scripts/curriculum_diff.py`
-- **Sections that name a changed field, and lines that name the tracked version.…** (1 connections) — `scripts/curriculum_diff.py`
-- **Edits outside what the plan lists, in a doc file the plan scopes (a section or…** (1 connections) — `scripts/curriculum_diff.py`
+- **run_cert.py** (12 connections) — `scripts/run_cert.py`
+- **main()** (6 connections) — `scripts/run_cert.py`
+- **run()** (3 connections) — `scripts/run_cert.py`
+- **pending_topics()** (2 connections) — `scripts/run_cert.py`
+- **# NOTE: --to, not --lang. `--lang` re-authors from the syllabus and** (1 connections) — `scripts/run_cert.py`
+- **The ONE way to take a certification from nothing to finished. Every agent and…** (1 connections) — `scripts/run_cert.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (5 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
-- [Community 214](Community_214.md) (1 shared connections)
-- [Community 146](Community_146.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 19](Community_19.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
+- [Community 88](Community_88.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/upgrades/README.md`
-- `scripts/curriculum_diff.py`
+- `scripts/run_cert.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (96%)
-- INFERRED: 1 (4%)
+- EXTRACTED: 18 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

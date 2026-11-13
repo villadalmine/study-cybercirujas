@@ -1,28 +1,29 @@
 # Community 228
 
-> 6 nodes · cohesion 0.47
+> 5 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **sitecustomize.py** (6 connections) — `tests/netguard/sitecustomize.py`
-- **_host()** (3 connections) — `tests/netguard/sitecustomize.py`
-- **_connect()** (2 connections) — `tests/netguard/sitecustomize.py`
-- **_connect_ex()** (2 connections) — `tests/netguard/sitecustomize.py`
-- **_getaddrinfo()** (1 connections) — `tests/netguard/sitecustomize.py`
-- **Block every network connection that does not go to this machine. Put this…** (1 connections) — `tests/netguard/sitecustomize.py`
+- **Guardrails: what is checked, what blocks, and what is only a convention** (5 connections) — `docs/GUARDRAILS.md`
+- **2. Labs and exercises are true** (2 connections) — `docs/GUARDRAILS.md`
+- **3. Code and syntax are valid** (2 connections) — `docs/GUARDRAILS.md`
+- **1. The content is true** (1 connections) — `docs/GUARDRAILS.md`
+- **How the three fit together** (1 connections) — `docs/GUARDRAILS.md`
 
 ## Relationships
 
-- [Community 127](Community_127.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/netguard/sitecustomize.py`
+- `docs/GUARDRAILS.md`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (62%)
-- INFERRED: 3 (38%)
+- EXTRACTED: 5 (71%)
+- INFERRED: 2 (29%)
 - AMBIGUOUS: 0 (0%)
 
 ---

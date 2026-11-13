@@ -1,35 +1,39 @@
 # Community 51
 
-> 12 nodes · cohesion 0.17
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
-- **ProtocolTests** (12 connections) — `tests/test_mcp_server.py`
-- **.setUpClass()** (2 connections) — `tests/test_mcp_server.py`
-- **.tearDownClass()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_a_bad_topic_does_not_take_the_server_down()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_a_topic_arrives_with_its_sources()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_an_unknown_certification_says_what_to_do_instead()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_every_tool_is_described()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_it_offers_the_contract_and_nothing_else()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_listing_certifications_says_which_are_empty()** (1 connections) — `tests/test_mcp_server.py`
-- **.test_search_carries_its_reasoning()** (1 connections) — `tests/test_mcp_server.py`
-- **skipUnless** (1 connections)
-- **Started as a subprocess and driven over stdio, like a real client.** (1 connections) — `tests/test_mcp_server.py`
+- **1. The code graph (Graphify)** (8 connections) — `docs/DEVTOOLS.md`
+- **2. The wiki (OpenWiki)** (4 connections) — `docs/DEVTOOLS.md`
+- **3. Real metrics, end to end** (4 connections) — `docs/DEVTOOLS.md`
+- **Developer tools: code graph, wiki, and real metrics** (4 connections) — `docs/DEVTOOLS.md`
+- **Optional, costs completions** (1 connections) — `docs/DEVTOOLS.md`
+- **Reading the numbers** (1 connections) — `docs/DEVTOOLS.md`
+- **Semantic enrichment — documented, deliberately not run** (1 connections) — `docs/DEVTOOLS.md`
+- **Setup, once** (1 connections) — `docs/DEVTOOLS.md`
+- **Setup, once per clone** (1 connections) — `docs/DEVTOOLS.md`
+- **The derived wiki (free — no LLM at all)** (1 connections) — `docs/DEVTOOLS.md`
+- **Using it** (1 connections) — `docs/DEVTOOLS.md`
+- **Using it from an agent (MCP)** (1 connections) — `docs/DEVTOOLS.md`
+- **Using it from the CLI** (1 connections) — `docs/DEVTOOLS.md`
+- **What changed on 2026-08-18 (blind spots closed)** (1 connections) — `docs/DEVTOOLS.md`
+- **When the code changes** (1 connections) — `docs/DEVTOOLS.md`
+- **When the code changes** (1 connections) — `docs/DEVTOOLS.md`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Community 93](Community_93.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
+- [Community 145](Community_145.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_mcp_server.py`
+- `docs/DEVTOOLS.md`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 16 (94%)
+- INFERRED: 1 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---
