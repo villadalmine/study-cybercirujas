@@ -194,7 +194,7 @@ topics:
   - https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html#dgx-h100-component-descriptions
   - https://www.nvidia.com/en-us/data-center/nvlink/
   - https://developer.nvidia.com/blog/accelerating-io-in-the-modern-data-center-network-io/
-  status: pending
+  status: generated
   title: Identify hardware requirements for specific AI training task use cases
   topic: 2 - AI Infrastructure
   weight: 4.0
