@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.6.9](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.8...v0.6.9) (2026-11-13)
+
+
+### Features
+
+* **certs:** CKS follows the Kubernetes v1.37 curriculum ([#322](https://github.com/villadalmine/study-cybercirujas/issues/322)) ([4c3190c](https://github.com/villadalmine/study-cybercirujas/commit/4c3190c670f364f54842cc2c7bf35cf1b5861c9a))
+* **cks:** bump the Kubernetes version in the CKS material, labs and citations to 1.37, by script ([#318](https://github.com/villadalmine/study-cybercirujas/issues/318)) ([4069e14](https://github.com/villadalmine/study-cybercirujas/commit/4069e14360771ad56c1b5758da7a3f1a85c9b0fb))
+* **nca-aiio:** 1.4 why AI improved and spread so fast, English and Spanish ([#295](https://github.com/villadalmine/study-cybercirujas/issues/295)) ([c1c5335](https://github.com/villadalmine/study-cybercirujas/commit/c1c533544d81842e63a8e6d517b4c0e28f649183))
+* **nca-aiio:** 1.5 key AI use cases and industries, English and Spanish ([#312](https://github.com/villadalmine/study-cybercirujas/issues/312)) ([432c371](https://github.com/villadalmine/study-cybercirujas/commit/432c3712ebaeb0e34b74ab586406e869e7723f9a))
+* **upgrades:** upgrade_pins.py writes the pins file from live sources; CKS v1.37 pins ([#316](https://github.com/villadalmine/study-cybercirujas/issues/316)) ([a83ae68](https://github.com/villadalmine/study-cybercirujas/commit/a83ae688088da882ea5823ee93ae9fd5c23b8602))
+
+
+### Bug Fixes
+
+* **upgrade:** a record of how a transcript was made keeps its version ([#320](https://github.com/villadalmine/study-cybercirujas/issues/320)) ([0651f95](https://github.com/villadalmine/study-cybercirujas/commit/0651f957bd33c5cd17fb4cd11d6e05b3877ca361))
+* **upgrade:** a version bump leaves dated facts alone and moves the banners, answers and citations it missed ([#319](https://github.com/villadalmine/study-cybercirujas/issues/319)) ([bd00960](https://github.com/villadalmine/study-cybercirujas/commit/bd00960f7aed078c5029bffbd081b3de8bef75fe))
+
 ## [0.6.8](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.7...v0.6.8) (2026-11-13)
 
 
