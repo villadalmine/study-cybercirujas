@@ -172,12 +172,12 @@ certs:
     name: Certified Kubernetes Security Specialist (CKS)
     exam: CKS
     category: cloud-native
-    tracked_version: '1.34'
-    upstream_status: outdated
+    tracked_version: '1.37'
+    upstream_status: current
     last_checked: '2026-11-12'
     file: certs/cks.md
     sources:
-      objectives: https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+      objectives: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
       repo: https://github.com/cncf/curriculum
     license: CC-BY 4.0
     level: professional
@@ -186,14 +186,6 @@ certs:
     - cka
     curriculum_updated: '2026-11-03'
     vendor: CNCF
-    upstream:
-      version: '1.37'
-      objectives: https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
-      sha256: a755a5680bec6978de4a3074d7f0c7fe978bd7a9ad5e4f1681597aedda6f6637
-      published: '2026-11-03'
-      detected: '2026-11-11'
-      snapshot: syllabi/cks/v1.37.yaml
-      milestone: v0.6.9
   kcna:
     name: Kubernetes and Cloud Native Associate (KCNA)
     exam: KCNA

@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **CKS on Kubernetes v1.37:** the Certified Kubernetes Security Specialist material, labs and citations now follow the CKS v1.37 curriculum (the PDF is identical to v1.34, so every topic stays as it was); the Kubernetes versions in commands and samples were moved by script to 1.37.2.
 
 ## Upgrade notes
 

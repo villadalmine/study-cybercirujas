@@ -1,9 +1,10 @@
 ---
 cert: cks
 exam: CKS
-snapshot_date: '2026-07-17'
+snapshot_date: '2026-11-03'
 sources:
 - https://github.com/cncf/curriculum/raw/master/CKS_Curriculum%20v1.34.pdf
+- https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf
 topics:
 - id: '1.1'
   sources:
@@ -193,10 +194,12 @@ topics:
   title: Use Kubernetes audit logs to monitor access
   topic: 6 - Monitoring, Logging and Runtime Security
   weight: 4
-version: '1.34'
+version: '1.37'
 ---
 
 # Certified Kubernetes Security Specialist (CKS)
 
 Snapshot del temario. Completar `topics` con id, title, weight, status y sources
 (ver certs/lpi-010-160.md como referencia) y correr `teach cert generate cks`.
+
+**Superseded by the curriculum 1.37** (https://github.com/cncf/curriculum/raw/4de0c318883d34f6070e760bf55df1f8dd5846eb/CKS_Curriculum%20v1.37.pdf), switched by `docs/upgrades/cks-1.37.yaml`. The notes above are dated and describe the snapshot they were written for.
