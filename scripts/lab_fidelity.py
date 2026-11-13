@@ -18,10 +18,12 @@ emulator publishes for the pinned release:
   `Issue-Key: <service>|<Operation>|<cause>...` lines. `known_issues` counts the files that name the operation.
 
 Verdict per operation (the only rule; change it here, with its test):
-- `reject: no-evidence`   no passing unit calls it: nothing shows the emulator behaves like AWS there;
-- `reject: not-implemented` a known issue says the emulator answers NotImplemented (a scaffold stub);
-- `reject: critical-issue`  a known issue of severity CRITICAL, about that one service, names it;
-- `ok` otherwise. Failing units and lower-severity known issues are recorded, not hidden: `ops` prints them.
+- `reject: no-evidence`     no passing unit calls it: nothing shows the emulator behaves like AWS there;
+- `reject: not-implemented` the same, and a known issue says the emulator answers NotImplemented (a stub);
+- `warn: critical-issue`    it has passing units, but a CRITICAL known issue about that one service names it. The
+  data is per operation, not per way of calling it (`s3|GetObject|NotImplemented` is only the If-Match path), so
+  this does not reject: it is recorded, and the runner's break/fix proof decides;
+- `ok` otherwise. Failing units and known issues are counted, never hidden: `ops` prints them.
 
 `check` (the gate over each lab, and the `fidelity:` block it records there) is the next PR of #325.
 """
@@ -32,6 +34,8 @@ import gzip
 import hashlib
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
 import urllib.request
@@ -59,6 +63,8 @@ def sha256(data: bytes) -> str:
 
 
 def fetch(url: str) -> bytes:
+    if not url.startswith("https://"):
+        raise SystemExit(f"refusing to read {url}: only https URLs")
     headers = {"User-Agent": "study-cybercirujas lab_fidelity"}
     if url.startswith("https://api.github.com/") and os.environ.get("GITHUB_TOKEN"):
         headers["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
@@ -95,9 +101,9 @@ def load_pins(path: Path = PINS) -> dict:
 
 
 def cmd_pin(args) -> int:
-    pin = live_pin(args.release)
+    have = load_pins() if args.check else {}
+    pin = live_pin(args.release or have.get("release"))
     if args.check:
-        have = load_pins()
         diff = [k for k in pin if have.get(k) != pin[k]]
         if diff:
             print(f"STALE: {PINS.relative_to(REPO)} differs from {pin['release']} in {', '.join(diff)}")
@@ -111,33 +117,75 @@ def cmd_pin(args) -> int:
 
 # ---------------------------------------------------------------- data
 
+def git(repo: Path, *args: str) -> str:
+    out = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True)
+    if out.returncode:
+        raise SystemExit(f"git {' '.join(args)} in {repo}: {out.stderr.strip()}")
+    return out.stdout
+
+
 def ensure_data(pin: dict) -> Path:
-    """Download the pinned scores and known issues once; the sha256 and the commit are verified every time."""
+    """Download the pinned scores and the emulator's tree once; both are verified on every run.
+
+    Every download goes to a temporary name and is renamed only when complete and verified, so an interrupted run
+    leaves nothing a later run would trust; a cached copy that fails its check is downloaded again."""
     root = CACHE / EMULATOR / pin["release"]
+    root.mkdir(parents=True, exist_ok=True)
     scores = root / "scores.json.gz"
-    if not scores.exists():
-        root.mkdir(parents=True, exist_ok=True)
-        scores.write_bytes(fetch(pin["scores_url"]))
-    if sha256(scores.read_bytes()) != pin["scores_sha256"]:
-        raise SystemExit(f"{scores}: sha256 differs from the pin; delete it and run fetch again")
+    if not scores.exists() or sha256(scores.read_bytes()) != pin["scores_sha256"]:
+        blob = fetch(pin["scores_url"])
+        if sha256(blob) != pin["scores_sha256"]:
+            raise SystemExit(f"{pin['scores_url']}: sha256 differs from the pin")
+        (root / "scores.json.gz.part").write_bytes(blob)
+        (root / "scores.json.gz.part").replace(scores)
     repo = root / "repo"
-    if not (repo / ".git").exists():
-        url = f"https://github.com/{pin['repo']}.git"
-        for cmd in (["git", "init", "-q", str(repo)],
-                    ["git", "-C", str(repo), "remote", "add", "origin", url],
-                    ["git", "-C", str(repo), "sparse-checkout", "set", "--no-cone", f"{ISSUES_DIR}/*"],
-                    ["git", "-C", str(repo), "fetch", "-q", "--depth", "1", "--filter=blob:none", "origin", pin["commit"]],
-                    ["git", "-C", str(repo), "checkout", "-q", "FETCH_HEAD"]):
-            subprocess.run(cmd, check=True)
-    head = subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True, text=True, check=True)
-    if head.stdout.strip() != pin["commit"]:
-        raise SystemExit(f"{repo}: at {head.stdout.strip()[:12]}, the pin says {pin['commit'][:12]}")
+    if repo.exists() and subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True,
+                                        text=True).stdout.strip() != pin["commit"]:
+        shutil.rmtree(repo)
+    if not repo.exists():
+        tmp = root / "repo.part"
+        shutil.rmtree(tmp, ignore_errors=True)
+        tmp.mkdir()
+        git(tmp, "init", "-q")
+        git(tmp, "remote", "add", "origin", f"https://github.com/{pin['repo']}.git")
+        git(tmp, "sparse-checkout", "set", "--no-cone", f"{ISSUES_DIR}/*")
+        git(tmp, "fetch", "-q", "--depth", "1", "--filter=blob:none", "origin", pin["commit"])
+        git(tmp, "checkout", "-q", "FETCH_HEAD")
+        tmp.rename(repo)
+    if git(repo, "rev-parse", "HEAD").strip() != pin["commit"]:
+        raise SystemExit(f"{repo}: not at the pinned commit {pin['commit'][:12]}")
     return root
 
 
 def namespace(shape_id: str) -> str:
     """com.amazonaws.s3#AmazonS3 -> s3 (the name `uses:` takes)."""
     return shape_id.split("#")[0].removeprefix("com.amazonaws.")
+
+
+def norm(name: str) -> str:
+    """CreateBucket, create_bucket -> createbucket: how an operation is matched to its handler file."""
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
+def service_dir(shape_id: str) -> str:
+    """com.amazonaws.s3#AmazonS3 -> service-com-amazonaws-s3-amazons3, the emulator's crate for that service."""
+    return "service-" + re.sub(r"[^a-z0-9]+", "-", shape_id.lower()).strip("-")
+
+
+def ownership(handler_paths: list[str], shapes: set[str]) -> dict[str, set[str]]:
+    """normalized operation -> the namespaces whose crate has a handler for it (services/<crate>/src/ops/<op>.rs).
+
+    The emulator has one handler file per operation, so this is the source of truth for which service an
+    operation belongs to. Crates of services no unit or issue names are left out: they have no evidence anyway."""
+    crate_ns = {service_dir(s): namespace(s) for s in shapes}
+    owners: dict[str, set[str]] = defaultdict(set)
+    for path in handler_paths:
+        parts = path.split("/")
+        if len(parts) >= 5 and parts[0] == "services" and parts[2:4] == ["src", "ops"] and path.endswith(".rs"):
+            stem = parts[-1][:-3]
+            if stem != "mod" and parts[1] in crate_ns:
+                owners[norm(stem)].add(crate_ns[parts[1]])
+    return owners
 
 
 def parse_issue(text: str) -> dict:
@@ -156,85 +204,76 @@ def parse_issue(text: str) -> dict:
     return {"severity": head.get("Issue-Severity", ""), "shape": head.get("Issue-Shape-Id", ""), "keys": keys}
 
 
-def issue_services(issue: dict, prefix_to_ns: dict[str, str]) -> set[str]:
-    if issue["shape"]:
-        return {namespace(issue["shape"])}
-    return {prefix_to_ns.get(k.split("|")[0], k.split("|")[0]) for k in issue["keys"]}
+def key_services(key: str, owners: dict[str, set[str]]) -> tuple[str, set[str]]:
+    """An Issue-Key `<service id>|<Operation>|<cause>...` -> (Operation, its namespaces). The first segment is the
+    called service (an SDK id such as `s3` or `cloudwatch-logs`), not the issue's Shape-Id, which is the scenario's.
+    An operation one service owns goes to it; one several own goes to the owner whose name is that id, or to all
+    of them (a known issue then counts for each: it can only make a verdict stricter). A key whose operation has no
+    handler anywhere (`<check-id>|run#N|...`) names no operation and is skipped."""
+    parts = key.split("|")
+    if len(parts) < 2:
+        return "", set()
+    cands = owners.get(norm(parts[1]), set())
+    named = {ns for ns in cands if norm(ns) == norm(parts[0])}
+    return parts[1], (cands if len(cands) <= 1 else named or cands)
 
 
-def build_index(scores: dict, issues: list[dict]) -> dict:
+def build_index(scores: dict, issues: list[dict], owners: dict[str, set[str]]) -> dict:
     """{(service, Operation): {passing_units, failing_units, known_issues, severities, causes}}
 
-    A step names an operation, not its service. A unit with one service attributes every call to it; a unit with
-    several attributes a call only to the service(s) where that operation is already known (from a one-service unit
-    or an Issue-Key), so `budgets:CreateRole` is not invented from a budgets+iam scenario. A known issue's severity
-    counts for an operation only when the issue is about that one service (its Shape-Id, or all its keys): a
-    CRITICAL "the CodeBuild chain never finishes" does not reject `iam:GetRole` because the chain calls it.
+    A wire unit is filed under the scenario's service, but its steps may call other services (a budgets scenario
+    calls iam:CreateRole). Each call is credited to the service that owns the operation: the unit's own service when
+    it has a handler for it, else the only owner; an operation with several other owners is not credited. A known
+    issue's severity counts only when all its keys are about one service, so a CRITICAL "the CodeBuild chain never
+    finishes" does not reject `iam:GetRole` because the chain calls it.
     """
     idx: dict = defaultdict(lambda: {"passing_units": 0, "failing_units": 0, "known_issues": 0,
                                      "severities": set(), "causes": set()})
-    prefix_to_ns: dict[str, str] = {}
-    for issue in issues:   # learn Issue-Key prefix -> namespace from the issues that carry both
-        if issue["shape"]:
-            for key in issue["keys"]:
-                prefix_to_ns.setdefault(key.split("|")[0], namespace(issue["shape"]))
-    units = []
-    known: set[tuple[str, str]] = set()
     for unit in scores["units"]:
         steps = (unit.get("detail") or {}).get("steps") or []
         services = {namespace(s) for s in unit.get("services", []) if s.startswith("com.amazonaws.")}
-        if not steps or not services:
-            continue
-        units.append((unit, steps, services))
-        if len(services) == 1:
-            known |= {(next(iter(services)), s["operation"]) for s in steps}
-    for issue in issues:
-        for key in issue["keys"]:
-            parts = key.split("|")
-            if len(parts) >= 2:
-                known |= {(svc, parts[1]) for svc in issue_services(issue, prefix_to_ns)}
-    for unit, steps, services in units:
         bad = {s["operation"] for s in steps if s["outcome"] in ("mismatch", "error")}
-        for op in {s["operation"] for s in steps}:
-            owners = services if len(services) == 1 else {svc for svc in services if (svc, op) in known}
-            for svc in owners:
+        for op in sorted({s["operation"] for s in steps}):
+            cands = owners.get(norm(op), set())
+            mine = cands & services
+            for svc in mine or (cands if len(cands) == 1 else set()):
                 if unit["outcome"] == "pass":
                     idx[(svc, op)]["passing_units"] += 1
                 elif op in bad:
                     idx[(svc, op)]["failing_units"] += 1
     for issue in issues:
-        owners = issue_services(issue, prefix_to_ns)
+        resolved = [(key, *key_services(key, owners)) for key in issue["keys"]]
+        about = set().union(*(svcs for _, _, svcs in resolved)) if resolved else set()
         named = set()
-        for key in issue["keys"]:
-            parts = key.split("|")
-            if len(parts) < 2:
-                continue
-            svc = namespace(issue["shape"]) if issue["shape"] else prefix_to_ns.get(parts[0], parts[0])
-            entry = idx[(svc, parts[1])]
-            if (svc, parts[1]) not in named:
-                named.add((svc, parts[1]))
-                entry["known_issues"] += 1
-                if len(owners) == 1:
-                    entry["severities"].add(issue["severity"])
-            if len(parts) > 2:
-                entry["causes"].add(parts[2])
+        for key, op, svcs in resolved:
+            for svc in svcs:
+                entry = idx[(svc, op)]
+                if (svc, op) not in named:
+                    named.add((svc, op))
+                    entry["known_issues"] += 1
+                    if len(about) == 1:
+                        entry["severities"].add(issue["severity"])
+                if len(key.split("|")) > 2:
+                    entry["causes"].add(key.split("|")[2])
     return idx
 
 
 def load_index(pin: dict) -> dict:
     root = ensure_data(pin)
     scores = json.loads(gzip.decompress((root / "scores.json.gz").read_bytes()))
-    files = sorted((root / "repo" / ISSUES_DIR).glob("*.md"))
-    return build_index(scores, [parse_issue(f.read_text(encoding="utf-8", errors="replace")) for f in files])
+    issues = [parse_issue(f.read_text(encoding="utf-8", errors="replace"))
+              for f in sorted((root / "repo" / ISSUES_DIR).glob("*.md"))]
+    shapes = {s for u in scores["units"] for s in u.get("services", []) if s.startswith("com.amazonaws.")}
+    shapes |= {i["shape"] for i in issues if i["shape"].startswith("com.amazonaws.")}
+    handlers = git(root / "repo", "ls-tree", "-r", "--name-only", "HEAD", "--", "services").splitlines()
+    return build_index(scores, issues, ownership(handlers, shapes))
 
 
 def verdict(entry: dict | None) -> str:
     if not entry or entry["passing_units"] == 0:
-        return "reject: no-evidence"
-    if "NotImplemented" in entry["causes"]:
-        return "reject: not-implemented"
+        return "reject: not-implemented" if entry and "NotImplemented" in entry["causes"] else "reject: no-evidence"
     if "CRITICAL" in entry["severities"]:
-        return "reject: critical-issue"
+        return "warn: critical-issue"
     return "ok"
 
 
@@ -242,8 +281,8 @@ def cmd_ops(args) -> int:
     index = load_index(load_pins())
     rows = sorted((op, e) for (svc, op), e in index.items() if svc == args.service)
     if not rows:
-        known = sorted({svc for svc, _ in index})
-        print(f"no operation for service {args.service!r}; services: {' '.join(known)}")
+        print(f"no operation with evidence or known issues for service {args.service!r} (the Smithy namespace, "
+              "e.g. s3, iam, ec2)")
         return 1
     for op, e in rows:
         if args.grep and args.grep.lower() not in op.lower():
@@ -264,7 +303,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("pin", help="write or compare deploy/lab-emulators.yaml")
-    p.add_argument("--release", help="release tag (default: the latest)")
+    p.add_argument("--release", help="release tag (default: the latest; with --check, the pinned one)")
     p.add_argument("--check", action="store_true")
     p.set_defaults(func=cmd_pin)
     p = sub.add_parser("fetch", help="download the pinned scores and known issues")
