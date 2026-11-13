@@ -29,9 +29,10 @@
 #   * Intended for a disposable lab VM (any modern Linux with bash + awk).
 #
 # USAGE
-#   sudo ./aiio-2.3-power-cooling-breakfix.sh            # install + break
+#   sudo ./break_fix.sh            # install + break
 #   lab-check                                            # verify your fix
-#   sudo ./aiio-2.3-power-cooling-breakfix.sh --cleanup  # remove everything
+#   sudo ./break_fix.sh --verify                         # the same check, as a script mode
+#   sudo ./break_fix.sh --cleanup  # remove everything
 #
 # OFFICIAL REFERENCES
 #   DGX H100 component descriptions and system power (~10.2 kW max):
@@ -76,7 +77,13 @@ if [[ ${1:-} == "--cleanup" ]]; then
   msg "cleanup complete"
   exit 0
 fi
-[[ $# -eq 0 ]] || die "unknown argument '$1' (only --cleanup is supported)"
+# ----------------------------------------------------------------------------- verify
+# The same grader as `lab-check`, reachable as a script mode so the study-lab runner can call it.
+if [[ ${1:-} == "--verify" ]]; then
+  [[ -x $LAB_ROOT/bin/lab-check ]] || die "lab not installed; run this script without arguments first"
+  exec "$LAB_ROOT/bin/lab-check"
+fi
+[[ $# -eq 0 ]] || die "unknown argument '$1' (only --verify and --cleanup are supported)"
 
 # ----------------------------------------------------------------------------- pre-flight
 if [[ -e $BIN_DIR/nvidia-smi && ! -L $BIN_DIR/nvidia-smi ]]; then
