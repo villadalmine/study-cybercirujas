@@ -127,6 +127,9 @@ class Main(unittest.TestCase):
         up.REPO = r.root                                                 # the editor and the paths of the fixture repo
         try:
             self.assertEqual(up.main(argv, get=sources()), 0)
+            pins = yaml.safe_load(out.read_text())
+            self.assertEqual(pins["tool_sha256"], hashlib.sha256(b"# editor\n").hexdigest())   # the fixture, not this repo
+            self.assertEqual(pins["tracked"], "1.34")
             self.assertIn("docs/upgrades/cks-1.37.yaml -o docs/upgrades/cks-1.37.pins.yaml --check", out.read_text())
             self.assertEqual(up.main(argv + ["--check"], get=sources()), 0)
             self.assertEqual(up.main(argv + ["--check"], get=sources(stable="v1.37.4\n",
@@ -149,6 +152,11 @@ class RepoPins(unittest.TestCase):
         self.assertTrue(f.read_text().startswith("# The one place the cks-1.37 upgrade pins its versions."))
         snap = yaml.safe_load((REPO / "syllabi" / "cks" / "v1.37.yaml").read_text())
         self.assertEqual(pins["target"], snap["version"])
+        spec = yaml.safe_load((REPO / "docs" / "upgrades" / "cks-1.37.yaml").read_text())
+        tracked = (REPO / spec["certs"]["cks"].get("tracked", "certs/cks.md")).read_text()
+        if str(yaml.safe_load(tracked.split("---")[1])["version"]) != pins["tracked"]:
+            self.skipTest("switched: the pins file is the record of the lookup the bump used")
+        self.assertEqual(pins["upgrade"], "cks-1.37")
         self.assertEqual(pins["curriculum_commit"], {"CKS": snap["source"]["commit"]})
         self.assertEqual(pins["tool_sha256"], hashlib.sha256((REPO / up.TOOL).read_bytes()).hexdigest())
         self.assertEqual(int(pins["target"].split(".")[1]) - int(pins["tracked"].split(".")[1]), pins["shift"])

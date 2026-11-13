@@ -335,7 +335,7 @@ PDF's domain 4); the plan's *Maps to* records it. Renumbering stays the maintain
 ## Phase 2: the edit script, `scripts/upgrade_versions.py`
 
 No model. The pins file is the one place the versions are pinned. Since CKS v1.37 it is written by
-`scripts/upgrade_pins.py <spec> -o <pins>`, never by hand: `tracked` from the catalog, `target` from the target snapshot,
+`scripts/upgrade_pins.py <spec> -o <pins>`, never by hand: `tracked` from the `version` of the spec's tracked syllabus (`certs/<cert>.md`), `target` from the target snapshot,
 `patch` from `dl.k8s.io/release/stable-<target>.txt` (kept only when kubeadm, kubelet and kubectl all have it in
 `pkgs.k8s.io/core:/stable:/v<target>/deb`, else the newest patch the three share), `kindest_node` from the newest
 `kindest/node:v<target>.*` the latest kind release lists, `tool_sha256` from the editor, `curriculum_commit` from the target

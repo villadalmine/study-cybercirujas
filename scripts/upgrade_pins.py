@@ -176,7 +176,7 @@ def main(argv: list[str] | None = None, get=fetch) -> int:
     if a.check and not a.out.is_file():
         print(f"{a.out}: missing")
         return 1
-    pins = build(a.spec, date, get=get)
+    pins = build(a.spec, date, get=get, root=REPO)    # REPO read now, not bound at import (tests point it at a fixture)
     if a.check:
         have = comparable(yaml.safe_load(a.out.read_text(encoding="utf-8")))
         want = comparable(pins)
