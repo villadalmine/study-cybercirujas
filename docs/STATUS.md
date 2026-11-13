@@ -47,7 +47,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `aws-aif` | 14 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ai-901` | 7 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `gcp-gail` | 15 | ❌ | ❌ | – | – | – | – | – | ❌ |
-| `nca-aiio` | 22 | 🔶 3/22c·3/22e | 🔶 5/22c·5/22e | – | – | – | – | – | 🔶 5/22 |
+| `nca-aiio` | 22 | – | 🔶 5/22c·5/22e | – | – | – | – | – | 🔶 5/22 |
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
