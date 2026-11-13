@@ -227,6 +227,7 @@ flowchart TD
 | The upgrade window names the frozen snapshot and the milestone | `curriculum_diff.py window <spec>` (refuses when the tracker's version or URL is not the snapshot's) | `check_curriculum_consistency.py` fails without it | |
 | The committed plan and report are what their inputs produce | `tests/test_curriculum_diff.py`, run by `make verify-ci` | in `verify.yml` | |
 | An upgrade PR changes only planned files | `curriculum_diff.py guard --base origin/main` | | run by hand; its logic is unit-tested, but no workflow runs it on each PR |
+| The versions the bump writes are read from live sources (k8s stable release, apt repo, kind node images) | `scripts/upgrade_pins.py` | | `--check` against the sources; a pins file typed by hand |
 | The version bump touches only the lines the plan lists | `scripts/upgrade_versions.py` | | a scripted edit, checked with `--check`; by hand |
 | The version the site follows moves once | `scripts/check_pr.py` (Scope: exam-version, only the milestone's final PR) | yes | |
 | The detail and the v1.37 case | [upgrades/README.md](upgrades/README.md) | | |
