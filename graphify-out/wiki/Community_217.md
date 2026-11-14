@@ -1,32 +1,42 @@
 # Community 217
 
-> 9 nodes · cohesion 0.22
+> 9 nodes · cohesion 0.42
 
 ## Key Concepts
 
-- **Killercoda is an export target, never the source** (9 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Run a lab anywhere** (2 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Evidence per target** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **How a lab gets proven before it is published** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Limits and open questions** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Publish: automatic on merge** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **Publish by hand (the same thing, when you want to see it)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **What each scenario says about itself** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
-- **What Killercoda documents about limits (checked 2026-10-16)** (1 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
+- **kubectl()** (18 connections) — `scripts/clean_registry.py`
+- **clean_registry.py** (9 connections) — `scripts/clean_registry.py`
+- **main()** (6 connections) — `scripts/clean_registry.py`
+- **usage()** (6 connections) — `scripts/clean_registry.py`
+- **deployed_tags()** (4 connections) — `scripts/clean_registry.py`
+- **in_registry()** (4 connections) — `scripts/clean_registry.py`
+- **Prune old image tags from the cluster registry, then reclaim the space. Written…** (1 connections) — `scripts/clean_registry.py`
+- **Every image referenced by a deployment, as `repo:tag`.** (1 connections) — `scripts/clean_registry.py`
+- **Disk usage of the registry volume, read by column name rather than index. `df…** (1 connections) — `scripts/clean_registry.py`
 
 ## Relationships
 
-- [Community 111](Community_111.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 209](Community_209.md) (2 shared connections)
+- [Community 21](Community_21.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 16](Community_16.md) (1 shared connections)
+- [Community 207](Community_207.md) (1 shared connections)
+- [Community 47](Community_47.md) (1 shared connections)
+- [Community 211](Community_211.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
+- [Community 1](Community_1.md) (1 shared connections)
+- [Community 80](Community_80.md) (1 shared connections)
+- [Community 223](Community_223.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/RUN-A-LAB-ANYWHERE.md`
+- `scripts/clean_registry.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 20 (57%)
+- INFERRED: 15 (43%)
 - AMBIGUOUS: 0 (0%)
 
 ---

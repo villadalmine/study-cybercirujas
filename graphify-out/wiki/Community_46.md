@@ -4,7 +4,7 @@
 
 ## Key Concepts
 
-- **re** (123 connections)
+- **re** (126 connections)
 - **test_lockfile.py** (9 connections) — `tests/test_lockfile.py`
 - **test_actions_pinned.py** (7 connections) — `tests/test_actions_pinned.py`
 - **unpinned()** (5 connections) — `tests/test_actions_pinned.py`
@@ -26,18 +26,18 @@
 
 ## Relationships
 
-- [Community 43](Community_43.md) (9 shared connections)
+- [Community 43](Community_43.md) (10 shared connections)
 - [Community 74](Community_74.md) (8 shared connections)
+- [Community 18](Community_18.md) (7 shared connections)
+- [Community 32](Community_32.md) (7 shared connections)
 - [Community 31](Community_31.md) (6 shared connections)
 - [Community 124](Community_124.md) (6 shared connections)
-- [Community 14](Community_14.md) (6 shared connections)
-- [Community 32](Community_32.md) (5 shared connections)
-- [Community 111](Community_111.md) (4 shared connections)
-- [Community 249](Community_249.md) (4 shared connections)
-- [Community 144](Community_144.md) (4 shared connections)
-- [Community 164](Community_164.md) (4 shared connections)
 - [Community 54](Community_54.md) (4 shared connections)
-- [Community 89](Community_89.md) (3 shared connections)
+- [Community 12](Community_12.md) (4 shared connections)
+- [Community 144](Community_144.md) (3 shared connections)
+- [Community 164](Community_164.md) (3 shared connections)
+- [Community 26](Community_26.md) (3 shared connections)
+- [Community 14](Community_14.md) (3 shared connections)
 
 ## Source Files
 
@@ -47,7 +47,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 151 (100%)
+- EXTRACTED: 154 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

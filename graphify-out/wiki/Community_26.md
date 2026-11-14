@@ -1,60 +1,57 @@
 # Community 26
 
-> 25 nodes · cohesion 0.14
+> 39 nodes · cohesion 0.11
 
 ## Key Concepts
 
-- **lab/cli.py** (35 connections) — `teach/lab/cli.py`
-- **main()** (23 connections) — `teach/lab/cli.py`
-- **cmd_export()** (13 connections) — `teach/lab/cli.py`
-- **resolve()** (10 connections) — `teach/lab/cli.py`
-- **SpecError** (9 connections) — `teach/lab/spec.py`
-- **_clone()** (6 connections) — `teach/lab/cli.py`
-- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
-- **cmd_new()** (6 connections) — `teach/lab/cli.py`
-- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
-- **_banner()** (4 connections) — `teach/lab/cli.py`
-- **cmd_list()** (4 connections) — `teach/lab/cli.py`
-- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
-- **test_plan_dry_run_after_137_keeps_linux_and_skips_k8s_with_a_warning()** (4 connections) — `tests/lab/test_kc_test.py`
-- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
-- **Lab** (3 connections)
-- **Path** (3 connections)
-- **test_print_env_after_137_exits_2_with_the_reason()** (2 connections) — `tests/lab/test_kc_test.py`
-- **test_print_env_gives_the_three_bootstrap_arguments()** (2 connections) — `tests/lab/test_kc_test.py`
-- **__main__.py** (2 connections) — `teach/lab/__main__.py`
-- **Exception** (1 connections)
-- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
-- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
-- **Deterministic export of verified labs to a Killercoda scenario tree (an…** (1 connections) — `teach/lab/cli.py`
-- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
-- **Dry run of the publish plan on a date after the 1.37 switch: linux is proven…** (1 connections) — `tests/lab/test_kc_test.py`
+- **lab_fidelity.py** (42 connections) — `scripts/lab_fidelity.py`
+- **load_data()** (9 connections) — `scripts/lab_fidelity.py`
+- **cmd_check()** (8 connections) — `scripts/lab_fidelity.py`
+- **ensure_data()** (8 connections) — `scripts/lab_fidelity.py`
+- **norm()** (8 connections) — `scripts/lab_fidelity.py`
+- **build_index()** (7 connections) — `scripts/lab_fidelity.py`
+- **load_pins()** (7 connections) — `scripts/lab_fidelity.py`
+- **live_pin()** (6 connections) — `scripts/lab_fidelity.py`
+- **main()** (6 connections) — `scripts/lab_fidelity.py`
+- **ownership()** (6 connections) — `scripts/lab_fidelity.py`
+- **unattributed()** (6 connections) — `scripts/lab_fidelity.py`
+- **cmd_fetch()** (5 connections) — `scripts/lab_fidelity.py`
+- **cmd_ops()** (5 connections) — `scripts/lab_fidelity.py`
+- **cmd_pin()** (5 connections) — `scripts/lab_fidelity.py`
+- **git()** (5 connections) — `scripts/lab_fidelity.py`
+- **key_services()** (5 connections) — `scripts/lab_fidelity.py`
+- **load_index()** (5 connections) — `scripts/lab_fidelity.py`
+- **sdk_ids()** (5 connections) — `scripts/lab_fidelity.py`
+- **sha256()** (5 connections) — `scripts/lab_fidelity.py`
+- **fidelity_block()** (4 connections) — `scripts/lab_fidelity.py`
+- **namespace()** (4 connections) — `scripts/lab_fidelity.py`
+- **service_dir()** (4 connections) — `scripts/lab_fidelity.py`
+- **Path** (4 connections)
+- **fetch()** (3 connections) — `scripts/lab_fidelity.py`
+- **lab_files()** (3 connections) — `scripts/lab_fidelity.py`
+- *... and 14 more nodes in this community*
 
 ## Relationships
 
-- [Community 29](Community_29.md) (11 shared connections)
-- [Community 111](Community_111.md) (11 shared connections)
-- [Community 12](Community_12.md) (9 shared connections)
-- [Community 70](Community_70.md) (8 shared connections)
-- [Community 1](Community_1.md) (8 shared connections)
-- [Community 18](Community_18.md) (4 shared connections)
-- [Community 103](Community_103.md) (4 shared connections)
+- [Community 141](Community_141.md) (5 shared connections)
+- [Community 144](Community_144.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 144](Community_144.md) (2 shared connections)
+- [Community 103](Community_103.md) (3 shared connections)
+- [Community 46](Community_46.md) (3 shared connections)
 - [Community 89](Community_89.md) (2 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
+- [Community 56](Community_56.md) (2 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
+- [Community 265](Community_265.md) (1 shared connections)
+- [Community 170](Community_170.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/lab/__main__.py`
-- `teach/lab/cli.py`
-- `teach/lab/spec.py`
-- `tests/lab/test_kc_test.py`
+- `scripts/lab_fidelity.py`
 
 ## Audit Trail
 
-- EXTRACTED: 107 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 107 (96%)
+- INFERRED: 4 (4%)
 - AMBIGUOUS: 0 (0%)
 
 ---

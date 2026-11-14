@@ -1,6 +1,6 @@
 # Community 215
 
-> 17 nodes · cohesion 0.21
+> 18 nodes · cohesion 0.20
 
 ## Key Concepts
 
@@ -14,6 +14,7 @@
 - **.test_no_timestamp_is_written_per_request()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_since_is_the_first_day_and_never_moves()** (3 connections) — `tests/test_bot_stats.py`
 - **.test_the_breakdown_counts_each_characteristic_independently()** (3 connections) — `tests/test_bot_stats.py`
+- **_blank()** (2 connections) — `teach/core/bot_stats.py`
 - **.test_a_refused_event_writes_nothing_at_all()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_an_unwritable_path_is_swallowed()** (2 connections) — `tests/test_bot_stats.py`
 - **.setUp()** (1 connections) — `tests/test_bot_stats.py`
@@ -24,10 +25,10 @@
 
 ## Relationships
 
-- [Community 160](Community_160.md) (5 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 103](Community_103.md) (2 shared connections)
 - [Community 125](Community_125.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 160](Community_160.md) (1 shared connections)
 - [Community 107](Community_107.md) (1 shared connections)
 - [Community 255](Community_255.md) (1 shared connections)
 
@@ -38,7 +39,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 39 (100%)
+- EXTRACTED: 40 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

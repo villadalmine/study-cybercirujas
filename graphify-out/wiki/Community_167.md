@@ -23,9 +23,8 @@
 ## Relationships
 
 - [Community 3](Community_3.md) (3 shared connections)
-- [video.py](video.py.md) (2 shared connections)
-- [Community 107](Community_107.md) (2 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
+- [Community 125](Community_125.md) (3 shared connections)
+- [Community 275](Community_275.md) (2 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
 

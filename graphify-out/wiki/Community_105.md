@@ -29,10 +29,9 @@
 ## Relationships
 
 - [Community 57](Community_57.md) (14 shared connections)
-- [Community 135](Community_135.md) (3 shared connections)
-- [Community 55](Community_55.md) (1 shared connections)
+- [Community 135](Community_135.md) (4 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
 - [Community 146](Community_146.md) (1 shared connections)
 

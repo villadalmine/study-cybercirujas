@@ -1,6 +1,6 @@
 # Community 8
 
-> 17 nodes · cohesion 0.20
+> 18 nodes · cohesion 0.20
 
 ## Key Concepts
 
@@ -8,6 +8,7 @@
 - **validate_spec()** (13 connections) — `teach/core/labs.py`
 - **ContractTests** (11 connections) — `tests/test_labs.py`
 - **lab_dir()** (11 connections) — `teach/core/labs.py`
+- **Path** (11 connections)
 - **.test_malformed_nested_fields_are_reported_not_raised()** (4 connections) — `tests/test_labs.py`
 - **.test_a_broken_lab_is_reported()** (3 connections) — `tests/test_labs.py`
 - **.test_a_script_that_does_not_parse_is_reported()** (3 connections) — `tests/test_labs.py`
@@ -24,16 +25,16 @@
 
 ## Relationships
 
-- [Community 121](Community_121.md) (6 shared connections)
-- [Community 209](Community_209.md) (5 shared connections)
+- [Community 121](Community_121.md) (11 shared connections)
+- [Community 209](Community_209.md) (6 shared connections)
 - [Community 0](Community_0.md) (3 shared connections)
-- [Community 163](Community_163.md) (2 shared connections)
-- [Community 111](Community_111.md) (2 shared connections)
+- [Community 141](Community_141.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 - [Community 134](Community_134.md) (1 shared connections)
 - [Community 171](Community_171.md) (1 shared connections)
 - [Community 144](Community_144.md) (1 shared connections)
+- [Community 163](Community_163.md) (1 shared connections)
 
 ## Source Files
 
@@ -42,7 +43,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 50 (100%)
+- EXTRACTED: 58 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

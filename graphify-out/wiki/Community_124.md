@@ -1,6 +1,6 @@
 # Community 124
 
-> 67 nodes · cohesion 0.06
+> 70 nodes · cohesion 0.06
 
 ## Key Concepts
 
@@ -18,6 +18,7 @@
 - **lab_check()** (7 connections) — `scripts/quality_score.py`
 - **main()** (7 connections) — `scripts/quality_score.py`
 - **score()** (7 connections) — `teach/core/scoring.py`
+- **manifest_rate.py** (7 connections) — `scripts/manifest_rate.py`
 - **FormulaTests** (6 connections) — `tests/test_quality_score.py`
 - **cited_domains()** (6 connections) — `scripts/check_sources.py`
 - **chain_check()** (6 connections) — `scripts/quality_score.py`
@@ -28,21 +29,20 @@
 - **catalogue()** (5 connections) — `scripts/check_sources.py`
 - **main()** (5 connections) — `scripts/check_sources.py`
 - **floor_check()** (5 connections) — `scripts/quality_score.py`
-- **rel()** (5 connections) — `scripts/quality_score.py`
-- *... and 42 more nodes in this community*
+- *... and 45 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (16 shared connections)
-- [Community 111](Community_111.md) (9 shared connections)
-- [Community 89](Community_89.md) (6 shared connections)
+- [Community 43](Community_43.md) (18 shared connections)
+- [Community 141](Community_141.md) (11 shared connections)
 - [Community 46](Community_46.md) (6 shared connections)
+- [Community 89](Community_89.md) (6 shared connections)
 - [Community 63](Community_63.md) (3 shared connections)
 - [Community 103](Community_103.md) (2 shared connections)
 - [Community 22](Community_22.md) (2 shared connections)
-- [Community 61](Community_61.md) (2 shared connections)
-- [Community 259](Community_259.md) (2 shared connections)
+- [Community 170](Community_170.md) (2 shared connections)
 - [Community 7](Community_7.md) (2 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 - [Community 249](Community_249.md) (1 shared connections)
 
@@ -51,13 +51,14 @@
 - `scripts/check_k8s_apis.py`
 - `scripts/check_manifests.py`
 - `scripts/check_sources.py`
+- `scripts/manifest_rate.py`
 - `scripts/quality_score.py`
 - `teach/core/scoring.py`
 - `tests/test_quality_score.py`
 
 ## Audit Trail
 
-- EXTRACTED: 183 (100%)
+- EXTRACTED: 191 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

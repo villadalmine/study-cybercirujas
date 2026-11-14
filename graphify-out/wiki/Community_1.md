@@ -1,21 +1,18 @@
 # Community 1
 
-> 41 nodes · cohesion 0.10
+> 49 nodes · cohesion 0.07
 
 ## Key Concepts
 
 - **test_cli.py** (23 connections) — `tests/lab/test_cli.py`
-- **lab/__init__.py** (21 connections) — `teach/lab/__init__.py`
-- **conftest.py** (19 connections) — `tests/lab/conftest.py`
 - **run_cli()** (18 connections) — `tests/lab/conftest.py`
 - **test_e2e.py** (18 connections) — `tests/lab/test_e2e.py`
+- **study-lab — break/fix labs in a throwaway container** (11 connections) — `docs/LABS-RUNNER.md`
 - **Tests** (10 connections) — `docs/LABS-RUNNER.md`
 - **git_repo()** (9 connections) — `tests/lab/conftest.py`
 - **flow()** (9 connections) — `tests/lab/test_e2e.py`
 - **test_kind_lab_from_template()** (5 connections) — `tests/lab/test_e2e.py`
 - **test_linux_lab_from_git_repo()** (5 connections) — `tests/lab/test_e2e.py`
-- **docker_ok()** (4 connections) — `tests/lab/conftest.py`
-- **image_ok()** (4 connections) — `tests/lab/conftest.py`
 - **new_lab()** (4 connections) — `tests/lab/conftest.py`
 - **test_all_curated_labs_pass_the_schema()** (4 connections) — `tests/lab/test_cli.py`
 - **test_from_repo_path_cannot_escape()** (4 connections) — `tests/lab/test_cli.py`
@@ -29,35 +26,39 @@
 - **no_docker_tcp_listener()** (3 connections) — `tests/lab/test_e2e.py`
 - **snapshot()** (3 connections) — `tests/lab/test_e2e.py`
 - **skipif** (3 connections)
-- *... and 16 more nodes in this community*
+- **The template: `lab.yaml` v2 + `break | verify | cleanup`** (3 connections) — `docs/LABS-RUNNER.md`
+- **clean()** (2 connections) — `teach/core/tracker.py`
+- **make()** (2 connections) — `tests/lab/conftest.py`
+- *... and 24 more nodes in this community*
 
 ## Relationships
 
-- [Community 26](Community_26.md) (8 shared connections)
-- [Community 144](Community_144.md) (7 shared connections)
-- [Community 29](Community_29.md) (6 shared connections)
-- [Community 43](Community_43.md) (6 shared connections)
-- [Community 18](Community_18.md) (5 shared connections)
-- [Community 12](Community_12.md) (4 shared connections)
-- [Community 56](Community_56.md) (3 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
-- [Community 69](Community_69.md) (3 shared connections)
-- [Community 111](Community_111.md) (3 shared connections)
-- [Community 34](Community_34.md) (2 shared connections)
-- [Community 75](Community_75.md) (1 shared connections)
+- [Community 29](Community_29.md) (11 shared connections)
+- [Community 144](Community_144.md) (10 shared connections)
+- [Community 12](Community_12.md) (3 shared connections)
+- [Community 138](Community_138.md) (2 shared connections)
+- [Community 104](Community_104.md) (1 shared connections)
+- [Community 34](Community_34.md) (1 shared connections)
+- [Community 228](Community_228.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/LABS-RUNNER.md`
-- `teach/lab/__init__.py`
+- `teach/core/tracker.py`
 - `tests/lab/conftest.py`
 - `tests/lab/test_cli.py`
 - `tests/lab/test_e2e.py`
+- `tests/lab/test_export_killercoda.py`
 
 ## Audit Trail
 
-- EXTRACTED: 131 (98%)
-- INFERRED: 3 (2%)
+- EXTRACTED: 110 (95%)
+- INFERRED: 6 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

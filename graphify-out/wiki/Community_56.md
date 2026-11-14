@@ -1,9 +1,10 @@
 # Community 56
 
-> 40 nodes · cohesion 0.09
+> 41 nodes · cohesion 0.09
 
 ## Key Concepts
 
+- **hashlib** (32 connections)
 - **test_kc_meta.py** (27 connections) — `tests/lab/test_kc_meta.py`
 - **kc_meta.py** (23 connections) — `teach/lab/kc_meta.py`
 - **decorate()** (12 connections) — `teach/lab/kc_meta.py`
@@ -28,23 +29,22 @@
 - **test_banner_wording()** (2 connections) — `tests/lab/test_kc_meta.py`
 - **test_bash_n_gets_lf_bytes_whatever_the_platform()** (2 connections) — `tests/lab/test_kc_meta.py`
 - **test_bash_n_real_script_with_crlf_passes_and_syntax_error_fails()** (2 connections) — `tests/lab/test_kc_meta.py`
-- **test_human_record_accepts_a_good_entry_and_an_unquoted_date()** (2 connections) — `tests/lab/test_kc_meta.py`
-- *... and 15 more nodes in this community*
+- *... and 16 more nodes in this community*
 
 ## Relationships
 
-- [Community 18](Community_18.md) (9 shared connections)
-- [Community 111](Community_111.md) (6 shared connections)
+- [Community 18](Community_18.md) (14 shared connections)
+- [Community 29](Community_29.md) (7 shared connections)
+- [Community 144](Community_144.md) (5 shared connections)
+- [Community 43](Community_43.md) (5 shared connections)
 - [Community 12](Community_12.md) (5 shared connections)
-- [Community 144](Community_144.md) (4 shared connections)
 - [Community 103](Community_103.md) (4 shared connections)
-- [Community 29](Community_29.md) (4 shared connections)
-- [Community 70](Community_70.md) (3 shared connections)
-- [Community 1](Community_1.md) (3 shared connections)
-- [Community 26](Community_26.md) (1 shared connections)
-- [Community 239](Community_239.md) (1 shared connections)
-- [Community 102](Community_102.md) (1 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
+- [Community 141](Community_141.md) (4 shared connections)
+- [Community 74](Community_74.md) (3 shared connections)
+- [Community 138](Community_138.md) (2 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 34](Community_34.md) (2 shared connections)
+- [Community 57](Community_57.md) (2 shared connections)
 
 ## Source Files
 
@@ -54,7 +54,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 116 (100%)
+- EXTRACTED: 145 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

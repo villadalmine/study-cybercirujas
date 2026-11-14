@@ -1,59 +1,54 @@
 # Community 14
 
-> 57 nodes · cohesion 0.07
+> 24 nodes · cohesion 0.13
 
 ## Key Concepts
 
 - **milestone_sync.py** (27 connections) — `scripts/milestone_sync.py`
-- **release_notes.py** (27 connections) — `scripts/release_notes.py`
-- **publish()** (16 connections) — `scripts/release_notes.py`
-- **GitHub** (14 connections) — `scripts/milestone_sync.py`
-- **main()** (13 connections) — `scripts/milestone_sync.py`
-- **.call()** (11 connections) — `scripts/milestone_sync.py`
 - **shipped_items()** (10 connections) — `scripts/milestone_sync.py`
-- **open_reset_pr()** (7 connections) — `scripts/release_notes.py`
-- **parse_sections()** (7 connections) — `scripts/release_notes.py`
-- **file_at()** (6 connections) — `scripts/release_notes.py`
-- **.paged()** (5 connections) — `scripts/milestone_sync.py`
 - **pick_milestone()** (5 connections) — `scripts/milestone_sync.py`
 - **plan_pr_merged()** (5 connections) — `scripts/milestone_sync.py`
 - **plan_release()** (5 connections) — `scripts/milestone_sync.py`
 - **previous_tag()** (5 connections) — `scripts/milestone_sync.py`
-- **main()** (5 connections) — `scripts/release_notes.py`
-- **remove_published()** (5 connections) — `scripts/release_notes.py`
 - **closing_issue_numbers()** (4 connections) — `scripts/milestone_sync.py`
-- **.issue()** (4 connections) — `scripts/milestone_sync.py`
-- **.milestones()** (4 connections) — `scripts/milestone_sync.py`
 - **release_milestones()** (4 connections) — `scripts/milestone_sync.py`
-- **summary()** (4 connections) — `scripts/milestone_sync.py`
-- **commit_subjects()** (4 connections) — `scripts/release_notes.py`
-- **compose()** (4 connections) — `scripts/release_notes.py`
-- **maintainers()** (4 connections) — `scripts/release_notes.py`
-- *... and 32 more nodes in this community*
+- **git_lines()** (3 connections) — `scripts/milestone_sync.py`
+- **is_release_pr()** (3 connections) — `scripts/milestone_sync.py`
+- **links_an_issue()** (3 connections) — `scripts/milestone_sync.py`
+- **plan_issue_closed()** (3 connections) — `scripts/milestone_sync.py`
+- **pr_numbers()** (3 connections) — `scripts/milestone_sync.py`
+- **wants_release_milestone()** (3 connections) — `scripts/milestone_sync.py`
+- **key()** (2 connections) — `scripts/milestone_sync.py`
+- **key()** (1 connections) — `scripts/milestone_sync.py`
+- **PR numbers from the subjects of the commits a release shipped (squash `(#N)` or…** (1 connections) — `scripts/milestone_sync.py`
+- **Issues a PR description closes (Closes/Fixes/Resolves; "Part of" closes…** (1 connections) — `scripts/milestone_sync.py`
+- **A shipped PR/issue goes into `tag` unless it is already there or sits in a non-…** (1 connections) — `scripts/milestone_sync.py`
+- **Release `tag` published. `milestones` holds every milestone (open and closed),…** (1 connections) — `scripts/milestone_sync.py`
+- **PRs merged and issues closed as completed between the previous release tag and…** (1 connections) — `scripts/milestone_sync.py`
+- **Keep release milestones (`vX.Y.Z`, CONTRIBUTING -> Releases) in step with the…** (1 connections) — `scripts/milestone_sync.py`
+- **Open `v*` milestones, earliest due date first; those without a due date go last.** (1 connections) — `scripts/milestone_sync.py`
+- **The release tag just below `tag` by version (`vX.Y.Z` tags only), or None for…** (1 connections) — `scripts/milestone_sync.py`
 
 ## Relationships
 
-- [Community 46](Community_46.md) (6 shared connections)
-- [Community 43](Community_43.md) (6 shared connections)
-- [Community 89](Community_89.md) (4 shared connections)
-- [Community 249](Community_249.md) (4 shared connections)
+- [Community 173](Community_173.md) (9 shared connections)
+- [Community 46](Community_46.md) (3 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 - [Community 144](Community_144.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 32](Community_32.md) (2 shared connections)
-- [Community 55](Community_55.md) (1 shared connections)
-- [Community 101](Community_101.md) (1 shared connections)
-- [Community 164](Community_164.md) (1 shared connections)
+- [Community 89](Community_89.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
+- [Community 265](Community_265.md) (1 shared connections)
 - [Community 102](Community_102.md) (1 shared connections)
+- [Community 62](Community_62.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/milestone_sync.py`
-- `scripts/release_notes.py`
 
 ## Audit Trail
 
-- EXTRACTED: 126 (86%)
-- INFERRED: 21 (14%)
+- EXTRACTED: 54 (93%)
+- INFERRED: 4 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

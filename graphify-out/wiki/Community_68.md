@@ -22,9 +22,9 @@
 
 ## Relationships
 
-- [Community 207](Community_207.md) (1 shared connections)
+- [Community 217](Community_217.md) (1 shared connections)
 - [Community 232](Community_232.md) (1 shared connections)
-- [Community 170](Community_170.md) (1 shared connections)
+- [Community 272](Community_272.md) (1 shared connections)
 
 ## Source Files
 

@@ -1,11 +1,13 @@
 # Community 140
 
-> 16 nodes · cohesion 0.13
+> 19 nodes · cohesion 0.13
 
 ## Key Concepts
 
+- **test_release_notes.py** (11 connections) — `tests/test_release_notes.py`
 - **PureTests** (8 connections) — `tests/test_release_notes.py`
 - **FakeGitHub** (6 connections) — `tests/test_release_notes.py`
+- **urllib_error** (6 connections)
 - **PublishTests** (3 connections) — `tests/test_release_notes.py`
 - **pr()** (3 connections) — `tests/test_release_notes.py`
 - **.call()** (2 connections) — `tests/test_release_notes.py`
@@ -20,10 +22,15 @@
 - **.test_pr_numbers_and_previous_tag()** (1 connections) — `tests/test_release_notes.py`
 - **.test_reset_removes_published_lines_keeps_new_ones_and_comments()** (1 connections) — `tests/test_release_notes.py`
 - **.test_the_changelog_stays_below_a_rule_and_a_second_run_changes_nothing()** (1 connections) — `tests/test_release_notes.py`
+- **scripts/release_notes.py: the release-notes block, the Thanks and the NEXT.md…** (1 connections) — `tests/test_release_notes.py`
 
 ## Relationships
 
-- [Community 249](Community_249.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 62](Community_62.md) (3 shared connections)
+- [Community 249](Community_249.md) (1 shared connections)
+- [Community 247](Community_247.md) (1 shared connections)
+- [Community 160](Community_160.md) (1 shared connections)
 
 ## Source Files
 
@@ -31,7 +38,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
+- EXTRACTED: 32 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

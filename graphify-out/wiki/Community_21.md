@@ -1,6 +1,6 @@
 # Community 21
 
-> 32 nodes · cohesion 0.08
+> 31 nodes · cohesion 0.08
 
 ## Key Concepts
 
@@ -19,7 +19,6 @@
 - **2026-08-04** (3 connections) — `docs/HISTORY.md`
 - **Three bugs this study found in our own checks** (3 connections) — `docs/TRANSLATION_STUDY.md`
 - **Pull requests from agents** (2 connections) — `docs/AGENT-GUIDE.md`
-- **Verification: what is proven, and what is only assumed** (2 connections) — `docs/AGENT-GUIDE.md`
 - **Method** (2 connections) — `docs/TRANSLATION_STUDY.md`
 - **Why translating and authoring are different problems** (2 connections) — `docs/TRANSLATION_STUDY.md`
 - **Agent Idea Synchronization (docs/AGENTS_SYNC.md)** (1 connections) — `docs/AGENT-GUIDE.md`
@@ -29,18 +28,19 @@
 - **Recommendation** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **Results** (1 connections) — `docs/TRANSLATION_STUDY.md`
 - **Translating is not the same deliverable as authoring** (1 connections) — `docs/TRANSLATION_STUDY.md`
-- *... and 7 more nodes in this community*
+- **What this actually saves** (1 connections) — `docs/TRANSLATION_STUDY.md`
+- *... and 6 more nodes in this community*
 
 ## Relationships
 
-- [Community 7](Community_7.md) (7 shared connections)
+- [Community 7](Community_7.md) (6 shared connections)
+- [Community 15](Community_15.md) (3 shared connections)
+- [Community 160](Community_160.md) (2 shared connections)
 - [Community 65](Community_65.md) (2 shared connections)
 - [Community 110](Community_110.md) (2 shared connections)
-- [Community 15](Community_15.md) (2 shared connections)
-- [Community 207](Community_207.md) (2 shared connections)
+- [Community 217](Community_217.md) (2 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 - [Community 124](Community_124.md) (1 shared connections)
-- [Community 249](Community_249.md) (1 shared connections)
 - [Community 156](Community_156.md) (1 shared connections)
 - [Community 228](Community_228.md) (1 shared connections)
 - [Community 222](Community_222.md) (1 shared connections)
@@ -56,8 +56,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 49 (75%)
-- INFERRED: 16 (25%)
+- EXTRACTED: 49 (77%)
+- INFERRED: 15 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

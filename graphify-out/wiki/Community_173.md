@@ -1,43 +1,39 @@
 # Community 173
 
-> 13 nodes · cohesion 0.17
+> 11 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **get_topic()** (8 connections) — `teach/api.py`
-- **get_cert()** (7 connections) — `teach/api.py`
-- **get_topic_preview()** (7 connections) — `teach/api.py`
-- **_not_found()** (7 connections) — `teach/api.py`
-- **get_paths()** (5 connections) — `teach/api.py`
-- **_valid_lang()** (5 connections) — `teach/api.py`
-- **HTTPException** (1 connections)
-- **Exception** (1 connections)
-- **One certification: catalogue entry, syllabus and which topics have material.** (1 connections) — `teach/api.py`
-- **Public teaser: first lines of the material + what the topic includes.** (1 connections) — `teach/api.py`
-- **A topic's material: content, exercises, lab, and the provenance of what is…** (1 connections) — `teach/api.py`
-- **A 404 that never carries a filesystem path: FileNotFoundError text names the…** (1 connections) — `teach/api.py`
-- **Career paths with their steps, in the requested language. The base fields of a…** (1 connections) — `teach/api.py`
+- **GitHub** (14 connections) — `scripts/milestone_sync.py`
+- **main()** (13 connections) — `scripts/milestone_sync.py`
+- **.call()** (11 connections) — `scripts/milestone_sync.py`
+- **.paged()** (5 connections) — `scripts/milestone_sync.py`
+- **main()** (5 connections) — `scripts/release_notes.py`
+- **.issue()** (4 connections) — `scripts/milestone_sync.py`
+- **.milestones()** (4 connections) — `scripts/milestone_sync.py`
+- **summary()** (4 connections) — `scripts/milestone_sync.py`
+- **commit_subjects()** (4 connections) — `scripts/release_notes.py`
+- **merged_prs()** (4 connections) — `scripts/release_notes.py`
+- **.__init__()** (1 connections) — `scripts/milestone_sync.py`
 
 ## Relationships
 
-- [Community 107](Community_107.md) (6 shared connections)
-- [Community 125](Community_125.md) (5 shared connections)
-- [Community 134](Community_134.md) (2 shared connections)
-- [Community 207](Community_207.md) (2 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 126](Community_126.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
-- [Community 121](Community_121.md) (1 shared connections)
-- [Community 265](Community_265.md) (1 shared connections)
+- [Community 62](Community_62.md) (15 shared connections)
+- [Community 14](Community_14.md) (9 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 280](Community_280.md) (1 shared connections)
+- [Community 101](Community_101.md) (1 shared connections)
+- [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/api.py`
+- `scripts/milestone_sync.py`
+- `scripts/release_notes.py`
 
 ## Audit Trail
 
-- EXTRACTED: 33 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 30 (61%)
+- INFERRED: 19 (39%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,42 +1,47 @@
 # Community 158
 
-> 13 nodes · cohesion 0.17
+> 14 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **scan()** (11 connections) — `scripts/curriculum_diff.py`
-- **_sections()** (5 connections) — `scripts/curriculum_diff.py`
-- **_headings()** (4 connections) — `scripts/curriculum_diff.py`
-- **unlisted_edits()** (4 connections) — `scripts/curriculum_diff.py`
-- **Efficiency: how this update came out** (3 connections) — `docs/upgrades/README.md`
-- **Lessons** (3 connections) — `docs/upgrades/README.md`
-- **minor_below()** (2 connections) — `scripts/curriculum_diff.py`
-- **Phase 2, measured (2026-10-21)** (2 connections) — `docs/upgrades/README.md`
-- **Cost: scoped edits versus full regeneration** (1 connections) — `docs/upgrades/README.md`
-- **Edits outside what the plan lists, in a doc file the plan scopes (a section or…** (1 connections) — `scripts/curriculum_diff.py`
-- **Per line: is it a markdown heading? A `# ...` line inside a code fence is a…** (1 connections) — `scripts/curriculum_diff.py`
-- **(first line number, heading, body) per markdown section; text before the first…** (1 connections) — `scripts/curriculum_diff.py`
-- **Sections that name a changed field, and lines that name the tracked version.…** (1 connections) — `scripts/curriculum_diff.py`
+- **run_batch.py** (20 connections) — `scripts/run_batch.py`
+- **main()** (11 connections) — `scripts/run_batch.py`
+- **generate_with_retries()** (8 connections) — `scripts/run_batch.py`
+- **me()** (6 connections) — `teach/core/pipeline.py`
+- **pending()** (5 connections) — `scripts/run_batch.py`
+- **mine()** (5 connections) — `teach/core/pipeline.py`
+- **owner()** (5 connections) — `teach/core/pipeline.py`
+- **generate()** (4 connections) — `scripts/run_batch.py`
+- **_sort_key()** (2 connections) — `scripts/run_batch.py`
+- **Generate a bounded batch of topics, honouring the budget in pipeline.yaml.…** (1 connections) — `scripts/run_batch.py`
+- **Topics still missing for this combination, in syllabus order.** (1 connections) — `scripts/run_batch.py`
+- **One topic, start to finish. Returns done | failed | skipped | fatal. The claim…** (1 connections) — `scripts/run_batch.py`
+- **Which agent takes this certification by default; 'any' if unassigned. NOT a…** (1 connections) — `teach/core/pipeline.py`
+- **This agent's name, from TEACH_AGENT. Unset means 'claude' — the historical…** (1 connections) — `teach/core/pipeline.py`
 
 ## Relationships
 
-- [Community 57](Community_57.md) (5 shared connections)
-- [Community 135](Community_135.md) (2 shared connections)
-- [Community 146](Community_146.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 5](Community_5.md) (1 shared connections)
-- [Community 214](Community_214.md) (1 shared connections)
-- [Community 44](Community_44.md) (1 shared connections)
+- [Community 19](Community_19.md) (9 shared connections)
+- [Community 61](Community_61.md) (5 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 144](Community_144.md) (3 shared connections)
+- [Community 6](Community_6.md) (3 shared connections)
+- [Community 0](Community_0.md) (2 shared connections)
+- [Community 37](Community_37.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 13](Community_13.md) (1 shared connections)
+- [Community 293](Community_293.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/upgrades/README.md`
-- `scripts/curriculum_diff.py`
+- `scripts/run_batch.py`
+- `teach/core/pipeline.py`
 
 ## Audit Trail
 
-- EXTRACTED: 23 (88%)
-- INFERRED: 3 (12%)
+- EXTRACTED: 51 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---
