@@ -19,10 +19,10 @@
 #   of the GPUs is failing in silence.
 #
 # Usage
-#   sudo ./lab.sh            # same as "break": install + break
-#   sudo ./lab.sh break
-#   sudo ./lab.sh verify     # exit 0 only when fixed
-#   sudo ./lab.sh cleanup    # remove everything this lab created
+#   sudo ./break_fix.sh            # same as "break": install + break
+#   sudo ./break_fix.sh break
+#   sudo ./break_fix.sh verify     # exit 0 only when fixed
+#   sudo ./break_fix.sh cleanup    # remove everything this lab created
 #
 # Safety: everything lives under /opt/gpu-mon-lab, /etc/dcgm-exporter-lab,
 # /etc/default/fake-dcgm-exporter and one systemd unit. Nothing else is touched.
@@ -541,7 +541,7 @@ esac
 #      echo GPU-e4a7b305-92cd-4f18-8e6b-2c3d4e5f6a72 >> /opt/gpu-mon-lab/cordon-list.txt
 #
 # 7) Verify:
-#      ./lab.sh verify     # -> all [ OK ], exit 0
+#      ./break_fix.sh verify     # -> all [ OK ], exit 0
 #
 # Production follow-up (what you would add in a real cluster):
 #    - alert: up{job="gpu-nodes"} == 0 for 5m
