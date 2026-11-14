@@ -47,7 +47,7 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `aws-aif` | 14 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ai-901` | 7 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `gcp-gail` | 15 | ❌ | ❌ | – | – | – | – | – | ❌ |
-| `nca-aiio` | 22 | – | 🔶 6/22c·6/22e | – | – | – | – | – | 🔶 6/22 |
+| `nca-aiio` | 22 | – | 🔶 7/22c·7/22e | – | – | – | – | – | 🔶 7/22 |
 | `nca-genl` | 31 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `ncp-aii` | 39 | ❌ | ❌ | – | – | – | – | – | ❌ |
 | `mcpa` | 17 | ❌ | ✅ | – | – | – | – | – | ✅ |
@@ -137,7 +137,7 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 | `aws-clf` | 38 | 79.0 | 0 | 38 | 0 | 0 |
 | `az-900` | 22 | 79.0 | 0 | 22 | 0 | 0 |
 | `gcp-cdl` | 28 | 79.0 | 0 | 28 | 0 | 0 |
-| `nca-aiio` | 9 | 81.2 | 0 | 9 | 0 | 0 |
+| `nca-aiio` | 10 | 81.2 | 0 | 10 | 0 | 0 |
 | `mcpa` | 17 | 75.3 | 0 | 17 | 0 | 0 |
 | `ckne` | 22 | 80.6 | 0 | 22 | 0 | 0 |
 
