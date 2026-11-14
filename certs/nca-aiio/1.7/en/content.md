@@ -232,8 +232,7 @@ toolkit:
 devicePlugin:
   enabled: true
   config:
-    name: time-slicing-config
-    default: any
+    name: time-slicing-config   # no `default`: only labelled nodes are time-sliced (below)
 dcgm:
   enabled: true
 dcgmExporter:
@@ -269,14 +268,21 @@ metadata:
 data:
   any: |-
     version: v1
-    flags:
-      migStrategy: none
     sharing:
       timeSlicing:
         resources:
           - name: nvidia.com/gpu
             replicas: 4
 ```
+
+Without a `default`, the ConfigMap applies only to the nodes you label, so production nodes such as `gpu-node-01` below keep whole GPUs:
+
+```
+$ kubectl label node notebook-gpu-01 nvidia.com/device-plugin.config=any
+node/notebook-gpu-01 labeled
+```
+
+On a labelled node the device plugin advertises physical GPUs × 4 as `nvidia.com/gpu`, `nvidia.com/gpu.replicas` becomes `4` and the product label gets the `-SHARED` suffix. The MIG strategy is declared once, in the Helm values (`mig.strategy`), which the operator passes to the device plugin; the ConfigMap does not repeat it.
 
 ```
 $ kubectl apply -f time-slicing-config.yaml
