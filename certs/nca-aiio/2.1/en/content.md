@@ -468,10 +468,10 @@ spec:
                         operator: In
                         values:
                           - "true"
-                      - key: nvidia.com/mig.strategy
+                      - key: nvidia.com/mig.config
                         operator: NotIn
                         values:
-                          - mixed-dev
+                          - dev-and-train
           tolerations:
             - key: nvidia.com/gpu
               operator: Exists
@@ -555,6 +555,10 @@ spec:
                         operator: In
                         values:
                           - "8"
+                      - key: nvidia.com/mig.config
+                        operator: NotIn
+                        values:
+                          - dev-and-train
           tolerations:
             - key: nvidia.com/gpu
               operator: Exists
