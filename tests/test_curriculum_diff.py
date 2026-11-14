@@ -324,6 +324,23 @@ class HtmlExtraction(unittest.TestCase):
         self.assertEqual(plan["counts"]["keep"], 5)
         self.assertEqual(sum(plan["counts"].values()), 5)
 
+    def test_switch_reads_an_html_snapshot(self):
+        """r4575905203: the switch moves the catalog and the frozen syllabus to the canonical page."""
+        import frontmatter
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.lpi_root(root)
+            catalog = {"certs": {"c": {"tracked_version": "4.5.0",
+                                       "sources": {"objectives": "https://www.lpi.org/old-alias/"}}}}
+            (root / "catalog.yaml").write_text(yaml.safe_dump(catalog, sort_keys=False), encoding="utf-8")
+            new, files, why = cd.switch(root, {"certs": {"c": {"target": "syllabi/c/v4.5.0.yaml"}}})
+        self.assertEqual(why, [])
+        self.assertEqual((new["certs"]["c"]["sources"]["objectives"], new["certs"]["c"]["upstream_status"]),
+                         (self.URL, "current"))
+        meta = frontmatter.loads(files["certs/c.md"]).metadata
+        self.assertEqual((meta["version"], meta["snapshot_date"]), ("4.5.0", "2026-11-14"))
+        self.assertIn(self.URL, meta["sources"])
+
     def test_the_report_says_page_for_a_page_source(self):
         """r4575905192: headings and the flow node name the source's kind, not PDF."""
         with tempfile.TemporaryDirectory() as tmp:
