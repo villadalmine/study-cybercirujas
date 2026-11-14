@@ -1,0 +1,22 @@
+cert: nca-aiio
+topic: '2.3'
+title: Identify key concepts and high-level specifications related to power and cooling
+  requirements within a data center
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
+modes:
+  break:
+    args: []
+  verify:
+    args:
+    - --verify
+  cleanup:
+    args:
+    - --cleanup
