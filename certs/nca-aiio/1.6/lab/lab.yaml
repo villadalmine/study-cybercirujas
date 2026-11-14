@@ -1,0 +1,13 @@
+cert: nca-aiio
+topic: '1.6'
+title: Explain the purpose and use case of various NVIDIA solutions
+provider: local
+requires: linux
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 1
+    ram_mb: 1024
+setup:
+- break_fix.sh
