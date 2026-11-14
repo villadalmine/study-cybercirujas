@@ -19,10 +19,10 @@
 # violate those requirements.
 #
 # Modes (all idempotent):
-#   ./lab.sh            same as "break"
-#   ./lab.sh break      build the fabric and break it
-#   ./lab.sh verify     exit 0 only when the fabric meets the requirements
-#   ./lab.sh cleanup    remove everything this lab created
+#   ./break_fix.sh            same as "break"
+#   ./break_fix.sh break      build the fabric and break it
+#   ./break_fix.sh verify     exit 0 only when the fabric meets the requirements
+#   ./break_fix.sh cleanup    remove everything this lab created
 #
 # Official references:
 #   - NVIDIA DGX SuperPOD reference architecture (B200), network fabrics:
@@ -390,7 +390,7 @@ esac
 #
 #      ip netns exec aiio-node-a ping -c 5 -M do -s 8972 10.77.0.2   # 0% loss
 #      ip netns exec aiio-node-b ping -c 5 -M do -s 8972 10.77.0.1   # 0% loss
-#      ./lab.sh verify                                                # exit 0
+#      ./break_fix.sh verify                                                # exit 0
 #
 # 5. Wrong "fixes" that verify rejects on purpose:
 #      - Lowering every interface to MTU 1500: traffic flows, but the design
@@ -399,5 +399,5 @@ esac
 #      - Deleting and recreating the namespaces by hand: that is not
 #        troubleshooting, and the briefing forbids it.
 #
-# 6. When done:  ./lab.sh cleanup
+# 6. When done:  ./break_fix.sh cleanup
 # =============================================================================
