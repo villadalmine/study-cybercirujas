@@ -2,6 +2,7 @@ cert: nca-aiio
 topic: '3.4'
 title: Identify the key considerations for virtualizing accelerated infrastructure
 provider: local
+requires: linux
 resources:
   vms:
   - name: lab
@@ -10,3 +11,9 @@ resources:
     ram_mb: 256
 setup:
 - break_fix.sh
+verified:
+  status: true
+  date: '2026-11-14'
+  by: 'study-lab runner: break -> check FAIL -> reference fix -> check PASS'
+  method: runner
+  runner_image: study-lab:linux (debian-12, systemd, podman)

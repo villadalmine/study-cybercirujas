@@ -35,7 +35,7 @@
 # domain, and tiny lab-* tools that behave like the real commands. Nothing outside
 # $LAB is touched, and root is not required. The script never waits for input.
 #
-# Usage: ./lab.sh [break|verify|cleanup]     (no argument = break)
+# Usage: ./break_fix.sh [break|verify|cleanup]     (no argument = break)
 
 set -euo pipefail
 
@@ -639,7 +639,7 @@ esac
 #      lab-virsh start                               -> NVIDIA H100 PCIe, ~54.9 GB/s
 #      lab-preflight                                 -> RESULT: READY
 #
-# 6) ./lab.sh verify   -> exit 0
+# 6) ./break_fix.sh verify   -> exit 0
 #
 # Operational takeaways: a passthrough VM cannot be live-migrated (one VM per GPU,
 # so drain it for host maintenance). If you need sharing or mobility, evaluate
