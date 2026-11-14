@@ -399,7 +399,7 @@ do_verify() {
   local listen
   listen="$(sed -n 's/^[[:space:]]*DCGM_EXPORTER_LISTEN=//p' "$ENV_FILE" 2>/dev/null | tail -n1 | tr -d '"'"'"' ')"
   case "$listen" in
-    ":9400"|"0.0.0.0:9400"|"[::]:9400") ok "Listen address ${listen} is reachable by the remote Prometheus" ;;
+    ":9400"|"0.0.0.0:9400") ok "Listen address ${listen} is reachable by the remote Prometheus" ;;
     *) fail "DCGM_EXPORTER_LISTEN='${listen}': Prometheus scrapes <node>:9400 from another host"; rc=1 ;;
   esac
 

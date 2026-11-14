@@ -450,7 +450,7 @@ $ dcgmi health -g 2 -c
 +---------------------------+----------------------------------------------------------+
 ```
 
-`-s` selects subsystems: `p` PCIe, `m` memory, `i` inforom, `t` thermal, `n` NVLink, `v` power, or `a` for all. Health watches are **passive**: they evaluate telemetry already being collected and add no load.
+`-s` selects subsystems: `p` PCIe, `m` memory, `i` inforom, `t` thermal and power, `n` NVLink, `d` driver, `x` NVSwitch, or `a` for all. Health watches are **passive**: they evaluate telemetry already being collected and add no load.
 
 ### 5.4 Active diagnostics
 
@@ -664,7 +664,7 @@ dcgmExporter:
   serviceMonitor:
     enabled: true
     interval: 15s
-    honorLabels: false
+    honorLabels: true    # keep the workload pod/namespace labels dcgm-exporter attaches
     additionalLabels:
       release: kube-prometheus-stack
 ```
@@ -840,6 +840,7 @@ spec:
   endpoints:
     - port: metrics
       interval: 15s
+      honorLabels: true
       scrapeTimeout: 10s
       relabelings:
         - sourceLabels:

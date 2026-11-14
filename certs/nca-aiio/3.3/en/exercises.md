@@ -838,10 +838,10 @@ Sample output:
 | GPU   Name          Profile  Instance   Placement  |
 |                       ID       ID       Start:Size |
 |====================================================|
-|   0  MIG 3g.40gb       9        1          0:4     |
-|   0  MIG 2g.20gb      14        3          4:2     |
-|   0  MIG 1g.10gb      19        9          6:1     |
-|   0  MIG 1g.10gb      19       10          7:1     |
+|   0  MIG 3g.40gb       9        1          4:4     |
+|   0  MIG 2g.20gb      14        3          0:2     |
+|   0  MIG 1g.10gb      19        9          2:1     |
+|   0  MIG 1g.10gb      19       10          3:1     |
 +----------------------------------------------------+
 
 GPU 0: NVIDIA H100 80GB HBM3 (UUID: GPU-5a1c8e0f-...)
