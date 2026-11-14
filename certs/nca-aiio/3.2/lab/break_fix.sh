@@ -20,10 +20,10 @@
 #   out of service (DRAIN/INVAL) before it can take jobs.
 #
 # Modes (runner contract, teach/lab/spec.py)
-#   ./lab.sh            same as "break": installs Slurm, builds the cluster, breaks it
-#   ./lab.sh break      idem, idempotent
-#   ./lab.sh verify     exit 0 only when the cluster schedules jobs again (persistently)
-#   ./lab.sh cleanup    stops Slurm, restores previous files, removes what we installed
+#   ./break_fix.sh            same as "break": installs Slurm, builds the cluster, breaks it
+#   ./break_fix.sh break      idem, idempotent
+#   ./break_fix.sh verify     exit 0 only when the cluster schedules jobs again (persistently)
+#   ./break_fix.sh cleanup    stops Slurm, restores previous files, removes what we installed
 #
 # References
 #   Slurm slurm.conf (NodeName, RealMemory, PartitionName, State):
@@ -406,7 +406,7 @@ esac
 #      cat /tmp/llm-finetune-*.out
 #        epoch 1/1 done on lab-vm
 #      srun -p train -n1 --mem=64 hostname
-#      sudo ./lab.sh verify
+#      sudo ./break_fix.sh verify
 #
 # Takeaways for NCA-AIIO 3.2
 #   - The scheduler (Slurm, or kube-scheduler/Run:ai on Kubernetes) only
