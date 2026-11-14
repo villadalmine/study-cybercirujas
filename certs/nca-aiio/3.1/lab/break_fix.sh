@@ -399,6 +399,7 @@ do_break() {
   # Reset to a known state so "break" is idempotent.
   systemctl disable --now "$UNIT_NAME" >/dev/null 2>&1 || true
   systemctl reset-failed "$UNIT_NAME" >/dev/null 2>&1 || true
+  rm -rf "/etc/systemd/system/${UNIT_NAME}.d"
 
   install -d -m 0755 "$ETC_DIR"
   write_exporter

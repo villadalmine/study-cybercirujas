@@ -6,7 +6,7 @@ These exercises follow how an AI data center is actually operated. You start at 
 
 > **Two tracks**
 > - **Track A (GPU hardware available):** run every command against a real NVIDIA data center GPU node (A100/H100/L40S or similar) with a recent R535+ driver.
-> - **Track B (no GPU):** Exercises 1 (with the Redfish mockup), 4, 7 and 8 run fully on a laptop with Docker. For Exercises 2, 3, 5 and 6, work from the provided expected outputs and answer the questions. That is exactly the skill the exam tests: **reading** telemetry and **choosing** the right tool.
+> - **Track B (no GPU):** Exercises 1 (with the Redfish mockup) and 7 run fully on a laptop with Docker. Exercises 4 and 8 need a GPU node or a BCM/Slurm head node for their first step. For Exercises 2, 3, 5 and 6, work from the provided expected outputs and answer the questions. That is exactly the skill the exam tests: **reading** telemetry and **choosing** the right tool.
 
 **Official references used throughout**
 - NVIDIA DCGM: https://developer.nvidia.com/dcgm
@@ -230,12 +230,12 @@ These exercises follow how an AI data center is actually operated. You start at 
 
    ```bash
    dcgmi group -c training-gpus -a 0,1,2,3
-   dcgmi health -g 1 -s a
-   dcgmi health -g 1 -c
+   dcgmi health -g 2 -s a
+   dcgmi health -g 2 -c
    ```
 
    ```
-   Successfully created group "training-gpus" with a group ID of 1
+   Successfully created group "training-gpus" with a group ID of 2
    Health monitor systems set successfully.
    +---------------------------+----------------------------------------------------+
    | Health Monitor Report                                                          |

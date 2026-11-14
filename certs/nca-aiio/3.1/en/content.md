@@ -285,7 +285,6 @@ Groups and health watches:
 ```
 $ dcgmi group -c trainers --default
 Successfully created group "trainers" with a group ID of 2
-Specified entity ID is valid but unknown: ...   (only if entities missing)
 
 $ dcgmi health -g 2 -s a          # watch all subsystems: PCIe, memory, inforom, thermal, power, NVLink
 Health monitor systems set successfully.
@@ -618,7 +617,7 @@ spec:
               or DCGM_FI_DEV_XID_ERRORS == 79
               or DCGM_FI_DEV_XID_ERRORS == 95
             )
-          for: 1m
+          for: 0m
           labels:
             severity: critical
           annotations:
@@ -682,9 +681,9 @@ spec:
         - record: namespace:gpu_tensor_active:avg
           expr: |
             avg by (namespace) (DCGM_FI_PROF_PIPE_TENSOR_ACTIVE{namespace!=""})
-        - record: namespace:gpu_energy_joules:rate5m
+        - record: namespace:gpu_power_watts:rate5m
           expr: |
-            sum by (namespace) (rate(DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION{namespace!=""}[5m])) / 1000
+            sum by (namespace) (rate(DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION{namespace!=""}[5m])) / 1000  # mJ/s -> W
 ```
 
 `DCGM_FI_DEV_XID_ERRORS` is a gauge holding the **last** Xid value, not a counter. Alert on specific values, and also correlate with the kernel log, because a later benign Xid can overwrite an earlier critical one.
