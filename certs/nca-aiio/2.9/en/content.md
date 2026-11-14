@@ -40,7 +40,7 @@ The exam objective, "identify options and their use cases", maps directly onto t
 | NVLink 5 | DGX B200 (Blackwell) | 1.8 TB/s | 18 | 8 GPUs per node (2 NVSwitch chips) |
 | NVLink 5 + NVLink Switch | GB200 NVL72 | 1.8 TB/s | 18 | 72 GPUs in one NVLink domain, ~130 TB/s aggregate |
 
-Compare that with scale-out: one 400 Gb/s NIC delivers ~50 GB/s per direction. On a DGX H100 with 8× 400G compute NICs, the node has ~400 GB/s of scale-out bandwidth in total. That is less than half of what **a single GPU** has over NVLink. This ratio drives the most important design rule.
+Compare that with scale-out: one 400 Gb/s NIC delivers ~50 GB/s per direction. On a DGX H100 with 8× 400G compute NICs, the node has ~400 GB/s per direction of scale-out bandwidth in total. A **single GPU** has ~450 GB/s per direction over NVLink (900 GB/s bidirectional), so one GPU alone can move more than the whole node can send out, and each GPU's share of the fabric is only ~50 GB/s: about one ninth. This ratio drives the most important design rule.
 
 > **Design rule:** place the most bandwidth-hungry parallelism, typically **tensor parallelism** and expert-parallel `AllToAll`, inside the NVLink domain. Place data parallelism and pipeline stages, which communicate less often, across the scale-out fabric.
 
