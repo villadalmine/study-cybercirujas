@@ -452,7 +452,8 @@ merged PRs, found by `scripts/release_notes.py` when the release is created; a s
 When a vendor publishes a new curriculum version, the upgrade gets a spec in `docs/upgrades/` that names its release
 milestone (`vX.Y.Z`; older upgrades used `<CERT> v<version> upgrade`, #291) and the process of
 [#63](https://github.com/villadalmine/study-cybercirujas/issues/63) runs, with no model until phase 2:
-`scripts/curriculum_diff.py extract` freezes the official PDF, pinned by commit and hashed, in `syllabi/`;
+`scripts/curriculum_diff.py extract` freezes the official PDF, pinned by commit and hashed, in `syllabi/`
+(`extract --html` does the same for an LPI objectives page, hashed and dated);
 `window` records that snapshot and the milestone in the catalog's `upstream:` block;
 `plan` diffs it against the frozen syllabus the material was built on and gives every topic one class by rules in
 the code (`keep`, `revalidate`, `regenerate`, `new`, `retire`), down to the sections and version lines in scope; the
