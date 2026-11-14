@@ -1,51 +1,57 @@
 # Community 69
 
-> 18 nodes · cohesion 0.25
+> 19 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **pytest** (23 connections)
-- **test_kc_envs_allowlist.py** (16 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
-- **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **url_allowed()** (5 connections) — `teach/lab/export_killercoda.py`
-- **test_bad_cilium_tag_reaching_cilium_install()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_bad_kubernetes_patch()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_bad_runtime_and_cli_versions()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **parametrize** (5 connections)
-- **test_bad_cilium_supported_minor()** (4 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_bootstrap_script_refuses_odd_arguments()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_committed_file_is_valid()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **test_allowed_urls_pass()** (2 connections) — `tests/lab/test_kc_envs_allowlist.py`
-- **bad()** (1 connections) — `teach/lab/export_killercoda.py`
-- **https only, exact host, no userinfo/port, path under an allowed prefix and…** (1 connections) — `teach/lab/export_killercoda.py`
-- **Raise ValueError unless every version, name and URL in the envs file is on the…** (1 connections) — `teach/lab/export_killercoda.py`
-- **killercoda_envs.yaml values are checked against allowlists before they reach a…** (1 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **topics()** (13 connections) — `teach/core/certs.py`
+- **get_syllabus()** (11 connections) — `teach/core/corpus.py`
+- **list_certs()** (8 connections) — `teach/core/catalog.py`
+- **list_certs()** (8 connections) — `teach/core/corpus.py`
+- **_status_snapshot()** (6 connections) — `teach/api.py`
+- **serve()** (6 connections) — `teach/mcp_server.py`
+- **ListAndSyllabusTests** (5 connections) — `tests/test_corpus.py`
+- **get_cert()** (5 connections) — `teach/core/catalog.py`
+- **.test_every_listed_certification_can_be_opened()** (3 connections) — `tests/test_corpus.py`
+- **.test_the_count_matches_what_the_syllabus_holds()** (3 connections) — `tests/test_corpus.py`
+- **get_syllabus()** (2 connections) — `teach/mcp_server.py`
+- **get_topic()** (2 connections) — `teach/mcp_server.py`
+- **list_certs()** (2 connections) — `teach/mcp_server.py`
+- **search_topics()** (2 connections) — `teach/mcp_server.py`
+- **.test_availability_is_reported_not_assumed()** (2 connections) — `tests/test_corpus.py`
+- **.test_the_syllabus_is_small_enough_to_hand_a_model_whole()** (2 connections) — `tests/test_corpus.py`
+- **Every certification, with enough to choose one and nothing more. `topics` and…** (1 connections) — `teach/core/corpus.py`
+- **One certification's objectives: what the model picks from. This IS the phase-2…** (1 connections) — `teach/core/corpus.py`
+- **Run the stdio server, as `.mcp.json` starts it.** (1 connections) — `teach/mcp_server.py`
 
 ## Relationships
 
-- [Community 18](Community_18.md) (6 shared connections)
-- [Community 111](Community_111.md) (6 shared connections)
-- [Community 70](Community_70.md) (4 shared connections)
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 1](Community_1.md) (3 shared connections)
-- [Community 144](Community_144.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
+- [Community 55](Community_55.md) (7 shared connections)
+- [Community 125](Community_125.md) (6 shared connections)
+- [Community 275](Community_275.md) (4 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
+- [Community 10](Community_10.md) (3 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 - [Community 34](Community_34.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Community 134](Community_134.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
+- [video.py](video.py.md) (1 shared connections)
+- [Community 15](Community_15.md) (1 shared connections)
+- [Community 280](Community_280.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/lab/export_killercoda.py`
-- `tests/lab/test_kc_envs_allowlist.py`
+- `teach/api.py`
+- `teach/core/catalog.py`
+- `teach/core/certs.py`
+- `teach/core/corpus.py`
+- `teach/mcp_server.py`
+- `tests/test_corpus.py`
 
 ## Audit Trail
 
-- EXTRACTED: 68 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 56 (98%)
+- INFERRED: 1 (2%)
 - AMBIGUOUS: 0 (0%)
 
 ---

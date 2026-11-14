@@ -16,7 +16,7 @@
 
 - [Community 121](Community_121.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
 - [Community 8](Community_8.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 

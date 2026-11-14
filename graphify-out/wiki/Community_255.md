@@ -1,11 +1,12 @@
 # Community 255
 
-> 9 nodes · cohesion 0.33
+> 10 nodes · cohesion 0.29
 
 ## Key Concepts
 
 - **accepted()** (9 connections) — `teach/core/bot_stats.py`
 - **AcceptanceTests** (7 connections) — `tests/test_bot_stats.py`
+- **_known_models()** (3 connections) — `teach/core/bot_stats.py`
 - **.test_a_missing_field_is_refused()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_model_outside_the_catalogue_is_refused()** (2 connections) — `tests/test_bot_stats.py`
 - **.test_a_well_formed_event_is_accepted()** (2 connections) — `tests/test_bot_stats.py`
@@ -16,9 +17,9 @@
 
 ## Relationships
 
-- [Community 160](Community_160.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 - [Community 215](Community_215.md) (1 shared connections)
+- [Community 275](Community_275.md) (1 shared connections)
 
 ## Source Files
 
@@ -27,7 +28,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 16 (100%)
+- EXTRACTED: 18 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

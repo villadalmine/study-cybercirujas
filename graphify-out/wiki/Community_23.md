@@ -1,6 +1,6 @@
 # Community 23
 
-> 18 nodes · cohesion 0.29
+> 18 nodes · cohesion 0.30
 
 ## Key Concepts
 
@@ -9,15 +9,15 @@
 - **HOW-IT-WORKS.md** (14 connections) — `docs/HOW-IT-WORKS.md`
 - **AGENTS.md** (13 connections) — `AGENTS.md`
 - **PRINCIPLES.md** (11 connections) — `docs/PRINCIPLES.md`
+- **GUARDRAILS.md** (10 connections) — `docs/GUARDRAILS.md`
 - **CHARTER.md** (10 connections) — `docs/CHARTER.md`
-- **GUARDRAILS.md** (9 connections) — `docs/GUARDRAILS.md`
 - **ISSUE-TO-RELEASE.md** (8 connections) — `docs/ISSUE-TO-RELEASE.md`
 - **REVIEWS.md** (7 connections) — `docs/REVIEWS.md`
 - **GOVERNANCE.md** (6 connections) — `docs/GOVERNANCE.md`
 - **RUN-A-LAB-ANYWHERE.md** (6 connections) — `docs/RUN-A-LAB-ANYWHERE.md`
 - **audit/README.md** (5 connections) — `docs/audit/README.md`
 - **CODE_OF_CONDUCT.md** (4 connections) — `CODE_OF_CONDUCT.md`
-- **LABS-RUNNER.md** (3 connections) — `docs/LABS-RUNNER.md`
+- **LABS-RUNNER.md** (4 connections) — `docs/LABS-RUNNER.md`
 - **The charter** (2 connections) — `docs/CHARTER.md`
 - **CLAUDE.md** (1 connections) — `CLAUDE.md`
 - **Code of Conduct** (1 connections) — `CODE_OF_CONDUCT.md`
@@ -58,7 +58,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 97 (100%)
+- EXTRACTED: 98 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

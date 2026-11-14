@@ -1,35 +1,49 @@
 # Community 138
 
-> 6 nodes · cohesion 0.33
+> 15 nodes · cohesion 0.16
 
 ## Key Concepts
 
-- **What you can contribute** (5 connections) — `CONTRIBUTING.md`
-- **Raising a topic's quality score** (4 connections) — `CONTRIBUTING.md`
-- **.verified()** (3 connections) — `teach/lab/spec.py`
-- **Provenance is mandatory** (2 connections) — `CONTRIBUTING.md`
-- **Not done yet** (2 connections) — `docs/LABS-RUNNER.md`
-- **No braindumps, no NDA material** (1 connections) — `CONTRIBUTING.md`
+- **lab/__init__.py** (21 connections) — `teach/lab/__init__.py`
+- **test_lab_safety.py** (20 connections) — `tests/test_lab_safety.py`
+- **SchemaTests** (4 connections) — `tests/test_lab_safety.py`
+- **VisibleWhereStudentsLookTests** (4 connections) — `tests/test_lab_safety.py`
+- **.test_a_lab_without_safety_exports_as_before()** (4 connections) — `tests/test_lab_safety.py`
+- **.test_killercoda_intro_carries_the_warning()** (4 connections) — `tests/test_lab_safety.py`
+- **lab_dirs_with_safety()** (3 connections) — `tests/test_lab_safety.py`
+- **needs_jsonschema** (3 connections)
+- **.test_schema_rejects_unknown_risk_and_missing_warning()** (2 connections) — `tests/test_lab_safety.py`
+- **.test_the_az900_labs_declare_their_risks()** (2 connections) — `tests/test_lab_safety.py`
+- **.test_readme_and_script_header_carry_the_warning()** (2 connections) — `tests/test_lab_safety.py`
+- **importlib_util** (2 connections)
+- **typer_testing** (2 connections)
+- **study-lab: run break/fix labs in throwaway containers (docs/LABS-RUNNER.md).** (1 connections) — `teach/lab/__init__.py`
+- **lab.yaml `safety`: risky labs say so in lab.yaml, and every place a student…** (1 connections) — `tests/test_lab_safety.py`
 
 ## Relationships
 
-- [Community 28](Community_28.md) (2 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 222](Community_222.md) (1 shared connections)
-- [Community 48](Community_48.md) (1 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
-- [Community 188](Community_188.md) (1 shared connections)
+- [Community 43](Community_43.md) (9 shared connections)
+- [Community 29](Community_29.md) (7 shared connections)
+- [Community 18](Community_18.md) (6 shared connections)
+- [Community 141](Community_141.md) (2 shared connections)
+- [Community 0](Community_0.md) (2 shared connections)
+- [Community 56](Community_56.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 1](Community_1.md) (2 shared connections)
+- [Community 111](Community_111.md) (2 shared connections)
+- [Community 12](Community_12.md) (2 shared connections)
+- [Community 133](Community_133.md) (2 shared connections)
 
 ## Source Files
 
-- `CONTRIBUTING.md`
-- `docs/LABS-RUNNER.md`
-- `teach/lab/spec.py`
+- `teach/lab/__init__.py`
+- `tests/test_lab_safety.py`
 
 ## Audit Trail
 
-- EXTRACTED: 7 (58%)
-- INFERRED: 5 (42%)
+- EXTRACTED: 58 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

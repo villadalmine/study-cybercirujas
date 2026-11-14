@@ -7,7 +7,7 @@
 - **teach/cli.py** (37 connections) — `teach/cli.py`
 - **command()** (26 connections) — `scripts/run_batch.py`
 - **typer** (23 connections)
-- **tracker_sync()** (8 connections) — `teach/cli.py`
+- **lab_up()** (8 connections) — `teach/cli.py`
 - **lab_validate()** (7 connections) — `teach/cli.py`
 - **cert_add()** (6 connections) — `teach/cli.py`
 - **cert_generate()** (6 connections) — `teach/cli.py`
@@ -33,18 +33,18 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (9 shared connections)
-- [Community 43](Community_43.md) (6 shared connections)
-- [video.py](video.py.md) (6 shared connections)
-- [Community 7](Community_7.md) (5 shared connections)
+- [Community 74](Community_74.md) (6 shared connections)
+- [video.py](video.py.md) (5 shared connections)
+- [Community 121](Community_121.md) (5 shared connections)
+- [Community 7](Community_7.md) (4 shared connections)
 - [Community 10](Community_10.md) (4 shared connections)
-- [Community 163](Community_163.md) (3 shared connections)
-- [Community 121](Community_121.md) (3 shared connections)
+- [Community 69](Community_69.md) (4 shared connections)
+- [Community 275](Community_275.md) (3 shared connections)
 - [Community 8](Community_8.md) (3 shared connections)
-- [Community 125](Community_125.md) (2 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
-- [Community 142](Community_142.md) (1 shared connections)
+- [Community 158](Community_158.md) (2 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 138](Community_138.md) (2 shared connections)
+- [Community 293](Community_293.md) (1 shared connections)
 
 ## Source Files
 

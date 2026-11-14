@@ -1,39 +1,35 @@
 # Community 172
 
-> 12 nodes · cohesion 0.33
+> 12 nodes · cohesion 0.41
 
 ## Key Concepts
 
-- **pr_check.py** (17 connections) — `scripts/pr_check.py`
-- **main()** (9 connections) — `scripts/pr_check.py`
-- **run()** (5 connections) — `scripts/pr_check.py`
-- **check()** (4 connections) — `scripts/pr_check.py`
-- **verify_ci_commands()** (4 connections) — `scripts/pr_check.py`
-- **changed()** (3 connections) — `scripts/pr_check.py`
-- **graph_status()** (3 connections) — `scripts/pr_check.py`
-- **report()** (3 connections) — `scripts/pr_check.py`
-- **groundedness_cached()** (2 connections) — `scripts/pr_check.py`
-- **Run, on your machine, the checks CI runs on a pull request. make pr-check #…** (1 connections) — `scripts/pr_check.py`
-- **OK only when check_graph.py says so: exit 0 and its own `graph: OK` marker. It…** (1 connections) — `scripts/pr_check.py`
-- **The recipe of `make verify-ci`, one command per entry (the single definition CI…** (1 connections) — `scripts/pr_check.py`
+- **Check** (12 connections) — `tests/test_lab_fidelity.py`
+- **.run_check()** (9 connections) — `tests/test_lab_fidelity.py`
+- **.write()** (9 connections) — `tests/test_lab_fidelity.py`
+- **.test_missing_block_fails_then_write_then_passes()** (4 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_hand_edit_is_stale()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_new_pin_makes_the_block_stale()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_rejected_operation_fails_even_when_recorded()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_stub_names_its_issue_and_ok_has_no_issue_list()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_warning_is_recorded_and_printed_but_does_not_fail()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_malformed_uses_fail()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.test_write_replaces_the_block_and_keeps_the_rest()** (3 connections) — `tests/test_lab_fidelity.py`
+- **.setUp()** (1 connections) — `tests/test_lab_fidelity.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (3 shared connections)
-- [Community 146](Community_146.md) (2 shared connections)
-- [Community 89](Community_89.md) (1 shared connections)
-- [Community 18](Community_18.md) (1 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
-- [Community 170](Community_170.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/pr_check.py`
+- `tests/test_lab_fidelity.py`
 
 ## Audit Trail
 
-- EXTRACTED: 30 (97%)
-- INFERRED: 1 (3%)
+- EXTRACTED: 29 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -17,8 +17,8 @@
 - select() `EXTRACTED`
 - SpecError `EXTRACTED`
 - _scenario() `EXTRACTED`
-- cmd_migrate() `EXTRACTED`
 - schema_errors() `EXTRACTED`
+- cmd_migrate() `EXTRACTED`
 - _lab() `EXTRACTED`
 - test_export_publishes_only_what_has_evidence() `EXTRACTED`
 - test_migrate_v1_to_v2_validates() `EXTRACTED`

@@ -1,40 +1,42 @@
 # Community 188
 
-> 12 nodes · cohesion 0.17
+> 11 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **study-lab — break/fix labs in a throwaway container** (10 connections) — `docs/LABS-RUNNER.md`
-- **The template: `lab.yaml` v2 + `break | verify | cleanup`** (3 connections) — `docs/LABS-RUNNER.md`
-- **clean()** (2 connections) — `teach/core/tracker.py`
-- **How it works** (2 connections) — `docs/LABS-RUNNER.md`
-- **Quick start** (2 connections) — `docs/LABS-RUNNER.md`
-- **Run a lab from another repository** (2 connections) — `docs/LABS-RUNNER.md`
-- **State of the 548 curated labs (validate, 2026-10-15)** (2 connections) — `docs/LABS-RUNNER.md`
-- **Create a lab that follows the template** (1 connections) — `docs/LABS-RUNNER.md`
-- **Measured (WSL2 Ubuntu 24.04 on the workstation, Docker 29.8, 2026-10-15)** (1 connections) — `docs/LABS-RUNNER.md`
-- **Other places to run it** (1 connections) — `docs/LABS-RUNNER.md`
-- **Pinned versions** (1 connections) — `docs/LABS-RUNNER.md`
-- **Validate your repo in CI (reusable action)** (1 connections) — `docs/LABS-RUNNER.md`
+- **publish_if_complete.py** (19 connections) — `scripts/publish_if_complete.py`
+- **is_complete()** (7 connections) — `scripts/publish_if_complete.py`
+- **main()** (6 connections) — `scripts/publish_if_complete.py`
+- **complete_certs()** (4 connections) — `scripts/publish_if_complete.py`
+- **publish()** (4 connections) — `scripts/publish_if_complete.py`
+- **_record()** (3 connections) — `scripts/publish_if_complete.py`
+- **_save()** (3 connections) — `scripts/publish_if_complete.py`
+- **_topic_ids()** (3 connections) — `scripts/publish_if_complete.py`
+- **Build in-cluster, then deploy — with the SAME tag passed to both. `TAG`…** (1 connections) — `scripts/publish_if_complete.py`
+- **Publish when a certification becomes complete. Part of the pass, not a…** (1 connections) — `scripts/publish_if_complete.py`
+- **(complete, why not). Everything the certification declares must be there.…** (1 connections) — `scripts/publish_if_complete.py`
 
 ## Relationships
 
-- [Community 104](Community_104.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
-- [Community 207](Community_207.md) (1 shared connections)
-- [Community 23](Community_23.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 138](Community_138.md) (1 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 19](Community_19.md) (3 shared connections)
+- [Community 103](Community_103.md) (3 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 141](Community_141.md) (2 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
+- [Community 88](Community_88.md) (1 shared connections)
+- [Community 102](Community_102.md) (1 shared connections)
+- [Community 13](Community_13.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/LABS-RUNNER.md`
-- `teach/core/tracker.py`
+- `scripts/publish_if_complete.py`
 
 ## Audit Trail
 
-- EXTRACTED: 14 (82%)
-- INFERRED: 3 (18%)
+- EXTRACTED: 36 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

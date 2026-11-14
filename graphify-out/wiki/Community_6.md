@@ -1,9 +1,10 @@
 # Community 6
 
-> 23 nodes · cohesion 0.12
+> 28 nodes · cohesion 0.11
 
 ## Key Concepts
 
+- **claims.py** (20 connections) — `teach/core/claims.py`
 - **claim()** (13 connections) — `teach/core/claims.py`
 - **ClaimTest** (9 connections) — `tests/test_claims.py`
 - **active()** (9 connections) — `teach/core/claims.py`
@@ -18,25 +19,29 @@
 - **_unlock()** (2 connections) — `teach/core/claims.py`
 - **.test_a_free_topic_is_granted()** (2 connections) — `tests/test_claims.py`
 - **.test_the_same_topic_is_refused_while_held()** (2 connections) — `tests/test_claims.py`
+- **collections_abc** (2 connections)
 - **.setUp()** (1 connections) — `tests/test_claims.py`
 - **.tearDown()** (1 connections) — `tests/test_claims.py`
+- **Per-topic claims, so several agents can work at once without colliding. The…** (1 connections) — `teach/core/claims.py`
 - **What is being worked on right now, across every agent on this machine.** (1 connections) — `teach/core/claims.py`
 - **Non-blocking exclusive lock. False if someone else holds it.** (1 connections) — `teach/core/claims.py`
 - **Claim one (cert, topic, lang). Yields False if someone else holds it. Never…** (1 connections) — `teach/core/claims.py`
 - **Whether someone is working on it right now. Advisory: a topic can be claimed…** (1 connections) — `teach/core/claims.py`
 - **Claim from a separate PROCESS: flock is per open file description, so a second…** (1 connections) — `tests/test_claims.py`
 - **The whole reason this is per topic and not global.** (1 connections) — `tests/test_claims.py`
-- **A lock file checked with exists() would strand a topic forever after a crash.…** (1 connections) — `tests/test_claims.py`
+- *... and 3 more nodes in this community*
 
 ## Relationships
 
-- [Community 43](Community_43.md) (10 shared connections)
-- [Community 19](Community_19.md) (2 shared connections)
-- [Community 88](Community_88.md) (1 shared connections)
-- [Community 112](Community_112.md) (1 shared connections)
-- [Community 49](Community_49.md) (1 shared connections)
+- [Community 43](Community_43.md) (7 shared connections)
+- [Community 158](Community_158.md) (3 shared connections)
+- [Community 88](Community_88.md) (2 shared connections)
+- [Community 112](Community_112.md) (2 shared connections)
+- [Community 49](Community_49.md) (2 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 61](Community_61.md) (2 shared connections)
 - [Community 45](Community_45.md) (1 shared connections)
-- [Community 61](Community_61.md) (1 shared connections)
+- [Community 7](Community_7.md) (1 shared connections)
 
 ## Source Files
 
@@ -45,8 +50,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 46 (96%)
-- INFERRED: 2 (4%)
+- EXTRACTED: 61 (97%)
+- INFERRED: 2 (3%)
 - AMBIGUOUS: 0 (0%)
 
 ---

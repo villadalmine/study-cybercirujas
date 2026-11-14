@@ -4,41 +4,35 @@
 
 ## Key Concepts
 
-- **check()** (14 connections) — `scripts/check_pr.py`
-- **Path** (6 connections)
-- **quality_only()** (5 connections) — `scripts/check_pr.py`
-- **declared()** (4 connections) — `scripts/check_pr.py`
-- **declared_scope()** (4 connections) — `scripts/check_pr.py`
-- **disclosure()** (4 connections) — `scripts/check_pr.py`
-- **material_dirs()** (4 connections) — `scripts/check_pr.py`
-- **read_labels()** (4 connections) — `scripts/check_pr.py`
-- **read_milestone()** (4 connections) — `scripts/check_pr.py`
-- **Contributing** (2 connections) — `docs/FAQ.md`
-- **`- Key: value` lines of the Provenance section, lower-cased keys.** (1 connections) — `scripts/check_pr.py`
-- **meta.yaml files that are the only change in their topic/language and differ…** (1 connections) — `scripts/check_pr.py`
-- **The AI disclosure, on every PR: `Author: human|ai`, and for ai the tool and the…** (1 connections) — `scripts/check_pr.py`
-- **The one scope the Scope section declares, and the problems if it is not exactly…** (1 connections) — `scripts/check_pr.py`
-- **The title `gh api .../issues/N --jq '.milestone.title // empty'` writes; empty…** (1 connections) — `scripts/check_pr.py`
-- **One label per line, as `gh api .../labels --jq '.[].name'` writes them.** (1 connections) — `scripts/check_pr.py`
+- **Index** (9 connections) — `tests/test_lab_fidelity.py`
+- **Ownership** (6 connections) — `tests/test_lab_fidelity.py`
+- **issue()** (4 connections) — `tests/test_lab_fidelity.py`
+- **.test_issue_headers_are_parsed_until_the_first_blank_line()** (2 connections) — `tests/test_lab_fidelity.py`
+- **.test_sdk_ids_are_learned_from_keys_with_one_owner()** (2 connections) — `tests/test_lab_fidelity.py`
+- **.test_unattributed_keys_are_counted_per_id()** (2 connections) — `tests/test_lab_fidelity.py`
+- **.setUp()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_a_call_is_credited_to_the_service_that_owns_it()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_an_issue_counts_for_the_called_service_not_the_scenario()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_check_id_keys_name_no_operation()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_passing_and_failing_units_per_operation()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_severity_only_from_issues_about_one_service()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_verdicts()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_handler_files_name_the_owner()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_issue_keys_go_to_the_called_service()** (1 connections) — `tests/test_lab_fidelity.py`
+- **.test_service_dir_matches_the_emulator_layout()** (1 connections) — `tests/test_lab_fidelity.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (17 shared connections)
-- [Community 164](Community_164.md) (2 shared connections)
-- [Community 46](Community_46.md) (2 shared connections)
-- [Community 111](Community_111.md) (2 shared connections)
-- [Community 165](Community_165.md) (1 shared connections)
-- [Community 156](Community_156.md) (1 shared connections)
+- [Community 43](Community_43.md) (3 shared connections)
 
 ## Source Files
 
-- `docs/FAQ.md`
-- `scripts/check_pr.py`
+- `tests/test_lab_fidelity.py`
 
 ## Audit Trail
 
-- EXTRACTED: 40 (98%)
-- INFERRED: 1 (2%)
+- EXTRACTED: 19 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

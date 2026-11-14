@@ -1,12 +1,11 @@
 # Community 257
 
-> 17 nodes · cohesion 0.12
+> 16 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **The loop** (10 connections) — `docs/WORKFLOW.md`
 - **Content Workflow** (9 connections) — `docs/WORKFLOW.md`
-- **2. Generate** (3 connections) — `docs/WORKFLOW.md`
 - **1. Snapshot the syllabus — once per certification** (2 connections) — `docs/WORKFLOW.md`
 - **3. Audit — never skip this** (2 connections) — `docs/WORKFLOW.md`
 - **Backends** (2 connections) — `docs/WORKFLOW.md`
@@ -24,10 +23,11 @@
 
 ## Relationships
 
-- [Community 7](Community_7.md) (4 shared connections)
-- [Community 74](Community_74.md) (2 shared connections)
-- [Community 29](Community_29.md) (1 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
+- [Community 15](Community_15.md) (2 shared connections)
 - [Community 110](Community_110.md) (1 shared connections)
+- [Community 10](Community_10.md) (1 shared connections)
+- [Community 147](Community_147.md) (1 shared connections)
 - [Community 207](Community_207.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
 
@@ -37,8 +37,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 20 (77%)
-- INFERRED: 6 (23%)
+- EXTRACTED: 20 (83%)
+- INFERRED: 4 (17%)
 - AMBIGUOUS: 0 (0%)
 
 ---

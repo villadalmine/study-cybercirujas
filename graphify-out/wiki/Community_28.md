@@ -25,17 +25,17 @@
 
 ## Relationships
 
-- [Community 146](Community_146.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 138](Community_138.md) (2 shared connections)
+- [Community 146](Community_146.md) (3 shared connections)
+- [Community 66](Community_66.md) (2 shared connections)
+- [Community 156](Community_156.md) (2 shared connections)
 - [Verifying the material is true — design notes](Verifying_the_material_is_true_—_design_notes.md) (1 shared connections)
-- [Community 156](Community_156.md) (1 shared connections)
 - [Community 239](Community_239.md) (1 shared connections)
-- [Community 231](Community_231.md) (1 shared connections)
+- [Community 107](Community_107.md) (1 shared connections)
 - [Community 222](Community_222.md) (1 shared connections)
-- [Community 111](Community_111.md) (1 shared connections)
+- [Community 141](Community_141.md) (1 shared connections)
 - [Community 54](Community_54.md) (1 shared connections)
-- [Community 12](Community_12.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 - [Community 103](Community_103.md) (1 shared connections)
 
 ## Source Files
