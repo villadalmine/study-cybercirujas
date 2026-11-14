@@ -6,7 +6,7 @@
 
 **Official references used throughout**
 
-- NVIDIA BlueField-3 DPU datasheet: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
+- NVIDIA NCA-AIIO Exam Study Guide: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
 - Offloading and Isolating Data Center Workloads with BlueField DPU: https://developer.nvidia.com/blog/offloading-and-isolating-data-center-workloads-with-bluefield-dpu
 - Accelerating IO in the Modern Data Center — Network IO: https://developer.nvidia.com/blog/accelerating-io-in-the-modern-data-center-network-io/
 - DGX H100 component descriptions: https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html#dgx-h100-component-descriptions
@@ -311,7 +311,7 @@ A node has 2 × 32-core CPUs, which gives 64 cores. Profiling shows the followin
 
 **Questions**
 
-6.1. What percentage of host CPU is infrastructure overhead in this scenario? How does it compare with the claim, commonly cited by NVIDIA, that infrastructure tasks can consume up to roughly 30% of server CPU cycles?
+6.1. What percentage of host CPU is infrastructure overhead in this scenario? How does it compare with the rule of thumb that infrastructure tasks can consume a noticeable share, on the order of a quarter of server CPU cycles, in heavily virtualized environments?
 
 6.2. Besides more cores, name two second-order benefits of the offload that do not show up in a core count.
 
@@ -405,7 +405,7 @@ The single physical path asked for in step 3 is the PCIe link into the DPU's hos
 
 ### Exercise 6
 
-**6.1.** 6 + 5 + 3 + 2 = 16 cores, and 16 / 64 = 25% of the node. That is within the range NVIDIA cites, which is up to roughly 30%, depending on workload, link speed, and which services (encryption, storage) are enabled.
+**6.1.** 6 + 5 + 3 + 2 = 16 cores, and 16 / 64 = 25% of the node. That is in line with the rule of thumb of about a quarter of the CPU. The real share depends on workload, link speed, and which services (encryption, storage) are enabled; NVIDIA's offload article expresses it in cores (30, 100 or 300 depending on the scenario), not as one percentage.
 
 Step 2: 16 − 0.5 = 15.5 cores reclaimed per node.
 
@@ -424,7 +424,7 @@ Step 3: 15.5 × 1,000 = 15,500 cores. Divided by 64 cores per node, that is abou
 
 **7.1.** In a DGX, the multi-node compute (east-west, GPU-to-GPU RDMA) fabric is carried by the dedicated ConnectX-7 adapters. There is one adapter per GPU, and they connect to the InfiniBand (or Spectrum-X Ethernet) compute fabric so that each GPU gets its own NIC bandwidth via GPUDirect RDMA.
 
-The two BlueField-3 DPUs serve the converged storage and in-band management network (north-south). Their value there is offload, isolation, and infrastructure services. Raw per-GPU RDMA bandwidth is not their role.
+On a DGX H100 the converged storage and in-band management network (north-south) is served by two dual-port ConnectX-7 cards; on a DGX B200 by two BlueField-3 DPUs. Raw per-GPU RDMA bandwidth is not their role. Where a DPU is present (DGX B200), its value is offload, isolation, and infrastructure services.
 
 The table from step 3:
 
@@ -432,8 +432,8 @@ The table from step 3:
 |---|---|---|---|
 | GPU-to-GPU inside one node | Intra-node | NVLink / NVSwitch | Highest bandwidth, no NIC involved |
 | GPU-to-GPU across nodes | East-west | ConnectX-7 (compute fabric, one per GPU) | Per-GPU RDMA bandwidth, GPUDirect |
-| Storage I/O | North-south | BlueField-3 DPU | Storage offload, isolation, high-throughput access to shared storage |
-| Management, SSH, scheduler, registry | North-south | BlueField-3 DPU (in-band); BMC port for out-of-band | Isolation and infrastructure services; OOB stays separate |
+| Storage I/O | North-south | Storage card: ConnectX-7 (DGX H100) or BlueField-3 DPU (DGX B200) | High-throughput access to shared storage; offload and isolation when a DPU is present |
+| Management, SSH, scheduler, registry | North-south | Same storage/in-band card (in-band); BMC port for out-of-band | OOB stays separate |
 
 **7.2.** NVLink is a GPU-to-GPU interconnect (and, with NVLink Switch, a scale-up domain). It moves tensors between GPU memories. It does not run an OS, does not enforce network or security policy, and does not offload storage or networking services. A DPU is a network endpoint with its own Arm compute that offloads, accelerates, and isolates data center infrastructure. They solve different problems at different layers.
 

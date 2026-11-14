@@ -7,7 +7,7 @@
 #
 # What this lab models
 # --------------------
-# A real NVIDIA BlueField DPU (BlueField-3 in DGX H100/B200 and DGX SuperPOD)
+# A real NVIDIA BlueField DPU (BlueField-3 in DGX B200 and DGX SuperPOD)
 # is a separate computer on the NIC. It has its own Arm cores, memory, OS
 # and DOCA software stack. It sits between the host CPU and the network
 # fabric. Infrastructure services run on the DPU and not on the host:
@@ -104,6 +104,9 @@ deps() {
   install_pkg nft nftables
   install_pkg python3 python3
   install_pkg timeout coreutils
+  install_pkg sysctl procps
+  install_pkg curl curl
+  install_pkg ping iputils-ping
 }
 
 ns_exists() { ip netns list 2>/dev/null | awk '{print $1}' | grep -qx "$1"; }
@@ -202,7 +205,14 @@ do_break() {
   log "Resetting any previous run..."
   teardown
   log "Building the simulated host / DPU / fabric topology..."
-  build_topology
+  # set -e only inside the subshell, and not under || or if, where bash ignores it.
+  ( set -e; build_topology )
+  topo_rc=$?
+  if [ "$topo_rc" -ne 0 ]; then
+    teardown
+    echo "ERROR: could not build the network namespaces (need root with NET_ADMIN and SYS_ADMIN; see 'ip netns add')." >&2
+    exit 1
+  fi
   dpu_correct_policy
 
   # --- The controlled breakage ----------------------------------------------
@@ -386,6 +396,6 @@ esac
 # processor (Arm cores + NIC + accelerators, programmed with DOCA). It
 # offloads networking, storage and security from the host CPU, accelerates
 # them in hardware, and isolates them in a separate trust domain. That gives
-# zero-trust enforcement even when the host is compromised. In DGX H100/B200
+# zero-trust enforcement even when the host is compromised. In DGX B200
 # systems, BlueField-3 DPUs handle the storage and in-band management networks.
 # =============================================================================

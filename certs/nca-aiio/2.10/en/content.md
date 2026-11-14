@@ -17,7 +17,7 @@ In a traditional server, the host CPU runs two kinds of work:
    - Security: IPsec/TLS crypto, stateful firewalls, micro-segmentation, telemetry and flow logging.
    - Management agents, monitoring exporters, and the hypervisor or container runtime networking stack.
 
-At 100–400 Gb/s line rates, infrastructure work does not scale on general-purpose cores. Processing 400 Gb/s of small packets in software with per-packet encap, conntrack and crypto can consume a large fraction of a server's cores. NVIDIA and the industry often call this the **data center infrastructure tax**: published estimates put it at roughly a quarter to a third of CPU cycles in heavily virtualized environments.
+At 100–400 Gb/s line rates, infrastructure work does not scale on general-purpose cores. Processing 400 Gb/s of small packets in software with per-packet encap, conntrack and crypto can consume a large fraction of a server's cores. NVIDIA and the industry often call this the **data center infrastructure tax**: the share depends on workload and link speed; NVIDIA's offload article frames it as the work of dozens to hundreds of CPU cores (30, 100 or 300 cores depending on the scenario), not as a fixed percentage.
 
 For AI infrastructure the tax is worse, for three reasons:
 
@@ -186,18 +186,20 @@ The honest trade-off: a DPU adds **a second computer per server** to lifecycle-m
 
 ### 4.1 DGX H100 / DGX B200 network topology
 
-In a DGX H100 (and similarly DGX B200), the network adapters are deliberately split by purpose. Representative DGX H100 layout per the user guide:
+The two DGX generations split their network adapters by purpose, but not with the same hardware:
 
-| Adapter | Count | Role |
-|---|---|---|
-| ConnectX-7 (in the OSFP "Cedar" modules) | 8 single-port 400 Gb/s, one per GPU | **Compute fabric** (InfiniBand NDR or Ethernet): east-west GPU-to-GPU traffic for collectives |
-| **BlueField-3 DPU** | **2 dual-port** (up to 400 Gb/s) | **Storage fabric and in-band management** (north-south): high-speed access to shared storage, cluster management network, optionally tenant networking |
-| Onboard 10/25GbE / BMC port | — | Out-of-band management (BMC) |
+| Adapter | DGX H100 ([user guide](https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html)) | DGX B200 ([user guide](https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html)) | Role |
+|---|---|---|---|
+| ConnectX-7 (OSFP modules) | 8 single-port 400 Gb/s cards, one per GPU | 8 single-port 400 Gb/s cards, one per GPU | **Compute fabric** (InfiniBand NDR or Ethernet): east-west GPU-to-GPU traffic for collectives |
+| Storage and in-band management card | **2 dual-port ConnectX-7** Ethernet cards | **2 dual-port BlueField-3 DPU** cards | North-south: access to shared storage and the cluster management network |
+| BMC port | 1 GbE RJ-45 | 1 GbE RJ-45 | Out-of-band management (BMC) |
+
+The DPU appears in the node only from DGX B200 on. On a DGX H100 the same storage and in-band role is served by ConnectX-7 cards, without an Arm subsystem to run offload services. Do not assume a DPU in every DGX.
 
 So inside a DGX:
 
 - **ConnectX-7 / InfiniBand or SuperNIC** carry the GPU-to-GPU compute traffic.
-- **BlueField-3 DPUs** carry storage and management traffic, and are where storage offload, security and isolation functions live.
+- **Storage and in-band management cards** (ConnectX-7 on DGX H100, BlueField-3 DPUs on DGX B200) carry storage and management traffic. On DGX B200 the DPUs are where storage offload, security and isolation functions can live.
 - **NVLink/NVSwitch** carries GPU-to-GPU traffic *inside* the node. It never touches the DPU.
 
 ### 4.2 DGX SuperPOD
@@ -728,7 +730,7 @@ Link Error Recovery Counter     : 0
 - **What's inside BlueField-3:** ConnectX-7-class 400 Gb/s networking, 16 Arm A78 cores running their own OS, DDR5, PCIe Gen5 switch, hardware engines (ASAP², crypto, storage emulation, compression, regex, DPA).
 - **Software:** DOCA is the SDK/runtime, analogous to CUDA for GPUs.
 - **Three pillars:** CPU (general compute), GPU (accelerated compute), DPU (infrastructure compute).
-- **In DGX H100/B200:** ConnectX-7 adapters serve the compute fabric. **2× BlueField-3 DPUs serve the storage and in-band management networks.** NVLink handles intra-node GPU traffic.
+- **In DGX:** ConnectX-7 adapters serve the compute fabric. The storage and in-band management networks use 2× dual-port ConnectX-7 cards on DGX H100 and **2× BlueField-3 DPUs on DGX B200**. NVLink handles intra-node GPU traffic. DGX systems ship their BlueField-3 DPUs in **NIC mode** by default.
 - **SuperNIC vs DPU:** both are BlueField-3 based. The SuperNIC accelerates east-west GPU traffic in Spectrum-X Ethernet. The DPU handles north-south infrastructure, storage and security.
 - **Modes:** DPU mode (Arm owns the eSwitch; default) vs NIC mode (behaves like ConnectX).
 
@@ -749,7 +751,7 @@ Link Error Recovery Counter     : 0
 
 ## Referencias
 
-- NVIDIA BlueField-3 DPU datasheet: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
+- NVIDIA NCA-AIIO Exam Study Guide: https://dam-cdn.nvd.orangelogic.com/AssetLink/x874j05hy3m3r2sor84kpvp70750m468.pdf
 - NVIDIA Academy, AI Infrastructure and Operations Fundamentals: https://academy.nvidia.com/en/course/ai-infrastructure-operations-fundamentals/?cm=64727
 - Offloading and Isolating Data Center Workloads with BlueField DPU (NVIDIA Technical Blog): https://developer.nvidia.com/blog/offloading-and-isolating-data-center-workloads-with-bluefield-dpu
 - NVIDIA DGX SuperPOD Reference Architecture, DGX B200: https://docs.nvidia.com/dgx-superpod/reference-architecture-scalable-infrastructure-b200/latest/index.html
@@ -759,3 +761,4 @@ Link Error Recovery Counter     : 0
 - NVIDIA BlueField DPU documentation (modes of operation, RShim, BFB installation): https://docs.nvidia.com/networking/display/bluefielddpuosv500
 - NVIDIA DOCA documentation: https://docs.nvidia.com/doca/sdk/index.html
 - NVIDIA Network Operator documentation: https://docs.nvidia.com/networking/display/kubernetes2540/index.html
+- NVIDIA DGX B200 User Guide: https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html
