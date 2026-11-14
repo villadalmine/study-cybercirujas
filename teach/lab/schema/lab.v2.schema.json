@@ -186,6 +186,43 @@
         "runner_image": {"type": "string"}
       }
     },
+    "uses": {
+      "description": "Cloud labs on a local emulator (#303): the exact API operations the lab calls, as <service>:<Operation> with the Smithy namespace (`scripts/lab_fidelity.py ops <service>` lists them). Declared by the lab's author; `scripts/lab_fidelity.py check` rejects an operation without fidelity evidence in the pinned emulator release.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*:[A-Z][A-Za-z0-9]*$"}
+    },
+    "fidelity": {
+      "description": "Written by `scripts/lab_fidelity.py check --write`, never by hand: where the verdict on each `uses:` operation comes from (emulator release and commit, sha256 of its published scores and of the script, date) and the counts it was decided on. `check` re-derives it and fails when it differs.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["emulator", "release", "commit", "scores_sha256", "tool_sha256", "uses_from", "date", "operations"],
+      "properties": {
+        "emulator": {"enum": ["aws-emulator"]},
+        "release": {"type": "string"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "scores_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "tool_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "uses_from": {"enum": ["declared", "request-log"]},
+        "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "operations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["verdict", "passing_units", "failing_units", "known_issues"],
+            "properties": {
+              "verdict": {"enum": ["ok", "warn: critical-issue", "reject: no-evidence", "reject: not-implemented"]},
+              "passing_units": {"type": "integer", "minimum": 0},
+              "failing_units": {"type": "integer", "minimum": 0},
+              "known_issues": {"type": "integer", "minimum": 0},
+              "issues": {"type": "array", "items": {"type": "string", "pattern": "^issues/things-that-do-not-work/[^/]+\\.md$"}, "description": "For `warn: critical-issue` and `reject: not-implemented`: the emulator's known-issue files (path in the pinned commit) the verdict comes from."}
+            }
+          }
+        }
+      }
+    },
     "license": {"type": "string", "description": "SPDX id, e.g. Apache-2.0 (this repo) or MIT."}
   },
   "$defs": {

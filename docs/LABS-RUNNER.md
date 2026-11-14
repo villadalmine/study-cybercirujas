@@ -183,6 +183,61 @@ Found and fixed by running the pilot for real:
   bash refused them; `.gitattributes` now forces LF for `*.sh`, and `validate`
   rejects CRLF scripts.
 
+## Cloud labs on a local emulator: the fidelity gate (#303)
+
+A cloud lab (AWS) runs against [AWS Emulator](https://github.com/aws/aws-emulator), a local copy of the AWS APIs
+(CC0, no account, no token), not against AWS. The emulator only teaches the truth where it behaves like AWS, so
+before a cloud lab is written or accepted, `scripts/lab_fidelity.py` decides each API operation the lab calls,
+with no model, from data the emulator publishes for one pinned release:
+
+- `deploy/lab-emulators.yaml`: the release, its commit and the sha256 of its `scores.json.gz`. Written by
+  `scripts/lab_fidelity.py pin --release <tag>` (`--check` compares it with GitHub), never by hand.
+- `scores.json.gz`: AWS's fidelity units. Their expected answers were first recorded against real AWS. A passing
+  unit is evidence that each operation it calls answers like AWS.
+- `issues/things-that-do-not-work/` at that commit: known gaps, with `Issue-Key: <service>|<Operation>|<cause>`.
+
+The lab declares what it calls, and the script records where the verdict comes from:
+
+```yaml
+uses: [s3:CreateBucket, s3:PutBucketVersioning, iam:CreateRole]   # Smithy namespace: `lab_fidelity.py ops s3`
+fidelity:                     # written by `scripts/lab_fidelity.py check --write`, never by hand
+  emulator: aws-emulator
+  release: v1.0.345
+  commit: 1874aeac…           # the issues are read at this commit
+  scores_sha256: c5c7d997…    # the scores file the counts come from
+  tool_sha256: …              # the script that applied the rule
+  uses_from: declared         # `request-log` once the runner compares `uses:` with what the lab really called
+  date: '2026-11-13'
+  operations:
+    s3:CreateBucket: {verdict: ok, passing_units: 219, failing_units: 1, known_issues: 2}   # counts as measured on v1.0.345
+```
+
+| Verdict | When |
+| :--- | :--- |
+| `reject: no-evidence` | no passing unit calls the operation |
+| `reject: not-implemented` | the same, and a known issue says the emulator answers NotImplemented (a stub) |
+| `warn: critical-issue` | it passes in some units, but a CRITICAL known issue about that service names it. The data is per operation, not per way of calling it (`s3|GetObject|NotImplemented` is only the If-Match path), so it is recorded, printed, and left to the runner's proof |
+| `ok` | otherwise; failing units and other known issues stay visible in the counts |
+
+For `warn: critical-issue` and `reject: not-implemented`, the operation also gets `issues:`, the emulator's
+known-issue files the verdict comes from (path in the pinned commit, so `git show <commit>:<path>` reads it),
+for example `s3:GetObject: {verdict: 'warn: critical-issue', ..., issues: [issues/things-that-do-not-work/<file>.md]}`.
+
+An operation belongs to the service whose emulator crate has a handler for it (`services/<crate>/src/ops/<op>.rs`,
+listed with `git ls-tree` at the pinned commit): a call inside a budgets scenario to `CreateRole` counts for
+`iam:CreateRole`, and an Issue-Key counts for the service it names, not the scenario's Shape-Id.
+
+`scripts/lab_fidelity.py check` (in `make verify-ci`) fails when a lab has a rejected operation, has no
+`fidelity:` block, or has a block that differs from what the pinned data gives today (other than `date`). That
+happens after a hand edit, a new pin, or a change to the script. Labs without `uses:` are skipped and need no
+network. `fetch` caches the data in `.cache/lab-fidelity/`; the sha256 and the commit are checked on every run.
+
+What it does **not** prove: that the lab works. That is the runner's job (break, verify FAILS, fix, verify
+PASSES, cleanup twice), on target `aws-emulator` (#303 step 3), with evidence in `deploy/lab-evidence.yaml`.
+The gate only keeps a lab from teaching an emulator's behaviour as AWS's. Measured on 2026-11-13 with the spike
+lab (S3 versioning plus an IAM role): every operation `ok` (`iam:CreateRole` 318 passing units). `s3:GetObject` and
+`s3:PutObject` are `warn: critical-issue`. AWS Organizations has no units at all in v1.0.345, so `organizations:*` labs are rejected.
+
 ## Create a lab that follows the template
 
 ```bash
@@ -266,4 +321,5 @@ kubectl `v1.37.1`, helm `v4.3.0` (all sha256-checked), node
 - `run_in: node` is wired but not proven with a kubeadm-style lab (CKA 2.x, 4.x).
 - Published images (`ghcr.io/...`) and signatures; today `run` builds them locally if missing.
 - A machine-readable reference fix per lab (`solution`), so CI can keep `verified` true by itself.
+- Cloud labs: the `aws-emulator` runner target and a first proven aws-clf lab (#303 steps 3 and 4); only the fidelity gate exists.
 - Bringing the 323 labs without a full contract to `break | verify | cleanup`.

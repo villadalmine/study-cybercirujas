@@ -124,6 +124,7 @@ flowchart TD
 | The score in `meta.yaml` is current | `scripts/quality_score.py --check` | in `verify.yml` | |
 | The status page is what the tree gives | `tests/test_determinism.py` (compares `docs/STATUS.md` with `scripts/status_matrix.py`), part of the unit tests `make verify-ci` runs | in `verify.yml` | |
 | Curriculum citations name the tracked version and the pinned objectives document | `scripts/check_curriculum_consistency.py` (`make verify-ci`) | in `verify.yml` | |
+| A cloud lab only calls API operations the pinned emulator answers like AWS, and records where that verdict comes from | `scripts/lab_fidelity.py check` (`make verify-ci`; pin in `deploy/lab-emulators.yaml`) | in `verify.yml` | no network unless a lab declares `uses:` |
 | Does the cited page say what the text claims | `scripts/check_claims.py` | | not in CI: sampling, costs a model completion per citation |
 | Is each sentence supported by its sources | `scripts/check_groundedness.py` (`groundedness.yml`) | | `mode: warn`, not required |
 | Is the explanation true | no check | | the gap; see [GUARDRAILS](GUARDRAILS.md) and [AUDITOR_DESIGN](AUDITOR_DESIGN.md) |

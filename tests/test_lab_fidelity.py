@@ -1,4 +1,4 @@
-"""scripts/lab_fidelity.py (#325): ownership of operations, the verdict rules, the pin and the cache.
+"""scripts/lab_fidelity.py (#325): ownership of operations, the verdict rules, the pin, the cache and the `fidelity:` block.
 
 The data is synthetic but has the shape of AWS Emulator v1.0.345 (measured 2026-11-13): every wire unit names ONE
 service (the scenario's) while its steps may call others; an Issue-Key's first segment is the CALLED service's SDK
@@ -15,8 +15,11 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import yaml
+
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
+sys.path.insert(0, str(REPO))
 import lab_fidelity as lf  # noqa: E402
 
 S3 = "com.amazonaws.s3#AmazonS3"
@@ -63,8 +66,10 @@ ISSUES = [
     issue("HIGH", IAM, "iam|GetRole|2xx->2xx|$.Role"),
     issue("CRITICAL", "", "codebuild|StartBuild|Timeout", "iam|GetRole|2xx->4xx|status"),   # a chain: two services
     issue("HIGH", APPFLOW, "s3|GetObject|2xx->2xx|$.Body"),                                 # filed under appflow
-    issue("CRITICAL", S3, "s3|GetObject|NotImplemented", "s3.cond-get|run#9|AssertionError|assert code == 304"),
-    issue("HIGH", IAM, "iam|CreateServiceLinkedRole|NotImplemented"),
+    dict(issue("CRITICAL", S3, "s3|GetObject|NotImplemented", "s3.cond-get|run#9|AssertionError|assert code == 304"),
+         file="issues/things-that-do-not-work/s3-getobject-if-match.md"),
+    dict(issue("HIGH", IAM, "iam|CreateServiceLinkedRole|NotImplemented"),
+         file="issues/things-that-do-not-work/iam-slr-stub.md"),
     issue("HIGH", XRAY, "cloudwatch-logs|PutResourcePolicy|4xx->2xx|$"),
     issue("HIGH", XRAY, "logs|CreateLogGroup|2xx->2xx|$", "logs|PutResourcePolicy|2xx->4xx|status"),
 ]
@@ -92,6 +97,10 @@ class Ownership(unittest.TestCase):
         self.assertEqual(lf.key_services("logs|PutResourcePolicy|x", OWNERS, {})[1], set(),
                          "two owners, none named: skipped, never spread over both")
         self.assertEqual(lf.key_services("s3.cond-get|run#9|AssertionError|assert", OWNERS, ids), ("run#9", set()))
+
+    def test_unattributed_keys_are_counted_per_id(self):
+        issues = [issue("HIGH", XRAY, "events|PutResourcePolicy|x", "s3|GetObject|y", "s3.check|run#1|E|a")]
+        self.assertEqual(lf.unattributed(issues, OWNERS), {"events": 1})
 
     def test_sdk_ids_are_learned_from_keys_with_one_owner(self):
         ids = lf.sdk_ids([issue("HIGH", XRAY, "logs|CreateLogGroup|x", "logs|PutResourcePolicy|y"),
@@ -186,7 +195,114 @@ class Data(unittest.TestCase):
             lf.fetch("file:///etc/passwd")
 
 
+class Check(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.lab = Path(self.tmp.name) / "lab.yaml"
+        self.idx = lf.build_index(SCORES, ISSUES, OWNERS)
+        patches = [mock.patch.object(lf, "load_pins", return_value=PIN),
+                   mock.patch.object(lf, "load_index", return_value=self.idx)]
+        for p in patches:
+            p.start()
+            self.addCleanup(p.stop)
+        self.addCleanup(self.tmp.cleanup)
+
+    def write(self, uses, extra=""):
+        self.lab.write_text("cert: aws-clf\ntopic: '1.1'\ntitle: t\n" + extra
+                            + "uses:\n" + "".join(f"- {u}\n" for u in uses), encoding="utf-8")
+
+    def run_check(self, *args):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = lf.main(["check", *args, str(self.lab)])
+        return code, out.getvalue()
+
+    def test_missing_block_fails_then_write_then_passes(self):
+        self.write(["s3:CreateBucket", "iam:CreateRole"])
+        code, out = self.run_check()
+        self.assertEqual(code, 1)
+        self.assertIn("`fidelity:` is missing", out)
+        self.assertEqual(self.run_check("--write", "--date", "2026-11-13")[0], 0)
+        self.assertEqual(self.run_check()[0], 0, "date is not compared")
+        data = yaml.safe_load(self.lab.read_text())
+        block = data["fidelity"]
+        self.assertEqual((block["release"], block["commit"], block["uses_from"]), ("v9.9.9", "a" * 40, "declared"))
+        self.assertEqual(block["tool_sha256"], lf.sha256((REPO / lf.TOOL).read_bytes()))
+        self.assertEqual(block["operations"]["s3:CreateBucket"],
+                         {"verdict": "ok", "passing_units": 2, "failing_units": 0, "known_issues": 0})
+        from teach.lab import spec
+        self.assertEqual(spec.schema_errors(data), [])
+
+    def test_a_hand_edit_is_stale(self):
+        self.write(["s3:CreateBucket"])
+        self.run_check("--write")
+        self.lab.write_text(self.lab.read_text().replace("passing_units: 2", "passing_units: 9"))
+        code, out = self.run_check()
+        self.assertEqual(code, 1)
+        self.assertIn("`fidelity:` is stale", out)
+
+    def test_a_new_pin_makes_the_block_stale(self):
+        self.write(["s3:CreateBucket"])
+        self.run_check("--write")
+        with mock.patch.object(lf, "load_pins", return_value=dict(PIN, release="v9.9.10")):
+            self.assertEqual(self.run_check()[0], 1)
+
+    def test_a_rejected_operation_fails_even_when_recorded(self):
+        self.write(["s3:CreateBucket", "iam:CreateServiceLinkedRole"])
+        self.run_check("--write")
+        code, out = self.run_check()
+        self.assertEqual(code, 1)
+        self.assertIn("iam:CreateServiceLinkedRole (reject: not-implemented)", out)
+
+    def test_a_warning_is_recorded_and_printed_but_does_not_fail(self):
+        self.write(["s3:GetObject"])
+        self.run_check("--write")
+        code, out = self.run_check()
+        self.assertEqual(code, 0)
+        self.assertIn("warn: critical-issue", out)
+        op = yaml.safe_load(self.lab.read_text())["fidelity"]["operations"]["s3:GetObject"]
+        self.assertEqual(op["verdict"], "warn: critical-issue")
+        self.assertEqual(op["issues"], ["issues/things-that-do-not-work/s3-getobject-if-match.md"],
+                         "the block names the CRITICAL issue the warning comes from")
+        self.assertIn("issues/things-that-do-not-work/s3-getobject-if-match.md", out)
+
+    def test_a_stub_names_its_issue_and_ok_has_no_issue_list(self):
+        self.write(["s3:CreateBucket", "iam:CreateServiceLinkedRole"])
+        self.run_check("--write")
+        ops = yaml.safe_load(self.lab.read_text())["fidelity"]["operations"]
+        self.assertEqual(ops["iam:CreateServiceLinkedRole"]["issues"], ["issues/things-that-do-not-work/iam-slr-stub.md"])
+        self.assertNotIn("issues", ops["s3:CreateBucket"])
+
+    def test_write_replaces_the_block_and_keeps_the_rest(self):
+        self.write(["s3:CreateBucket"], extra="requires: linux\n")
+        self.run_check("--write")
+        self.write(["s3:CreateBucket", "iam:CreateRole"], extra="requires: linux\n")
+        self.lab.write_text(self.lab.read_text() + yaml.safe_dump({"fidelity": {"old": 1}}))
+        self.run_check("--write")
+        text = self.lab.read_text()
+        self.assertEqual(text.count("fidelity:"), 1)
+        self.assertIn("requires: linux", text)
+        self.assertIn("iam:CreateRole:", text)
+
+    def test_malformed_uses_fail(self):
+        self.write(["s3 CreateBucket"])
+        code, out = self.run_check()
+        self.assertEqual(code, 1)
+        self.assertIn("<service>:<Operation>", out)
+
+
 class Pin(unittest.TestCase):
+    def test_without_cloud_labs_it_needs_no_pin_and_no_network(self):
+        with mock.patch.object(lf, "load_pins", side_effect=AssertionError("read the pin")), \
+                mock.patch.object(lf, "fetch", side_effect=AssertionError("network")):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = lf.main(["check"])
+        if "cloud lab(s)" in out.getvalue():
+            self.skipTest("the tree has cloud labs now; the CI step covers them")
+        self.assertEqual(code, 0)
+        self.assertIn("no lab declares `uses:`", out.getvalue())
+
     def test_check_compares_with_the_pinned_release_not_the_latest(self):
         have = lf.load_pins()
         with mock.patch.object(lf, "live_pin", return_value=have) as live, contextlib.redirect_stdout(io.StringIO()):
