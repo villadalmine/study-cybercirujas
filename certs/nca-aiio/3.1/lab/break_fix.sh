@@ -25,10 +25,10 @@
 #     https://kubernetes.io/docs/home/
 #
 # Modes (runner contract, teach/lab/spec.py):
-#   ./lab.sh            same as "break"
-#   ./lab.sh break      install the simulated exporter and break it
-#   ./lab.sh verify     exit 0 only when the student fixed everything
-#   ./lab.sh cleanup    remove everything this lab created
+#   ./break_fix.sh            same as "break"
+#   ./break_fix.sh break      install the simulated exporter and break it
+#   ./break_fix.sh verify     exit 0 only when the student fixed everything
+#   ./break_fix.sh cleanup    remove everything this lab created
 # All three modes are idempotent.
 # =============================================================================
 set -u -o pipefail
@@ -603,7 +603,7 @@ esac
 #    Expected: GPU-7d6c13f9-0e2a-4b97-a5d8-4c1f9e3b7a05
 #
 # 7) Verify:
-#      sudo ./lab.sh verify
+#      sudo ./break_fix.sh verify
 #
 # Production mapping:
 #   - Real dcgm-exporter runs as a DaemonSet (GPU Operator) and reads
