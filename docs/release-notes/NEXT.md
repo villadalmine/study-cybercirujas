@@ -9,8 +9,6 @@
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 
-- **Cloud labs, fidelity gate:** a cloud lab declares the AWS API operations it calls (`uses:`), and `scripts/lab_fidelity.py` rejects any that the pinned AWS Emulator release has no evidence of answering like AWS, recording where each verdict comes from in the lab (#303). No AWS lab uses it yet.
-
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->
