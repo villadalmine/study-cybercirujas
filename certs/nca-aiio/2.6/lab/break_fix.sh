@@ -28,10 +28,10 @@
 #   https://academy.nvidia.com/en/course/ai-infrastructure-operations-fundamentals/?cm=64727
 #
 # Usage
-#   ./lab.sh            same as "break"
-#   ./lab.sh break      prepare the lab and break it (idempotent: resets it)
-#   ./lab.sh verify     exit 0 only when the plan is fixed
-#   ./lab.sh cleanup    remove everything this lab created
+#   ./break_fix.sh            same as "break"
+#   ./break_fix.sh break      prepare the lab and break it (idempotent: resets it)
+#   ./break_fix.sh verify     exit 0 only when the plan is fixed
+#   ./break_fix.sh cleanup    remove everything this lab created
 #
 # Safety
 #   This lab only writes text files under its own directory (and one symlink
@@ -346,7 +346,7 @@ esac
 #
 # 6. Confirm:
 #      facility-check      -> RESULT: PASS
-#      ./lab.sh verify     -> FIXED ... (exit 0)
+#      ./break_fix.sh verify     -> FIXED ... (exit 0)
 #
 # Takeaways for the exam
 #   - Size power from the system's MAXIMUM power (DGX H100 ~10.2 kW), not average.
@@ -359,5 +359,5 @@ esac
 #     SYSTEM_MAX_KW to a "typical" value, or dropping below 8 systems.
 #
 # 7. When finished:
-#      ./lab.sh cleanup
+#      ./break_fix.sh cleanup
 # =============================================================================
