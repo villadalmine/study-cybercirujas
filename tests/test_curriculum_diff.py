@@ -210,16 +210,26 @@ class HtmlExtraction(unittest.TestCase):
 
     def test_real_page_structure(self):
         domains = cd.parse_lpi_html(self.PAGE.read_text(encoding="utf-8"))
-        self.assertEqual([(d["id"], d["name"], d["weight"]) for d in domains],
-                         [("101", "System Architecture", 8),
-                          ("104", "Devices, Linux Filesystems, Filesystem Hierarchy Standard", 6)])
-        self.assertEqual([(o["id"], o["text"], o["weight"]) for d in domains for o in d["objectives"]],
-                         [("101.1", "Determine and configure hardware settings", 2),
-                          ("101.2", "Boot the system", 3),
-                          ("101.3", "Change runlevels / boot targets and shutdown or reboot system", 3),
-                          ("104.3", "Control mounting and unmounting of filesystems", 3),
-                          ("104.5", "Manage file permissions and ownership", 3)])   # 104.4 Removed: dropped
-        self.assertEqual(cd.check_tree(domains, total=None), [])
+        # 14 questions in the fixture: weight is each one's share in percent, the count stays as `questions`
+        self.assertEqual([(d["id"], d["name"], d["weight"], d["questions"]) for d in domains],
+                         [("101", "System Architecture", 57.14, 8),
+                          ("104", "Devices, Linux Filesystems, Filesystem Hierarchy Standard", 42.86, 6)])
+        self.assertEqual([(o["id"], o["text"], o["questions"], o["weight"]) for d in domains for o in d["objectives"]],
+                         [("101.1", "Determine and configure hardware settings", 2, 14.29),
+                          ("101.2", "Boot the system", 3, 21.43),
+                          ("101.3", "Change runlevels / boot targets and shutdown or reboot system", 3, 21.43),
+                          ("104.3", "Control mounting and unmounting of filesystems", 3, 21.43),
+                          ("104.5", "Manage file permissions and ownership", 3, 21.43)])   # 104.4 Removed: dropped
+        self.assertEqual(cd.check_tree(domains), [])
+
+    def test_percent_shares_sum_to_exactly_100(self):
+        # LPIC-2's thirteen domains (120 questions): floors leave six hundredths, the earlier ties take them
+        lpic2 = [8, 9, 9, 9, 8, 11, 6, 8, 11, 8, 11, 8, 14]
+        shares = cd.percent_shares(lpic2)
+        self.assertEqual(shares, [6.67, 7.5, 7.5, 7.5, 6.67, 9.17, 5, 6.67, 9.17, 6.67, 9.16, 6.66, 11.66])
+        self.assertEqual(round(sum(shares), 2), 100)
+        self.assertEqual(cd.percent_shares([1, 1, 1]), [33.34, 33.33, 33.33])
+        self.assertEqual(cd.percent_shares([0, 0]), [0, 0])
 
     def test_script_and_style_are_not_text(self):
         lines = cd.html_lines(self.PAGE.read_text(encoding="utf-8"))
@@ -229,16 +239,16 @@ class HtmlExtraction(unittest.TestCase):
         toc = "<ul><li>Topic 101: System Architecture</li><li>101.1 Determine things</li><li>Weight 7</li></ul>"
         domains = cd.parse_lpi_html(self.page(toc, "<h3>Topic 101: System Architecture</h3>",
                                               self.objective("101.1", "Determine things", "2")))
-        self.assertEqual([(o["id"], o["weight"]) for o in domains[0]["objectives"]], [("101.1", 2)])
+        self.assertEqual([(o["id"], o["questions"]) for o in domains[0]["objectives"]], [("101.1", 2)])
 
     def test_weight_in_the_title_is_not_title(self):
         # LPIC-2 prints `200.1 Measure and Troubleshoot Resource Usage (weight: 6)` and the table's Weight too
         domains = cd.parse_lpi_html(self.page("<h3>Topic 200: Capacity Planning</h3>",
                                               self.objective("200.1", "Measure Usage (weight: 6)", "6"),
                                               "<h4>200.2 Predict Needs (weight: 2)</h4>"))
-        self.assertEqual([(o["text"], o["weight"]) for o in domains[0]["objectives"]],
+        self.assertEqual([(o["text"], o["questions"]) for o in domains[0]["objectives"]],
                          [("Measure Usage", 6), ("Predict Needs", 2)])
-        self.assertEqual(domains[0]["weight"], 8)
+        self.assertEqual((domains[0]["questions"], domains[0]["weight"]), (8, 100))
 
     def refused(self, *body: str) -> str:
         with self.assertRaises(SystemExit) as raised:
@@ -282,6 +292,33 @@ class HtmlExtraction(unittest.TestCase):
             code, err = self.run_html(argv + ["--check"], body + b"<!-- cache stamp -->")
             self.assertEqual(code, 1)
             self.assertIn("objective tree is the same", err)
+
+    def test_plan_reads_the_weights_on_the_frozen_scale(self):
+        """r4575905185: a frozen syllabus whose weights are the page's (q*100/total, as certs/lpic-2.md) plans as keep."""
+        import frontmatter
+        page = self.page("<h3>Topic 200: Capacity Planning</h3>", self.objective("200.1", "Measure usage", "6"),
+                         self.objective("200.2", "Predict needs", "2"),
+                         "<h3>Topic 201: Linux Kernel</h3>", self.objective("201.1", "Kernel components", "2"),
+                         self.objective("201.2", "Compiling a kernel", "3"), self.objective("201.3", "Runtime", "4"))
+        snap = cd.html_snapshot(cd.parse_lpi_html(page), cert="c", version="4.5.0", url=self.URL,
+                                committed="2026-11-14", sha256="s")
+        frozen = [("200.1", "200 - Capacity Planning", 35.29, "Measure usage"),
+                  ("200.2", "200 - Capacity Planning", 11.76, "Predict needs"),
+                  ("201.1", "201 - Linux Kernel", 11.76, "Kernel components"),
+                  ("201.2", "201 - Linux Kernel", 17.65, "Compiling a kernel"),
+                  ("201.3", "201 - Linux Kernel", 23.53, "Runtime")]   # 17 questions: q*100/17, rounded
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "certs").mkdir()
+            (root / "syllabi" / "c").mkdir(parents=True)
+            post = frontmatter.Post("", cert="c", version="4.5.0", sources=[self.URL],
+                                    topics=[{"id": i, "topic": t, "weight": w, "title": x} for i, t, w, x in frozen])
+            (root / "certs" / "c.md").write_text(frontmatter.dumps(post) + "\n", encoding="utf-8")
+            (root / "syllabi" / "c" / "v4.5.0.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+            plan = cd.plan_cert(root, "c", {"target": "syllabi/c/v4.5.0.yaml"})
+        self.assertEqual(plan["impact"]["domains"]["weight_changed"], [])
+        self.assertEqual(plan["counts"]["keep"], 5)
+        self.assertEqual(sum(plan["counts"].values()), 5)
 
     def test_cli_defaults_the_date_to_today(self):
         with tempfile.TemporaryDirectory() as tmp:

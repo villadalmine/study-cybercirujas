@@ -178,15 +178,13 @@ def parse_layout(text: str) -> list[dict]:
             for i, d in enumerate(domains, 1)]
 
 
-def check_tree(domains: list[dict], total: int | None = 100) -> list[str]:
-    """What a real curriculum always satisfies: domains, objectives in each, weights summing to `total`.
-
-    `total=None` skips the sum: LPI weights are question counts per exam (60 each), not percentages."""
+def check_tree(domains: list[dict]) -> list[str]:
+    """What a real curriculum always satisfies: domains, objectives in each, weights summing to 100."""
     problems = [] if domains else ["no domains found"]
     problems += [f"domain {d['id']} ({d['name']}) has no objectives" for d in domains if not d["objectives"]]
-    found = sum(number(d["weight"]) for d in domains)
-    if domains and total is not None and round(found, 2) != total:
-        problems.append(f"domain weights sum to {found}, not {total}")
+    total = sum(number(d["weight"]) for d in domains)
+    if domains and round(total, 2) != 100:
+        problems.append(f"domain weights sum to {total}, not 100")
     return problems
 
 
@@ -230,14 +228,18 @@ def snapshot(domains: list[dict], *, cert: str, version: str, repo: str, commit:
 # header, so the tree starts at the LAST line equal to the first `Topic` header.
 # Objectives titled `Removed` are placeholders for a retired id (LPIC-1 104.4)
 # and are dropped. An objective with no weight, a weight that disagrees with its
-# title, an id outside its topic or repeated is refused. A domain's weight is the
-# sum of its objectives' weights (LPI weights count questions, 60 per exam, so
-# they do not sum to 100). The page states several versions (history, other
+# title, an id outside its topic or repeated is refused. LPI weights count
+# questions (60 per exam); every consumer of a snapshot reads `weight` as a
+# percentage, so the published count is kept as `questions` and `weight` is its
+# share of all the page's questions: an objective's is q*100/total rounded to
+# two decimals (what certs/<cert>.md stores), a domain's is its questions'
+# share apportioned in hundredths by largest remainder (ties to the earlier
+# domain), so the domains sum to exactly 100. The page states several versions (history, other
 # exams), so the version is the caller's `--version`. `source` records the URL,
 # the sha256 of the bytes served and `committed`: the date the page was read,
 # since a web page has no commit (`switch` writes it as the syllabus's
-# snapshot_date). The output is the PDF path's schema, plus each objective's
-# published `weight`.
+# snapshot_date). The output is the PDF path's schema, plus `questions` on each
+# domain and objective.
 
 LPI_TOPIC = re.compile(r"^Topic (\d{3}): (.+)$")
 LPI_OBJECTIVE = re.compile(r"^(\d{3})\.(\d{1,2}) (.+?)(?: \(weight: ?(\d+)\))?$", re.I)
@@ -331,21 +333,38 @@ def parse_lpi_html(html: str) -> list[dict]:
                 if current["weight"] is not None and current["weight"] != value:
                     problems.append(f"{current['id']}: weight {value} disagrees with its title's {current['weight']}")
                 current["weight"] = value
-    out = []
     for d in domains:
-        objectives = [o for o in d["objectives"] if normalize(o["text"]) != "removed"]
-        problems += [f"{o['id']} ({o['text']}) has no weight" for o in objectives if o["weight"] is None]
-        out.append({"id": d["id"], "name": d["name"],
-                    "weight": number(sum(o["weight"] or 0 for o in objectives)),
-                    "objectives": [{"id": o["id"], "text": o["text"], "weight": number(o["weight"] or 0)}
-                                   for o in objectives]})
+        d["objectives"] = [o for o in d["objectives"] if normalize(o["text"]) != "removed"]
+        problems += [f"{o['id']} ({o['text']}) has no weight" for o in d["objectives"] if o["weight"] is None]
     if problems:
         raise SystemExit("extraction looks wrong:\n  " + "\n  ".join(problems))
-    return out
+    questions = [sum(o["weight"] for o in d["objectives"]) for d in domains]
+    total = sum(questions)
+    shares = percent_shares(questions)
+    return [{"id": d["id"], "name": d["name"], "weight": share, "questions": q,
+             "objectives": [{"id": o["id"], "text": o["text"],
+                             "weight": number(o["weight"] * 100 / total) if total else 0, "questions": o["weight"]}
+                            for o in d["objectives"]]}
+            for d, q, share in zip(domains, questions, shares)]
+
+
+def percent_shares(counts: list[int]) -> list[int | float]:
+    """Each count's share of the total in percent, in hundredths, summing to exactly 100 (largest remainder).
+
+    Integer arithmetic, so it is the same on every machine: each share is floor(c*10000/total) hundredths, and
+    the hundredths still missing go one each to the largest remainders, the earlier count first on a tie."""
+    total = sum(counts)
+    if not total:
+        return [0 for _ in counts]
+    floors = [divmod(c * 10000, total) for c in counts]
+    missing = 10000 - sum(f for f, _ in floors)
+    order = sorted(range(len(counts)), key=lambda i: (-floors[i][1], i))
+    extra = set(order[:missing])
+    return [number((f + (1 if i in extra else 0)) / 100) for i, (f, _) in enumerate(floors)]
 
 
 def html_snapshot(domains: list[dict], *, cert: str, version: str, url: str, committed: str, sha256: str) -> dict:
-    problems = check_tree(domains, total=None)
+    problems = check_tree(domains)
     if problems:
         raise SystemExit("extraction looks wrong:\n  " + "\n  ".join(problems))
     return {
@@ -353,8 +372,9 @@ def html_snapshot(domains: list[dict], *, cert: str, version: str, url: str, com
         "version": str(version),
         "source": {"url": url, "sha256": sha256, "committed": committed},
         "extraction": {"tool": "scripts/curriculum_diff.py extract --html",
-                       "method": "LPI objectives page: `Topic NNN` sections, `NNN.N` objectives and their Weight; "
-                                 "table of contents and `Removed` placeholders skipped; domain weight = sum"},
+                       "method": "LPI objectives page: `Topic NNN` sections, `NNN.N` objectives and their Weight (kept as "
+                                 "questions); table of contents and `Removed` placeholders skipped; weight = share "
+                                 "of all questions in percent, domains by largest remainder in hundredths"},
         "tree_sha256": tree_sha256(domains),
         "domains": domains,
     }
