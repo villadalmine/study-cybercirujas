@@ -117,7 +117,7 @@ preflight() {
   # EFF is what this machine really gives, nproc capped by the cgroup's cpu.max.
   EFF=$NPROC
   local q p
-  if read -r q p < /sys/fs/cgroup/cpu.max 2>/dev/null && [[ $q =~ ^[0-9]+$ && $p =~ ^[0-9]+$ ]]; then
+  if [[ -r /sys/fs/cgroup/cpu.max ]] && read -r q p < /sys/fs/cgroup/cpu.max && [[ $q =~ ^[0-9]+$ && $p =~ ^[0-9]+$ ]]; then
     q=$(( (q + p - 1) / p ))
     (( q < EFF )) && EFF=$q
   fi
@@ -304,10 +304,10 @@ do_break() {
   cat <<EOF
 
 ${c_ylw}==================== INCIDENT TICKET ====================${c_rst}
- The data team moved its "tile compute" job onto a ${NPROC}-vCPU node.
+ The data team moved its "tile compute" job onto a node with ${EFF} CPUs.
  The job is embarrassingly parallel (every task independent, exactly the
  kind of work a GPU eats). Capacity planning promised it would scale with
- cores. It does not: wall time on ${NPROC} vCPUs is the same as on 1.
+ cores. It does not: wall time on ${EFF} CPUs is the same as on 1.
 
  SYMPTOMS you will see:
    * 'sudo $0 status' shows elapsed_s close to the single-core baseline.
