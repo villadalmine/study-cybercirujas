@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.6.10](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.9...v0.6.10) (2026-11-14)
+
+
+### Features
+
+* **labs:** fidelity gate for cloud labs, with provenance in lab.yaml ([#330](https://github.com/villadalmine/study-cybercirujas/issues/330)) ([630a5f2](https://github.com/villadalmine/study-cybercirujas/commit/630a5f2eba1e077db1ac09658de3435611026aae))
+* **labs:** lab_fidelity.py pins AWS Emulator and indexes its fidelity data ([#326](https://github.com/villadalmine/study-cybercirujas/issues/326)) ([1f3e411](https://github.com/villadalmine/study-cybercirujas/commit/1f3e411884f688b781b69abf05dc36b49c1dc4d3))
+* **nca-aiio:** 1.6 purpose and use cases of NVIDIA solutions, in English ([#313](https://github.com/villadalmine/study-cybercirujas/issues/313)) ([a2af631](https://github.com/villadalmine/study-cybercirujas/commit/a2af631cd86380d703c75a5af7b1def36789e24c))
+* **nca-aiio:** 1.7 software components of the AI development life cycle, in English ([#315](https://github.com/villadalmine/study-cybercirujas/issues/315)) ([8edbbba](https://github.com/villadalmine/study-cybercirujas/commit/8edbbbac10632bfefa341cb50189986a89b91366))
+* **nca-aiio:** 1.8 GPU and CPU architectures compared, in English ([#331](https://github.com/villadalmine/study-cybercirujas/issues/331)) ([aeadc66](https://github.com/villadalmine/study-cybercirujas/commit/aeadc6675123c6d605f29f46cee6952a9dfe3135))
+* **nca-aiio:** 2.1 hardware requirements for AI training use cases, in English ([#333](https://github.com/villadalmine/study-cybercirujas/issues/333)) ([412a822](https://github.com/villadalmine/study-cybercirujas/commit/412a822dcb7be2ff419722de45d85551b16bbf78))
+* **nca-aiio:** 2.10 the purpose and benefits of a DPU in a data center, in English ([#344](https://github.com/villadalmine/study-cybercirujas/issues/344)) ([8f8eb8c](https://github.com/villadalmine/study-cybercirujas/commit/8f8eb8c9daebddaf449d61d750018d0e33e9841f))
+* **nca-aiio:** 2.2 scaling GPU infrastructure for different use cases, in English ([#335](https://github.com/villadalmine/study-cybercirujas/issues/335)) ([b08f8d8](https://github.com/villadalmine/study-cybercirujas/commit/b08f8d82afa4cbf18101eae82d921d57ac58cf94))
+* **nca-aiio:** 2.3 data center power and cooling, in English ([#336](https://github.com/villadalmine/study-cybercirujas/issues/336)) ([6be0568](https://github.com/villadalmine/study-cybercirujas/commit/6be056879728d4615aa3e76a89361169a8fdd60c))
+* **nca-aiio:** 2.4 on-premises versus cloud AI infrastructure, in English ([#337](https://github.com/villadalmine/study-cybercirujas/issues/337)) ([5e5f990](https://github.com/villadalmine/study-cybercirujas/commit/5e5f990fa640f48e527379a5426f136dbd3db607))
+* **nca-aiio:** 2.5 components of an accelerated cluster, in English ([#338](https://github.com/villadalmine/study-cybercirujas/issues/338)) ([e64074f](https://github.com/villadalmine/study-cybercirujas/commit/e64074ff7dc5e7d91ad9d25c17a91bf17c71a4df))
+* **nca-aiio:** 2.6 data center facility requirements, in English ([#340](https://github.com/villadalmine/study-cybercirujas/issues/340)) ([8af507d](https://github.com/villadalmine/study-cybercirujas/commit/8af507d2d6ccfed8045b5f9cb4cc9d2504b40d52))
+* **nca-aiio:** 2.7 networking requirements for AI workloads, in English ([#341](https://github.com/villadalmine/study-cybercirujas/issues/341)) ([8b7dea6](https://github.com/villadalmine/study-cybercirujas/commit/8b7dea6a715225910254d58aff634aaf85407b9d))
+* **nca-aiio:** 2.8 data center networking protocols and key concepts, in English ([#342](https://github.com/villadalmine/study-cybercirujas/issues/342)) ([e7c2fb4](https://github.com/villadalmine/study-cybercirujas/commit/e7c2fb4981f56108fdc4155eaf612ea7340e17ca))
+* **nca-aiio:** 2.9 high-speed data center network options and their use cases, in English ([#343](https://github.com/villadalmine/study-cybercirujas/issues/343)) ([033dcce](https://github.com/villadalmine/study-cybercirujas/commit/033dccefe47b703076ed6cfbc40394dd31b41608))
+* **nca-aiio:** 3.1 AI data center management and monitoring essentials, in English ([#345](https://github.com/villadalmine/study-cybercirujas/issues/345)) ([c22c980](https://github.com/villadalmine/study-cybercirujas/commit/c22c980784dd68bccede6c4d4b7961b90780a86b))
+* **nca-aiio:** 3.2 AI cluster orchestration and job scheduling essentials, in English ([#346](https://github.com/villadalmine/study-cybercirujas/issues/346)) ([3578b97](https://github.com/villadalmine/study-cybercirujas/commit/3578b978c3bafff873ffe60a2cef518476bcb8fc))
+* **nca-aiio:** 3.3 key measures and criteria for monitoring GPUs, in English ([#347](https://github.com/villadalmine/study-cybercirujas/issues/347)) ([17036c3](https://github.com/villadalmine/study-cybercirujas/commit/17036c388008040a6eb342b8ee773b978fd1f8ff))
+* **nca-aiio:** 3.4 key considerations for virtualizing accelerated infrastructure, in English ([#348](https://github.com/villadalmine/study-cybercirujas/issues/348)) ([f609e06](https://github.com/villadalmine/study-cybercirujas/commit/f609e06a6224b6aac09214a32b0ecbdffc0f544b))
+
 ## [0.6.9](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.8...v0.6.9) (2026-11-13)
 
 
