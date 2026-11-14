@@ -130,7 +130,7 @@ xml_hostdev() {
 
 # Prints one line per NUMA problem; the return code is the number of problems.
 numa_report() {
-  local xml="${1:-$XML_DEF}" gnode node_cpus nodeset vcpus pins cs c n=0
+  local xml="${1:-$XML_DEF}" gnode node_cpus nodeset vcpus pins vcpu_cs cs c n=0
   gnode=$(cat "$DEV/numa_node")
   node_cpus=" $(expand_cpus "$(cat "$NODES/node$gnode/cpulist")") "
   nodeset=$(xml_nodeset "$xml")
@@ -140,7 +140,9 @@ numa_report() {
   fi
   vcpus=$({ grep -oE '<vcpu( [^>]*)?>[[:space:]]*[0-9]+' "$xml" || true; } | grep -oE '[0-9]+$' | head -n1)
   pins=$(grep -cE '<vcpupin[[:space:]]' "$xml" || true)
-  if [[ -z "$vcpus" || "$pins" != "$vcpus" ]]; then
+  # A whole-VM <vcpu cpuset='...'> pins every vCPU too (libvirt domain XML, CPU allocation).
+  vcpu_cs=$({ grep -oE "<vcpu[[:space:]][^>]*cpuset=['\"][^'\"]+" "$xml" || true; } | sed -E "s/.*cpuset=['\"]//" | head -n1)
+  if [[ -z "$vcpus" || ( "$pins" != "$vcpus" && -z "$vcpu_cs" ) ]]; then
     echo "$pins <vcpupin> entries for ${vcpus:-?} vCPUs: unpinned vCPUs can run on the remote socket"
     n=$((n+1))
   fi
@@ -152,7 +154,7 @@ numa_report() {
         n=$((n+1)); break
       fi
     done
-  done < <(xml_cpusets "$xml")
+  done < <(xml_cpusets "$xml"; [[ -n "$vcpu_cs" ]] && echo "$vcpu_cs")
   return "$n"
 }
 LIB
@@ -593,7 +595,7 @@ esac
 #      GRUB_CMDLINE_LINUX="console=ttyS0,115200n8 default_hugepagesz=1G hugepagesz=1G hugepages=128 intel_iommu=on iommu=pt"
 #    intel_iommu=on enables DMA remapping, which VFIO requires. iommu=pt keeps
 #    host-owned devices in identity mapping, so they pay no translation cost.
-#    On AMD use amd_iommu=on (enabled by default on recent kernels) plus iommu=pt.
+#    On AMD the IOMMU is enabled by default on recent kernels; add iommu=pt.
 #    VT-d / AMD-Vi must also be enabled in the BIOS/BMC.
 #
 # 2) Claim the right device with vfio-pci. Edit etc/modprobe.d/vfio.conf:

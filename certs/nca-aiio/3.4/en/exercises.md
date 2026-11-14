@@ -65,7 +65,7 @@ Every form of VM-level GPU virtualization (passthrough, vGPU, MIG-backed vGPU) d
 2. If the IOMMU is not enabled, add the kernel parameters and reboot:
 
    ```bash
-   # Intel: intel_iommu=on iommu=pt   |  AMD: amd_iommu=on iommu=pt
+   # Intel: intel_iommu=on iommu=pt   |  AMD: iommu=pt (AMD-Vi is on by default)
    sudo grubby --update-kernel=ALL --args="intel_iommu=on iommu=pt"   # RHEL/Fedora
    # Debian/Ubuntu: edit GRUB_CMDLINE_LINUX in /etc/default/grub, then: sudo update-grub
    sudo reboot
@@ -184,7 +184,7 @@ Passthrough gives one VM the whole physical GPU. The host must **not** load the 
 
    ```
    name, memory.total [MiB], pci.bus_id
-   NVIDIA A100-PCIE-40GB, 40960 MiB, 00000000:07:00.0
+   NVIDIA A100-PCIE-40GB, 40536 MiB, 00000000:07:00.0
    ```
 
 5. Try to live-migrate the VM:
@@ -218,7 +218,7 @@ With NVIDIA vGPU, the **NVIDIA Virtual GPU Manager** runs on the hypervisor and 
 1. On a KVM host with the vGPU Manager installed (not the regular driver), enable the VFs:
 
    ```bash
-   sudo /usr/lib/nvidia/sriov-manage -e 00:41:0000.0
+   sudo /usr/lib/nvidia/sriov-manage -e 00000000:41:00.0
    lspci -d 10de: | head -4
    ```
 
@@ -622,7 +622,7 @@ The NVIDIA GPU Operator automates the driver, container toolkit, device plugin, 
 
    ```
    name, memory.total [MiB]
-   NVIDIA A100-PCIE-40GB, 40960 MiB
+   NVIDIA A100-PCIE-40GB, 40536 MiB
    ```
 
 4. Switch the node to **MIG** using the MIG Manager. First remove the time-slicing default, then set the `mixed` strategy and apply a MIG layout label:
@@ -675,7 +675,7 @@ The NVIDIA GPU Operator automates the driver, container toolkit, device plugin, 
 
 ### Questions
 
-6.1. In step 3, both pods report the full 40960 MiB. What does this reveal about memory isolation under time-slicing, and what failure can occur when `ts-a` allocates 30 GiB and `ts-b` allocates 15 GiB?
+6.1. In step 3, both pods report the full 40536 MiB. What does this reveal about memory isolation under time-slicing, and what failure can occur when `ts-a` allocates 30 GiB and `ts-b` allocates 15 GiB?
 
 6.2. Why does the node advertise `NVIDIA-A100-PCIE-40GB-SHARED`, and how would you use that label to keep latency-sensitive workloads off shared nodes?
 
