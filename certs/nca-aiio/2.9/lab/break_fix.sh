@@ -23,10 +23,10 @@
 #   net.ipv4.tcp_ecn is a host-side stand-in for "ECN enabled on the RDMA path".
 #
 # MODES (all idempotent)
-#   sudo ./lab.sh            -> same as "break": builds the fabric and injects the faults
-#   sudo ./lab.sh break
-#   sudo ./lab.sh verify     -> exit 0 only when every fault is fixed
-#   sudo ./lab.sh cleanup    -> removes namespaces and lab files; host stays as it was
+#   sudo ./break_fix.sh            -> same as "break": builds the fabric and injects the faults
+#   sudo ./break_fix.sh break
+#   sudo ./break_fix.sh verify     -> exit 0 only when every fault is fixed
+#   sudo ./break_fix.sh cleanup    -> removes namespaces and lab files; host stays as it was
 #
 # References:
 #   https://docs.nvidia.com/dgx-superpod/reference-architecture-scalable-infrastructure-b200/latest/index.html
@@ -376,6 +376,6 @@ esac
 #        separate from the compute and storage fabrics.
 #
 # 6) Verify, then clean up
-#    sudo ./lab.sh verify     # all PASS, exit 0
-#    sudo ./lab.sh cleanup
+#    sudo ./break_fix.sh verify     # all PASS, exit 0
+#    sudo ./break_fix.sh cleanup
 # =============================================================================
