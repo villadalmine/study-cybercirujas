@@ -133,7 +133,9 @@ flowchart TD
    cncf/curriculum --commit <sha> --path <file> --committed <date> -o syllabi/<c>/v<v>.yaml`. It records the sha256 of
    the PDF and refuses a tree with no domains, an empty domain, or weights that do not sum to 100. `--text <layout.txt>`
    (the `pdftotext -layout` output, without the PDF) needs `--sha256`, and `--check` (here and in `render`) needs `-o`: both are
-   usage errors (exit 2), not a crash or an always-STALE answer. The model-based
+   usage errors (exit 2), not a crash or an always-STALE answer. LPI publishes its objectives as web pages, not PDFs:
+   `extract --html <url> --cert <c> --version <v> -o syllabi/<c>/v<v>.yaml` fetches and freezes one (`Topic NNN`
+   domains, `NNN.N` objectives with their `Weight`, the table of contents and `Removed` placeholders skipped). The model-based
    `teach cert snapshot` (used for vendors without a PDF layout) now records the sha256 of the vendor's bytes as
    `source_sha256` and refuses a document longer than its 20,000-character window instead of truncating it.
    **Open the window** before planning: `scripts/curriculum_diff.py window docs/upgrades/<upgrade>.yaml` writes

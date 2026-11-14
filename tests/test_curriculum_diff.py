@@ -191,6 +191,125 @@ class Extraction(unittest.TestCase):
         self.assertIn("uncommitted", " ".join(out.split()))
 
 
+
+class HtmlExtraction(unittest.TestCase):
+    """`extract --html` (#235): LPI objective pages. The fixture is the real exam-101-102 page, trimmed."""
+
+    PAGE = FIXTURES / "lpi_exam-101-102.trimmed.html"
+    URL = "https://www.lpi.org/our-certifications/exam-101-102-objectives/"
+
+    @staticmethod
+    def page(*body: str) -> str:
+        return "<html><body>" + "\n".join(body) + "</body></html>"
+
+    @staticmethod
+    def objective(oid: str, title: str, weight: str | None) -> str:
+        table = (f'<table><tr><td><p><b>Weight</b>\n</p></td><td>{weight}\n</td></tr></table>'
+                 if weight is not None else "<p><br /></p>")
+        return f'<h4><span style="color:navy">{oid} {title}</span></h4>\n{table}'
+
+    def test_real_page_structure(self):
+        domains = cd.parse_lpi_html(self.PAGE.read_text(encoding="utf-8"))
+        self.assertEqual([(d["id"], d["name"], d["weight"]) for d in domains],
+                         [("101", "System Architecture", 8),
+                          ("104", "Devices, Linux Filesystems, Filesystem Hierarchy Standard", 6)])
+        self.assertEqual([(o["id"], o["text"], o["weight"]) for d in domains for o in d["objectives"]],
+                         [("101.1", "Determine and configure hardware settings", 2),
+                          ("101.2", "Boot the system", 3),
+                          ("101.3", "Change runlevels / boot targets and shutdown or reboot system", 3),
+                          ("104.3", "Control mounting and unmounting of filesystems", 3),
+                          ("104.5", "Manage file permissions and ownership", 3)])   # 104.4 Removed: dropped
+        self.assertEqual(cd.check_tree(domains, total=None), [])
+
+    def test_script_and_style_are_not_text(self):
+        lines = cd.html_lines(self.PAGE.read_text(encoding="utf-8"))
+        self.assertFalse([line for line in lines if "999" in line or "101.9" in line])
+
+    def test_a_table_of_contents_without_numbers_is_skipped(self):
+        toc = "<ul><li>Topic 101: System Architecture</li><li>101.1 Determine things</li><li>Weight 7</li></ul>"
+        domains = cd.parse_lpi_html(self.page(toc, "<h3>Topic 101: System Architecture</h3>",
+                                              self.objective("101.1", "Determine things", "2")))
+        self.assertEqual([(o["id"], o["weight"]) for o in domains[0]["objectives"]], [("101.1", 2)])
+
+    def test_weight_in_the_title_is_not_title(self):
+        # LPIC-2 prints `200.1 Measure and Troubleshoot Resource Usage (weight: 6)` and the table's Weight too
+        domains = cd.parse_lpi_html(self.page("<h3>Topic 200: Capacity Planning</h3>",
+                                              self.objective("200.1", "Measure Usage (weight: 6)", "6"),
+                                              "<h4>200.2 Predict Needs (weight: 2)</h4>"))
+        self.assertEqual([(o["text"], o["weight"]) for o in domains[0]["objectives"]],
+                         [("Measure Usage", 6), ("Predict Needs", 2)])
+        self.assertEqual(domains[0]["weight"], 8)
+
+    def refused(self, *body: str) -> str:
+        with self.assertRaises(SystemExit) as raised:
+            cd.parse_lpi_html(self.page(*body))
+        return str(raised.exception.code)
+
+    def test_what_a_real_page_never_does_is_refused(self):
+        topic = "<h3>Topic 101: System Architecture</h3>"
+        self.assertIn("101.1 (Determine) has no weight", self.refused(topic, self.objective("101.1", "Determine", None)))
+        self.assertIn("disagrees", self.refused(topic, self.objective("101.1", "Determine (weight: 3)", "2")))
+        self.assertIn("102.1 is outside Topic 101", self.refused(topic, self.objective("102.1", "Elsewhere", "2")))
+        self.assertIn("101.1 appears twice", self.refused(topic, self.objective("101.1", "A", "2"),
+                                                          self.objective("101.1", "B", "2")))
+        with self.assertRaises(SystemExit):     # a topic left with only a Removed placeholder is an empty domain
+            cd.html_snapshot(cd.parse_lpi_html(self.page(topic, self.objective("101.4", "Removed", None))),
+                             cert="x", version="1", url=self.URL, committed="d", sha256="s")
+
+    def run_html(self, argv, body: bytes):
+        with mock.patch.object(cd, "fetch_bytes", return_value=body) as fetched, \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()) as err:
+            code = cd.main(argv)
+        fetched.assert_called_once_with(self.URL)
+        return code, err.getvalue()
+
+    def test_cli_writes_the_pdf_schema_and_checks_by_refetching(self):
+        body = self.PAGE.read_bytes()
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "v5.0.yaml"
+            argv = ["extract", "--html", self.URL, "--cert", "lpic-1", "--version", "5.0", "-o", str(out)]
+            self.assertEqual(self.run_html(argv + ["--committed", "2026-11-14"], body)[0], 0)
+            snap = yaml.safe_load(out.read_text(encoding="utf-8"))
+            self.assertEqual(snap["source"], {"url": self.URL, "sha256": hashlib.sha256(body).hexdigest(),
+                                              "committed": "2026-11-14"})
+            self.assertEqual((snap["cert"], snap["version"]), ("lpic-1", "5.0"))
+            self.assertEqual(snap["tree_sha256"], cd.tree_sha256(snap["domains"]))
+            # the PDF path's consumers read it unchanged: load_syllabus, diff (here against itself)
+            loaded = cd.load_syllabus(out)
+            self.assertTrue(cd.diff(loaded, loaded)["identical"])
+            # --check re-fetches; with no --committed it compares against the file's own date
+            self.assertEqual(self.run_html(argv + ["--check"], body)[0], 0)
+            code, err = self.run_html(argv + ["--check"], body + b"<!-- cache stamp -->")
+            self.assertEqual(code, 1)
+            self.assertIn("objective tree is the same", err)
+
+    def test_cli_defaults_the_date_to_today(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "v.yaml"
+            self.run_html(["extract", "--html", self.URL, "--cert", "c", "--version", "1", "-o", str(out)],
+                          self.PAGE.read_bytes())
+            committed = yaml.safe_load(out.read_text(encoding="utf-8"))["source"]["committed"]
+            self.assertRegex(committed, r"^\d{4}-\d{2}-\d{2}$")
+
+    def test_flags_that_belong_to_the_pdf_are_usage_errors(self):
+        err = io.StringIO()
+        for argv, says in (
+                (["extract", "--html", self.URL, "--cert", "c", "--version", "1", "--commit", "abc"], "--html takes no"),
+                (["extract", "--html", self.URL, "--cert", "c", "--version", "1", "--sha256", "s"], "--html takes no"),
+                (["extract", "--html", self.URL, "--cert", "c", "--version", "1", "--check"], "--check needs -o"),
+                (["extract", "--pdf", "x.pdf", "--cert", "c", "--version", "1"], "--pdf/--text need --repo")):
+            with self.subTest(argv=argv), contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
+                cd.main(argv)
+            self.assertEqual(raised.exception.code, 2)
+            self.assertIn(says, err.getvalue())
+
+    def test_the_report_names_a_page_source(self):
+        self.assertEqual(cd._source_parts({"url": self.URL, "sha256": "s", "committed": "2026-11-14"}),
+                         (self.URL, "read 2026-11-14", "read 2026-11-14", "page"))
+        self.assertEqual(cd._source_parts({"repo": "cncf/curriculum", "commit": "abcdef123", "path": "X.pdf",
+                                           "url": "u"}), ("X.pdf", "cncf/curriculum @ abcdef1", "abcdef1", "PDF"))
+
+
 # ==== diff ====
 
 class Window(unittest.TestCase):

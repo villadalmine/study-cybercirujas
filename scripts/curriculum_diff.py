@@ -4,7 +4,7 @@
 A curriculum version change re-evaluates the whole cert. Every step here is a
 function of its inputs, never a judgment call: the same PDFs and the same frozen
 syllabus give the same bytes, run after run, on any machine with the same
-`pdftotext`. No model, no network.
+`pdftotext`. No model; the network only for `extract --html`, which fetches the page it freezes.
 
 Each subcommand's rules are written in the comment block that opens its section
 below; `--help` lists the subcommands and `<subcommand> --help` their flags.
@@ -178,13 +178,15 @@ def parse_layout(text: str) -> list[dict]:
             for i, d in enumerate(domains, 1)]
 
 
-def check_tree(domains: list[dict]) -> list[str]:
-    """What a real curriculum always satisfies: domains, objectives in each, weights summing to 100."""
+def check_tree(domains: list[dict], total: int | None = 100) -> list[str]:
+    """What a real curriculum always satisfies: domains, objectives in each, weights summing to `total`.
+
+    `total=None` skips the sum: LPI weights are question counts per exam (60 each), not percentages."""
     problems = [] if domains else ["no domains found"]
     problems += [f"domain {d['id']} ({d['name']}) has no objectives" for d in domains if not d["objectives"]]
-    total = sum(number(d["weight"]) for d in domains)
-    if domains and round(total, 2) != 100:
-        problems.append(f"domain weights sum to {total}, not 100")
+    found = sum(number(d["weight"]) for d in domains)
+    if domains and total is not None and round(found, 2) != total:
+        problems.append(f"domain weights sum to {found}, not {total}")
     return problems
 
 
@@ -213,18 +215,184 @@ def snapshot(domains: list[dict], *, cert: str, version: str, repo: str, commit:
     }
 
 
+# ---- extract --html: LPI objective pages ----
+#
+#   scripts/curriculum_diff.py extract --html https://www.lpi.org/our-certifications/exam-101-102-objectives/ \
+#       --cert lpic-1 --version 5.0 [--committed 2026-11-14] -o syllabi/lpic-1/v5.0.yaml   # or --check
+#
+# LPI publishes its objectives as a web page (a MediaWiki export), not a PDF. The
+# page is reduced to text lines (a block element ends a line; script and style
+# are dropped), then read in order: a `Topic NNN: <name>` line opens a domain
+# with id NNN; a `NNN.N <title>` line opens an objective of that domain (a
+# trailing `(weight: N)` in the title, as LPIC-2 prints it, is a weight, not
+# title); a `Weight` line, followed by its number or carrying it, sets the
+# weight of the open objective. The table of contents at the top repeats every
+# header, so the tree starts at the LAST line equal to the first `Topic` header.
+# Objectives titled `Removed` are placeholders for a retired id (LPIC-1 104.4)
+# and are dropped. An objective with no weight, a weight that disagrees with its
+# title, an id outside its topic or repeated is refused. A domain's weight is the
+# sum of its objectives' weights (LPI weights count questions, 60 per exam, so
+# they do not sum to 100). The page states several versions (history, other
+# exams), so the version is the caller's `--version`. `source` records the URL,
+# the sha256 of the bytes served and `committed`: the date the page was read,
+# since a web page has no commit (`switch` writes it as the syllabus's
+# snapshot_date). The output is the PDF path's schema, plus each objective's
+# published `weight`.
+
+LPI_TOPIC = re.compile(r"^Topic (\d{3}): (.+)$")
+LPI_OBJECTIVE = re.compile(r"^(\d{3})\.(\d{1,2}) (.+?)(?: \(weight: ?(\d+)\))?$", re.I)
+LPI_WEIGHT = re.compile(r"^Weight:? ?(\d+)?$")
+BLOCK_TAGS = {"address", "article", "aside", "blockquote", "br", "dd", "div", "dl", "dt", "figcaption",
+              "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hr", "li", "main",
+              "nav", "ol", "p", "pre", "section", "table", "tbody", "td", "th", "thead", "tr", "ul"}
+
+
+def html_lines(html: str) -> list[str]:
+    """The visible text of an HTML page, one line per block, whitespace collapsed, empty lines dropped."""
+    from html.parser import HTMLParser
+
+    class Lines(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.parts: list[str] = []
+            self.skip = 0
+
+        def handle_starttag(self, tag, attrs):
+            if tag in ("script", "style"):
+                self.skip += 1
+            elif tag in BLOCK_TAGS:
+                self.parts.append("\n")
+
+        def handle_startendtag(self, tag, attrs):
+            if tag in BLOCK_TAGS:
+                self.parts.append("\n")
+
+        def handle_endtag(self, tag):
+            if tag in ("script", "style"):
+                self.skip = max(0, self.skip - 1)
+            elif tag in BLOCK_TAGS:
+                self.parts.append("\n")
+
+        def handle_data(self, data):
+            if not self.skip:
+                self.parts.append(data)
+
+    parser = Lines()
+    parser.feed(html)
+    parser.close()
+    return [line for line in (tidy(x) for x in "".join(parser.parts).split("\n")) if line]
+
+
+def parse_lpi_html(html: str) -> list[dict]:
+    """Domains (`Topic NNN`) with their objectives (`NNN.N`) and weights, from an LPI objectives page."""
+    lines = html_lines(html)
+    first = next((line for line in lines if LPI_TOPIC.match(line)), None)
+    if first is None:
+        return []
+    start = max(i for i, line in enumerate(lines) if line == first)   # past the table of contents
+    domains: list[dict] = []
+    seen: set[str] = set()
+    current: dict | None = None
+    expect_weight = False
+    problems: list[str] = []
+    for line in lines[start:]:
+        topic = LPI_TOPIC.match(line)
+        objective = LPI_OBJECTIVE.match(line)
+        weight = LPI_WEIGHT.match(line)
+        if expect_weight:
+            expect_weight = False
+            if re.fullmatch(r"\d+", line):
+                weight_value = int(line)
+                if current is not None:
+                    if current["weight"] is not None and current["weight"] != weight_value:
+                        problems.append(f"{current['id']}: weight {weight_value} disagrees with its title's "
+                                        f"{current['weight']}")
+                    current["weight"] = weight_value
+                continue
+        if topic:
+            domains.append({"id": topic.group(1), "name": topic.group(2).strip(), "objectives": []})
+            current = None
+        elif objective and domains:
+            oid = f"{objective.group(1)}.{objective.group(2)}"
+            if objective.group(1) != domains[-1]["id"]:
+                problems.append(f"{oid} is outside Topic {domains[-1]['id']}")
+            if oid in seen:
+                problems.append(f"{oid} appears twice")
+            seen.add(oid)
+            title_weight = objective.group(4)
+            current = {"id": oid, "text": objective.group(3).strip(),
+                       "weight": int(title_weight) if title_weight else None}
+            domains[-1]["objectives"].append(current)
+        elif weight and current is not None:
+            if weight.group(1) is None:
+                expect_weight = True
+            else:
+                value = int(weight.group(1))
+                if current["weight"] is not None and current["weight"] != value:
+                    problems.append(f"{current['id']}: weight {value} disagrees with its title's {current['weight']}")
+                current["weight"] = value
+    out = []
+    for d in domains:
+        objectives = [o for o in d["objectives"] if normalize(o["text"]) != "removed"]
+        problems += [f"{o['id']} ({o['text']}) has no weight" for o in objectives if o["weight"] is None]
+        out.append({"id": d["id"], "name": d["name"],
+                    "weight": number(sum(o["weight"] or 0 for o in objectives)),
+                    "objectives": [{"id": o["id"], "text": o["text"], "weight": number(o["weight"] or 0)}
+                                   for o in objectives]})
+    if problems:
+        raise SystemExit("extraction looks wrong:\n  " + "\n  ".join(problems))
+    return out
+
+
+def html_snapshot(domains: list[dict], *, cert: str, version: str, url: str, committed: str, sha256: str) -> dict:
+    problems = check_tree(domains, total=None)
+    if problems:
+        raise SystemExit("extraction looks wrong:\n  " + "\n  ".join(problems))
+    return {
+        "cert": cert,
+        "version": str(version),
+        "source": {"url": url, "sha256": sha256, "committed": committed},
+        "extraction": {"tool": "scripts/curriculum_diff.py extract --html",
+                       "method": "LPI objectives page: `Topic NNN` sections, `NNN.N` objectives and their Weight; "
+                                 "table of contents and `Removed` placeholders skipped; domain weight = sum"},
+        "tree_sha256": tree_sha256(domains),
+        "domains": domains,
+    }
+
+
+def fetch_bytes(url: str) -> bytes:
+    """The bytes a URL serves, through teach's fetch (httpx with a deadline, then curl)."""
+    sys.path.insert(0, str(REPO))
+    from teach.core.tracker import _get_bytes
+
+    return _get_bytes(url)[0]
+
+
 def _extract_args(p: argparse.ArgumentParser) -> None:
     src = p.add_mutually_exclusive_group(required=True)
     src.add_argument("--pdf", type=Path)
     src.add_argument("--text", type=Path, help="pdftotext -layout output instead of the PDF (then pass --sha256)")
+    src.add_argument("--html", metavar="URL", help="an LPI objectives page, fetched (no --repo/--commit/--path)")
     p.add_argument("--sha256", help="the PDF's sha256 (computed from --pdf when not given)")
-    for flag in ("--cert", "--version", "--repo", "--commit", "--path", "--committed"):
-        p.add_argument(flag, required=True)
+    p.add_argument("--cert", required=True)
+    p.add_argument("--version", required=True)
+    for flag in ("--repo", "--commit", "--path"):
+        p.add_argument(flag, help="the PDF's repository, commit and path (--pdf/--text only)")
+    p.add_argument("--committed", help="the PDF's commit date; with --html the date the page is read "
+                                       "(default: today in UTC, or the -o file's date with --check)")
     p.add_argument("-o", "--out")
-    p.add_argument("--check", action="store_true", help="fail if --out is not what the PDF produces (needs -o)")
+    p.add_argument("--check", action="store_true", help="fail if --out is not what the source produces (needs -o)")
 
 
 def _extract_validate(args) -> str | None:
+    if args.html:
+        given = [f for f in ("repo", "commit", "path", "sha256") if getattr(args, f)]
+        if given:   # a page has no repository or commit, and its digest is of the bytes fetched now
+            return f"--html takes no {', '.join('--' + f for f in given)} (the page is fetched and hashed)"
+        return _check_needs_out(args)
+    missing = [f"--{f}" for f in ("repo", "commit", "path", "committed") if not getattr(args, f)]
+    if missing:
+        return f"--pdf/--text need {', '.join(missing)}"
     if args.text and not args.sha256:   # the digest is of the PDF, which --text does not have: it cannot be computed
         return "--text needs --sha256 (the PDF's digest cannot be computed from its text)"
     return _check_needs_out(args)
@@ -236,7 +404,35 @@ def _check_needs_out(args) -> str | None:
     return None
 
 
+def _html_committed(args) -> str:
+    if args.committed:
+        return args.committed
+    if args.check and Path(args.out).is_file():
+        found = ((yaml.safe_load(Path(args.out).read_text(encoding="utf-8")) or {}).get("source") or {})
+        if found.get("committed"):
+            return str(found["committed"])
+    import datetime
+
+    return datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+
+
+def _extract_html(args) -> int:
+    body = fetch_bytes(args.html)
+    snap = html_snapshot(parse_lpi_html(body.decode("utf-8", "replace")), cert=args.cert, version=args.version,
+                         url=args.html, committed=_html_committed(args), sha256=hashlib.sha256(body).hexdigest())
+    text = dump_yaml(snap)
+    code = write(text, args.out, args.check)
+    if code and args.check and Path(args.out).is_file():
+        old = yaml.safe_load(Path(args.out).read_text(encoding="utf-8")) or {}
+        if old.get("tree_sha256") == snap["tree_sha256"]:
+            print("  the objective tree is the same (tree_sha256); only the page's bytes or the date differ",
+                  file=sys.stderr)
+    return code
+
+
 def _extract_run(args) -> int:
+    if args.html:
+        return _extract_html(args)
     if args.pdf:
         text = subprocess.run(["pdftotext", "-layout", str(args.pdf), "-"], check=True, capture_output=True,
                               text=True, encoding="utf-8").stdout
@@ -248,7 +444,7 @@ def _extract_run(args) -> int:
     return write(dump_yaml(snap), args.out, args.check)
 
 
-COMMANDS["extract"] = ("freeze an official PDF as a syllabus snapshot", _extract_args, _extract_run)
+COMMANDS["extract"] = ("freeze an official PDF (or an LPI objectives page) as a syllabus snapshot", _extract_args, _extract_run)
 
 
 # ==== diff ====
@@ -1290,12 +1486,22 @@ def _diff_lines(d: dict) -> list[str]:
     return lines
 
 
+def _source_parts(src: dict) -> tuple[str, str, str, str]:
+    """(name, flow pin, report pin, what was hashed) of a snapshot's source: a PDF at a commit, or a page read on a
+    date (`extract --html`, which has no repo, commit or path)."""
+    if "path" in src or "commit" in src or not src.get("url"):
+        commit = (src.get("commit") or "")[:7]
+        return str(src.get("path")), f"{src.get('repo')} @ {commit}", commit, "PDF"
+    return src["url"], f"read {src.get('committed')}", f"read {src.get('committed')}", "page"
+
+
 def _mermaid(p: dict) -> list[str]:
     """The upgrade flow, with this plan's sources and counts."""
     lines = ["```mermaid", "flowchart LR"]
     for cert, c in p["certs"].items():
         src = c["target"].get("source") or {}
-        lines.append(f'    {cert}_pdf["{src.get("path")}<br/>{src.get("repo")} @ {(src.get("commit") or "")[:7]}'
+        name, pin, _, _ = _source_parts(src)
+        lines.append(f'    {cert}_pdf["{name}<br/>{pin}'
                      f'<br/>sha256 {(src.get("sha256") or "")[:12]}"] -->|extract| {cert}_target["{c["target"]["file"]}"]')
         if "upstream" in c:
             same = "identical" if c["upstream"]["identical"] else "changed"
@@ -1342,18 +1548,18 @@ def render(p: dict) -> str:
         out.append(f"| `{r['class']}` | {_cell(r['rule'])} | {_cell(r['action'])} | {files} |")
     for cert, c in p["certs"].items():
         src = c["target"].get("source") or {}
+        name, _, pin, kind = _source_parts(src)
         out += ["", f"## {cert}", "",
                 f"- Tracked (what the material was built against): `{c['tracked']['file']}` v{c['tracked']['version']}"
                 f", sha256 `{c['tracked']['sha256'][:12]}…`",
                 f"- Target: `{c['target']['file']}` v{c['target']['version']}, from "
-                f"[{src.get('path')}]({src.get('url')}) @ `{(src.get('commit') or '')[:7]}`, "
-                f"PDF sha256 `{src.get('sha256')}`"]
+                f"[{name}]({src.get('url')}) @ `{pin}`, {kind} sha256 `{src.get('sha256')}`"]
         if "upstream" in c:
             bsrc = c["upstream_base"].get("source") or {}
+            bname, _, bpin, bkind = _source_parts(bsrc)
             base_v, new_v = c["upstream_base"]["version"], c["target"]["version"]
             out += [f"- Upstream base: `{c['upstream_base']['file']}` v{base_v}, from "
-                    f"[{bsrc.get('path')}]({bsrc.get('url')}) @ `{(bsrc.get('commit') or '')[:7]}`, "
-                    f"PDF sha256 `{bsrc.get('sha256')}`",
+                    f"[{bname}]({bsrc.get('url')}) @ `{bpin}`, {bkind} sha256 `{bsrc.get('sha256')}`",
                     "", f"### What upstream changed (v{base_v} PDF -> v{new_v} PDF)", ""]
             out += _diff_lines(c["upstream"])
             out += ["", f"### Drift: frozen `{c['tracked']['file']}` vs its own v{base_v} PDF", ""]
