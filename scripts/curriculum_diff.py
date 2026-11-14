@@ -237,7 +237,7 @@ def snapshot(domains: list[dict], *, cert: str, version: str, repo: str, commit:
 # domain), so the domains sum to exactly 100. The page states several versions (history, other
 # exams), so the version is the caller's `--version`. `source` records the URL,
 # the sha256 of the bytes served and `committed`: the date the page was read,
-# since a web page has no commit (`switch` writes it as the syllabus's
+# since a web page has no commit; a re-run on the same bytes keeps it (`switch` writes it as the syllabus's
 # snapshot_date). The output is the PDF path's schema, plus `questions` on each
 # domain and objective.
 
@@ -399,7 +399,8 @@ def _extract_args(p: argparse.ArgumentParser) -> None:
     for flag in ("--repo", "--commit", "--path"):
         p.add_argument(flag, help="the PDF's repository, commit and path (--pdf/--text only)")
     p.add_argument("--committed", help="the PDF's commit date; with --html the date the page is read "
-                                       "(default: today in UTC, or the -o file's date with --check)")
+                                       "(default: the -o file's date under --check or when the page bytes are unchanged, "
+                                       "else today in UTC)")
     p.add_argument("-o", "--out")
     p.add_argument("--check", action="store_true", help="fail if --out is not what the source produces (needs -o)")
 
@@ -424,12 +425,14 @@ def _check_needs_out(args) -> str | None:
     return None
 
 
-def _html_committed(args) -> str:
+def _html_committed(args, sha256: str) -> str:
+    """The date the page was read: --committed; else the -o file's own date under --check, or when the page bytes
+    are the ones that file hashed (a re-run must not move the first reading to today); else today in UTC."""
     if args.committed:
         return args.committed
-    if args.check and Path(args.out).is_file():
+    if args.out and Path(args.out).is_file():
         found = ((yaml.safe_load(Path(args.out).read_text(encoding="utf-8")) or {}).get("source") or {})
-        if found.get("committed"):
+        if found.get("committed") and (args.check or found.get("sha256") == sha256):
             return str(found["committed"])
     import datetime
 
@@ -438,8 +441,9 @@ def _html_committed(args) -> str:
 
 def _extract_html(args) -> int:
     body = fetch_bytes(args.html)
+    digest = hashlib.sha256(body).hexdigest()
     snap = html_snapshot(parse_lpi_html(body.decode("utf-8", "replace")), cert=args.cert, version=args.version,
-                         url=args.html, committed=_html_committed(args), sha256=hashlib.sha256(body).hexdigest())
+                         url=args.html, committed=_html_committed(args, digest), sha256=digest)
     text = dump_yaml(snap)
     code = write(text, args.out, args.check)
     if code and args.check and Path(args.out).is_file():

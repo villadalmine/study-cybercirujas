@@ -347,6 +347,18 @@ class HtmlExtraction(unittest.TestCase):
             committed = yaml.safe_load(out.read_text(encoding="utf-8"))["source"]["committed"]
             self.assertRegex(committed, r"^\d{4}-\d{2}-\d{2}$")
 
+    def test_a_rerun_on_the_same_bytes_keeps_the_first_date(self):
+        """r4575905198: without --committed, rewriting -o from the same page keeps the date it was first read."""
+        body = self.PAGE.read_bytes()
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "v.yaml"
+            argv = ["extract", "--html", self.URL, "--cert", "c", "--version", "1", "-o", str(out)]
+            self.run_html(argv + ["--committed", "2026-01-02"], body)
+            self.run_html(argv, body)                                   # same bytes: the first date stays
+            self.assertEqual(yaml.safe_load(out.read_text(encoding="utf-8"))["source"]["committed"], "2026-01-02")
+            self.run_html(argv, body + b"<!-- edited -->")              # new bytes: read today
+            self.assertNotEqual(yaml.safe_load(out.read_text(encoding="utf-8"))["source"]["committed"], "2026-01-02")
+
     def test_flags_that_belong_to_the_pdf_are_usage_errors(self):
         err = io.StringIO()
         for argv, says in (
