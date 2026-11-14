@@ -450,7 +450,7 @@ $ dcgmi health -g 2 -c
 +---------------------------+----------------------------------------------------------+
 ```
 
-`-s` selects subsystems: `p` PCIe, `m` memory, `i` inforom, `t` thermal and power, `n` NVLink, `d` driver, `x` NVSwitch, or `a` for all. Health watches are **passive**: they evaluate telemetry already being collected and add no load.
+`-s` selects subsystems: `p` PCIe, `m` memory, `i` inforom, `t` thermal and power, `n` NVLink, `d` driver, `x` ConnectX, or `a` for all (NVSwitch watches have no letter of their own: only `a` enables them). Health watches are **passive**: they evaluate telemetry already being collected and add no load.
 
 ### 5.4 Active diagnostics
 
@@ -1038,6 +1038,7 @@ Design notes:
 * **Bitmask decoding in PromQL.** PromQL has no bitwise operators. `floor(x / 2^n) % 2 == 1` tests bit *n*. If your exporter version emits `DCGM_FI_DEV_CLOCKS_EVENT_REASONS`, rename the metric in the rule.
 * **`DCGM_FI_DEV_XID_ERRORS` is a "last value" gauge.** It does not reset by itself. Pair alerts with a runbook that confirms with `dmesg`, and consider `changes(DCGM_FI_DEV_XID_ERRORS[10m]) > 0` to detect new events.
 * **Temperature thresholds** (85/90 °C here) are illustrative. Per-SKU rules, keyed on `modelName`, are more correct in heterogeneous fleets.
+* **`honorLabels: true` is a precondition for the `{pod!=""}` / `{namespace!=""}` rules.** dcgm-exporter attaches the workload's `pod` and `namespace` labels; with `honorLabels: false` Prometheus renames them to `exported_pod`/`exported_namespace` and the per-workload selectors match the exporter pod instead. A Prometheus CR with `overrideHonorLabels: true` forces it back to false.
 * **`GPUExporterDown` is mandatory.** Absence of GPU errors is meaningless if collection is broken.
 
 ### 6.7 Useful PromQL for dashboards
