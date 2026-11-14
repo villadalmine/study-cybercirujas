@@ -130,7 +130,7 @@ goals:                       # what the student has to fix, without the commands
 level: beginner | intermediate | advanced
 origin: {kind: curated | community | generated, repo: ..., author: ..., generated_by: ...}
 derived_from: {syllabus: 'certs/cka.md#1.1', content: certs/cka/1.1/en/content.md, content_sha256: <chain hash>}  # labs in certs/: required (scripts/check_source_chain.py)
-verified: {status: true, date: '2026-10-15', method: runner | ci | human, by: ..., runner_image: ...}
+verified: {status: true, date: '2026-10-15', method: runner | ci | human, by: ..., runner_image: ...}  # a claim; the proof is deploy/lab-evidence.yaml
 license: Apache-2.0
 safety:                      # only labs that do more than break a throwaway container
   risks: [modifies-host]     # modifies-host | billable-cloud | public-exposure
@@ -250,7 +250,9 @@ study-lab down ./labs/netpol
 ```
 
 Then set `verified: {status: true, method: runner, date: ...}`. Scripts must
-use LF line endings.
+use LF line endings. `verified:` is a claim: for a curated lab, the quality
+score's `lab` check counts only an entry in `deploy/lab-evidence.yaml` with the
+lab's current hash and a run link or log sha256 (#217).
 
 ## Run a lab from another repository
 

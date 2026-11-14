@@ -56,8 +56,8 @@ quality:
     version: '1'
     result: pass
     weight: 10
-    ran_at: '2026-10-20'
-    evidence: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+    ran_at: '2026-10-21'
+    evidence: 'proven on kind for the current lab hash: docs/upgrades/evidence/logs/kind-ckad-4.4.log sha256:9483942cd797886225328298fc0943fdd12a7f2d9f06a51b701a13cf4f4591e5'
   - name: independent_review
     version: '1'
     result: not_run

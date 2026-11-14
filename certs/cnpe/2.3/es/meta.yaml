@@ -6,7 +6,7 @@ sources:
 - https://github.com/cncf/curriculum/raw/master/CNPE_Curriculum.pdf
 quality:
   weights_version: 1
-  score: 86.1
+  score: 80.6
   level: ai-beta
   checks:
   - name: quality_floor
@@ -47,10 +47,10 @@ quality:
     evidence: declares its origin (sources + References)
   - name: lab
     version: '1'
-    result: pass
+    result: not_run
     weight: 10
-    ran_at: '2026-10-19'
-    evidence: 'study-lab runner: break -> check FAIL -> reference fix (break_fix.sh fix) -> check PASS -> down'
+    ran_at: null
+    evidence: 'claimed, not proven: lab.yaml says verified, no entry in deploy/lab-evidence.yaml'
   - name: independent_review
     version: '1'
     result: not_run

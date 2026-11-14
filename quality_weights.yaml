@@ -25,7 +25,7 @@ checks:
   k8s_manifests:       {weight: 10, what: "YAML/JSON blocks parse and use no removed Kubernetes API (check_manifests.py, check_k8s_apis.py)"}
   translation_gate:    {weight: 10, what: "a translation keeps code blocks, URLs, headings and length (generator._verify_translation)"}
   source_chain:        {weight: 10, what: "this link declares its origin and the origin has not changed since (scripts/check_source_chain.py)"}
-  lab:                 {weight: 10, what: "the topic's lab ran in the study-lab runner: break -> verify FAIL -> fix -> verify PASS -> cleanup (lab.yaml verified)"}
+  lab:                 {weight: 10, what: "the topic's lab was proven in the study-lab runner or CI: break -> verify FAIL -> fix -> verify PASS -> cleanup, as an entry in deploy/lab-evidence.yaml for the CURRENT lab hash with a run link or log sha256 (#217); lab.yaml verified: alone is a claim and earns nothing"}
   independent_review:  {weight: 10, what: "an independent review (fable revisor-pr, Copilot) with its link, recorded in meta.yaml reviews"}
   human_review:        {weight: 5,  what: "a person reviewed or edited it (meta.yaml human_edits / human_review)"}
   groundedness:        {weight: 5,  what: "each claim is supported by its cited source — advisory: CI runs it in warn mode (scripts/check_groundedness.py, groundedness.yaml); a recorded pass/fail is kept here (re-weighted from this file, so a hand-edited weight does not count), otherwise not_run"}

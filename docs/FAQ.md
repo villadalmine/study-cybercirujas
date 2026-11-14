@@ -282,9 +282,12 @@ run in a throwaway container by `study-lab`
 `break`, the reference fix makes it pass, and cleanup leaves nothing.
 
 **Are the labs tested?**
-The contract of every lab is validated in CI (`labs.yml`). Running the full
-cycle is recorded per lab in `lab.yaml → verified`, and only those count as
-`lab: pass` in the quality score ([`scripts/quality_score.py:149-161`](../scripts/quality_score.py#L149-L161)).
+The contract of every lab is validated in CI (`labs.yml`). A lab counts as
+`lab: pass` in the quality score only with a proof that can be checked: an entry
+in `deploy/lab-evidence.yaml` for the lab's current hash, with a run link or a
+log sha256 ([`scripts/quality_score.py` → `lab_check`](../scripts/quality_score.py), #217).
+`lab.yaml → verified` is the author's claim: on its own it earns nothing and the
+score shows it as "claimed, not proven"; a proof for an older hash is stale.
 Most labs do not yet have a full `break | verify | cleanup` contract
 ([LABS-RUNNER → State of the curated labs](LABS-RUNNER.md#state-of-the-548-curated-labs-validate-2026-10-15),
 [#46](https://github.com/villadalmine/study-cybercirujas/issues/46)); known

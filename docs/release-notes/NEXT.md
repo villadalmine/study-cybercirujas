@@ -10,6 +10,8 @@
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
 - **LPI objective pages can be frozen:** `curriculum_diff.py extract --html` reads an LPI objectives page (hashed, dated, weights as each objective's share of the questions), so LPIC-1/LPIC-2 can move to the canonical LPI pages through the deterministic upgrade process (#235).
 
+- **Lab credit needs proof:** a topic's quality score counts its lab only when `deploy/lab-evidence.yaml` proves the lab as it is now (run link or log sha256 and the current lab hash); a bare `verified:` in `lab.yaml` now shows as "claimed, not proven", so 11 labs lost that credit until their runs are recorded (#217).
+
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->

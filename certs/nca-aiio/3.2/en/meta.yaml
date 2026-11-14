@@ -13,7 +13,7 @@ sources:
 - https://www.nvidia.com/en-us/technologies/multi-instance-gpu/
 quality:
   weights_version: 1
-  score: 86.1
+  score: 80.6
   level: ai-beta
   checks:
   - name: quality_floor
@@ -54,10 +54,10 @@ quality:
     evidence: declares its origin (sources + References)
   - name: lab
     version: '1'
-    result: pass
+    result: not_run
     weight: 10
-    ran_at: '2026-11-14'
-    evidence: 'study-lab runner: break -> check FAIL -> reference fix -> check PASS'
+    ran_at: null
+    evidence: 'claimed, not proven: lab.yaml says verified, no entry in deploy/lab-evidence.yaml'
   - name: independent_review
     version: '1'
     result: not_run
