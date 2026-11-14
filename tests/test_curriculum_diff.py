@@ -293,8 +293,9 @@ class HtmlExtraction(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("objective tree is the same", err)
 
-    def test_plan_reads_the_weights_on_the_frozen_scale(self):
-        """r4575905185: a frozen syllabus whose weights are the page's (q*100/total, as certs/lpic-2.md) plans as keep."""
+    def lpi_root(self, root: Path) -> None:
+        """A repo root with a frozen certs/c.md and the HTML snapshot syllabi/c/v4.5.0.yaml of the same objectives,
+        the frozen weights on the page's scale (q*100/total, as certs/lpic-2.md stores them)."""
         import frontmatter
         page = self.page("<h3>Topic 200: Capacity Planning</h3>", self.objective("200.1", "Measure usage", "6"),
                          self.objective("200.2", "Predict needs", "2"),
@@ -307,18 +308,36 @@ class HtmlExtraction(unittest.TestCase):
                   ("201.1", "201 - Linux Kernel", 11.76, "Kernel components"),
                   ("201.2", "201 - Linux Kernel", 17.65, "Compiling a kernel"),
                   ("201.3", "201 - Linux Kernel", 23.53, "Runtime")]   # 17 questions: q*100/17, rounded
+        (root / "certs").mkdir()
+        (root / "syllabi" / "c").mkdir(parents=True)
+        post = frontmatter.Post("", cert="c", version="4.5.0", sources=["https://www.lpi.org/old-alias/"],
+                                topics=[{"id": i, "topic": t, "weight": w, "title": x} for i, t, w, x in frozen])
+        (root / "certs" / "c.md").write_text(frontmatter.dumps(post) + "\n", encoding="utf-8")
+        (root / "syllabi" / "c" / "v4.5.0.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
+
+    def test_plan_reads_the_weights_on_the_frozen_scale(self):
+        """r4575905185: a frozen syllabus whose weights are the page's share (as certs/lpic-2.md) plans as keep."""
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / "certs").mkdir()
-            (root / "syllabi" / "c").mkdir(parents=True)
-            post = frontmatter.Post("", cert="c", version="4.5.0", sources=[self.URL],
-                                    topics=[{"id": i, "topic": t, "weight": w, "title": x} for i, t, w, x in frozen])
-            (root / "certs" / "c.md").write_text(frontmatter.dumps(post) + "\n", encoding="utf-8")
-            (root / "syllabi" / "c" / "v4.5.0.yaml").write_text(cd.dump_yaml(snap), encoding="utf-8")
-            plan = cd.plan_cert(root, "c", {"target": "syllabi/c/v4.5.0.yaml"})
+            self.lpi_root(Path(tmp))
+            plan = cd.plan_cert(Path(tmp), "c", {"target": "syllabi/c/v4.5.0.yaml"})
         self.assertEqual(plan["impact"]["domains"]["weight_changed"], [])
         self.assertEqual(plan["counts"]["keep"], 5)
         self.assertEqual(sum(plan["counts"].values()), 5)
+
+    def test_the_report_says_page_for_a_page_source(self):
+        """r4575905192: headings and the flow node name the source's kind, not PDF."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.lpi_root(root)
+            (root / "docs" / "upgrades").mkdir(parents=True)
+            spec = {"upgrade": "c-4.5.0", "milestone": "v0.6.11", "issue": 235,
+                    "certs": {"c": {"target": "syllabi/c/v4.5.0.yaml", "upstream_base": "syllabi/c/v4.5.0.yaml"}}}
+            (root / "docs" / "upgrades" / "c.yaml").write_text(cd.dump_yaml(spec), encoding="utf-8")
+            report = cd.render(cd.plan(root, "docs/upgrades/c.yaml"))
+        self.assertIn("### What upstream changed (v4.5.0 page -> v4.5.0 page)", report)
+        self.assertIn("vs its own v4.5.0 page", report)
+        self.assertIn("c_page[", report)
+        self.assertNotIn("PDF", report)
 
     def test_cli_defaults_the_date_to_today(self):
         with tempfile.TemporaryDirectory() as tmp:

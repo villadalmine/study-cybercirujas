@@ -1520,8 +1520,8 @@ def _mermaid(p: dict) -> list[str]:
     lines = ["```mermaid", "flowchart LR"]
     for cert, c in p["certs"].items():
         src = c["target"].get("source") or {}
-        name, pin, _, _ = _source_parts(src)
-        lines.append(f'    {cert}_pdf["{name}<br/>{pin}'
+        name, pin, _, kind = _source_parts(src)
+        lines.append(f'    {cert}_{kind.lower()}["{name}<br/>{pin}'
                      f'<br/>sha256 {(src.get("sha256") or "")[:12]}"] -->|extract| {cert}_target["{c["target"]["file"]}"]')
         if "upstream" in c:
             same = "identical" if c["upstream"]["identical"] else "changed"
@@ -1580,9 +1580,9 @@ def render(p: dict) -> str:
             base_v, new_v = c["upstream_base"]["version"], c["target"]["version"]
             out += [f"- Upstream base: `{c['upstream_base']['file']}` v{base_v}, from "
                     f"[{bname}]({bsrc.get('url')}) @ `{bpin}`, {bkind} sha256 `{bsrc.get('sha256')}`",
-                    "", f"### What upstream changed (v{base_v} PDF -> v{new_v} PDF)", ""]
+                    "", f"### What upstream changed (v{base_v} {bkind} -> v{new_v} {kind})", ""]
             out += _diff_lines(c["upstream"])
-            out += ["", f"### Drift: frozen `{c['tracked']['file']}` vs its own v{base_v} PDF", ""]
+            out += ["", f"### Drift: frozen `{c['tracked']['file']}` vs its own v{base_v} {bkind}", ""]
             out += _diff_lines(c["drift"])
         out += ["", f"### Impact: frozen `{c['tracked']['file']}` -> v{c['target']['version']} (drives the classes)", ""]
         out += _diff_lines(c["impact"])
