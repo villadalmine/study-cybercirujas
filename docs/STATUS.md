@@ -137,7 +137,7 @@ Score 0-100 per topic and language, from every check that exists (`quality_weigh
 | `aws-clf` | 38 | 79.0 | 0 | 38 | 0 | 0 |
 | `az-900` | 22 | 79.0 | 0 | 22 | 0 | 0 |
 | `gcp-cdl` | 28 | 79.0 | 0 | 28 | 0 | 0 |
-| `nca-aiio` | 23 | 81.1 | 0 | 23 | 0 | 0 |
+| `nca-aiio` | 23 | 81.3 | 0 | 23 | 0 | 0 |
 | `mcpa` | 17 | 75.3 | 0 | 17 | 0 | 0 |
 | `ckne` | 22 | 80.6 | 0 | 22 | 0 | 0 |
 
