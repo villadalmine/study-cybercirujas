@@ -35,10 +35,10 @@
 # The student must find and fix both without lowering the design MTU.
 #
 # Runner contract (study-lab):
-#   ./lab.sh            -> same as "break"
-#   ./lab.sh break      -> build the fabric and break it (idempotent)
-#   ./lab.sh verify     -> exit 0 only if the fabric works as designed
-#   ./lab.sh cleanup    -> remove everything this lab created (idempotent)
+#   ./break_fix.sh            -> same as "break"
+#   ./break_fix.sh break      -> build the fabric and break it (idempotent)
+#   ./break_fix.sh verify     -> exit 0 only if the fabric works as designed
+#   ./break_fix.sh cleanup    -> remove everything this lab created (idempotent)
 #
 # References (official):
 #   NVIDIA DGX SuperPOD reference architecture (B200), network fabrics:
@@ -341,7 +341,7 @@ esac
 # 6) Confirm end to end, both directions, with DF:
 #      ip netns exec lab28-gpu  ping -c2 -M do -s 8972 10.100.0.21
 #      ip netns exec lab28-stor ping -c2 -M do -s 8972 10.100.0.11
-#      ./lab.sh verify      -> exit 0
+#      ./break_fix.sh verify      -> exit 0
 #
 # Takeaways for the exam and for production:
 #   * VLANs (802.1Q) segment traffic at L2; the tag on the wire, not the
