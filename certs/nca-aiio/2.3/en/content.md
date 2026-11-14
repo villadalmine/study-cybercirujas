@@ -124,8 +124,8 @@ For liquid cooling, ASHRAE defines facility water classes (W17, W27, W32, W40, W
 | 208 V 1φ 30 A | 6.2 kVA | ~5.0 kW | Legacy servers only |
 | 208 V 3φ 30 A | 10.8 kVA | ~8.6 kW | Not even one DGX H100 |
 | 208 V 3φ 60 A | 21.6 kVA | ~17.3 kW | 1 DGX B200 or 1 DGX H100 (with headroom) |
-| 415 V 3φ 32 A (EU, IEC 60309) | ~23 kVA | ~22 kW (local rules apply) | 2 DGX H100 (tight) |
-| 415 V 3φ 63 A | ~45 kVA | ~43 kW | ~4 DGX H100 per feed |
+| 415 V 3φ 32 A (EU, IEC 60309) | ~23 kVA | ~18.4 kW (local rules apply) | 1 DGX H100 (2 × 10.2 kW = 20.4 kW does not fit) |
+| 415 V 3φ 63 A | ~45 kVA | ~36.2 kW | 3 DGX H100 per feed (4 = 40.8 kW does not fit) |
 
 Calculation for 208 V 3φ 60 A: √3 × 208 × 48 A ≈ 17,290 W.
 
