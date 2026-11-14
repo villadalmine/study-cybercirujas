@@ -1,0 +1,12 @@
+cert: nca-aiio
+topic: '3.2'
+title: Describe AI cluster orchestration and job scheduling essentials
+provider: local
+resources:
+  vms:
+  - name: lab
+    os: debian-12
+    cpus: 2
+    ram_mb: 2048
+setup:
+- break_fix.sh
