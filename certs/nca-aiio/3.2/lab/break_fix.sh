@@ -257,7 +257,7 @@ do_verify() {
   ok "slurmctld is up."
 
   real_hw
-  conf_mem="$(sed -n "s/^NodeName=${node}.*RealMemory=\([0-9]*\).*/\1/p" "$cd/slurm.conf" | head -n1)"
+  conf_mem="$(sed -n "s/^NodeName=${node}.*RealMemory=\([0-9]*\).*/\1/Ip" "$cd/slurm.conf" | head -n1)"
   if [ -z "$conf_mem" ]; then
     fail "No RealMemory found for NodeName=${node} in $cd/slurm.conf."; rc=1
   elif [ "$conf_mem" -gt "$HW_MEM" ]; then
@@ -266,7 +266,7 @@ do_verify() {
     ok "slurm.conf RealMemory=${conf_mem} <= real ${HW_MEM} MiB."
   fi
 
-  if grep -Eq "^PartitionName=${PARTITION}\b.*State=(DOWN|INACTIVE|DRAIN)" "$cd/slurm.conf"; then
+  if grep -Eiq "^PartitionName=${PARTITION}\b.*State=(DOWN|INACTIVE|DRAIN)" "$cd/slurm.conf"; then
     fail "Partition '${PARTITION}' is still State=DOWN in slurm.conf: it will come back down on restart."; rc=1
   else
     ok "slurm.conf no longer forces '${PARTITION}' down."

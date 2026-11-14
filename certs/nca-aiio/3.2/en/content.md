@@ -281,7 +281,7 @@ Profiles are named `<compute slices>g.<memory>gb`:
 | GPU | Profiles (max instances) |
 |---|---|
 | A100 40GB | `1g.5gb` (7), `2g.10gb` (3), `3g.20gb` (2), `4g.20gb` (1), `7g.40gb` (1) |
-| A100 80GB | `1g.10gb` (7), `2g.20gb` (3), `3g.40gb` (2), `4g.40gb` (1), `7g.80gb` (1) |
+| A100 80GB | `1g.10gb` (7), `1g.20gb` (4), `2g.20gb` (3), `3g.40gb` (2), `4g.40gb` (1), `7g.80gb` (1) |
 | H100 80GB | `1g.10gb` (7), `1g.20gb` (4), `2g.20gb` (3), `3g.40gb` (2), `4g.40gb` (1), `7g.80gb` (1) |
 
 ### 5.3 MIG strategies in the GPU Operator
@@ -855,8 +855,8 @@ $ squeue -u alice
 $ sinfo -p batch
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 batch*       up 7-00:00:00      2  drain dgx[009,021]
-batch*       up 7-00:00:00     26  alloc dgx[001-008,010-020,022-028]
-batch*       up 7-00:00:00      4   idle dgx[029-032]
+batch*       up 7-00:00:00     28  alloc dgx[001-008,010-020,022-030]
+batch*       up 7-00:00:00      2   idle dgx[031-032]
 
 $ sinfo -R
 REASON               USER      TIMESTAMP           NODELIST
@@ -879,7 +879,7 @@ JobID           JobName    Elapsed      State AllocTRES
 481190       eval-sweep   02:13:44    RUNNING billing=224,cpu=224,gres/gpu=8,mem=1950G,node=1
 ```
 
-Reading the output: job 481233 is pending with reason `Resources` (not `Priority`), because only 4 nodes are idle and 2 are drained; `nlp` has consumed more than its share (EffectvUsage 0.712 vs NormShares 0.5), so its FairShare factor is lower than `vision`'s.
+Reading the output: job 481233 is pending with reason `Resources` (not `Priority`), because it needs 4 nodes and only 2 are idle (2 more are drained); `nlp` has consumed more than its share (EffectvUsage 0.712 vs NormShares 0.5), so its FairShare factor is lower than `vision`'s.
 
 ---
 
