@@ -38,7 +38,7 @@
 #   https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html#dgx-h100-component-descriptions
 #   https://docs.nvidia.com/dgx-superpod/reference-architecture-scalable-infrastructure-b200/latest/index.html
 #
-# Usage:  sudo ./lab.sh [break|verify|cleanup]     (default: break)
+# Usage:  sudo ./break_fix.sh [break|verify|cleanup]     (default: break)
 # =============================================================================
 
 set -u
@@ -380,7 +380,7 @@ esac
 #      sudo ip netns exec lab-host curl -m 3 http://10.10.2.2:9090/   # -> timeout (DPU drops it)
 #
 # 6) Check:
-#      sudo ./lab.sh verify    # all OK, exit code 0
+#      sudo ./break_fix.sh verify    # all OK, exit code 0
 #
 # Takeaway for the exam: a DPU is a programmable data-center infrastructure
 # processor (Arm cores + NIC + accelerators, programmed with DOCA). It
