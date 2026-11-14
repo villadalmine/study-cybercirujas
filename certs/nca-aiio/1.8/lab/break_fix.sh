@@ -113,7 +113,15 @@ preflight() {
     command -v python3 >/dev/null || die "python3 not found. Install it (dnf/apt install python3)."
   fi
   NPROC=$(nproc)
-  (( NPROC >= 2 )) || die "This VM has ${NPROC} vCPU. Give it at least 2 (ideally 4+) and retry."
+  # nproc does not see a CPU quota (a container's --cpus, a pod's CPU limit):
+  # EFF is what this machine really gives, nproc capped by the cgroup's cpu.max.
+  EFF=$NPROC
+  local q p
+  if read -r q p < /sys/fs/cgroup/cpu.max 2>/dev/null && [[ $q =~ ^[0-9]+$ && $p =~ ^[0-9]+$ ]]; then
+    q=$(( (q + p - 1) / p ))
+    (( q < EFF )) && EFF=$q
+  fi
+  (( EFF >= 2 )) || die "This machine gives ${EFF} CPU (nproc ${NPROC}, cgroup cpu.max). Give it at least 2 (ideally 4+) and retry."
   PY3=$(command -v python3)
 }
 
@@ -157,10 +165,31 @@ def cgroup_cpu_max():
     return "unknown"
 
 
+def quota_cpus():
+    """CPUs the cgroup quota allows: the tightest cpu.max from this cgroup up to the root, or None."""
+    best = None
+    try:
+        with open("/proc/self/cgroup") as fh:
+            path = next(l.strip().split("::", 1)[1] for l in fh if l.startswith("0::"))
+    except (OSError, StopIteration):
+        return None
+    while True:
+        try:
+            q, period = open(f"/sys/fs/cgroup{path}/cpu.max").read().split()
+            if q != "max":
+                c = max(1, -(-int(q) // int(period)))
+                best = c if best is None else min(best, c)
+        except (OSError, ValueError):
+            pass
+        if path in ("/", ""):
+            return best
+        path = os.path.dirname(path)
+
+
 def main():
     allowed = sorted(os.sched_getaffinity(0))
     req = os.environ.get("BENCH_WORKERS", "auto").strip()
-    workers = len(allowed) if req == "auto" else max(1, int(req))
+    workers = min(len(allowed), quota_cpus() or len(allowed)) if req == "auto" else max(1, int(req))
     tasks = int(os.environ.get("BENCH_TASKS", "32"))
 
     t0 = time.perf_counter()
@@ -260,13 +289,13 @@ do_break() {
   # The ceiling: the same work on every CPU this machine really gives us. A VM
   # with N vCPUs gets close to N; a container capped by a CPU quota it cannot
   # see in nproc gets less. The target is set from what was measured here.
-  info "Measuring what all ${NPROC} vCPUs can do on this machine..."
-  BENCH_WORKERS=auto BENCH_TASKS="$tasks" BENCH_ITERS=1000000 BENCH_OUT="$CEILING" \
+  info "Measuring what ${EFF} CPUs can do on this machine (nproc ${NPROC})..."
+  BENCH_WORKERS="$EFF" BENCH_TASKS="$tasks" BENCH_ITERS=1000000 BENCH_OUT="$CEILING" \
     "$PY3" "$BENCH" >/dev/null
   chmod 0444 "$CEILING"
   local reach; reach=$(target_speedup)
   "$PY3" -c "import sys; sys.exit(0 if float('${reach}') >= 1.2 else 1)" \
-    || warn "All vCPUs together are barely faster than one here (a CPU quota nproc does not show?). The speedup target is ${reach}x; the affinity, worker and quota checks still apply."
+    || die "${EFF} CPUs together are barely faster than one here (target would be ${reach}x). This lab needs CPUs that really run in parallel; run 'sudo $0 reset' and use a VM with 2+ dedicated vCPUs."
 
   systemctl daemon-reload
   info "Running the production service once..."
@@ -287,7 +316,7 @@ ${c_ylw}==================== INCIDENT TICKET ====================${c_rst}
    * After you fix the obvious part, it is STILL slow. Keep digging.
 
  GOAL:
-   * ${UNIT} uses all ${NPROC} vCPUs and reaches a speedup of at least
+   * ${UNIT} uses all ${EFF} CPUs this machine gives it and reaches a speedup of at least
      $(target_speedup)x over the single-core baseline.
    * Fix it through configuration only. Do NOT edit ${BENCH}, do NOT
      change BENCH_TASKS/BENCH_ITERS (the checksum must match the baseline),
@@ -325,10 +354,10 @@ Hint 4: systemd does not see edited files until you run 'systemctl daemon-reload
 EOF
 }
 
-# The speedup verify asks for: 0.45 x min(N, 8) as on a real VM, but never
+# The speedup verify asks for: 0.45 x min(EFF, 8) as on a real VM, but never
 # more than 75% of what all CPUs measured at break time (the ceiling).
 target_speedup() {
-  "$PY3" - "$BASELINE" "$CEILING" "$NPROC" <<'PY'
+  "$PY3" - "$BASELINE" "$CEILING" "$EFF" <<'PY'
 import json, sys
 b = json.load(open(sys.argv[1]))
 n = int(sys.argv[3])
@@ -363,13 +392,14 @@ do_verify() {
     die "The service failed. Read the journal above."
   fi
 
-  "$PY3" - "$BASELINE" "$RESULT" "$NPROC" "$start" "$(target_speedup)" <<'PY'
+  "$PY3" - "$BASELINE" "$RESULT" "$NPROC" "$start" "$(target_speedup)" "$EFF" <<'PY'
 import json, sys
 G, R, X = "\033[32m", "\033[31m", "\033[0m"
 b = json.load(open(sys.argv[1]))
 r = json.load(open(sys.argv[2]))
 n = int(sys.argv[3])
 started = float(sys.argv[4])
+eff = int(sys.argv[6])
 good = True
 
 def check(cond, msg_ok, msg_bad):
@@ -385,14 +415,14 @@ check(r["tasks"] == b["tasks"] and r["iters"] == b["iters"] and r["checksum"] ==
 check(len(r["allowed_cpus"]) == n,
       f"Service may run on all {n} CPUs: {r['allowed_cpus']}.",
       f"Service may only run on CPUs {r['allowed_cpus']} (scheduler layer: CPU affinity).")
-check(r["workers"] >= n,
+check(r["workers"] >= eff,
       f"Application starts {r['workers']} workers.",
       f"Application starts only {r['workers']} worker(s) (application layer).")
 cpu_max = r.get("cpu_max", "unknown")
 quota_ok = cpu_max.startswith("max") or cpu_max == "unknown"
 if not quota_ok:
     q, period = cpu_max.split()
-    quota_ok = int(q) / int(period) >= n * 0.95
+    quota_ok = int(q) / int(period) >= eff * 0.95
 check(quota_ok, f"cgroup cpu.max = '{cpu_max}' (no throttling).",
       f"cgroup cpu.max = '{cpu_max}': the service is throttled (cgroup layer: CPUQuota).")
 
@@ -403,7 +433,7 @@ p = (1 - 1 / S) / (1 - 1 / eff_n) if S > 1 and eff_n > 1 else 0.0
 print()
 print(f"  T1 (baseline)        : {b['elapsed_s']:.2f} s")
 print(f"  Tn (service, n={n:<3}) : {r['elapsed_s']:.2f} s")
-print(f"  Speedup S = T1/Tn    : {S:.2f}x   (target >= {target:.2f}x, ideal {n}x)")
+print(f"  Speedup S = T1/Tn    : {S:.2f}x   (target >= {target:.2f}x, ideal {eff}x)")
 print(f"  Amdahl parallel frac : p ~ {min(p,1.0):.2f}")
 print()
 check(S >= target, "Throughput scales with cores.",
@@ -465,8 +495,8 @@ esac
 #
 #  STEP 4. Fix the APPLICATION layer (worker count).
 #    sudo sed -i 's/^BENCH_WORKERS=1$/BENCH_WORKERS=auto/' /etc/lab-gpucpu/bench.env
-#  "auto" = one worker per CPU the process is allowed to use
-#  (os.sched_getaffinity). Note: with CPUAffinity=0 still in place, "auto"
+#  "auto" = one worker per CPU the process may use: its CPU affinity
+#  (os.sched_getaffinity) capped by any cgroup CPU quota above it. Note: with CPUAffinity=0 still in place, "auto"
 #  still yields 1 worker, and a hard-coded "BENCH_WORKERS=8" would only
 #  oversubscribe CPU 0: more threads than cores does not add compute
 #  throughput on a CPU. A GPU, by contrast, WANTS many more threads than
@@ -478,12 +508,13 @@ esac
 #  sensitive service. Applied to a throughput job, it throws away every
 #  core but one.)
 #
-#  STEP 6. Reload and re-test. It is better but still far from Nx.
+#  STEP 6. Reload and re-test. It is still as slow as before.
 #    sudo systemctl daemon-reload
 #    sudo systemctl start lab-gpucpu-bench.service
 #    sudo ./break_fix.sh status
-#  mpstat now shows ALL CPUs busy, but each at about 100/N %: the cgroup
-#  is throttling. Confirm while it runs:
+#  Every CPU is allowed now, but "auto" still starts 1 worker: the unit's
+#  cgroup grants 1 CPU of time per second. (A hard-coded worker count would
+#  spread over all CPUs at about 100/N % each: the cgroup throttling.) Confirm:
 #    cat /sys/fs/cgroup/system.slice/lab-gpucpu-bench.service/cpu.max   -> 100000 100000
 #    cat /sys/fs/cgroup/system.slice/lab-gpucpu-bench.service/cpu.stat  -> nr_throttled grows
 #
