@@ -224,7 +224,7 @@ flowchart TD
 
 | Step | Script or workflow | Blocks | Warns |
 | :--- | :--- | :--- | :--- |
-| The vendor document is frozen with its hash | `scripts/curriculum_diff.py extract` | refuses a tree with no domains or weights not summing to 100 | |
+| The vendor document is frozen with its hash | `scripts/curriculum_diff.py extract` | refuses a tree with no domains or weights not summing to 100 (`--html`, LPI pages: no 100 total, but an objective with no weight is refused) | |
 | The upgrade window names the frozen snapshot and the milestone | `curriculum_diff.py window <spec>` (refuses when the tracker's version or URL is not the snapshot's) | `check_curriculum_consistency.py` fails without it | |
 | The committed plan and report are what their inputs produce | `tests/test_curriculum_diff.py`, run by `make verify-ci` | in `verify.yml` | |
 | An upgrade PR changes only planned files | `curriculum_diff.py guard --base origin/main` | | run by hand; its logic is unit-tested, but no workflow runs it on each PR |

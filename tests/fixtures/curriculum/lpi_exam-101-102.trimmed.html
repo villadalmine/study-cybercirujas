@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!-- Trimmed from https://www.lpi.org/our-certifications/exam-101-102-objectives/ (read 2026-11-14, sha256 56f56643...): the
+     table of contents, Topic 101 whole, Topic 104 from 104.3 to 104.5 (with the 104.4 Removed placeholder) and the
+     closing Future Change Considerations, markup as served. Objectives (c) Linux Professional Institute. -->
+<html lang="en-US"><head><meta charset="UTF-8"><title>LPIC-1 Exam 101 and 102 Objectives</title>
+<script>var toc = "Topic 999: Not a topic";</script><style>.x{content:"101.9 Not an objective"}</style></head><body>
+				<div id="rdp-we-mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div id="rdp-we-toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="rdp-we-toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="rdp-we-mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Version_Information"><span class="tocnumber">2</span> <span class="toctext">Version Information</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Exams"><span class="tocnumber">3</span> <span class="toctext">Exams</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Addenda"><span class="tocnumber">4</span> <span class="toctext">Addenda</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Translations_of_Objectives"><span class="tocnumber">5</span> <span class="toctext">Translations of Objectives</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Objectives:_Exam_101"><span class="tocnumber">6</span> <span class="toctext">Objectives: Exam 101</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Topic_101:_System_Architecture"><span class="tocnumber">6.1</span> <span class="toctext"><i>Topic 101: System Architecture</i></span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#101.1_Determine_and_configure_hardware_settings"><span class="tocnumber">6.1.1</span> <span class="toctext"><span>101.1 Determine and configure hardware settings</span></span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#101.2_Boot_the_system"><span class="tocnumber">6.1.2</span> <span class="toctext"><span>101.2 Boot the system</span></span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#101.3_Change_runlevels_/_boot_targets_and_shutdown_or_reboot_system"><span class="tocnumber">6.1.3</span> <span class="toctext"><span>101.3 Change runlevels / boot targets and shutdown or reboot system </span></span></a></li>
+</ul>
+</li>
+</li>
+<li class="toclevel-2 tocsection-27"><a href="#Topic_104:_Devices,_Linux_Filesystems,_Filesystem_Hierarchy_Standard"><span class="tocnumber">6.4</span> <span class="toctext"><i>Topic 104: Devices, Linux Filesystems, Filesystem Hierarchy Standard</i></span></a>
+<ul>
+<li class="toclevel-3 tocsection-30"><a href="#104.3_Control_mounting_and_unmounting_of_filesystems"><span class="tocnumber">6.4.3</span> <span class="toctext"><span>104.3 Control mounting and unmounting of filesystems</span></span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#104.4_Removed"><span class="tocnumber">6.4.4</span> <span class="toctext"><span>104.4 Removed</span></span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#104.5_Manage_file_permissions_and_ownership"><span class="tocnumber">6.4.5</span> <span class="toctext"><span>104.5 Manage file permissions and ownership</span></span></a></li>
+</ul>
+</div>
+<div class="mw-heading mw-heading2"><h2 id="rdp-we-Objectives:_Exam_101">Objectives: Exam 101</h2></div>
+<div class="mw-heading mw-heading3"><h3 id="rdp-we-Topic_101:_System_Architecture"><i>Topic 101: System Architecture</i></h3></div>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-101.1_Determine_and_configure_hardware_settings"><span style="color:navy">101.1 Determine and configure hardware settings</span></h4></div>
+<table style="">
+<tbody><tr>
+<td style="background:#dadada">
+<p><b>Weight</b>
+</p>
+</td>
+<td style="background:#eaeaea">2
+</td></tr>
+<tr>
+<td style="background:#dadada; padding-right:1em">
+<p><b>Description</b>
+</p>
+</td>
+<td style="background:#eaeaea">
+<p>Candidates should be able to determine and configure fundamental system hardware.
+</p>
+</td></tr></tbody></table>
+<p><b>Key Knowledge Areas:</b>
+</p>
+<ul><li>Enable and disable integrated peripherals.</li>
+<li>Differentiate between the various types of mass storage devices.</li>
+<li>Determine hardware resources for devices.</li>
+<li>Tools and utilities to list various hardware information (e.g. lsusb, lspci, etc.).</li>
+<li>Tools and utilities to manipulate USB devices.</li>
+<li>Conceptual understanding of sysfs, udev and dbus.</li></ul>
+<p><b>The following is a partial list of the used files, terms and utilities:</b>
+</p>
+<ul><li>/sys/</li>
+<li>/proc/</li>
+<li>/dev/</li>
+<li>modprobe</li>
+<li>lsmod</li>
+<li>lspci</li>
+<li>lsusb</li></ul>
+<p><br />
+</p>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-101.2_Boot_the_system"><span style="color:navy">101.2 Boot the system</span></h4></div>
+<table style="">
+<tbody><tr>
+<td style="background:#dadada">
+<p><b>Weight</b>
+</p>
+</td>
+<td style="background:#eaeaea">3
+</td></tr>
+<tr>
+<td style="background:#dadada; padding-right:1em">
+<p><b>Description</b>
+</p><p><br />
+</p>
+</td>
+<td style="background:#eaeaea">
+<p>Candidates should be able to guide the system through the booting process.
+</p>
+</td></tr></tbody></table>
+<p><b>Key Knowledge Areas:</b>
+</p>
+<ul><li>Provide common commands to the boot loader and options to the kernel at boot time.</li>
+<li>Demonstrate knowledge of the boot sequence from BIOS/UEFI to boot completion.</li>
+<li>Understanding of SysVinit and systemd.</li>
+<li>Awareness of Upstart.</li>
+<li>Check boot events in the log files.</li></ul>
+<p><b>The following is a partial list of the used files, terms and utilities:</b>
+</p>
+<ul><li>dmesg</li>
+<li>journalctl</li>
+<li>BIOS</li>
+<li>UEFI</li>
+<li>bootloader</li>
+<li>kernel</li>
+<li>initramfs</li>
+<li>init</li>
+<li>SysVinit</li>
+<li>systemd</li></ul>
+<p><br />
+<br />
+</p>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-101.3_Change_runlevels_/_boot_targets_and_shutdown_or_reboot_system"><span id="rdp-we-101.3_Change_runlevels_.2F_boot_targets_and_shutdown_or_reboot_system"></span><span style="color:navy">101.3 Change runlevels / boot targets and shutdown or reboot system </span></h4></div>
+<table style="">
+<tbody><tr>
+<td style="background:#dadada">
+<p><b>Weight</b>
+</p>
+</td>
+<td style="background:#eaeaea">3
+</td></tr>
+<tr>
+<td style="background:#dadada; padding-right:1em">
+<p><b>Description</b>
+</p>
+</td>
+<td style="background:#eaeaea">
+<p>Candidates should be able to manage the SysVinit runlevel or systemd boot target of the system. This objective includes changing to single user mode, shutdown or rebooting the system. Candidates should be able to alert users before switching runlevels / boot targets and properly terminate processes. This objective also includes setting the default SysVinit runlevel or systemd boot target. It also includes awareness of Upstart as an alternative to SysVinit or systemd.
+</p>
+</td></tr></tbody></table>
+<p><b>Key Knowledge Areas:</b>
+</p>
+<ul><li>Set the default runlevel or boot target.</li>
+<li>Change between runlevels / boot targets including single user mode.</li>
+<li>Shutdown and reboot from the command line.</li>
+<li>Alert users before switching runlevels / boot targets or other major system events.</li>
+<li>Properly terminate processes.</li>
+<li>Awareness of acpid.</li></ul>
+<p><b>The following is a partial list of the used files, terms and utilities:</b>
+</p>
+<ul><li>/etc/inittab</li>
+<li>shutdown</li>
+<li>init</li>
+<li>/etc/init.d/</li>
+<li>telinit</li>
+<li>systemd</li>
+<li>systemctl</li>
+<li>/etc/systemd/</li>
+<li>/usr/lib/systemd/</li>
+<li>wall</li></ul>
+<p><br />
+</p>
+<div class="mw-heading mw-heading3"><h3 id="rdp-we-Topic_104:_Devices,_Linux_Filesystems,_Filesystem_Hierarchy_Standard"><span id="rdp-we-Topic_104:_Devices.2C_Linux_Filesystems.2C_Filesystem_Hierarchy_Standard"></span><i>Topic 104: Devices, Linux Filesystems, Filesystem Hierarchy Standard</i></h3></div>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-104.3_Control_mounting_and_unmounting_of_filesystems"><span style="color:navy">104.3 Control mounting and unmounting of filesystems</span></h4></div>
+<table style="">
+<tbody><tr>
+<td style="background:#dadada">
+<p><b>Weight</b>
+</p>
+</td>
+<td style="background:#eaeaea">3
+</td></tr>
+<tr>
+<td style="background:#dadada; padding-right:1em">
+<p><b>Description</b>
+</p>
+</td>
+<td style="background:#eaeaea">
+<p>Candidates should be able to configure the mounting of a filesystem.
+</p>
+</td></tr></tbody></table>
+<p><b>Key Knowledge Areas:</b>
+</p>
+<ul><li>Manually mount and unmount filesystems.</li>
+<li>Configure filesystem mounting on bootup.</li>
+<li>Configure user mountable removable filesystems.</li>
+<li>Use of labels and UUIDs for identifying and mounting file systems.</li>
+<li>Awareness of systemd mount units.</li></ul>
+<p><b>The following is a partial list of the used files, terms and utilities:</b>
+</p>
+<ul><li>/etc/fstab</li>
+<li>/media/</li>
+<li>mount</li>
+<li>umount</li>
+<li>blkid</li>
+<li>lsblk</li></ul>
+<p><br />
+</p>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-104.4_Removed"><span style="color:navy">104.4 Removed</span></h4></div>
+<p><br />
+</p>
+<div class="mw-heading mw-heading4"><h4 id="rdp-we-104.5_Manage_file_permissions_and_ownership"><span style="color:navy">104.5 Manage file permissions and ownership</span></h4></div>
+<table style="">
+<tbody><tr>
+<td style="background:#dadada">
+<p><b>Weight</b>
+</p>
+</td>
+<td style="background:#eaeaea">3
+</td></tr>
+<tr>
+<td style="background:#dadada; padding-right:1em">
+<p><b>Description</b>
+</p>
+</td>
+<td style="background:#eaeaea">
+<p>Candidates should be able to control file access through the proper use of permissions and ownerships. 
+</p>
+</td></tr></tbody></table>
+<p><b>Key Knowledge Areas:</b>
+</p>
+<ul><li>Manage access permissions on regular and special files as well as directories.</li>
+<li>Use access modes such as suid, sgid and the sticky bit to maintain security.</li>
+<li>Know how to change the file creation mask.</li>
+<li>Use the group field to grant file access to group members.</li></ul>
+<p><b>The following is a partial list of the used files, terms and utilities:</b>
+</p>
+<ul><li>chmod</li>
+<li>umask</li>
+<li>chown</li>
+<li>chgrp</li></ul>
+<p><br />
+</p>
+<div class="mw-heading mw-heading2"><h2 id="rdp-we-Future_Change_Considerations">Future Change Considerations</h2></div>
+<p>Future changes to the objective will/may include:
+</p>
+<ul><li>Remove ifup/ifdown and legacy net-tools command</li>
+<li>Remove TCP wrappers</li>
+<li>103.2: textutils became part of coreutils</li>
+<li>reword "Find packages containing specific files or libraries which may or may not be installed." (maybe "Find packages containing specific files or libraries that are installed.")</li>
+</div></div></body></html>
