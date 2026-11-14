@@ -356,7 +356,7 @@ topics:
   - https://kubernetes.io/docs/home/
   - https://developer.nvidia.com/blog/maximizing-gpu-utilization-with-nvidia-runai-and-nvidia-nim/
   - https://www.nvidia.com/en-us/technologies/multi-instance-gpu/
-  status: pending
+  status: generated
   title: Articulate the key measures and criteria related to monitoring GPUs
   topic: 3 - AI Operations
   weight: 5.5
