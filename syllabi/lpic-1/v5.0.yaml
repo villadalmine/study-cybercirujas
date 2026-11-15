@@ -1,0 +1,229 @@
+cert: lpic-1
+version: '5.0'
+source:
+  url: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+  sha256: 28ef9305618980d8a06789ab876f49d33d74f3b2f9c800caecf06113b48abc7d
+  committed: '2026-11-15'
+extraction:
+  tool: scripts/curriculum_diff.py extract --html
+  method: 'LPI objectives page: `Topic NNN` sections, `NNN.N` objectives and their Weight (kept as questions); table of contents and `Removed` placeholders skipped; weight = share of all questions in percent, domains by largest remainder in hundredths'
+tree_sha256: 6af4b498b7498cbe3b8d63a8b440444a47fa48c6dfc1589203a8c54f53ae13d2
+domains:
+- id: '101'
+  name: System Architecture
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '101.1'
+    text: Determine and configure hardware settings
+    weight: 1.67
+    questions: 2
+  - id: '101.2'
+    text: Boot the system
+    weight: 2.5
+    questions: 3
+  - id: '101.3'
+    text: Change runlevels / boot targets and shutdown or reboot system
+    weight: 2.5
+    questions: 3
+- id: '102'
+  name: Linux Installation and Package Management
+  weight: 10
+  questions: 12
+  objectives:
+  - id: '102.1'
+    text: Design hard disk layout
+    weight: 1.67
+    questions: 2
+  - id: '102.2'
+    text: Install a boot manager
+    weight: 1.67
+    questions: 2
+  - id: '102.3'
+    text: Manage shared libraries
+    weight: 0.83
+    questions: 1
+  - id: '102.4'
+    text: Use Debian package management
+    weight: 2.5
+    questions: 3
+  - id: '102.5'
+    text: Use RPM and YUM package management
+    weight: 2.5
+    questions: 3
+  - id: '102.6'
+    text: Linux as a virtualization guest
+    weight: 0.83
+    questions: 1
+- id: '103'
+  name: GNU and Unix Commands
+  weight: 21.67
+  questions: 26
+  objectives:
+  - id: '103.1'
+    text: Work on the command line
+    weight: 3.33
+    questions: 4
+  - id: '103.2'
+    text: Process text streams using filters
+    weight: 1.67
+    questions: 2
+  - id: '103.3'
+    text: Perform basic file management
+    weight: 3.33
+    questions: 4
+  - id: '103.4'
+    text: Use streams, pipes and redirects
+    weight: 3.33
+    questions: 4
+  - id: '103.5'
+    text: Create, monitor and kill processes
+    weight: 3.33
+    questions: 4
+  - id: '103.6'
+    text: Modify process execution priorities
+    weight: 1.67
+    questions: 2
+  - id: '103.7'
+    text: Search text files using regular expressions
+    weight: 2.5
+    questions: 3
+  - id: '103.8'
+    text: Basic file editing
+    weight: 2.5
+    questions: 3
+- id: '104'
+  name: Devices, Linux Filesystems, Filesystem Hierarchy Standard
+  weight: 11.67
+  questions: 14
+  objectives:
+  - id: '104.1'
+    text: Create partitions and filesystems
+    weight: 1.67
+    questions: 2
+  - id: '104.2'
+    text: Maintain the integrity of filesystems
+    weight: 1.67
+    questions: 2
+  - id: '104.3'
+    text: Control mounting and unmounting of filesystems
+    weight: 2.5
+    questions: 3
+  - id: '104.5'
+    text: Manage file permissions and ownership
+    weight: 2.5
+    questions: 3
+  - id: '104.6'
+    text: Create and change hard and symbolic links
+    weight: 1.67
+    questions: 2
+  - id: '104.7'
+    text: Find system files and place files in the correct location
+    weight: 1.67
+    questions: 2
+- id: '105'
+  name: Shells and Shell Scripting
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '105.1'
+    text: Customize and use the shell environment
+    weight: 3.33
+    questions: 4
+  - id: '105.2'
+    text: Customize or write simple scripts
+    weight: 3.33
+    questions: 4
+- id: '106'
+  name: User Interfaces and Desktops
+  weight: 3.33
+  questions: 4
+  objectives:
+  - id: '106.1'
+    text: Install and configure X11
+    weight: 1.67
+    questions: 2
+  - id: '106.2'
+    text: Graphical Desktops
+    weight: 0.83
+    questions: 1
+  - id: '106.3'
+    text: Accessibility
+    weight: 0.83
+    questions: 1
+- id: '107'
+  name: Administrative Tasks
+  weight: 10
+  questions: 12
+  objectives:
+  - id: '107.1'
+    text: Manage user and group accounts and related system files
+    weight: 4.17
+    questions: 5
+  - id: '107.2'
+    text: Automate system administration tasks by scheduling jobs
+    weight: 3.33
+    questions: 4
+  - id: '107.3'
+    text: Localisation and internationalisation
+    weight: 2.5
+    questions: 3
+- id: '108'
+  name: Essential System Services
+  weight: 10
+  questions: 12
+  objectives:
+  - id: '108.1'
+    text: Maintain system time
+    weight: 2.5
+    questions: 3
+  - id: '108.2'
+    text: System logging
+    weight: 3.33
+    questions: 4
+  - id: '108.3'
+    text: Mail Transfer Agent (MTA) basics
+    weight: 2.5
+    questions: 3
+  - id: '108.4'
+    text: Manage printers and printing
+    weight: 1.67
+    questions: 2
+- id: '109'
+  name: Networking Fundamentals
+  weight: 11.66
+  questions: 14
+  objectives:
+  - id: '109.1'
+    text: Fundamentals of internet protocols
+    weight: 3.33
+    questions: 4
+  - id: '109.2'
+    text: Persistent network configuration
+    weight: 3.33
+    questions: 4
+  - id: '109.3'
+    text: Basic network troubleshooting
+    weight: 3.33
+    questions: 4
+  - id: '109.4'
+    text: Configure client side DNS
+    weight: 1.67
+    questions: 2
+- id: '110'
+  name: Security
+  weight: 8.33
+  questions: 10
+  objectives:
+  - id: '110.1'
+    text: Perform security administration tasks
+    weight: 2.5
+    questions: 3
+  - id: '110.2'
+    text: Setup host security
+    weight: 2.5
+    questions: 3
+  - id: '110.3'
+    text: Securing data with encryption
+    weight: 3.33
+    questions: 4

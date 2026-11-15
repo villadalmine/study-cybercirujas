@@ -12,6 +12,7 @@ what the upgrade cost. The first real use is **CKA & CKAD v1.37** (milestone *CK
 | [cka-ckad-1.37.md](cka-ckad-1.37.md) | the same plan as a report: counts, flow diagram, rules, diffs, per-topic table, sections and lines | `scripts/curriculum_diff.py render` |
 | [cks-1.37.yaml](cks-1.37.yaml), [cks-1.37.plan.json](cks-1.37.plan.json), [cks-1.37.md](cks-1.37.md), [cks-1.37.pins.yaml](cks-1.37.pins.yaml) | the same three for **CKS v1.37** (milestone *v0.6.9*, [#287](https://github.com/villadalmine/study-cybercirujas/issues/287)), and the pins its version bump reads | a person / `plan` / `render` / `scripts/upgrade_pins.py` |
 | [ckne-ga.yaml](ckne-ga.yaml), [ckne-ga.plan.json](ckne-ga.plan.json), [ckne-ga.md](ckne-ga.md), [ckne-ga.pins.yaml](ckne-ga.pins.yaml) | the same three for **CKNE GA** (beta → curriculum of 2026-10-01, milestone *v0.6.10*, [#285](https://github.com/villadalmine/study-cybercirujas/issues/285)), and the pins the switch PR's citation fix stamps | a person / `plan` / `render` / a person |
+| [lpic-canonical-pages.yaml](lpic-canonical-pages.yaml), [lpic-canonical-pages.plan.json](lpic-canonical-pages.plan.json), [lpic-canonical-pages.md](lpic-canonical-pages.md), [lpic-canonical-pages.pins.yaml](lpic-canonical-pages.pins.yaml) | the same three for **LPIC-1 5.0 and LPIC-2 4.5.0** (alias objective pages → the canonical ones, milestone *v0.6.11*, [#235](https://github.com/villadalmine/study-cybercirujas/issues/235)), and the pins the switch PR's citation fix stamps | a person / `plan` / `render` / a person |
 | this README | the process, the proof, phase 2, efficiency and cost | a person |
 
 The snapshots the plan reads are in `syllabi/` (`syllabi/cka/v1.37.yaml` and the others), frozen from the official PDFs.
@@ -94,6 +95,36 @@ its title moves and its checks re-run. The PDF puts *Observability* before *Netw
 ids stay (see *Topic ids at the switch*), each topic's *Maps to* records the PDF position. No model is needed: the
 switch is `curriculum_diff.py switch docs/upgrades/ckne-ga.yaml`, then `make quality CERT=ckne`. Two false positives of
 this run were fixed in the tool first (see *Lessons*).
+
+## Result for the LPIC canonical objective pages (2026-11-15)
+
+The fourth run, and the first from LPI's HTML pages (`extract --html`, #350). No version moves: LPIC-1 stays 5.0 and
+LPIC-2 4.5.0. What moves is the objectives document: the catalog pins the alias pages `exam-101-objectives` and
+`exam-201-objectives`, which redirect to the canonical `exam-101-102-objectives` and `exam-201-202-objectives`, and
+`certs/lpic-1.md` / `certs/lpic-2.md` still list `exam-102-objectives` / `exam-202-objectives`, which now redirect to the
+LPI home page. `check_pr` treats the move to the canonical page as an exam-version change, so the switch needs this spec
+on the base ([#235](https://github.com/villadalmine/study-cybercirujas/issues/235)). **No window**: `window` exists to
+let citations name a newer version while the upgrade is open, and here the version does not change, so there is nothing
+to open; as for CKNE GA, the citations move in the switch PR, after `switch`, with the pins file
+([lpic-canonical-pages.pins.yaml](lpic-canonical-pages.pins.yaml), written by a person: date, tool, and what each URL
+said live). No `upstream_base`: there is no earlier snapshot of these pages.
+
+| Cert | keep | revalidate | regenerate | new | retire | topic files | planned | sections | version lines (curriculum / label / technical) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| lpic-1 | 0 | 42 | 0 | 0 | 0 | 336 | 267 | 112 | 0 / 0 / 322 |
+| lpic-2 | 41 | 0 | 0 | 0 | 0 | 9 | 4 | 0 | 0 / 0 / 8 |
+
+No objective text changes in either cert: all 83 topics match their objective at similarity 1.0, so `switch` rewrites
+no topic title and no `lab.yaml` title. **LPIC-2** keeps every domain weight. **LPIC-1 revalidates all 42 topics for
+weight alone**, and the weights that are wrong are ours: the 2026-08-11 snapshot summed 101-105 to 100 on a /64 scale and
+left 106-110 at 0 (`System Architecture 12.51% -> 6.67%`, `Security 0% -> 8.33%`); the page gives each objective a
+question count, 120 over both exams, which the snapshot keeps as `questions` and turns into percentages. At the switch
+each `revalidate` topic gets its `revalidated:` block and `make quality CERT=lpic-1` re-runs the checks; the 112 listed
+sections are headings of the files that quote a weight, a scope and not an edit list. The 322 + 8 technical lines name
+the version (`5.0`, `4.5.0`) that does not move: nothing to rewrite. `switch` does not rewrite each topic's `weight:`
+in `certs/lpic-1.md` (#124), and catalog `tracked_version` for lpic-2 becomes the snapshot's `4.5.0` (the frozen file's
+spelling; the catalog says `4.5`). The page sha256 changes whenever LPI's cache is rebuilt (cookie expiry, nonce, cache
+timestamps in the HTML), so `extract --html --check` can say STALE with the same `tree_sha256`; the tool prints that.
 
 ## Sources, pinned by commit
 

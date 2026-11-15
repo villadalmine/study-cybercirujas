@@ -1,0 +1,240 @@
+cert: lpic-2
+version: 4.5.0
+source:
+  url: https://www.lpi.org/our-certifications/exam-201-202-objectives/
+  sha256: 3fe89bac36f1f4253e58aaadcfb474eb405fcd5c6da8dcbf816a0a5ae3aa21be
+  committed: '2026-11-15'
+extraction:
+  tool: scripts/curriculum_diff.py extract --html
+  method: 'LPI objectives page: `Topic NNN` sections, `NNN.N` objectives and their Weight (kept as questions); table of contents and `Removed` placeholders skipped; weight = share of all questions in percent, domains by largest remainder in hundredths'
+tree_sha256: 10bbc865edee97fc6977b430b9d9b6984545c7cb263c1ac1133c65f11aa51fd9
+domains:
+- id: '200'
+  name: Capacity Planning
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '200.1'
+    text: Measure and Troubleshoot Resource Usage
+    weight: 5
+    questions: 6
+  - id: '200.2'
+    text: Predict Future Resource Needs
+    weight: 1.67
+    questions: 2
+- id: '201'
+  name: Linux Kernel
+  weight: 7.5
+  questions: 9
+  objectives:
+  - id: '201.1'
+    text: Kernel components
+    weight: 1.67
+    questions: 2
+  - id: '201.2'
+    text: Compiling a Linux kernel
+    weight: 2.5
+    questions: 3
+  - id: '201.3'
+    text: Kernel runtime management and troubleshooting
+    weight: 3.33
+    questions: 4
+- id: '202'
+  name: System Startup
+  weight: 7.5
+  questions: 9
+  objectives:
+  - id: '202.1'
+    text: Customizing system startup
+    weight: 2.5
+    questions: 3
+  - id: '202.2'
+    text: System recovery
+    weight: 3.33
+    questions: 4
+  - id: '202.3'
+    text: Alternate Bootloaders
+    weight: 1.67
+    questions: 2
+- id: '203'
+  name: Filesystem and Devices
+  weight: 7.5
+  questions: 9
+  objectives:
+  - id: '203.1'
+    text: Operating the Linux filesystem
+    weight: 3.33
+    questions: 4
+  - id: '203.2'
+    text: Maintaining a Linux filesystem
+    weight: 2.5
+    questions: 3
+  - id: '203.3'
+    text: Creating and configuring filesystem options
+    weight: 1.67
+    questions: 2
+- id: '204'
+  name: Advanced Storage Device Administration
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '204.1'
+    text: Configuring RAID
+    weight: 2.5
+    questions: 3
+  - id: '204.2'
+    text: Adjusting Storage Device Access
+    weight: 1.67
+    questions: 2
+  - id: '204.3'
+    text: Logical Volume Manager
+    weight: 2.5
+    questions: 3
+- id: '205'
+  name: Networking Configuration
+  weight: 9.17
+  questions: 11
+  objectives:
+  - id: '205.1'
+    text: Basic networking configuration
+    weight: 2.5
+    questions: 3
+  - id: '205.2'
+    text: Advanced Network Configuration
+    weight: 3.33
+    questions: 4
+  - id: '205.3'
+    text: Troubleshooting network issues
+    weight: 3.33
+    questions: 4
+- id: '206'
+  name: System Maintenance
+  weight: 5
+  questions: 6
+  objectives:
+  - id: '206.1'
+    text: Make and install programs from source
+    weight: 1.67
+    questions: 2
+  - id: '206.2'
+    text: Backup operations
+    weight: 2.5
+    questions: 3
+  - id: '206.3'
+    text: Notify users on system-related issues
+    weight: 0.83
+    questions: 1
+- id: '207'
+  name: Domain Name Server
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '207.1'
+    text: Basic DNS server configuration
+    weight: 2.5
+    questions: 3
+  - id: '207.2'
+    text: Create and maintain DNS zones
+    weight: 2.5
+    questions: 3
+  - id: '207.3'
+    text: Securing a DNS server
+    weight: 1.67
+    questions: 2
+- id: '208'
+  name: HTTP Services
+  weight: 9.17
+  questions: 11
+  objectives:
+  - id: '208.1'
+    text: Basic Apache configuration
+    weight: 3.33
+    questions: 4
+  - id: '208.2'
+    text: Apache configuration for HTTPS
+    weight: 2.5
+    questions: 3
+  - id: '208.3'
+    text: Implementing Squid as a caching proxy
+    weight: 1.67
+    questions: 2
+  - id: '208.4'
+    text: Implementing Nginx as a web server and a reverse proxy
+    weight: 1.67
+    questions: 2
+- id: '209'
+  name: File Sharing
+  weight: 6.67
+  questions: 8
+  objectives:
+  - id: '209.1'
+    text: Samba Server Configuration
+    weight: 4.17
+    questions: 5
+  - id: '209.2'
+    text: NFS Server Configuration
+    weight: 2.5
+    questions: 3
+- id: '210'
+  name: Network Client Management
+  weight: 9.16
+  questions: 11
+  objectives:
+  - id: '210.1'
+    text: DHCP configuration
+    weight: 1.67
+    questions: 2
+  - id: '210.2'
+    text: PAM authentication
+    weight: 2.5
+    questions: 3
+  - id: '210.3'
+    text: LDAP client usage
+    weight: 1.67
+    questions: 2
+  - id: '210.4'
+    text: Configuring an OpenLDAP server
+    weight: 3.33
+    questions: 4
+- id: '211'
+  name: E-Mail Services
+  weight: 6.66
+  questions: 8
+  objectives:
+  - id: '211.1'
+    text: Using e-mail servers
+    weight: 3.33
+    questions: 4
+  - id: '211.2'
+    text: Managing E-Mail Delivery
+    weight: 1.67
+    questions: 2
+  - id: '211.3'
+    text: Managing Mailbox Access
+    weight: 1.67
+    questions: 2
+- id: '212'
+  name: System Security
+  weight: 11.66
+  questions: 14
+  objectives:
+  - id: '212.1'
+    text: Configuring a router
+    weight: 2.5
+    questions: 3
+  - id: '212.2'
+    text: Managing FTP servers
+    weight: 1.67
+    questions: 2
+  - id: '212.3'
+    text: Secure shell (SSH)
+    weight: 3.33
+    questions: 4
+  - id: '212.4'
+    text: Security tasks
+    weight: 2.5
+    questions: 3
+  - id: '212.5'
+    text: OpenVPN
+    weight: 1.67
+    questions: 2
