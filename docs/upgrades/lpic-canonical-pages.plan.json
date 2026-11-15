@@ -1,0 +1,4255 @@
+{
+  "certs": {
+    "lpic-1": {
+      "cert": "lpic-1",
+      "counts": {
+        "keep": 0,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 42
+      },
+      "efficiency": {
+        "planned_files": 267,
+        "sections_to_edit": 112,
+        "topic_files": 336,
+        "version_lines": {
+          "curriculum": 0,
+          "label": 0,
+          "technical": 322
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": [
+            {
+              "domain": "System Architecture",
+              "new": 6.67,
+              "new_id": "101",
+              "old": 12.51,
+              "old_id": "101"
+            },
+            {
+              "domain": "Linux Installation and Package Management",
+              "new": 10,
+              "new_id": "102",
+              "old": 18.76,
+              "old_id": "102"
+            },
+            {
+              "domain": "GNU and Unix Commands",
+              "new": 21.67,
+              "new_id": "103",
+              "old": 40.62,
+              "old_id": "103"
+            },
+            {
+              "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+              "new": 11.67,
+              "new_id": "104",
+              "old": 21.86,
+              "old_id": "104"
+            },
+            {
+              "domain": "Shells and Shell Scripting",
+              "new": 6.67,
+              "new_id": "105",
+              "old": 6.25,
+              "old_id": "105"
+            },
+            {
+              "domain": "User Interfaces and Desktops",
+              "new": 3.33,
+              "new_id": "106",
+              "old": 0,
+              "old_id": "106"
+            },
+            {
+              "domain": "Administrative Tasks",
+              "new": 10,
+              "new_id": "107",
+              "old": 0,
+              "old_id": "107"
+            },
+            {
+              "domain": "Essential System Services",
+              "new": 10,
+              "new_id": "108",
+              "old": 0,
+              "old_id": "108"
+            },
+            {
+              "domain": "Networking Fundamentals",
+              "new": 11.66,
+              "new_id": "109",
+              "old": 0,
+              "old_id": "109"
+            },
+            {
+              "domain": "Security",
+              "new": 8.33,
+              "new_id": "110",
+              "old": 0,
+              "old_id": "110"
+            }
+          ]
+        },
+        "identical": false,
+        "new": {
+          "domains": 10,
+          "objectives": 42,
+          "version": "5.0"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "101.1",
+              "old_id": "101.1",
+              "similarity": 1.0,
+              "text": "Determine and configure hardware settings"
+            },
+            {
+              "new_id": "101.2",
+              "old_id": "101.2",
+              "similarity": 1.0,
+              "text": "Boot the system"
+            },
+            {
+              "new_id": "101.3",
+              "old_id": "101.3",
+              "similarity": 1.0,
+              "text": "Change runlevels / boot targets and shutdown or reboot system"
+            },
+            {
+              "new_id": "102.1",
+              "old_id": "102.1",
+              "similarity": 1.0,
+              "text": "Design hard disk layout"
+            },
+            {
+              "new_id": "102.2",
+              "old_id": "102.2",
+              "similarity": 1.0,
+              "text": "Install a boot manager"
+            },
+            {
+              "new_id": "102.3",
+              "old_id": "102.3",
+              "similarity": 1.0,
+              "text": "Manage shared libraries"
+            },
+            {
+              "new_id": "102.4",
+              "old_id": "102.4",
+              "similarity": 1.0,
+              "text": "Use Debian package management"
+            },
+            {
+              "new_id": "102.5",
+              "old_id": "102.5",
+              "similarity": 1.0,
+              "text": "Use RPM and YUM package management"
+            },
+            {
+              "new_id": "102.6",
+              "old_id": "102.6",
+              "similarity": 1.0,
+              "text": "Linux as a virtualization guest"
+            },
+            {
+              "new_id": "103.1",
+              "old_id": "103.1",
+              "similarity": 1.0,
+              "text": "Work on the command line"
+            },
+            {
+              "new_id": "103.2",
+              "old_id": "103.2",
+              "similarity": 1.0,
+              "text": "Process text streams using filters"
+            },
+            {
+              "new_id": "103.3",
+              "old_id": "103.3",
+              "similarity": 1.0,
+              "text": "Perform basic file management"
+            },
+            {
+              "new_id": "103.4",
+              "old_id": "103.4",
+              "similarity": 1.0,
+              "text": "Use streams, pipes and redirects"
+            },
+            {
+              "new_id": "103.5",
+              "old_id": "103.5",
+              "similarity": 1.0,
+              "text": "Create, monitor and kill processes"
+            },
+            {
+              "new_id": "103.6",
+              "old_id": "103.6",
+              "similarity": 1.0,
+              "text": "Modify process execution priorities"
+            },
+            {
+              "new_id": "103.7",
+              "old_id": "103.7",
+              "similarity": 1.0,
+              "text": "Search text files using regular expressions"
+            },
+            {
+              "new_id": "103.8",
+              "old_id": "103.8",
+              "similarity": 1.0,
+              "text": "Basic file editing"
+            },
+            {
+              "new_id": "104.1",
+              "old_id": "104.1",
+              "similarity": 1.0,
+              "text": "Create partitions and filesystems"
+            },
+            {
+              "new_id": "104.2",
+              "old_id": "104.2",
+              "similarity": 1.0,
+              "text": "Maintain the integrity of filesystems"
+            },
+            {
+              "new_id": "104.3",
+              "old_id": "104.3",
+              "similarity": 1.0,
+              "text": "Control mounting and unmounting of filesystems"
+            },
+            {
+              "new_id": "104.5",
+              "old_id": "104.5",
+              "similarity": 1.0,
+              "text": "Manage file permissions and ownership"
+            },
+            {
+              "new_id": "104.6",
+              "old_id": "104.6",
+              "similarity": 1.0,
+              "text": "Create and change hard and symbolic links"
+            },
+            {
+              "new_id": "104.7",
+              "old_id": "104.7",
+              "similarity": 1.0,
+              "text": "Find system files and place files in the correct location"
+            },
+            {
+              "new_id": "105.1",
+              "old_id": "105.1",
+              "similarity": 1.0,
+              "text": "Customize and use the shell environment"
+            },
+            {
+              "new_id": "105.2",
+              "old_id": "105.2",
+              "similarity": 1.0,
+              "text": "Customize or write simple scripts"
+            },
+            {
+              "new_id": "106.1",
+              "old_id": "106.1",
+              "similarity": 1.0,
+              "text": "Install and configure X11"
+            },
+            {
+              "new_id": "106.2",
+              "old_id": "106.2",
+              "similarity": 1.0,
+              "text": "Graphical Desktops"
+            },
+            {
+              "new_id": "106.3",
+              "old_id": "106.3",
+              "similarity": 1.0,
+              "text": "Accessibility"
+            },
+            {
+              "new_id": "107.1",
+              "old_id": "107.1",
+              "similarity": 1.0,
+              "text": "Manage user and group accounts and related system files"
+            },
+            {
+              "new_id": "107.2",
+              "old_id": "107.2",
+              "similarity": 1.0,
+              "text": "Automate system administration tasks by scheduling jobs"
+            },
+            {
+              "new_id": "107.3",
+              "old_id": "107.3",
+              "similarity": 1.0,
+              "text": "Localisation and internationalisation"
+            },
+            {
+              "new_id": "108.1",
+              "old_id": "108.1",
+              "similarity": 1.0,
+              "text": "Maintain system time"
+            },
+            {
+              "new_id": "108.2",
+              "old_id": "108.2",
+              "similarity": 1.0,
+              "text": "System logging"
+            },
+            {
+              "new_id": "108.3",
+              "old_id": "108.3",
+              "similarity": 1.0,
+              "text": "Mail Transfer Agent (MTA) basics"
+            },
+            {
+              "new_id": "108.4",
+              "old_id": "108.4",
+              "similarity": 1.0,
+              "text": "Manage printers and printing"
+            },
+            {
+              "new_id": "109.1",
+              "old_id": "109.1",
+              "similarity": 1.0,
+              "text": "Fundamentals of internet protocols"
+            },
+            {
+              "new_id": "109.2",
+              "old_id": "109.2",
+              "similarity": 1.0,
+              "text": "Persistent network configuration"
+            },
+            {
+              "new_id": "109.3",
+              "old_id": "109.3",
+              "similarity": 1.0,
+              "text": "Basic network troubleshooting"
+            },
+            {
+              "new_id": "109.4",
+              "old_id": "109.4",
+              "similarity": 1.0,
+              "text": "Configure client side DNS"
+            },
+            {
+              "new_id": "110.1",
+              "old_id": "110.1",
+              "similarity": 1.0,
+              "text": "Perform security administration tasks"
+            },
+            {
+              "new_id": "110.2",
+              "old_id": "110.2",
+              "similarity": 1.0,
+              "text": "Setup host security"
+            },
+            {
+              "new_id": "110.3",
+              "old_id": "110.3",
+              "similarity": 1.0,
+              "text": "Securing data with encryption"
+            }
+          ]
+        },
+        "old": {
+          "domains": 10,
+          "objectives": 42,
+          "version": "5.0"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/lpic-1/v5.0.yaml",
+        "sha256": "b8cd64c556fbd4c0e838f7e6a9bff35b63d001eb5a514405ad55b59af53fd2b5",
+        "source": {
+          "committed": "2026-11-15",
+          "sha256": "28ef9305618980d8a06789ab876f49d33d74f3b2f9c800caecf06113b48abc7d",
+          "url": "https://www.lpi.org/our-certifications/exam-101-102-objectives/"
+        },
+        "tree_sha256": "6af4b498b7498cbe3b8d63a8b440444a47fa48c6dfc1589203a8c54f53ae13d2",
+        "version": "5.0"
+      },
+      "topics": [
+        {
+          "class": "revalidate",
+          "domain": "System Architecture",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "101.1",
+          "planned_files": [
+            "certs/lpic-1/101.1/en/content.md",
+            "certs/lpic-1/101.1/en/exercises.md",
+            "certs/lpic-1/101.1/en/meta.yaml",
+            "certs/lpic-1/101.1/es/content.md",
+            "certs/lpic-1/101.1/es/exercises.md",
+            "certs/lpic-1/101.1/es/meta.yaml",
+            "certs/lpic-1/101.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 12.51% -> 6.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/101.1/en/content.md",
+              "heading": "101.1 — Determine and Configure Hardware Settings",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.1/en/exercises.md",
+              "heading": "Guided Exercises (LPIC-1, exam 101-500, syllabus v5.0 — weight 3.13)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Determine and configure hardware settings",
+          "topic": "101.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/101.1/en/content.md:1928",
+              "certs/lpic-1/101.1/en/exercises.md:2",
+              "certs/lpic-1/101.1/en/exercises.md:1126",
+              "certs/lpic-1/101.1/es/content.md:1928",
+              "certs/lpic-1/101.1/es/exercises.md:2",
+              "certs/lpic-1/101.1/es/exercises.md:1126",
+              "certs/lpic-1/101.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "System Architecture",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "101.2",
+          "planned_files": [
+            "certs/lpic-1/101.2/en/content.md",
+            "certs/lpic-1/101.2/en/exercises.md",
+            "certs/lpic-1/101.2/en/meta.yaml",
+            "certs/lpic-1/101.2/es/content.md",
+            "certs/lpic-1/101.2/es/exercises.md",
+            "certs/lpic-1/101.2/es/meta.yaml",
+            "certs/lpic-1/101.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 12.51% -> 6.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/101.2/en/content.md",
+              "heading": "101.2 — Boot the System",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.2/en/content.md",
+              "heading": "5.1 Comparative table",
+              "line": 798,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.2/en/content.md",
+              "heading": "5.4 systemd",
+              "line": 1051,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.2/en/exercises.md",
+              "heading": "Guided Exercises (Exam 101-500, syllabus v5.0 — weight 4.69)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.2/es/content.md",
+              "heading": "5.1 Tabla comparativa",
+              "line": 798,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.2/es/content.md",
+              "heading": "5.4 systemd",
+              "line": 1051,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Boot the system",
+          "topic": "101.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/101.2/en/content.md:3",
+              "certs/lpic-1/101.2/en/content.md:2405",
+              "certs/lpic-1/101.2/en/content.md:2450",
+              "certs/lpic-1/101.2/en/exercises.md:2",
+              "certs/lpic-1/101.2/en/exercises.md:1198",
+              "certs/lpic-1/101.2/es/content.md:3",
+              "certs/lpic-1/101.2/es/content.md:2405",
+              "certs/lpic-1/101.2/es/content.md:2450",
+              "certs/lpic-1/101.2/es/exercises.md:2",
+              "certs/lpic-1/101.2/es/exercises.md:1198",
+              "certs/lpic-1/101.2/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "System Architecture",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "101.3",
+          "planned_files": [
+            "certs/lpic-1/101.3/en/content.md",
+            "certs/lpic-1/101.3/en/exercises.md",
+            "certs/lpic-1/101.3/en/meta.yaml",
+            "certs/lpic-1/101.3/es/content.md",
+            "certs/lpic-1/101.3/es/exercises.md",
+            "certs/lpic-1/101.3/es/meta.yaml",
+            "certs/lpic-1/101.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 12.51% -> 6.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/101.3/en/content.md",
+              "heading": "101.3 — Change runlevels / boot targets and shutdown or reboot system",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.3/en/content.md",
+              "heading": "2.4 Trade-off comparison",
+              "line": 294,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.3/en/exercises.md",
+              "heading": "101.3 — Change runlevels / boot targets and shutdown or reboot system",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/101.3/es/content.md",
+              "heading": "2.4 Comparación de compromisos",
+              "line": 294,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Change runlevels / boot targets and shutdown or reboot system",
+          "topic": "101.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/101.3/en/content.md:3",
+              "certs/lpic-1/101.3/en/content.md:314",
+              "certs/lpic-1/101.3/en/content.md:1921",
+              "certs/lpic-1/101.3/en/content.md:1964",
+              "certs/lpic-1/101.3/en/exercises.md:3",
+              "certs/lpic-1/101.3/en/exercises.md:1077",
+              "certs/lpic-1/101.3/es/content.md:3",
+              "certs/lpic-1/101.3/es/content.md:314",
+              "certs/lpic-1/101.3/es/content.md:1921",
+              "certs/lpic-1/101.3/es/content.md:1964",
+              "certs/lpic-1/101.3/es/exercises.md:3",
+              "certs/lpic-1/101.3/es/exercises.md:1077",
+              "certs/lpic-1/101.3/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.1",
+          "planned_files": [
+            "certs/lpic-1/102.1/en/content.md",
+            "certs/lpic-1/102.1/en/exercises.md",
+            "certs/lpic-1/102.1/en/meta.yaml",
+            "certs/lpic-1/102.1/es/content.md",
+            "certs/lpic-1/102.1/es/exercises.md",
+            "certs/lpic-1/102.1/es/meta.yaml",
+            "certs/lpic-1/102.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.1/en/content.md",
+              "heading": "102.1 — Design Hard Disk Layout",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.1/en/exercises.md",
+              "heading": "Guided Exercises (Exam 101-500, version 5.0 · Weight: 3.13)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Design hard disk layout",
+          "topic": "102.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.1/en/content.md:3",
+              "certs/lpic-1/102.1/en/exercises.md:2",
+              "certs/lpic-1/102.1/es/content.md:3",
+              "certs/lpic-1/102.1/es/exercises.md:2",
+              "certs/lpic-1/102.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.2",
+          "planned_files": [
+            "certs/lpic-1/102.2/en/content.md",
+            "certs/lpic-1/102.2/en/exercises.md",
+            "certs/lpic-1/102.2/en/meta.yaml",
+            "certs/lpic-1/102.2/es/content.md",
+            "certs/lpic-1/102.2/es/exercises.md",
+            "certs/lpic-1/102.2/es/meta.yaml",
+            "certs/lpic-1/102.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.2/en/content.md",
+              "heading": "LPIC-1 · Topic 102.2 — Install a Boot Manager",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.2/en/exercises.md",
+              "heading": "Guided exercises (production depth)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Install a boot manager",
+          "topic": "102.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.2/en/content.md:3",
+              "certs/lpic-1/102.2/en/content.md:2135",
+              "certs/lpic-1/102.2/en/exercises.md:4",
+              "certs/lpic-1/102.2/en/exercises.md:1104",
+              "certs/lpic-1/102.2/es/content.md:3",
+              "certs/lpic-1/102.2/es/content.md:2135",
+              "certs/lpic-1/102.2/es/exercises.md:4",
+              "certs/lpic-1/102.2/es/exercises.md:1104",
+              "certs/lpic-1/102.2/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.3",
+          "planned_files": [
+            "certs/lpic-1/102.3/en/content.md",
+            "certs/lpic-1/102.3/en/exercises.md",
+            "certs/lpic-1/102.3/en/meta.yaml",
+            "certs/lpic-1/102.3/es/content.md",
+            "certs/lpic-1/102.3/es/meta.yaml",
+            "certs/lpic-1/102.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.3/en/content.md",
+              "heading": "102.3 — Manage Shared Libraries",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.3/en/exercises.md",
+              "heading": "102.3 — Manage Shared Libraries: Guided Exercises",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Manage shared libraries",
+          "topic": "102.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.3/en/content.md:1807",
+              "certs/lpic-1/102.3/en/content.md:1808",
+              "certs/lpic-1/102.3/es/content.md:1807",
+              "certs/lpic-1/102.3/es/content.md:1808",
+              "certs/lpic-1/102.3/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.4",
+          "planned_files": [
+            "certs/lpic-1/102.4/en/content.md",
+            "certs/lpic-1/102.4/en/exercises.md",
+            "certs/lpic-1/102.4/en/meta.yaml",
+            "certs/lpic-1/102.4/es/content.md",
+            "certs/lpic-1/102.4/es/meta.yaml",
+            "certs/lpic-1/102.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.4/en/content.md",
+              "heading": "102.4 — Use Debian Package Management",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.4/en/content.md",
+              "heading": "8.4 `reprepro` — the lightweight alternative",
+              "line": 2157,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.4/en/exercises.md",
+              "heading": "Guided Lab Exercises",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Use Debian package management",
+          "topic": "102.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.4/en/content.md:3",
+              "certs/lpic-1/102.4/en/content.md:2210",
+              "certs/lpic-1/102.4/en/content.md:2664",
+              "certs/lpic-1/102.4/es/content.md:3",
+              "certs/lpic-1/102.4/es/content.md:2210",
+              "certs/lpic-1/102.4/es/content.md:2664",
+              "certs/lpic-1/102.4/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.5",
+          "planned_files": [
+            "certs/lpic-1/102.5/en/content.md",
+            "certs/lpic-1/102.5/en/exercises.md",
+            "certs/lpic-1/102.5/en/meta.yaml",
+            "certs/lpic-1/102.5/es/content.md",
+            "certs/lpic-1/102.5/es/exercises.md",
+            "certs/lpic-1/102.5/es/meta.yaml",
+            "certs/lpic-1/102.5/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.5/en/content.md",
+              "heading": "102.5 — Use RPM and YUM Package Management",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.5/en/exercises.md",
+              "heading": "Guided Exercises",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Use RPM and YUM package management",
+          "topic": "102.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.5/en/content.md:2398",
+              "certs/lpic-1/102.5/en/content.md:2399",
+              "certs/lpic-1/102.5/en/exercises.md:4",
+              "certs/lpic-1/102.5/en/exercises.md:1488",
+              "certs/lpic-1/102.5/en/exercises.md:1489",
+              "certs/lpic-1/102.5/es/content.md:2398",
+              "certs/lpic-1/102.5/es/content.md:2399",
+              "certs/lpic-1/102.5/es/exercises.md:4",
+              "certs/lpic-1/102.5/es/exercises.md:1488",
+              "certs/lpic-1/102.5/es/exercises.md:1489",
+              "certs/lpic-1/102.5/lab/break_fix.sh:6"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Linux Installation and Package Management",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "102.6",
+          "planned_files": [
+            "certs/lpic-1/102.6/en/content.md",
+            "certs/lpic-1/102.6/en/exercises.md",
+            "certs/lpic-1/102.6/en/meta.yaml",
+            "certs/lpic-1/102.6/es/content.md",
+            "certs/lpic-1/102.6/es/exercises.md",
+            "certs/lpic-1/102.6/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 18.76% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/102.6/en/content.md",
+              "heading": "102.6 — Linux as a Virtualization Guest",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.6/en/content.md",
+              "heading": "2.2 System container vs application container",
+              "line": 53,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.6/en/exercises.md",
+              "heading": "Guided Exercises (Exam 101-500, syllabus version 5.0 — weight 1)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/102.6/en/exercises.md",
+              "heading": "Exercise 5",
+              "line": 1282,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Linux as a virtualization guest",
+          "topic": "102.6",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/102.6/en/content.md:3",
+              "certs/lpic-1/102.6/en/content.md:2112",
+              "certs/lpic-1/102.6/en/content.md:2113",
+              "certs/lpic-1/102.6/en/exercises.md:2",
+              "certs/lpic-1/102.6/en/exercises.md:1381",
+              "certs/lpic-1/102.6/en/exercises.md:1382",
+              "certs/lpic-1/102.6/es/content.md:3",
+              "certs/lpic-1/102.6/es/content.md:2112",
+              "certs/lpic-1/102.6/es/content.md:2113",
+              "certs/lpic-1/102.6/es/exercises.md:2",
+              "certs/lpic-1/102.6/es/exercises.md:1381",
+              "certs/lpic-1/102.6/es/exercises.md:1382"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.1",
+          "planned_files": [
+            "certs/lpic-1/103.1/en/content.md",
+            "certs/lpic-1/103.1/en/exercises.md",
+            "certs/lpic-1/103.1/en/meta.yaml",
+            "certs/lpic-1/103.1/es/content.md",
+            "certs/lpic-1/103.1/es/exercises.md",
+            "certs/lpic-1/103.1/es/meta.yaml",
+            "certs/lpic-1/103.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.1/en/content.md",
+              "heading": "LPIC-1 · Topic 103.1 — Work on the Command Line",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.1/en/content.md",
+              "heading": "1. Motivation: the architectural problem behind \"just run a command\"",
+              "line": 9,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Work on the command line",
+          "topic": "103.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.1/en/content.md:559",
+              "certs/lpic-1/103.1/en/exercises.md:2",
+              "certs/lpic-1/103.1/es/content.md:559",
+              "certs/lpic-1/103.1/es/exercises.md:2",
+              "certs/lpic-1/103.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.2",
+          "planned_files": [
+            "certs/lpic-1/103.2/en/content.md",
+            "certs/lpic-1/103.2/en/exercises.md",
+            "certs/lpic-1/103.2/en/meta.yaml",
+            "certs/lpic-1/103.2/es/content.md",
+            "certs/lpic-1/103.2/es/exercises.md",
+            "certs/lpic-1/103.2/es/meta.yaml",
+            "certs/lpic-1/103.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.2/en/content.md",
+              "heading": "LPIC-1 · Exam 101-500 · Objective 103.2 — Process text streams using filters",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.2/en/exercises.md",
+              "heading": "LPIC-1 103.2 — Process text streams using filters",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Process text streams using filters",
+          "topic": "103.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.2/en/content.md:3",
+              "certs/lpic-1/103.2/en/content.md:1332",
+              "certs/lpic-1/103.2/en/exercises.md:3",
+              "certs/lpic-1/103.2/es/content.md:3",
+              "certs/lpic-1/103.2/es/content.md:1332",
+              "certs/lpic-1/103.2/es/exercises.md:3",
+              "certs/lpic-1/103.2/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.3",
+          "planned_files": [
+            "certs/lpic-1/103.3/en/content.md",
+            "certs/lpic-1/103.3/en/exercises.md",
+            "certs/lpic-1/103.3/en/meta.yaml",
+            "certs/lpic-1/103.3/es/content.md",
+            "certs/lpic-1/103.3/es/exercises.md",
+            "certs/lpic-1/103.3/es/meta.yaml",
+            "certs/lpic-1/103.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.3/en/content.md",
+              "heading": "103.3 — Perform Basic File Management",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.3/en/exercises.md",
+              "heading": "Guided Exercises (LPIC-1, exam 101-500, v5.0 — weight 6.25)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Perform basic file management",
+          "topic": "103.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.3/en/content.md:3",
+              "certs/lpic-1/103.3/en/content.md:2005",
+              "certs/lpic-1/103.3/en/exercises.md:2",
+              "certs/lpic-1/103.3/en/exercises.md:1809",
+              "certs/lpic-1/103.3/es/content.md:3",
+              "certs/lpic-1/103.3/es/content.md:2005",
+              "certs/lpic-1/103.3/es/exercises.md:2",
+              "certs/lpic-1/103.3/es/exercises.md:1809",
+              "certs/lpic-1/103.3/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.4",
+          "planned_files": [
+            "certs/lpic-1/103.4/en/content.md",
+            "certs/lpic-1/103.4/en/exercises.md",
+            "certs/lpic-1/103.4/en/meta.yaml",
+            "certs/lpic-1/103.4/es/content.md",
+            "certs/lpic-1/103.4/es/exercises.md",
+            "certs/lpic-1/103.4/es/meta.yaml",
+            "certs/lpic-1/103.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.4/en/content.md",
+              "heading": "103.4 — Use Streams, Pipes and Redirects",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Use streams, pipes and redirects",
+          "topic": "103.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.4/en/content.md:3",
+              "certs/lpic-1/103.4/en/content.md:1318",
+              "certs/lpic-1/103.4/en/exercises.md:2",
+              "certs/lpic-1/103.4/es/content.md:3",
+              "certs/lpic-1/103.4/es/content.md:1318",
+              "certs/lpic-1/103.4/es/exercises.md:2",
+              "certs/lpic-1/103.4/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.5",
+          "planned_files": [
+            "certs/lpic-1/103.5/en/content.md",
+            "certs/lpic-1/103.5/en/exercises.md",
+            "certs/lpic-1/103.5/en/meta.yaml",
+            "certs/lpic-1/103.5/es/content.md",
+            "certs/lpic-1/103.5/es/exercises.md",
+            "certs/lpic-1/103.5/es/meta.yaml",
+            "certs/lpic-1/103.5/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.5/en/content.md",
+              "heading": "103.5 — Create, monitor and kill processes",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.5/en/content.md",
+              "heading": "6.3 `ps` vs `top` vs the alternatives",
+              "line": 829,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Create, monitor and kill processes",
+          "topic": "103.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.5/en/content.md:3",
+              "certs/lpic-1/103.5/en/content.md:859",
+              "certs/lpic-1/103.5/en/content.md:895",
+              "certs/lpic-1/103.5/en/content.md:2064",
+              "certs/lpic-1/103.5/en/exercises.md:1396",
+              "certs/lpic-1/103.5/es/content.md:3",
+              "certs/lpic-1/103.5/es/content.md:859",
+              "certs/lpic-1/103.5/es/content.md:895",
+              "certs/lpic-1/103.5/es/content.md:2064",
+              "certs/lpic-1/103.5/es/exercises.md:1396",
+              "certs/lpic-1/103.5/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.6",
+          "planned_files": [
+            "certs/lpic-1/103.6/en/content.md",
+            "certs/lpic-1/103.6/en/exercises.md",
+            "certs/lpic-1/103.6/en/meta.yaml",
+            "certs/lpic-1/103.6/es/content.md",
+            "certs/lpic-1/103.6/es/exercises.md",
+            "certs/lpic-1/103.6/es/meta.yaml",
+            "certs/lpic-1/103.6/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "103.6 — Modify Process Execution Priorities",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "1. Motivation: the architectural problem",
+              "line": 7,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "2.2 What a nice value actually buys you",
+              "line": 76,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "2.3 CFS, EEVDF and where nice went",
+              "line": 115,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "4. Why your `nice` did nothing: autogroups",
+              "line": 307,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "5.1 Policy comparison",
+              "line": 386,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "6.2 cgroup v2 — the layer that actually holds in production",
+              "line": 535,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "7.1 systemd unit — the low-latency API",
+              "line": 598,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "7.2 Kubernetes: what maps to what",
+              "line": 728,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "8.1 The verification ladder",
+              "line": 914,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "8.2 Reproducible lab",
+              "line": 978,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "8.3 Failure catalogue",
+              "line": 1038,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "9. Command reference",
+              "line": 1094,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/content.md",
+              "heading": "10. Referencias",
+              "line": 1126,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "103.6 — Modify Process Execution Priorities",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 4 — Measuring what nice actually buys you",
+              "line": 260,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 7 — Why `nice` sometimes appears to do nothing: autogroups and cgroups",
+              "line": 471,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Sources",
+              "line": 695,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 4",
+              "line": 762,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 6",
+              "line": 786,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 7",
+              "line": 796,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/en/exercises.md",
+              "heading": "Exercise 8",
+              "line": 808,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "1. Motivación: el problema arquitectónico",
+              "line": 7,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "2.2 Qué te compra realmente un valor de nice",
+              "line": 76,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "2.3 CFS, EEVDF y adónde fue a parar nice",
+              "line": 115,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "6.2 cgroup v2 — la capa que realmente aguanta en producción",
+              "line": 535,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "7.1 Unit de systemd — la API de baja latencia",
+              "line": 598,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "7.2 Kubernetes: qué mapea a qué",
+              "line": 728,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "8.1 La escalera de verificación",
+              "line": 914,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "8.2 Laboratorio reproducible",
+              "line": 978,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "8.3 Catálogo de fallas",
+              "line": 1038,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "9. Referencia de comandos",
+              "line": 1094,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/content.md",
+              "heading": "10. Referencias",
+              "line": 1126,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/exercises.md",
+              "heading": "Ejercicio 7 — Por qué `nice` a veces parece no hacer nada: autogroups y cgroups",
+              "line": 471,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/exercises.md",
+              "heading": "Fuentes",
+              "line": 695,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/exercises.md",
+              "heading": "Ejercicio 6",
+              "line": 786,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/exercises.md",
+              "heading": "Ejercicio 7",
+              "line": 796,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.6/es/exercises.md",
+              "heading": "Ejercicio 8",
+              "line": 808,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Modify process execution priorities",
+          "topic": "103.6",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.6/en/content.md:3",
+              "certs/lpic-1/103.6/en/content.md:515",
+              "certs/lpic-1/103.6/en/exercises.md:3",
+              "certs/lpic-1/103.6/en/exercises.md:697",
+              "certs/lpic-1/103.6/en/exercises.md:814",
+              "certs/lpic-1/103.6/es/content.md:3",
+              "certs/lpic-1/103.6/es/content.md:515",
+              "certs/lpic-1/103.6/es/exercises.md:3",
+              "certs/lpic-1/103.6/es/exercises.md:697",
+              "certs/lpic-1/103.6/es/exercises.md:814",
+              "certs/lpic-1/103.6/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.7",
+          "planned_files": [
+            "certs/lpic-1/103.7/en/content.md",
+            "certs/lpic-1/103.7/en/exercises.md",
+            "certs/lpic-1/103.7/en/meta.yaml",
+            "certs/lpic-1/103.7/es/content.md",
+            "certs/lpic-1/103.7/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.7/en/content.md",
+              "heading": "103.7 — Search text files using regular expressions",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/103.7/en/exercises.md",
+              "heading": "Guided lab exercises (weight 4.69)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Search text files using regular expressions",
+          "topic": "103.7",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.7/en/content.md:3",
+              "certs/lpic-1/103.7/en/content.md:186",
+              "certs/lpic-1/103.7/en/content.md:988",
+              "certs/lpic-1/103.7/en/content.md:992",
+              "certs/lpic-1/103.7/en/content.md:1470",
+              "certs/lpic-1/103.7/es/content.md:3",
+              "certs/lpic-1/103.7/es/content.md:186",
+              "certs/lpic-1/103.7/es/content.md:988",
+              "certs/lpic-1/103.7/es/content.md:992",
+              "certs/lpic-1/103.7/es/content.md:1470"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "GNU and Unix Commands",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "103.8",
+          "planned_files": [
+            "certs/lpic-1/103.8/en/content.md",
+            "certs/lpic-1/103.8/en/exercises.md",
+            "certs/lpic-1/103.8/en/meta.yaml",
+            "certs/lpic-1/103.8/es/content.md",
+            "certs/lpic-1/103.8/es/exercises.md",
+            "certs/lpic-1/103.8/es/meta.yaml",
+            "certs/lpic-1/103.8/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 40.62% -> 21.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/103.8/en/content.md",
+              "heading": "LPIC-1 103.8 — Basic file editing",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Basic file editing",
+          "topic": "103.8",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/103.8/en/content.md:3",
+              "certs/lpic-1/103.8/en/exercises.md:3",
+              "certs/lpic-1/103.8/en/exercises.md:1250",
+              "certs/lpic-1/103.8/es/content.md:3",
+              "certs/lpic-1/103.8/es/exercises.md:3",
+              "certs/lpic-1/103.8/es/exercises.md:1250",
+              "certs/lpic-1/103.8/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.1",
+          "planned_files": [
+            "certs/lpic-1/104.1/en/content.md",
+            "certs/lpic-1/104.1/en/exercises.md",
+            "certs/lpic-1/104.1/en/meta.yaml",
+            "certs/lpic-1/104.1/es/content.md",
+            "certs/lpic-1/104.1/es/meta.yaml",
+            "certs/lpic-1/104.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.1/en/content.md",
+              "heading": "104.1 — Create Partitions and Filesystems",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.1/en/content.md",
+              "heading": "8.3 systemd-repart — declarative, growable GPT",
+              "line": 1230,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.1/en/exercises.md",
+              "heading": "Guided exercises (Exam 101-500, weight 3)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.1/es/content.md",
+              "heading": "8.3 systemd-repart — GPT declarativa y expansible",
+              "line": 1230,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Create partitions and filesystems",
+          "topic": "104.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.1/en/content.md:3",
+              "certs/lpic-1/104.1/en/content.md:1042",
+              "certs/lpic-1/104.1/en/content.md:1929",
+              "certs/lpic-1/104.1/es/content.md:3",
+              "certs/lpic-1/104.1/es/content.md:1042",
+              "certs/lpic-1/104.1/es/content.md:1929",
+              "certs/lpic-1/104.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.2",
+          "planned_files": [
+            "certs/lpic-1/104.2/en/content.md",
+            "certs/lpic-1/104.2/en/exercises.md",
+            "certs/lpic-1/104.2/en/meta.yaml",
+            "certs/lpic-1/104.2/es/content.md",
+            "certs/lpic-1/104.2/es/exercises.md",
+            "certs/lpic-1/104.2/es/meta.yaml",
+            "certs/lpic-1/104.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.2/en/content.md",
+              "heading": "104.2 — Maintain the Integrity of Filesystems",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.2/en/exercises.md",
+              "heading": "LPIC-1 · Topic 104.2 — Maintain the Integrity of Filesystems",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Maintain the integrity of filesystems",
+          "topic": "104.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.2/en/content.md:3",
+              "certs/lpic-1/104.2/en/content.md:1650",
+              "certs/lpic-1/104.2/en/exercises.md:3",
+              "certs/lpic-1/104.2/es/content.md:3",
+              "certs/lpic-1/104.2/es/content.md:1650",
+              "certs/lpic-1/104.2/es/exercises.md:3",
+              "certs/lpic-1/104.2/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.3",
+          "planned_files": [
+            "certs/lpic-1/104.3/en/content.md",
+            "certs/lpic-1/104.3/en/exercises.md",
+            "certs/lpic-1/104.3/en/meta.yaml",
+            "certs/lpic-1/104.3/es/content.md",
+            "certs/lpic-1/104.3/es/meta.yaml",
+            "certs/lpic-1/104.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.3/en/content.md",
+              "heading": "104.3 — Control mounting and unmounting of filesystems",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.3/en/exercises.md",
+              "heading": "Guided Exercises (Exam 101-500, weight 4)",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Control mounting and unmounting of filesystems",
+          "topic": "104.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.3/en/content.md:1421",
+              "certs/lpic-1/104.3/es/content.md:1421",
+              "certs/lpic-1/104.3/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.5",
+          "planned_files": [
+            "certs/lpic-1/104.5/en/content.md",
+            "certs/lpic-1/104.5/en/exercises.md",
+            "certs/lpic-1/104.5/en/meta.yaml",
+            "certs/lpic-1/104.5/es/content.md",
+            "certs/lpic-1/104.5/es/exercises.md",
+            "certs/lpic-1/104.5/es/meta.yaml",
+            "certs/lpic-1/104.5/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.5/en/content.md",
+              "heading": "LPIC-1 · 104.5 — Manage file permissions and ownership",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.5/en/exercises.md",
+              "heading": "LPIC-1 · Exam 101-500 · Topic 104.5 — Manage file permissions and ownership",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Manage file permissions and ownership",
+          "topic": "104.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.5/en/content.md:3",
+              "certs/lpic-1/104.5/en/content.md:1461",
+              "certs/lpic-1/104.5/en/content.md:1462",
+              "certs/lpic-1/104.5/en/exercises.md:1297",
+              "certs/lpic-1/104.5/es/content.md:3",
+              "certs/lpic-1/104.5/es/content.md:1461",
+              "certs/lpic-1/104.5/es/content.md:1462",
+              "certs/lpic-1/104.5/es/exercises.md:1297",
+              "certs/lpic-1/104.5/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.6",
+          "planned_files": [
+            "certs/lpic-1/104.6/en/content.md",
+            "certs/lpic-1/104.6/en/exercises.md",
+            "certs/lpic-1/104.6/en/meta.yaml",
+            "certs/lpic-1/104.6/es/content.md",
+            "certs/lpic-1/104.6/es/exercises.md",
+            "certs/lpic-1/104.6/es/meta.yaml",
+            "certs/lpic-1/104.6/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.6/en/content.md",
+              "heading": "104.6 — Create and Change Hard and Symbolic Links",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.6/en/exercises.md",
+              "heading": "LPIC-1 · 104.6 — Create and change hard and symbolic links",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Create and change hard and symbolic links",
+          "topic": "104.6",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.6/en/content.md:3",
+              "certs/lpic-1/104.6/en/content.md:1239",
+              "certs/lpic-1/104.6/en/exercises.md:1119",
+              "certs/lpic-1/104.6/es/content.md:3",
+              "certs/lpic-1/104.6/es/content.md:1239",
+              "certs/lpic-1/104.6/es/exercises.md:1119",
+              "certs/lpic-1/104.6/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Devices, Linux Filesystems, Filesystem Hierarchy Standard",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "104.7",
+          "planned_files": [
+            "certs/lpic-1/104.7/en/content.md",
+            "certs/lpic-1/104.7/en/exercises.md",
+            "certs/lpic-1/104.7/en/meta.yaml",
+            "certs/lpic-1/104.7/es/content.md",
+            "certs/lpic-1/104.7/es/exercises.md",
+            "certs/lpic-1/104.7/es/meta.yaml",
+            "certs/lpic-1/104.7/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 21.86% -> 11.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/104.7/en/content.md",
+              "heading": "LPIC-1 · Topic 104.7 — Find System Files and Place Files in the Correct Location",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/104.7/en/exercises.md",
+              "heading": "LPIC-1 — 104.7 Find System Files and Place Files in the Correct Location",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Find system files and place files in the correct location",
+          "topic": "104.7",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/104.7/en/content.md:3",
+              "certs/lpic-1/104.7/en/content.md:2036",
+              "certs/lpic-1/104.7/en/exercises.md:3",
+              "certs/lpic-1/104.7/es/content.md:3",
+              "certs/lpic-1/104.7/es/content.md:2036",
+              "certs/lpic-1/104.7/es/exercises.md:3",
+              "certs/lpic-1/104.7/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Shells and Shell Scripting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "105.1",
+          "planned_files": [
+            "certs/lpic-1/105.1/en/content.md",
+            "certs/lpic-1/105.1/en/exercises.md",
+            "certs/lpic-1/105.1/en/meta.yaml",
+            "certs/lpic-1/105.1/es/content.md",
+            "certs/lpic-1/105.1/es/exercises.md",
+            "certs/lpic-1/105.1/es/meta.yaml",
+            "certs/lpic-1/105.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 6.25% -> 6.67%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/105.1/en/content.md",
+              "heading": "105.1 — Customize and Use the Shell Environment",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/105.1/en/content.md",
+              "heading": "4.1 Semantics you must be exact about",
+              "line": 355,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/105.1/en/exercises.md",
+              "heading": "Guided Exercises",
+              "line": 3,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Customize and use the shell environment",
+          "topic": "105.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/105.1/en/content.md:3",
+              "certs/lpic-1/105.1/en/content.md:2452",
+              "certs/lpic-1/105.1/en/exercises.md:5",
+              "certs/lpic-1/105.1/en/exercises.md:1594",
+              "certs/lpic-1/105.1/en/exercises.md:1595",
+              "certs/lpic-1/105.1/es/content.md:3",
+              "certs/lpic-1/105.1/es/content.md:2452",
+              "certs/lpic-1/105.1/es/exercises.md:5",
+              "certs/lpic-1/105.1/es/exercises.md:1594",
+              "certs/lpic-1/105.1/es/exercises.md:1595",
+              "certs/lpic-1/105.1/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Shells and Shell Scripting",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "105.2",
+          "planned_files": [
+            "certs/lpic-1/105.2/en/content.md",
+            "certs/lpic-1/105.2/en/meta.yaml",
+            "certs/lpic-1/105.2/es/content.md",
+            "certs/lpic-1/105.2/es/meta.yaml",
+            "certs/lpic-1/105.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 6.25% -> 6.67%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Customize or write simple scripts",
+          "topic": "105.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/105.2/en/content.md:3",
+              "certs/lpic-1/105.2/en/content.md:2107",
+              "certs/lpic-1/105.2/en/content.md:2108",
+              "certs/lpic-1/105.2/es/content.md:3",
+              "certs/lpic-1/105.2/es/content.md:2107",
+              "certs/lpic-1/105.2/es/content.md:2108",
+              "certs/lpic-1/105.2/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "User Interfaces and Desktops",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "106.1",
+          "planned_files": [
+            "certs/lpic-1/106.1/en/content.md",
+            "certs/lpic-1/106.1/en/exercises.md",
+            "certs/lpic-1/106.1/en/meta.yaml",
+            "certs/lpic-1/106.1/es/content.md",
+            "certs/lpic-1/106.1/es/exercises.md",
+            "certs/lpic-1/106.1/es/meta.yaml",
+            "certs/lpic-1/106.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 3.33%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/106.1/en/content.md",
+              "heading": "106.1 — Install and Configure X11",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Install and configure X11",
+          "topic": "106.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/106.1/en/content.md:4",
+              "certs/lpic-1/106.1/en/content.md:330",
+              "certs/lpic-1/106.1/en/content.md:331",
+              "certs/lpic-1/106.1/en/content.md:1289",
+              "certs/lpic-1/106.1/en/exercises.md:1139",
+              "certs/lpic-1/106.1/es/content.md:4",
+              "certs/lpic-1/106.1/es/content.md:330",
+              "certs/lpic-1/106.1/es/content.md:331",
+              "certs/lpic-1/106.1/es/content.md:1289",
+              "certs/lpic-1/106.1/es/exercises.md:1139",
+              "certs/lpic-1/106.1/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "User Interfaces and Desktops",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "106.2",
+          "planned_files": [
+            "certs/lpic-1/106.2/en/exercises.md",
+            "certs/lpic-1/106.2/en/meta.yaml",
+            "certs/lpic-1/106.2/es/exercises.md",
+            "certs/lpic-1/106.2/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 0% -> 3.33%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/106.2/en/exercises.md",
+              "heading": "Guided Exercises",
+              "line": 2,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Graphical Desktops",
+          "topic": "106.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/106.2/en/exercises.md:4",
+              "certs/lpic-1/106.2/en/exercises.md:970",
+              "certs/lpic-1/106.2/en/exercises.md:971",
+              "certs/lpic-1/106.2/es/exercises.md:4",
+              "certs/lpic-1/106.2/es/exercises.md:970",
+              "certs/lpic-1/106.2/es/exercises.md:971"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "User Interfaces and Desktops",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "106.3",
+          "planned_files": [
+            "certs/lpic-1/106.3/en/content.md",
+            "certs/lpic-1/106.3/en/exercises.md",
+            "certs/lpic-1/106.3/en/meta.yaml",
+            "certs/lpic-1/106.3/es/content.md",
+            "certs/lpic-1/106.3/es/exercises.md",
+            "certs/lpic-1/106.3/es/meta.yaml",
+            "certs/lpic-1/106.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 3.33%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/106.3/en/content.md",
+              "heading": "106.3 Accessibility",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Accessibility",
+          "topic": "106.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/106.3/en/content.md:5",
+              "certs/lpic-1/106.3/en/content.md:166",
+              "certs/lpic-1/106.3/en/exercises.md:2",
+              "certs/lpic-1/106.3/en/exercises.md:1335",
+              "certs/lpic-1/106.3/en/exercises.md:1336",
+              "certs/lpic-1/106.3/es/content.md:5",
+              "certs/lpic-1/106.3/es/content.md:166",
+              "certs/lpic-1/106.3/es/exercises.md:2",
+              "certs/lpic-1/106.3/es/exercises.md:1335",
+              "certs/lpic-1/106.3/es/exercises.md:1336",
+              "certs/lpic-1/106.3/lab/break_fix.sh:4",
+              "certs/lpic-1/106.3/lab/break_fix.sh:6"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Administrative Tasks",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "107.1",
+          "planned_files": [
+            "certs/lpic-1/107.1/en/content.md",
+            "certs/lpic-1/107.1/en/exercises.md",
+            "certs/lpic-1/107.1/en/meta.yaml",
+            "certs/lpic-1/107.1/es/exercises.md",
+            "certs/lpic-1/107.1/es/meta.yaml",
+            "certs/lpic-1/107.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/107.1/en/content.md",
+              "heading": "LPIC-1 · Topic 107.1 — Manage user and group accounts and related system files",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Manage user and group accounts and related system files",
+          "topic": "107.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/107.1/en/exercises.md:2",
+              "certs/lpic-1/107.1/en/exercises.md:968",
+              "certs/lpic-1/107.1/es/exercises.md:2",
+              "certs/lpic-1/107.1/es/exercises.md:968",
+              "certs/lpic-1/107.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Administrative Tasks",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "107.2",
+          "planned_files": [
+            "certs/lpic-1/107.2/en/content.md",
+            "certs/lpic-1/107.2/en/exercises.md",
+            "certs/lpic-1/107.2/en/meta.yaml",
+            "certs/lpic-1/107.2/es/content.md",
+            "certs/lpic-1/107.2/es/exercises.md",
+            "certs/lpic-1/107.2/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/107.2/en/content.md",
+              "heading": "LPIC-1 · Topic 107.2 — Automate system administration tasks by scheduling jobs",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/en/content.md",
+              "heading": "2.1 Trade-off matrix",
+              "line": 34,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/en/content.md",
+              "heading": "7.1 The two-unit model",
+              "line": 665,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/en/content.md",
+              "heading": "8.1 Ansible role — idempotent, declarative scheduling",
+              "line": 904,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/es/content.md",
+              "heading": "2.1 Matriz de compromisos",
+              "line": 34,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/es/content.md",
+              "heading": "7.1 El modelo de dos unidades",
+              "line": 665,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/107.2/es/content.md",
+              "heading": "8.1 Rol de Ansible — planificación idempotente y declarativa",
+              "line": 904,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Automate system administration tasks by scheduling jobs",
+          "topic": "107.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/107.2/en/content.md:3",
+              "certs/lpic-1/107.2/en/exercises.md:4",
+              "certs/lpic-1/107.2/en/exercises.md:1272",
+              "certs/lpic-1/107.2/en/exercises.md:1273",
+              "certs/lpic-1/107.2/es/content.md:3",
+              "certs/lpic-1/107.2/es/exercises.md:4",
+              "certs/lpic-1/107.2/es/exercises.md:1272",
+              "certs/lpic-1/107.2/es/exercises.md:1273"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Administrative Tasks",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "107.3",
+          "planned_files": [
+            "certs/lpic-1/107.3/en/content.md",
+            "certs/lpic-1/107.3/en/exercises.md",
+            "certs/lpic-1/107.3/en/meta.yaml",
+            "certs/lpic-1/107.3/es/content.md",
+            "certs/lpic-1/107.3/es/exercises.md",
+            "certs/lpic-1/107.3/es/meta.yaml",
+            "certs/lpic-1/107.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/107.3/en/content.md",
+              "heading": "107.3 — Localisation and Internationalisation",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Localisation and internationalisation",
+          "topic": "107.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/107.3/en/content.md:3",
+              "certs/lpic-1/107.3/en/exercises.md:899",
+              "certs/lpic-1/107.3/en/exercises.md:900",
+              "certs/lpic-1/107.3/es/content.md:3",
+              "certs/lpic-1/107.3/es/exercises.md:899",
+              "certs/lpic-1/107.3/es/exercises.md:900",
+              "certs/lpic-1/107.3/lab/break_fix.sh:5"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Essential System Services",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "108.1",
+          "planned_files": [
+            "certs/lpic-1/108.1/en/content.md",
+            "certs/lpic-1/108.1/en/exercises.md",
+            "certs/lpic-1/108.1/en/meta.yaml",
+            "certs/lpic-1/108.1/es/content.md",
+            "certs/lpic-1/108.1/es/exercises.md",
+            "certs/lpic-1/108.1/es/meta.yaml",
+            "certs/lpic-1/108.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/108.1/en/content.md",
+              "heading": "7.2 `/etc/ntp.conf` (reference `ntpd`)",
+              "line": 703,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Maintain system time",
+          "topic": "108.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/108.1/en/content.md:3",
+              "certs/lpic-1/108.1/en/exercises.md:841",
+              "certs/lpic-1/108.1/en/exercises.md:842",
+              "certs/lpic-1/108.1/es/content.md:3",
+              "certs/lpic-1/108.1/es/exercises.md:841",
+              "certs/lpic-1/108.1/es/exercises.md:842",
+              "certs/lpic-1/108.1/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Essential System Services",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "108.2",
+          "planned_files": [
+            "certs/lpic-1/108.2/en/content.md",
+            "certs/lpic-1/108.2/en/meta.yaml",
+            "certs/lpic-1/108.2/es/content.md",
+            "certs/lpic-1/108.2/es/meta.yaml",
+            "certs/lpic-1/108.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "System logging",
+          "topic": "108.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/108.2/en/content.md:3",
+              "certs/lpic-1/108.2/es/content.md:3",
+              "certs/lpic-1/108.2/lab/break_fix.sh:4",
+              "certs/lpic-1/108.2/lab/break_fix.sh:7"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Essential System Services",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "108.3",
+          "planned_files": [
+            "certs/lpic-1/108.3/en/content.md",
+            "certs/lpic-1/108.3/en/exercises.md",
+            "certs/lpic-1/108.3/en/meta.yaml",
+            "certs/lpic-1/108.3/es/content.md",
+            "certs/lpic-1/108.3/es/exercises.md",
+            "certs/lpic-1/108.3/es/meta.yaml",
+            "certs/lpic-1/108.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Mail Transfer Agent (MTA) basics",
+          "topic": "108.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/108.3/en/content.md:3",
+              "certs/lpic-1/108.3/en/exercises.md:2",
+              "certs/lpic-1/108.3/en/exercises.md:881",
+              "certs/lpic-1/108.3/en/exercises.md:882",
+              "certs/lpic-1/108.3/es/content.md:3",
+              "certs/lpic-1/108.3/es/exercises.md:2",
+              "certs/lpic-1/108.3/es/exercises.md:881",
+              "certs/lpic-1/108.3/es/exercises.md:882",
+              "certs/lpic-1/108.3/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Essential System Services",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "108.4",
+          "planned_files": [
+            "certs/lpic-1/108.4/en/content.md",
+            "certs/lpic-1/108.4/en/meta.yaml",
+            "certs/lpic-1/108.4/es/content.md",
+            "certs/lpic-1/108.4/es/meta.yaml",
+            "certs/lpic-1/108.4/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 10%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/108.4/en/content.md",
+              "heading": "108.4 — Manage Printers and Printing",
+              "line": 1,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Manage printers and printing",
+          "topic": "108.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/108.4/en/content.md:3",
+              "certs/lpic-1/108.4/es/content.md:3",
+              "certs/lpic-1/108.4/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Networking Fundamentals",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "109.1",
+          "planned_files": [
+            "certs/lpic-1/109.1/en/content.md",
+            "certs/lpic-1/109.1/en/meta.yaml",
+            "certs/lpic-1/109.1/es/content.md",
+            "certs/lpic-1/109.1/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 0% -> 11.66%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Fundamentals of internet protocols",
+          "topic": "109.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/109.1/en/content.md:3",
+              "certs/lpic-1/109.1/en/content.md:1360",
+              "certs/lpic-1/109.1/es/content.md:3",
+              "certs/lpic-1/109.1/es/content.md:1360"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Networking Fundamentals",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "109.2",
+          "planned_files": [
+            "certs/lpic-1/109.2/en/content.md",
+            "certs/lpic-1/109.2/en/exercises.md",
+            "certs/lpic-1/109.2/en/meta.yaml",
+            "certs/lpic-1/109.2/es/content.md",
+            "certs/lpic-1/109.2/es/exercises.md",
+            "certs/lpic-1/109.2/es/meta.yaml",
+            "certs/lpic-1/109.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 11.66%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Persistent network configuration",
+          "topic": "109.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/109.2/en/content.md:3",
+              "certs/lpic-1/109.2/en/content.md:1304",
+              "certs/lpic-1/109.2/en/content.md:1305",
+              "certs/lpic-1/109.2/en/exercises.md:2",
+              "certs/lpic-1/109.2/en/exercises.md:971",
+              "certs/lpic-1/109.2/es/content.md:3",
+              "certs/lpic-1/109.2/es/content.md:1304",
+              "certs/lpic-1/109.2/es/content.md:1305",
+              "certs/lpic-1/109.2/es/exercises.md:2",
+              "certs/lpic-1/109.2/es/exercises.md:971",
+              "certs/lpic-1/109.2/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Networking Fundamentals",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "109.3",
+          "planned_files": [
+            "certs/lpic-1/109.3/en/content.md",
+            "certs/lpic-1/109.3/en/meta.yaml",
+            "certs/lpic-1/109.3/es/content.md",
+            "certs/lpic-1/109.3/es/meta.yaml",
+            "certs/lpic-1/109.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 11.66%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/109.3/en/content.md",
+              "heading": "5.4 Reachability: `ping`",
+              "line": 319,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Basic network troubleshooting",
+          "topic": "109.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/109.3/en/content.md:3",
+              "certs/lpic-1/109.3/en/content.md:73",
+              "certs/lpic-1/109.3/en/content.md:1719",
+              "certs/lpic-1/109.3/en/content.md:1742",
+              "certs/lpic-1/109.3/en/content.md:1743",
+              "certs/lpic-1/109.3/es/content.md:3",
+              "certs/lpic-1/109.3/es/content.md:73",
+              "certs/lpic-1/109.3/es/content.md:1719",
+              "certs/lpic-1/109.3/es/content.md:1742",
+              "certs/lpic-1/109.3/es/content.md:1743",
+              "certs/lpic-1/109.3/lab/break_fix.sh:4"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Networking Fundamentals",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "109.4",
+          "planned_files": [
+            "certs/lpic-1/109.4/en/exercises.md",
+            "certs/lpic-1/109.4/en/meta.yaml",
+            "certs/lpic-1/109.4/es/exercises.md",
+            "certs/lpic-1/109.4/es/meta.yaml"
+          ],
+          "reasons": [
+            "domain weight 0% -> 11.66%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configure client side DNS",
+          "topic": "109.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/109.4/en/exercises.md:3",
+              "certs/lpic-1/109.4/en/exercises.md:937",
+              "certs/lpic-1/109.4/en/exercises.md:938",
+              "certs/lpic-1/109.4/es/exercises.md:3",
+              "certs/lpic-1/109.4/es/exercises.md:937",
+              "certs/lpic-1/109.4/es/exercises.md:938"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "110.1",
+          "planned_files": [
+            "certs/lpic-1/110.1/en/content.md",
+            "certs/lpic-1/110.1/en/exercises.md",
+            "certs/lpic-1/110.1/en/meta.yaml",
+            "certs/lpic-1/110.1/es/content.md",
+            "certs/lpic-1/110.1/es/exercises.md",
+            "certs/lpic-1/110.1/es/meta.yaml",
+            "certs/lpic-1/110.1/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 8.33%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/110.1/en/content.md",
+              "heading": "5.4 systemd — the layer that actually governs services",
+              "line": 890,
+              "why": [
+                "weight"
+              ]
+            },
+            {
+              "file": "certs/lpic-1/110.1/es/content.md",
+              "heading": "5.4 systemd — la capa que realmente gobierna los servicios",
+              "line": 890,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Perform security administration tasks",
+          "topic": "110.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/110.1/en/content.md:3",
+              "certs/lpic-1/110.1/en/exercises.md:3",
+              "certs/lpic-1/110.1/es/content.md:3",
+              "certs/lpic-1/110.1/es/exercises.md:3",
+              "certs/lpic-1/110.1/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "110.2",
+          "planned_files": [
+            "certs/lpic-1/110.2/en/content.md",
+            "certs/lpic-1/110.2/en/exercises.md",
+            "certs/lpic-1/110.2/en/meta.yaml",
+            "certs/lpic-1/110.2/es/content.md",
+            "certs/lpic-1/110.2/es/meta.yaml",
+            "certs/lpic-1/110.2/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 8.33%"
+          ],
+          "sections": [
+            {
+              "file": "certs/lpic-1/110.2/en/exercises.md",
+              "heading": "Guided Exercises",
+              "line": 3,
+              "why": [
+                "weight"
+              ]
+            }
+          ],
+          "similarity": 1.0,
+          "title": "Setup host security",
+          "topic": "110.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/110.2/en/content.md:3",
+              "certs/lpic-1/110.2/es/content.md:3",
+              "certs/lpic-1/110.2/lab/break_fix.sh:3"
+            ]
+          }
+        },
+        {
+          "class": "revalidate",
+          "domain": "Security",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "110.3",
+          "planned_files": [
+            "certs/lpic-1/110.3/en/content.md",
+            "certs/lpic-1/110.3/en/exercises.md",
+            "certs/lpic-1/110.3/en/meta.yaml",
+            "certs/lpic-1/110.3/es/content.md",
+            "certs/lpic-1/110.3/es/exercises.md",
+            "certs/lpic-1/110.3/es/meta.yaml",
+            "certs/lpic-1/110.3/lab/break_fix.sh"
+          ],
+          "reasons": [
+            "domain weight 0% -> 8.33%"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Securing data with encryption",
+          "topic": "110.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-1/110.3/en/content.md:3",
+              "certs/lpic-1/110.3/en/exercises.md:3",
+              "certs/lpic-1/110.3/es/content.md:3",
+              "certs/lpic-1/110.3/es/exercises.md:3",
+              "certs/lpic-1/110.3/lab/break_fix.sh:3"
+            ]
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/lpic-1.md",
+        "sha256": "45d706998e1bb4e69c39914dc045fe851af786339d625438abccdf6c1b73a81b",
+        "version": "5.0"
+      }
+    },
+    "lpic-2": {
+      "cert": "lpic-2",
+      "counts": {
+        "keep": 41,
+        "new": 0,
+        "regenerate": 0,
+        "retire": 0,
+        "revalidate": 0
+      },
+      "efficiency": {
+        "planned_files": 4,
+        "sections_to_edit": 0,
+        "topic_files": 9,
+        "version_lines": {
+          "curriculum": 0,
+          "label": 0,
+          "technical": 8
+        }
+      },
+      "impact": {
+        "domains": {
+          "added": [],
+          "removed": [],
+          "renamed": [],
+          "weight_changed": []
+        },
+        "identical": true,
+        "new": {
+          "domains": 13,
+          "objectives": 41,
+          "version": "4.5.0"
+        },
+        "objectives": {
+          "added": [],
+          "changed": [],
+          "moved": [],
+          "removed": [],
+          "reworded": [],
+          "unchanged": [
+            {
+              "new_id": "200.1",
+              "old_id": "200.1",
+              "similarity": 1.0,
+              "text": "Measure and Troubleshoot Resource Usage"
+            },
+            {
+              "new_id": "200.2",
+              "old_id": "200.2",
+              "similarity": 1.0,
+              "text": "Predict Future Resource Needs"
+            },
+            {
+              "new_id": "201.1",
+              "old_id": "201.1",
+              "similarity": 1.0,
+              "text": "Kernel components"
+            },
+            {
+              "new_id": "201.2",
+              "old_id": "201.2",
+              "similarity": 1.0,
+              "text": "Compiling a Linux kernel"
+            },
+            {
+              "new_id": "201.3",
+              "old_id": "201.3",
+              "similarity": 1.0,
+              "text": "Kernel runtime management and troubleshooting"
+            },
+            {
+              "new_id": "202.1",
+              "old_id": "202.1",
+              "similarity": 1.0,
+              "text": "Customizing system startup"
+            },
+            {
+              "new_id": "202.2",
+              "old_id": "202.2",
+              "similarity": 1.0,
+              "text": "System recovery"
+            },
+            {
+              "new_id": "202.3",
+              "old_id": "202.3",
+              "similarity": 1.0,
+              "text": "Alternate Bootloaders"
+            },
+            {
+              "new_id": "203.1",
+              "old_id": "203.1",
+              "similarity": 1.0,
+              "text": "Operating the Linux filesystem"
+            },
+            {
+              "new_id": "203.2",
+              "old_id": "203.2",
+              "similarity": 1.0,
+              "text": "Maintaining a Linux filesystem"
+            },
+            {
+              "new_id": "203.3",
+              "old_id": "203.3",
+              "similarity": 1.0,
+              "text": "Creating and configuring filesystem options"
+            },
+            {
+              "new_id": "204.1",
+              "old_id": "204.1",
+              "similarity": 1.0,
+              "text": "Configuring RAID"
+            },
+            {
+              "new_id": "204.2",
+              "old_id": "204.2",
+              "similarity": 1.0,
+              "text": "Adjusting Storage Device Access"
+            },
+            {
+              "new_id": "204.3",
+              "old_id": "204.3",
+              "similarity": 1.0,
+              "text": "Logical Volume Manager"
+            },
+            {
+              "new_id": "205.1",
+              "old_id": "205.1",
+              "similarity": 1.0,
+              "text": "Basic networking configuration"
+            },
+            {
+              "new_id": "205.2",
+              "old_id": "205.2",
+              "similarity": 1.0,
+              "text": "Advanced Network Configuration"
+            },
+            {
+              "new_id": "205.3",
+              "old_id": "205.3",
+              "similarity": 1.0,
+              "text": "Troubleshooting network issues"
+            },
+            {
+              "new_id": "206.1",
+              "old_id": "206.1",
+              "similarity": 1.0,
+              "text": "Make and install programs from source"
+            },
+            {
+              "new_id": "206.2",
+              "old_id": "206.2",
+              "similarity": 1.0,
+              "text": "Backup operations"
+            },
+            {
+              "new_id": "206.3",
+              "old_id": "206.3",
+              "similarity": 1.0,
+              "text": "Notify users on system-related issues"
+            },
+            {
+              "new_id": "207.1",
+              "old_id": "207.1",
+              "similarity": 1.0,
+              "text": "Basic DNS server configuration"
+            },
+            {
+              "new_id": "207.2",
+              "old_id": "207.2",
+              "similarity": 1.0,
+              "text": "Create and maintain DNS zones"
+            },
+            {
+              "new_id": "207.3",
+              "old_id": "207.3",
+              "similarity": 1.0,
+              "text": "Securing a DNS server"
+            },
+            {
+              "new_id": "208.1",
+              "old_id": "208.1",
+              "similarity": 1.0,
+              "text": "Basic Apache configuration"
+            },
+            {
+              "new_id": "208.2",
+              "old_id": "208.2",
+              "similarity": 1.0,
+              "text": "Apache configuration for HTTPS"
+            },
+            {
+              "new_id": "208.3",
+              "old_id": "208.3",
+              "similarity": 1.0,
+              "text": "Implementing Squid as a caching proxy"
+            },
+            {
+              "new_id": "208.4",
+              "old_id": "208.4",
+              "similarity": 1.0,
+              "text": "Implementing Nginx as a web server and a reverse proxy"
+            },
+            {
+              "new_id": "209.1",
+              "old_id": "209.1",
+              "similarity": 1.0,
+              "text": "Samba Server Configuration"
+            },
+            {
+              "new_id": "209.2",
+              "old_id": "209.2",
+              "similarity": 1.0,
+              "text": "NFS Server Configuration"
+            },
+            {
+              "new_id": "210.1",
+              "old_id": "210.1",
+              "similarity": 1.0,
+              "text": "DHCP configuration"
+            },
+            {
+              "new_id": "210.2",
+              "old_id": "210.2",
+              "similarity": 1.0,
+              "text": "PAM authentication"
+            },
+            {
+              "new_id": "210.3",
+              "old_id": "210.3",
+              "similarity": 1.0,
+              "text": "LDAP client usage"
+            },
+            {
+              "new_id": "210.4",
+              "old_id": "210.4",
+              "similarity": 1.0,
+              "text": "Configuring an OpenLDAP server"
+            },
+            {
+              "new_id": "211.1",
+              "old_id": "211.1",
+              "similarity": 1.0,
+              "text": "Using e-mail servers"
+            },
+            {
+              "new_id": "211.2",
+              "old_id": "211.2",
+              "similarity": 1.0,
+              "text": "Managing E-Mail Delivery"
+            },
+            {
+              "new_id": "211.3",
+              "old_id": "211.3",
+              "similarity": 1.0,
+              "text": "Managing Mailbox Access"
+            },
+            {
+              "new_id": "212.1",
+              "old_id": "212.1",
+              "similarity": 1.0,
+              "text": "Configuring a router"
+            },
+            {
+              "new_id": "212.2",
+              "old_id": "212.2",
+              "similarity": 1.0,
+              "text": "Managing FTP servers"
+            },
+            {
+              "new_id": "212.3",
+              "old_id": "212.3",
+              "similarity": 1.0,
+              "text": "Secure shell (SSH)"
+            },
+            {
+              "new_id": "212.4",
+              "old_id": "212.4",
+              "similarity": 1.0,
+              "text": "Security tasks"
+            },
+            {
+              "new_id": "212.5",
+              "old_id": "212.5",
+              "similarity": 1.0,
+              "text": "OpenVPN"
+            }
+          ]
+        },
+        "old": {
+          "domains": 13,
+          "objectives": 41,
+          "version": "4.5.0"
+        },
+        "thresholds": {
+          "match": 0.6,
+          "reword": 0.9
+        }
+      },
+      "new": [],
+      "target": {
+        "file": "syllabi/lpic-2/v4.5.0.yaml",
+        "sha256": "e1b90b0410db73b839358119c65276964376652e02951972a4fed2a5a280e817",
+        "source": {
+          "committed": "2026-11-15",
+          "sha256": "3fe89bac36f1f4253e58aaadcfb474eb405fcd5c6da8dcbf816a0a5ae3aa21be",
+          "url": "https://www.lpi.org/our-certifications/exam-201-202-objectives/"
+        },
+        "tree_sha256": "10bbc865edee97fc6977b430b9d9b6984545c7cb263c1ac1133c65f11aa51fd9",
+        "version": "4.5.0"
+      },
+      "topics": [
+        {
+          "class": "keep",
+          "domain": "Capacity Planning",
+          "lab": true,
+          "languages": [
+            "en",
+            "es"
+          ],
+          "maps_to": "200.1",
+          "planned_files": [
+            "certs/lpic-2/200.1/en/content.md",
+            "certs/lpic-2/200.1/en/exercises.md",
+            "certs/lpic-2/200.1/es/content.md",
+            "certs/lpic-2/200.1/es/exercises.md"
+          ],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Measure and Troubleshoot Resource Usage",
+          "topic": "200.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": [
+              "certs/lpic-2/200.1/en/content.md:3",
+              "certs/lpic-2/200.1/en/content.md:2577",
+              "certs/lpic-2/200.1/en/exercises.md:2",
+              "certs/lpic-2/200.1/en/exercises.md:1458",
+              "certs/lpic-2/200.1/es/content.md:3",
+              "certs/lpic-2/200.1/es/content.md:2577",
+              "certs/lpic-2/200.1/es/exercises.md:2",
+              "certs/lpic-2/200.1/es/exercises.md:1458"
+            ]
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Capacity Planning",
+          "lab": false,
+          "languages": [],
+          "maps_to": "200.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Predict Future Resource Needs",
+          "topic": "200.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Linux Kernel",
+          "lab": false,
+          "languages": [],
+          "maps_to": "201.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Kernel components",
+          "topic": "201.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Linux Kernel",
+          "lab": false,
+          "languages": [],
+          "maps_to": "201.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Compiling a Linux kernel",
+          "topic": "201.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Linux Kernel",
+          "lab": false,
+          "languages": [],
+          "maps_to": "201.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Kernel runtime management and troubleshooting",
+          "topic": "201.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Startup",
+          "lab": false,
+          "languages": [],
+          "maps_to": "202.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Customizing system startup",
+          "topic": "202.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Startup",
+          "lab": false,
+          "languages": [],
+          "maps_to": "202.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "System recovery",
+          "topic": "202.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Startup",
+          "lab": false,
+          "languages": [],
+          "maps_to": "202.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Alternate Bootloaders",
+          "topic": "202.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Filesystem and Devices",
+          "lab": false,
+          "languages": [],
+          "maps_to": "203.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Operating the Linux filesystem",
+          "topic": "203.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Filesystem and Devices",
+          "lab": false,
+          "languages": [],
+          "maps_to": "203.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Maintaining a Linux filesystem",
+          "topic": "203.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Filesystem and Devices",
+          "lab": false,
+          "languages": [],
+          "maps_to": "203.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Creating and configuring filesystem options",
+          "topic": "203.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Storage Device Administration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "204.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring RAID",
+          "topic": "204.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Storage Device Administration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "204.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Adjusting Storage Device Access",
+          "topic": "204.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Advanced Storage Device Administration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "204.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Logical Volume Manager",
+          "topic": "204.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Networking Configuration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "205.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Basic networking configuration",
+          "topic": "205.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Networking Configuration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "205.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Advanced Network Configuration",
+          "topic": "205.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Networking Configuration",
+          "lab": false,
+          "languages": [],
+          "maps_to": "205.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Troubleshooting network issues",
+          "topic": "205.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Maintenance",
+          "lab": false,
+          "languages": [],
+          "maps_to": "206.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Make and install programs from source",
+          "topic": "206.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Maintenance",
+          "lab": false,
+          "languages": [],
+          "maps_to": "206.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Backup operations",
+          "topic": "206.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Maintenance",
+          "lab": false,
+          "languages": [],
+          "maps_to": "206.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Notify users on system-related issues",
+          "topic": "206.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Domain Name Server",
+          "lab": false,
+          "languages": [],
+          "maps_to": "207.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Basic DNS server configuration",
+          "topic": "207.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Domain Name Server",
+          "lab": false,
+          "languages": [],
+          "maps_to": "207.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Create and maintain DNS zones",
+          "topic": "207.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Domain Name Server",
+          "lab": false,
+          "languages": [],
+          "maps_to": "207.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Securing a DNS server",
+          "topic": "207.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "HTTP Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "208.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Basic Apache configuration",
+          "topic": "208.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "HTTP Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "208.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Apache configuration for HTTPS",
+          "topic": "208.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "HTTP Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "208.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Squid as a caching proxy",
+          "topic": "208.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "HTTP Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "208.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Implementing Nginx as a web server and a reverse proxy",
+          "topic": "208.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "File Sharing",
+          "lab": false,
+          "languages": [],
+          "maps_to": "209.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Samba Server Configuration",
+          "topic": "209.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "File Sharing",
+          "lab": false,
+          "languages": [],
+          "maps_to": "209.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "NFS Server Configuration",
+          "topic": "209.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Client Management",
+          "lab": false,
+          "languages": [],
+          "maps_to": "210.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "DHCP configuration",
+          "topic": "210.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Client Management",
+          "lab": false,
+          "languages": [],
+          "maps_to": "210.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "PAM authentication",
+          "topic": "210.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Client Management",
+          "lab": false,
+          "languages": [],
+          "maps_to": "210.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "LDAP client usage",
+          "topic": "210.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "Network Client Management",
+          "lab": false,
+          "languages": [],
+          "maps_to": "210.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring an OpenLDAP server",
+          "topic": "210.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "E-Mail Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "211.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Using e-mail servers",
+          "topic": "211.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "E-Mail Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "211.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing E-Mail Delivery",
+          "topic": "211.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "E-Mail Services",
+          "lab": false,
+          "languages": [],
+          "maps_to": "211.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing Mailbox Access",
+          "topic": "211.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Security",
+          "lab": false,
+          "languages": [],
+          "maps_to": "212.1",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Configuring a router",
+          "topic": "212.1",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Security",
+          "lab": false,
+          "languages": [],
+          "maps_to": "212.2",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Managing FTP servers",
+          "topic": "212.2",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Security",
+          "lab": false,
+          "languages": [],
+          "maps_to": "212.3",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Secure shell (SSH)",
+          "topic": "212.3",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Security",
+          "lab": false,
+          "languages": [],
+          "maps_to": "212.4",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "Security tasks",
+          "topic": "212.4",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        },
+        {
+          "class": "keep",
+          "domain": "System Security",
+          "lab": false,
+          "languages": [],
+          "maps_to": "212.5",
+          "planned_files": [],
+          "reasons": [
+            "unchanged"
+          ],
+          "sections": [],
+          "similarity": 1.0,
+          "title": "OpenVPN",
+          "topic": "212.5",
+          "version_lines": {
+            "citations": [],
+            "curriculum": 0,
+            "label": 0,
+            "technical": []
+          }
+        }
+      ],
+      "tracked": {
+        "file": "certs/lpic-2.md",
+        "sha256": "73123cc969f764032666f789fd2dead7a416afbd2528fa5c1fbd451409942379",
+        "version": "4.5.0"
+      }
+    }
+  },
+  "issue": 235,
+  "milestone": "v0.6.11",
+  "planned_files": {
+    "keep": [],
+    "new": [
+      "{t}/**"
+    ],
+    "regenerate": [
+      "{t}/**"
+    ],
+    "retire": [
+      "{t}/**"
+    ],
+    "revalidate": [
+      "{t}/{lang}/meta.yaml"
+    ]
+  },
+  "rules": [
+    {
+      "action": "archive the topic directory; redirect its links",
+      "class": "retire",
+      "rule": "its objective is not in the new syllabus (removed, or below MATCH similarity to every new one)"
+    },
+    {
+      "action": "one PR through the whole content process (content, exercises, lab, translations)",
+      "class": "regenerate",
+      "rule": "its objective changed: best match has MATCH (0.6) <= similarity < REWORD (0.9)"
+    },
+    {
+      "action": "re-run every check against the new text; record the result in meta.yaml; a failed check makes it regenerate",
+      "class": "revalidate",
+      "rule": "its objective was reworded (REWORD <= similarity < 1), moved to another domain, or its domain's published weight changed"
+    },
+    {
+      "action": "no content change; only its listed technical version lines may be rewritten in place, by the version bump",
+      "class": "keep",
+      "rule": "its objective text, domain and domain weight are identical"
+    },
+    {
+      "action": "a new topic directory, through the whole content process",
+      "class": "new",
+      "rule": "an objective of the new syllabus that no topic covers"
+    }
+  ],
+  "spec": "docs/upgrades/lpic-canonical-pages.yaml",
+  "thresholds": {
+    "match": 0.6,
+    "reword": 0.9
+  },
+  "upgrade": "LPIC canonical objective pages"
+}

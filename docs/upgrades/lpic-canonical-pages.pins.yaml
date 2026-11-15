@@ -1,0 +1,22 @@
+# The pins of the LPIC canonical objective pages upgrade (#235). Written by a person (scripts/upgrade_pins.py reads
+# Kubernetes sources only). It moves no version: LPIC-1 stays 5.0 and LPIC-2 4.5.0, and what moves is the objectives
+# document, from the alias pages to the canonical ones. So, as for CKNE GA, it only pins the date a tool edit stamps and
+# the one scripted editor the guard accepts: `upgrade_versions.py --scope citations --cert lpic-1` (and lpic-2) runs in
+# the switch PR, after `curriculum_diff.py switch`, because an upgrade whose version does not move has no upstream
+# window to move the citations in before it (docs/upgrades/README.md, step 6).
+upgrade: lpic-canonical-pages
+date: '2026-11-15'          # the day the pages were read and frozen; what a tool edit stamps in meta.yaml (never the clock)
+tool: scripts/upgrade_versions.py   # the one scripted editor the guard accepts for this upgrade
+tool_sha256: 70f348f481dd43d832ec5343b728c7351e6f029409f502ee5b126baf1b087ebe   # its sha256: change the script and this line moves with it (the guard checks it when the tool edits)
+# What each LPI URL said when read on 2026-11-15 (curl -L; the pages are MediaWiki articles behind a WordPress cache,
+# so their bytes change when the cache is rebuilt even when the objectives do not: tree_sha256 in the snapshot is the
+# stable identity, the page sha256 is the bytes read that day)
+live:
+  lpic-1:
+    canonical: https://www.lpi.org/our-certifications/exam-101-102-objectives/   # 200, no redirect; "These objectives are version 5.0"; wiki revision 5808; page sha256 28ef9305…, tree 6af4b498…
+    alias: https://www.lpi.org/our-certifications/exam-101-objectives/   # 200 after 1 redirect to the canonical page (the catalog's pin today)
+    dead: https://www.lpi.org/our-certifications/exam-102-objectives/   # redirects to https://www.lpi.org/ (still listed in certs/lpic-1.md)
+  lpic-2:
+    canonical: https://www.lpi.org/our-certifications/exam-201-202-objectives/   # 200, no redirect; "These objectives are version 4.5.0"; wiki revision 5722; page sha256 3fe89bac…, tree 10bbc865…
+    alias: https://www.lpi.org/our-certifications/exam-201-objectives/   # 200 after 1 redirect to the canonical page (the catalog's pin today)
+    dead: https://www.lpi.org/our-certifications/exam-202-objectives/   # redirects to https://www.lpi.org/ (still listed in certs/lpic-2.md)

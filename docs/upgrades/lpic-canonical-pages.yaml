@@ -1,0 +1,23 @@
+# Upgrade spec for scripts/curriculum_diff.py plan (#63). The plan and the report next to this file are
+# generated from it and from the files it names; nothing in them is written by hand.
+#
+#   scripts/curriculum_diff.py plan docs/upgrades/lpic-canonical-pages.yaml
+#   scripts/curriculum_diff.py render docs/upgrades/lpic-canonical-pages.plan.json -o docs/upgrades/lpic-canonical-pages.md
+#
+# tracked:  the frozen syllabi the material was built against, snapshotted on 2026-08-11 from the alias pages
+#           exam-101-objectives and exam-201-objectives (and the dead exam-102 / exam-202 pages)
+# target:   the canonical LPI objective pages, exam-101-102-objectives (LPIC-1 5.0) and exam-201-202-objectives
+#           (LPIC-2 4.5.0), frozen by `curriculum_diff.py extract --html`. The versions do not change: the upgrade
+#           moves the objectives document from the alias to the canonical page (#235), which check_pr treats as an
+#           exam-version change, so the switch needs this spec on the base
+# No upstream_base: no earlier snapshot of these pages exists. No window: the version does not move.
+upgrade: LPIC canonical objective pages
+milestone: v0.6.11
+issue: 235
+certs:
+  lpic-1:
+    tracked: certs/lpic-1.md
+    target: syllabi/lpic-1/v5.0.yaml
+  lpic-2:
+    tracked: certs/lpic-2.md
+    target: syllabi/lpic-2/v4.5.0.yaml
