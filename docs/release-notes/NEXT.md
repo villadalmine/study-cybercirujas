@@ -8,6 +8,7 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
+- **LPI objective pages can be frozen:** `curriculum_diff.py extract --html` reads an LPI objectives page (hashed, dated, weights as each objective's share of the questions), so LPIC-1/LPIC-2 can move to the canonical LPI pages through the deterministic upgrade process (#235).
 
 ## Upgrade notes
 
