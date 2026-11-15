@@ -154,12 +154,18 @@ def chain_check(lang_dir: Path, meta: dict, ctx: Context) -> dict:
     return entry("source_chain", "pass", w, "declares its origin" + (" (source_sha256 matches)" if stale else " (sources + References)"))
 
 
+PERSON_REPORT = re.compile(r"\s*by\s+\S", re.IGNORECASE)   # "by <login>": a person's report (#217)
+
+
 def proof_problem(evidence: str) -> str | None:
     """Why a recorded `evidence` is not a proof that can be checked, or None when it is one.
 
     A proof is a run link (https://...) or the sha256 of a log. When the log is a file in this repository,
     its sha256 must be the recorded one: a log edited or deleted after the entry is not evidence any more.
-    A person's report ("by <login>") is neither: it is kept in the evidence file, it earns no credit here."""
+    A person's report ("by <login>") is neither, even when it carries a link: it is kept in the evidence file, it earns
+    no credit here."""
+    if PERSON_REPORT.match(evidence):
+        return "a person's report (by <login>), not a run link or log sha256"
     logs = LOG_SHA.findall(evidence)
     for path, digest in logs:
         if path and REPO_PATH.match(path) and not RUN_LINK.match(path):
@@ -201,7 +207,9 @@ def lab_check(topic_dir: Path, ctx: Context) -> dict:
         return entry("lab", "not_run", w, f"{claimed}the lab does not load: {error}"[:200])
     why = {}
     for target, e in sorted(recorded.items(), key=lambda te: (te[1]["date"], te[0]), reverse=True):
-        if e["lab_hash"] != current:
+        if target.startswith("human-"):
+            why[target] = f"{target}: a person's observation (deploy/lab-targets.yaml), not a checkable proof"
+        elif e["lab_hash"] != current:
             why[target] = f"stale on {target}: proven for lab hash {e['lab_hash'][:8]}, the lab is now {current[:8]}"
         elif problem := proof_problem(str(e["evidence"])):
             why[target] = f"{target}: {problem}"

@@ -259,11 +259,22 @@ class LabEvidenceTests(unittest.TestCase):
         self.assertIn("not in the repository", got["evidence"])
 
     def test_a_person_s_report_or_a_bare_sentence_is_not_a_checkable_proof(self):
-        for words in ("by villadalmine (deploy/killercoda/human_tested.yaml)", "ran it, it works"):
-            with self.subTest(evidence=words):
-                got = self.run_check(self.proof(words, target="human-killercoda"))
+        cases = (("by villadalmine (deploy/killercoda/human_tested.yaml)", "human-killercoda", "person"),
+                 ("by villadalmine (deploy/killercoda/human_tested.yaml)", "docker-linux", "person"),
+                 ("ran it, it works", "docker-linux", "no run link or log sha256"))
+        for words, target, why in cases:
+            with self.subTest(evidence=words, target=target):
+                got = self.run_check(self.proof(words, target=target))
                 self.assertEqual(got["result"], "not_run")
-                self.assertIn("no run link or log sha256", got["evidence"])
+                self.assertIn(why, got["evidence"])
+
+    def test_a_person_s_report_with_a_link_still_earns_nothing(self):
+        linked = "by villadalmine, scenario at https://killercoda.com/villadalmine/scenario/cka-1-1"
+        for target in ("human-killercoda", "docker-linux"):
+            with self.subTest(target=target):
+                got = self.run_check(self.proof(linked, target=target))
+                self.assertEqual(got["result"], "not_run")
+                self.assertIn("person", got["evidence"])
 
     def test_one_usable_target_is_enough(self):
         proof = {**self.proof(lab_hash="0" * 64, target="kind"), **self.proof()}
