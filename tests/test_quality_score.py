@@ -77,7 +77,7 @@ class BlockTests(unittest.TestCase):
         names = [c["name"] for c in a["checks"]]
         self.assertIn("groundedness", names)
         self.assertEqual(next(c for c in a["checks"] if c["name"] == "groundedness")["result"], "not_run")
-        self.assertEqual(next(c for c in a["checks"] if c["name"] == "lab")["result"], "pass")   # runner-verified
+        self.assertEqual(next(c for c in a["checks"] if c["name"] == "lab")["result"], "pass")   # deploy/lab-evidence.yaml
 
     def test_render_keeps_the_rest_of_meta_yaml_byte_for_byte(self):
         text = "generated_at: '2026-07-16'\nlang: en\nsources:\n- https://x\nquality:\n  score: 1\n  checks: []\n"
@@ -180,6 +180,105 @@ class RecordedGroundednessIsNotTrustedVerbatim(unittest.TestCase):
     def test_the_entry_keeps_the_keys_and_order_of_every_other_check(self):
         got = quality_score.groundedness_check({"quality": {"checks": [self.recorded(extra="x")]}}, W)
         self.assertEqual(list(got), ["name", "version", "result", "weight", "ran_at", "evidence"])
+
+
+class LabEvidenceTests(unittest.TestCase):
+    """The lab check credits only a proof that can be checked, for the lab as it is now (#217).
+
+    A copy of a real lab in a temporary repository: lab.yaml's `verified:` is self-declared, so the credit comes only from an
+    entry in deploy/lab-evidence.yaml with the current lab_hash and a run link or a log sha256."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self.topic = self.root / "certs" / "nca-aiio" / "3.4"
+        shutil.copytree(REPO / "certs" / "nca-aiio" / "3.4" / "lab", self.topic / "lab")
+        self.assertTrue(yaml.safe_load((self.topic / "lab" / "lab.yaml").read_text(encoding="utf-8"))["verified"]["status"])
+        patcher = mock.patch.object(quality_score, "REPO", self.root)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.addCleanup(self.tmp.cleanup)
+
+    def lab_hash(self):
+        return quality_score.kc_meta.lab_hash(quality_score.spec.load(self.topic / "lab", "curated"))
+
+    def run_check(self, evidence=None):
+        ctx = mock.Mock(weights=W, broken_labs=set(), lab_evidence={"nca-aiio/3.4": evidence} if evidence else {})
+        return quality_score.lab_check(self.topic, ctx)
+
+    def proof(self, evidence="https://github.com/o/r/actions/runs/1", lab_hash=None, target="docker-linux"):
+        return {target: {"date": "2026-11-14", "lab_hash": lab_hash or self.lab_hash(), "evidence": evidence,
+                         "runner": "study-lab:linux (debian-12)"}}
+
+    def test_a_bare_verified_true_without_evidence_earns_no_credit(self):
+        got = self.run_check()
+        self.assertEqual(got["result"], "not_run")
+        self.assertIn("claimed, not proven", got["evidence"])
+        self.assertIsNone(got["ran_at"])
+
+    def test_evidence_for_the_current_lab_hash_with_a_run_link_scores(self):
+        got = self.run_check(self.proof())
+        self.assertEqual((got["result"], got["ran_at"]), ("pass", "2026-11-14"))
+        self.assertIn("docker-linux", got["evidence"])
+
+    def test_evidence_without_a_verified_claim_still_scores(self):
+        lab_yaml = self.topic / "lab" / "lab.yaml"
+        doc = yaml.safe_load(lab_yaml.read_text(encoding="utf-8"))
+        doc["verified"] = {"status": False}
+        lab_yaml.write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8")
+        self.assertEqual(self.run_check(self.proof())["result"], "pass")
+
+    def test_stale_evidence_for_an_edited_lab_earns_no_credit(self):
+        proof = self.proof()
+        with open(self.topic / "lab" / "break_fix.sh", "a", encoding="utf-8") as script:
+            script.write("# edited after the proof\n")
+        got = self.run_check(proof)
+        self.assertEqual(got["result"], "not_run")
+        self.assertIn("stale on docker-linux", got["evidence"])
+        self.assertIn("claimed, not proven", got["evidence"])
+
+    def test_a_kept_log_must_still_have_its_recorded_sha256(self):
+        log = self.root / "docs" / "evidence" / "run.log"
+        log.parent.mkdir(parents=True)
+        log.write_text("break\ncheck FAIL\nfix\ncheck PASS\n", encoding="utf-8")
+        digest = quality_score.hashlib.sha256(log.read_bytes()).hexdigest()
+        proof = self.proof(f"docs/evidence/run.log sha256:{digest}")
+        self.assertEqual(self.run_check(proof)["result"], "pass")
+        log.write_text("check PASS\n", encoding="utf-8")
+        got = self.run_check(proof)
+        self.assertEqual(got["result"], "not_run")
+        self.assertIn("is not the recorded one", got["evidence"])
+        log.unlink()
+        self.assertIn("not in the repository", self.run_check(proof)["evidence"])
+        outside = self.root.parent / f"{self.root.name}-outside.log"   # a path that climbs out of the repository
+        outside.write_text("check PASS\n", encoding="utf-8")
+        self.addCleanup(outside.unlink)
+        digest = quality_score.hashlib.sha256(outside.read_bytes()).hexdigest()
+        got = self.run_check(self.proof(f"docs/../../{outside.name} sha256:{digest}"))
+        self.assertEqual(got["result"], "not_run")
+        self.assertIn("not in the repository", got["evidence"])
+
+    def test_a_person_s_report_or_a_bare_sentence_is_not_a_checkable_proof(self):
+        cases = (("by villadalmine (deploy/killercoda/human_tested.yaml)", "human-killercoda", "person"),
+                 ("by villadalmine (deploy/killercoda/human_tested.yaml)", "docker-linux", "person"),
+                 ("ran it, it works", "docker-linux", "no run link or log sha256"))
+        for words, target, why in cases:
+            with self.subTest(evidence=words, target=target):
+                got = self.run_check(self.proof(words, target=target))
+                self.assertEqual(got["result"], "not_run")
+                self.assertIn(why, got["evidence"])
+
+    def test_a_person_s_report_with_a_link_still_earns_nothing(self):
+        linked = "by villadalmine, scenario at https://killercoda.com/villadalmine/scenario/cka-1-1"
+        for target in ("human-killercoda", "docker-linux"):
+            with self.subTest(target=target):
+                got = self.run_check(self.proof(linked, target=target))
+                self.assertEqual(got["result"], "not_run")
+                self.assertIn("person", got["evidence"])
+
+    def test_one_usable_target_is_enough(self):
+        proof = {**self.proof(lab_hash="0" * 64, target="kind"), **self.proof()}
+        self.assertEqual(self.run_check(proof)["result"], "pass")
 
 
 class VisibleTests(unittest.TestCase):

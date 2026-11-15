@@ -152,7 +152,7 @@ To raise a topic's score, turn its `not_run` and `fail` entries into `pass`:
 | `k8s_manifests` | every YAML/JSON block parses; no removed Kubernetes API |
 | `translation_gate` | the translation keeps the source's code blocks, URLs, headings and length |
 | `source_chain` | the link declares its origin (docs/PRINCIPLES.md → The source chain) and it has not changed since |
-| `lab` | the topic's lab ran in the study-lab runner and its `lab.yaml` records `verified` |
+| `lab` | `deploy/lab-evidence.yaml` has a proof of the topic's lab for its current hash, with a run link or a log sha256; `lab.yaml → verified` alone is "claimed, not proven" (#217) |
 | `independent_review` | a `reviews:` entry in meta.yaml: `{by, link, date, result: pass}` — `fable (revisor-pr)` or Copilot, with the review's link |
 | `human_review` | a `human_edits:` entry (see *Provenance is mandatory*) |
 | `citations_resolve` | not run in CI today (network); it stays `not_run` |

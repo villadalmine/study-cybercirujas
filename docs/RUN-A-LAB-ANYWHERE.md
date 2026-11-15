@@ -70,7 +70,9 @@ runner}}`; `teach/lab/kc_scope.py` rejects an unknown target, a missing field, a
 `k3s-incus` proves the lab, not the Killercoda scenario (#103). Each target has a `role` there: `primary` (`kind`, `k3s-incus`,
 `docker-linux`) is where a lab is really proven, on our own infra; `optional-channel` (`killercoda-*`, `human-killercoda`) is a
 publishing channel, never required, never blocking, and the only evidence that allows pushing a scenario to the Killercoda
-mirror ([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)).
+mirror ([RFC #210](https://github.com/villadalmine/study-cybercirujas/issues/210)). The same file is the only thing the quality
+score's `lab` check credits ([#217](https://github.com/villadalmine/study-cybercirujas/issues/217)): an entry on any target for the lab's current hash with a
+run link or a log sha256; `lab.yaml → verified` alone is "claimed, not proven" and a `by <login>` report earns no credit there.
 
 ### How a lab gets proven before it is published
 

@@ -21,6 +21,7 @@ the result is a function of the files, not of when it was computed.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import sys
 from collections import Counter, defaultdict
@@ -38,8 +39,14 @@ import check_source_chain  # noqa: E402
 import check_sources  # noqa: E402
 from teach.core import generator, quality  # noqa: E402
 from teach.core.scoring import level_for, load_weights, score  # noqa: E402
+from teach.lab import kc_meta, kc_scope, spec  # noqa: E402
 
 KNOWN_BROKEN_LABS = REPO / "tests" / "fixtures" / "labs_known_broken.txt"
+LAB_EVIDENCE = kc_scope.EVIDENCE_FILE   # deploy/lab-evidence.yaml: lab -> target -> {date, lab_hash, evidence, runner}
+LAB_EVIDENCE_NAME = LAB_EVIDENCE.relative_to(REPO).as_posix()
+RUN_LINK = re.compile(r"https://\S+")
+LOG_SHA = re.compile(r"(?:(\S+)\s+)?sha256[:\s]+([0-9a-f]{64})\b")
+REPO_PATH = re.compile(r"^[\w.-]+(?:/[\w.-]+)+$")
 CHECK_VERSION = "1"
 
 
@@ -64,6 +71,7 @@ class Context:
                 path = line.split("#", 1)[0].strip()
                 if path:
                     self.broken_labs.add(path)
+        self.lab_evidence = kc_scope.load_evidence(LAB_EVIDENCE)
 
 
 def rel(path: Path) -> str:
@@ -146,19 +154,69 @@ def chain_check(lang_dir: Path, meta: dict, ctx: Context) -> dict:
     return entry("source_chain", "pass", w, "declares its origin" + (" (source_sha256 matches)" if stale else " (sources + References)"))
 
 
+PERSON_REPORT = re.compile(r"\s*by\s+\S", re.IGNORECASE)   # "by <login>": a person's report (#217)
+
+
+def proof_problem(evidence: str) -> str | None:
+    """Why a recorded `evidence` is not a proof that can be checked, or None when it is one.
+
+    A proof is a run link (https://...) or the sha256 of a log. When the log is a file in this repository,
+    its sha256 must be the recorded one: a log edited or deleted after the entry is not evidence any more.
+    A person's report ("by <login>") is neither, even when it carries a link: it is kept in the evidence file, it earns
+    no credit here."""
+    if PERSON_REPORT.match(evidence):
+        return "a person's report (by <login>), not a run link or log sha256"
+    logs = LOG_SHA.findall(evidence)
+    for path, digest in logs:
+        if path and REPO_PATH.match(path) and not RUN_LINK.match(path):
+            log = (REPO / path).resolve()
+            if REPO.resolve() not in log.parents or not log.is_file():
+                return f"names the log {path}, which is not in the repository"
+            if hashlib.sha256(log.read_bytes()).hexdigest() != digest:
+                return f"the sha256 of {path} is not the recorded one"
+    if logs or RUN_LINK.search(evidence):
+        return None
+    return "no run link or log sha256"
+
+
 def lab_check(topic_dir: Path, ctx: Context) -> dict:
+    """Credit only a proof that can be checked (#217): an entry in deploy/lab-evidence.yaml for the lab AS IT IS NOW.
+
+    The entry must carry the lab_hash of the current lab folder (teach/lab/kc_meta.py) and a run link or a log sha256.
+    lab.yaml's `verified:` block is self-declared, so on its own it earns nothing: it stays visible in the evidence as
+    "claimed, not proven". Evidence for an older hash is stale (the lab changed after it was proven) and earns nothing.
+    """
     w = ctx.weights
     spec_file = topic_dir / "lab" / "lab.yaml"
     if rel(topic_dir / "lab") in ctx.broken_labs:
         return entry("lab", "fail", w, "listed in tests/fixtures/labs_known_broken.txt")
     if not spec_file.exists():
         return entry("lab", "not_run", w, "no lab")
-    spec = yaml.safe_load(spec_file.read_text(encoding="utf-8")) or {}
-    verified = spec.get("verified") or {}
-    if verified.get("status") is True:
-        return entry("lab", "pass", w, str(verified.get("by") or verified.get("method") or "verified")[:200],
-                     ran_at=str(verified.get("date")) if verified.get("date") else None)
-    return entry("lab", "not_run", w, "not yet run in the study-lab runner")
+    lab_id = f"{topic_dir.parent.name}/{topic_dir.name}"
+    recorded = ctx.lab_evidence.get(lab_id) or {}
+    raw = yaml.safe_load(spec_file.read_text(encoding="utf-8")) or {}
+    claim = raw.get("verified") if isinstance(raw.get("verified"), dict) else {}
+    claimed = "claimed, not proven: lab.yaml says verified, " if claim.get("status") is True else ""
+    if not recorded:
+        if claimed:
+            return entry("lab", "not_run", w, f"{claimed}no entry in {LAB_EVIDENCE_NAME}")
+        return entry("lab", "not_run", w, "not yet run in the study-lab runner")
+    try:
+        current = kc_meta.lab_hash(spec.load(topic_dir / "lab", "curated"))
+    except spec.SpecError as error:
+        return entry("lab", "not_run", w, f"{claimed}the lab does not load: {error}"[:200])
+    why = {}
+    for target, e in sorted(recorded.items(), key=lambda te: (te[1]["date"], te[0]), reverse=True):
+        if target.startswith("human-"):
+            why[target] = f"{target}: a person's observation (deploy/lab-targets.yaml), not a checkable proof"
+        elif e["lab_hash"] != current:
+            why[target] = f"stale on {target}: proven for lab hash {e['lab_hash'][:8]}, the lab is now {current[:8]}"
+        elif problem := proof_problem(str(e["evidence"])):
+            why[target] = f"{target}: {problem}"
+        else:
+            return entry("lab", "pass", w, f"proven on {target} for the current lab hash: {e['evidence']}"[:200],
+                         ran_at=e["date"])
+    return entry("lab", "not_run", w, f"{claimed}no usable proof in {LAB_EVIDENCE_NAME} ({'; '.join(why.values())})"[:300])
 
 
 def review_check(meta: dict, w: dict) -> dict:

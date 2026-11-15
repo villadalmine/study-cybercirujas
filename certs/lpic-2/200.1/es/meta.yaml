@@ -126,8 +126,8 @@ quality:
     version: '1'
     result: pass
     weight: 10
-    ran_at: '2026-10-15'
-    evidence: 'study-lab runner on Docker 29.8 (Windows 11): run -> run again (no-op) -> check FAIL -> fix 1 -> check FAIL -> fix 2 -> check PASS -> down'
+    ran_at: '2026-10-21'
+    evidence: 'proven on killercoda-ubuntu for the current lab hash: https://github.com/villadalmine/study-cybercirujas/actions/runs/39608994677 (tested.json sha256 f233c68b6b8278dfdc3767a4e7a7ca11ca51b5c0cb50fcaa1c'
   - name: independent_review
     version: '1'
     result: not_run
