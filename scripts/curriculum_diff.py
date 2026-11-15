@@ -978,7 +978,11 @@ COMMANDS["window"] = ("open the upgrade window: upstream.snapshot and milestone 
 #   was superseded, by which document and upgrade, so no note there reads as the current state.
 #
 # The same serializers teach.core uses (yaml.safe_dump for the catalog, frontmatter.dumps for the syllabus).
-# A domain renamed or reweighted is not rewritten into each topic's `topic:`/`weight:` (#124).
+# A domain renamed is not rewritten into each topic's `topic:` label (#124). Each topic's `weight:` is rewritten only
+# when the target states a weight per objective (an LPI page, `extract --html`: every objective has `questions`): it
+# becomes its `maps_to` objective's share of all the questions, in hundredths by largest remainder over every
+# objective, so the cert sums to exactly 100 as certs/lpic-2.md does (`objective_weights`, #235). A PDF publishes a
+# weight per domain only, and there the frozen weights stay as they are.
 
 
 REVALIDATED_KEY = re.compile(r"^revalidated:.*?(?=^\S|\Z)", re.M | re.S)
@@ -1015,6 +1019,17 @@ def lab_with_title(text: str, title: str) -> str:
     return LAB_TITLE.sub(lambda _: line, text, count=1) if LAB_TITLE.search(text) else text
 
 
+def objective_weights(target: dict) -> dict[str, int | float]:
+    """objective id -> its weight in percent, when the target states one per objective; {} for a PDF snapshot.
+
+    `percent_shares` over every objective's `questions`, so the weights sum to exactly 100; each one is the
+    snapshot's own `weight` (q*100/total to two decimals) or a hundredth off it, where the remainders land."""
+    objectives = [o for d in target.get("domains") or [] for o in d.get("objectives") or []]
+    if not objectives or any(not isinstance(o.get("questions"), int) for o in objectives):
+        return {}
+    return dict(zip((str(o["id"]) for o in objectives), percent_shares([o["questions"] for o in objectives])))
+
+
 def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str, str], list[str]]:
     """(new catalog, {path: new text} for the frozen syllabi, the reasons it cannot) without writing."""
     import frontmatter
@@ -1039,6 +1054,7 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
             why.append(f"{cert}: {s['target']} has no source.url or source.committed")
             continue
         texts = {o["id"]: o["text"] for d in target["domains"] for o in d["objectives"]}
+        weights = objective_weights(target)
         rows = {t["topic"]: t for t in c["topics"]}
         md = root / (s.get("tracked") or f"certs/{cert}.md")
         post = frontmatter.load(md)
@@ -1062,6 +1078,8 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
             new = texts.get(row["maps_to"]) if row else None
             if new and tidy(str(topic.get("title") or "")) != new:
                 topic["title"] = new
+            if row and row["maps_to"] in weights and topic.get("weight") != weights[row["maps_to"]]:
+                topic["weight"] = float(weights[row["maps_to"]])   # the frozen files' spelling: 5.0, 1.67
             lab = root / "certs" / cert / str(topic.get("id")) / "lab" / "lab.yaml"
             if new and lab.is_file():      # the lab states the objective title too (Killercoda R5 compares them)
                 text = lab.read_text(encoding="utf-8")
