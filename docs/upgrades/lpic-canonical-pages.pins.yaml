@@ -7,7 +7,7 @@
 upgrade: lpic-canonical-pages
 date: '2026-11-15'          # the day the pages were read and frozen; what a tool edit stamps in meta.yaml (never the clock)
 tool: scripts/upgrade_versions.py   # the one scripted editor the guard accepts for this upgrade
-tool_sha256: 70f348f481dd43d832ec5343b728c7351e6f029409f502ee5b126baf1b087ebe   # its sha256: change the script and this line moves with it (a test checks)
+tool_sha256: 70f348f481dd43d832ec5343b728c7351e6f029409f502ee5b126baf1b087ebe   # its sha256: change the script and this line moves with it (the guard checks it when the tool edits)
 # What each LPI URL said when read on 2026-11-15 (curl -L; the pages are MediaWiki articles behind a WordPress cache,
 # so their bytes change when the cache is rebuilt even when the objectives do not: tree_sha256 in the snapshot is the
 # stable identity, the page sha256 is the bytes read that day)
