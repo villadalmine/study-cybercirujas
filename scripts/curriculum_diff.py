@@ -1183,20 +1183,74 @@ def _catalog_certs(text: str | None) -> dict:
     return data.get("certs", {}) if isinstance(data, dict) else {}
 
 
+_LPIC_LABEL = re.compile(
+    r"\b(10[12])-500\b|(?:\bexam(?:en|s)?|\bex[aá]menes)\s+(?:lpic-1\s+)?(10[12])(?:/(10[12]))?\b(?![.\d])"
+    r"|\blpic-1\s+(10[12])\b(?![.\d])|\bexam-(10[12])\b|\b(10[12])/(10[12])\b", re.I)
+_LPIC_COMPANION = re.compile(r"\b(?:companion|complementario)\b", re.I)
+_LPIC_STALE_NOTE = re.compile(
+    r"\s*\((?:normalized|normalizado)\)\s*—\s*1\s+(?:point in the raw LPI weighting|punto en la ponderación cruda de LPI)"
+    r"|\s*\(≈5%\s+(?:of|del)\s+101-500\)"
+    r"|\s*\((?:platform-normalized|normalizado por la plataforma)\)"
+    r"|\s*(?:The syllabus record that produced this page reports weight 0\.0[^)]*|"
+    r"El registro del temario que produjo esta página reporta peso 0\.0[^)]*)(?=\)\*)"
+    r"|\s*\((?:the exam-blueprint value; treat the `0\.0`[^)]*|el valor del blueprint del examen; tratá el `0\.0`[^)]*)\)"
+    r"|\s*\((?:the `0\.0` in the generation metadata[^)]*|el `0\.0` en los metadatos de generación[^)]*)\)"
+    r"|(?: in this syllabus snapshot| en este snapshot del temario)(?=:\*\*)")
+
+
+def _lpic_questions(text: str | None) -> tuple[dict[str, str], dict[str, str]]:
+    try:
+        snap = yaml.safe_load(text or "") or {}
+    except yaml.YAMLError:
+        return {}, {}
+    domains = snap.get("domains") or []
+    obj_q = {str(o["id"]): str(o["questions"]) for d in domains for o in d.get("objectives") or [] if "questions" in o}
+    dom_q = {str(o["id"]): str(d["questions"]) for d in domains for o in d.get("objectives") or [] if "questions" in d}
+    return obj_q, dom_q
+
+
+def _lpic_line(topic: str, line: str, want: dict, obj_q: dict[str, str], dom_q: dict[str, str]) -> str:
+    """Apply LPIC-1's canonical switch normalization on one line: 105-110 exam 101->102 labels,
+    citation links via cc.fix_line, and per-objective question counts in weight headers."""
+    q, dq = obj_q.get(topic), dom_q.get(topic)
+    if not q:
+        return cc.fix_line(line, want)
+    group = topic.split(".", 1)[0]
+    if group.isdigit() and int(group) >= 105 and not _LPIC_COMPANION.search(line):
+        named = {g for m in _LPIC_LABEL.finditer(re.sub(r"https?://\S+", " ", line)) for g in m.groups() if g}
+        if named == {"101"}:
+            line = re.sub(r"\b101(-500)\b", r"102\1", line)
+            line = re.sub(r"(\bexam(?:en|s)?|\bex[aá]menes|\blpic-1)(\s+(?:lpic-1\s+)?)101\b(?![.\d/])", r"\g<1>\g<2>102", line, flags=re.I)
+            line = re.sub(r"(?<!/)\b(exam-)101\b(?!-objectives)", r"\g<1>102", line, flags=re.I)
+    line = cc.fix_line(line, want)
+    low = line.lower()
+    if re.search(r"(?<![.\w])(?:weight|peso)\b", low) and "table 1" not in low:
+        line = _LPIC_STALE_NOTE.sub("", line)
+        line = re.sub(r"\(weight 0 in 101, examinable in 102-500\b", f"(weight {q} in 102-500, examinable", line)
+        line = re.sub(r"\b(?:3\.1[23]|4\.69|1\.56|6\.25|0\.0)\b", q, line)
+        line = re.sub(r"((?<![.\w])(?:weight|peso)[^0-9\n]{0,50}?(?<!\.)\b)(?:0|2|3|4)\b"
+                      r"(?!\s*(?:—\s*1\s+(?:point|punto)|in\s+the\s+raw|en\s+la\s+ponderaci))", rf"\g<1>{q}", line, flags=re.I)
+        line = re.sub(r"(\btotal(?:\s+del?\s+[Tt]ema\s+\d+)?[:\s]+)\d+", rf"\g<1>{dq}", line, flags=re.I)
+    return line
+
+
 def cite_checker(base_text, head_text=None):
     """(file, old line, new line) -> True when the new line is what the citation fix writes from the catalog on the BASE.
 
     Plan-free on purpose: the catalog says what each cert's citations must read, so any line `fix_line` would change may
     be rewritten to exactly that, in a topic the plan keeps or revalidates, with no widening of the plan.
 
-    The switch PR of an upgrade with no window (a beta or a date-versioned PDF: `window` needs dotted versions) moves
-    tracked_version and must make the citations agree in the same PR, or the consistency gate fails it. For a cert whose
-    tracked_version differs between the base and the HEAD catalog, the fix the HEAD catalog writes is accepted too; that
-    catalog change is itself gated by check_pr (an upgrade spec on the base, its milestone, `Scope: exam-version`)."""
+    The switch PR of an upgrade with no window (a beta, a date-versioned PDF, or a same-version canonical URL switch)
+    moves tracked_version or sources.objectives and must make the citations agree in the same PR. For a switched cert,
+    the fix the HEAD catalog writes (and LPIC-1's per-objective weight/exam headers from its snapshot) is accepted too;
+    that catalog change is itself gated by check_pr."""
     base = _catalog_certs(base_text("catalog.yaml"))
     head = _catalog_certs(head_text("catalog.yaml")) if head_text else {}
     switched = {c: e for c, e in head.items()
-                if c in base and isinstance(e, dict) and e.get("tracked_version") != base[c].get("tracked_version")}
+                if c in base and isinstance(e, dict)
+                and (e.get("tracked_version") != base[c].get("tracked_version")
+                     or (e.get("sources") or {}).get("objectives") != (base[c].get("sources") or {}).get("objectives"))}
+    obj_q, dom_q = _lpic_questions(base_text("syllabi/lpic-1/v5.0.yaml")) if "lpic-1" in switched else ({}, {})
 
     def wants(cert: str) -> list[dict]:
         # the head entry without its `upstream:` window: check_pr gates only tracked_version and sources.objectives, so
@@ -1208,8 +1262,14 @@ def cite_checker(base_text, head_text=None):
 
     def ok(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
-        return (len(parts) > 2 and parts[0] == "certs"
-                and any(cc.fix_line(old, w) == new for w in wants(parts[1])))
+        if len(parts) <= 2 or parts[0] != "certs":
+            return False
+        cert, topic = parts[1], parts[2]
+        ws = wants(cert)
+        if any(cc.fix_line(old, w) == new for w in ws):
+            return True
+        return cert == "lpic-1" and cert in switched and bool(obj_q) and any(
+            _lpic_line(topic, old, w, obj_q, dom_q) == new for w in ws)
 
     def meta(f: str, old: str, new: str) -> bool:
         parts = f.split("/")
@@ -1232,7 +1292,7 @@ def citation_files_ok(plan_data: dict, f: str, base_text, head_text, cite_ok) ->
         return False
     if parts[-1] == "meta.yaml":
         return cite_ok.meta(f, old, new)
-    is_lab_script = len(parts) > 5 and parts[3] == "lab" and parts[-1].endswith(".sh")
+    is_lab_script = len(parts) >= 5 and parts[3] == "lab" and parts[-1].endswith(".sh")
     if (parts[-1] not in DOC_FILES and not is_lab_script) or len(old.splitlines()) != len(new.splitlines()):
         return False
     return all(cite_ok(f, x, y) for x, y in zip(old.splitlines(), new.splitlines()) if x != y)
@@ -1322,6 +1382,8 @@ def tool_edit_ok(root: Path, plan_data: dict, directory: str, meta: dict, change
 
 
 def uv_rewrite(line: str, pins: dict) -> str:
+    if "tracked" not in pins or "target" not in pins:
+        return line
     import upgrade_versions          # scripts/ is on sys.path when this file runs or is imported as a module
     return upgrade_versions.rewrite(line, pins)
 

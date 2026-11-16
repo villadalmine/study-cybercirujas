@@ -281,6 +281,7 @@ def meta_ok(old_text: str, new_text: str, want: dict, lang: str | None = None) -
     for d in (old, new):
         d.pop("quality", None)
         d.pop("tool_edit", None)
+        d.pop("revalidated", None)
     old["sources"] = [fix_line(str(x), want) for x in old.get("sources") or []]
     if lang and new.get("lang") == lang:
         old["lang"] = lang

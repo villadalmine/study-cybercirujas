@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1 (Exams 101-500 / 102-500, version 5.0)
-#  Topic 102.2 - Install a boot manager   (exam weight: 3.13)
+#  Topic 102.2 - Install a boot manager   (exam weight: 2)
 #
 #  BREAK & FIX LAB - GRUB 2 boot manager
 #
@@ -11,7 +11,7 @@
 #  keeps a full backup of everything it touched. The step-by-step solution is
 #  at the very bottom of this file, commented out.
 #
-#  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #             https://www.gnu.org/software/grub/manual/grub/grub.html
 #             https://wiki.debian.org/Grub
 #

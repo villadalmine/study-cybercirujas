@@ -3,11 +3,11 @@
 # ==============================================================================
 #  LPIC-1 (Exam 101-500, v5.0) — Topic 101.3
 #  "Change runlevels / boot targets and shutdown or reboot system"
-#  Exam weight: 4.69
+#  Exam weight: 3
 #
 #  BREAK & FIX LABORATORY  —  systemd default target sabotage
 #
-#  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #             https://www.freedesktop.org/software/systemd/man/systemctl.html
 #             https://www.freedesktop.org/software/systemd/man/systemd.special.html
 #             https://www.freedesktop.org/software/systemd/man/systemd.target.html
@@ -796,7 +796,7 @@ main "$@"
 # ------------------------------------------------------------------------------
 #
 #   LPI Exam 101-500 objectives, topic 101.3
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   systemctl(1)
 #     https://www.freedesktop.org/software/systemd/man/systemctl.html
 #   systemd.special(7) — the standard targets and the runlevel mapping

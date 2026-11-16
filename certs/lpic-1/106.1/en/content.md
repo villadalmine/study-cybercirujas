@@ -1,7 +1,7 @@
 # 106.1 — Install and Configure X11
 
 **LPIC-1 · Topic 106: User Interfaces and Desktops**
-*(Note on exam mapping: topic 106 is examined in **102-500**, not 101-500. In the LPIC-1 v5.0 objective set, 106.1 carries a **weight of 2**. The syllabus record that produced this page reports weight 0.0, which is a metadata gap — study it at weight-2 depth.)*
+*(Note on exam mapping: topic 106 is examined in **102-500**, not 101-500. In the LPIC-1 v5.0 objective set, 106.1 carries a **weight of 2**.)*
 
 ---
 
@@ -1303,8 +1303,8 @@ The last check is the one that matters for security review: **an X server listen
 ## Referencias
 
 **LPI — objectives**
-- LPIC-1 Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 objectives (topic 106 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPIC-1 Exam 102-500 objectives (topic 106 lives here) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **X.Org Foundation — upstream documentation and manual pages**

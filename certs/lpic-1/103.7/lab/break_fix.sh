@@ -3,7 +3,7 @@
 # ============================================================================
 #  LPIC-1 (exam 101-500) — Topic 103.7: Search text files using regular
 #  expressions
-#  Weight: 4.69
+#  Weight: 3
 #
 #  BREAK & FIX LAB — "The log triage script that greps the wrong things"
 #
@@ -14,7 +14,7 @@
 #
 #  Reference:
 #    - LPI exam 101-500 objectives:
-#        https://www.lpi.org/our-certifications/exam-101-objectives/
+#        https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    - GNU grep manual:
 #        https://www.gnu.org/software/grep/manual/grep.html
 #    - POSIX regular expressions (Basic and Extended):
@@ -818,7 +818,7 @@ exit 0
 #
 #   Sources
 #       LPI 101-500 objectives:
-#         https://www.lpi.org/our-certifications/exam-101-objectives/
+#         https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #       GNU grep manual:
 #         https://www.gnu.org/software/grep/manual/grep.html
 #       GNU sed manual:

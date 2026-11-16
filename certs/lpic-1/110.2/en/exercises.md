@@ -1320,8 +1320,8 @@ The deeper point: "bound to a routable address" is not the same as "reachable" �
 
 ## Sources
 
-* LPI — *Exam 102-500 Objectives*, topic 110.2 "Setup host security": <https://www.lpi.org/our-certifications/exam-101-objectives/>
-* LPI — *Exam 101-500 Objectives*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — *Exam 102-500 Objectives*, topic 110.2 "Setup host security": <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+* LPI — *Exam 102-500 Objectives*: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * shadow-utils upstream project (`passwd`, `chage`, `pwconv`, `vipw`, `shadow(5)`, `login.defs(5)`): <https://github.com/shadow-maint/shadow>
 * `shadow(5)` manual page: <https://man7.org/linux/man-pages/man5/shadow.5.html>
 * `chage(1)` manual page: <https://man7.org/linux/man-pages/man1/chage.1.html>

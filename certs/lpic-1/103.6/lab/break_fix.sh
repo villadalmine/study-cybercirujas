@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # =============================================================================
 #  LPIC-1 v5.0  ·  Exam 101-500  ·  Topic 103.6 "Modify process execution
-#  priorities"  (exam weight: 3.12)          ---  BREAK & FIX LAB  ---
+#  priorities"  (exam weight: 2)          ---  BREAK & FIX LAB  ---
 #
 #  Objective 103.6 -- key files, terms and utilities: nice, ps, renice, top
-#  Source: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Source: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  WHAT THIS SCRIPT DOES
 #    It builds a small, self-contained CPU-contention scenario, then breaks it
@@ -224,7 +224,7 @@ EOF
         cat > "$UNIT_PATH" <<EOF
 [Unit]
 Description=LPIC-1 103.6 break&fix lab workloads
-Documentation=https://www.lpi.org/our-certifications/exam-101-objectives/
+Documentation=https://www.lpi.org/our-certifications/exam-101-102-objectives/
 After=multi-user.target
 
 [Service]
@@ -849,7 +849,7 @@ exit $?
 #      cat /proc/<pid>/stat        # field 19 is the raw nice value
 #
 #  REFERENCES
-#    LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    nice(1)     https://man7.org/linux/man-pages/man1/nice.1.html
 #    renice(1)   https://man7.org/linux/man-pages/man1/renice.1.html
 #    ps(1)       https://man7.org/linux/man-pages/man1/ps.1.html

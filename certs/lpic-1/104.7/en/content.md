@@ -1,6 +1,6 @@
 # LPIC-1 · Topic 104.7 — Find System Files and Place Files in the Correct Location
 
-**Exam:** 101-500 · **Weight:** 3.12 · **Version:** 5.0
+**Exam:** 101-500 · **Weight:** 2 · **Version:** 5.0
 **Key files, terms and utilities:** `find`, `locate`, `updatedb`, `whereis`, `which`, `type`, `/etc/updatedb.conf`
 **Depth profile:** Principal Platform Architect / SRE — filesystem contract design, search-plane performance, fleet-wide forensics.
 
@@ -2033,7 +2033,7 @@ That last line is a finding, not a formality: the on-disk `kubectl` does not mat
 ## 8. Referencias
 
 **Certification objectives**
-- LPI, *Exam 101-500 Objectives (Version 5.0)* — Topic 104.7: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101-500 Objectives (Version 5.0)* — Topic 104.7: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI, *LPIC-1 Certification Overview*: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **Filesystem Hierarchy Standard**

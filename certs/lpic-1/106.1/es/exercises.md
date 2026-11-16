@@ -9,7 +9,7 @@
 > * Paquetes: `xorg-x11-server-Xorg`, `xorg-x11-apps` (o `xorg`, `x11-apps` en Debian/Ubuntu), `xorg-x11-server-Xephyr`/`xserver-xephyr`, `xorg-x11-server-Xvfb`/`xvfb`, `xorg-x11-utils`/`x11-utils`, `xauth`, `fontconfig`, `edid-decode`, `mesa-utils`/`glx-utils`.
 > * Sacá un snapshot de la VM antes del Ejercicio 4. Vas a editar `/etc/X11/` y reiniciar el servidor gráfico.
 >
-> Objetivo de referencia: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+> Objetivo de referencia: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 
 ---
 
@@ -1136,7 +1136,7 @@ El objetivo pide *conocimiento del servidor de fuentes de X*. En la práctica te
 
 ## Fuentes
 
-* LPI — Exam 101 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — Exam 102 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * X.Org — manual del archivo de configuración `xorg.conf(5)`: <https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml>
 * X.Org — manual del servidor `Xorg(1)`: <https://www.x.org/releases/current/doc/man/man1/Xorg.1.xhtml>
 * X.Org — `X(7)`, nombres de display y control de acceso: <https://www.x.org/releases/current/doc/man/man7/X.7.xhtml>

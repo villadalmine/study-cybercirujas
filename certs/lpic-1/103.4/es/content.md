@@ -2,7 +2,7 @@
 
 **Certificación:** LPIC-1 (Exámenes 101-500 / 102-500, versión 5.0)
 **Tema:** 103.4 — Uso de flujos, tuberías y redirecciones
-**Peso en el examen:** 6.25
+**Peso en el examen:** 4
 **Nivel:** Avanzado — perfil SRE / Arquitecto de Plataforma
 
 **Áreas de conocimiento clave cubiertas por el objetivo:** redirigir la entrada estándar, la salida estándar y el error estándar; canalizar la salida de un comando hacia la entrada de otro; usar la salida de un comando como argumentos de otro comando; enviar la salida simultáneamente a stdout y a un archivo.
@@ -1315,7 +1315,7 @@ $ rm -f demo.pipe
 ## 11. Referencias
 
 **Objetivos de certificación**
-- LPI — Exam 101 Objectives (LPIC-1 versión 5.0), Tema 103.4: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101 Objectives (LPIC-1 versión 5.0), Tema 103.4: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Descripción general de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Shell y estándares**

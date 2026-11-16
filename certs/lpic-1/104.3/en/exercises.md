@@ -1,5 +1,5 @@
 # LPIC-1 · 104.3 — Control mounting and unmounting of filesystems
-## Guided Exercises (Exam 101-500, weight 4)
+## Guided Exercises (Exam 101-500, weight 3)
 
 > **Scope of this lab.** Manual mount/umount, mount options and their kernel semantics, `/etc/fstab`, identification by `UUID`/`LABEL`/`PARTUUID`, user-mountable removable media, diagnosing busy filesystems, and systemd `.mount` / `.automount` units.
 >
@@ -1180,7 +1180,7 @@ A fourth step is worth adding on any host you cannot easily reach: `systemctl li
 
 ## Official sources
 
-- **LPI, Exam 101-500 Objectives — 104.3 Control mounting and unmounting of filesystems** — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- **LPI, Exam 101-500 Objectives — 104.3 Control mounting and unmounting of filesystems** — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `mount(8)`, `umount(8)`, `fstab(5)`, `findmnt(8)`, `blkid(8)`, `lsblk(8)`, `losetup(8)`, `fuser(1)` — util-linux manual pages: <https://man7.org/linux/man-pages/man8/mount.8.html>, <https://man7.org/linux/man-pages/man5/fstab.5.html>, <https://man7.org/linux/man-pages/man8/findmnt.8.html>
 - **util-linux project documentation** — <https://github.com/util-linux/util-linux/blob/master/Documentation/>
 - **Linux kernel — filesystem mount options and `proc` interfaces** — <https://docs.kernel.org/filesystems/proc.html>, <https://docs.kernel.org/filesystems/sharedsubtree.html>, <https://docs.kernel.org/admin-guide/ext4.html>, <https://docs.kernel.org/filesystems/vfat.html>

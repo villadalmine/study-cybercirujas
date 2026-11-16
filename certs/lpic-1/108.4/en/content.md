@@ -1,7 +1,7 @@
 # 108.4 — Manage Printers and Printing
 
 **Certification:** LPIC-1 (101-500 / 102-500), version 5.0
-**Exam weight in this syllabus snapshot:** 0
+**Exam weight:** 2
 **Profile:** Principal Platform Architect / Senior SRE
 
 ---
@@ -1424,8 +1424,8 @@ The two invariants worth carrying out of this topic:
 
 ## Referencias
 
-- LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 Objectives (Topic 108, Essential System Services): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 102-500 Objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPI — Exam 102-500 Objectives (Topic 108, Essential System Services): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - OpenPrinting CUPS — Documentation index: https://openprinting.github.io/cups/
 - CUPS — `cupsd.conf(5)` man page: https://openprinting.github.io/cups/doc/man-cupsd.conf.html
 - CUPS — `cups-files.conf(5)` man page: https://openprinting.github.io/cups/doc/man-cups-files.conf.html

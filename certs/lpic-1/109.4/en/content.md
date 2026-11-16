@@ -1171,8 +1171,8 @@ If `strace` shows the process never opens `/etc/resolv.conf`, it is not using gl
 ## 12. Referencias
 
 **LPI**
-- Exam 102-500 objectives (Topic 109.4): https://www.lpi.org/our-certifications/exam-101-objectives/
-- Exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+- Exam 102-500 objectives (Topic 109.4): https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- Exam 102-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Manual pages and glibc**

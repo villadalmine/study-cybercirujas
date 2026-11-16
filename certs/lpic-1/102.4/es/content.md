@@ -1,6 +1,6 @@
 # 102.4 — Uso de la gestión de paquetes Debian
 
-**LPIC-1 · Examen 101-500 / 102-500 · Versión 5.0 · Peso del objetivo: 4.69**
+**LPIC-1 · Examen 101-500 / 102-500 · Versión 5.0 · Peso del objetivo: 3**
 
 ---
 
@@ -2661,7 +2661,7 @@ Cada ejercicio tiene una única respuesta verificable producida por las herramie
 ## 11. Referencias
 
 **Objetivos del examen**
-- LPI — Exam 101-500 Objectives (v5.0), Topic 102.4: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0), Topic 102.4: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification Overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Documentación oficial de Debian**

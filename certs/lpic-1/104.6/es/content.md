@@ -1,7 +1,7 @@
 # 104.6 — Crear y cambiar enlaces duros y simbólicos
 
 **Certificación:** LPIC-1 (Exámenes 101-500 + 102-500), versión 5.0
-**Peso del tema:** 3.12
+**Peso del tema:** 2
 **Nivel:** Avanzado / SRE de producción — Arquitecto de plataforma
 
 ---
@@ -1236,7 +1236,7 @@ find DIR -xtype l                # every broken symlink beneath DIR
 
 **LPI — objetivos de certificación**
 
-- LPIC-1 Exam 101 objectives (version 5.0), objetivo 104.6 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPIC-1 Exam 101 objectives (version 5.0), objetivo 104.6 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **Linux man-pages project — syscalls y semántica de archivos**

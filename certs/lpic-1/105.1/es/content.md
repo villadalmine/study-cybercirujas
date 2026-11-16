@@ -1,7 +1,7 @@
 # 105.1 — Personalizar y usar el entorno del shell
 
 **Certificación:** LPIC-1 (LPI 101-500 + 102-500, versión 5.0)
-**Tema 105.1 — peso 6.25** (el Tema 105, *Shells and Shell Scripting*, se evalúa en **102-500**)
+**Tema 105.1 — peso 4** (el Tema 105, *Shells and Shell Scripting*, se evalúa en **102-500**)
 **Archivos, términos y utilidades clave:** `.` (punto), `source`, `/etc/bash.bashrc`, `/etc/profile`, `env`, `export`, `set`, `unset`, `~/.bash_profile`, `~/.bash_login`, `~/.profile`, `~/.bashrc`, `~/.bash_logout`, `function`, `alias`, listas
 
 ---
@@ -2448,8 +2448,8 @@ a ; b     a && b     a || b     a & b     (a)     { a; }     ! a
 
 **Objetivos de certificación**
 
-- LPI — Objetivos del examen 102-500 (Tema 105, *Shells and Shell Scripting*; objetivo 105.1 *Customize and use the shell environment*): https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Objetivos del examen 101-500 (examen complementario de LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del examen 102-500 (Tema 105, *Shells and Shell Scripting*; objetivo 105.1 *Customize and use the shell environment*): https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPI — Objetivos del examen 101-500 (examen complementario de LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Descripción general de la certificación LPIC-1 Linux Administrator: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Bash**

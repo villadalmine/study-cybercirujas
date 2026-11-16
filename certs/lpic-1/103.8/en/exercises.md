@@ -1247,7 +1247,7 @@ vimtutor
 
 ## Sources
 
-- LPI, *Exam 101 Objectives (LPIC-1 version 5.0)*, objective 103.8 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101 Objectives (LPIC-1 version 5.0)*, objective 103.8 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - The Open Group, *POSIX.1-2017, `vi` utility* (the behaviour every implementation must provide) — <https://pubs.opengroup.org/onlinepubs/9699919799/utilities/vi.html>
 - Vim project documentation (`:help` as published online): motions <https://vimhelp.org/motion.txt.html>, changing text <https://vimhelp.org/change.txt.html>, recovery <https://vimhelp.org/recover.txt.html>, options including `'backupcopy'`, `'compatible'` and `'paste'` <https://vimhelp.org/options.txt.html>
 - GNU nano, *nano(1) manual page* — <https://www.nano-editor.org/dist/latest/nano.1.html>

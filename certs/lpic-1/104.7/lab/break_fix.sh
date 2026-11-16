@@ -3,7 +3,7 @@
 # =============================================================================
 #  LPIC-1 (exams 101-500 / 102-500, version 5.0)
 #  Topic 104.7 - Find system files and place files in the correct location
-#  Exam weight: 3.12
+#  Exam weight: 2
 #
 #  BREAK & FIX LAB - RUN ONLY ON A DISPOSABLE LABORATORY VM.
 #
@@ -12,7 +12,7 @@
 #  files (find, locate/updatedb, whereis, which, type, command -v).
 #
 #  Reference material used to build this lab:
-#    - LPI exam 101 objectives .... https://www.lpi.org/our-certifications/exam-101-objectives/
+#    - LPI exam 101 objectives .... https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    - FHS 3.0 (authoritative) ..... https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html
 #    - find(1), locate(1), updatedb(1), updatedb.conf(5), whereis(1), which(1)
 #

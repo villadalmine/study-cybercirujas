@@ -1,5 +1,5 @@
 # LPIC-1 · Topic 102.1 — Design hard disk layout
-## Guided Exercises (Exam 101-500, version 5.0 · Weight: 3.13)
+## Guided Exercises (Exam 101-500, version 5.0 · Weight: 2)
 
 > **Scope of this lab.** You will inventory a running system's layout, then design and build three complete layouts — UEFI/GPT, BIOS/GPT, and an LVM-backed one — on a **file-backed loop device**, so nothing on your real disks is ever touched. Every destructive command in this document targets `/dev/loopN` only. Read every `wipefs`, `sgdisk`, `mkfs` and `dd` line before pressing Enter and confirm the target device name in the same breath.
 
@@ -11,7 +11,7 @@
 
 **Reference sources used throughout**
 
-- LPI Exam 101 objectives — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101 objectives — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `fstab(5)` — <https://man7.org/linux/man-pages/man5/fstab.5.html>
 - `mkswap(8)` / `swapon(8)` — <https://man7.org/linux/man-pages/man8/mkswap.8.html>
 - GNU GRUB manual (BIOS boot partition, LVM/LUKS support) — <https://www.gnu.org/software/grub/manual/grub/grub.html>

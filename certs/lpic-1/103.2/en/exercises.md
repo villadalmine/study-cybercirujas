@@ -1,6 +1,6 @@
 # LPIC-1 103.2 — Process text streams using filters
 
-**Exam:** 101-500 (LPIC-1, version 5.0) · **Objective:** 103.2 · **Weight:** 3.12
+**Exam:** 101-500 (LPIC-1, version 5.0) · **Objective:** 103.2 · **Weight:** 2
 
 **Utilities in scope:** `bzcat`, `cat`, `cut`, `head`, `join`, `less`, `ls`, `md5sum`, `nl`, `od`, `paste`, `pr`, `sed`, `sha256sum`, `sha512sum`, `sort`, `split`, `tail`, `tr`, `uniq`, `wc`, `xzcat`, `zcat` — plus the adjacent whitespace filters `expand`/`unexpand`/`fmt` that older syllabus revisions listed and that still appear in real pipelines.
 
@@ -8,7 +8,7 @@
 
 **Reference sources**
 
-- LPI, *Exam 101 Objectives (101-500)* — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI, *Exam 101 Objectives (101-500)* — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - GNU coreutils manual — https://www.gnu.org/software/coreutils/manual/coreutils.html
 - GNU sed manual — https://www.gnu.org/software/sed/manual/sed.html
 - POSIX.1-2017 Shell & Utilities — https://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html

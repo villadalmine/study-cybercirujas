@@ -1,5 +1,5 @@
 # LPIC-1 101.2 — Arrancar el sistema
-## Ejercicios guiados (Examen 101-500, temario v5.0 — peso 4.69)
+## Ejercicios guiados (Examen 101-500, temario v5.0 — peso 3)
 
 > **Seguridad en el laboratorio.** Cada bloque que escribe en `/etc/default/grub`, `/boot`, `/etc/fstab` o en entradas de arranque de la NVRAM puede dejar una máquina sin poder arrancar. Ejecutá esto en una **VM descartable con un snapshot tomado antes de empezar**. Los bloques marcados como *solo lectura* son seguros en cualquier host. Las instrucciones de recuperación de cada paso destructivo están incluidas en el propio bloque.
 >
@@ -1195,7 +1195,7 @@ Dos advertencias adicionales que vale la pena plantear antes de que alguien lo e
 
 ## Fuentes
 
-- LPI, *Exam 101 Objectives (LPIC-1, version 5.0)*, objetivo 101.2 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101 Objectives (LPIC-1, version 5.0)*, objetivo 101.2 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Documentación del kernel de Linux, *The kernel's command-line parameters* — <https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html>
 - Documentación del kernel de Linux, *initrd and initramfs* — <https://www.kernel.org/doc/html/latest/admin-guide/initrd.html>
 - GNU GRUB Manual 2.12 — <https://www.gnu.org/software/grub/manual/grub/grub.html>

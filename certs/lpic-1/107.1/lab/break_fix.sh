@@ -12,8 +12,8 @@
 #                passwd chage getent id pwck grpck pwconv grpconv chpasswd
 #
 #  Official references:
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    https://man7.org/linux/man-pages/man5/passwd.5.html
 #    https://man7.org/linux/man-pages/man5/shadow.5.html
 #    https://man7.org/linux/man-pages/man5/gshadow.5.html

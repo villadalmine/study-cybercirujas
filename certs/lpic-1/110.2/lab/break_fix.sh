@@ -32,8 +32,8 @@
 #
 #  Official references
 #  -------------------
-#    LPI exam 101 objectives  https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI exam 102 objectives  https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI exam 102 objectives  https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    LPI exam 102 objectives  https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    shadow(5)                https://man7.org/linux/man-pages/man5/shadow.5.html
 #    pwconv(8) / pwunconv(8)  https://man7.org/linux/man-pages/man8/pwconv.8.html
 #    sudoers(5)               https://www.sudo.ws/docs/man/sudoers.man/

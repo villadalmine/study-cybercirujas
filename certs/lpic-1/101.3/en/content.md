@@ -1,6 +1,6 @@
 # 101.3 — Change runlevels / boot targets and shutdown or reboot system
 
-**LPIC-1 · Exam 101-500 · Version 5.0 · Weight 4.69**
+**LPIC-1 · Exam 101-500 · Version 5.0 · Weight 3**
 
 > **Key knowledge areas:** set the default runlevel or boot target · change between runlevels / boot targets including single user mode · shutdown and reboot from the command line · alert users before switching runlevels / boot targets or other major system events · properly terminate processes.
 >
@@ -1918,7 +1918,7 @@ mount -o remount,ro /
 ## 10. Referencias
 
 **LPI**
-- LPIC-1 Exam 101-500 Objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 101-500 Objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **systemd — freedesktop.org / man pages**

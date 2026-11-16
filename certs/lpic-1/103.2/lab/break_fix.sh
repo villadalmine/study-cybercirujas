@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #===============================================================================
 # LPIC-1 v5.0 / Exam 101-500 — Topic 103.2  "Process text streams using filters"
-# Weight: 3.12
+# Weight: 2
 #
 # BREAK & FIX LABORATORY  —  run ONLY on a disposable lab VM.
 #
@@ -19,7 +19,7 @@
 # './lab.sh reset' (re-break) or './lab.sh clean' (delete the whole lab tree).
 #
 # Official objective reference:
-#   https://www.lpi.org/our-certifications/exam-101-objectives/
+#   https://www.lpi.org/our-certifications/exam-101-102-objectives/
 # Utility documentation used by this lab:
 #   https://www.gnu.org/software/coreutils/manual/coreutils.html
 #   https://www.gnu.org/software/sed/manual/sed.html
@@ -663,7 +663,7 @@ esac
 #-------------------------------------------------------------------------------
 # REFERENCES
 #   LPI 101-500 objectives:
-#       https://www.lpi.org/our-certifications/exam-101-objectives/
+#       https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   GNU coreutils manual (cut, sort, uniq, head, tail, tr, nl, od, wc, paste,
 #   split, cat, md5sum, sha256sum, sha512sum):
 #       https://www.gnu.org/software/coreutils/manual/coreutils.html

@@ -1,7 +1,7 @@
 # 103.5 — Create, monitor and kill processes
 
 **Certification:** LPIC-1 (Exams 101-500 / 102-500, version 5.0)
-**Topic weight:** 6.25
+**Topic weight:** 4
 **Profile:** Principal Platform Architect / Senior SRE
 **Prerequisites:** 103.1 (shell and command line), 103.2 (text filters), 103.4 (streams, pipes, redirects)
 **Adjacent topic:** 103.6 (`nice`, `renice`, scheduling priorities) — deliberately out of scope here
@@ -2061,7 +2061,7 @@ $ systemctl status 10248
 ## 10. References
 
 **Certification objectives**
-- LPI — Exam 101-500 Objectives (v5.0), Topic 103.5 *Create, monitor and kill processes*: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0), Topic 103.5 *Create, monitor and kill processes*: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Kernel and system-call interfaces (`man-pages` project)**

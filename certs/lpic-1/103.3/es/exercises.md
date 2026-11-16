@@ -1,5 +1,5 @@
 # 103.3 — Realizar la gestión básica de archivos
-## Ejercicios guiados (LPIC-1, examen 101-500, v5.0 — peso 6.25)
+## Ejercicios guiados (LPIC-1, examen 101-500, v5.0 — peso 4)
 
 **Entorno asumido:** un sistema Linux con GNU coreutils ≥ 8.30, GNU findutils, GNU tar ≥ 1.30, GNU cpio y `bash` 5.x. Donde el comportamiento de BSD/busybox difiere de forma relevante, se señala. Todo el trabajo ocurre dentro de un árbol de laboratorio desechable: no se toca nada fuera de `~/lpic1-lab`, con dos excepciones marcadas explícitamente como solo lectura (`/etc/hostname`) o temporales (`/tmp`, `/dev/shm`).
 
@@ -1806,7 +1806,7 @@ La ventaja compensatoria — y la razón por la que `cpio` sigue existiendo — 
 
 ## Fuentes
 
-- LPI — *Exam 101 Objectives (LPIC-1, version 5.0)*, objetivo 103.3: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101 Objectives (LPIC-1, version 5.0)*, objetivo 103.3: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Coreutils Manual — `cp`, `mv`, `rm`, `rmdir`, `mkdir`, `touch`, `ls`, `dd`, `sha256sum`: <https://www.gnu.org/software/coreutils/manual/coreutils.html>
 - GNU Findutils Manual — `find`, `xargs`: <https://www.gnu.org/software/findutils/manual/html_mono/find.html>
 - GNU Tar Manual: <https://www.gnu.org/software/tar/manual/tar.html>

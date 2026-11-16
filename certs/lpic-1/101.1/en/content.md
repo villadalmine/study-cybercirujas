@@ -1,6 +1,6 @@
 # 101.1 — Determine and Configure Hardware Settings
 
-**LPIC-1 · Exam 101-500 · Topic 101: System Architecture · Weight 3.13**
+**LPIC-1 · Exam 101-500 · Topic 101: System Architecture · Weight 2**
 
 > **Scope of this objective.** Enable and disable integrated peripherals; differentiate mass storage device types; determine hardware resources for devices; use the tools that list hardware information; manipulate USB devices; hold a conceptual understanding of `sysfs`, `udev` and `dbus`.
 > **Terms and utilities:** `/sys/`, `/proc/`, `/dev/`, `modprobe`, `lsmod`, `lspci`, `lsusb`.
@@ -1925,7 +1925,7 @@ Corrected AER storms mean a physical problem: reseat the card, replace the riser
 ## 13. Referencias
 
 **Objetivos oficiales de la certificación**
-- LPI — Exam 101-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Kernel de Linux (documentación oficial)**

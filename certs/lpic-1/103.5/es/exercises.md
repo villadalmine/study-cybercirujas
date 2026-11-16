@@ -1393,7 +1393,7 @@ Para un servicio gestionado por systemd, reemplazá los escalones 1–4 por `sys
 
 ## Fuentes
 
-- LPI — Exam 101-500 Objectives (v5.0), Topic 103.5: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101-500 Objectives (v5.0), Topic 103.5: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Bash Reference Manual — Job Control: <https://www.gnu.org/software/bash/manual/html_node/Job-Control.html>
 - GNU Bash Reference Manual — Signals: <https://www.gnu.org/software/bash/manual/html_node/Signals.html>
 - `signal(7)` — página del manual de Linux (números de señal, disposiciones, diferencias entre arquitecturas): <https://man7.org/linux/man-pages/man7/signal.7.html>

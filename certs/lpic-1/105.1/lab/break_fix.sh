@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #===============================================================================
 #  LPIC-1 v5.0 — Topic 105.1  "Customize and use the shell environment"
-#  Exam weight: 6.25   |   Objective lives in exam 102-500
+#  Exam weight: 4   |   Objective lives in exam 102-500
 #
 #  BREAK & FIX LABORATORY — controlled damage + guided recovery
 #
 #  Official references:
-#    - LPI exam objectives (101-500): https://www.lpi.org/our-certifications/exam-101-objectives/
-#    - LPI exam objectives (102-500): https://www.lpi.org/our-certifications/exam-101-objectives/
+#    - LPI exam objectives (102-500): https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    - LPI exam objectives (102-500): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    - GNU Bash Reference Manual, "Bash Startup Files":
 #        https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 #    - bash(1) — INVOCATION, PROMPTING, HISTORY sections

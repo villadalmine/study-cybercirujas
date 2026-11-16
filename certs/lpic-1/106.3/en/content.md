@@ -1490,8 +1490,8 @@ Every check above verifies that the *machinery* is present and wired. None of th
 
 **Certification**
 
-* LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-* LPI — Exam 102-500 Objectives (Topic 106.3 lives here): https://www.lpi.org/our-certifications/exam-101-objectives/
+* LPI — Exam 102-500 Objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+* LPI — Exam 102-500 Objectives (Topic 106.3 lives here): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 * LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Accessibility infrastructure**

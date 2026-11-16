@@ -1,7 +1,7 @@
 # 102.6 — Linux como invitado de virtualización
 
 **Certificación:** LPIC-1 (Exámenes 101-500 / 102-500), versión 5.0
-**Peso del objetivo:** 1.56 (normalizado) — 1 punto en la ponderación cruda de LPI
+**Peso del objetivo:** 1
 **Alcance (paráfrasis original del objetivo de LPI):** entender qué es una máquina virtual y qué es un contenedor; conocer los bloques constructivos de una instancia de nube IaaS (cómputo, almacenamiento en bloque, red); saber qué propiedades de una instalación de Linux deben volverse únicas antes de clonarla o convertirla en plantilla; saber cómo las imágenes de sistema despliegan VMs, instancias de nube y contenedores; conocer las extensiones del lado del invitado que integran Linux con un hipervisor; estar al tanto de `cloud-init`.
 
 > **Verificación de realidad para el día del examen.** LPI pondera este objetivo con 1 punto sobre 60 — estadísticamente ~1 pregunta por forma de examen. El material siguiente es deliberadamente más profundo que eso, porque *todo* sistema Linux de producción que un SRE toca en 2026 es invitado de algo, y los modos de falla de este objetivo (`machine-id` duplicado, claves de host SSH duplicadas, falta de `virtio` en el initramfs, `cloud-init` que silenciosamente nunca corrió) son los que te despiertan a las 03:00. Aprendé primero la superficie del examen (§13), y quedate con el resto como runbook.
@@ -2109,8 +2109,8 @@ Los hechos que LPI probablemente evalúe, enunciados llanamente:
 ## 14. Referencias
 
 **LPI — objetivos de certificación**
-- Objetivos del examen LPIC-1 101 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- Objetivos del examen LPIC-1 101 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- Objetivos del examen LPIC-1 101 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- Objetivos del examen LPIC-1 101 (versión 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Panorama de la certificación LPIC-1 — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **systemd — identidad de máquina y detección de virtualización**

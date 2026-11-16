@@ -26,8 +26,8 @@
 #  Non-interactive:  LAB_CONFIRM=yes ./110.3-break-and-fix.sh break
 #
 #  Official sources
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
-#     https://www.lpi.org/our-certifications/exam-101-objectives/   (110.3)
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/   (110.3)
 #     https://man.openbsd.org/sshd.8      (AUTHORIZED_KEYS, StrictModes)
 #     https://man.openbsd.org/ssh_config.5
 #     https://www.gnupg.org/documentation/manuals/gnupg/

@@ -1,6 +1,6 @@
 # LPIC-1 · Tema 104.7 — Encontrar archivos del sistema y ubicar archivos en el lugar correcto
 
-**Examen:** 101-500 · **Peso:** 3.12 · **Versión:** 5.0
+**Examen:** 101-500 · **Peso:** 2 · **Versión:** 5.0
 **Archivos, términos y utilidades clave:** `find`, `locate`, `updatedb`, `whereis`, `which`, `type`, `/etc/updatedb.conf`
 **Perfil de profundidad:** Principal Platform Architect / SRE — diseño del contrato del sistema de archivos, rendimiento del plano de búsqueda, forense a escala de flota.
 
@@ -2033,7 +2033,7 @@ Esa última línea es un hallazgo, no una formalidad: el `kubectl` en disco no c
 ## 8. Referencias
 
 **Objetivos de certificación**
-- LPI, *Exam 101-500 Objectives (Version 5.0)* — Tema 104.7: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101-500 Objectives (Version 5.0)* — Tema 104.7: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI, *LPIC-1 Certification Overview*: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **Filesystem Hierarchy Standard**

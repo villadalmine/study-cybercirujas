@@ -9,7 +9,7 @@
 > * Packages: `xorg-x11-server-Xorg`, `xorg-x11-apps` (or `xorg`, `x11-apps` on Debian/Ubuntu), `xorg-x11-server-Xephyr`/`xserver-xephyr`, `xorg-x11-server-Xvfb`/`xvfb`, `xorg-x11-utils`/`x11-utils`, `xauth`, `fontconfig`, `edid-decode`, `mesa-utils`/`glx-utils`.
 > * Snapshot the VM before Exercise 4. You will be editing `/etc/X11/` and restarting the display server.
 >
-> Reference objective: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+> Reference objective: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 
 ---
 
@@ -1136,7 +1136,7 @@ The objective asks for *awareness of the X font server*. In practice you must kn
 
 ## Sources
 
-* LPI — Exam 101 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — Exam 102 Objectives (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * X.Org — `xorg.conf(5)` configuration file manual: <https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml>
 * X.Org — `Xorg(1)` server manual: <https://www.x.org/releases/current/doc/man/man1/Xorg.1.xhtml>
 * X.Org — `X(7)`, display names and access control: <https://www.x.org/releases/current/doc/man/man7/X.7.xhtml>

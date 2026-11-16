@@ -2,7 +2,7 @@
 
 **Certification:** LPIC-1 (Exams 101-500 / 102-500, version 5.0)
 **Topic:** 104.2 — Maintain the integrity of filesystems
-**Exam weight:** 3.12
+**Exam weight:** 2
 **Level:** Advanced — Platform Architect / SRE
 
 **Objective scope (LPI):**
@@ -1647,7 +1647,7 @@ systemd[1]: Finished Online integrity check of vg_data--lv_data.
 ## Referencias
 
 **Certification objectives**
-- LPI Exam 101 Objectives (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101 Objectives (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **ext2/3/4 and e2fsprogs**

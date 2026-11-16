@@ -1,6 +1,6 @@
 # 104.1 — Create Partitions and Filesystems
 
-**LPIC-1 · Exam 101-500 · Version 5.0 · Weight: 3.12**
+**LPIC-1 · Exam 101-500 · Version 5.0 · Weight: 2**
 
 **Objective scope:** Manage MBR partition tables · Use `mkfs` commands to create ext2/ext3/ext4, XFS, VFAT and exFAT filesystems · Awareness of ReiserFS and Btrfs · Basic knowledge of `gdisk` and `parted` with GPT.
 
@@ -1926,7 +1926,7 @@ blkid ; lsblk -f ; dumpe2fs -h ; xfs_info ; fsck.fat -v -n ; findmnt --verify
 ## 13. References
 
 **Official certification objectives**
-- LPI — Exam 101-500 Objectives (V5.0), Topic 104.1: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (V5.0), Topic 104.1: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification Overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Specifications**

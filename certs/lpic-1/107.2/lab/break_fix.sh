@@ -12,7 +12,7 @@
 #  it creates, and every original file it modifies is backed up under
 #  /root/107.2-lab-backup/ so an instructor can always recover the box.
 #
-#  Reference: LPI Exam 101/102 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: LPI Exam 101/102 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #             crontab(5), crontab(1), cron(8), anacrontab(5), at(1),
 #             systemd.timer(5), systemd.time(7)
 # ============================================================================
@@ -1025,8 +1025,8 @@ main "$@"
 # ---------------------------------------------------------------------------
 # SOURCES
 # ---------------------------------------------------------------------------
-#   LPI Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-#   LPI Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
+#   LPI Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#   LPI Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   crontab(5), crontab(1), cron(8), anacron(8), anacrontab(5), at(1),
 #     run-parts(8) — man-pages shipped with cron/anacron/at on the system
 #   systemd.timer(5)  — https://www.freedesktop.org/software/systemd/man/systemd.timer.html

@@ -1,6 +1,6 @@
 # LPIC-1 · Topic 104.2 — Maintain the Integrity of Filesystems
 
-**Exam:** 101-500 (LPIC-1 v5.0) · **Weight:** 3.12
+**Exam:** 101-500 (LPIC-1 v5.0) · **Weight:** 2
 **Command surface:** `du`, `df`, `fsck`, `e2fsck`, `mke2fs`, `tune2fs`, `dumpe2fs`, `debugfs`, `badblocks`, `xfs_info`, `xfs_repair`, `xfs_db`, `xfs_fsr`, `xfs_admin`
 
 ---
@@ -1358,7 +1358,7 @@ Leaving a stale list in place permanently withholds those blocks from the alloca
 
 ## Official sources
 
-- LPI — Exam 101-500 Objectives, Topic 104.2: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101-500 Objectives, Topic 104.2: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Linux kernel — ext4 filesystem documentation: <https://www.kernel.org/doc/html/latest/filesystems/ext4/index.html>
 - Linux kernel — ext4 administration guide: <https://docs.kernel.org/admin-guide/ext4.html>
 - Linux kernel — XFS filesystem documentation: <https://www.kernel.org/doc/html/latest/admin-guide/xfs.html>

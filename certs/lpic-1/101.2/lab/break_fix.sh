@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  LPIC-1 v5.0 — Exam 101-500 — Topic 101.2 "Boot the system" (weight: 4.69)
+#  LPIC-1 v5.0 — Exam 101-500 — Topic 101.2 "Boot the system" (weight: 3)
 #  Break & Fix laboratory driver
 # =============================================================================
 #
@@ -14,7 +14,7 @@
 #    * Awareness of Upstart
 #    * Check boot events in the log files (dmesg, journalctl -b)
 #    Terms: dmesg, journalctl, /var/log/, initramfs, init, SysVinit, systemd
-#    Source: https://www.lpi.org/our-certifications/exam-101-objectives/
+#    Source: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  WHAT THIS SCRIPT DOES
 #    It performs ONE controlled, reversible sabotage of the boot path, writes a
@@ -980,7 +980,7 @@ main "$@"
 #     nomodeset                                       blank-screen graphics failures
 #
 # Reference: LPI Exam 101-500 objectives, topic 101.2 —
-#   https://www.lpi.org/our-certifications/exam-101-objectives/
+#   https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   https://www.gnu.org/software/grub/manual/grub/grub.html
 #   https://www.freedesktop.org/software/systemd/man/latest/bootup.html
 #   https://www.freedesktop.org/software/systemd/man/latest/systemd-fstab-generator.html

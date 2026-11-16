@@ -38,7 +38,7 @@ certs:
     last_checked: '2026-09-03'
     file: certs/lpic-1.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+      objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
     level: professional
     validity: 5 años
     requires: []
@@ -47,12 +47,12 @@ certs:
     name: 'LPIC-2: Linux Engineer'
     exam: 201-450 + 202-450
     category: linux
-    tracked_version: '4.5'
+    tracked_version: 4.5.0
     upstream_status: current
     last_checked: '2026-09-03'
     file: certs/lpic-2.md
     sources:
-      objectives: https://www.lpi.org/our-certifications/exam-201-objectives/
+      objectives: https://www.lpi.org/our-certifications/exam-201-202-objectives/
     level: professional
     validity: 5 años
     requires:

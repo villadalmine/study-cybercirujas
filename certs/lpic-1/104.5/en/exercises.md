@@ -1,6 +1,6 @@
 # LPIC-1 · Exam 101-500 · Topic 104.5 — Manage file permissions and ownership
 
-**Exam weight:** 4.69 · **Key terms:** `chmod`, `umask`, `chown`, `chgrp`, SUID, SGID, sticky bit
+**Exam weight:** 3 · **Key terms:** `chmod`, `umask`, `chown`, `chgrp`, SUID, SGID, sticky bit
 
 These are **hands-on guided exercises**. Every step is meant to be executed on a throw-away Linux system (VM, container, or a spare box) where you have `root` via `sudo`. Outputs shown are real-shape outputs; numeric UIDs/GIDs, inode numbers, device numbers and timestamps will differ on your machine.
 
@@ -1294,7 +1294,7 @@ Read it as: world-writable (`-0002` = all of the "other write" bit set) **and no
 
 ## Sources
 
-- LPI — *Exam 101 Objectives, LPIC-1 version 5.0* (Topic 104.5): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101 Objectives, LPIC-1 version 5.0* (Topic 104.5): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `chmod(1)` / `chown(1)` / `chgrp(1)` / `umask(1p)` / `find(1)` / `stat(1)` / `namei(1)` — man-pages project: <https://man7.org/linux/man-pages/>
 - `chmod(2)`, `chown(2)`, `open(2)`, `umask(2)`, `path_resolution(7)`, `capabilities(7)`, `credentials(7)` — <https://man7.org/linux/man-pages/man2/chown.2.html>, <https://man7.org/linux/man-pages/man7/path_resolution.7.html>, <https://man7.org/linux/man-pages/man7/capabilities.7.html>
 - GNU Coreutils manual — *File permissions*, *Mode Structure*, *Numeric Modes*, *Directory Setuid and Setgid*: <https://www.gnu.org/software/coreutils/manual/html_node/File-permissions.html>

@@ -2,7 +2,7 @@
 #
 # ==============================================================================
 #  LPIC-1 (Exam 101-500, v5.0) — Topic 103.1: Work on the command line
-#  Weight: 6.25
+#  Weight: 4
 #
 #  BREAK & FIX LABORATORY — "The Shell That Forgot How To Work"
 #
@@ -21,7 +21,7 @@
 #
 #  Reference (official):
 #    LPI Exam 101-500 Objectives, Topic 103.1 "Work on the command line"
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    Key knowledge areas exercised below: bash, echo, env, export, pwd, set,
 #    unset, type, which, man, uname, history, .bash_history, quoting.
 #
@@ -877,8 +877,8 @@ exit $?
 # OFFICIAL SOURCES
 # ------------------------------------------------------------------------------
 #
-#   LPI Exam 101-500 Objectives (Topic 103.1, weight 2 — Topic 103 total 26)
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#   LPI Exam 101-500 Objectives (Topic 103.1, weight 4 — Topic 103 total 26)
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #   GNU Bash Reference Manual — Shell Expansions, Quoting, Bash History
 #     https://www.gnu.org/software/bash/manual/bash.html

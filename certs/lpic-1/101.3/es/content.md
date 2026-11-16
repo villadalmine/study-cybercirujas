@@ -1,6 +1,6 @@
 # 101.3 — Cambiar runlevels / boot targets y apagar o reiniciar el sistema
 
-**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso 4.69**
+**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso 3**
 
 > **Áreas de conocimiento clave:** establecer el runlevel o boot target por defecto · cambiar entre runlevels / boot targets, incluido el modo single user · apagar y reiniciar desde la línea de comandos · alertar a los usuarios antes de cambiar de runlevel / boot target u otros eventos importantes del sistema · terminar procesos correctamente.
 >
@@ -1918,7 +1918,7 @@ mount -o remount,ro /
 ## 10. Referencias
 
 **LPI**
-- LPIC-1 Exam 101-500 Objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 101-500 Objectives (v5.0) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **systemd — freedesktop.org / páginas de manual**

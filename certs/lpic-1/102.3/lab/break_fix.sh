@@ -2,7 +2,7 @@
 #
 # =====================================================================================
 #  LPIC-1 (Exams 101-500 + 102-500, version 5.0)
-#  Topic 102.3 -- Manage shared libraries        (exam weight: 1.56)
+#  Topic 102.3 -- Manage shared libraries        (exam weight: 1)
 #
 #  BREAK & FIX LAB -- run ONLY on a disposable/throwaway lab VM or container.
 #
@@ -40,8 +40,8 @@
 #
 #  Official sources
 #  ----------------
-#      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-#      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+#      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#      LPI exam 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #      ld.so(8)   -- dynamic linker/loader:   https://man7.org/linux/man-pages/man8/ld.so.8.html
 #      ldconfig(8) -- cache/link maintenance: https://man7.org/linux/man-pages/man8/ldconfig.8.html
 #      ldd(1)     -- print shared deps:       https://man7.org/linux/man-pages/man1/ldd.1.html
@@ -595,8 +595,8 @@ exit 0
 #    directory it tries. It is the fastest way to answer "why is it picking THAT copy?".
 #
 #  References
-#      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
-#      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+#      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#      LPI 101-500 objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #      ld.so(8):    https://man7.org/linux/man-pages/man8/ld.so.8.html
 #      ldconfig(8): https://man7.org/linux/man-pages/man8/ldconfig.8.html
 #      ldd(1):      https://man7.org/linux/man-pages/man1/ldd.1.html

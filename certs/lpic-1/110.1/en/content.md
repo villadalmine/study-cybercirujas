@@ -2536,8 +2536,8 @@ id ; whoami ; logname ; groups
 ## 11. References
 
 **Certification objectives**
-- LPI Exam 101-500 Objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI Exam 102-500 Objectives (Topic 110, Security) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI Exam 102-500 Objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPI Exam 102-500 Objectives (Topic 110, Security) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Manual pages and core tooling**

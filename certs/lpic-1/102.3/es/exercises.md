@@ -1,6 +1,6 @@
 # 102.3 — Gestionar bibliotecas compartidas: ejercicios guiados
 
-**LPIC-1 / Examen 101-500, Tema 102.3 — peso 1.56**
+**LPIC-1 / Examen 101-500, Tema 102.3 — peso 1**
 Cobertura del objetivo: identificar bibliotecas compartidas, comprender la ruta de búsqueda de bibliotecas del sistema, cargar bibliotecas compartidas, `ldd`, `ldconfig`, `/etc/ld.so.conf`, `LD_LIBRARY_PATH`.
 
 ---
@@ -1074,7 +1074,7 @@ void greet(const char *who)
 
 ## Fuentes
 
-- LPI — *Exam 101-500 Objectives*, Tema 102.3 "Manage shared libraries": <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101-500 Objectives*, Tema 102.3 "Manage shared libraries": <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `ld.so(8)` — enlazador/cargador dinámico, orden de búsqueda y variables de entorno: <https://man7.org/linux/man-pages/man8/ld.so.8.html>
 - `ldconfig(8)` — configurar los enlaces en tiempo de ejecución del enlazador dinámico: <https://man7.org/linux/man-pages/man8/ldconfig.8.html>
 - `ldd(1)` — imprimir dependencias de objetos compartidos, incluida la nota de seguridad sobre la ejecución: <https://man7.org/linux/man-pages/man1/ldd.1.html>

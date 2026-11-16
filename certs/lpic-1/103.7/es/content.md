@@ -2,7 +2,7 @@
 
 **Certificación:** LPIC-1 (LPI 101-500 + 102-500), versión 5.0
 **Examen:** 101-500 · **Tema:** 103 (Comandos GNU y Unix) · **Objetivo:** 103.7
-**Peso (normalizado por la plataforma):** 4.69
+**Peso:** 3
 **Áreas de conocimiento clave:** crear expresiones regulares que contengan varios elementos notacionales; comprender la diferencia entre expresiones regulares básicas y extendidas; usar herramientas de expresiones regulares para buscar en un sistema de archivos o en el contenido de un archivo.
 **Términos y utilidades:** `grep`, `egrep`, `fgrep`, `sed`, `regex(7)`
 
@@ -1467,7 +1467,7 @@ SUPERLINEAR at n=10000 — do not ship this pattern
 ## 8. Referencias
 
 **Objetivos de certificación**
-- LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0), objetivo 103.7 — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0), objetivo 103.7 — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI, *LPIC-1 Certification* (visión general) — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Estándares**

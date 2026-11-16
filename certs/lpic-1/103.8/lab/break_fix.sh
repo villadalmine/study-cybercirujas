@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1  (Exam 101-500 / 102-500, version 5.0)
-#  Topic 103.8 - Basic file editing            Exam weight: 4.69
+#  Topic 103.8 - Basic file editing            Exam weight: 3
 #
 #  BREAK & FIX LABORATORY
 #
@@ -44,7 +44,7 @@
 #    sudo ./103.8-break-and-fix.sh --restore   # undo everything
 #
 #  Official reference:
-#    LPI Exam 101 objectives - https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI Exam 101 objectives - https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    (103.8 Basic file editing: vi, vim, EDITOR/VISUAL, modes, ZZ, :w! :q! :wq)
 #
 #  The complete step-by-step solution is at the END of this file, commented out.
@@ -462,7 +462,7 @@ ${C_BLD}YOUR MISSION${C_RST}
 
 ${C_BLD}RULES OF ENGAGEMENT${C_RST}
   * You may consult 'man vi', 'vimtutor', ':help', and the LPI objectives:
-    https://www.lpi.org/our-certifications/exam-101-objectives/
+    https://www.lpi.org/our-certifications/exam-101-102-objectives/
   * You may NOT edit the file with anything other than vi/vim.
   * You may NOT reinstall vim, and you may NOT delete the whole lab tree.
   * Time target: 25 minutes.
@@ -790,5 +790,5 @@ main "$@"
 #     An unusable editor variable breaks administration, not just editing.
 #
 # Reference: LPI Exam 101 objectives, 103.8 Basic file editing
-#            https://www.lpi.org/our-certifications/exam-101-objectives/
+#            https://www.lpi.org/our-certifications/exam-101-102-objectives/
 # =============================================================================

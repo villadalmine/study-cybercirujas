@@ -1,6 +1,6 @@
 # 103.6 — Modificar las prioridades de ejecución de los procesos
 
-**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso: 3.12**
+**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso: 2**
 
 ---
 
@@ -1126,7 +1126,7 @@ grep -H '^some' /sys/fs/cgroup/**/cpu.pressure 2>/dev/null \
 ## 10. Referencias
 
 **Objetivos oficiales de LPI**
-- LPIC-1 Exam 101-500 Objectives (Topic 103.6) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 101-500 Objectives (Topic 103.6) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Páginas de manual de Linux (upstream, Michael Kerrisk / proyecto kernel.org)**

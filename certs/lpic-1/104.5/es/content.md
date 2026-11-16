@@ -1,6 +1,6 @@
 # LPIC-1 · 104.5 — Administrar permisos y propiedad de archivos
 
-**Examen:** 101-500 / 102-500 (v5.0) · **Objetivo 104.5** · **Peso: 4.69**
+**Examen:** 101-500 / 102-500 (v5.0) · **Objetivo 104.5** · **Peso: 3**
 **Comandos clave:** `chmod`, `umask`, `chown`, `chgrp`
 **Adyacentes, relevantes para el examen:** `stat`, `namei`, `find -perm`, `install`, `getfacl`/`setfacl`, `getcap`
 
@@ -1458,8 +1458,8 @@ Group membership is applied at process creation, not at usermod time.
 
 ## Referencias
 
-- LPI — Objetivos del examen 101 (v5.0), Tema 104.5: https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Objetivos del examen 101 (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del examen 101 (v5.0), Tema 104.5: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPI — Objetivos del examen 101 (v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - `chmod(1)` — manual de GNU coreutils: https://www.gnu.org/software/coreutils/manual/html_node/chmod-invocation.html
 - `chown(1)` — manual de GNU coreutils: https://www.gnu.org/software/coreutils/manual/html_node/chown-invocation.html
 - `chgrp(1)` — manual de GNU coreutils: https://www.gnu.org/software/coreutils/manual/html_node/chgrp-invocation.html

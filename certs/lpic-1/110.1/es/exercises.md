@@ -4,7 +4,7 @@
 > **Alcance de este objetivo:** auditar archivos SUID/SGID, gestionar contraseñas y su caducidad, descubrir puertos abiertos (`nmap`, `netstat`/`ss`), establecer límites de login/procesos/memoria, determinar quién está (o estuvo) conectado, y `sudo` básico.
 > **Utilidades clave:** `find`, `passwd`, `fuser`, `lsof`, `nmap`, `chage`, `netstat`/`ss`, `sudo`, `su`, `usermod`, `ulimit`, `who`, `w`, `last`.
 
-**Seguridad en el laboratorio.** Ejecutá cada paso destructivo en una VM o contenedor descartable de tu propiedad (una máquina Debian/Ubuntu o de la familia RHEL sirve). Donde un paso modifica cuentas o `sudoers`, se indica el comando de reversión. Los comandos con prefijo `#` requieren root; los `$` son sin privilegios. Referencia oficial del objetivo: <https://www.lpi.org/our-certifications/exam-101-objectives/> y las páginas de manual enlazadas (`man 1 find`, `man 5 sudoers`, `man 1 chage`, `man 5 limits.conf`).
+**Seguridad en el laboratorio.** Ejecutá cada paso destructivo en una VM o contenedor descartable de tu propiedad (una máquina Debian/Ubuntu o de la familia RHEL sirve). Donde un paso modifica cuentas o `sudoers`, se indica el comando de reversión. Los comandos con prefijo `#` requieren root; los `$` son sin privilegios. Referencia oficial del objetivo: <https://www.lpi.org/our-certifications/exam-101-102-objectives/> y las páginas de manual enlazadas (`man 1 find`, `man 5 sudoers`, `man 1 chage`, `man 5 limits.conf`).
 
 ---
 

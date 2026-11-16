@@ -1,8 +1,8 @@
 # LPIC‑1 — 102.2 Install a boot manager
 ## Guided exercises (production depth)
 
-**Exam:** LPI 101‑500 (LPIC‑1 v5.0) · **Objective 102.2** · **Weight:** 3.13
-**Official objectives:** https://www.lpi.org/our-certifications/exam-101-objectives/
+**Exam:** LPI 101‑500 (LPIC‑1 v5.0) · **Objective 102.2** · **Weight:** 2
+**Official objectives:** https://www.lpi.org/our-certifications/exam-101-102-objectives/
 
 ---
 
@@ -1101,7 +1101,7 @@ Rule: **GRUB Legacy counts disks and partitions from 0.** **GRUB 2 counts disks 
 
 ## References
 
-* LPI — Exam 101‑500 Objectives (v5.0), Topic 102.2: https://www.lpi.org/our-certifications/exam-101-objectives/
+* LPI — Exam 101‑500 Objectives (v5.0), Topic 102.2: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 * GNU GRUB Manual 2.x — Installation, Configuration, Command shell, Network/rescue: https://www.gnu.org/software/grub/manual/grub/grub.html
 * GNU GRUB Manual — `grub-install` invocation: https://www.gnu.org/software/grub/manual/grub/grub.html#Invoking-grub_002dinstall
 * GNU GRUB Legacy Manual (0.97) — `menu.lst`, `setup`, stage files: https://www.gnu.org/software/grub/manual/legacy/grub.html

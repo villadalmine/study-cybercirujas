@@ -9,7 +9,7 @@
 #  RUN IT ONLY INSIDE A DISPOSABLE LABORATORY VIRTUAL MACHINE WITH A SNAPSHOT
 #  TAKEN BEFOREHAND. NEVER RUN IT ON A WORKSTATION YOU CARE ABOUT.
 #
-#  Exam objective coverage (weight 0 in 101, examinable in 102-500 as part of
+#  Exam objective coverage (weight 1 in 102-500, examinable as part of
 #  "106.2 Graphical Desktops"):
 #    - X11 / Wayland as the display server layer
 #    - X display managers (LightDM, GDM, SDDM) and how they are selected
@@ -17,8 +17,8 @@
 #    - Where the desktop session is configured and how it is diagnosed
 #
 #  Official objective reference:
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  Documentation the student is expected to consult:
 #    https://www.x.org/wiki/Documentation/

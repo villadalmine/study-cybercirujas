@@ -2,7 +2,7 @@
 
 **Certification:** LPIC-1 (LPI 101-500 + 102-500), version 5.0
 **Exam:** 101-500 · **Topic:** 103 (GNU and Unix Commands) · **Objective:** 103.7
-**Weight (platform-normalized):** 4.69
+**Weight:** 3
 **Key knowledge areas:** create regular expressions containing several notational elements; understand the difference between basic and extended regular expressions; use regular expression tools to search a filesystem or file content.
 **Terms and utilities:** `grep`, `egrep`, `fgrep`, `sed`, `regex(7)`
 
@@ -1467,7 +1467,7 @@ SUPERLINEAR at n=10000 — do not ship this pattern
 ## 8. References
 
 **Certification objectives**
-- LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0), objective 103.7 — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI, *Exam 101-500 Objectives* (LPIC-1 v5.0), objective 103.7 — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI, *LPIC-1 Certification* overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Standards**

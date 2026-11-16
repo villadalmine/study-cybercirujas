@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # =============================================================================
 #  LPIC-1 v5.0 — Exam 101-500 — Topic 103.3 "Perform basic file management"
-#  Exam weight: 6.25                                    Lab type: break & fix
+#  Exam weight: 4                                    Lab type: break & fix
 #
 #  Objective source (official):
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  WHAT THIS LAB IS
 #    It builds a small production-shaped deployment tree for a fictional
@@ -721,7 +721,7 @@ esac
 #
 #  REFERENCES
 #    LPI 101-500 objectives (103.3):
-#      https://www.lpi.org/our-certifications/exam-101-objectives/
+#      https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    GNU tar manual — --strip-components, --auto-compress:
 #      https://www.gnu.org/software/tar/manual/tar.html
 #    GNU cpio manual — copy-in mode, -d, -m, --no-absolute-filenames:

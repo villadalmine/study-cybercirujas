@@ -1186,7 +1186,7 @@ Cualquier otra cosa es un error propio de `xargs` (1). Note que `123` *no* es el
 
 ## Fuentes
 
-- LPI — *Exam 101-500 Objectives*, objetivo 103.4 "Use streams, pipes and redirects": <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101-500 Objectives*, objetivo 103.4 "Use streams, pipes and redirects": <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Bash Reference Manual — *Redirections* (incluyendo `>|`, `&>`, `<<`, `<<<`, `{varname}>`): <https://www.gnu.org/software/bash/manual/bash.html#Redirections>
 - GNU Bash Reference Manual — *Pipelines* y `PIPESTATUS`: <https://www.gnu.org/software/bash/manual/bash.html#Pipelines>
 - GNU Bash Reference Manual — *Process Substitution* y *Command Substitution*: <https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution>

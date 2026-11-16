@@ -121,12 +121,7 @@ left 106-110 at 0 (`System Architecture 12.51% -> 6.67%`, `Security 0% -> 8.33%`
 question count, 120 over both exams, which the snapshot keeps as `questions` and turns into percentages. At the switch
 each `revalidate` topic gets its `revalidated:` block and `make quality CERT=lpic-1` re-runs the checks; the 112 listed
 sections are headings of the files that quote a weight, a scope and not an edit list. The 322 + 8 technical lines name
-the version (`5.0`, `4.5.0`) that does not move: nothing to rewrite. `switch` did not rewrite each topic's `weight:`
-in `certs/lpic-1.md` (#196), so a small code PR before the switch made it write each topic's `weight:` from its
-`maps_to` objective when the target snapshot carries per-objective weights (the HTML path, step 6), keeping the frozen
-weights for PDFs without them; the switch PR then also rewrites the 112 weight headings with a guarded, scoped
-edit, so after it a fresh `plan` gives `keep` for LPIC-1 too. The catalog `tracked_version` for lpic-2 becomes the snapshot's `4.5.0` (the frozen file's
-spelling; the catalog says `4.5`). The page sha256 changes whenever LPI's cache is rebuilt (cookie expiry, nonce, cache
+the version (`5.0`, `4.5.0`) that does not move: nothing to rewrite. `switch` rewrites each topic's `weight:` from its `maps_to` objective when the target snapshot carries per-objective weights (the HTML path, step 6), keeping the frozen weights for PDFs without them; the switch PR re-pinned citations and rewrote LPIC-1's weight headings and Exam 101/102 labels with a guarded edit (`cite_checker` accepts a `sources.objectives` switch even at unchanged version), so a fresh `plan` gives `keep` for both certs. The catalog `tracked_version` for lpic-2 becomes the snapshot's `4.5.0` (the frozen file's spelling; the catalog used to say `4.5`). The page sha256 changes whenever LPI's cache is rebuilt (cookie expiry, nonce, cache
 timestamps in the HTML), so `extract --html --check` can say STALE with the same `tree_sha256`; the tool prints that.
 
 ## Sources, pinned by commit

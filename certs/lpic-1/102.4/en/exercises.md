@@ -1,7 +1,7 @@
 # LPIC-1 · Topic 102.4 — Use Debian Package Management
 ## Guided Lab Exercises
 
-**Exam:** LPIC-1 101-500 (Topic 102) · **Weight:** 4.69
+**Exam:** LPIC-1 101-500 (Topic 102) · **Weight:** 3
 **Reference distribution:** Debian 12 *bookworm* (all outputs shown were taken on `amd64`). Everything applies to Ubuntu/Devuan/Raspberry Pi OS with the noted differences.
 **Key utilities exercised:** `dpkg`, `dpkg-query`, `dpkg-deb`, `dpkg-reconfigure`, `apt`, `apt-get`, `apt-cache`, `apt-mark`, `apt-file`, `/etc/apt/sources.list`.
 
@@ -1509,7 +1509,7 @@ Reading state information... Done
 
 ## Official Sources
 
-- LPI — Exam 101-500 Objectives (Topic 102.4): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101-500 Objectives (Topic 102.4): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Debian Policy Manual — Chapter 3 (Binary packages), 7 (Declaring relationships), 10.7 (Configuration files): <https://www.debian.org/doc/debian-policy/>
 - `dpkg(1)`: <https://manpages.debian.org/bookworm/dpkg/dpkg.1.en.html>
 - `dpkg-query(1)`: <https://manpages.debian.org/bookworm/dpkg/dpkg-query.1.en.html>

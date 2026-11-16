@@ -3,11 +3,11 @@
 # =============================================================================
 #  LPIC-1  (Exam 101-500 / 102-500, version 5.0)
 #  Topic 104.3 - Control mounting and unmounting of filesystems
-#  Exam weight: 4.69
+#  Exam weight: 3
 #
 #  BREAK & FIX LAB - lpic1-104.3-mount-breakfix.sh
 #
-#  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #             mount(8), umount(8), fstab(5), findmnt(8), lsof(8), fuser(1),
 #             losetup(8), blkid(8), systemd.mount(5)
 #

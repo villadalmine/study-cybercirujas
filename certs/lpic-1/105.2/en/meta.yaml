@@ -3,14 +3,22 @@ lang: en
 backend: claude
 model: claude-opus-5
 sources:
-- https://www.lpi.org/our-certifications/exam-101-objectives/
+- https://www.lpi.org/our-certifications/exam-101-102-objectives/
+revalidated:
+  upgrade: docs/upgrades/lpic-canonical-pages.yaml
+  against: syllabi/lpic-1/v5.0.yaml
+  version: '5.0'
+  objective: Customize or write simple scripts
+  reasons:
+  - domain weight 6.25% -> 6.67%
+  committed: '2026-11-15'
 tool_edit:
   tool: scripts/upgrade_versions.py
-  script_sha256: 9808e780d6e95cd5c4c87ca14a0a23d78192930855d12752be62cd670883b867
-  plan: docs/upgrades/cka-ckad-1.37.plan.json
-  plan_sha256: 445e569ff8252c6a2642e84df964ef1c0054b90056b091e4c630615d60630688
-  pins_sha256: cbd9c8f3921b170d5bfa46e93acbddbe56fa2f3e70e4ad791925d12c4c974a1d
-  date: '2026-10-21'
+  script_sha256: 70f348f481dd43d832ec5343b728c7351e6f029409f502ee5b126baf1b087ebe
+  plan: docs/upgrades/lpic-canonical-pages.plan.json
+  plan_sha256: 72f62c0fb7ee4c71bbfb7aa362ca62ed51ba8061fa7d876d2f351d027d626442
+  pins_sha256: ea7fefa2c9baf6d030eb08217bcf644552e71f0f99bde0d439c94e3c749785b1
+  date: '2026-11-15'
 quality:
   weights_version: 1
   score: 80.6

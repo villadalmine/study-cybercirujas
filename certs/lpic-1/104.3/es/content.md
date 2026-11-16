@@ -1,6 +1,6 @@
 # 104.3 — Controlar el montaje y desmontaje de sistemas de archivos
 
-**LPIC-1 · Examen 101-500 · Tema 104 (Dispositivos, sistemas de archivos Linux, Filesystem Hierarchy Standard) · Peso 4.69**
+**LPIC-1 · Examen 101-500 · Tema 104 (Dispositivos, sistemas de archivos Linux, Filesystem Hierarchy Standard) · Peso 3**
 
 **Cobertura del objetivo:** mount/umount manual · configuración de montaje en el arranque · sistemas de archivos removibles montables por el usuario · etiquetas y UUID · conocimiento de las unidades de montaje de systemd.
 **Términos y utilidades:** `/etc/fstab`, `/media/`, `mount`, `umount`, `blkid`, `lsblk`.
@@ -1418,7 +1418,7 @@ Conectá el estado de salida de `findmnt --verify` a la gestión de configuraci�
 ## 12. Referencias
 
 **Objetivos del examen**
-- LPI — Objetivos del examen 101-500 (LPIC-1 v5.0), Tema 104.3: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del examen 101-500 (LPIC-1 v5.0), Tema 104.3: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Panorama de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **util-linux (mount, umount, findmnt, blkid, lsblk, fstab)**

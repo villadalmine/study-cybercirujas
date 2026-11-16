@@ -1,6 +1,6 @@
 # 101.3 — Change runlevels / boot targets and shutdown or reboot system
 
-**Exam:** LPIC-1 101-500 (v5.0) · **Weight:** 4.69
+**Exam:** LPIC-1 101-500 (v5.0) · **Weight:** 3
 **Key files, terms and utilities:** `/etc/inittab`, `shutdown`, `init`, `/etc/init.d/`, `telinit`, `systemd`, `systemctl`, `/etc/systemd/`, `/usr/lib/systemd/`, `wall`
 
 ---
@@ -1074,7 +1074,7 @@ The `initdefault` record's fourth field is empty because the record carries no c
 
 ## References
 
-- LPI — *Exam 101 Objectives (101-500, v5.0)*, objective 101.3: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101 Objectives (101-500, v5.0)*, objective 101.3: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `systemd.special(7)` — special targets, including `default.target`, `rescue.target`, `emergency.target`, `runlevelN.target`: <https://www.freedesktop.org/software/systemd/man/systemd.special.html>
 - `systemctl(1)` — `get-default`, `set-default`, `isolate`, `rescue`, `emergency`, `kill`, force flags: <https://www.freedesktop.org/software/systemd/man/systemctl.html>
 - `shutdown(8)` (systemd) — time arguments, `-c`, `-k`, `/run/nologin`: <https://www.freedesktop.org/software/systemd/man/shutdown.html>

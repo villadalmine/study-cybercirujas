@@ -1490,8 +1490,8 @@ Cada comprobación de arriba verifica que la *maquinaria* está presente y conec
 
 **Certificación**
 
-* LPI — Objetivos del examen 101-500: https://www.lpi.org/our-certifications/exam-101-objectives/
-* LPI — Objetivos del examen 102-500 (el tema 106.3 vive acá): https://www.lpi.org/our-certifications/exam-101-objectives/
+* LPI — Objetivos del examen 102-500: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+* LPI — Objetivos del examen 102-500 (el tema 106.3 vive acá): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 * Panorama de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Infraestructura de accesibilidad**

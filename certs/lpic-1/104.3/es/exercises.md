@@ -1,5 +1,5 @@
 # LPIC-1 · 104.3 — Control mounting and unmounting of filesystems
-## Ejercicios guiados (Examen 101-500, peso 4)
+## Ejercicios guiados (Examen 101-500, peso 3)
 
 > **Alcance de este lab.** Montaje/desmontaje manual, opciones de montaje y su semántica en el kernel, `/etc/fstab`, identificación por `UUID`/`LABEL`/`PARTUUID`, medios extraíbles montables por usuarios, diagnóstico de sistemas de archivos ocupados, y units systemd `.mount` / `.automount`.
 >
@@ -1180,7 +1180,7 @@ Vale la pena agregar un cuarto paso en cualquier host al que no puedas llegar f�
 
 ## Fuentes oficiales
 
-- **LPI, Objetivos del Examen 101-500 — 104.3 Control mounting and unmounting of filesystems** — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- **LPI, Objetivos del Examen 101-500 — 104.3 Control mounting and unmounting of filesystems** — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `mount(8)`, `umount(8)`, `fstab(5)`, `findmnt(8)`, `blkid(8)`, `lsblk(8)`, `losetup(8)`, `fuser(1)` — páginas de manual de util-linux: <https://man7.org/linux/man-pages/man8/mount.8.html>, <https://man7.org/linux/man-pages/man5/fstab.5.html>, <https://man7.org/linux/man-pages/man8/findmnt.8.html>
 - **Documentación del proyecto util-linux** — <https://github.com/util-linux/util-linux/blob/master/Documentation/>
 - **Kernel de Linux — opciones de montaje de sistemas de archivos e interfaces `proc`** — <https://docs.kernel.org/filesystems/proc.html>, <https://docs.kernel.org/filesystems/sharedsubtree.html>, <https://docs.kernel.org/admin-guide/ext4.html>, <https://docs.kernel.org/filesystems/vfat.html>

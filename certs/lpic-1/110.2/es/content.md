@@ -2143,8 +2143,8 @@ Los tres hechos que más se pasan por alto:
 ## 9. Referencias
 
 **Objetivos de certificación de LPI**
-- Objetivos del examen LPIC-1 101-500 — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Objetivos del examen LPIC-1 102-500 (el Tema 110 vive acá) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- Objetivos del examen LPIC-1 102-500 — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- Objetivos del examen LPIC-1 102-500 (el Tema 110 vive acá) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - Panorama de la certificación LPIC-1 — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Cuentas, shadow passwords y envejecimiento**

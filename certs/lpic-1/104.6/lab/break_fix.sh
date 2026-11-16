@@ -2,7 +2,7 @@
 #
 # ============================================================================
 #  LPIC-1  (exams 101-500 + 102-500, version 5.0)
-#  Topic 104.6 — Create and change hard and symbolic links      Weight: 3.12
+#  Topic 104.6 — Create and change hard and symbolic links      Weight: 2
 #
 #  BREAK & FIX LAB — "orderd", a fake production service deployed the way real
 #  services are deployed: atomic release directories behind a 'current'
@@ -28,7 +28,7 @@
 #      LAB_ROOT=/opt/lab-links ./break-fix-104.6.sh break
 #
 #  Exam objective and reference documentation (official sources):
-#    LPI 101-500 objectives, 104.6 ...... https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI 101-500 objectives, 104.6 ...... https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    ln(1) ............................. https://man7.org/linux/man-pages/man1/ln.1.html
 #    symlink(7) ........................ https://man7.org/linux/man-pages/man7/symlink.7.html
 #    link(2)  (EXDEV, EPERM, EMLINK) ... https://man7.org/linux/man-pages/man2/link.2.html
