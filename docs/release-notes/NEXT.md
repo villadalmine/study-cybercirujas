@@ -18,6 +18,8 @@
 
 - **Fenced code blocks in the material are syntax-checked:** `scripts/lint_content.py` (`make lint-content`, and in `make verify-ci`) runs `bash -O extglob -n` on `bash`/`sh`/`shell`/`console` blocks (prompt lines only in transcripts, `<placeholder>` tokens masked) and PyYAML on `yaml`/`yml` blocks against a shrink-only baseline of 192 legacy blocks (`tests/fixtures/lint_content_baseline.txt`), with optional `--shellcheck` and `--kubeconform` flags (#207).
 
+- **Cited sources validated for official domain, pinning, and reachability:** `scripts/check_citations.py` adds offline domain & version/commit pinning checks, optional SHA-256 `citation_pins:` recording in `meta.yaml` (`--write-pins`), changed-topic scoping (`--base`), warn/block modes, and a weekly `.github/workflows/citations.yml` workflow that maintains a single citation-rot issue (#208).
+
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->

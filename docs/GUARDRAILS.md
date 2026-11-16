@@ -41,7 +41,7 @@ flowchart TD
     S["frozen syllabus<br/>sha256 of the vendor document"] --> TOP["topic: content.md + meta.yaml"]
     TOP --> SRC["official domain?<br/>check_sources.py + docs/sources.yaml"]
     TOP --> CHAIN["origin unchanged?<br/>check_source_chain.py"]
-    TOP --> URL["URL resolves?<br/>check_citations.py (by hand)"]
+    TOP --> URL["URL resolves, official, pinned?<br/>check_citations.py (citations.yml)"]
     TOP --> API["fields exist in the spec?<br/>check_api_facts.py (by hand)"]
     TOP --> CL["page says it?<br/>check_claims.py (sampled)"]
     TOP --> GR["sentence supported?<br/>check_groundedness.py"]
@@ -58,7 +58,7 @@ flowchart TD
 | The chain syllabus, content, labs, translations declares its origin | nothing drifted from its source unnoticed | `scripts/check_source_chain.py` | **blocks** |
 | Curriculum citations are consistent | every citation names the tracked version and the pinned objectives document, one value per certification | `scripts/check_curriculum_consistency.py` | **blocks** (`make verify-ci`) |
 | Provenance is complete | model, date, sources and edits are recorded | `scripts/check_provenance.py` | **blocks** |
-| Cited URLs resolve | no invented documentation URL | `scripts/check_citations.py` | by hand: network check, not in CI (flaky third-party sites) |
+| Cited URLs resolve, come from an official project and stay pinned | HTTP 200 reachability, `docs/sources.yaml` host check, version/SHA pin check (and `--write-pins` `meta.yaml` sha256) | `scripts/check_citations.py`, `.github/workflows/citations.yml` | **warns** on PRs (`--offline --mode warn`) and weekly schedule (opens/updates one rot issue, `#208`); `--mode block` blocks locally |
 | Field names match the project's own spec | no invented API field | `scripts/check_api_facts.py` | by hand, not in CI |
 | The cited page says what the text claims | the source supports the claim | `scripts/check_claims.py` | sampling, costs a model completion per citation, not in CI |
 | Each sentence is supported by its sources | a number, list or output the source does not say | `scripts/check_groundedness.py`, `.github/workflows/groundedness.yml`, `groundedness.yaml` | **warns** (`mode: warn`) |
@@ -66,7 +66,7 @@ flowchart TD
 
 **Known gaps**
 - Groundedness only warns; moving it to block needs a measured baseline ([#41](https://github.com/villadalmine/study-cybercirujas/issues/41)).
-- Validating that every cited source is reachable, official and pinned, in CI and not by hand: [#208](https://github.com/villadalmine/study-cybercirujas/issues/208).
+- Enforcing citation reachability and pinning as blocking on new/changed topics once scheduled rot runs clear legacy links (`scripts/check_citations.py --mode block`, [#208](https://github.com/villadalmine/study-cybercirujas/issues/208)).
 - A library of official sources that a model can query to verify claims: [#209](https://github.com/villadalmine/study-cybercirujas/issues/209).
 - A confident, well-cited, wrong explanation passes every check ([AUDITOR_DESIGN](AUDITOR_DESIGN.md)). That is why review and the "AI-generated" notice exist.
 
