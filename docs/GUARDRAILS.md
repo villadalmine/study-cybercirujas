@@ -117,7 +117,7 @@ was removed.
 flowchart TD
     BLK["code blocks in content.md and exercises.md"] --> Y["yaml / json blocks<br/>check_manifests.py"]
     BLK --> K["Kubernetes manifests<br/>check_k8s_apis.py: removed APIs"]
-    BLK --> SH["bash / console blocks<br/>NOT checked (gap)"]
+    BLK --> SH["bash / console / yaml blocks<br/>lint_content.py"]
     TR["translations"] --> TG["_verify_translation<br/>code blocks, URLs unchanged"]
     LABSH["lab scripts in a Killercoda scenario"] --> BN["bash -n<br/>export_killercoda.py"]
 ```
@@ -125,16 +125,14 @@ flowchart TD
 | Check | What it establishes | Path | Today |
 | :--- | :--- | :--- | :--- |
 | YAML and JSON blocks parse | the student can copy a manifest that parses | `scripts/check_manifests.py` | **blocks** (`make verify-ci`) |
+| `bash`, `console` and `yaml` blocks in the material | `bash -O extglob -n` (prompt commands only in transcripts) and PyYAML on fenced blocks, with a shrink-only baseline (`tests/fixtures/lint_content_baseline.txt`); optional `--shellcheck` and `--kubeconform` | `scripts/lint_content.py` (`make lint-content`) | **blocks** (`make verify-ci`) |
 | No removed Kubernetes API is taught | no removed or deprecated core Kubernetes API (for example `extensions/v1beta1` Ingress) in the material | `scripts/check_k8s_apis.py` | **blocks** |
 | A translation keeps the code | code blocks, URLs, headings and length are kept from the source | `teach/core/generator.py` (`_verify_translation`) | **blocks** the translation from being saved |
 | Lab scripts in a Killercoda scenario parse | `bash -n` on every script and a shebang | `teach/lab/export_killercoda.py` | **blocks** the export |
-| `bash` and `console` blocks in the material | nothing | | **gap** |
-| Manifests validate against the real schema | nothing (`kubeconform` or `kubectl --dry-run=client` is not used) | | **gap** |
-| Shell scripts of the labs are linted | nothing (`shellcheck` is not used) | | **gap** |
+| Manifests validate against the real schema | `kubeconform` report via `scripts/lint_content.py --kubeconform` | `scripts/lint_content.py` | optional report (not blocking) |
+| Shell scripts of the labs are linted | `shellcheck` report on material shell blocks via `scripts/lint_content.py --shellcheck`; lab scripts remain unchecked | `scripts/lint_content.py` | optional report / **gap** for `lab/*.sh` |
 
-**Known gaps** (one issue, [#207](https://github.com/villadalmine/study-cybercirujas/issues/207)): syntax-check every command and
-code block in the material, deterministically and locally. The material has thousands of `bash` and `console` blocks that no check
-reads; the same issue covers the schema validation of manifests and linting of lab scripts, so there is one place to track them.
+**Known gaps** (tracked in [#207](https://github.com/villadalmine/study-cybercirujas/issues/207)): `scripts/lint_content.py` syntax-checks `bash`, `console` and `yaml` blocks in CI with a shrink-only baseline (`tests/fixtures/lint_content_baseline.txt` for legacy blocks), while `kubeconform` schema validation and `shellcheck` linting remain optional report-only flags (`--kubeconform`, `--shellcheck`) and lab scripts are checked by `bash -n` at Killercoda export rather than `shellcheck`.
 
 ## How the three fit together
 

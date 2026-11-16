@@ -246,6 +246,10 @@ probe-models: ## do the bot's models ANSWER, read the material, and speak each l
 	@# its effort selector and its per-language filtering from.
 	$(VENV)/bin/python3 scripts/probe_models.py $(if $(UPDATE),--update,) $(if $(TIER),--tier $(TIER),) $(if $(LANGS),--langs "$(LANGS)",)
 
+.PHONY: lint-content
+lint-content: ## syntax-check the material's bash/console/yaml code blocks (bash -n, PyYAML; shrink-only baseline, free, ~40 s)
+	$(VENV)/bin/python3 scripts/lint_content.py $(if $(CERT),certs/$(CERT),)
+
 check-docs: ## docs consistent with the repo: links, anchors, paths, make/teach commands, generated files (free)
 	$(VENV)/bin/python3 scripts/check_docs.py
 
@@ -285,6 +289,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_curriculum_consistency.py
+	$(VENV)/bin/python3 scripts/lint_content.py
 	$(VENV)/bin/python3 scripts/lab_fidelity.py check
 	$(VENV)/bin/python3 scripts/check_syllabus.py
 	$(VENV)/bin/python3 scripts/check_labels.py
@@ -325,6 +330,7 @@ verify-ci: ## the free checks that hold on ANY clean clone — what CI runs, and
 	$(VENV)/bin/python3 scripts/check_sources.py
 	$(VENV)/bin/python3 scripts/check_versions.py
 	$(VENV)/bin/python3 scripts/check_curriculum_consistency.py
+	$(VENV)/bin/python3 scripts/lint_content.py
 	$(VENV)/bin/python3 scripts/lab_fidelity.py check
 	$(VENV)/bin/python3 scripts/check_syllabus.py
 	$(VENV)/bin/python3 scripts/check_labels.py

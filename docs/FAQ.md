@@ -183,7 +183,7 @@ Layers, none of which proves an explanation true
 |---|---|---|---|
 | Quality floor | stubs, a missing References or answers section | generator, before writing; `make verify-ci` | yes |
 | Sources | References that are not official project domains | `scripts/check_sources.py`, `docs/sources.yaml` | yes (`verify-ci`) |
-| Manifests and Kubernetes APIs | YAML/JSON that does not parse, removed APIs | `scripts/check_manifests.py`, `scripts/check_k8s_apis.py` | yes |
+| Manifests, shell blocks and Kubernetes APIs | `bash`/`console` and YAML/JSON syntax that fails to parse (with a shrink-only legacy baseline), removed APIs | `scripts/check_manifests.py`, `scripts/lint_content.py`, `scripts/check_k8s_apis.py` | yes |
 | API facts for the tracked release | manifests using APIs that release does not serve | `scripts/check_api_facts.py` | no (network, run by hand) |
 | Citations resolve | invented URLs (about 1–3% measured) | `scripts/check_citations.py` | no (network, not in CI) |
 | Groundedness | sentences the cited sources do not support | `scripts/check_groundedness.py`, CI job `groundedness` | no, `mode: warn` |
