@@ -1,7 +1,7 @@
 # 103.6 — Modify Process Execution Priorities
 
 **Certification:** LPIC-1 (LPI 101-500 / 102-500, version 5.0)
-**Objective 103.6**, exam weight **3.12**
+**Objective 103.6**, exam weight **2**
 **Key knowledge:** default priority of a newly created job; running a program with a higher/lower priority than the default; changing the priority of a running process.
 **Terms and utilities:** `nice`, `ps`, `renice`, `top`
 
@@ -694,7 +694,7 @@ If you edited `/etc/security/limits.d/90-lab-nice.conf` or created a systemd dro
 
 ## Sources
 
-* LPI — Exam 101 Objectives, v5.0, objective 103.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — Exam 101 Objectives, v5.0, objective 103.6: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * `nice(1)`: <https://man7.org/linux/man-pages/man1/nice.1.html>
 * GNU coreutils, `nice` invocation: <https://www.gnu.org/software/coreutils/manual/html_node/nice-invocation.html>
 * `renice(1)`: <https://man7.org/linux/man-pages/man1/renice.1.html>

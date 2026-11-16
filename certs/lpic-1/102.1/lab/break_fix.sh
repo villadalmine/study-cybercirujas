@@ -2,9 +2,9 @@
 #
 # ==============================================================================
 #  LPIC-1 (LPI 101-500 / 102-500, syllabus version 5.0)
-#  Topic 102.1 — Design hard disk layout   (exam weight: 3.13)
-#  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#             https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Topic 102.1 — Design hard disk layout   (exam weight: 2)
+#  Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#             https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  BREAK & FIX LAB — controlled damage on a DISPOSABLE lab VM.
 #
@@ -897,7 +897,7 @@ exit 0
 #   Leave free extents in the VG. A VG at 100% allocation cannot take a snapshot
 #   and cannot absorb the growth you failed to predict.
 #
-#  Official objective text: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Official objective text: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #  man pages cited: fstab(5), mount(8), umount(8), mountpoint(1), blkid(8),
 #  mkswap(8), swapon(8), lvextend(8), resize2fs(8), parted(8), lsblk(8),
 #  findmnt(8), systemd-fstab-generator(8)

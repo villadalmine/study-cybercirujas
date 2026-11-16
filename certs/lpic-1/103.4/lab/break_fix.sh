@@ -3,8 +3,8 @@
 # lab-103.4-break-and-fix.sh
 #
 # LPIC-1 v5.0 - Exam 101-500 - Topic 103.4 "Use streams, pipes and redirects"
-# Exam weight: 6.25
-# Objective reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+# Exam weight: 4
+# Objective reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 # WHAT THIS IS
 #   A controlled break & fix drill. It seeds five real, reversible faults that
@@ -828,7 +828,7 @@ main "$@"
 #
 # Sources:
 #   LPI Exam 101-500 objectives, topic 103.4
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   GNU Bash Reference Manual - Redirections
 #     https://www.gnu.org/software/bash/manual/bash.html#Redirections
 #   GNU Bash Reference Manual - Pipelines / The Set Builtin (noclobber, lastpipe)

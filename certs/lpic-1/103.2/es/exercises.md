@@ -1,6 +1,6 @@
 # LPIC-1 103.2 — Procesar flujos de texto utilizando filtros
 
-**Examen:** 101-500 (LPIC-1, versión 5.0) · **Objetivo:** 103.2 · **Peso:** 3.12
+**Examen:** 101-500 (LPIC-1, versión 5.0) · **Objetivo:** 103.2 · **Peso:** 2
 
 **Utilidades incluidas:** `bzcat`, `cat`, `cut`, `head`, `join`, `less`, `ls`, `md5sum`, `nl`, `od`, `paste`, `pr`, `sed`, `sha256sum`, `sha512sum`, `sort`, `split`, `tail`, `tr`, `uniq`, `wc`, `xzcat`, `zcat` — más los filtros de espacios en blanco adyacentes `expand`/`unexpand`/`fmt`, que revisiones anteriores del temario listaban y que siguen apareciendo en pipelines reales.
 
@@ -8,7 +8,7 @@
 
 **Fuentes de referencia**
 
-- LPI, *Exam 101 Objectives (101-500)* — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI, *Exam 101 Objectives (101-500)* — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - Manual de GNU coreutils — https://www.gnu.org/software/coreutils/manual/coreutils.html
 - Manual de GNU sed — https://www.gnu.org/software/sed/manual/sed.html
 - POSIX.1-2017 Shell & Utilities — https://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html

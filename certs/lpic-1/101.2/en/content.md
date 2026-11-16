@@ -2,7 +2,7 @@
 
 **Certification:** LPIC-1 (Exams 101-500 / 102-500, version 5.0)
 **Objective:** Guide the system through the booting process
-**Course weight:** 4.69
+**Course weight:** 3
 
 **Key knowledge areas covered here**
 
@@ -2402,7 +2402,7 @@ BOOT_IMAGE=(hd0,gpt3)/ostree/rhcos-.../vmlinuz-5.14.0-427.el9.x86_64 root=UUID=.
 
 **Exam objectives**
 
-- LPI — Exam 101 Objectives (LPIC-1 version 5.0), objective 101.2 *Boot the system*: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101 Objectives (LPIC-1 version 5.0), objective 101.2 *Boot the system*: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Boot loaders and firmware**

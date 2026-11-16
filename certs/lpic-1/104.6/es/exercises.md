@@ -1,6 +1,6 @@
 # LPIC-1 · 104.6 — Crear y modificar enlaces duros y simbólicos
 
-**Examen:** 101-500 · **Peso del objetivo:** 3.12
+**Examen:** 101-500 · **Peso del objetivo:** 2
 **Ejercicios guiados.** Cada paso está pensado para ser ejecutado. Las respuestas están al final, en una sección plegable — escribí tu propia respuesta antes de abrirla.
 
 ---
@@ -1116,7 +1116,7 @@ Chequeo autoritativo: `systemctl list-unit-files <name>`, `systemctl show -p Wan
 
 ## Fuentes
 
-- LPI — Objetivos del examen 101 (LPIC-1 v5.0), objetivo 104.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del examen 101 (LPIC-1 v5.0), objetivo 104.6: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Manual de GNU Coreutils — invocación de `ln`: <https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html>
 - Manual de GNU Coreutils — invocación de `cp`: <https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html>
 - Manual de GNU Coreutils — invocación de `readlink`: <https://www.gnu.org/software/coreutils/manual/html_node/readlink-invocation.html>

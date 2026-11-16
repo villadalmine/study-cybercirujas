@@ -1,8 +1,8 @@
 # LPIC‑1 — 102.2 Instalar un gestor de arranque
 ## Ejercicios guiados (profundidad de producción)
 
-**Examen:** LPI 101‑500 (LPIC‑1 v5.0) · **Objetivo 102.2** · **Peso:** 3.13
-**Objetivos oficiales:** https://www.lpi.org/our-certifications/exam-101-objectives/
+**Examen:** LPI 101‑500 (LPIC‑1 v5.0) · **Objetivo 102.2** · **Peso:** 2
+**Objetivos oficiales:** https://www.lpi.org/our-certifications/exam-101-102-objectives/
 
 ---
 
@@ -1101,7 +1101,7 @@ Regla: **GRUB Legacy cuenta discos y particiones desde 0.** **GRUB 2 cuenta los 
 
 ## Referencias
 
-* LPI — Objetivos del examen 101‑500 (v5.0), Tema 102.2: https://www.lpi.org/our-certifications/exam-101-objectives/
+* LPI — Objetivos del examen 101‑500 (v5.0), Tema 102.2: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 * Manual de GNU GRUB 2.x — Instalación, configuración, intérprete de comandos, red/rescate: https://www.gnu.org/software/grub/manual/grub/grub.html
 * Manual de GNU GRUB — invocación de `grub-install`: https://www.gnu.org/software/grub/manual/grub/grub.html#Invoking-grub_002dinstall
 * Manual de GNU GRUB Legacy (0.97) — `menu.lst`, `setup`, archivos de etapas: https://www.gnu.org/software/grub/manual/legacy/grub.html

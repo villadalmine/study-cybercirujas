@@ -1,6 +1,6 @@
 # LPIC-1 — 104.7 Find System Files and Place Files in the Correct Location
 
-**Exam:** 101-500 · **Weight:** 3.12 · **Syllabus version:** 5.0
+**Exam:** 101-500 · **Weight:** 2 · **Syllabus version:** 5.0
 
 **Objective scope** — Understand the correct locations of files under the FHS; find files and commands on a Linux system; know the location and purpose of important files and directories as defined in the FHS.
 
@@ -8,7 +8,7 @@
 
 **Reference sources**
 
-- LPI Exam 101 Objectives — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101 Objectives — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Filesystem Hierarchy Standard 3.0 (Linux Foundation) — <https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html>
 - GNU findutils manual — <https://www.gnu.org/software/findutils/manual/html_mono/find.html>
 - `find(1)` — <https://man7.org/linux/man-pages/man1/find.1.html>

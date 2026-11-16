@@ -3,13 +3,13 @@
 # ============================================================================
 #  LPIC-1 (Exam 101-500 / 102-500, version 5.0)
 #  Topic 106.3 -- Accessibility
-#  Weight: 0 (deprecated in syllabus v5.0, still examinable knowledge on
+#  Weight: 1 (deprecated in syllabus v5.0, still examinable knowledge on
 #             legacy 4.0 material and *very* real in production desktops)
 #
 #  BREAK & FIX LAB -- accessibility subsystem sabotage
 #
-#  Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#             https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#             https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 # ----------------------------------------------------------------------------
 #  !!  DESTRUCTIVE  !!  RUN ONLY ON A DISPOSABLE LAB VM.
@@ -1006,10 +1006,10 @@ main "$@"
 # OFFICIAL SOURCES
 # ---------------------------------------------------------------------------
 #
-#   LPI Exam 101-500 objectives
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#   LPI Exam 102-500 objectives
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   LPI Exam 102-500 objectives (topic 106 lives here)
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   X.Org -- setxkbmap(1), xset(1), xorg.conf(5), xorg.conf.d
 #     https://www.x.org/releases/current/doc/man/man1/setxkbmap.1.xhtml
 #     https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml

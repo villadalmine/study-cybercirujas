@@ -1171,8 +1171,8 @@ Si `strace` muestra que el proceso nunca abre `/etc/resolv.conf`, no está usand
 ## 12. Referencias
 
 **LPI**
-- Objetivos del examen 102-500 (Tema 109.4): https://www.lpi.org/our-certifications/exam-101-objectives/
-- Objetivos del examen 101-500: https://www.lpi.org/our-certifications/exam-101-objectives/
+- Objetivos del examen 102-500 (Tema 109.4): https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- Objetivos del examen 102-500: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - Descripción general de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Páginas de manual y glibc**

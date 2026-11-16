@@ -29,8 +29,8 @@
 #    - --restore puts the machine back, including the RTC
 #
 #  REFERENCES (official)
-#    LPI 101 objectives .... https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI 102 objectives .... https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI 101 objectives .... https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    LPI 102 objectives .... https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    timedatectl(1) ........ https://www.freedesktop.org/software/systemd/man/timedatectl.html
 #    systemd-timesyncd(8) .. https://www.freedesktop.org/software/systemd/man/systemd-timesyncd.service.html
 #    hwclock(8) ............ https://man7.org/linux/man-pages/man8/hwclock.8.html

@@ -1,6 +1,6 @@
 # LPIC-1 — 104.7 Encontrar archivos del sistema y ubicar archivos en la ubicación correcta
 
-**Examen:** 101-500 · **Peso:** 3.12 · **Versión del temario:** 5.0
+**Examen:** 101-500 · **Peso:** 2 · **Versión del temario:** 5.0
 
 **Alcance del objetivo** — Comprender las ubicaciones correctas de los archivos según el FHS; encontrar archivos y comandos en un sistema Linux; conocer la ubicación y el propósito de archivos y directorios importantes según los define el FHS.
 
@@ -8,7 +8,7 @@
 
 **Fuentes de referencia**
 
-- LPI Exam 101 Objectives — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101 Objectives — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Filesystem Hierarchy Standard 3.0 (Linux Foundation) — <https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html>
 - Manual de GNU findutils — <https://www.gnu.org/software/findutils/manual/html_mono/find.html>
 - `find(1)` — <https://man7.org/linux/man-pages/man1/find.1.html>

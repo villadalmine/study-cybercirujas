@@ -2,13 +2,13 @@
 #
 # =============================================================================
 #  LPIC-1 (Exam 101-500) — Topic 102.6: Linux as a virtualization guest
-#  Weight: 1.56
+#  Weight: 1
 #
 #  BREAK & FIX LAB — "The guest that lost its identity"
 #
 #  Reference: LPI Exam 101 Objectives
-#             https://www.lpi.org/our-certifications/exam-101-objectives/
-#             (Topic index: https://www.lpi.org/our-certifications/exam-101-objectives/)
+#             https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#             (Topic index: https://www.lpi.org/our-certifications/exam-101-102-objectives/)
 #
 #  WARNING — DISPOSABLE LAB VM ONLY
 #  ---------------------------------
@@ -365,7 +365,7 @@ CONCEPTS UNDER TEST (LPI 102.6)
   Tools: systemd-detect-virt, systemd-machine-id-setup, dbus-uuidgen,
          hostnamectl, dmidecode, lsmod, lspci, cloud-init.
 
-Official objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+Official objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 =============================================================================
 EOF
     chmod 0644 "$BRIEF_FILE"
@@ -863,9 +863,9 @@ main "$@"
 # SOURCES
 # ---------------------------------------------------------------------------
 #   LPI Exam 101 objectives (102.6 Linux as a virtualization guest)
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   LPI certification index
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   machine-id(5)
 #     https://www.freedesktop.org/software/systemd/man/latest/machine-id.html
 #   systemd-machine-id-setup(1)

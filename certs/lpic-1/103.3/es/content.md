@@ -1,6 +1,6 @@
 # 103.3 — Realizar gestión básica de archivos
 
-**LPIC-1 v5.0 · Examen 101-500 · Peso: 6.25**
+**LPIC-1 v5.0 · Examen 101-500 · Peso: 4**
 
 **Archivos, términos y utilidades clave:** `cp`, `find`, `mkdir`, `mv`, `ls`, `rm`, `rmdir`, `touch`, `tar`, `cpio`, `dd`, `file`, `gzip`, `gunzip`, `bzip2`, `bunzip2`, `xz`, `unxz`, file globbing.
 
@@ -2002,7 +2002,7 @@ bash      shopt -s extglob globstar nullglob failglob dotglob nocaseglob
 ## Referencias
 
 **Objetivos de certificación**
-- LPI Exam 101-500 Objectives (v5.0), Topic 103.3 — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI Exam 101-500 Objectives (v5.0), Topic 103.3 — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Estándares**

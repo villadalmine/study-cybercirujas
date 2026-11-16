@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1 v5.0 (exams 101-500 / 102-500) - Topic 104.1
-#  "Create partitions and filesystems"  (exam weight: 3.12)
+#  "Create partitions and filesystems"  (exam weight: 2)
 #
 #  BREAK & FIX LABORATORY
 #
@@ -32,7 +32,7 @@
 #    sudo ./104.1-break-and-fix.sh cleanup    # remove every trace
 #
 #  REFERENCES (official)
-#    LPI exam 101 objectives ... https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI exam 101 objectives ... https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    GPT on-disk layout ....... https://uefi.org/specifications
 #    gdisk / sgdisk ........... https://www.rodsbooks.com/gdisk/
 #    ext4 superblock layout ... https://www.kernel.org/doc/html/latest/filesystems/ext4/globals.html

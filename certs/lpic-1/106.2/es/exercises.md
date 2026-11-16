@@ -1,7 +1,7 @@
 # LPIC-1 — Tema 106.2: Escritorios gráficos
 ## Ejercicios guiados
 
-**Examen:** 101-500 / 102-500 (v5.0) · **Objetivo 106.2** · **Peso:** 0.0
+**Examen:** 101-500 / 102-500 (v5.0) · **Objetivo 106.2** · **Peso:** 1
 **Alcance del objetivo:** conocimiento de los principales entornos de escritorio (KDE, GNOME, Xfce) y comprensión de los protocolos usados para alcanzar una sesión gráfica remota (X11, XDMCP, VNC, Spice, RDP).
 
 ### Prerrequisitos del laboratorio
@@ -967,8 +967,8 @@ loginctl user-status alice
 
 ### Fuentes
 
-- LPI — Exam 101-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPI — Exam 102-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 102-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPI — Exam 102-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - X.Org Foundation — `Xserver(1)`, `Xsecurity(7)`, `xauth(1)`, `xhost(1)`: https://www.x.org/releases/current/doc/man/
 - X.Org Foundation — Especificación XDMCP: https://www.x.org/releases/current/doc/xorg-docs/xdmcp/xdmcp.html
 - freedesktop.org — Desktop Entry Specification: https://specifications.freedesktop.org/desktop-entry-spec/latest/

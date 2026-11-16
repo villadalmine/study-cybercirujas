@@ -1574,8 +1574,8 @@ Steps 3 and 5 are the ones that get skipped, and they are the ones that matter. 
 ## 6. References
 
 **LPI certification objectives**
-- Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Exam 102-500 objectives (Topic 110.3 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- Exam 102-500 objectives (Topic 110.3 lives here) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **OpenSSH — project documentation and manual pages**

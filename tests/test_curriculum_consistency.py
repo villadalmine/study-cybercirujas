@@ -113,11 +113,12 @@ class FixLine(unittest.TestCase):
         self.assertEqual(cc.fix_line("see https://www.lpi.org/our-certifications/linux-essentials-overview/", lpic2),
                          "see https://www.lpi.org/our-certifications/linux-essentials-overview/")   # another document
 
-    def test_lpic2s_canonical_page_is_a_reviewed_spelling_of_the_catalogs_alias(self):
-        alias = entry("4.5", "https://www.lpi.org/our-certifications/exam-201-objectives/")
-        page = "see https://www.lpi.org/our-certifications/exam-201-202-objectives/"
-        self.assertEqual(cc.fix_line(page, cc.wanted(alias, "lpic-2")), page)               # accepted for lpic-2 (data, with its reason)
-        self.assertNotEqual(cc.fix_line(page, cc.wanted(alias, "lpic-9")), page)            # not for a cert that has no such entry
+    def test_lpic2s_canonical_page_is_pinned_directly_after_the_switch(self):
+        # #235: lpic-2 in catalog.yaml now pins .../exam-201-202-objectives/ directly, so no extra alias spelling is accepted.
+        canon = "https://www.lpi.org/our-certifications/exam-201-202-objectives/"
+        want = cc.wanted(entry("4.5.0", canon), "lpic-2")
+        self.assertEqual(cc.fix_line(f"see {canon}", want), f"see {canon}")
+        self.assertEqual(cc.fix_line("see https://www.lpi.org/our-certifications/exam-201-objectives/", want), f"see {canon}")
 
     def test_lpic1s_dead_exam_102_page_is_not_a_reviewed_spelling(self):
         # #235: .../exam-102-objectives/ redirects to the LPI home page (checked 2026-10-27). It was accepted for lpic-1 only until the
@@ -382,6 +383,25 @@ class Guard(unittest.TestCase):
             with self.subTest("unstamped " + name):
                 self.assertEqual(len(cd.wrong_rewrites(plan, [self.META], base, lambda f, t=text: t)), 1)
         self.assertEqual(cd.wrong_rewrites(plan, [self.META], base, lambda f: ok_meta), [])
+
+    def test_same_version_objectives_switch_lab_script_revalidated_meta_and_citation_only_pins(self):
+        old_url = "https://www.lpi.org/our-certifications/exam-101-objectives/"
+        new_url = "https://www.lpi.org/our-certifications/exam-101-102-objectives/"
+        base_cat = yaml.safe_dump({"certs": {"lpic-1": entry(tracked="5.0", url=old_url)}})
+        head_cat = yaml.safe_dump({"certs": {"lpic-1": entry(tracked="5.0", url=new_url)}})
+        sh = "certs/lpic-1/101.1/lab/break_fix.sh"
+        meta = "certs/lpic-1/101.1/en/meta.yaml"
+        meta_old = f"lang: en\nsources:\n- {old_url}\nquality:\n  score: 80\n"
+        meta_new = f"lang: en\nsources:\n- {new_url}\nquality:\n  score: 80\nrevalidated:\n  version: '5.0'\ntool_edit:\n  tool: scripts/upgrade_versions.py\n"
+        sh_old = f"#!/usr/bin/env bash\n# Ref: {old_url}\n"
+        sh_new = f"#!/usr/bin/env bash\n# Ref: {new_url}\n"
+        base = lambda f: base_cat if f == "catalog.yaml" else meta_old if f == meta else sh_old
+        head = lambda f: meta_new if f == meta else sh_new
+        plan = {"certs": {"lpic-1": {"new": [], "topics": [dict(self.TOPIC, topic="101.1")]}}}
+        ok = cd.cite_checker(base, lambda f: head_cat)
+        self.assertTrue(cd.citation_files_ok(plan, sh, base, head, ok))
+        self.assertTrue(cd.citation_files_ok(plan, meta, base, head, ok))
+        self.assertEqual(cd.uv_rewrite("unchanged 5.0", {"date": "2026-11-15"}), "unchanged 5.0")
 
 
 if __name__ == "__main__":

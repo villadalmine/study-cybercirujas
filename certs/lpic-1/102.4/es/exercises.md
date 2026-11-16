@@ -1,7 +1,7 @@
 # LPIC-1 · Tema 102.4 — Uso de la gestión de paquetes de Debian
 ## Ejercicios de laboratorio guiados
 
-**Examen:** LPIC-1 101-500 (Tema 102) · **Peso:** 4.69
+**Examen:** LPIC-1 101-500 (Tema 102) · **Peso:** 3
 **Distribución de referencia:** Debian 12 *bookworm* (todas las salidas mostradas se tomaron en `amd64`). Todo aplica a Ubuntu/Devuan/Raspberry Pi OS con las diferencias señaladas.
 **Utilidades clave ejercitadas:** `dpkg`, `dpkg-query`, `dpkg-deb`, `dpkg-reconfigure`, `apt`, `apt-get`, `apt-cache`, `apt-mark`, `apt-file`, `/etc/apt/sources.list`.
 
@@ -1509,7 +1509,7 @@ Reading state information... Done
 
 ## Fuentes oficiales
 
-- LPI — Objetivos del Examen 101-500 (Tema 102.4): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del Examen 101-500 (Tema 102.4): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Debian Policy Manual — Capítulo 3 (Paquetes binarios), 7 (Declaración de relaciones), 10.7 (Archivos de configuración): <https://www.debian.org/doc/debian-policy/>
 - `dpkg(1)`: <https://manpages.debian.org/bookworm/dpkg/dpkg.1.en.html>
 - `dpkg-query(1)`: <https://manpages.debian.org/bookworm/dpkg/dpkg-query.1.en.html>

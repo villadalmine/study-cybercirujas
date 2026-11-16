@@ -4,7 +4,7 @@
 **Alcance cubierto:** comandos simples y secuencias de comandos en una sola línea · variables de shell vs. variables de entorno (`set`, `unset`, `export`, `env`) · resolución de comandos y `PATH` · quoting · historial de comandos y `.bash_history` · `man` y autodocumentación · `uname`, `pwd`, `echo`, `type`, `which`.
 
 **Fuentes de referencia**
-- Objetivos del examen LPI 101-500 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- Objetivos del examen LPI 101-500 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Bash Reference Manual — <https://www.gnu.org/software/bash/manual/bash.html>
 - GNU Coreutils Manual — <https://www.gnu.org/software/coreutils/manual/coreutils.html>
 - Proyecto `man-pages` de Linux — <https://www.kernel.org/doc/man-pages/>

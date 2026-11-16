@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1 (Exams 101-500 / 102-500, version 5.0)
-#  Topic 108.4 - Manage printers and printing        (exam weight: 0.0)
+#  Topic 108.4 - Manage printers and printing        (exam weight: 2)
 #
 #  BREAK & FIX LABORATORY - CUPS print queue incident simulator
 # =============================================================================
@@ -40,7 +40,7 @@
 #
 #    Add --yes (or export LPIC_LAB_CONFIRM=yes) to acknowledge this is a lab VM.
 #
-#  Reference: LPI Exam 101/102 objectives - https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Reference: LPI Exam 101/102 objectives - https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #             CUPS documentation          - https://openprinting.github.io/cups/
 #             cupsd.conf(5), cups-files.conf(5), lpadmin(8), lpstat(1), lp(1)
 # =============================================================================
@@ -818,7 +818,7 @@ exit 0
 #      <Location /> block still says "Order allow,deny / Allow localhost".
 #
 #  Sources:
-#    LPI 101/102 objectives - https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI 101/102 objectives - https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    CUPS documentation     - https://openprinting.github.io/cups/
 #    man pages              - cupsd.conf(5) cups-files.conf(5) lpadmin(8)
 #                             lpstat(1) lp(1) lpr(1) cupsenable(8) cupsaccept(8)

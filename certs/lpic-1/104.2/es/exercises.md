@@ -1,6 +1,6 @@
 # LPIC-1 · Tema 104.2 — Mantener la integridad de los sistemas de archivos
 
-**Examen:** 101-500 (LPIC-1 v5.0) · **Peso:** 3.12
+**Examen:** 101-500 (LPIC-1 v5.0) · **Peso:** 2
 **Superficie de comandos:** `du`, `df`, `fsck`, `e2fsck`, `mke2fs`, `tune2fs`, `dumpe2fs`, `debugfs`, `badblocks`, `xfs_info`, `xfs_repair`, `xfs_db`, `xfs_fsr`, `xfs_admin`
 
 ---
@@ -1358,7 +1358,7 @@ Dejar una lista obsoleta en su lugar retiene permanentemente esos bloques fuera 
 
 ## Fuentes oficiales
 
-- LPI — Objetivos del examen 101-500, Tema 104.2: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del examen 101-500, Tema 104.2: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Kernel de Linux — documentación del sistema de archivos ext4: <https://www.kernel.org/doc/html/latest/filesystems/ext4/index.html>
 - Kernel de Linux — guía de administración de ext4: <https://docs.kernel.org/admin-guide/ext4.html>
 - Kernel de Linux — documentación del sistema de archivos XFS: <https://www.kernel.org/doc/html/latest/admin-guide/xfs.html>

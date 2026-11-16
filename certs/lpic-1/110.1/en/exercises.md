@@ -4,7 +4,7 @@
 > **Scope of this objective:** audit SUID/SGID files, manage passwords and password aging, discover open ports (`nmap`, `netstat`/`ss`), set login/process/memory limits, determine who is (or was) logged in, and basic `sudo`.
 > **Key utilities:** `find`, `passwd`, `fuser`, `lsof`, `nmap`, `chage`, `netstat`/`ss`, `sudo`, `su`, `usermod`, `ulimit`, `who`, `w`, `last`.
 
-**Lab safety.** Run every destructive step in a throwaway VM or container you own (a Debian/Ubuntu or a RHEL-family box is fine). Where a step changes accounts or `sudoers`, a rollback command is given. Commands prefixed with `#` require root; `$` are unprivileged. Official reference for the objective: <https://www.lpi.org/our-certifications/exam-101-objectives/> and the linked man pages (`man 1 find`, `man 5 sudoers`, `man 1 chage`, `man 5 limits.conf`).
+**Lab safety.** Run every destructive step in a throwaway VM or container you own (a Debian/Ubuntu or a RHEL-family box is fine). Where a step changes accounts or `sudoers`, a rollback command is given. Commands prefixed with `#` require root; `$` are unprivileged. Official reference for the objective: <https://www.lpi.org/our-certifications/exam-101-102-objectives/> and the linked man pages (`man 1 find`, `man 5 sudoers`, `man 1 chage`, `man 5 limits.conf`).
 
 ---
 

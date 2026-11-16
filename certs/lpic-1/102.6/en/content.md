@@ -1,7 +1,7 @@
 # 102.6 — Linux as a Virtualization Guest
 
 **Certification:** LPIC-1 (Exams 101-500 / 102-500), version 5.0
-**Objective weight:** 1.56 (normalized) — 1 point in the raw LPI weighting
+**Objective weight:** 1
 **Scope (original paraphrase of the LPI objective):** understand what a virtual machine and a container are; know the building blocks of an IaaS cloud instance (compute, block storage, networking); know which properties of a Linux installation must be made unique before it is cloned or turned into a template; know how system images deploy VMs, cloud instances and containers; know the guest-side extensions that integrate Linux with a hypervisor; be aware of `cloud-init`.
 
 > **Exam-day reality check.** LPI weights this objective at 1 point out of 60 — statistically ~1 question per exam form. The material below is deliberately deeper than that, because *every* production Linux system an SRE touches in 2026 is a guest of something, and the failure modes in this objective (duplicate `machine-id`, duplicate SSH host keys, missing `virtio` in the initramfs, `cloud-init` that silently never ran) are the ones that page you at 03:00. Learn the exam surface first (§13), then keep the rest as a runbook.
@@ -2109,8 +2109,8 @@ The facts LPI is likely to test, stated flatly:
 ## 14. References
 
 **LPI — certification objectives**
-- LPIC-1 Exam 101 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPIC-1 Exam 101 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPIC-1 Exam 101 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPIC-1 Exam 101 objectives (version 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **systemd — machine identity and virtualization detection**

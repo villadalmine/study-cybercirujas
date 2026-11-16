@@ -1,5 +1,5 @@
 # LPIC-1 101.2 — Boot the system
-## Guided Exercises (Exam 101-500, syllabus v5.0 — weight 4.69)
+## Guided Exercises (Exam 101-500, syllabus v5.0 — weight 3)
 
 > **Lab safety.** Every block that writes to `/etc/default/grub`, `/boot`, `/etc/fstab` or NVRAM boot entries can make a machine unbootable. Run these on a **disposable VM with a snapshot taken before you start**. Blocks marked *read-only* are safe on any host. Recovery instructions for each destructive step are included in the block itself.
 >
@@ -1195,7 +1195,7 @@ Two further caveats worth raising before anyone masks it:
 
 ## Sources
 
-- LPI, *Exam 101 Objectives (LPIC-1, version 5.0)*, objective 101.2 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101 Objectives (LPIC-1, version 5.0)*, objective 101.2 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - The Linux Kernel documentation, *The kernel's command-line parameters* — <https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html>
 - The Linux Kernel documentation, *initrd and initramfs* — <https://www.kernel.org/doc/html/latest/admin-guide/initrd.html>
 - GNU GRUB Manual 2.12 — <https://www.gnu.org/software/grub/manual/grub/grub.html>

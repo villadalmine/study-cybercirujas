@@ -2,7 +2,7 @@
 
 **Certification:** LPIC-1 (Exams 101-500 / 102-500, version 5.0)
 **Topic:** 103.4 — Use streams, pipes and redirects
-**Exam weight:** 6.25
+**Exam weight:** 4
 **Level:** Advanced — SRE / Platform Architect profile
 
 **Key knowledge areas covered by the objective:** redirecting standard input, standard output and standard error; piping the output of one command to the input of another; using the output of one command as arguments to another command; sending output simultaneously to stdout and a file.
@@ -1315,7 +1315,7 @@ $ rm -f demo.pipe
 ## 11. References
 
 **Certification objectives**
-- LPI — Exam 101 Objectives (LPIC-1 version 5.0), Topic 103.4: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101 Objectives (LPIC-1 version 5.0), Topic 103.4: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Shell and standards**

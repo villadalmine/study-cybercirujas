@@ -1,6 +1,6 @@
 # 104.1 — Crear particiones y sistemas de archivos
 
-**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso: 3.12**
+**LPIC-1 · Examen 101-500 · Versión 5.0 · Peso: 2**
 
 **Alcance del objetivo:** Gestionar tablas de particiones MBR · Usar comandos `mkfs` para crear sistemas de archivos ext2/ext3/ext4, XFS, VFAT y exFAT · Conocimiento general de ReiserFS y Btrfs · Conocimiento básico de `gdisk` y `parted` con GPT.
 
@@ -1926,7 +1926,7 @@ blkid ; lsblk -f ; dumpe2fs -h ; xfs_info ; fsck.fat -v -n ; findmnt --verify
 ## 13. Referencias
 
 **Objetivos oficiales de la certificación**
-- LPI — Objetivos del examen 101-500 (V5.0), Tema 104.1: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del examen 101-500 (V5.0), Tema 104.1: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Descripción general de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Especificaciones**

@@ -3,8 +3,8 @@
 # lpic1-104.2-break-and-fix.sh
 #
 # LPIC-1 v5.0 -- Exam 101-500 -- Topic 104.2: Maintain the integrity of filesystems
-# Exam weight: 3.12
-# Objective reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+# Exam weight: 2
+# Objective reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 # Key knowledge exercised here (all of it is on the objective list):
 #   fsck / e2fsck / mke2fs / tune2fs / dumpe2fs / debugfs
@@ -1011,7 +1011,7 @@ main "$@"
 # ---------------------------------------------------------------------------
 #
 # Sources:
-#   LPI Exam 101-500 objectives, topic 104.2 -- https://www.lpi.org/our-certifications/exam-101-objectives/
+#   LPI Exam 101-500 objectives, topic 104.2 -- https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   e2fsck(8), mke2fs(8), tune2fs(8), dumpe2fs(8), debugfs(8), fsck(8) -- e2fsprogs
 #   xfs_repair(8), xfs_db(8), xfs_info(8), xfs_fsr(8) -- xfsprogs
 #   lsof(8), df(1), du(1), proc(5) ("/proc/[pid]/fd")

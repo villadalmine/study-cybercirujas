@@ -1,7 +1,7 @@
 # 104.6 — Create and Change Hard and Symbolic Links
 
 **Certification:** LPIC-1 (Exams 101-500 + 102-500), version 5.0
-**Topic weight:** 3.12
+**Topic weight:** 2
 **Level:** Advanced / Production SRE — Platform Architect
 
 ---
@@ -1236,7 +1236,7 @@ find DIR -xtype l                # every broken symlink beneath DIR
 
 **LPI — certification objectives**
 
-- LPIC-1 Exam 101 objectives (version 5.0), objective 104.6 — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPIC-1 Exam 101 objectives (version 5.0), objective 104.6 — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **Linux man-pages project — syscalls and file semantics**

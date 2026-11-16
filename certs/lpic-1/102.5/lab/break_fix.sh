@@ -4,7 +4,7 @@
 #  lpic1-102.5-rpm-yum-breakfix.sh
 #
 #  LPIC-1 (exams 101-500 / 102-500, syllabus version 5.0)
-#  Topic 102.5 — "Use RPM and YUM package management"   (exam weight: 4.69)
+#  Topic 102.5 — "Use RPM and YUM package management"   (exam weight: 3)
 #
 #  Break & Fix laboratory. This script injects five controlled, fully
 #  reversible faults into the RPM / DNF-YUM stack of a DISPOSABLE lab VM,
@@ -13,8 +13,8 @@
 #  (`restore`).
 #
 #  Official references
-#    LPI 101 objectives ....... https://www.lpi.org/our-certifications/exam-101-objectives/
-#    LPI 102 objectives ....... https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI 101 objectives ....... https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#    LPI 102 objectives ....... https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    rpm(8) / rpm macros ...... https://rpm-software-management.github.io/rpm/manual/
 #    dnf configuration ........ https://dnf.readthedocs.io/en/latest/conf_ref.html
 #    dnf command reference .... https://dnf.readthedocs.io/en/latest/command_ref.html

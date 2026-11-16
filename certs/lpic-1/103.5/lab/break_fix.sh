@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1  (Exam 101-500 / 102-500, version 5.0)
-#  Topic 103.5 - Create, monitor and kill processes            Weight: 6.25
+#  Topic 103.5 - Create, monitor and kill processes            Weight: 4
 #
 #  BREAK & FIX LABORATORY - "The night the queue stopped moving"
 #
@@ -12,7 +12,7 @@
 #     screen / tmux (detached execution), signals, process states, /proc
 #
 #  Official references:
-#     https://www.lpi.org/our-certifications/exam-101-objectives/
+#     https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #     https://man7.org/linux/man-pages/man7/signal.7.html
 #     https://man7.org/linux/man-pages/man1/ps.1.html
 #     https://man7.org/linux/man-pages/man1/kill.1.html

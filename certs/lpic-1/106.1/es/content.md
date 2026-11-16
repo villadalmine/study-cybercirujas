@@ -1,7 +1,7 @@
 # 106.1 — Instalar y configurar X11
 
 **LPIC-1 · Tema 106: Interfaces de usuario y escritorios**
-*(Nota sobre el mapeo del examen: el tema 106 se evalúa en **102-500**, no en 101-500. En el conjunto de objetivos de LPIC-1 v5.0, 106.1 tiene un **peso de 2**. El registro del temario que produjo esta página reporta peso 0.0, lo cual es un hueco de metadatos — estudialo con la profundidad correspondiente a peso 2.)*
+*(Nota sobre el mapeo del examen: el tema 106 se evalúa en **102-500**, no en 101-500. En el conjunto de objetivos de LPIC-1 v5.0, 106.1 tiene un **peso de 2**.)*
 
 ---
 
@@ -1303,8 +1303,8 @@ La última verificación es la que importa para la revisión de seguridad: **un 
 ## Referencias
 
 **LPI — objetivos**
-- LPIC-1 Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 objectives (acá vive el tema 106) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPIC-1 Exam 102-500 objectives (acá vive el tema 106) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **X.Org Foundation — documentación upstream y páginas de manual**

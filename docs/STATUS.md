@@ -89,8 +89,8 @@ None declared — the unattended timer generates nothing. That is the safe defau
 | `lpi-050-100` | unknown | 2026-08-06 | unknown | – | 2026-09-03 | – unknown |
 | `lpi-702` | 1.0 | 2026-08-06 | 1.0 | – | 2026-09-03 | ✅ current |
 | `lpi-devops` | 2.0.0 | 2026-09-03 | 2.0 | – | 2026-09-03 | ✅ current |
-| `lpic-1` | 5.0 | 2026-08-11 | 5.0 | – | 2026-09-03 | ✅ current |
-| `lpic-2` | 4.5.0 | 2026-08-11 | 4.5 | – | 2026-09-03 | ✅ current |
+| `lpic-1` | 5.0 | 2026-11-15 | 5.0 | – | 2026-09-03 | ✅ current |
+| `lpic-2` | 4.5.0 | 2026-11-15 | 4.5.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-300` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-303` | 3.0.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |
 | `lpic-3-305` | 3.0 | 2026-08-11 | 3.0 | – | 2026-09-03 | ✅ current |

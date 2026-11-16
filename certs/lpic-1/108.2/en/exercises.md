@@ -1059,8 +1059,8 @@ The journal rotates itself. **Plain-text files written by rsyslog do not** — t
 
 ## Sources
 
-- LPI — Exam 102-500 Objectives (topic 108.2): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Exam 101-500 Objectives: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 102-500 Objectives (topic 108.2): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPI — Exam 102-500 Objectives: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `journalctl(1)`: <https://www.freedesktop.org/software/systemd/man/latest/journalctl.html>
 - `journald.conf(5)`: <https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html>
 - `systemd-journald.service(8)`: <https://www.freedesktop.org/software/systemd/man/latest/systemd-journald.service.html>

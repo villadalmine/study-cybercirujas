@@ -3,10 +3,10 @@
 # lab-107.3-break-and-fix.sh
 #
 # LPIC-1 (exams 101-500 / 102-500, version 5.0)
-# Topic 107.3 -- Localisation and internationalisation   (exam weight: 0)
+# Topic 107.3 -- Localisation and internationalisation   (exam weight: 3)
 #
-# Reference: https://www.lpi.org/our-certifications/exam-101-objectives/
-#            https://www.lpi.org/our-certifications/exam-101-objectives/
+# Reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
+#            https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 # WHAT THIS IS
 #   A controlled "break & fix" drill. It sabotages the locale, timezone and
@@ -710,7 +710,7 @@ exit 0
 #     needs you to state the source encoding, because bytes carry no label.
 #
 # Sources:
-#   https://www.lpi.org/our-certifications/exam-101-objectives/
+#   https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #   https://www.gnu.org/software/libc/manual/html_node/Locales.html
 #   man 1 locale ; man 1 localedef ; man 5 locale.conf ; man 1 localectl
 #   man 1 timedatectl ; man 3 tzset ; man 1 iconv ; man 7 charsets ; man 7 utf-8

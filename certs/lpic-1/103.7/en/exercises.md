@@ -1,5 +1,5 @@
 # LPIC-1 · Exam 101-500 · Topic 103.7 — Search text files using regular expressions
-## Guided lab exercises (weight 4.69)
+## Guided lab exercises (weight 3)
 
 > **Scope of this lab.** Objective 103.7 covers: creating simple regular expressions containing several notational elements, and using regular expression tools to perform searches through a filesystem or file content. Key files, terms and utilities: `grep`, `egrep`, `fgrep`, `sed`, `regex(7)`.
 > Sections marked **[beyond exam]** are production technique, not exam material — do them anyway, they explain *why* the exam-scope answers are what they are.
@@ -1141,7 +1141,7 @@ Before moving on, you should be able to do each of these without help:
 
 ## Official sources
 
-- LPI — Exam 101-500 Objectives (topic 103.7): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101-500 Objectives (topic 103.7): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU grep manual (regular expressions, options, exit status): <https://www.gnu.org/software/grep/manual/grep.html>
 - GNU sed manual (addresses, `s` command, `-i`, `l` command): <https://www.gnu.org/software/sed/manual/sed.html>
 - `regex(7)` — POSIX regular expressions on Linux: <https://man7.org/linux/man-pages/man7/regex.7.html>

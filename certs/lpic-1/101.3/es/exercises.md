@@ -1,6 +1,6 @@
 # 101.3 — Cambiar de runlevel / boot target y apagar o reiniciar el sistema
 
-**Examen:** LPIC-1 101-500 (v5.0) · **Peso:** 4.69
+**Examen:** LPIC-1 101-500 (v5.0) · **Peso:** 3
 **Archivos, términos y utilidades clave:** `/etc/inittab`, `shutdown`, `init`, `/etc/init.d/`, `telinit`, `systemd`, `systemctl`, `/etc/systemd/`, `/usr/lib/systemd/`, `wall`
 
 ---
@@ -1074,7 +1074,7 @@ El cuarto campo del registro `initdefault` está vacío porque el registro no ll
 
 ## Referencias
 
-- LPI — *Exam 101 Objectives (101-500, v5.0)*, objetivo 101.3: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101 Objectives (101-500, v5.0)*, objetivo 101.3: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `systemd.special(7)` — targets especiales, incluidos `default.target`, `rescue.target`, `emergency.target`, `runlevelN.target`: <https://www.freedesktop.org/software/systemd/man/systemd.special.html>
 - `systemctl(1)` — `get-default`, `set-default`, `isolate`, `rescue`, `emergency`, `kill`, flags de forzado: <https://www.freedesktop.org/software/systemd/man/systemctl.html>
 - `shutdown(8)` (systemd) — argumentos de tiempo, `-c`, `-k`, `/run/nologin`: <https://www.freedesktop.org/software/systemd/man/shutdown.html>

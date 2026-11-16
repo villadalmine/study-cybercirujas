@@ -2,7 +2,7 @@
 
 ## Guided Exercises
 
-**Exam:** 102-500 (LPIC-1, version 5.0) · **Weight:** 4 (Topic 105 total: 9)
+**Exam:** 102-500 (LPIC-1, version 5.0) · **Weight:** 4 (Topic 105 total: 8)
 **Objective coverage:** setting environment variables at login and for new shells, writing Bash functions for frequently used command sequences, maintaining skeleton directories for new accounts, setting the command search path.
 **Utilities under test:** `.` , `source`, `/etc/bash.bashrc`, `/etc/profile`, `env`, `export`, `set`, `unset`, `~/.bash_profile`, `~/.bash_login`, `~/.profile`, `~/.bashrc`, `~/.bash_logout`, `function`, `alias`, `lists`.
 
@@ -1591,8 +1591,8 @@ Neither reliably removes a deleted definition. The only clean reload is `exec ba
 
 ## Sources
 
-- LPI — *Exam 101 Objectives, LPIC-1 version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — *Exam 102 Objectives, LPIC-1 version 5.0* (Topic 105.1 is examined in 102-500): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 102 Objectives, LPIC-1 version 5.0*: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPI — *Exam 102 Objectives, LPIC-1 version 5.0* (Topic 105.1 is examined in 102-500): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU — *Bash Reference Manual, "Bash Startup Files"*: <https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html>
 - GNU — *Bash Reference Manual, "Shell Variables"* (`BASH_ENV`, `PROMPT_COMMAND`, `PS1`–`PS4`, `SHLVL`): <https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html>
 - GNU — *Bash Reference Manual, "Aliases"*: <https://www.gnu.org/software/bash/manual/html_node/Aliases.html>

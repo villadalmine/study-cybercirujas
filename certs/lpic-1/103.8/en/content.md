@@ -1,6 +1,6 @@
 # LPIC-1 103.8 — Basic file editing
 
-> **Exam:** 101-500 (LPIC-1, version 5.0) · **Topic:** 103.8 · **Weight:** 4.69
+> **Exam:** 101-500 (LPIC-1, version 5.0) · **Topic:** 103.8 · **Weight:** 3
 >
 > **Official objective description:** *Candidates are required to be able to edit text files using `vi`. This objective includes `vi` navigation, basic `vi` modes, inserting, editing, deleting, copying and finding text. It also includes awareness of other common editors and setting the default editor.*
 >
@@ -2076,7 +2076,7 @@ Three distinctions that are asked in different words every time:
 
 **Certification objective**
 
-- LPI — Exam 101-500 Objectives (Topic 103.8, *Basic file editing*): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101-500 Objectives (Topic 103.8, *Basic file editing*): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI — LPIC-1 certification overview: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **Standards**

@@ -1,5 +1,5 @@
 # LPIC-1 — 104.1 Crear particiones y sistemas de archivos
-## Ejercicios guiados (Examen 101-500, peso 3)
+## Ejercicios guiados (Examen 101-500, peso 2)
 
 > **Alcance cubierto aquí:** tablas de particiones MBR con `fdisk`, GPT con `gdisk`/`sgdisk`/`parted`, `mkfs` para ext2/ext3/ext4, XFS, VFAT y exFAT, `mkswap`, y conocimiento general de Btrfs y ReiserFS.
 
@@ -1627,7 +1627,7 @@ rm -rf /var/tmp/lpic104 /mnt/lab
 
 ## Fuentes
 
-- LPI — Objetivos del Examen 101-500, tema 104.1: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del Examen 101-500, tema 104.1: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `fdisk(8)`, `sfdisk(8)`, `partx(8)`, `losetup(8)`, `blkid(8)`, `lsblk(8)`, `wipefs(8)`, `mkswap(8)`, `swapon(8)`, `swaplabel(8)`, `blockdev(8)` — util-linux: <https://www.kernel.org/pub/linux/utils/util-linux/> y <https://man7.org/linux/man-pages/>
 - Documentación de GPT fdisk (`gdisk`, `sgdisk`, `cgdisk`): <https://www.rodsbooks.com/gdisk/>
 - Manual de GNU Parted: <https://www.gnu.org/software/parted/manual/parted.html>

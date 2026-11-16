@@ -1739,8 +1739,8 @@ Hechos que se examinan literalmente y son fáciles de perder:
 
 **Objetivos oficiales de la certificación**
 
-- LPI — Objetivos del examen 102-500 (LPIC-1 v5.0), Tema 109.3 *Basic network troubleshooting*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Objetivos del examen 101-500 (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del examen 102-500 (LPIC-1 v5.0), Tema 109.3 *Basic network troubleshooting*: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPI — Objetivos del examen 102-500 (LPIC-1 v5.0): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI — Descripción general de la certificación LPIC-1 Linux Administrator: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **iproute2 y redes en el kernel**

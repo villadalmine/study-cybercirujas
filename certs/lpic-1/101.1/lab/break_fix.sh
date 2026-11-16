@@ -2,7 +2,7 @@
 #
 # ======================================================================
 #  LPIC-1 - Exam 101-500 (version 5.0) - Topic 101.1
-#  "Determine and configure hardware settings"  (exam weight: 3.13)
+#  "Determine and configure hardware settings"  (exam weight: 2)
 #
 #  BREAK & FIX LAB.  RUN THIS ONLY ON A DISPOSABLE LABORATORY VM.
 #  It edits /etc/modprobe.d, /etc/udev/rules.d, /etc/sysctl.d and the
@@ -14,7 +14,7 @@
 #  each one, and then grades your repair with --verify.
 #
 #  Reference material (official sources):
-#    LPI 101-500 objectives .. https://www.lpi.org/our-certifications/exam-101-objectives/
+#    LPI 101-500 objectives .. https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #    modprobe.d(5) .......... https://man7.org/linux/man-pages/man5/modprobe.d.5.html
 #    modprobe(8) ............ https://man7.org/linux/man-pages/man8/modprobe.8.html
 #    udev(7) ................ https://man7.org/linux/man-pages/man7/udev.7.html

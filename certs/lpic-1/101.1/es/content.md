@@ -1,6 +1,6 @@
 # 101.1 — Determinar y configurar parámetros de hardware
 
-**LPIC-1 · Examen 101-500 · Tema 101: Arquitectura del sistema · Peso 3.13**
+**LPIC-1 · Examen 101-500 · Tema 101: Arquitectura del sistema · Peso 2**
 
 > **Alcance de este objetivo.** Habilitar y deshabilitar periféricos integrados; diferenciar tipos de dispositivos de almacenamiento masivo; determinar los recursos de hardware de los dispositivos; usar las herramientas que listan información de hardware; manipular dispositivos USB; tener una comprensión conceptual de `sysfs`, `udev` y `dbus`.
 > **Términos y utilidades:** `/sys/`, `/proc/`, `/dev/`, `modprobe`, `lsmod`, `lspci`, `lsusb`.
@@ -1925,7 +1925,7 @@ Las tormentas de AER corregidos significan un problema físico: reasentar la pla
 ## 13. Referencias
 
 **Objetivos oficiales de la certificación**
-- LPI — Exam 101-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Kernel de Linux (documentación oficial)**

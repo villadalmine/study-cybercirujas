@@ -1,7 +1,7 @@
 # LPIC-1 · Topic 107.2 — Automate system administration tasks by scheduling jobs
 
 > **Exam:** 102-500 (LPIC-1 v5.0), Topic 107 — Administrative Tasks
-> **Actual published weight: 4** (the `0.0` in the generation metadata is a syllabus-import artifact; 107.2 is one of the heavier objectives in 102-500 and is treated at full depth here).
+> **Actual published weight: 4**.
 > **Key files, terms and utilities (per LPI):** `/usr/bin/crontab`, `/etc/crontab`, `/etc/cron.{d,daily,hourly,monthly,weekly}`, `/var/spool/cron/`, `/etc/cron.allow`, `/etc/cron.deny`, `/etc/at.allow`, `/etc/at.deny`, `at`, `atq`, `atrm`, `crontab`, `systemd-run`, `systemctl` (timers), `.timer` and `.service` units.
 
 ---
@@ -1959,8 +1959,8 @@ That `!! IGNORED BY CRON` line is a real class of incident: someone dropped `bac
 
 **LPI official**
 
-- LPIC-1 Exam 101-500 Objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- LPIC-1 Exam 102-500 Objectives (Topic 107.2 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPIC-1 Exam 102-500 Objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- LPIC-1 Exam 102-500 Objectives (Topic 107.2 lives here) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 Certification Overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 - LPI Learning Materials, LPIC-1 102 — https://learning.lpi.org/en/learning-materials/102-500/
 

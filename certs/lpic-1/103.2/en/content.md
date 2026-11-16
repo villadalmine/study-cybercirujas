@@ -1,6 +1,6 @@
 # LPIC-1 · Exam 101-500 · Objective 103.2 — Process text streams using filters
 
-**Exam weight: 3.12** (≈5% of 101-500) · **Version 5.0** · Profile: SRE / Platform Architect
+**Exam weight: 2** · **Version 5.0** · Profile: SRE / Platform Architect
 
 **Utilities in scope:** `bzcat`, `cat`, `cut`, `head`, `less`, `md5sum`, `nl`, `od`, `paste`, `sed`, `sha256sum`, `sha512sum`, `sort`, `split`, `tail`, `tr`, `uniq`, `wc`, `xzcat`, `zcat`
 
@@ -1329,7 +1329,7 @@ Beyond the production framing, the 101-500 exam tests these specific discriminat
 
 ## References
 
-- LPI — Exam 101-500 Objectives (v5.0), Topic 103.2: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0), Topic 103.2: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification Overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 - GNU Coreutils Manual — Output of entire files (`cat`, `nl`, `od`): https://www.gnu.org/software/coreutils/manual/html_node/Output-of-entire-files.html
 - GNU Coreutils Manual — Output of parts of files (`head`, `tail`, `split`): https://www.gnu.org/software/coreutils/manual/html_node/Output-of-parts-of-files.html

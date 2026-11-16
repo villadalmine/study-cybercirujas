@@ -2,12 +2,12 @@
 #
 # =============================================================================
 #  LPIC-1 (101-500 / 102-500) v5.0 — Topic 102.4: Use Debian package management
-#  Weight: 4.69
+#  Weight: 3
 #
 #  BREAK & FIX LAB — "The dpkg database, APT sources and a half-configured package"
 #
 #  Reference: LPI Exam 101 / 102 Objectives
-#             https://www.lpi.org/our-certifications/exam-101-objectives/
+#             https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #
 #  WHAT THIS SCRIPT DOES
 #  ---------------------
@@ -809,7 +809,7 @@ exit $?
 #     apt-file search / list                (needs `apt-file update` first)
 #
 #   Sources:
-#     LPI Exam 101/102 Objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
+#     LPI Exam 101/102 Objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #     Debian Administrator's Handbook, ch. 5 "Packaging System" and ch. 6 "Maintenance
 #       and Updates: The APT Tools" — https://www.debian.org/doc/manuals/debian-handbook/
 #     Debian Policy Manual, ch. 6 "Package maintainer scripts and installation

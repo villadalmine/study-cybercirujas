@@ -1,6 +1,6 @@
 # LPIC-1 · Topic 102.2 — Install a Boot Manager
 
-**Exam:** 101-500 (LPIC-1 v5.0) · **Weight:** 3.13 · **Level:** Production / SRE / Platform Architect
+**Exam:** 101-500 (LPIC-1 v5.0) · **Weight:** 2 · **Level:** Production / SRE / Platform Architect
 
 **Objective coverage:**
 - Providing alternative boot locations and backup boot options
@@ -2132,7 +2132,7 @@ $ journalctl -b -1 -p err
 ## 13. Referencias
 
 **Certification objectives**
-- LPI — Exam 101-500 Objectives (LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **GNU GRUB**

@@ -4,7 +4,7 @@
 **Scope covered:** single commands and one-line command sequences · shell vs. environment variables (`set`, `unset`, `export`, `env`) · command resolution and `PATH` · quoting · command history and `.bash_history` · `man` and self-documentation · `uname`, `pwd`, `echo`, `type`, `which`.
 
 **Reference sources**
-- LPI Exam 101-500 objectives — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101-500 objectives — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Bash Reference Manual — <https://www.gnu.org/software/bash/manual/bash.html>
 - GNU Coreutils Manual — <https://www.gnu.org/software/coreutils/manual/coreutils.html>
 - Linux `man-pages` project — <https://www.kernel.org/doc/man-pages/>

@@ -1,6 +1,6 @@
 # LPIC-1 · Topic 107.1 — Manage user and group accounts and related system files
 
-**Exam:** 102-500 · **Objective weight:** 5 (the exam-blueprint value; treat the `0.0` in the generation metadata as unset)
+**Exam:** 102-500 · **Objective weight:** 5
 **Key files:** `/etc/passwd`, `/etc/shadow`, `/etc/group`, `/etc/gshadow`, `/etc/skel`, `/etc/login.defs`, `/etc/default/useradd`, `/etc/subuid`, `/etc/subgid`
 **Key commands:** `useradd`, `usermod`, `userdel`, `groupadd`, `groupmod`, `groupdel`, `passwd`, `gpasswd`, `chage`, `getent`, `id`, `pwck`, `grpck`, `vipw`, `vigr`, `newgrp`, `sg`
 
@@ -1292,8 +1292,8 @@ The kernel allows 65 536 supplementary groups, but **NFSv3 with `AUTH_SYS` trans
 ## 10. Referencias
 
 **LPI**
-- Exam 101-500 objectives — https://www.lpi.org/our-certifications/exam-101-objectives/
-- Exam 102-500 objectives (Topic 107 lives here) — https://www.lpi.org/our-certifications/exam-101-objectives/
+- Exam 102-500 objectives — https://www.lpi.org/our-certifications/exam-101-102-objectives/
+- Exam 102-500 objectives (Topic 107 lives here) — https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPIC-1 certification overview — https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **shadow-utils (upstream project and manual pages)**

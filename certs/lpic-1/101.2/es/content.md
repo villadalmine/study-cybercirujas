@@ -2,7 +2,7 @@
 
 **Certificación:** LPIC-1 (Exámenes 101-500 / 102-500, versión 5.0)
 **Objetivo:** Guiar al sistema a través del proceso de arranque
-**Peso en el curso:** 4.69
+**Peso en el curso:** 3
 
 **Áreas de conocimiento clave cubiertas acá**
 
@@ -2402,7 +2402,7 @@ BOOT_IMAGE=(hd0,gpt3)/ostree/rhcos-.../vmlinuz-5.14.0-427.el9.x86_64 root=UUID=.
 
 **Objetivos del examen**
 
-- LPI — Exam 101 Objectives (LPIC-1 version 5.0), objetivo 101.2 *Boot the system*: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101 Objectives (LPIC-1 version 5.0), objetivo 101.2 *Boot the system*: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Gestores de arranque y firmware**

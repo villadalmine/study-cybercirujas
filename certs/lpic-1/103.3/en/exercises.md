@@ -1,5 +1,5 @@
 # 103.3 — Perform Basic File Management
-## Guided Exercises (LPIC-1, exam 101-500, v5.0 — weight 6.25)
+## Guided Exercises (LPIC-1, exam 101-500, v5.0 — weight 4)
 
 **Environment assumed:** a Linux system with GNU coreutils ≥ 8.30, GNU findutils, GNU tar ≥ 1.30, GNU cpio, and `bash` 5.x. Where BSD/busybox behaviour differs materially, it is flagged. All work happens inside a disposable lab tree — nothing outside `~/lpic1-lab` is touched, with two exceptions that are explicitly marked read-only (`/etc/hostname`) or scratch (`/tmp`, `/dev/shm`).
 
@@ -1806,7 +1806,7 @@ The compensating advantage — and the reason `cpio` still exists — is exactly
 
 ## Sources
 
-- LPI — *Exam 101 Objectives (LPIC-1, version 5.0)*, objective 103.3: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101 Objectives (LPIC-1, version 5.0)*, objective 103.3: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Coreutils Manual — `cp`, `mv`, `rm`, `rmdir`, `mkdir`, `touch`, `ls`, `dd`, `sha256sum`: <https://www.gnu.org/software/coreutils/manual/coreutils.html>
 - GNU Findutils Manual — `find`, `xargs`: <https://www.gnu.org/software/findutils/manual/html_mono/find.html>
 - GNU Tar Manual: <https://www.gnu.org/software/tar/manual/tar.html>

@@ -2,7 +2,7 @@
 
 **Certificación:** LPIC-1 (Exámenes 101-500 / 102-500, versión 5.0)
 **Tema:** 104.2 — Mantener la integridad de los sistemas de archivos
-**Peso del examen:** 3.12
+**Peso del examen:** 2
 **Nivel:** Avanzado — Platform Architect / SRE
 
 **Alcance del objetivo (LPI):**
@@ -1647,7 +1647,7 @@ systemd[1]: Finished Online integrity check of vg_data--lv_data.
 ## Referencias
 
 **Objetivos de certificación**
-- LPI Exam 101 Objectives (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI Exam 101 Objectives (LPIC-1 version 5.0) — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI LPIC-1 certification overview — <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **ext2/3/4 y e2fsprogs**

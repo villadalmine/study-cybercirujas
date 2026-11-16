@@ -1,6 +1,6 @@
 # 102.4 — Use Debian Package Management
 
-**LPIC-1 · Exam 101-500 / 102-500 · Version 5.0 · Objective weight: 4.69**
+**LPIC-1 · Exam 101-500 / 102-500 · Version 5.0 · Objective weight: 3**
 
 ---
 
@@ -2661,7 +2661,7 @@ Each drill has a single verifiable answer produced by the tools above. Do them o
 ## 11. References
 
 **Exam objectives**
-- LPI — Exam 101-500 Objectives (v5.0), Topic 102.4: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (v5.0), Topic 102.4: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification Overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **Debian official documentation**

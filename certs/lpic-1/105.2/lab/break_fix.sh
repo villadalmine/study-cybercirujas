@@ -26,7 +26,7 @@
 # THE STEP-BY-STEP SOLUTION IS AT THE BOTTOM OF THIS FILE, COMMENTED OUT.
 # Do not read it until you have run --verify at least once.
 #
-# Reference: LPI exam 101/102 objectives, https://www.lpi.org/our-certifications/exam-101-objectives/
+# Reference: LPI exam 101/102 objectives, https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #            Bash Reference Manual, https://www.gnu.org/software/bash/manual/bash.html
 #            POSIX Shell Command Language, https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
 
@@ -694,7 +694,7 @@ main "$@"
 #     Check $?, propagate failures, and never end a branch with a blind exit 0.
 #   - Off-by-one belongs to shell too: tail -n +N, ${array[@]:n}, seq bounds.
 #
-# Sources: LPI exam objectives, https://www.lpi.org/our-certifications/exam-101-objectives/
+# Sources: LPI exam objectives, https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #          bash(1) - SHELL BUILTIN COMMANDS (set, test, shift, exit)
 #          GNU Coreutils manual (tail, ls), https://www.gnu.org/software/coreutils/manual/
 #          Bash Reference Manual - Word Splitting and Quoting,

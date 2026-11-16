@@ -1,7 +1,7 @@
 # 103.6 — Modificar las prioridades de ejecución de procesos
 
 **Certificación:** LPIC-1 (LPI 101-500 / 102-500, versión 5.0)
-**Objetivo 103.6**, peso del examen **3.12**
+**Objetivo 103.6**, peso del examen **2**
 **Conocimientos clave:** prioridad por defecto de un trabajo recién creado; ejecutar un programa con una prioridad mayor/menor que la predeterminada; cambiar la prioridad de un proceso en ejecución.
 **Términos y utilidades:** `nice`, `ps`, `renice`, `top`
 
@@ -694,7 +694,7 @@ Si editaste `/etc/security/limits.d/90-lab-nice.conf` o creaste un drop-in de sy
 
 ## Fuentes
 
-* LPI — Exam 101 Objectives, v5.0, objetivo 103.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — Exam 101 Objectives, v5.0, objetivo 103.6: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * `nice(1)`: <https://man7.org/linux/man-pages/man1/nice.1.html>
 * GNU coreutils, invocación de `nice`: <https://www.gnu.org/software/coreutils/manual/html_node/nice-invocation.html>
 * `renice(1)`: <https://man7.org/linux/man-pages/man1/renice.1.html>

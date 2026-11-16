@@ -1,6 +1,6 @@
 # LPIC-1 · Examen 101-500 · Objetivo 103.2 — Procesar flujos de texto usando filtros
 
-**Peso del examen: 3.12** (≈5% del 101-500) · **Versión 5.0** · Perfil: SRE / Arquitecto de Plataforma
+**Peso del examen: 2** · **Versión 5.0** · Perfil: SRE / Arquitecto de Plataforma
 
 **Utilidades en alcance:** `bzcat`, `cat`, `cut`, `head`, `less`, `md5sum`, `nl`, `od`, `paste`, `sed`, `sha256sum`, `sha512sum`, `sort`, `split`, `tail`, `tr`, `uniq`, `wc`, `xzcat`, `zcat`
 
@@ -1329,7 +1329,7 @@ Más allá del encuadre de producción, el examen 101-500 evalúa estas discrimi
 
 ## Referencias
 
-- LPI — Objetivos del Examen 101-500 (v5.0), Tema 103.2: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del Examen 101-500 (v5.0), Tema 103.2: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Descripción general de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 - Manual de GNU Coreutils — Salida de archivos completos (`cat`, `nl`, `od`): https://www.gnu.org/software/coreutils/manual/html_node/Output-of-entire-files.html
 - Manual de GNU Coreutils — Salida de partes de archivos (`head`, `tail`, `split`): https://www.gnu.org/software/coreutils/manual/html_node/Output-of-parts-of-files.html

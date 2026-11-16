@@ -1,6 +1,6 @@
 # LPIC-1 · Topic 103.1 — Work on the Command Line
 
-**Exams:** 101-500 (Topic 103, *GNU and Unix Commands*) · **Weight:** 6.25
+**Exams:** 101-500 (Topic 103, *GNU and Unix Commands*) · **Weight:** 4
 **Key knowledge areas:** single commands and one-line command sequences · shell environment (define, reference, export) · command history · invoking commands inside and outside `$PATH`
 **Terms and utilities:** `bash`, `echo`, `env`, `export`, `pwd`, `set`, `unset`, `type`, `which`, `man`, `uname`, `history`, `.bash_history`, quoting
 
@@ -1335,9 +1335,9 @@ Answer before checking; each maps to a specific mechanism above.
 ## 10. References
 
 **Certification objectives**
-- LPI — Exam 101-500 Objectives (Topic 103.1): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (Topic 103.1): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
-- LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 
 **Shell and standards**
 - GNU Bash Reference Manual: https://www.gnu.org/software/bash/manual/bash.html

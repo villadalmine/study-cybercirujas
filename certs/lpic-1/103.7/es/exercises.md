@@ -1,5 +1,5 @@
 # LPIC-1 · Examen 101-500 · Tema 103.7 — Buscar en archivos de texto usando expresiones regulares
-## Ejercicios de laboratorio guiados (peso 4.69)
+## Ejercicios de laboratorio guiados (peso 3)
 
 > **Alcance de este laboratorio.** El objetivo 103.7 cubre: crear expresiones regulares simples que contengan varios elementos notacionales, y usar herramientas de expresiones regulares para hacer búsquedas a través de un sistema de archivos o del contenido de un archivo. Archivos, términos y utilidades clave: `grep`, `egrep`, `fgrep`, `sed`, `regex(7)`.
 > Las secciones marcadas **[fuera del examen]** son técnica de producción, no material de examen — hacelas igual, explican *por qué* las respuestas dentro del alcance del examen son las que son.
@@ -1141,7 +1141,7 @@ Antes de seguir, deberías poder hacer cada una de estas cosas sin ayuda:
 
 ## Fuentes oficiales
 
-- LPI — Objetivos del Examen 101-500 (tema 103.7): <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Objetivos del Examen 101-500 (tema 103.7): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Manual de GNU grep (expresiones regulares, opciones, estado de salida): <https://www.gnu.org/software/grep/manual/grep.html>
 - Manual de GNU sed (direcciones, comando `s`, `-i`, comando `l`): <https://www.gnu.org/software/sed/manual/sed.html>
 - `regex(7)` — expresiones regulares POSIX en Linux: <https://man7.org/linux/man-pages/man7/regex.7.html>

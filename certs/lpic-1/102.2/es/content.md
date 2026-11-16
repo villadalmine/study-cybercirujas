@@ -1,6 +1,6 @@
 # LPIC-1 · Tema 102.2 — Instalar un gestor de arranque
 
-**Examen:** 101-500 (LPIC-1 v5.0) · **Peso:** 3.13 · **Nivel:** Producción / SRE / Arquitecto de plataforma
+**Examen:** 101-500 (LPIC-1 v5.0) · **Peso:** 2 · **Nivel:** Producción / SRE / Arquitecto de plataforma
 
 **Cobertura del objetivo:**
 - Proveer ubicaciones de arranque alternativas y opciones de arranque de respaldo
@@ -2132,7 +2132,7 @@ $ journalctl -b -1 -p err
 ## 13. Referencias
 
 **Objetivos de certificación**
-- LPI — Objetivos del examen 101-500 (LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Objetivos del examen 101-500 (LPIC-1 v5.0): https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — Visión general de la certificación LPIC-1: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **GNU GRUB**

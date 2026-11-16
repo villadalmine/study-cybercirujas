@@ -12,6 +12,8 @@
 
 - **Switch writes topic weights from a page:** when the target snapshot states a weight per objective (an LPI page), `curriculum_diff.py switch` writes each topic's `weight:` in `certs/<cert>.md` from the objective it maps to, summing to exactly 100; PDF snapshots keep their weights. LPIC-1's frozen weights (101-105 on a /64 scale, 106-110 at 0) get corrected by its switch (#235).
 
+- **LPIC-1 and LPIC-2 switched to canonical objective pages:** both certifications now pin `exam-101-102-objectives/` and `exam-201-202-objectives/` across `catalog.yaml`, frozen syllabi, topic sources, and 294 material/lab files; LPIC-1's 42 frozen weights, 125 weight headings, and Exam 101/102 labels in topics `105`–`110` now match the official LPI 5.0 objective table (#235).
+
 - **Lab credit needs proof:** a topic's quality score counts its lab only when `deploy/lab-evidence.yaml` proves the lab as it is now (run link or log sha256 and the current lab hash); a bare `verified:` in `lab.yaml` now shows as "claimed, not proven", so 11 labs lost that credit until their runs are recorded (#217).
 
 ## Upgrade notes

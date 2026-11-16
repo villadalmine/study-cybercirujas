@@ -1,7 +1,7 @@
 # 101.1 — Determinar y configurar los parámetros del hardware
-## Ejercicios guiados (LPIC-1, examen 101-500, temario v5.0 — peso 3.13)
+## Ejercicios guiados (LPIC-1, examen 101-500, temario v5.0 — peso 2)
 
-**Fuente del objetivo:** <https://www.lpi.org/our-certifications/exam-101-objectives/>
+**Fuente del objetivo:** <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 
 ---
 
@@ -1123,7 +1123,7 @@ echo $DEV | sudo tee /sys/bus/pci/drivers/snd_hda_intel/bind
 
 ## Referencias
 
-- LPI, *Exam 101 Objectives, version 5.0* — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI, *Exam 101 Objectives, version 5.0* — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - Documentación del kernel de Linux, *sysfs — The filesystem for exporting kernel objects* — <https://docs.kernel.org/filesystems/sysfs.html>
 - Documentación del kernel de Linux, *Rules on how to access information in sysfs* — <https://docs.kernel.org/admin-guide/sysfs-rules.html>
 - Documentación del kernel de Linux, *The /proc Filesystem* — <https://docs.kernel.org/filesystems/proc.html>

@@ -1,6 +1,6 @@
 # LPIC-1 · 104.6 — Create and change hard and symbolic links
 
-**Exam:** 101-500 · **Objective weight:** 3.12
+**Exam:** 101-500 · **Objective weight:** 2
 **Guided exercises.** Every step is meant to be executed. Answers are at the bottom, in a collapsible section — write your own answer down before opening it.
 
 ---
@@ -1116,7 +1116,7 @@ Authoritative check: `systemctl list-unit-files <name>`, `systemctl show -p Want
 
 ## Sources
 
-- LPI — Exam 101 Objectives (LPIC-1 v5.0), objective 104.6: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 101 Objectives (LPIC-1 v5.0), objective 104.6: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - GNU Coreutils Manual — `ln` invocation: <https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html>
 - GNU Coreutils Manual — `cp` invocation: <https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html>
 - GNU Coreutils Manual — `readlink` invocation: <https://www.gnu.org/software/coreutils/manual/html_node/readlink-invocation.html>

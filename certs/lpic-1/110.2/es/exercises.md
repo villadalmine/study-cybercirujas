@@ -1320,8 +1320,8 @@ El punto más profundo: "enlazado a una dirección enrutable" no es lo mismo que
 
 ## Fuentes
 
-* LPI — *Exam 102-500 Objectives*, tema 110.2 "Setup host security": <https://www.lpi.org/our-certifications/exam-101-objectives/>
-* LPI — *Exam 101-500 Objectives*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+* LPI — *Exam 102-500 Objectives*, tema 110.2 "Setup host security": <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+* LPI — *Exam 102-500 Objectives*: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 * Proyecto upstream shadow-utils (`passwd`, `chage`, `pwconv`, `vipw`, `shadow(5)`, `login.defs(5)`): <https://github.com/shadow-maint/shadow>
 * Página de manual `shadow(5)`: <https://man7.org/linux/man-pages/man5/shadow.5.html>
 * Página de manual `chage(1)`: <https://man7.org/linux/man-pages/man1/chage.1.html>

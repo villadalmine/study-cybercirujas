@@ -1,5 +1,5 @@
 # LPIC-1 · Tema 102.1 — Diseñar la distribución del disco duro
-## Ejercicios guiados (Examen 101-500, versión 5.0 · Peso: 3.13)
+## Ejercicios guiados (Examen 101-500, versión 5.0 · Peso: 2)
 
 > **Alcance de este laboratorio.** Vas a inventariar la distribución de un sistema en funcionamiento y luego diseñar y construir tres distribuciones completas — UEFI/GPT, BIOS/GPT y una respaldada por LVM — sobre un **dispositivo loop respaldado por archivo**, de modo que nunca se toque nada de tus discos reales. Cada comando destructivo de este documento apunta únicamente a `/dev/loopN`. Leé cada línea de `wipefs`, `sgdisk`, `mkfs` y `dd` antes de presionar Enter y confirmá el nombre del dispositivo destino en el mismo acto.
 
@@ -11,7 +11,7 @@
 
 **Fuentes de referencia usadas a lo largo del documento**
 
-- Objetivos del Examen 101 de LPI — <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- Objetivos del Examen 101 de LPI — <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `fstab(5)` — <https://man7.org/linux/man-pages/man5/fstab.5.html>
 - `mkswap(8)` / `swapon(8)` — <https://man7.org/linux/man-pages/man8/mkswap.8.html>
 - Manual de GNU GRUB (partición BIOS boot, soporte de LVM/LUKS) — <https://www.gnu.org/software/grub/manual/grub/grub.html>

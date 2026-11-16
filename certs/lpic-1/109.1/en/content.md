@@ -1660,8 +1660,8 @@ Note the destination of the first packet: `ff02::1:ff00:5` — the **solicited-n
 
 **Official LPI certification objectives**
 
-- LPI — Exam 102-500 objectives (Topic 109, where objective 109.1 lives): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — Exam 101-500 objectives: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — Exam 102-500 objectives (Topic 109, where objective 109.1 lives): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPI — Exam 102-500 objectives: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - LPI — LPIC-1 certification overview: <https://www.lpi.org/our-certifications/lpic-1-overview/>
 
 **IETF standards**

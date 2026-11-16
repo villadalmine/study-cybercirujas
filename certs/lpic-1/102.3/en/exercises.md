@@ -1,6 +1,6 @@
 # 102.3 — Manage Shared Libraries: Guided Exercises
 
-**LPIC-1 / Exam 101-500, Topic 102.3 — weight 1.56**
+**LPIC-1 / Exam 101-500, Topic 102.3 — weight 1**
 Objective coverage: identify shared libraries, understand the system library search path, load shared libraries, `ldd`, `ldconfig`, `/etc/ld.so.conf`, `LD_LIBRARY_PATH`.
 
 ---
@@ -1074,7 +1074,7 @@ void greet(const char *who)
 
 ## Sources
 
-- LPI — *Exam 101-500 Objectives*, Topic 102.3 "Manage shared libraries": <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101-500 Objectives*, Topic 102.3 "Manage shared libraries": <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - `ld.so(8)` — dynamic linker/loader, search order and environment variables: <https://man7.org/linux/man-pages/man8/ld.so.8.html>
 - `ldconfig(8)` — configure dynamic linker run-time bindings: <https://man7.org/linux/man-pages/man8/ldconfig.8.html>
 - `ldd(1)` — print shared object dependencies, including the security note on execution: <https://man7.org/linux/man-pages/man1/ldd.1.html>

@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #  LPIC-1 v5.0  |  Exam 101-500  |  Topic 104.5 — Manage file permissions and
-#                                                  ownership   (weight 4.69)
+#                                                  ownership   (weight 3)
 #
 #  BREAK & FIX LABORATORY — DISPOSABLE VM ONLY
 #
@@ -13,7 +13,7 @@
 #  declared in the CONFIGURATION block below.
 #
 #  Official objective source:
-#    https://www.lpi.org/our-certifications/exam-101-objectives/
+#    https://www.lpi.org/our-certifications/exam-101-102-objectives/
 #  Manual pages that are the real reference for this topic:
 #    chmod(1) chown(1) chgrp(1) umask(1p) stat(1) find(1) ls(1) inode(7)
 #    path_resolution(7) credentials(7) execve(2) open(2) sudo(8)
@@ -689,5 +689,5 @@ main "$@"
 #     does not protect a file living in a directory you can write, which is the
 #     whole reason the sticky bit exists.
 #
-#  Objective reference: https://www.lpi.org/our-certifications/exam-101-objectives/
+#  Objective reference: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 # =============================================================================

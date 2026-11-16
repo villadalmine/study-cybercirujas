@@ -1,6 +1,6 @@
 # 104.3 — Control mounting and unmounting of filesystems
 
-**LPIC-1 · Exam 101-500 · Topic 104 (Devices, Linux Filesystems, Filesystem Hierarchy Standard) · Weight 4.69**
+**LPIC-1 · Exam 101-500 · Topic 104 (Devices, Linux Filesystems, Filesystem Hierarchy Standard) · Weight 3**
 
 **Objective coverage:** manual mount/umount · mount configuration at boot · user-mountable removable filesystems · labels and UUIDs · awareness of systemd mount units.
 **Terms and utilities:** `/etc/fstab`, `/media/`, `mount`, `umount`, `blkid`, `lsblk`.
@@ -1418,7 +1418,7 @@ Wire the `findmnt --verify` exit status into configuration management and the `R
 ## 12. References
 
 **Exam objectives**
-- LPI — Exam 101-500 Objectives (LPIC-1 v5.0), Topic 104.3: https://www.lpi.org/our-certifications/exam-101-objectives/
+- LPI — Exam 101-500 Objectives (LPIC-1 v5.0), Topic 104.3: https://www.lpi.org/our-certifications/exam-101-102-objectives/
 - LPI — LPIC-1 Certification overview: https://www.lpi.org/our-certifications/lpic-1-overview/
 
 **util-linux (mount, umount, findmnt, blkid, lsblk, fstab)**

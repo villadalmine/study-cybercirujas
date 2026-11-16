@@ -1,7 +1,7 @@
 # LPIC-1 102.5 — Use RPM and YUM Package Management
 ## Ejercicios guiados
 
-> **Peso en el examen:** 4.69 (Examen 101-500, versión 5.0)
+> **Peso en el examen:** 3 (Examen 101-500, versión 5.0)
 > **Alcance cubierto acá:** `rpm`, `rpm2cpio`, `/etc/yum.conf`, `/etc/yum.repos.d/`, `yum`, `dnf`, `zypper`, integridad y firmas de paquetes, búsquedas inversas archivo↔paquete, inspección de dependencias, historial de transacciones y recuperación.
 
 ---
@@ -1485,8 +1485,8 @@ $ podman rm -f lpic-rpm lpic-zypper
 
 ## Fuentes oficiales
 
-- LPI — *Exam 101-500 Objectives, version 5.0* (objetivo 102.5): <https://www.lpi.org/our-certifications/exam-101-objectives/>
-- LPI — *Exam 101-500 Objectives, version 5.0*: <https://www.lpi.org/our-certifications/exam-101-objectives/>
+- LPI — *Exam 101-500 Objectives, version 5.0* (objetivo 102.5): <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
+- LPI — *Exam 101-500 Objectives, version 5.0*: <https://www.lpi.org/our-certifications/exam-101-102-objectives/>
 - RPM Project — *RPM Documentation* (`rpm(8)`, `rpm2cpio(8)`, `rpmkeys(8)`, formatos de consulta, flags de verificación): <https://rpm-software-management.github.io/rpm/manual/>
 - RPM Project — *Package signing and verification*: <https://rpm-software-management.github.io/rpm/manual/signatures_digests.html>
 - DNF Project — *DNF Command Reference*: <https://dnf.readthedocs.io/en/latest/command_ref.html>
