@@ -69,6 +69,25 @@ class AuditAndWorkflowTests(unittest.TestCase):
             self.assertEqual(cc.main([str(root / "certs"), "--offline", "--mode", "warn"]), 0)
             self.assertEqual(cc.main([str(root / "certs"), "--offline", "--mode", "block"]), 1)
 
+    def test_base_scopes_to_changed_topics_and_bad_ref_fails(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            git = lambda *a: subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *a],
+                                            cwd=root, check=True, capture_output=True)
+            git("init", "-q", "-b", "main")
+            self._tree(root, "- https://kubernetes.io/docs/v1.35/tasks/")
+            git("add", "."); git("commit", "-qm", "base")
+            other = root / "certs" / "cka" / "1.2" / "en"
+            other.mkdir(parents=True)
+            (other / "content.md").write_text("## References\n\n- https://random-blog.example.com/x\n", encoding="utf-8")
+            git("add", "."); git("commit", "-qm", "change")
+            rep = cc.audit([], base="HEAD~1", offline=True, root=root)
+            self.assertEqual(rep["files_checked"], 1)
+            self.assertEqual([u["url"] for u in rep["unofficial"]], ["https://random-blog.example.com/x"])
+            with self.assertRaises(SystemExit):
+                cc.audit([], base="does-not-exist", offline=True, root=root)
+
     def test_mocked_reachability_write_pins_and_single_rot_issue_body(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

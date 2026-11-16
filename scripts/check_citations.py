@@ -166,7 +166,8 @@ def changed_content_files(base: str, root: Path = REPO) -> list[Path]:
     res = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD", "--", "certs/*/*/*/content.md"],
                          cwd=root, capture_output=True, text=True)
     if res.returncode != 0:
-        return []
+        # An empty scope here would pass even in block mode: fail instead.
+        raise SystemExit(f"check_citations: git diff {base}...HEAD failed: {res.stderr.strip()}")
     return [root / p for p in sorted(res.stdout.splitlines()) if p and (root / p).is_file()]
 
 
