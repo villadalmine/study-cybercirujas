@@ -105,15 +105,41 @@ class AuditAndWorkflowTests(unittest.TestCase):
             rep_after = cc.audit(["certs"], offline=True, root=root)
             self.assertNotIn(good, [x["url"] for x in rep_after["unpinned"]])
 
+    def test_reachability_runs_in_parallel_and_keeps_every_result(self):
+        import threading, time
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            urls = [f"https://kubernetes.io/docs/v1.35/p{i}/" for i in range(40)]
+            self._tree(root, "\n".join(f"- {u}" for u in urls))
+            live, peak, lock = [0], [0], threading.Lock()
+
+            def slow(url, cache):
+                with lock:
+                    live[0] += 1; peak[0] = max(peak[0], live[0])
+                time.sleep(0.05)
+                with lock:
+                    live[0] -= 1
+                return 404 if url.endswith("p7/") else 200
+            with mock.patch.object(cc, "status", side_effect=slow):
+                rep = cc.audit(["certs"], cache_path=None, workers=8, root=root)
+            self.assertEqual(rep["checked_urls"], 40)
+            self.assertEqual([b["url"] for b in rep["broken"]], [urls[7]])
+            self.assertGreater(peak[0], 1)
+
     def test_citations_workflow_schedules_single_rot_issue(self):
         wf = yaml.safe_load((REPO / ".github" / "workflows" / "citations.yml").read_text(encoding="utf-8"))
-        self.assertIn("citation-rot", wf["jobs"])
-        self.assertEqual(wf["permissions"]["issues"], "write")
-        run_text = "\n".join(s.get("run", "") for s in wf["jobs"]["citation-rot"]["steps"])
-        self.assertIn("<!-- citation-rot -->", run_text)
-        self.assertIn("gh issue edit", run_text)
-        self.assertIn("gh issue create", run_text)
-
+        self.assertEqual(wf["permissions"], {"contents": "read"})
+        self.assertNotIn("issues", wf["jobs"]["changed-topics"].get("permissions", {}))
+        rot = wf["jobs"]["citation-rot"]
+        self.assertEqual(rot["permissions"]["issues"], "write")
+        run_text = "\n".join(s.get("run", "") for s in rot["steps"])
+        for needle in ("set -euo pipefail", "--label citation-rot", "--state all", "gh issue reopen",
+                       "gh issue edit", "gh issue create"):
+            self.assertIn(needle, run_text)
+        pr_run = "\n".join(s.get("run", "") for s in wf["jobs"]["changed-topics"]["steps"])
+        self.assertNotIn("${{", pr_run)
+        labels = {l["name"] for l in yaml.safe_load((REPO / ".github" / "labels.yml").read_text(encoding="utf-8"))}
+        self.assertIn("citation-rot", labels)
 
 if __name__ == "__main__":
     unittest.main()

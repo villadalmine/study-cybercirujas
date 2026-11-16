@@ -36,6 +36,7 @@ import sys
 import urllib.error
 import urllib.request
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -173,7 +174,7 @@ def changed_content_files(base: str, root: Path = REPO) -> list[Path]:
 
 def audit(paths: list[str], *, base: str | None = None, offline: bool = False, sample: int = 0,
           cache_path: Path | None = CACHE, write_pins: bool = False, date_str: str | None = None,
-          timeout: int = 10, root: Path = REPO) -> dict:
+          timeout: int = 10, workers: int = 16, root: Path = REPO) -> dict:
     files = changed_content_files(base, root) if base else sorted(
         {p for raw in paths for p in ((Path(raw) if Path(raw).is_absolute() else root / raw)).glob("**/content.md")})
     owner, neutral, versioned = source_domains()
@@ -201,14 +202,19 @@ def audit(paths: list[str], *, base: str | None = None, offline: bool = False, s
         fetched_pins: dict[str, dict[str, str]] = {}
         today = date_str or datetime.date.today().isoformat()
         print(f"{len(by_url)} unique citations; checking {len(target_urls)}", flush=True)
-        for i, url in enumerate(target_urls, 1):
+        def check(url: str) -> tuple[str, int | str, str | None]:
             code, sha = fetch_sha256(url, timeout=timeout) if write_pins else (status(url, cache), None)
-            if sha:
-                fetched_pins[url] = {"sha256": sha, "date": today}
-            if code != 200 and code not in BLOCKED:
-                broken.append({"url": url, "status": code, "files": by_url[url]})
-            if i % 25 == 0:
-                print(f"  {i}/{len(target_urls)}", flush=True)
+            return url, code, sha
+
+        # One URL at a time took ~0.6 s each: the whole corpus outran the CI job (#358 review).
+        with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+            for i, (url, code, sha) in enumerate(pool.map(check, target_urls), 1):
+                if sha:
+                    fetched_pins[url] = {"sha256": sha, "date": today}
+                if code != 200 and code not in BLOCKED:
+                    broken.append({"url": url, "status": code, "files": by_url[url]})
+                if i % 250 == 0:
+                    print(f"  {i}/{len(target_urls)}", flush=True)
         if cache_path and not write_pins:
             cache_path.parent.mkdir(parents=True, exist_ok=True)
             cache_path.write_text(json.dumps(cache, indent=2), encoding="utf-8")
@@ -251,6 +257,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--strict-pins", action="store_true")
     ap.add_argument("--sample", type=int, default=0, help="check only N random URLs (quick review)")
     ap.add_argument("--timeout", type=int, default=10)
+    ap.add_argument("--workers", type=int, default=16, help="parallel HTTP checks")
     ap.add_argument("--cache", default=str(CACHE))
     ap.add_argument("--write-pins", action="store_true")
     ap.add_argument("--json", type=Path)
@@ -258,7 +265,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     rep = audit(args.paths, base=args.base, offline=args.offline, sample=args.sample,
-                cache_path=Path(args.cache) if args.cache else None, write_pins=args.write_pins, timeout=args.timeout)
+                cache_path=Path(args.cache) if args.cache else None, write_pins=args.write_pins, timeout=args.timeout,
+                workers=args.workers)
     if args.json:
         args.json.write_text(json.dumps(rep, indent=2), encoding="utf-8")
     if args.issue_body:
