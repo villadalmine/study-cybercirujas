@@ -14,16 +14,16 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 concurrency:
   group: citations-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  citation-rot:
+  changed-topics:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
@@ -39,30 +39,56 @@ jobs:
       - name: Tests
         run: .venv/bin/python3 -m unittest tests.test_check_citations -v
       - name: Check changed topics (offline)
-        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           .venv/bin/python3 scripts/check_citations.py --offline --mode warn \
-            --base "origin/${{ github.base_ref || 'main' }}" --json citation-rot.json --issue-body citation-rot.md
+            --base "origin/${BASE_REF}" --json citation-rot.json --issue-body citation-rot.md
           cat citation-rot.md >> "$GITHUB_STEP_SUMMARY"
-      - name: Audit corpus citations and sync single rot issue
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+  citation-rot:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # ~6.5k URLs checked 16 at a time take a few minutes; 45 leaves room for slow hosts.
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -q --require-hashes -r requirements.lock
+          .venv/bin/pip install -q --no-deps -e .
+      - name: Audit corpus citations
+        run: |
+          .venv/bin/python3 scripts/check_citations.py --mode warn --workers 16 \
+            --json citation-rot.json --issue-body citation-rot.md
+          cat citation-rot.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Sync the single rot issue (label citation-rot, body starts with <!-- citation-rot -->)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          .venv/bin/python3 scripts/check_citations.py --mode warn --json citation-rot.json --issue-body citation-rot.md
-          cat citation-rot.md >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
           broken=$(jq '.broken | length' citation-rot.json)
-          id=$(gh api "repos/${{ github.repository }}/issues?state=open&per_page=100" \
-            --jq '.[] | select((.body // "") | startswith("<!-- citation-rot -->")) | .number' | head -1)
+          found=$(gh issue list --repo "$GITHUB_REPOSITORY" --label citation-rot --state all --limit 1 \
+            --json number,state --jq '.[0] // empty | "\(.number) \(.state)"')
+          read -r num state <<<"$found"
           if [ "$broken" -gt 0 ]; then
-            if [ -n "$id" ]; then
-              gh issue edit "$id" --body-file citation-rot.md >/dev/null
+            if [ -z "$num" ]; then
+              gh issue create --repo "$GITHUB_REPOSITORY" --title "quality: citation rot report" \
+                --body-file citation-rot.md --label citation-rot --label "area:quality" --label "type:bug" >/dev/null
             else
-              gh issue create --title "quality: citation rot report" --body-file citation-rot.md \
-                --label "area:quality" --label "type:bug" >/dev/null
+              [ "$state" = "OPEN" ] || gh issue reopen "$num" --repo "$GITHUB_REPOSITORY" >/dev/null
+              gh issue edit "$num" --repo "$GITHUB_REPOSITORY" --body-file citation-rot.md >/dev/null
             fi
-          elif [ -n "$id" ]; then
-            gh issue close "$id" --comment "All cited URLs now resolve." >/dev/null
+          elif [ -n "$num" ] && [ "$state" = "OPEN" ]; then
+            gh issue edit "$num" --repo "$GITHUB_REPOSITORY" --body-file citation-rot.md >/dev/null
+            gh issue close "$num" --repo "$GITHUB_REPOSITORY" --comment "All cited URLs now resolve." >/dev/null
           fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         if: always()
