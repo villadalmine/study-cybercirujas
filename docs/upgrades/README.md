@@ -121,10 +121,10 @@ left 106-110 at 0 (`System Architecture 12.51% -> 6.67%`, `Security 0% -> 8.33%`
 question count, 120 over both exams, which the snapshot keeps as `questions` and turns into percentages. At the switch
 each `revalidate` topic gets its `revalidated:` block and `make quality CERT=lpic-1` re-runs the checks; the 112 listed
 sections are headings of the files that quote a weight, a scope and not an edit list. The 322 + 8 technical lines name
-the version (`5.0`, `4.5.0`) that does not move: nothing to rewrite. Today `switch` does not rewrite each topic's `weight:`
-in `certs/lpic-1.md` (#196), so the route is: a small code PR before the switch makes `switch` write each topic's
-`weight:` from its `maps_to` objective when the target snapshot carries per-objective weights (the HTML path), keeping
-the even split for PDFs without them; the switch PR then also rewrites the 112 weight headings with a guarded, scoped
+the version (`5.0`, `4.5.0`) that does not move: nothing to rewrite. `switch` did not rewrite each topic's `weight:`
+in `certs/lpic-1.md` (#196), so a small code PR before the switch made it write each topic's `weight:` from its
+`maps_to` objective when the target snapshot carries per-objective weights (the HTML path, step 6), keeping the frozen
+weights for PDFs without them; the switch PR then also rewrites the 112 weight headings with a guarded, scoped
 edit, so after it a fresh `plan` gives `keep` for LPIC-1 too. The catalog `tracked_version` for lpic-2 becomes the snapshot's `4.5.0` (the frozen file's
 spelling; the catalog says `4.5`). The page sha256 changes whenever LPI's cache is rebuilt (cookie expiry, nonce, cache
 timestamps in the HTML), so `extract --html --check` can say STALE with the same `tree_sha256`; the tool prints that.
@@ -200,7 +200,11 @@ flowchart TD
    pin, is replaced by the pinned PDF, at the top level and in each topic's `sources`, #322) and each topic's title set to the objective text it maps to
    (directory ids and the `topic:` domain labels unchanged, see *Topic ids at the switch*), in `certs/<cert>.md` and in
    the topic's `lab/lab.yaml` `title:` line, which Killercoda's rule R5 compares with the syllabus; `guard` accepts
-   that one line in a kept or revalidated topic's `lab.yaml` and nothing else in it. The body of `certs/<cert>.md` keeps its dated notes and
+   that one line in a kept or revalidated topic's `lab.yaml` and nothing else in it. Each topic's `weight:` is
+   rewritten only when the target states a weight per objective (an LPI page, `extract --html`, where every objective
+   has `questions`): it becomes its *Maps to* objective's share of all the questions, in hundredths by largest
+   remainder, so the cert sums to exactly 100 as `certs/lpic-2.md` does (#235); a PDF snapshot has domain weights
+   only, and the frozen per-topic weights stay as they are. The body of `certs/<cert>.md` keeps its dated notes and
    gets one line saying the snapshot was superseded, by which document and upgrade. Each `revalidate` topic gets a
    `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why, and `committed`:
    the target curriculum's date, not the day of the check), before

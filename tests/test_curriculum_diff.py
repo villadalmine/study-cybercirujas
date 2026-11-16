@@ -293,7 +293,7 @@ class HtmlExtraction(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("objective tree is the same", err)
 
-    def lpi_root(self, root: Path) -> None:
+    def lpi_root(self, root: Path, weights: list | None = None) -> None:
         """A repo root with a frozen certs/c.md and the HTML snapshot syllabi/c/v4.5.0.yaml of the same objectives,
         the frozen weights on the page's scale (q*100/total, as certs/lpic-2.md stores them)."""
         import frontmatter
@@ -308,6 +308,8 @@ class HtmlExtraction(unittest.TestCase):
                   ("201.1", "201 - Linux Kernel", 11.76, "Kernel components"),
                   ("201.2", "201 - Linux Kernel", 17.65, "Compiling a kernel"),
                   ("201.3", "201 - Linux Kernel", 23.53, "Runtime")]   # 17 questions: q*100/17, rounded
+        if weights:
+            frozen = [(i, t, w, x) for (i, t, _, x), w in zip(frozen, weights)]
         (root / "certs").mkdir()
         (root / "syllabi" / "c").mkdir(parents=True)
         post = frontmatter.Post("", cert="c", version="4.5.0", sources=["https://www.lpi.org/old-alias/"],
@@ -340,6 +342,33 @@ class HtmlExtraction(unittest.TestCase):
         meta = frontmatter.loads(files["certs/c.md"]).metadata
         self.assertEqual((meta["version"], meta["snapshot_date"]), ("4.5.0", "2026-11-14"))
         self.assertIn(self.URL, meta["sources"])
+
+    def test_switch_writes_each_topic_weight_from_its_objective(self):
+        """#235: LPIC-1's frozen weights were on another scale (/64, 0 for 106-110); a page states one weight per
+        objective, so the switch writes it: each objective's share of the 17 questions in hundredths, the cert summing
+        to exactly 100 (largest remainder, as certs/lpic-2.md), and a fresh plan then says keep."""
+        import frontmatter
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.lpi_root(root, weights=[40.0, 20.0, 40.0, 0.0, 0.0])
+            catalog = {"certs": {"c": {"tracked_version": "4.5.0",
+                                       "sources": {"objectives": "https://www.lpi.org/old-alias/"}}}}
+            (root / "catalog.yaml").write_text(yaml.safe_dump(catalog, sort_keys=False), encoding="utf-8")
+            spec = {"certs": {"c": {"target": "syllabi/c/v4.5.0.yaml"}}}
+            self.assertEqual(cd.plan_cert(root, "c", spec["certs"]["c"])["counts"]["revalidate"], 5)
+            _, files, why = cd.switch(root, spec)
+            self.assertEqual(why, [])
+            topics = frontmatter.loads(files["certs/c.md"]).metadata["topics"]
+            # the snapshot says 35.29, 11.76, 11.76, 17.65, 23.53 (99.99): the missing hundredth goes to the larger
+            # remainder, 200.2 before its tie 201.1
+            self.assertEqual([(t["id"], t["weight"]) for t in topics],
+                             [("200.1", 35.29), ("200.2", 11.77), ("201.1", 11.76), ("201.2", 17.65), ("201.3", 23.53)])
+            self.assertTrue(all(isinstance(t["weight"], float) for t in topics))
+            self.assertEqual(round(sum(t["weight"] for t in topics), 6), 100)
+            (root / "certs" / "c.md").write_text(files["certs/c.md"], encoding="utf-8")
+            again = cd.plan_cert(root, "c", spec["certs"]["c"])
+            self.assertEqual(again["counts"]["keep"], 5)
+            self.assertEqual(cd.switch(root, spec)[1]["certs/c.md"], files["certs/c.md"])   # a second run: the same
 
     def test_the_report_says_page_for_a_page_source(self):
         """r4575905192: headings and the flow node name the source's kind, not PDF."""
@@ -871,6 +900,17 @@ class Switch(unittest.TestCase):
                 self.assertEqual(out, "cert: c\ntopic: '1.2'\ntitle: New title\nprovider: local\nresources:\n  vms: []\n")
                 self.assertEqual(yaml.safe_load(out)["title"], "New title")
         self.assertEqual(cd.lab_with_title("cert: c\n", "x"), "cert: c\n")          # no title line: unchanged
+
+    def test_a_pdf_without_objective_weights_leaves_each_topic_weight(self):
+        """#235: a CNCF PDF publishes domain weights only; a reweighted domain revalidates, the topic weights stay."""
+        import frontmatter
+        domains = copy.deepcopy(BASE["domains"])
+        domains[0]["weight"], domains[1]["weight"] = 50, 50
+        self.assertEqual(cd.objective_weights({"domains": domains}), {})
+        _, files, why = self.run_switch(domains)
+        self.assertEqual(why, [])
+        self.assertEqual([t["weight"] for t in frontmatter.loads(files["certs/c.md"]).metadata["topics"]], [20.0] * 5)
+        self.assertEqual(files["certs/c.md"].count("  weight: 20.0\n"), 5)
 
     def test_refused_while_content_must_change(self):
         domains = copy.deepcopy(BASE["domains"])
