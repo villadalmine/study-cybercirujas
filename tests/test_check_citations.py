@@ -32,6 +32,13 @@ class DomainAndPinTests(unittest.TestCase):
         self.assertFalse(cc.is_pinned("https://raw.githubusercontent.com/org/repo/main/README.md", versioned))
         self.assertTrue(cc.is_pinned("https://github.com/org/repo/raw/0123456789abcdef/file.pdf", versioned))
 
+    def test_floating_aliases_are_not_pins(self):
+        floating = {"docs.cilium.io", "argo-cd.readthedocs.io"}
+        for url in ("https://docs.cilium.io/en/stable/network/", "https://argo-cd.readthedocs.io/en/stable/",
+                    "https://docs.cilium.io/en/lts/network/", "https://docs.cilium.io/en/latest/network/"):
+            self.assertFalse(cc.is_pinned(url, floating), url)
+        self.assertTrue(cc.is_pinned("https://docs.cilium.io/en/v1.16/network/", floating))
+
     def test_write_meta_pins_is_idempotent_and_preserves_quality(self):
         with tempfile.TemporaryDirectory() as tmp:
             meta = Path(tmp) / "meta.yaml"

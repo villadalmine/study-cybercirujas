@@ -57,7 +57,8 @@ BLOCKED = {401, 403, 405, 418, 429, 503}
 GIT_HOSTS = {"github.com", "raw.githubusercontent.com", "gitlab.com"}
 FLOAT_GIT = re.compile(r"/(?:raw|blob|tree)/(?:main|master|HEAD)(?:/|$)")
 SHA_GIT = re.compile(r"/[0-9a-f]{7,40}(?:/|$)")
-TAG_OR_PIN = re.compile(r"(?:^|/)(?:v?\d+\.\d+[^/]*|20\d{2}(?:[-/]\d{2})?|release-[^/]+|stable|lts|onlinepubs/\d+|r\d+)(?:/|$|[?#])")
+# `stable`/`latest`/`lts` are floating aliases (docs.cilium.io/en/stable), not pins.
+TAG_OR_PIN = re.compile(r"(?:^|/)(?:v?\d+\.\d+[^/]*|20\d{2}(?:[-/]\d{2})?|release-[^/]+|onlinepubs/\d+|r\d+)(?:/|$|[?#])")
 QUERY_PIN = re.compile(r"[?&](?:v|ver|version|tag)=")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 ISSUE_MARKER = "<!-- citation-rot -->"
