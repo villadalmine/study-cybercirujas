@@ -52,7 +52,8 @@ def pending(cert: str, lang: str) -> list[str]:
 
 # A topic generated and moved to its own branch by scripts/topic_pr.py is gone from this checkout until its PR
 # merges, so the auditor reports it missing and the next batch authored it again (#339: 1.6-1.8 of nca-aiio on
-# 2026-11-13). It is in flight while an open PR carries its files, or a local topic_pr worktree holds it unpushed.
+# 2026-11-13). It is in flight while an open PR carries its files, or a local topic_pr worktree holds it unpushed
+# (a branch with no upstream).
 TOPIC_FILE = re.compile(r"^certs/([^/]+)/([^/]+)/([^/]+)/content\.md$")
 
 
@@ -61,16 +62,20 @@ def topics_in_files(paths: list[str], cert: str, lang: str) -> set[str]:
     return {m[2] for m in map(TOPIC_FILE.match, paths) if m and m[1] == cert and m[3] == lang}
 
 
-def topics_in_worktrees(porcelain: str, cert: str, lang: str, repo: Path = REPO) -> set[str]:
-    """Topics held by another worktree on a topic_pr branch (`feat/[<issue>-]<cert>-<topic>`) that has the file."""
+def topics_in_worktrees(porcelain: str, cert: str, lang: str, repo: Path = REPO,
+                        pushed: frozenset[str] = frozenset()) -> set[str]:
+    """Topics held by another worktree on a topic_pr branch (`feat/[<issue>-]<cert>-<topic>`) that has the file and
+    is not pushed yet (`pushed`: branches with an upstream). Once pushed, its open PR is what counts, so a worktree
+    left behind after its PR was closed holds nothing (#361 review)."""
     branch = re.compile(rf"^refs/heads/feat/(?:\d+-)?{re.escape(cert)}-(\d+(?:\.\d+)*)$")
     found, path = set(), None
     for line in porcelain.splitlines():
         if line.startswith("worktree "):
             path = Path(line[len("worktree "):])
         elif line.startswith("branch ") and path and path.resolve() != repo.resolve():
-            m = branch.match(line[len("branch "):])
-            if m and (path / "certs" / cert / m[1] / lang / "content.md").is_file():
+            ref = line[len("branch "):]
+            m = branch.match(ref)
+            if m and ref not in pushed and (path / "certs" / cert / m[1] / lang / "content.md").is_file():
                 found.add(m[1])
     return found
 
@@ -109,8 +114,11 @@ def in_flight(cert: str, lang: str, repo: Path = REPO) -> set[str]:
         print(f"WARNING: could not list open PRs ({why}); topics already in a PR may be authored again",
               file=sys.stderr, flush=True)
     wts = _quiet(["git", "worktree", "list", "--porcelain"], repo)
+    refs = _quiet(["git", "for-each-ref", "--format=%(refname) %(upstream)", "refs/heads/"], repo)
     if wts is not None and wts.returncode == 0:
-        found |= topics_in_worktrees(wts.stdout, cert, lang, repo)
+        pushed = frozenset(line.split()[0] for line in (refs.stdout if refs and refs.returncode == 0 else "")
+                           .splitlines() if len(line.split()) == 2)
+        found |= topics_in_worktrees(wts.stdout, cert, lang, repo, pushed)
     return found
 
 

@@ -34,6 +34,8 @@ class InFlight(unittest.TestCase):
             (held / "certs/nca-aiio/1.7/en").mkdir(parents=True)
             (held / "certs/nca-aiio/1.7/en/content.md").write_text("# x\n", encoding="utf-8")
             empty.mkdir()
+            (root / "other/certs/nca-aiio/1.9/en").mkdir(parents=True)
+            (root / "other/certs/nca-aiio/1.9/en/content.md").write_text("# x\n", encoding="utf-8")
             (main / "certs/nca-aiio/2.6/en").mkdir(parents=True)
             (main / "certs/nca-aiio/2.6/en/content.md").write_text("# x\n", encoding="utf-8")
             porcelain = "\n".join([
@@ -45,6 +47,9 @@ class InFlight(unittest.TestCase):
             # (nca-aiio-extra) does not match nca-aiio
             self.assertEqual(run_batch.topics_in_worktrees(porcelain, "nca-aiio", "en", main), {"1.7"})
             self.assertEqual(run_batch.topics_in_worktrees(porcelain, "nca-aiio", "es", main), set())
+            # pushed: its PR counts from now on, and a worktree left behind after the PR closed holds nothing
+            self.assertEqual(run_batch.topics_in_worktrees(porcelain, "nca-aiio", "en", main,
+                                                           frozenset({"refs/heads/feat/284-nca-aiio-1.7"})), set())
 
     def test_in_flight_joins_both_and_survives_gh_failing(self):
         prs = json.dumps([{"files": [{"path": "certs/nca-aiio/1.6/en/content.md"}]}, {"files": []}])
@@ -53,6 +58,23 @@ class InFlight(unittest.TestCase):
             return done(prs) if cmd[0] == "gh" else done("")
         with mock.patch.object(run_batch.subprocess, "run", side_effect=fake):
             self.assertEqual(run_batch.in_flight("nca-aiio", "en"), {"1.6"})
+
+    def test_in_flight_reads_upstreams_so_a_pushed_worktree_does_not_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            wt = Path(tmp) / "wt"
+            (wt / "certs/nca-aiio/1.7/en").mkdir(parents=True)
+            (wt / "certs/nca-aiio/1.7/en/content.md").write_text("# x\n", encoding="utf-8")
+            porcelain = f"worktree {wt}\nHEAD b\nbranch refs/heads/feat/284-nca-aiio-1.7\n"
+            for upstream, want in (("", {"1.7"}), ("refs/remotes/origin/feat/284-nca-aiio-1.7", set())):
+                def fake(cmd, **kw):
+                    if cmd[0] == "gh":
+                        return done("[]")
+                    if cmd[1] == "worktree":
+                        return done(porcelain)
+                    return done(f"refs/heads/feat/284-nca-aiio-1.7 {upstream}".rstrip() + "\n")
+                with self.subTest(upstream=upstream or "none"), \
+                        mock.patch.object(run_batch.subprocess, "run", side_effect=fake):
+                    self.assertEqual(run_batch.in_flight("nca-aiio", "en"), want)
 
         def offline(cmd, **kw):
             return done(returncode=1, stderr="gh: not logged in") if cmd[0] == "gh" else done("")
