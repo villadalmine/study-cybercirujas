@@ -853,6 +853,26 @@ class Switch(unittest.TestCase):
         self.assertTrue(rescored.endswith("quality:\n  score: 71\n"))
         self.assertEqual(cd.with_revalidated("lang: en\n", {"a": 1}), "lang: en\nrevalidated:\n  a: 1\n")
 
+    def test_a_rerun_keeps_the_revalidated_block_of_the_first_switch(self):
+        # #323: a re-run plans against the syllabus the first run rewrote, so its reasons can be fewer; the block
+        # of the same upgrade already in meta.yaml is the record and stays byte for byte.
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        self.run_switch(domains)
+        root = Path(self._roots[-1])
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md", "target": "syllabi/c/v2026-10-01.yaml"}}}
+        meta = root / "certs/c/2.3/en/meta.yaml"
+        meta.parent.mkdir(parents=True)
+        first = {"upgrade": "docs/upgrades/u.yaml", "against": "syllabi/c/v2026-10-01.yaml", "version": "2026-10-01",
+                 "objective": "Use the Gateway API to manage Ingress-traffic",
+                 "reasons": ["objective reworded (similarity 0.9)", "moved: A -> B"], "committed": "2026-10-01"}
+        meta.write_text(cd.with_revalidated("lang: en\nquality:\n  score: 70\n", first), encoding="utf-8")
+        _, files, why = cd.switch(root, spec, "docs/upgrades/u.yaml")
+        self.assertEqual(why, [])
+        self.assertNotIn("certs/c/2.3/en/meta.yaml", files)
+        _, files, _ = cd.switch(root, spec, "docs/upgrades/other.yaml")    # another upgrade's block is replaced
+        self.assertIn("upgrade: docs/upgrades/other.yaml", files["certs/c/2.3/en/meta.yaml"])
+
     def test_the_lab_title_follows_the_objective_and_the_guard_accepts_only_that(self):
         # review of #306: the lab's title stayed "End to End" while the syllabus said "End-to-End" (Killercoda R5)
         domains = copy.deepcopy(BASE["domains"])
@@ -1032,6 +1052,77 @@ class CommittedUpgrade(unittest.TestCase):
                                  f"-o {report.relative_to(REPO)}")
                 self.assertIn("```mermaid", report.read_text(encoding="utf-8"))
 
+
+class ClosedUpgradeStaysSwitched(unittest.TestCase):
+    """A closed upgrade's `switch --check` stays current (#323: cka-ckad-1.37 went stale when switch later learned the
+    superseded note, snapshot_date-from-commit and `revalidated:` blocks).
+
+    Closed means: every tracked file carries the spec's `switched by` note AND each cert still sits at the spec's
+    target (no `upstream:` window, `upstream_status: current`, no `objectives_drift`, `tracked_version` is the
+    target's version). Once the next upgrade of the cert
+    opens its window, or switches past this one, the newer spec is the one that must be current (#359 review)."""
+
+    @staticmethod
+    def closed(spec: dict, rel: str, catalog: dict, root: Path = REPO) -> bool:
+        certs = spec.get("certs") or {}
+        for cert, c in certs.items():
+            tracked = root / (c.get("tracked") or f"certs/{cert}.md")
+            if not tracked.is_file() or f"switched by `{rel}`" not in tracked.read_text(encoding="utf-8"):
+                return False      # window still open: the switch PR has not landed
+            entry = (catalog.get("certs") or {}).get(cert) or {}
+            target = cd.load_syllabus(root / c["target"])
+            if (entry.get("upstream") or entry.get("objectives_drift") or entry.get("upstream_status") != "current"
+                    or str(entry.get("tracked_version")) != str(target["version"])):
+                # the next upgrade of this cert has started: a window, or the tracker saw a new curriculum it cannot
+                # version (sync_cncf, sync_ai mark only `outdated`/`objectives_drift`); its spec guards it from now on
+                return False
+        return bool(certs)
+
+    def test_every_closed_upgrade_is_current(self):
+        catalog_now = yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8"))
+        checked = 0
+        for path in sorted((REPO / "docs" / "upgrades").glob("*.yaml")):
+            if path.name.endswith(".pins.yaml"):
+                continue
+            rel = path.relative_to(REPO).as_posix()
+            spec = yaml.safe_load(path.read_text(encoding="utf-8"))
+            if not self.closed(spec, rel, catalog_now):
+                continue
+            checked += 1
+            with self.subTest(spec=rel):
+                catalog, files, why = cd.switch(REPO, spec, rel)
+                self.assertEqual(why, [])
+                for cert in spec["certs"]:
+                    self.assertEqual(catalog["certs"][cert], catalog_now["certs"][cert],
+                                     f"catalog.yaml entry of {cert} is not what {rel} switches to")
+                stale = [f for f, text in files.items() if (REPO / f).read_text(encoding="utf-8") != text]
+                self.assertEqual(stale, [], f"run: scripts/curriculum_diff.py switch {rel}")
+        self.assertGreater(checked, 0)
+
+    def test_a_new_window_on_a_switched_cert_ends_the_old_spec_s_guard(self):
+        rel = "docs/upgrades/cks-1.37.yaml"
+        spec = yaml.safe_load((REPO / rel).read_text(encoding="utf-8"))
+        # cks at the 1.37 target, built on a copy: the live catalog moves on when the next cks upgrade starts, and
+        # this test must not turn red then (#359 review). The note in certs/cks.md and the target snapshot stay.
+        catalog = copy.deepcopy(yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8")))
+        entry = catalog["certs"]["cks"]
+        entry.update(tracked_version=str(cd.load_syllabus(REPO / spec["certs"]["cks"]["target"])["version"]),
+                     upstream_status="current")
+        entry.pop("upstream", None)
+        entry.pop("objectives_drift", None)
+        self.assertTrue(self.closed(spec, rel, catalog))
+        opened = copy.deepcopy(catalog)
+        opened["certs"]["cks"]["upstream"] = {"version": "1.38"}
+        self.assertFalse(self.closed(spec, rel, opened))
+        moved = copy.deepcopy(catalog)
+        moved["certs"]["cks"]["tracked_version"] = "1.38"
+        self.assertFalse(self.closed(spec, rel, moved))
+        outdated = copy.deepcopy(catalog)
+        outdated["certs"]["cks"]["upstream_status"] = "outdated"
+        self.assertFalse(self.closed(spec, rel, outdated))
+        drift = copy.deepcopy(catalog)
+        drift["certs"]["cks"]["objectives_drift"] = {"sha256": "x", "detected": "2026-11-17"}
+        self.assertFalse(self.closed(spec, rel, drift))
 
 if __name__ == "__main__":
     unittest.main()

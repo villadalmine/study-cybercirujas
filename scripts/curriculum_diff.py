@@ -1101,7 +1101,13 @@ def switch(root: Path, spec: dict, spec_path: str = "") -> tuple[dict, dict[str,
                      "objective": texts.get(row["maps_to"]), "reasons": list(row["reasons"]),
                      "committed": str(committed)}   # the target curriculum's date, not the day it was re-checked
             for meta in sorted((root / "certs" / cert / row["topic"]).glob("*/meta.yaml")):
-                files[str(meta.relative_to(root))] = with_revalidated(meta.read_text(encoding="utf-8"), block)
+                meta_text = meta.read_text(encoding="utf-8")
+                # A re-run plans against the syllabus this switch already rewrote, so a reworded title no longer
+                # shows: the block from the first switch of this upgrade is the record, and it stays (#323).
+                old = (yaml.safe_load(meta_text) or {}).get("revalidated")
+                if isinstance(old, dict) and all(old.get(k) == block[k] for k in ("upgrade", "against", "version")):
+                    continue
+                files[str(meta.relative_to(root))] = with_revalidated(meta_text, block)
         entry["tracked_version"] = version
         entry.setdefault("sources", {})["objectives"] = url
         entry["upstream_status"] = "current"
