@@ -203,7 +203,9 @@ flowchart TD
    gets one line saying the snapshot was superseded, by which document and upgrade. Each `revalidate` topic gets a
    `revalidated:` block in every `<lang>/meta.yaml` (against which objective text, from which upgrade and why, and `committed`:
    the target curriculum's date, not the day of the check), before
-   `quality:`; `check_pr` treats it like `quality:`, a check record and not authorship. It refuses while any topic is
+   `quality:`; `check_pr` treats it like `quality:`, a check record and not authorship. A re-run keeps the block of the same
+   upgrade as the first run wrote it (the re-run plans against the syllabus it already rewrote), so `switch` is idempotent,
+   and `ClosedUpgradeStaysSwitched` in `make verify-ci` fails when a closed upgrade's `switch --check` is not current. It refuses while any topic is
    `regenerate` or `retire` or a new objective has no topic: content changes first. After it,
    `make quality CERT=<cert>` re-runs every check (its result is the `quality:` block next to `revalidated:`), and
    `check_curriculum_consistency.py` must pass.

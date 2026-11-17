@@ -853,6 +853,26 @@ class Switch(unittest.TestCase):
         self.assertTrue(rescored.endswith("quality:\n  score: 71\n"))
         self.assertEqual(cd.with_revalidated("lang: en\n", {"a": 1}), "lang: en\nrevalidated:\n  a: 1\n")
 
+    def test_a_rerun_keeps_the_revalidated_block_of_the_first_switch(self):
+        # #323: a re-run plans against the syllabus the first run rewrote, so its reasons can be fewer; the block
+        # of the same upgrade already in meta.yaml is the record and stays byte for byte.
+        domains = copy.deepcopy(BASE["domains"])
+        domains[1]["objectives"][2]["text"] = "Use the Gateway API to manage Ingress-traffic"
+        self.run_switch(domains)
+        root = Path(self._roots[-1])
+        spec = {"milestone": "v0.6.10", "certs": {"c": {"tracked": "certs/c.md", "target": "syllabi/c/v2026-10-01.yaml"}}}
+        meta = root / "certs/c/2.3/en/meta.yaml"
+        meta.parent.mkdir(parents=True)
+        first = {"upgrade": "docs/upgrades/u.yaml", "against": "syllabi/c/v2026-10-01.yaml", "version": "2026-10-01",
+                 "objective": "Use the Gateway API to manage Ingress-traffic",
+                 "reasons": ["objective reworded (similarity 0.9)", "moved: A -> B"], "committed": "2026-10-01"}
+        meta.write_text(cd.with_revalidated("lang: en\nquality:\n  score: 70\n", first), encoding="utf-8")
+        _, files, why = cd.switch(root, spec, "docs/upgrades/u.yaml")
+        self.assertEqual(why, [])
+        self.assertNotIn("certs/c/2.3/en/meta.yaml", files)
+        _, files, _ = cd.switch(root, spec, "docs/upgrades/other.yaml")    # another upgrade's block is replaced
+        self.assertIn("upgrade: docs/upgrades/other.yaml", files["certs/c/2.3/en/meta.yaml"])
+
     def test_the_lab_title_follows_the_objective_and_the_guard_accepts_only_that(self):
         # review of #306: the lab's title stayed "End to End" while the syllabus said "End-to-End" (Killercoda R5)
         domains = copy.deepcopy(BASE["domains"])
@@ -1031,6 +1051,33 @@ class CommittedUpgrade(unittest.TestCase):
                                  f"{report.name} is stale: scripts/curriculum_diff.py render {plan_file.relative_to(REPO)} "
                                  f"-o {report.relative_to(REPO)}")
                 self.assertIn("```mermaid", report.read_text(encoding="utf-8"))
+
+
+class ClosedUpgradeStaysSwitched(unittest.TestCase):
+    """A spec whose certs already carry its `switched by` note is a closed upgrade: `switch --check` on it must be
+    current, or the tracked syllabi drifted from what the switch writes (#323: cka-ckad-1.37 went stale when switch
+    later learned the superseded note, snapshot_date-from-commit and `revalidated:` blocks)."""
+
+    def test_every_closed_upgrade_is_current(self):
+        catalog_text = (REPO / "catalog.yaml").read_text(encoding="utf-8")
+        checked = 0
+        for path in sorted((REPO / "docs" / "upgrades").glob("*.yaml")):
+            if path.name.endswith(".pins.yaml"):
+                continue
+            rel = path.relative_to(REPO).as_posix()
+            spec = yaml.safe_load(path.read_text(encoding="utf-8"))
+            tracked = [REPO / (c.get("tracked") or f"certs/{cert}.md") for cert, c in (spec.get("certs") or {}).items()]
+            if not tracked or not all(t.is_file() and f"switched by `{rel}`" in t.read_text(encoding="utf-8")
+                                      for t in tracked):
+                continue  # window still open: the switch PR has not landed
+            checked += 1
+            with self.subTest(spec=rel):
+                catalog, files, why = cd.switch(REPO, spec, rel)
+                self.assertEqual(why, [])
+                self.assertEqual(yaml.safe_dump(catalog, sort_keys=False, allow_unicode=True), catalog_text)
+                stale = [f for f, text in files.items() if (REPO / f).read_text(encoding="utf-8") != text]
+                self.assertEqual(stale, [], f"run: scripts/curriculum_diff.py switch {rel}")
+        self.assertGreater(checked, 0)
 
 
 if __name__ == "__main__":
