@@ -1058,7 +1058,8 @@ class ClosedUpgradeStaysSwitched(unittest.TestCase):
     superseded note, snapshot_date-from-commit and `revalidated:` blocks).
 
     Closed means: every tracked file carries the spec's `switched by` note AND each cert still sits at the spec's
-    target (no `upstream:` window open, `tracked_version` is the target's version). Once the next upgrade of the cert
+    target (no `upstream:` window, `upstream_status: current`, no `objectives_drift`, `tracked_version` is the
+    target's version). Once the next upgrade of the cert
     opens its window, or switches past this one, the newer spec is the one that must be current (#359 review)."""
 
     @staticmethod
@@ -1070,8 +1071,11 @@ class ClosedUpgradeStaysSwitched(unittest.TestCase):
                 return False      # window still open: the switch PR has not landed
             entry = (catalog.get("certs") or {}).get(cert) or {}
             target = cd.load_syllabus(root / c["target"])
-            if entry.get("upstream") or str(entry.get("tracked_version")) != str(target["version"]):
-                return False      # the next upgrade of this cert has started: its spec guards it from now on
+            if (entry.get("upstream") or entry.get("objectives_drift") or entry.get("upstream_status") != "current"
+                    or str(entry.get("tracked_version")) != str(target["version"])):
+                # the next upgrade of this cert has started: a window, or the tracker saw a new curriculum it cannot
+                # version (sync_cncf, sync_ai mark only `outdated`/`objectives_drift`); its spec guards it from now on
+                return False
         return bool(certs)
 
     def test_every_closed_upgrade_is_current(self):
@@ -1106,6 +1110,12 @@ class ClosedUpgradeStaysSwitched(unittest.TestCase):
         moved = copy.deepcopy(catalog)
         moved["certs"]["cks"]["tracked_version"] = "1.38"
         self.assertFalse(self.closed(spec, rel, moved))
+        outdated = copy.deepcopy(catalog)
+        outdated["certs"]["cks"]["upstream_status"] = "outdated"
+        self.assertFalse(self.closed(spec, rel, outdated))
+        drift = copy.deepcopy(catalog)
+        drift["certs"]["cks"]["objectives_drift"] = {"sha256": "x", "detected": "2026-11-17"}
+        self.assertFalse(self.closed(spec, rel, drift))
 
 if __name__ == "__main__":
     unittest.main()
