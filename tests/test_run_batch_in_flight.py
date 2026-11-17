@@ -61,6 +61,31 @@ class InFlight(unittest.TestCase):
             self.assertEqual(run_batch.in_flight("nca-aiio", "en"), set())
         self.assertIn("may be authored again", err.getvalue())
 
+    def test_a_pr_with_more_files_than_the_list_returns_is_read_in_full(self):
+        listed = [{"path": f"certs/nca-aiio/1.{i}/en/meta.yaml"} for i in range(100)]
+        prs = json.dumps([{"number": 357, "changedFiles": 305, "files": listed},
+                          {"number": 9, "changedFiles": 1, "files": [{"path": "certs/nca-aiio/2.1/en/content.md"}]}])
+        calls = []
+
+        def fake(cmd, **kw):
+            calls.append(cmd)
+            if cmd[:3] == ["gh", "pr", "list"]:
+                return done(prs)
+            if cmd[:2] == ["gh", "api"]:
+                return done("certs/nca-aiio/3.4/en/content.md\ncerts/nca-aiio/3.4/en/meta.yaml\n")
+            return done("")
+        with mock.patch.object(run_batch.subprocess, "run", side_effect=fake):
+            self.assertEqual(run_batch.in_flight("nca-aiio", "en"), {"2.1", "3.4"})
+        self.assertEqual([c for c in calls if c[:2] == ["gh", "api"]],
+                         [["gh", "api", "--paginate", "repos/{owner}/{repo}/pulls/357/files", "--jq", ".[].filename"]])
+
+        def no_api(cmd, **kw):
+            return done(prs) if cmd[:3] == ["gh", "pr", "list"] else done(returncode=1) if cmd[0] == "gh" else done("")
+        err = io.StringIO()
+        with mock.patch.object(run_batch.subprocess, "run", side_effect=no_api), redirect_stderr(err):
+            self.assertEqual(run_batch.in_flight("nca-aiio", "en"), {"2.1"})   # the other PRs still count
+        self.assertIn("PR #357 lists 100 of its 305 files", err.getvalue())
+
     def test_no_gh_a_hung_gh_or_bad_json_warn_instead_of_crashing_the_batch(self):
         for broken in (FileNotFoundError("gh"), subprocess.TimeoutExpired("gh", 60), done("not json")):
             def fake(cmd, **kw):

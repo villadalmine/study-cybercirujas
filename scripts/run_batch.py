@@ -88,12 +88,23 @@ def in_flight(cert: str, lang: str, repo: Path = REPO) -> set[str]:
 
     Advisory: when the PR list cannot be read (no `gh`, not logged in, offline) it warns and the batch goes on."""
     found: set[str] = set()
-    prs = _quiet(["gh", "pr", "list", "--state", "open", "--limit", "200", "--json", "files"], repo)
+    prs = _quiet(["gh", "pr", "list", "--state", "open", "--limit", "200", "--json", "number,changedFiles,files"], repo)
     try:
         if prs is None or prs.returncode != 0:
             raise ValueError((prs.stderr.strip()[:200] if prs else "gh did not run") or "gh failed")
         for pr in json.loads(prs.stdout or "[]"):
-            found |= topics_in_files([f["path"] for f in pr.get("files") or []], cert, lang)
+            paths = [f["path"] for f in pr.get("files") or []]
+            if (pr.get("changedFiles") or 0) > len(paths):
+                # `gh pr list --json files` stops at 100 files a PR: a switch or re-snapshot PR (305 in #357)
+                # would hide most of its topics. The REST listing pages through all of them.
+                full = _quiet(["gh", "api", "--paginate", f"repos/{{owner}}/{{repo}}/pulls/{pr['number']}/files",
+                               "--jq", ".[].filename"], repo, timeout=120)
+                if full is not None and full.returncode == 0:
+                    paths = full.stdout.split()
+                else:
+                    print(f"WARNING: PR #{pr['number']} lists {len(paths)} of its {pr['changedFiles']} files; "
+                          "its other topics may be authored again", file=sys.stderr, flush=True)
+            found |= topics_in_files(paths, cert, lang)
     except ValueError as why:   # json.JSONDecodeError is a ValueError too
         print(f"WARNING: could not list open PRs ({why}); topics already in a PR may be authored again",
               file=sys.stderr, flush=True)
