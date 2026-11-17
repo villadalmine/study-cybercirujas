@@ -227,6 +227,7 @@ flowchart TD
 | The vendor document is frozen with its hash | `scripts/curriculum_diff.py extract` | refuses a tree with no domains or weights not summing to 100 (`--html`, LPI pages: weights are each objective's share of the page's questions; an objective with no weight is refused) | |
 | The upgrade window names the frozen snapshot and the milestone | `curriculum_diff.py window <spec>` (refuses when the tracker's version or URL is not the snapshot's) | `check_curriculum_consistency.py` fails without it | |
 | The committed plan and report are what their inputs produce | `tests/test_curriculum_diff.py`, run by `make verify-ci` | in `verify.yml` | |
+| A closed upgrade stays switched: `switch --check` on every spec whose certs carry its note and still sit at its target is current | `tests/test_curriculum_diff.py` (`ClosedUpgradeStaysSwitched`), run by `make verify-ci` | in `verify.yml` | |
 | An upgrade PR changes only planned files | `curriculum_diff.py guard --base origin/main` | | run by hand; its logic is unit-tested, but no workflow runs it on each PR |
 | The versions the bump writes are read from live sources (k8s stable release, apt repo, kind node images) | `scripts/upgrade_pins.py` | | `--check` against the sources; a pins file typed by hand |
 | The version bump touches only the lines the plan lists | `scripts/upgrade_versions.py` | | a scripted edit, checked with `--check`; by hand |

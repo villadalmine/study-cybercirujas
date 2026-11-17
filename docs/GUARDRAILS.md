@@ -53,7 +53,7 @@ flowchart TD
 
 | Check | What it establishes | Path | Today |
 | :--- | :--- | :--- | :--- |
-| Syllabus is frozen and hashed | the syllabus covers the exam's objectives, not only its table of contents, and a change is visible | `catalog.yaml`, `scripts/check_syllabus.py`, `scripts/curriculum_diff.py` | **blocks** (`make verify-ci`: `check_syllabus.py` and `tests/test_curriculum_diff.py`; `curriculum_diff.py` itself runs by hand) |
+| Syllabus is frozen and hashed | the syllabus covers the exam's objectives, not only its table of contents, and a change is visible | `catalog.yaml`, `scripts/check_syllabus.py`, `scripts/curriculum_diff.py` | **blocks** (`make verify-ci`: `check_syllabus.py` and `tests/test_curriculum_diff.py`; `curriculum_diff.py` itself runs by hand, except that a closed upgrade's `switch --check` must stay current: `ClosedUpgradeStaysSwitched`) |
 | Citations come from an official project | the domain belongs to a catalogued project | `scripts/check_sources.py`, `docs/sources.yaml` | **blocks** |
 | The chain syllabus, content, labs, translations declares its origin | nothing drifted from its source unnoticed | `scripts/check_source_chain.py` | **blocks** |
 | Curriculum citations are consistent | every citation names the tracked version and the pinned objectives document, one value per certification | `scripts/check_curriculum_consistency.py` | **blocks** (`make verify-ci`) |
