@@ -1102,7 +1102,14 @@ class ClosedUpgradeStaysSwitched(unittest.TestCase):
     def test_a_new_window_on_a_switched_cert_ends_the_old_spec_s_guard(self):
         rel = "docs/upgrades/cks-1.37.yaml"
         spec = yaml.safe_load((REPO / rel).read_text(encoding="utf-8"))
-        catalog = yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8"))
+        # cks at the 1.37 target, built on a copy: the live catalog moves on when the next cks upgrade starts, and
+        # this test must not turn red then (#359 review). The note in certs/cks.md and the target snapshot stay.
+        catalog = copy.deepcopy(yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8")))
+        entry = catalog["certs"]["cks"]
+        entry.update(tracked_version=str(cd.load_syllabus(REPO / spec["certs"]["cks"]["target"])["version"]),
+                     upstream_status="current")
+        entry.pop("upstream", None)
+        entry.pop("objectives_drift", None)
         self.assertTrue(self.closed(spec, rel, catalog))
         opened = copy.deepcopy(catalog)
         opened["certs"]["cks"]["upstream"] = {"version": "1.38"}
