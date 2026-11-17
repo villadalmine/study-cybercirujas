@@ -61,6 +61,20 @@ class InFlight(unittest.TestCase):
             self.assertEqual(run_batch.in_flight("nca-aiio", "en"), set())
         self.assertIn("may be authored again", err.getvalue())
 
+    def test_no_gh_a_hung_gh_or_bad_json_warn_instead_of_crashing_the_batch(self):
+        for broken in (FileNotFoundError("gh"), subprocess.TimeoutExpired("gh", 60), done("not json")):
+            def fake(cmd, **kw):
+                if cmd[0] != "gh":
+                    return done("")
+                if isinstance(broken, BaseException):
+                    raise broken
+                return broken
+            err = io.StringIO()
+            with self.subTest(broken=type(broken).__name__), \
+                    mock.patch.object(run_batch.subprocess, "run", side_effect=fake), redirect_stderr(err):
+                self.assertEqual(run_batch.in_flight("nca-aiio", "en"), set())
+            self.assertIn("may be authored again", err.getvalue())
+
     def test_the_batch_authors_the_next_topic_not_the_ones_in_flight(self):
         authored = []
         argv = ["run_batch.py", "nca-aiio", "--lang", "en", "--topics", "1"]

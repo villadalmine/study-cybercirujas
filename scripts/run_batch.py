@@ -75,19 +75,30 @@ def topics_in_worktrees(porcelain: str, cert: str, lang: str, repo: Path = REPO)
     return found
 
 
+def _quiet(cmd: list[str], repo: Path, timeout: int = 60) -> subprocess.CompletedProcess | None:
+    """The command's result, or None when it cannot run at all (no `gh` on PATH, a hung network call)."""
+    try:
+        return subprocess.run(cmd, cwd=repo, capture_output=True, text=True, timeout=timeout)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+
 def in_flight(cert: str, lang: str, repo: Path = REPO) -> set[str]:
-    """Topics of this combination already on their way in an open PR or a local topic_pr worktree."""
+    """Topics of this combination already on their way in an open PR or a local topic_pr worktree.
+
+    Advisory: when the PR list cannot be read (no `gh`, not logged in, offline) it warns and the batch goes on."""
     found: set[str] = set()
-    prs = subprocess.run(["gh", "pr", "list", "--state", "open", "--limit", "200", "--json", "files"],
-                         cwd=repo, capture_output=True, text=True)
-    if prs.returncode == 0:
+    prs = _quiet(["gh", "pr", "list", "--state", "open", "--limit", "200", "--json", "files"], repo)
+    try:
+        if prs is None or prs.returncode != 0:
+            raise ValueError((prs.stderr.strip()[:200] if prs else "gh did not run") or "gh failed")
         for pr in json.loads(prs.stdout or "[]"):
             found |= topics_in_files([f["path"] for f in pr.get("files") or []], cert, lang)
-    else:
-        print(f"WARNING: could not list open PRs ({prs.stderr.strip()[:200]}); "
-              "topics already in a PR may be authored again", file=sys.stderr, flush=True)
-    wts = subprocess.run(["git", "worktree", "list", "--porcelain"], cwd=repo, capture_output=True, text=True)
-    if wts.returncode == 0:
+    except ValueError as why:   # json.JSONDecodeError is a ValueError too
+        print(f"WARNING: could not list open PRs ({why}); topics already in a PR may be authored again",
+              file=sys.stderr, flush=True)
+    wts = _quiet(["git", "worktree", "list", "--porcelain"], repo)
+    if wts is not None and wts.returncode == 0:
         found |= topics_in_worktrees(wts.stdout, cert, lang, repo)
     return found
 
@@ -180,7 +191,7 @@ def main() -> int:
         return 3
 
     queue = pending(args.cert, args.lang)
-    flying = in_flight(args.cert, args.lang) & set(queue)
+    flying = (in_flight(args.cert, args.lang) & set(queue)) if queue else set()
     if flying:
         print(f"{args.cert} ({args.lang}): {len(flying)} topics already in an open PR or a topic_pr worktree "
               f"({', '.join(sorted(flying, key=_sort_key)[:5])}), skipping them", flush=True)
