@@ -87,6 +87,7 @@ this page fails CI. To change a label, edit that file (the *Sync labels* workflo
 | `area:site` | teach app, API, deploy, image | a maintainer |
 | `area:labs-infra` | Lab runners, exporters, Killercoda, spec (not a lab's content) | a maintainer |
 | `area:quality` | Quality score, groundedness, graph, provenance | a maintainer |
+| `citation-rot` | The one weekly citation rot report (citations.yml finds it by this label) | `.github/workflows/citations.yml`, never by hand |
 | `priority:high` | Broken main, security, data loss, blocks the next release | a maintainer |
 | `priority:medium` | Planned for the next release | a maintainer |
 | `priority:low` | Backlog; welcome from contributors | a maintainer |
