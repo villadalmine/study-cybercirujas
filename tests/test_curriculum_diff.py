@@ -1054,31 +1054,58 @@ class CommittedUpgrade(unittest.TestCase):
 
 
 class ClosedUpgradeStaysSwitched(unittest.TestCase):
-    """A spec whose certs already carry its `switched by` note is a closed upgrade: `switch --check` on it must be
-    current, or the tracked syllabi drifted from what the switch writes (#323: cka-ckad-1.37 went stale when switch
-    later learned the superseded note, snapshot_date-from-commit and `revalidated:` blocks)."""
+    """A closed upgrade's `switch --check` stays current (#323: cka-ckad-1.37 went stale when switch later learned the
+    superseded note, snapshot_date-from-commit and `revalidated:` blocks).
+
+    Closed means: every tracked file carries the spec's `switched by` note AND each cert still sits at the spec's
+    target (no `upstream:` window open, `tracked_version` is the target's version). Once the next upgrade of the cert
+    opens its window, or switches past this one, the newer spec is the one that must be current (#359 review)."""
+
+    @staticmethod
+    def closed(spec: dict, rel: str, catalog: dict, root: Path = REPO) -> bool:
+        certs = spec.get("certs") or {}
+        for cert, c in certs.items():
+            tracked = root / (c.get("tracked") or f"certs/{cert}.md")
+            if not tracked.is_file() or f"switched by `{rel}`" not in tracked.read_text(encoding="utf-8"):
+                return False      # window still open: the switch PR has not landed
+            entry = (catalog.get("certs") or {}).get(cert) or {}
+            target = cd.load_syllabus(root / c["target"])
+            if entry.get("upstream") or str(entry.get("tracked_version")) != str(target["version"]):
+                return False      # the next upgrade of this cert has started: its spec guards it from now on
+        return bool(certs)
 
     def test_every_closed_upgrade_is_current(self):
-        catalog_text = (REPO / "catalog.yaml").read_text(encoding="utf-8")
+        catalog_now = yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8"))
         checked = 0
         for path in sorted((REPO / "docs" / "upgrades").glob("*.yaml")):
             if path.name.endswith(".pins.yaml"):
                 continue
             rel = path.relative_to(REPO).as_posix()
             spec = yaml.safe_load(path.read_text(encoding="utf-8"))
-            tracked = [REPO / (c.get("tracked") or f"certs/{cert}.md") for cert, c in (spec.get("certs") or {}).items()]
-            if not tracked or not all(t.is_file() and f"switched by `{rel}`" in t.read_text(encoding="utf-8")
-                                      for t in tracked):
-                continue  # window still open: the switch PR has not landed
+            if not self.closed(spec, rel, catalog_now):
+                continue
             checked += 1
             with self.subTest(spec=rel):
                 catalog, files, why = cd.switch(REPO, spec, rel)
                 self.assertEqual(why, [])
-                self.assertEqual(yaml.safe_dump(catalog, sort_keys=False, allow_unicode=True), catalog_text)
+                for cert in spec["certs"]:
+                    self.assertEqual(catalog["certs"][cert], catalog_now["certs"][cert],
+                                     f"catalog.yaml entry of {cert} is not what {rel} switches to")
                 stale = [f for f, text in files.items() if (REPO / f).read_text(encoding="utf-8") != text]
                 self.assertEqual(stale, [], f"run: scripts/curriculum_diff.py switch {rel}")
         self.assertGreater(checked, 0)
 
+    def test_a_new_window_on_a_switched_cert_ends_the_old_spec_s_guard(self):
+        rel = "docs/upgrades/cks-1.37.yaml"
+        spec = yaml.safe_load((REPO / rel).read_text(encoding="utf-8"))
+        catalog = yaml.safe_load((REPO / "catalog.yaml").read_text(encoding="utf-8"))
+        self.assertTrue(self.closed(spec, rel, catalog))
+        opened = copy.deepcopy(catalog)
+        opened["certs"]["cks"]["upstream"] = {"version": "1.38"}
+        self.assertFalse(self.closed(spec, rel, opened))
+        moved = copy.deepcopy(catalog)
+        moved["certs"]["cks"]["tracked_version"] = "1.38"
+        self.assertFalse(self.closed(spec, rel, moved))
 
 if __name__ == "__main__":
     unittest.main()
