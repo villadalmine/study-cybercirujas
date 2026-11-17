@@ -303,7 +303,7 @@ verify: ## checks that cost no API budget (floor + manifests + k8s APIs + tests)
 	$(VENV)/bin/python3 -m unittest discover tests
 	@echo
 	@echo "Network, run separately (still no API quota):"
-	@echo "  scripts/check_citations.py     do the cited URLs resolve?"
+	@echo "  scripts/check_citations.py     do the cited URLs resolve? (also weekly in citations.yml)"
 	@echo "  scripts/check_api_facts.py     do manifests use APIs the tracked release serves?"
 	@echo "  scripts/check_models.py        do the study bot's models still exist, at that price?"
 	@echo "Costs quota, sample only:"
