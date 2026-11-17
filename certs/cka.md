@@ -1,7 +1,7 @@
 ---
 cert: cka
 exam: CKA
-snapshot_date: '2026-07-16'
+snapshot_date: '2026-10-15'
 sources:
 - https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf
 topics:
@@ -203,3 +203,5 @@ version: '1.37'
 
 Snapshot del temario. Completar `topics` con id, title, weight, status y sources
 (ver certs/lpi-010-160.md como referencia) y correr `teach cert generate cka`.
+
+**Superseded by the curriculum 1.37** (https://github.com/cncf/curriculum/raw/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf), switched by `docs/upgrades/cka-ckad-1.37.yaml`. The notes above are dated and describe the snapshot they were written for.
