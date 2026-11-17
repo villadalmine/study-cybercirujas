@@ -53,7 +53,7 @@ def pending(cert: str, lang: str) -> list[str]:
 # A topic generated and moved to its own branch by scripts/topic_pr.py is gone from this checkout until its PR
 # merges, so the auditor reports it missing and the next batch authored it again (#339: 1.6-1.8 of nca-aiio on
 # 2026-11-13). It is in flight while an open PR carries its files, or a local topic_pr worktree holds it unpushed
-# (a branch with no upstream).
+# (origin has no branch of that name yet).
 TOPIC_FILE = re.compile(r"^certs/([^/]+)/([^/]+)/([^/]+)/content\.md$")
 
 
@@ -65,7 +65,7 @@ def topics_in_files(paths: list[str], cert: str, lang: str) -> set[str]:
 def topics_in_worktrees(porcelain: str, cert: str, lang: str, repo: Path = REPO,
                         pushed: frozenset[str] = frozenset()) -> set[str]:
     """Topics held by another worktree on a topic_pr branch (`feat/[<issue>-]<cert>-<topic>`) that has the file and
-    is not pushed yet (`pushed`: branches with an upstream). Once pushed, its open PR is what counts, so a worktree
+    is not pushed yet (`pushed`: local branches origin also has). Once pushed, its open PR is what counts, so a worktree
     left behind after its PR was closed holds nothing (#361 review)."""
     branch = re.compile(rf"^refs/heads/feat/(?:\d+-)?{re.escape(cert)}-(\d+(?:\.\d+)*)$")
     found, path = set(), None
@@ -114,10 +114,12 @@ def in_flight(cert: str, lang: str, repo: Path = REPO) -> set[str]:
         print(f"WARNING: could not list open PRs ({why}); topics already in a PR may be authored again",
               file=sys.stderr, flush=True)
     wts = _quiet(["git", "worktree", "list", "--porcelain"], repo)
-    refs = _quiet(["git", "for-each-ref", "--format=%(refname) %(upstream)", "refs/heads/"], repo)
+    # Pushed = origin has a branch of the same name. Not "has an upstream": `git worktree add -b feat/... origin/main`
+    # (topic_pr.py) sets the upstream to origin/main before anything is pushed (#361 review, round 2).
+    remote = _quiet(["git", "for-each-ref", "--format=%(refname:lstrip=3)", "refs/remotes/origin/"], repo)
     if wts is not None and wts.returncode == 0:
-        pushed = frozenset(line.split()[0] for line in (refs.stdout if refs and refs.returncode == 0 else "")
-                           .splitlines() if len(line.split()) == 2)
+        pushed = frozenset(f"refs/heads/{name}" for name in (remote.stdout if remote and remote.returncode == 0
+                                                             else "").split())
         found |= topics_in_worktrees(wts.stdout, cert, lang, repo, pushed)
     return found
 

@@ -59,29 +59,34 @@ class InFlight(unittest.TestCase):
         with mock.patch.object(run_batch.subprocess, "run", side_effect=fake):
             self.assertEqual(run_batch.in_flight("nca-aiio", "en"), {"1.6"})
 
-    def test_in_flight_reads_upstreams_so_a_pushed_worktree_does_not_count(self):
+    def test_a_real_topic_pr_worktree_counts_until_its_branch_is_on_origin(self):
+        # Real git, no mocks: `worktree add -b <b> origin/main` (what topic_pr.py does) sets the upstream to
+        # origin/main before any push, so "has an upstream" is not "pushed" (#361 review, round 2).
         with tempfile.TemporaryDirectory() as tmp:
-            wt = Path(tmp) / "wt"
-            (wt / "certs/nca-aiio/1.7/en").mkdir(parents=True)
-            (wt / "certs/nca-aiio/1.7/en/content.md").write_text("# x\n", encoding="utf-8")
-            porcelain = f"worktree {wt}\nHEAD b\nbranch refs/heads/feat/284-nca-aiio-1.7\n"
-            for upstream, want in (("", {"1.7"}), ("refs/remotes/origin/feat/284-nca-aiio-1.7", set())):
-                def fake(cmd, **kw):
-                    if cmd[0] == "gh":
-                        return done("[]")
-                    if cmd[1] == "worktree":
-                        return done(porcelain)
-                    return done(f"refs/heads/feat/284-nca-aiio-1.7 {upstream}".rstrip() + "\n")
-                with self.subTest(upstream=upstream or "none"), \
-                        mock.patch.object(run_batch.subprocess, "run", side_effect=fake):
-                    self.assertEqual(run_batch.in_flight("nca-aiio", "en"), want)
+            root = Path(tmp)
+            env = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t",
+                   "GIT_COMMITTER_EMAIL": "t@t", "HOME": tmp, "PATH": "/usr/bin:/bin"}
+            git = lambda cwd, *a: subprocess.run(["git", *a], cwd=cwd, env=env, check=True, capture_output=True)
+            git(root, "init", "-q", "--bare", "-b", "main", "origin.git")
+            git(root, "clone", "-q", "origin.git", "main")
+            main = root / "main"
+            (main / "README").write_text("x\n", encoding="utf-8")
+            git(main, "add", "."); git(main, "commit", "-qm", "base"); git(main, "push", "-q", "origin", "main")
+            git(main, "worktree", "add", "-q", "-b", "feat/284-nca-aiio-1.7", str(root / "wt"), "origin/main")
+            topic = root / "wt" / "certs/nca-aiio/1.7/en"
+            topic.mkdir(parents=True)
+            (topic / "content.md").write_text("# x\n", encoding="utf-8")
+            real = subprocess.run
 
-        def offline(cmd, **kw):
-            return done(returncode=1, stderr="gh: not logged in") if cmd[0] == "gh" else done("")
-        err = io.StringIO()
-        with mock.patch.object(run_batch.subprocess, "run", side_effect=offline), redirect_stderr(err):
-            self.assertEqual(run_batch.in_flight("nca-aiio", "en"), set())
-        self.assertIn("may be authored again", err.getvalue())
+            def only_git(cmd, **kw):
+                if cmd[0] == "gh":
+                    return done("[]")
+                return real(cmd, **{**kw, "env": env})
+            with mock.patch.object(run_batch.subprocess, "run", side_effect=only_git):
+                self.assertEqual(run_batch.in_flight("nca-aiio", "en", main), {"1.7"})     # upstream origin/main
+                git(root / "wt", "push", "-q", "origin", "feat/284-nca-aiio-1.7")           # pushed without -u
+                git(main, "fetch", "-q", "origin")
+                self.assertEqual(run_batch.in_flight("nca-aiio", "en", main), set())
 
     def test_a_pr_with_more_files_than_the_list_returns_is_read_in_full(self):
         listed = [{"path": f"certs/nca-aiio/1.{i}/en/meta.yaml"} for i in range(100)]
