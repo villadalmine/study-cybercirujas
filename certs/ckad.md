@@ -1,7 +1,7 @@
 ---
 cert: ckad
 exam: CKAD
-snapshot_date: '2026-07-11'
+snapshot_date: '2026-10-01'
 sources:
 - https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
 topics:
@@ -60,7 +60,7 @@ topics:
   sources:
   - https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf
   status: generated
-  title: Understand API deprecations
+  title: Understand API depreciations
   topic: 2 - Application Deployment
   weight: 5
 - id: '3.1'
@@ -182,3 +182,5 @@ version: '1.37'
 
 Snapshot del temario. Completar `topics` con id, title, weight, status y sources
 (ver certs/lpi-010-160.md como referencia) y correr `teach cert generate ckad`.
+
+**Superseded by the curriculum 1.37** (https://github.com/cncf/curriculum/raw/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf), switched by `docs/upgrades/cka-ckad-1.37.yaml`. The notes above are dated and describe the snapshot they were written for.

@@ -11,6 +11,14 @@ tool_edit:
   plan_sha256: 445e569ff8252c6a2642e84df964ef1c0054b90056b091e4c630615d60630688
   pins_sha256: cbd9c8f3921b170d5bfa46e93acbddbe56fa2f3e70e4ad791925d12c4c974a1d
   date: '2026-10-21'
+revalidated:
+  upgrade: docs/upgrades/cka-ckad-1.37.yaml
+  against: syllabi/ckad/v1.37.yaml
+  version: '1.37'
+  objective: Kustomize
+  reasons:
+  - 'moved: Services and Networking -> Application Deployment'
+  committed: '2026-10-01'
 quality:
   weights_version: 1
   score: 80.6

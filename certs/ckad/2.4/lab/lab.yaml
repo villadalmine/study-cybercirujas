@@ -1,6 +1,6 @@
 cert: ckad
 topic: '2.4'
-title: Understand API deprecations
+title: Understand API depreciations
 provider: local
 resources:
   vms:
