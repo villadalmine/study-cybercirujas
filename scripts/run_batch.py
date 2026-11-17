@@ -14,6 +14,8 @@ it left off without keeping any state of its own.
 from __future__ import annotations
 
 import argparse
+import json
+import re
 import subprocess
 import sys
 import time
@@ -46,6 +48,48 @@ def pending(cert: str, lang: str) -> list[str]:
         (t for c, t, l in audit.find_bad_combos() if c == cert and l == lang),
         key=_sort_key,
     )
+
+
+# A topic generated and moved to its own branch by scripts/topic_pr.py is gone from this checkout until its PR
+# merges, so the auditor reports it missing and the next batch authored it again (#339: 1.6-1.8 of nca-aiio on
+# 2026-11-13). It is in flight while an open PR carries its files, or a local topic_pr worktree holds it unpushed.
+TOPIC_FILE = re.compile(r"^certs/([^/]+)/([^/]+)/([^/]+)/content\.md$")
+
+
+def topics_in_files(paths: list[str], cert: str, lang: str) -> set[str]:
+    """Topics of `cert` whose `<lang>/content.md` is among `paths` (an open PR's files)."""
+    return {m[2] for m in map(TOPIC_FILE.match, paths) if m and m[1] == cert and m[3] == lang}
+
+
+def topics_in_worktrees(porcelain: str, cert: str, lang: str, repo: Path = REPO) -> set[str]:
+    """Topics held by another worktree on a topic_pr branch (`feat/[<issue>-]<cert>-<topic>`) that has the file."""
+    branch = re.compile(rf"^refs/heads/feat/(?:\d+-)?{re.escape(cert)}-(\d+(?:\.\d+)*)$")
+    found, path = set(), None
+    for line in porcelain.splitlines():
+        if line.startswith("worktree "):
+            path = Path(line[len("worktree "):])
+        elif line.startswith("branch ") and path and path.resolve() != repo.resolve():
+            m = branch.match(line[len("branch "):])
+            if m and (path / "certs" / cert / m[1] / lang / "content.md").is_file():
+                found.add(m[1])
+    return found
+
+
+def in_flight(cert: str, lang: str, repo: Path = REPO) -> set[str]:
+    """Topics of this combination already on their way in an open PR or a local topic_pr worktree."""
+    found: set[str] = set()
+    prs = subprocess.run(["gh", "pr", "list", "--state", "open", "--limit", "200", "--json", "files"],
+                         cwd=repo, capture_output=True, text=True)
+    if prs.returncode == 0:
+        for pr in json.loads(prs.stdout or "[]"):
+            found |= topics_in_files([f["path"] for f in pr.get("files") or []], cert, lang)
+    else:
+        print(f"WARNING: could not list open PRs ({prs.stderr.strip()[:200]}); "
+              "topics already in a PR may be authored again", file=sys.stderr, flush=True)
+    wts = subprocess.run(["git", "worktree", "list", "--porcelain"], cwd=repo, capture_output=True, text=True)
+    if wts.returncode == 0:
+        found |= topics_in_worktrees(wts.stdout, cert, lang, repo)
+    return found
 
 
 def lab_only(cert: str, topic: str, lang: str, repo: Path = REPO) -> bool:
@@ -136,6 +180,11 @@ def main() -> int:
         return 3
 
     queue = pending(args.cert, args.lang)
+    flying = in_flight(args.cert, args.lang) & set(queue)
+    if flying:
+        print(f"{args.cert} ({args.lang}): {len(flying)} topics already in an open PR or a topic_pr worktree "
+              f"({', '.join(sorted(flying, key=_sort_key)[:5])}), skipping them", flush=True)
+        queue = [t for t in queue if t not in flying]
     if not queue:
         print(f"{args.cert} ({args.lang}): nothing pending")
         return 0
