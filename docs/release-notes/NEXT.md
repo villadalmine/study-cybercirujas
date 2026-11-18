@@ -20,6 +20,8 @@
 
 - **Cited sources validated for official domain, pinning, and reachability:** `scripts/check_citations.py` adds offline domain & version/commit pinning checks, optional SHA-256 `citation_pins:` recording in `meta.yaml` (`--write-pins`), changed-topic scoping (`--base`), warn/block modes, and a weekly `.github/workflows/citations.yml` workflow that maintains a single citation-rot issue (#208).
 
+- **`make batch` skips topics already in a PR:** a topic in an open PR or a local `topic_pr.py` worktree is no longer authored again, which spent quota on duplicates (#339).
+
 ## Upgrade notes
 
 <!-- What an operator must do or watch when upgrading (a new required value, a changed default). -->

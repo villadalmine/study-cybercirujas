@@ -113,6 +113,11 @@ scripts/run_batch.py kcsa --lang en         # refused if kcsa belongs to someone
 scripts/run_batch.py kcsa --lang en --anyway   # override deliberately
 ```
 
+A topic already on its way to `main` is not pending for the batch either: `run_batch.py` skips a
+topic whose `<lang>/content.md` is in an open PR (`gh pr list`), or held by a local
+`scripts/topic_pr.py` worktree that is not pushed yet, and says which. Without `gh` it warns
+and goes on, so a topic in a PR may then be authored again (#339).
+
 ## Generation backends
 
 `BACKEND=` (or `TEACH_BACKEND`):
