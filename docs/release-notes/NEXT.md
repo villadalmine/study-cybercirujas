@@ -8,19 +8,6 @@
 ## Highlights
 
 <!-- One line per change a user will notice: `- **Short name:** what changed and why it matters.` -->
-- **LPI objective pages can be frozen:** `curriculum_diff.py extract --html` reads an LPI objectives page (hashed, dated, weights as each objective's share of the questions), so LPIC-1/LPIC-2 can move to the canonical LPI pages through the deterministic upgrade process (#235).
-
-- **Switch writes topic weights from a page:** when the target snapshot states a weight per objective (an LPI page), `curriculum_diff.py switch` writes each topic's `weight:` in `certs/<cert>.md` from the objective it maps to, summing to exactly 100; PDF snapshots keep their weights. LPIC-1's frozen weights (101-105 on a /64 scale, 106-110 at 0) get corrected by its switch (#235).
-
-- **LPIC-1 and LPIC-2 switched to canonical objective pages:** both certifications now pin `exam-101-102-objectives/` and `exam-201-202-objectives/` across `catalog.yaml`, frozen syllabi, topic sources, and 294 material/lab files; LPIC-1's 42 frozen weights, 125 weight headings, and Exam 101/102 labels in topics `105`–`110` now match the official LPI 5.0 objective table (#235).
-
-- **Lab credit needs proof:** a topic's quality score counts its lab only when `deploy/lab-evidence.yaml` proves the lab as it is now (run link or log sha256 and the current lab hash); a bare `verified:` in `lab.yaml` now shows as "claimed, not proven", so 11 labs lost that credit until their runs are recorded (#217).
-
-- **Fenced code blocks in the material are syntax-checked:** `scripts/lint_content.py` (`make lint-content`, and in `make verify-ci`) runs `bash -O extglob -n` on `bash`/`sh`/`shell`/`console` blocks (prompt lines only in transcripts, `<placeholder>` tokens masked) and PyYAML on `yaml`/`yml` blocks against a shrink-only baseline of 192 legacy blocks (`tests/fixtures/lint_content_baseline.txt`), with optional `--shellcheck` and `--kubeconform` flags (#207).
-
-- **Cited sources validated for official domain, pinning, and reachability:** `scripts/check_citations.py` adds offline domain & version/commit pinning checks, optional SHA-256 `citation_pins:` recording in `meta.yaml` (`--write-pins`), changed-topic scoping (`--base`), warn/block modes, and a weekly `.github/workflows/citations.yml` workflow that maintains a single citation-rot issue (#208).
-
-- **`make batch` skips topics already in a PR:** a topic in an open PR or a local `topic_pr.py` worktree is no longer authored again, which spent quota on duplicates (#339).
 
 ## Upgrade notes
 
