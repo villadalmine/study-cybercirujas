@@ -1,36 +1,60 @@
 # Community 126
 
-> 13 nodes · cohesion 0.26
+> 26 nodes · cohesion 0.14
 
 ## Key Concepts
 
-- **StaleCycleTest** (10 connections) — `tests/test_stale_cycle.py`
-- **._outdated()** (7 connections) — `tests/test_stale_cycle.py`
-- **._regenerate()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_cycle_closes_when_none_are_left()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_regenerating_default_does_not_release_the_rest()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_unreadable_meta_counts_as_outdated()** (5 connections) — `tests/test_stale_cycle.py`
-- **.test_without_a_timestamp_nothing_is_outdated()** (4 connections) — `tests/test_stale_cycle.py`
-- **.test_content_older_than_the_change_is_flagged()** (2 connections) — `tests/test_stale_cycle.py`
-- **.setUp()** (1 connections) — `tests/test_stale_cycle.py`
-- **.tearDown()** (1 connections) — `tests/test_stale_cycle.py`
-- **A topic that never changed reports no outdated languages, however old its…** (1 connections) — `tests/test_stale_cycle.py`
-- **When in doubt, regenerate: if freshness cannot be proven, it is not assumed.** (1 connections) — `tests/test_stale_cycle.py`
-- **The case that drove the design: rebuilding Spanish cannot mark the topic…** (1 connections) — `tests/test_stale_cycle.py`
+- **lab/cli.py** (35 connections) — `teach/lab/cli.py`
+- **main()** (23 connections) — `teach/lab/cli.py`
+- **cmd_export()** (13 connections) — `teach/lab/cli.py`
+- **resolve()** (10 connections) — `teach/lab/cli.py`
+- **SpecError** (9 connections) — `teach/lab/spec.py`
+- **provable_labs()** (9 connections) — `teach/lab/cli.py`
+- **_clone()** (6 connections) — `teach/lab/cli.py`
+- **cmd_migrate()** (6 connections) — `teach/lab/cli.py`
+- **cmd_new()** (6 connections) — `teach/lab/cli.py`
+- **_lab_dir()** (5 connections) — `teach/lab/cli.py`
+- **_banner()** (4 connections) — `teach/lab/cli.py`
+- **cmd_list()** (4 connections) — `teach/lab/cli.py`
+- **cmd_validate()** (4 connections) — `teach/lab/cli.py`
+- **test_every_tested_lab_has_a_way_to_be_proven()** (4 connections) — `tests/lab/test_kc_gate.py`
+- **cmd_hint()** (3 connections) — `teach/lab/cli.py`
+- **test_labs_with_a_fix_verb_or_a_fix_file_are_provable()** (3 connections) — `tests/lab/test_kc_gate.py`
+- **Lab** (3 connections)
+- **Path** (3 connections)
+- **__main__.py** (2 connections) — `teach/lab/__main__.py`
+- **Exception** (1 connections)
+- **study-lab — run a study break/fix lab in a throwaway container. study-lab run…** (1 connections) — `teach/lab/cli.py`
+- **Scaffold a lab that already follows the template (and passes validate --strict).** (1 connections) — `teach/lab/cli.py`
+- **Deterministic export of verified labs to a Killercoda scenario tree (an…** (1 connections) — `teach/lab/cli.py`
+- **(cert, topic) of every lab that has a reference fix: a file in fixes/, or a…** (1 connections) — `teach/lab/cli.py`
+- **Shallow clone (or refresh) into the cache. Only fetches; runs nothing.** (1 connections) — `teach/lab/cli.py`
+- *... and 1 more nodes in this community*
 
 ## Relationships
 
-- [Community 10](Community_10.md) (5 shared connections)
-- [Community 134](Community_134.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
+- [Community 29](Community_29.md) (12 shared connections)
+- [Community 70](Community_70.md) (12 shared connections)
+- [Community 18](Community_18.md) (10 shared connections)
+- [Community 1](Community_1.md) (8 shared connections)
+- [Community 12](Community_12.md) (7 shared connections)
+- [Community 111](Community_111.md) (5 shared connections)
+- [Community 54](Community_54.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 56](Community_56.md) (3 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 89](Community_89.md) (2 shared connections)
 
 ## Source Files
 
-- `tests/test_stale_cycle.py`
+- `teach/lab/__main__.py`
+- `teach/lab/cli.py`
+- `teach/lab/spec.py`
+- `tests/lab/test_kc_gate.py`
 
 ## Audit Trail
 
-- EXTRACTED: 28 (100%)
+- EXTRACTED: 114 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

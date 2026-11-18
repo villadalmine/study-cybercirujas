@@ -1,61 +1,59 @@
 # Community 74
 
-> 42 nodes · cohesion 0.09
+> 34 nodes · cohesion 0.10
 
 ## Key Concepts
 
 - **tracker.py** (60 connections) — `teach/core/tracker.py`
+- **snapshot_topics()** (19 connections) — `teach/core/tracker.py`
 - **sync_ai()** (15 connections) — `teach/core/tracker.py`
-- **save()** (13 connections) — `teach/core/catalog.py`
-- **fetch_text()** (13 connections) — `teach/core/tracker.py`
-- **check_versions.py** (13 connections) — `scripts/check_versions.py`
+- **_get_bytes()** (13 connections) — `teach/core/tracker.py`
 - **sync_cncf()** (12 connections) — `teach/core/tracker.py`
-- **_ai_yaml()** (11 connections) — `teach/core/tracker.py`
-- **_get_bytes()** (11 connections) — `teach/core/tracker.py`
-- **sync_clouds()** (9 connections) — `teach/core/tracker.py`
-- **main()** (8 connections) — `scripts/check_versions.py`
-- **tracker_sync()** (8 connections) — `teach/cli.py`
+- **TrackerError** (10 connections) — `teach/core/tracker.py`
 - **document_text()** (8 connections) — `teach/core/tracker.py`
-- **sync_lpi()** (8 connections) — `teach/core/tracker.py`
+- **fetch_document()** (8 connections) — `teach/core/tracker.py`
 - **httpx** (8 connections)
-- **generate_paths()** (7 connections) — `teach/core/tracker.py`
-- **translate_paths()** (6 connections) — `teach/core/tracker.py`
+- **normalise_weights()** (7 connections) — `teach/core/tracker.py`
+- **_apply_snapshot_status()** (5 connections) — `teach/core/tracker.py`
 - **_get()** (5 connections) — `teach/core/tracker.py`
 - **_html_stream()** (5 connections) — `teach/core/tracker.py`
 - **_plain()** (5 connections) — `teach/core/tracker.py`
 - **html** (5 connections)
-- **frozen()** (4 connections) — `scripts/check_versions.py`
+- **urllib_parse** (5 connections)
 - **_validity()** (4 connections) — `teach/core/tracker.py`
-- **urllib_parse** (4 connections)
-- **published_version()** (3 connections) — `teach/core/tracker.py`
+- **2026-07-16** (4 connections) — `docs/HISTORY.md`
+- **_topic_identity()** (3 connections) — `teach/core/tracker.py`
 - **_exam_facts()** (2 connections) — `teach/core/tracker.py`
-- *... and 17 more nodes in this community*
+- **Response** (1 connections)
+- **Exception** (1 connections)
+- **Tracker/scraper: nothing is static — the whole catalog derives from sources. -…** (1 connections) — `teach/core/tracker.py`
+- **(full text, sha256 of the bytes served) of an objectives document, for a…** (1 connections) — `teach/core/tracker.py`
+- **The text of a fetched PDF or HTML body, whitespace collapsed, never cut.** (1 connections) — `teach/core/tracker.py`
+- *... and 9 more nodes in this community*
 
 ## Relationships
 
-- [Community 275](Community_275.md) (12 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (12 shared connections)
-- [Community 46](Community_46.md) (8 shared connections)
-- [Community 141](Community_141.md) (7 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
+- [Community 275](Community_275.md) (10 shared connections)
+- [Community 264](Community_264.md) (8 shared connections)
+- [Community 54](Community_54.md) (7 shared connections)
+- [Community 59](Community_59.md) (7 shared connections)
 - [Community 104](Community_104.md) (7 shared connections)
-- [Community 0](Community_0.md) (6 shared connections)
-- [Community 264](Community_264.md) (6 shared connections)
-- [Community 144](Community_144.md) (4 shared connections)
+- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (6 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 46](Community_46.md) (6 shared connections)
+- [Community 10](Community_10.md) (5 shared connections)
+- [Community 56](Community_56.md) (4 shared connections)
+- [Community 0](Community_0.md) (4 shared connections)
 - [Community 224](Community_224.md) (4 shared connections)
-- [Community 63](Community_63.md) (3 shared connections)
-- [Community 7](Community_7.md) (3 shared connections)
 
 ## Source Files
 
-- `scripts/check_versions.py`
-- `teach/cli.py`
-- `teach/core/catalog.py`
+- `docs/HISTORY.md`
 - `teach/core/tracker.py`
 
 ## Audit Trail
 
-- EXTRACTED: 184 (98%)
+- EXTRACTED: 156 (98%)
 - INFERRED: 4 (2%)
 - AMBIGUOUS: 0 (0%)
 

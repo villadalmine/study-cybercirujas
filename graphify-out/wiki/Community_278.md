@@ -1,33 +1,31 @@
 # Community 278
 
-> 7 nodes · cohesion 0.43
+> 9 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **topic_cost.py** (13 connections) — `scripts/topic_cost.py`
-- **main()** (6 connections) — `scripts/topic_cost.py`
-- **by_topic()** (3 connections) — `scripts/topic_cost.py`
-- **records()** (3 connections) — `scripts/topic_cost.py`
-- **dominant()** (2 connections) — `scripts/topic_cost.py`
-- **What one topic costs: tokens, context, model, and how many fit in a window.…** (1 connections) — `scripts/topic_cost.py`
-- **Roll completions up per (cert, topic, lang, op). A topic is several completions…** (1 connections) — `scripts/topic_cost.py`
+- **AuditAndWorkflowTests** (7 connections) — `tests/test_check_citations.py`
+- **._tree()** (6 connections) — `tests/test_check_citations.py`
+- **.test_reachability_runs_in_parallel_and_keeps_every_result()** (3 connections) — `tests/test_check_citations.py`
+- **.test_base_scopes_to_changed_topics_and_bad_ref_fails()** (2 connections) — `tests/test_check_citations.py`
+- **.test_mocked_reachability_write_pins_and_single_rot_issue_body()** (2 connections) — `tests/test_check_citations.py`
+- **.test_offline_audit_and_mode_exit_codes()** (2 connections) — `tests/test_check_citations.py`
+- **.test_citations_workflow_schedules_single_rot_issue()** (1 connections) — `tests/test_check_citations.py`
+- **slow()** (1 connections) — `tests/test_check_citations.py`
+- **Path** (1 connections)
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
-- [Community 102](Community_102.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
-- [Community 170](Community_170.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/topic_cost.py`
+- `tests/test_check_citations.py`
 
 ## Audit Trail
 
-- EXTRACTED: 20 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 12 (92%)
+- INFERRED: 1 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

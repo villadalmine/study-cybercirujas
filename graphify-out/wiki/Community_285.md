@@ -1,27 +1,31 @@
 # Community 285
 
-> 5 nodes · cohesion 0.40
+> 6 nodes · cohesion 0.47
 
 ## Key Concepts
 
-- **Determinism** (3 connections) — `tests/test_groundedness.py`
-- **overlap()** (3 connections) — `tests/test_groundedness.py`
-- **.test_same_tree_same_cache_same_bytes()** (2 connections) — `tests/test_groundedness.py`
-- **.test_written_entry_agrees_with_quality_score()** (1 connections) — `tests/test_groundedness.py`
-- **A stand-in scorer with no model: the share of the claim's words found in the…** (1 connections) — `tests/test_groundedness.py`
+- **gen_readme_table.py** (9 connections) — `scripts/gen_readme_table.py`
+- **table()** (4 connections) — `scripts/gen_readme_table.py`
+- **main()** (3 connections) — `scripts/gen_readme_table.py`
+- **status_rows()** (3 connections) — `scripts/gen_readme_table.py`
+- **Regenerate the certification table in README.md from docs/STATUS.md.…** (1 connections) — `scripts/gen_readme_table.py`
+- **The `## Certifications` table of docs/STATUS.md, as dicts.** (1 connections) — `scripts/gen_readme_table.py`
 
 ## Relationships
 
+- [Community 89](Community_89.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_groundedness.py`
+- `scripts/gen_readme_table.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (83%)
-- INFERRED: 1 (17%)
+- EXTRACTED: 14 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

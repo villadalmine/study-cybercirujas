@@ -1,35 +1,36 @@
 # Community 280
 
-> 6 nodes · cohesion 0.40
+> 8 nodes · cohesion 0.29
 
 ## Key Concepts
 
-- **mcp_server.py** (8 connections) — `teach/mcp_server.py`
-- **functools** (5 connections)
-- **_readable()** (4 connections) — `teach/mcp_server.py`
-- **wrapped()** (2 connections) — `teach/mcp_server.py`
-- **Study against this corpus from any agent — the same four functions, over MCP.…** (1 connections) — `teach/mcp_server.py`
-- **Turn a lookup failure into something the agent can act on. The SDK's own…** (1 connections) — `teach/mcp_server.py`
+- **scan()** (11 connections) — `scripts/curriculum_diff.py`
+- **_sections()** (5 connections) — `scripts/curriculum_diff.py`
+- **_headings()** (4 connections) — `scripts/curriculum_diff.py`
+- **Lessons** (3 connections) — `docs/upgrades/README.md`
+- **minor_below()** (2 connections) — `scripts/curriculum_diff.py`
+- **Per line: is it a markdown heading? A `# ...` line inside a code fence is a…** (1 connections) — `scripts/curriculum_diff.py`
+- **(first line number, heading, body) per markdown section; text before the first…** (1 connections) — `scripts/curriculum_diff.py`
+- **Sections that name a changed field, and lines that name the tracked version.…** (1 connections) — `scripts/curriculum_diff.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 173](Community_173.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 55](Community_55.md) (1 shared connections)
-- [Community 69](Community_69.md) (1 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
-- [Community 125](Community_125.md) (1 shared connections)
-- [Community 124](Community_124.md) (1 shared connections)
+- [Community 57](Community_57.md) (5 shared connections)
+- [Community 135](Community_135.md) (2 shared connections)
+- [Community 146](Community_146.md) (2 shared connections)
+- [Community 46](Community_46.md) (1 shared connections)
+- [Community 5](Community_5.md) (1 shared connections)
+- [Community 44](Community_44.md) (1 shared connections)
 
 ## Source Files
 
-- `teach/mcp_server.py`
+- `docs/upgrades/README.md`
+- `scripts/curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 13 (87%)
-- INFERRED: 2 (13%)
+- EXTRACTED: 17 (85%)
+- INFERRED: 3 (15%)
 - AMBIGUOUS: 0 (0%)
 
 ---

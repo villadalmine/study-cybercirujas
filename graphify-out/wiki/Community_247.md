@@ -1,38 +1,36 @@
 # Community 247
 
-> 9 nodes · cohesion 0.31
+> 13 nodes · cohesion 0.15
 
 ## Key Concepts
 
-- **check_syllabus.py** (15 connections) — `scripts/check_syllabus.py`
-- **main()** (5 connections) — `scripts/check_syllabus.py`
-- **upstream_objectives()** (5 connections) — `scripts/check_syllabus.py`
-- **load_syllabus()** (4 connections) — `scripts/check_syllabus.py`
-- **smells()** (3 connections) — `scripts/check_syllabus.py`
-- **Path** (1 connections)
-- **How many objectives the official page publishes. Network, no model.** (1 connections) — `scripts/check_syllabus.py`
-- **Does the frozen syllabus cover the exam, or only its table of contents? The…** (1 connections) — `scripts/check_syllabus.py`
-- **Structural signs the topic list was computed rather than read. Offline.…** (1 connections) — `scripts/check_syllabus.py`
+- **Upgrade plan: LPIC canonical objective pages** (6 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **lpic-1** (5 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **lpic-2** (4 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Rules (from the code, not judgment)** (2 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Counts** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Flow** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Impact: frozen `certs/lpic-1.md` -> v5.0 (drives the classes)** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Impact: frozen `certs/lpic-2.md` -> v4.5.0 (drives the classes)** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Per-topic plan** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Per-topic plan** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Sections that name what changed** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Technical lines that name v4.5.0** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
+- **Technical lines that name v5.0** (1 connections) — `docs/upgrades/lpic-canonical-pages.md`
 
 ## Relationships
 
-- [Community 74](Community_74.md) (3 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
-- [Community 89](Community_89.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 46](Community_46.md) (1 shared connections)
-- [Community 140](Community_140.md) (1 shared connections)
-- [Community 265](Community_265.md) (1 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
+- [Community 132](Community_132.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_syllabus.py`
+- `docs/upgrades/lpic-canonical-pages.md`
 
 ## Audit Trail
 
-- EXTRACTED: 25 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 13 (93%)
+- INFERRED: 1 (7%)
 - AMBIGUOUS: 0 (0%)
 
 ---

@@ -1,21 +1,21 @@
 # Community 5
 
-> 30 nodes · cohesion 0.12
+> 29 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **curriculum_citations.py** (27 connections) — `scripts/curriculum_citations.py`
+- **fix_line()** (12 connections) — `scripts/curriculum_citations.py`
 - **wanted()** (12 connections) — `scripts/curriculum_citations.py`
-- **fix_line()** (11 connections) — `scripts/curriculum_citations.py`
-- **window()** (10 connections) — `scripts/curriculum_citations.py`
+- **window()** (11 connections) — `scripts/curriculum_citations.py`
 - **offenders()** (8 connections) — `scripts/curriculum_citations.py`
 - **family()** (7 connections) — `scripts/curriculum_citations.py`
 - **cited()** (6 connections) — `scripts/curriculum_citations.py`
 - **problems()** (6 connections) — `scripts/curriculum_citations.py`
-- **meta_ok()** (5 connections) — `scripts/curriculum_citations.py`
 - **spans()** (5 connections) — `scripts/curriculum_citations.py`
 - **version_regexes()** (5 connections) — `scripts/curriculum_citations.py`
 - **Path** (5 connections)
+- **Result for the LPIC canonical objective pages (2026-11-15)** (5 connections) — `docs/upgrades/README.md`
 - **files()** (4 connections) — `scripts/curriculum_citations.py`
 - **_mask()** (3 connections) — `scripts/curriculum_citations.py`
 - **rule_for()** (3 connections) — `scripts/curriculum_citations.py`
@@ -29,30 +29,32 @@
 - **What the material and the metadata say about each cert's curriculum, against…** (1 connections) — `scripts/curriculum_citations.py`
 - **Things that make the control itself unable to speak for a cert: an invalid…** (1 connections) — `scripts/curriculum_citations.py`
 - **Every line of every cert that disagrees with its catalog entry, with what…** (1 connections) — `scripts/curriculum_citations.py`
-- *... and 5 more nodes in this community*
+- *... and 4 more nodes in this community*
 
 ## Relationships
 
-- [Community 141](Community_141.md) (8 shared connections)
+- [Community 214](Community_214.md) (6 shared connections)
+- [Community 135](Community_135.md) (5 shared connections)
 - [Community 219](Community_219.md) (5 shared connections)
-- [Community 135](Community_135.md) (4 shared connections)
-- [Community 214](Community_214.md) (3 shared connections)
-- [Community 146](Community_146.md) (3 shared connections)
+- [Community 141](Community_141.md) (5 shared connections)
+- [Community 146](Community_146.md) (4 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Community 43](Community_43.md) (2 shared connections)
-- [Community 156](Community_156.md) (1 shared connections)
+- [Community 280](Community_280.md) (1 shared connections)
 - [Community 27](Community_27.md) (1 shared connections)
 - [Community 56](Community_56.md) (1 shared connections)
 - [Community 57](Community_57.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/upgrades/README.md`
 - `scripts/curriculum_citations.py`
 
 ## Audit Trail
 
-- EXTRACTED: 80 (96%)
-- INFERRED: 3 (4%)
+- EXTRACTED: 79 (92%)
+- INFERRED: 7 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

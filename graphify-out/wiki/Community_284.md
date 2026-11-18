@@ -1,30 +1,29 @@
 # Community 284
 
-> 6 nodes · cohesion 0.47
+> 6 nodes · cohesion 0.33
 
 ## Key Concepts
 
-- **SnapshotDocumentTests** (6 connections) — `tests/test_tracker.py`
-- **.fetch()** (4 connections) — `tests/test_tracker.py`
-- **.test_fetch_text_still_cuts_for_its_other_callers()** (2 connections) — `tests/test_tracker.py`
-- **.test_refuses_a_document_longer_than_the_limit_instead_of_truncating()** (2 connections) — `tests/test_tracker.py`
-- **.test_returns_the_full_text_and_the_sha256_of_the_bytes()** (2 connections) — `tests/test_tracker.py`
-- **The snapshot reads the whole objectives document and records its hash (#63;…** (1 connections) — `tests/test_tracker.py`
+- **scope()** (6 connections) — `scripts/check_pr.py`
+- **generated_current()** (4 connections) — `scripts/check_pr.py`
+- **kinds()** (3 connections) — `scripts/check_pr.py`
+- **What a PR touches, by kind: material (topic/lang dirs), labs, code, docs.** (1 connections) — `scripts/check_pr.py`
+- **True when every touched generated file is exactly what its generator produces…** (1 connections) — `scripts/check_pr.py`
+- **Problems with the shape of a PR, independent of its description.** (1 connections) — `scripts/check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (1 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
-- [Community 74](Community_74.md) (1 shared connections)
+- [Community 32](Community_32.md) (5 shared connections)
+- [Community 111](Community_111.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_tracker.py`
+- `scripts/check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 10 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 9 (82%)
+- INFERRED: 2 (18%)
 - AMBIGUOUS: 0 (0%)
 
 ---

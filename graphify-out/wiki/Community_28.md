@@ -1,6 +1,6 @@
 # Community 28
 
-> 18 nodes · cohesion 0.20
+> 21 nodes · cohesion 0.16
 
 ## Key Concepts
 
@@ -17,26 +17,26 @@
 - **.test_check_without_the_file_fails_before_reading_any_source()** (3 connections) — `tests/test_upgrade_pins.py`
 - **.test_write_then_check()** (3 connections) — `tests/test_upgrade_pins.py`
 - **Check** (2 connections) — `tests/test_upgrade_pins.py`
+- **RepoPins** (2 connections) — `tests/test_upgrade_pins.py`
+- **.test_the_cks_pins_file_says_what_the_repo_says()** (2 connections) — `tests/test_upgrade_pins.py`
 - **.test_a_patch_only_some_packages_have_is_not_picked()** (1 connections) — `tests/test_upgrade_pins.py`
 - **no_network()** (1 connections) — `tests/test_upgrade_pins.py`
 - **.__init__()** (1 connections) — `tests/test_upgrade_pins.py`
 - **scripts/upgrade_pins.py: the pins file comes from the sources, never from a…** (1 connections) — `tests/test_upgrade_pins.py`
+- **Offline: the keys that come from the repo, not from a source, match the…** (1 connections) — `tests/test_upgrade_pins.py`
 - **A minimal repo: catalog, one spec, one target snapshot, the editor.** (1 connections) — `tests/test_upgrade_pins.py`
 
 ## Relationships
 
+- [Community 146](Community_146.md) (4 shared connections)
 - [Community 43](Community_43.md) (4 shared connections)
-- [Community 146](Community_146.md) (3 shared connections)
-- [Community 66](Community_66.md) (2 shared connections)
+- [Community 48](Community_48.md) (2 shared connections)
 - [Community 156](Community_156.md) (2 shared connections)
+- [Community 56](Community_56.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Verifying the material is true — design notes](Verifying_the_material_is_true_—_design_notes.md) (1 shared connections)
-- [Community 239](Community_239.md) (1 shared connections)
 - [Community 107](Community_107.md) (1 shared connections)
-- [Community 222](Community_222.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
-- [Community 54](Community_54.md) (1 shared connections)
-- [Community 56](Community_56.md) (1 shared connections)
-- [Community 103](Community_103.md) (1 shared connections)
+- [Community 70](Community_70.md) (1 shared connections)
 
 ## Source Files
 
@@ -44,8 +44,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 38 (76%)
-- INFERRED: 12 (24%)
+- EXTRACTED: 40 (77%)
+- INFERRED: 12 (23%)
 - AMBIGUOUS: 0 (0%)
 
 ---

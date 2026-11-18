@@ -1,6 +1,6 @@
 # Community 16
 
-> 40 nodes · cohesion 0.05
+> 39 nodes · cohesion 0.05
 
 ## Key Concepts
 
@@ -11,7 +11,6 @@
 - **Queue — Claude to Antigravity, 2026-08-06 (evening)** (4 connections) — `docs/AGENTS_SYNC.md`
 - **Start here: how to do a day's work in this repo** (4 connections) — `docs/AGENTS_SYNC.md`
 - **The rules in detail, and what each one cost when it was broken** (4 connections) — `docs/AGENTS_SYNC.md`
-- **From claude — 2026-08-19: video renders failed 136 times overnight; root cause and fix** (2 connections) — `docs/AGENTS_SYNC.md`
 - **Open — worth someone's time** (2 connections) — `docs/AGENTS_SYNC.md`
 - **What changed in the machinery this session, and why you should not undo it** (2 connections) — `docs/AGENTS_SYNC.md`
 - **Changed, do not redo** (1 connections) — `docs/AGENTS_SYNC.md`
@@ -29,16 +28,17 @@
 - **Pull requests from agents** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Resume in three commands** (1 connections) — `docs/AGENTS_SYNC.md`
 - **Settled — do not re-investigate or re-litigate these** (1 connections) — `docs/AGENTS_SYNC.md`
-- *... and 15 more nodes in this community*
+- **Several agents at once: yes, and you do not have to coordinate** (1 connections) — `docs/AGENTS_SYNC.md`
+- *... and 14 more nodes in this community*
 
 ## Relationships
 
 - [Community 110](Community_110.md) (1 shared connections)
-- [Community 7](Community_7.md) (1 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (1 shared connections)
+- [Community 297](Community_297.md) (1 shared connections)
 - [video.py](video.py.md) (1 shared connections)
+- [Community 303](Community_303.md) (1 shared connections)
 - [Community 217](Community_217.md) (1 shared connections)
-- [Community 19](Community_19.md) (1 shared connections)
+- [Community 61](Community_61.md) (1 shared connections)
 
 ## Source Files
 
@@ -46,8 +46,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 42 (93%)
-- INFERRED: 3 (7%)
+- EXTRACTED: 42 (95%)
+- INFERRED: 2 (5%)
 - AMBIGUOUS: 0 (0%)
 
 ---

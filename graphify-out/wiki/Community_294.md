@@ -1,24 +1,29 @@
 # Community 294
 
-> 3 nodes · cohesion 0.67
+> 6 nodes · cohesion 0.40
 
 ## Key Concepts
 
-- **WhereItRanTests** (3 connections) — `tests/test_check_pr.py`
-- **.test_evidence_without_a_run_fails()** (1 connections) — `tests/test_check_pr.py`
-- **.test_runs_are_read_from_the_subsection()** (1 connections) — `tests/test_check_pr.py`
+- **Tree** (5 connections) — `tests/test_source_chain.py`
+- **.__init__()** (5 connections) — `tests/test_source_chain.py`
+- **.setUp()** (2 connections) — `tests/test_source_chain.py`
+- **.meta()** (2 connections) — `tests/test_source_chain.py`
+- **Path** (1 connections)
+- **A minimal repository with one certification, one topic, a translation, a lab…** (1 connections) — `tests/test_source_chain.py`
 
 ## Relationships
 
+- [Community 75](Community_75.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
+- [Community 50](Community_50.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_check_pr.py`
+- `tests/test_source_chain.py`
 
 ## Audit Trail
 
-- EXTRACTED: 3 (100%)
+- EXTRACTED: 10 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

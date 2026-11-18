@@ -1,31 +1,38 @@
 # Community 223
 
-> 8 nodes · cohesion 0.25
+> 15 nodes · cohesion 0.21
 
 ## Key Concepts
 
-- **Roadmap — where this is and where it goes** (8 connections) — `docs/ROADMAP.md`
-- **Standing decisions worth not re-litigating** (2 connections) — `docs/ROADMAP.md`
-- **Current focus — set 2026-09-11** (1 connections) — `docs/ROADMAP.md`
-- **Smaller things, when there is an appetite** (1 connections) — `docs/ROADMAP.md`
-- **Study bot — the phases after this one** (1 connections) — `docs/ROADMAP.md`
-- **What is next** (1 connections) — `docs/ROADMAP.md`
-- **Where it is** (1 connections) — `docs/ROADMAP.md`
-- **Where we left off — 2026-09-30** (1 connections) — `docs/ROADMAP.md`
+- **done()** (10 connections) — `tests/test_run_batch_in_flight.py`
+- **InFlight** (8 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_a_pr_with_more_files_than_the_list_returns_is_read_in_full()** (4 connections) — `tests/test_run_batch_in_flight.py`
+- **fake()** (4 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_no_gh_a_hung_gh_or_bad_json_warn_instead_of_crashing_the_batch()** (4 connections) — `tests/test_run_batch_in_flight.py`
+- **fake()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **no_api()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_a_real_topic_pr_worktree_counts_until_its_branch_is_on_origin()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **only_git()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_in_flight_joins_both_and_survives_gh_failing()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **fake()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_the_batch_authors_the_next_topic_not_the_ones_in_flight()** (2 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_a_topic_pr_worktree_holds_its_topic_until_pushed()** (1 connections) — `tests/test_run_batch_in_flight.py`
+- **.test_topics_in_an_open_pr_are_read_from_its_files()** (1 connections) — `tests/test_run_batch_in_flight.py`
+- **CompletedProcess** (1 connections)
 
 ## Relationships
 
-- [Community 110](Community_110.md) (1 shared connections)
-- [Community 217](Community_217.md) (1 shared connections)
+- [Community 43](Community_43.md) (2 shared connections)
+- [Community 144](Community_144.md) (1 shared connections)
 
 ## Source Files
 
-- `docs/ROADMAP.md`
+- `tests/test_run_batch_in_flight.py`
 
 ## Audit Trail
 
-- EXTRACTED: 8 (89%)
-- INFERRED: 1 (11%)
+- EXTRACTED: 20 (80%)
+- INFERRED: 5 (20%)
 - AMBIGUOUS: 0 (0%)
 
 ---

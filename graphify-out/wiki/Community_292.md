@@ -1,34 +1,28 @@
 # Community 292
 
-> 4 nodes · cohesion 0.50
+> 6 nodes · cohesion 0.53
 
 ## Key Concepts
 
-- **test_model_probe.py** (17 connections) — `tests/test_model_probe.py`
-- **CatalogueWriterTests** (3 connections) — `tests/test_model_probe.py`
-- **Grading the study bot's models: the judgement, offline.…** (1 connections) — `tests/test_model_probe.py`
-- **models.yaml is rewritten by two scripts; both must leave it readable.** (1 connections) — `tests/test_model_probe.py`
+- **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
+- **.run_main()** (4 connections) — `tests/test_check_pr.py`
+- **.test_an_old_pr_number_gets_the_full_check()** (3 connections) — `tests/test_check_pr.py`
+- **.test_an_unsigned_commit_fails_the_pr()** (3 connections) — `tests/test_check_pr.py`
+- **.test_signed_commits_pass()** (3 connections) — `tests/test_check_pr.py`
+- **main() wires the commits of --base..HEAD, the event's number and author into…** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (5 shared connections)
-- [Community 275](Community_275.md) (2 shared connections)
-- [Community 206](Community_206.md) (2 shared connections)
-- [Community 37](Community_37.md) (1 shared connections)
-- [Community 270](Community_270.md) (1 shared connections)
-- [CatalogueStateTests](CatalogueStateTests.md) (1 shared connections)
-- [LanguageTests](LanguageTests.md) (1 shared connections)
-- [Community 76](Community_76.md) (1 shared connections)
-- [FixtureTests](FixtureTests.md) (1 shared connections)
-- [Community 283](Community_283.md) (1 shared connections)
+- [Community 138](Community_138.md) (3 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `tests/test_check_pr.py`
 
 ## Audit Trail
 
-- EXTRACTED: 19 (100%)
+- EXTRACTED: 12 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

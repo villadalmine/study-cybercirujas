@@ -1,6 +1,6 @@
 # video.py
 
-> 47 nodes · cohesion 0.11
+> 48 nodes · cohesion 0.10
 
 ## Key Concepts
 
@@ -29,7 +29,7 @@
 - **Video — Technical Debt** (5 connections) — `docs/BACKLOG.md`
 - **2026-07-17** (5 connections) — `docs/HISTORY.md`
 - **_ensure_voice()** (4 connections) — `teach/core/video.py`
-- *... and 22 more nodes in this community*
+- *... and 23 more nodes in this community*
 
 ## Relationships
 
@@ -39,22 +39,23 @@
 - [Community 43](Community_43.md) (4 shared connections)
 - [Community 144](Community_144.md) (2 shared connections)
 - [Community 69](Community_69.md) (1 shared connections)
-- [Community 228](Community_228.md) (1 shared connections)
-- [Community 16](Community_16.md) (1 shared connections)
+- [Community 75](Community_75.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
 - [Community 74](Community_74.md) (1 shared connections)
-- [Community 141](Community_141.md) (1 shared connections)
+- [Community 54](Community_54.md) (1 shared connections)
 - [Community 63](Community_63.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
 
 ## Source Files
 
+- `docs/AGENTS_SYNC.md`
 - `docs/BACKLOG.md`
 - `docs/HISTORY.md`
 - `teach/core/video.py`
 
 ## Audit Trail
 
-- EXTRACTED: 142 (94%)
+- EXTRACTED: 143 (94%)
 - INFERRED: 9 (6%)
 - AMBIGUOUS: 0 (0%)
 

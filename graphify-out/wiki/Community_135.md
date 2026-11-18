@@ -1,19 +1,16 @@
 # Community 135
 
-> 26 nodes · cohesion 0.11
+> 20 nodes · cohesion 0.14
 
 ## Key Concepts
 
+- **switch()** (16 connections) — `scripts/curriculum_diff.py`
 - **plan_cert()** (15 connections) — `scripts/curriculum_diff.py`
-- **switch()** (14 connections) — `scripts/curriculum_diff.py`
 - **load_syllabus()** (11 connections) — `scripts/curriculum_diff.py`
 - **Path** (10 connections)
-- **tidy()** (8 connections) — `scripts/curriculum_diff.py`
-- **unicodedata** (7 connections)
-- **lab_title_ok()** (6 connections) — `scripts/curriculum_diff.py`
 - **open_window()** (6 connections) — `scripts/curriculum_diff.py`
-- **plan()** (6 connections) — `scripts/curriculum_diff.py`
-- **lab_with_title()** (5 connections) — `scripts/curriculum_diff.py`
+- **sha256_text()** (4 connections) — `scripts/curriculum_diff.py`
+- **_switch_run()** (4 connections) — `scripts/curriculum_diff.py`
 - **_window_run()** (4 connections) — `scripts/curriculum_diff.py`
 - **classify()** (3 connections) — `scripts/curriculum_diff.py`
 - **inventory()** (3 connections) — `scripts/curriculum_diff.py`
@@ -23,25 +20,23 @@
 - **_needles()** (2 connections) — `scripts/curriculum_diff.py`
 - **planned()** (2 connections) — `scripts/curriculum_diff.py`
 - **repin()** (2 connections) — `scripts/curriculum_diff.py`
-- **A kept or revalidated topic's lab.yaml may change only as `switch` changes it:…** (1 connections) — `scripts/curriculum_diff.py`
+- **(new catalog, {path: new text} for the frozen syllabi, the reasons it cannot)…** (1 connections) — `scripts/curriculum_diff.py`
 - **A syllabus as {version, domains, file_sha256}: a snapshot YAML, or a frozen…** (1 connections) — `scripts/curriculum_diff.py`
 - **old topic id -> (class, reasons, new objective id, similarity), by CLASS_RULES…** (1 connections) — `scripts/curriculum_diff.py`
 - **Fill upstream.snapshot and upstream.milestone in place; the reasons it cannot,…** (1 connections) — `scripts/curriculum_diff.py`
-- **Display text: NFKC (the PDF's `ﬁ` ligature becomes `fi`) and single spaces.** (1 connections) — `scripts/curriculum_diff.py`
-- **The lab.yaml text with its top-level `title:` line set to `title`, everything…** (1 connections) — `scripts/curriculum_diff.py`
-- *... and 1 more nodes in this community*
 
 ## Relationships
 
-- [Community 57](Community_57.md) (22 shared connections)
-- [Community 141](Community_141.md) (7 shared connections)
-- [Community 214](Community_214.md) (4 shared connections)
-- [Community 105](Community_105.md) (4 shared connections)
-- [Community 5](Community_5.md) (4 shared connections)
-- [Community 146](Community_146.md) (4 shared connections)
-- [Community 31](Community_31.md) (2 shared connections)
-- [Community 55](Community_55.md) (2 shared connections)
+- [Community 57](Community_57.md) (19 shared connections)
+- [Community 54](Community_54.md) (7 shared connections)
+- [Community 5](Community_5.md) (5 shared connections)
+- [Community 105](Community_105.md) (3 shared connections)
+- [Community 245](Community_245.md) (2 shared connections)
+- [Community 280](Community_280.md) (2 shared connections)
+- [Community 170](Community_170.md) (2 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
@@ -49,8 +44,8 @@
 
 ## Audit Trail
 
-- EXTRACTED: 83 (98%)
-- INFERRED: 2 (2%)
+- EXTRACTED: 65 (94%)
+- INFERRED: 4 (6%)
 - AMBIGUOUS: 0 (0%)
 
 ---
