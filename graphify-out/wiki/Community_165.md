@@ -1,36 +1,53 @@
 # Community 165
 
-> 12 nodes · cohesion 0.17
+> 19 nodes · cohesion 0.24
 
 ## Key Concepts
 
-- **is_bot_pr()** (7 connections) — `scripts/check_pr.py`
-- **dco()** (5 connections) — `scripts/check_pr.py`
-- **noreply()** (5 connections) — `scripts/check_pr.py`
-- **is_release_please()** (4 connections) — `scripts/check_pr.py`
-- **is_release_pr()** (4 connections) — `scripts/check_pr.py`
-- **is_graph_refresh()** (3 connections) — `scripts/check_pr.py`
-- **The graph bot's PR: its fixed branch, opened by the Actions bot from this…** (1 connections) — `scripts/check_pr.py`
-- **The Release PR: opened by the releases GitHub App from a branch of this…** (1 connections) — `scripts/check_pr.py`
-- **The Release PR itself, not the notes-reset PR that shares its exemption.** (1 connections) — `scripts/check_pr.py`
-- **A PR a workflow of ours opens, which cannot cite its own CI run: the graph…** (1 connections) — `scripts/check_pr.py`
-- **`<id>+<login>@users.noreply.github.com` or `<login>@users.noreply.github.com`.** (1 connections) — `scripts/check_pr.py`
-- **One problem per commit without a valid Signed-off-by (empty: all signed, or…** (1 connections) — `scripts/check_pr.py`
+- **pytest** (23 connections)
+- **test_kc_envs_allowlist.py** (16 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **validate_envs()** (12 connections) — `teach/lab/export_killercoda.py`
+- **_envs()** (9 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **copy** (8 connections)
+- **test_urls_outside_the_allowlist_or_with_dot_segments()** (6 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **url_allowed()** (5 connections) — `teach/lab/export_killercoda.py`
+- **test_bad_cilium_tag_reaching_cilium_install()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_kubernetes_patch()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bad_runtime_and_cli_versions()** (5 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **parametrize** (5 connections)
+- **test_bad_cilium_supported_minor()** (4 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_bootstrap_script_refuses_odd_arguments()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_committed_file_is_valid()** (3 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **test_allowed_urls_pass()** (2 connections) — `tests/lab/test_kc_envs_allowlist.py`
+- **bad()** (1 connections) — `teach/lab/export_killercoda.py`
+- **https only, exact host, no userinfo/port, path under an allowed prefix and…** (1 connections) — `teach/lab/export_killercoda.py`
+- **Raise ValueError unless every version, name and URL in the envs file is on the…** (1 connections) — `teach/lab/export_killercoda.py`
+- **killercoda_envs.yaml values are checked against allowlists before they reach a…** (1 connections) — `tests/lab/test_kc_envs_allowlist.py`
 
 ## Relationships
 
-- [Community 32](Community_32.md) (10 shared connections)
+- [Community 18](Community_18.md) (8 shared connections)
+- [Community 111](Community_111.md) (6 shared connections)
+- [Community 1](Community_1.md) (3 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
+- [Community 275](Community_275.md) (2 shared connections)
+- [Community 3](Community_3.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [Community 46](Community_46.md) (1 shared connections)
+- [Community 43](Community_43.md) (1 shared connections)
+- [Community 72](Community_72.md) (1 shared connections)
 - [Community 66](Community_66.md) (1 shared connections)
+- [Community 56](Community_56.md) (1 shared connections)
 
 ## Source Files
 
-- `scripts/check_pr.py`
+- `teach/lab/export_killercoda.py`
+- `tests/lab/test_kc_envs_allowlist.py`
 
 ## Audit Trail
 
-- EXTRACTED: 22 (96%)
-- INFERRED: 1 (4%)
+- EXTRACTED: 74 (100%)
+- INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 
 ---

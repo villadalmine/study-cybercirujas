@@ -25,12 +25,11 @@
 
 ## Relationships
 
-- [Community 74](Community_74.md) (6 shared connections)
+- [Community 74](Community_74.md) (8 shared connections)
 - [Community 104](Community_104.md) (4 shared connections)
 - [Community 275](Community_275.md) (2 shared connections)
-- [Syllabus Coverage Tests](Syllabus_Coverage_Tests.md) (2 shared connections)
 - [Community 10](Community_10.md) (2 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Community 46](Community_46.md) (2 shared connections)
 - [Community 43](Community_43.md) (1 shared connections)
 - [Community 0](Community_0.md) (1 shared connections)

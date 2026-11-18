@@ -6,21 +6,21 @@
 
 - **fix_corrupted_content.py** (29 connections) — `scripts/fix_corrupted_content.py`
 - **main()** (17 connections) — `scripts/fix_corrupted_content.py`
-- **check_file()** (15 connections) — `teach/core/quality.py`
-- **run_until_complete.py** (11 connections) — `scripts/run_until_complete.py`
 - **find_bad_combos()** (9 connections) — `scripts/fix_corrupted_content.py`
 - **render_ready_videos()** (7 connections) — `scripts/fix_corrupted_content.py`
+- **milestone()** (7 connections) — `teach/core/pipeline.py`
+- **milestone_targets()** (7 connections) — `teach/core/pipeline.py`
 - **_finish()** (6 connections) — `scripts/fix_corrupted_content.py`
-- **main()** (6 connections) — `scripts/run_until_complete.py`
-- **topics_per_run()** (6 connections) — `teach/core/pipeline.py`
 - **_cert_topic_ids()** (5 connections) — `scripts/fix_corrupted_content.py`
+- **find_missing_videos()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_record_quota_block()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_refresh_status()** (4 connections) — `scripts/fix_corrupted_content.py`
 - **_usable_translate_backend()** (4 connections) — `scripts/fix_corrupted_content.py`
+- **in_milestone()** (4 connections) — `teach/core/pipeline.py`
 - **_publish_if_complete()** (3 connections) — `scripts/fix_corrupted_content.py`
 - **strip_fences_in_place()** (3 connections) — `scripts/fix_corrupted_content.py`
-- **pending()** (3 connections) — `scripts/run_until_complete.py`
 - **A veces el backend envuelve la respuesta entera en ```markdown ... ``` (visto…** (1 connections) — `scripts/fix_corrupted_content.py`
+- **[(cert, lang), ...] declared in pipeline.yaml but not rendered. Kept OUT of…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **Detect and regenerate corrupt or missing content.md/exercises.md. Originally…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **Produce videos for certifications whose content is finished. The unattended…** (1 connections) — `scripts/fix_corrupted_content.py`
 - **Ids de todos los topics del temario (frontmatter del .md), para poder detectar…** (1 connections) — `scripts/fix_corrupted_content.py`
@@ -33,29 +33,27 @@
 
 ## Relationships
 
-- [Community 19](Community_19.md) (9 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 158](Community_158.md) (5 shared connections)
+- [Community 158](Community_158.md) (9 shared connections)
+- [Community 63](Community_63.md) (8 shared connections)
 - [Community 144](Community_144.md) (5 shared connections)
-- [Community 63](Community_63.md) (4 shared connections)
-- [Community 88](Community_88.md) (3 shared connections)
-- [Community 13](Community_13.md) (3 shared connections)
-- [Community 141](Community_141.md) (2 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
 - [Community 49](Community_49.md) (2 shared connections)
+- [Community 293](Community_293.md) (2 shared connections)
+- [Community 88](Community_88.md) (2 shared connections)
 - [Community 6](Community_6.md) (2 shared connections)
-- [Community 103](Community_103.md) (2 shared connections)
+- [Community 70](Community_70.md) (2 shared connections)
 - [Community 7](Community_7.md) (2 shared connections)
+- [Community 21](Community_21.md) (1 shared connections)
 
 ## Source Files
 
 - `scripts/fix_corrupted_content.py`
-- `scripts/run_until_complete.py`
 - `teach/core/pipeline.py`
-- `teach/core/quality.py`
 
 ## Audit Trail
 
-- EXTRACTED: 99 (97%)
+- EXTRACTED: 83 (97%)
 - INFERRED: 3 (3%)
 - AMBIGUOUS: 0 (0%)
 

@@ -1,6 +1,6 @@
 # Community 0
 
-> 48 nodes · cohesion 0.08
+> 50 nodes · cohesion 0.08
 
 ## Key Concepts
 
@@ -8,6 +8,7 @@
 - **command()** (26 connections) — `scripts/run_batch.py`
 - **typer** (23 connections)
 - **lab_up()** (8 connections) — `teach/cli.py`
+- **tracker_sync()** (8 connections) — `teach/cli.py`
 - **lab_validate()** (7 connections) — `teach/cli.py`
 - **cert_add()** (6 connections) — `teach/cli.py`
 - **cert_generate()** (6 connections) — `teach/cli.py`
@@ -28,23 +29,22 @@
 - **paths_video_script()** (5 connections) — `teach/cli.py`
 - **status()** (5 connections) — `teach/cli.py`
 - **_echo_readings()** (4 connections) — `teach/cli.py`
-- **serve()** (3 connections) — `teach/cli.py`
-- *... and 23 more nodes in this community*
+- *... and 25 more nodes in this community*
 
 ## Relationships
 
-- [Community 74](Community_74.md) (6 shared connections)
+- [Community 121](Community_121.md) (6 shared connections)
+- [Community 69](Community_69.md) (5 shared connections)
 - [video.py](video.py.md) (5 shared connections)
-- [Community 121](Community_121.md) (5 shared connections)
+- [Community 275](Community_275.md) (4 shared connections)
 - [Community 7](Community_7.md) (4 shared connections)
-- [Community 10](Community_10.md) (4 shared connections)
-- [Community 69](Community_69.md) (4 shared connections)
-- [Community 275](Community_275.md) (3 shared connections)
+- [Community 74](Community_74.md) (4 shared connections)
+- [Community 43](Community_43.md) (4 shared connections)
+- [Community 293](Community_293.md) (3 shared connections)
 - [Community 8](Community_8.md) (3 shared connections)
-- [Community 158](Community_158.md) (2 shared connections)
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 138](Community_138.md) (2 shared connections)
-- [Community 293](Community_293.md) (1 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
+- [Community 54](Community_54.md) (2 shared connections)
+- [Community 244](Community_244.md) (1 shared connections)
 
 ## Source Files
 
@@ -53,7 +53,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 135 (99%)
+- EXTRACTED: 140 (99%)
 - INFERRED: 2 (1%)
 - AMBIGUOUS: 0 (0%)
 

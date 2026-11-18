@@ -1,28 +1,38 @@
 # Community 2
 
-> 5 nodes · cohesion 0.40
+> 10 nodes · cohesion 0.22
 
 ## Key Concepts
 
+- **test_api_404_paths.py** (10 connections) — `tests/test_api_404_paths.py`
+- **test_paths_lang.py** (8 connections) — `tests/test_paths_lang.py`
 - **NotFoundTests** (4 connections) — `tests/test_api_404_paths.py`
 - **.test_file_not_found_is_generic()** (3 connections) — `tests/test_api_404_paths.py`
+- **fastapi_testclient** (3 connections)
 - **_boom()** (2 connections) — `tests/test_api_404_paths.py`
 - **.setUp()** (1 connections) — `tests/test_api_404_paths.py`
 - **.test_unknown_cert_still_explains_itself()** (1 connections) — `tests/test_api_404_paths.py`
+- **404 responses never carry an absolute filesystem path.** (1 connections) — `tests/test_api_404_paths.py`
+- **Career paths are served in the language that was asked for. A path's base…** (1 connections) — `tests/test_paths_lang.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
+- [Community 43](Community_43.md) (6 shared connections)
+- [Community 125](Community_125.md) (2 shared connections)
+- [Community 275](Community_275.md) (2 shared connections)
+- [Community 10](Community_10.md) (2 shared connections)
 - [Community 19](Community_19.md) (1 shared connections)
+- [Community 148](Community_148.md) (1 shared connections)
 
 ## Source Files
 
 - `tests/test_api_404_paths.py`
+- `tests/test_paths_lang.py`
 
 ## Audit Trail
 
-- EXTRACTED: 5 (71%)
-- INFERRED: 2 (29%)
+- EXTRACTED: 22 (92%)
+- INFERRED: 2 (8%)
 - AMBIGUOUS: 0 (0%)
 
 ---

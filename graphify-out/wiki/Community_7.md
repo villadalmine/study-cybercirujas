@@ -1,61 +1,63 @@
 # Community 7
 
-> 34 nodes · cohesion 0.09
+> 35 nodes · cohesion 0.12
 
 ## Key Concepts
 
 - **generator.py** (54 connections) — `teach/core/generator.py`
+- **generate_topic()** (26 connections) — `teach/core/generator.py`
+- **generate_lab()** (19 connections) — `teach/core/generator.py`
 - **GeneratorConfigError** (16 connections) — `teach/core/generator.py`
 - **make_completer()** (16 connections) — `teach/core/generator.py`
 - **translate_topic()** (16 connections) — `teach/core/generator.py`
-- **complete()** (10 connections) — `teach/core/generator.py`
+- **_write_lab()** (13 connections) — `teach/core/generator.py`
 - **_litellm_completer()** (9 connections) — `teach/core/generator.py`
-- **_cli_env()** (7 connections) — `teach/core/generator.py`
+- **complete()** (8 connections) — `teach/core/generator.py`
+- **test_translation_verify.py** (8 connections) — `tests/test_translation_verify.py`
 - **_antigravity_completer()** (6 connections) — `teach/core/generator.py`
 - **_record_plain_usage()** (6 connections) — `teach/core/generator.py`
 - **_reject_if_substandard()** (6 connections) — `teach/core/generator.py`
-- **_record_usage()** (5 connections) — `teach/core/generator.py`
-- **Queue — Antigravity to Claude, 2026-08-08 (updated 2026-08-09)** (5 connections) — `docs/AGENTS_SYNC.md`
-- **CliEnvTest** (4 connections) — `tests/test_split_answer.py`
-- **generate_cert()** (4 connections) — `teach/core/generator.py`
+- **authored()** (6 connections) — `teach/core/quality.py`
+- **_topic_context()** (5 connections) — `teach/core/generator.py`
+- **_write_meta()** (5 connections) — `teach/core/generator.py`
+- **_system()** (4 connections) — `teach/core/generator.py`
 - **Completer** (4 connections)
-- **_dominant_model()** (3 connections) — `teach/core/generator.py`
+- **Content generation** (4 connections) — `docs/FAQ.md`
+- **First, the thing that surprises everyone** (3 connections) — `docs/WORKFLOW.md`
 - **complete()** (2 connections) — `teach/core/generator.py`
-- **.test_declared_ceiling_reaches_the_claude_cli()** (2 connections) — `tests/test_split_answer.py`
-- **.test_explicit_environment_wins()** (2 connections) — `tests/test_split_answer.py`
-- **.test_other_backends_are_untouched()** (2 connections) — `tests/test_split_answer.py`
-- **German translation: working recipe found, blocked on timeout** (2 connections) — `docs/AGENTS_SYNC.md`
-- **What I need from you** (2 connections) — `docs/AGENTS_SYNC.md`
+- **Path** (2 connections)
 - **Exception** (1 connections)
-- **Blocked: Gemini API 403 (ongoing since ~05:00 UTC 2026-08-08)** (1 connections) — `docs/AGENTS_SYNC.md`
-- **What I finished** (1 connections) — `docs/AGENTS_SYNC.md`
-- *... and 9 more nodes in this community*
+- **Content generator — interchangeable backends. Backends (env TEACH_BACKEND or…** (1 connections) — `teach/core/generator.py`
+- **Translate an existing topic instead of re-authoring it. `generate_topic` never…** (1 connections) — `teach/core/generator.py`
+- *... and 10 more nodes in this community*
 
 ## Relationships
 
-- [Community 10](Community_10.md) (19 shared connections)
-- [Community 244](Community_244.md) (7 shared connections)
-- [Community 43](Community_43.md) (7 shared connections)
-- [Community 21](Community_21.md) (6 shared connections)
-- [Community 15](Community_15.md) (5 shared connections)
+- [Community 10](Community_10.md) (14 shared connections)
+- [Community 244](Community_244.md) (10 shared connections)
+- [Community 43](Community_43.md) (8 shared connections)
+- [Community 15](Community_15.md) (7 shared connections)
+- [Community 21](Community_21.md) (7 shared connections)
+- [Community 54](Community_54.md) (6 shared connections)
+- [Community 134](Community_134.md) (6 shared connections)
 - [Community 0](Community_0.md) (4 shared connections)
 - [video.py](video.py.md) (4 shared connections)
-- [Community 103](Community_103.md) (4 shared connections)
-- [Community 19](Community_19.md) (3 shared connections)
-- [Community 122](Community_122.md) (3 shared connections)
-- [Community 74](Community_74.md) (3 shared connections)
+- [Community 73](Community_73.md) (3 shared connections)
 - [Community 37](Community_37.md) (3 shared connections)
+- [Community 63](Community_63.md) (3 shared connections)
 
 ## Source Files
 
-- `docs/AGENTS_SYNC.md`
+- `docs/FAQ.md`
+- `docs/WORKFLOW.md`
 - `teach/core/generator.py`
-- `tests/test_split_answer.py`
+- `teach/core/quality.py`
+- `tests/test_translation_verify.py`
 
 ## Audit Trail
 
-- EXTRACTED: 135 (94%)
-- INFERRED: 9 (6%)
+- EXTRACTED: 164 (91%)
+- INFERRED: 17 (9%)
 - AMBIGUOUS: 0 (0%)
 
 ---

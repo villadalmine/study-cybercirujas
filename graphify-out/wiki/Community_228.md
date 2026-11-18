@@ -1,53 +1,55 @@
 # Community 228
 
-> 16 nodes · cohesion 0.16
+> 39 nodes · cohesion 0.08
 
 ## Key Concepts
 
-- **chain_sha256()** (20 connections) — `teach/core/certs.py`
-- **derived_from()** (10 connections) — `teach/lab/spec.py`
+- **HtmlExtraction** (22 connections) — `tests/test_curriculum_diff.py`
+- **.lpi_root()** (9 connections) — `tests/test_curriculum_diff.py`
+- **ClosedUpgradeStaysSwitched** (8 connections) — `tests/test_curriculum_diff.py`
+- **.page()** (6 connections) — `tests/test_curriculum_diff.py`
+- **.objective()** (5 connections) — `tests/test_curriculum_diff.py`
 - **Guardrails: what is checked, what blocks, and what is only a convention** (5 connections) — `docs/GUARDRAILS.md`
-- **2026-10-15** (5 connections) — `docs/HISTORY.md`
-- **ChainHashTests** (4 connections) — `tests/test_source_chain.py`
-- **.test_line_endings_are_not_part_of_the_hash()** (4 connections) — `tests/test_source_chain.py`
-- **.test_migrating_a_curated_lab_records_its_origin()** (3 connections) — `tests/test_source_chain.py`
-- **.test_the_hash_is_deterministic_and_order_aware()** (2 connections) — `tests/test_source_chain.py`
+- **.closed()** (4 connections) — `tests/test_curriculum_diff.py`
+- **.run_html()** (4 connections) — `tests/test_curriculum_diff.py`
+- **.test_what_a_real_page_never_does_is_refused()** (4 connections) — `tests/test_curriculum_diff.py`
+- **.refused()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_a_rerun_on_the_same_bytes_keeps_the_first_date()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_a_table_of_contents_without_numbers_is_skipped()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_plan_reads_the_weights_on_the_frozen_scale()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_switch_reads_an_html_snapshot()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_switch_writes_each_topic_weight_from_its_objective()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_the_report_says_page_for_a_page_source()** (3 connections) — `tests/test_curriculum_diff.py`
+- **.test_weight_in_the_title_is_not_title()** (3 connections) — `tests/test_curriculum_diff.py`
+- **2. Labs and exercises are true** (3 connections) — `docs/GUARDRAILS.md`
+- **.test_a_new_window_on_a_switched_cert_ends_the_old_spec_s_guard()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_every_closed_upgrade_is_current()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_cli_defaults_the_date_to_today()** (2 connections) — `tests/test_curriculum_diff.py`
+- **.test_cli_writes_the_pdf_schema_and_checks_by_refetching()** (2 connections) — `tests/test_curriculum_diff.py`
 - **Path** (2 connections)
-- **2. Labs and exercises are true** (2 connections) — `docs/GUARDRAILS.md`
+- **1. The content is true** (2 connections) — `docs/GUARDRAILS.md`
 - **3. Code and syntax are valid** (2 connections) — `docs/GUARDRAILS.md`
-- **1. The content is true** (1 connections) — `docs/GUARDRAILS.md`
-- **How the three fit together** (1 connections) — `docs/GUARDRAILS.md`
-- **One sha256 over the files, in order, each prefixed by its name (a missing file…** (1 connections) — `teach/core/certs.py`
-- **For a lab in certs/<cert>/<topic>/lab/: the syllabus topic and the authoring-…** (1 connections) — `teach/lab/spec.py`
-- **A CRLF copy (Windows checkout, core.autocrlf=true) hashes the same as the LF…** (1 connections) — `tests/test_source_chain.py`
+- *... and 14 more nodes in this community*
 
 ## Relationships
 
-- [Community 75](Community_75.md) (5 shared connections)
-- [Community 29](Community_29.md) (4 shared connections)
-- [Community 44](Community_44.md) (3 shared connections)
-- [Community 222](Community_222.md) (2 shared connections)
-- [Community 43](Community_43.md) (1 shared connections)
-- [video.py](video.py.md) (1 shared connections)
-- [Community 1](Community_1.md) (1 shared connections)
-- [Community 50](Community_50.md) (1 shared connections)
-- [Community 22](Community_22.md) (1 shared connections)
-- [Community 10](Community_10.md) (1 shared connections)
-- [Community 156](Community_156.md) (1 shared connections)
+- [Community 72](Community_72.md) (2 shared connections)
+- [Community 164](Community_164.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
+- [Community 29](Community_29.md) (1 shared connections)
+- [Community 124](Community_124.md) (1 shared connections)
 - [Community 21](Community_21.md) (1 shared connections)
+- [Community 23](Community_23.md) (1 shared connections)
 
 ## Source Files
 
 - `docs/GUARDRAILS.md`
-- `docs/HISTORY.md`
-- `teach/core/certs.py`
-- `teach/lab/spec.py`
-- `tests/test_source_chain.py`
+- `tests/test_curriculum_diff.py`
 
 ## Audit Trail
 
-- EXTRACTED: 36 (80%)
-- INFERRED: 9 (20%)
+- EXTRACTED: 59 (91%)
+- INFERRED: 6 (9%)
 - AMBIGUOUS: 0 (0%)
 
 ---

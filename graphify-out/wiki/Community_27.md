@@ -1,13 +1,13 @@
 # Community 27
 
-> 50 nodes · cohesion 0.07
+> 51 nodes · cohesion 0.07
 
 ## Key Concepts
 
-- **entry()** (16 connections) — `tests/test_curriculum_consistency.py`
+- **entry()** (17 connections) — `tests/test_curriculum_consistency.py`
 - **strict()** (16 connections) — `tests/test_curriculum_consistency.py`
 - **FixLine** (13 connections) — `tests/test_curriculum_consistency.py`
-- **Guard** (11 connections) — `tests/test_curriculum_consistency.py`
+- **Guard** (12 connections) — `tests/test_curriculum_consistency.py`
 - **Gate** (8 connections) — `tests/test_curriculum_consistency.py`
 - **Window** (7 connections) — `tests/test_curriculum_consistency.py`
 - **.head()** (7 connections) — `tests/test_curriculum_consistency.py`
@@ -29,7 +29,7 @@
 - **.test_a_marker_after_its_introducing_word()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_another_certs_id_or_a_number_that_is_not_a_version_is_not_a_citation()** (2 connections) — `tests/test_curriculum_consistency.py`
 - **.test_every_form_the_repo_uses()** (2 connections) — `tests/test_curriculum_consistency.py`
-- *... and 25 more nodes in this community*
+- *... and 26 more nodes in this community*
 
 ## Relationships
 
@@ -42,7 +42,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 94 (100%)
+- EXTRACTED: 96 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

@@ -4,25 +4,25 @@
 
 ## Key Concepts
 
-- **VerdictTests** (6 connections) — `tests/test_model_probe.py`
-- **.test_a_different_answer_is_alive_but_not_obedient()** (2 connections) — `tests/test_model_probe.py`
-- **.test_the_expected_word_is_ok()** (2 connections) — `tests/test_model_probe.py`
-- **.test_two_hundred_with_no_content_is_empty()** (2 connections) — `tests/test_model_probe.py`
-- **.test_each_failure_keeps_its_own_name()** (1 connections) — `tests/test_model_probe.py`
-- **.test_rate_limited_is_not_dead()** (1 connections) — `tests/test_model_probe.py`
+- **Pull requests** (7 connections) — `CONTRIBUTING.md`
+- **Agents** (1 connections) — `CONTRIBUTING.md`
+- **How big is my change?** (1 connections) — `CONTRIBUTING.md`
+- **Labels** (1 connections) — `CONTRIBUTING.md`
+- **Size and scope** (1 connections) — `CONTRIBUTING.md`
+- **Triage and response times** (1 connections) — `CONTRIBUTING.md`
 
 ## Relationships
 
-- [Community 206](Community_206.md) (3 shared connections)
-- [Community 292](Community_292.md) (1 shared connections)
+- [Community 48](Community_48.md) (1 shared connections)
+- [Community 146](Community_146.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_model_probe.py`
+- `CONTRIBUTING.md`
 
 ## Audit Trail
 
-- EXTRACTED: 9 (100%)
+- EXTRACTED: 7 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

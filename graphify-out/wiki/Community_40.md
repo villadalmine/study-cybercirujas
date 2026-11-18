@@ -1,21 +1,11 @@
 # Community 40
 
-> 57 nodes · cohesion 0.05
+> 21 nodes · cohesion 0.15
 
 ## Key Concepts
 
 - **CheckPrTests** (24 connections) — `tests/test_check_pr.py`
-- **DcoTests** (20 connections) — `tests/test_check_pr.py`
-- **commit()** (20 connections) — `tests/test_check_pr.py`
 - **.body()** (13 connections) — `tests/test_check_pr.py`
-- **DcoMainTests** (6 connections) — `tests/test_check_pr.py`
-- **.run_main()** (4 connections) — `tests/test_check_pr.py`
-- **.test_git_paths_are_read_unquoted()** (3 connections) — `tests/test_check_pr.py`
-- **.test_the_bot_exemption_reads_the_author_and_repo_from_the_event()** (3 connections) — `tests/test_check_pr.py`
-- **.test_the_release_exemption_reads_the_author_and_repo_from_the_event()** (3 connections) — `tests/test_check_pr.py`
-- **.test_an_old_pr_number_gets_the_full_check()** (3 connections) — `tests/test_check_pr.py`
-- **.test_an_unsigned_commit_fails_the_pr()** (3 connections) — `tests/test_check_pr.py`
-- **.test_signed_commits_pass()** (3 connections) — `tests/test_check_pr.py`
 - **.test_a_complete_pr_passes()** (2 connections) — `tests/test_check_pr.py`
 - **.test_declared_site_must_match()** (2 connections) — `tests/test_check_pr.py`
 - **.test_deleted_material_is_not_missing_provenance()** (2 connections) — `tests/test_check_pr.py`
@@ -29,11 +19,20 @@
 - **.test_the_templates_bare_closes_line_does_not_fill_a_section()** (2 connections) — `tests/test_check_pr.py`
 - **.test_title_must_be_a_conventional_commit()** (2 connections) — `tests/test_check_pr.py`
 - **.test_where_it_ran_outside_evidence_is_not_evidence()** (2 connections) — `tests/test_check_pr.py`
-- *... and 32 more nodes in this community*
+- **.test_site_impact_is_computed_from_docker_yml_paths()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_graph_bot_pr_is_checked_by_title_author_and_files_only()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_notes_reset_pr_is_exempt_only_on_its_branch_with_only_next_md()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_release_exemption_has_no_free_ride()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_release_pr_is_checked_by_title_author_branch_and_files_only()** (1 connections) — `tests/test_check_pr.py`
+- **.test_the_templates_carry_every_required_section()** (1 connections) — `tests/test_check_pr.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (4 shared connections)
+- [Community 150](Community_150.md) (1 shared connections)
+- [Community 310](Community_310.md) (1 shared connections)
+- [Community 242](Community_242.md) (1 shared connections)
+- [Community 309](Community_309.md) (1 shared connections)
+- [Community 138](Community_138.md) (1 shared connections)
 
 ## Source Files
 
@@ -41,7 +40,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 91 (100%)
+- EXTRACTED: 37 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

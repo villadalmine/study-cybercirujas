@@ -1,13 +1,11 @@
 # Community 35
 
-> 15 nodes · cohesion 0.18
+> 11 nodes · cohesion 0.27
 
 ## Key Concepts
 
 - **CheckLabelsTests** (12 connections) — `tests/test_check_labels.py`
 - **.problems()** (6 connections) — `tests/test_check_labels.py`
-- **tree()** (5 connections) — `tests/test_check_labels.py`
-- **.setUp()** (2 connections) — `tests/test_check_labels.py`
 - **.test_form_with_unknown_label_fails()** (2 connections) — `tests/test_check_labels.py`
 - **.test_label_file_rules()** (2 connections) — `tests/test_check_labels.py`
 - **.test_labeler_workflow_and_check_pr_references_fail()** (2 connections) — `tests/test_check_labels.py`
@@ -17,13 +15,10 @@
 - **.test_current_tree_passes()** (1 connections) — `tests/test_check_labels.py`
 - **.test_every_form_opens_with_triage_needed()** (1 connections) — `tests/test_check_labels.py`
 - **.test_forms_and_config_are_valid_yaml()** (1 connections) — `tests/test_check_labels.py`
-- **Path** (1 connections)
-- **A copy of the files the check reads, so a test can break it.** (1 connections) — `tests/test_check_labels.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
+- [Community 144](Community_144.md) (2 shared connections)
 
 ## Source Files
 
@@ -31,7 +26,7 @@
 
 ## Audit Trail
 
-- EXTRACTED: 22 (100%)
+- EXTRACTED: 17 (100%)
 - INFERRED: 0 (0%)
 - AMBIGUOUS: 0 (0%)
 

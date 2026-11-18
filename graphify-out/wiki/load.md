@@ -1,6 +1,6 @@
 # load()
 
-> God node · 45 connections · `teach/lab/spec.py`
+> God node · 46 connections · `teach/lab/spec.py`
 
 **Community:** [Community 29](Community_29.md)
 
@@ -10,6 +10,7 @@
 - yaml `EXTRACTED`
 - Lab `EXTRACTED`
 - cmd_test() `EXTRACTED`
+- lab_check() `EXTRACTED`
 - cmd_export() `EXTRACTED`
 - resolve() `EXTRACTED`
 - _forged() `EXTRACTED`
@@ -26,8 +27,7 @@
 - test_goals_rendered_in_intro_and_fix_step() `EXTRACTED`
 - test_refuses_what_does_not_fit() `EXTRACTED`
 - test_secret_guard() `EXTRACTED`
-- test_verify_wrapper_honours_regex() `EXTRACTED`
-- *…and 23 more `calls` connection(s) not listed (lowest-degree first to go)*
+- *…and 24 more `calls` connection(s) not listed (lowest-degree first to go)*
 
 ### contains
 - spec.py `EXTRACTED`

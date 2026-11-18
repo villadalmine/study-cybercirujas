@@ -1,30 +1,34 @@
 # Community 279
 
-> 7 nodes · cohesion 0.43
+> 8 nodes · cohesion 0.36
 
 ## Key Concepts
 
-- **HelmSecretTests** (6 connections) — `tests/test_helm_secret_required.py`
-- **render()** (6 connections) — `tests/test_helm_secret_required.py`
-- **.test_a_real_secret_renders()** (2 connections) — `tests/test_helm_secret_required.py`
-- **.test_default_values_do_not_render()** (2 connections) — `tests/test_helm_secret_required.py`
-- **.test_digits_only_value_gets_the_intended_message()** (2 connections) — `tests/test_helm_secret_required.py`
-- **.test_placeholders_and_short_values_do_not_render()** (2 connections) — `tests/test_helm_secret_required.py`
-- **skipIf** (1 connections)
+- **.teach()** (7 connections) — `tests/test_smoke.py`
+- **StudentCliSmokeTests** (6 connections) — `tests/test_smoke.py`
+- **Checks that must pass** (3 connections) — `CONTRIBUTING.md`
+- **.test_cert_list()** (2 connections) — `tests/test_smoke.py`
+- **.test_cert_show()** (2 connections) — `tests/test_smoke.py`
+- **.test_lab_help()** (2 connections) — `tests/test_smoke.py`
+- **Groundedness (advisory)** (1 connections) — `CONTRIBUTING.md`
+- **The CLI commands the README offers a student — no key, no model.** (1 connections) — `tests/test_smoke.py`
 
 ## Relationships
 
-- [Community 43](Community_43.md) (2 shared connections)
-- [Community 144](Community_144.md) (1 shared connections)
+- [Community 289](Community_289.md) (1 shared connections)
+- [Community 19](Community_19.md) (1 shared connections)
+- [Community 271](Community_271.md) (1 shared connections)
+- [Community 48](Community_48.md) (1 shared connections)
 
 ## Source Files
 
-- `tests/test_helm_secret_required.py`
+- `CONTRIBUTING.md`
+- `tests/test_smoke.py`
 
 ## Audit Trail
 
-- EXTRACTED: 12 (100%)
-- INFERRED: 0 (0%)
+- EXTRACTED: 11 (79%)
+- INFERRED: 3 (21%)
 - AMBIGUOUS: 0 (0%)
 
 ---
