@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.11](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.10...v0.6.11) (2026-11-18)
+
+
+### Features
+
+* **lpic:** switch LPIC-1 and LPIC-2 to the canonical objective pages ([#357](https://github.com/villadalmine/study-cybercirujas/issues/357)) ([b45b195](https://github.com/villadalmine/study-cybercirujas/commit/b45b195e2ec0952609baf2d5d4ac24f5979addf0))
+* **quality:** syntax-check fenced code blocks in the material ([#356](https://github.com/villadalmine/study-cybercirujas/issues/356)) ([7c5e748](https://github.com/villadalmine/study-cybercirujas/commit/7c5e7481da25cfa116b5cece6f38138b842cdca2))
+* **quality:** validate cited sources and track rot in one issue ([#358](https://github.com/villadalmine/study-cybercirujas/issues/358)) ([ad32139](https://github.com/villadalmine/study-cybercirujas/commit/ad321392c62d0b5bcf9aa4b6696e691f011547a9))
+* **upgrades:** curriculum_diff extract reads LPI objective pages (HTML) ([#350](https://github.com/villadalmine/study-cybercirujas/issues/350)) ([35004dc](https://github.com/villadalmine/study-cybercirujas/commit/35004dcd35de8411a2c7b5189a2f04eb35aa044b))
+* **upgrades:** LPIC-1 and LPIC-2 canonical objective pages, spec and snapshots ([#354](https://github.com/villadalmine/study-cybercirujas/issues/354)) ([81e23be](https://github.com/villadalmine/study-cybercirujas/commit/81e23becf65e4b3ddd325911ec823fa56534d9b8))
+* **upgrades:** switch writes topic weights from a snapshot's objective weights ([#355](https://github.com/villadalmine/study-cybercirujas/issues/355)) ([e1e8f61](https://github.com/villadalmine/study-cybercirujas/commit/e1e8f61cf2b97420ffbca6f96ac06abfd5d1fbc4))
+
+
+### Bug Fixes
+
+* **pipeline:** make batch skips topics already in an open PR or a topic_pr worktree ([#361](https://github.com/villadalmine/study-cybercirujas/issues/361)) ([374d50c](https://github.com/villadalmine/study-cybercirujas/commit/374d50c084ea55fc50890700e61a99e02125d039))
+* **quality:** lab check credits only verifiable evidence, not a bare verified: ([#351](https://github.com/villadalmine/study-cybercirujas/issues/351)) ([2f952cc](https://github.com/villadalmine/study-cybercirujas/commit/2f952ccb55cd12bb843e8819336747e0fcab3ea3))
+* **upgrades:** regenerate the closed cka-ckad-1.37 switch so switch --check is current ([#360](https://github.com/villadalmine/study-cybercirujas/issues/360)) ([ae5b590](https://github.com/villadalmine/study-cybercirujas/commit/ae5b5901f4c1cc5bbaf460a4646a53c4e97d6d21))
+* **upgrades:** switch keeps the revalidated block of its first run ([#359](https://github.com/villadalmine/study-cybercirujas/issues/359)) ([b7ef861](https://github.com/villadalmine/study-cybercirujas/commit/b7ef86105ba6918d6cb4d3a9ea23c5bbcac73335))
+
 ## [0.6.10](https://github.com/villadalmine/study-cybercirujas/compare/v0.6.9...v0.6.10) (2026-11-14)
 
 
